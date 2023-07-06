@@ -45,6 +45,11 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'total_score' 		=> $_data['total_max_score'],
 					'amount_subject' 	=> $_data['divide_subject'],
 					'max_average' 		=> $_data['max_average'],
+
+					'semesterTotalScore' 	=> $_data['semesterTotalScore'],
+					'semesterTotalSubject' 	=> $_data['semesterTotalSubject'],
+					'semesterTotalAverage' 	=> $_data['semesterTotalAverage'],
+
 					'is_use' 		=> 0,
 					'gradingId' 		=> $_data['gradingId'],
 			);
@@ -112,6 +117,11 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 					'total_score' 		=> $_data['total_max_score'],
 					'amount_subject' 	=> $_data['divide_subject'],
 					'max_average' 		=> $_data['max_average'],
+
+					'semesterTotalScore' 	=> $_data['semesterTotalScore'],
+					'semesterTotalSubject' 	=> $_data['semesterTotalSubject'],
+					'semesterTotalAverage' 	=> $_data['semesterTotalAverage'],
+					
 					'user_id'	  	=> $this->getUserId(),
 					'gradingId' 		=> $_data['gradingId'],
 			);

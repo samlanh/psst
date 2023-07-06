@@ -173,17 +173,7 @@
 									<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 								 </div>
 							 </div>
-						 </div>
-					 </div>
-				 </div>
-			 </div>
-    	</div>
-    	<div class="col-md-4 col-sm-4 col-xs-12">
-			<div class="card-blogform">
-				<div class="card-body"> 
-					<div class="row"> 
-						<div class="col-md-12 col-sm-12 col-xs-12"> 
-							<div class="d-flex"> 
+							 <div class="d-flex"> 
 								<div class="settings-main-icon ">
 									<i class="material-icons-outlined">difference</i>
 								</div> 
@@ -198,6 +188,31 @@
 									<input type="hidden" id="schoolOption" name="schoolOption" dojoType="dijit.form.TextBox" />
 								</div>
 							 </div>
+							 <div class="form-group">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12" >
+									<?php echo $frm->getElement("notes");?>
+								</div>
+							 </div>
+						 </div>
+					 </div>
+				 </div>
+			 </div>
+    	</div>
+    	<div class="col-md-4 col-sm-4 col-xs-12">
+			<div class="card-blogform">
+				<div class="card-body"> 
+					<div class="row"> 
+						<div class="col-md-12 col-sm-12 col-xs-12"> 
+							
+							 <div class="d-flex"> 
+								<div class="settings-main-icon ">
+									<i class="material-icons-outlined">difference</i>
+								</div> 
+								<div class="col-md-10 col-sm-10 col-xs-12"> 
+									<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MONTHLY_SCORE_INFO");?></p>
+								</div> 
+							</div>
 							<div class="form-group">
 								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12" >
@@ -216,12 +231,36 @@
 									<?php echo $frm->getElement("max_average");?>
 								</div>
 							 </div>
-							<div class="form-group">
-								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?></label>
+
+							 <div class="d-flex"> 
+								<div class="settings-main-icon ">
+									<i class="material-icons-outlined">difference</i>
+								</div> 
+								<div class="col-md-10 col-sm-10 col-xs-12"> 
+									<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SEMESTER_SCORE_INFO");?></p>
+								</div> 
+							</div>
+				
+							 <div class="form-group">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12" >
-									<?php echo $frm->getElement("notes");?>
+									<?php echo $frm->getElement("semesterTotalScore");?>
 								</div>
 							 </div>
+							<div class="form-group">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12" >
+									<?php echo $frm->getElement("semesterTotalSubject");?>
+								</div>
+							 </div>
+							 <div class="form-group">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12" >
+									<?php echo $frm->getElement("semesterTotalAverage");?>
+								</div>
+							 </div>
+
+							
 						 </div>
 					 </div>
 				 </div>
@@ -800,6 +839,7 @@ function monthConvertedScore(col){
 	convert_score= max_score * coeffecient ;	
 	dijit.byId("month_converted_score"+col).attr("value",convert_score);
 	CulculateAverage();
+	
 	calculateTotalSubject();
 }
 
@@ -813,6 +853,7 @@ function semesterConvertedScore(col){
 
 	semester_convert_score= max_score * coeffecient ;	
 	dijit.byId("semester_converted_score"+col).attr("value",semester_convert_score);
+	CulculateSemesterAverage();
 	calculateTotalSubject();
 }
 
@@ -865,6 +906,7 @@ function calculateTotalSubject(){
 		dijit.byId("total_convert_semester").attr("value",total_semester_converted_score);
 		dijit.byId("total_score_cut").attr("value",total_score_cut);
 		CulculateAverage();
+		CulculateSemesterAverage();
 	}
 }
 function CulculateAverage(){
@@ -877,6 +919,18 @@ function CulculateAverage(){
 	max_average = parseFloat(total_max_score/divide_subject).toFixed(2);
 	dijit.byId("max_average").attr("value",max_average);
 }
+function CulculateSemesterAverage(){
+	semesterTotalScore = dijit.byId("semesterTotalScore").get("value");
+	semesterTotalScore=isNaN(semesterTotalScore)?1:semesterTotalScore;
+
+	semesterTotalSubject = dijit.byId("semesterTotalSubject").get("value");
+	semesterTotalSubject=isNaN(semesterTotalSubject)?1:semesterTotalSubject;
+
+	max_average_semester = parseFloat(semesterTotalScore/semesterTotalSubject).toFixed(2);
+	dijit.byId("semesterTotalAverage").attr("value",max_average_semester);
+}
+
+
 function submitDataClose(){
     branch_id=dijit.byId("branch_id").get("value");
     if(branch_id==-1 || branch_id==''){

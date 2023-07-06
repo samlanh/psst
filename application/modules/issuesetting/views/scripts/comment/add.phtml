@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('ADD_COMMENT')); 
 ?>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -29,6 +30,44 @@
 								<div class="col-md-12 col-sm-12 col-xs-12"> 
 									<div class="d-flex"> 
 										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("COMENT_TYPE");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										<div class="col-md-12 col-sm-12 col-xs-12"> 
+											&nbsp;
+										</div> 
+									</div>
+						
+									<div class="form-group">
+										<div class="col-md-4 col-sm-4 col-xs-12 text-center"> 
+											<input class="form-check-input " type="radio" name="commentType" id="commentType" value="1" checked>
+											<label class="form-check-label" for="exampleRadios1">
+											<?php echo $tr->translate("STUDY_HABITS");?>
+											</label>
+										</div> 
+										<div class="col-md-8 col-sm-8 col-xs-12 text-left"> 
+											<input class="form-check-input" type="radio" name="commentType" id="commentType" value="2">
+											<label class="form-check-label" for="exampleRadios2">
+												<?php echo $tr->translate("CITIZENSHIP_AND_SOCIAL_GROWTH");?>
+											</label>
+										</div> 
+										
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
 											<i class="glyphicon glyphicon-comment" aria-hidden="true"></i>
 										</div> 
 										<div class="col-md-10 col-sm-10 col-xs-12"> 
@@ -36,10 +75,10 @@
 										</div> 
 									</div>
 									<div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+										<label class="control-label  col-md-4 col-sm-4 col-xs-12 text-center" >
 											<?php echo $tr->translate("COMMENT");?> <span class="required">*</span>
 										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
+										<div class="col-md-8 col-sm-8 col-xs-12">
 											<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="comment" name="comment" type="text">
 										</div>
 									</div>
@@ -59,3 +98,19 @@
 		</form>
 	</div>
 </div>
+<script>
+	$("input:custom-switch-input").on('click', function() {
+  // in the handler, 'this' refers to the box clicked on
+  var $box = $(this);
+  if ($box.is(":checked")) {
+  
+    var group = "input:custom-switch-input[name='" + $box.attr("name") + "']";
+    
+    $(group).prop("checked", false);
+    $box.prop("checked", true);
+  } else {
+    $box.prop("checked", false);
+  }
+});
+
+</script>

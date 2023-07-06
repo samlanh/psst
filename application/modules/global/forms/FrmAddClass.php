@@ -91,7 +91,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
 	
 		$_note = new Zend_Dojo_Form_Element_Textarea('notes');
-		$_note->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
+		$_note->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
 		
 		$_reason = new Zend_Dojo_Form_Element_Textarea('reason');
 		$_reason->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
@@ -239,6 +239,26 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'onkeyup'=>'CulculateAverage();',
 				'required'=>true));
+
+		$semesterTotalScore = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalScore');
+		$semesterTotalScore->setAttribs(array('dojoType'=>$this->t_num,
+				'class'=>'fullside',
+				'onkeyup'=>'CulculateSemesterAverage();',
+				'required'=>true));
+		
+		$semesterTotalSubject = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalSubject');
+		$semesterTotalSubject->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
+				'required'=>true,
+				'onkeyup'=>'CulculateSemesterAverage();',
+				));
+		
+		$semesterTotalAverage = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalAverage');
+		$semesterTotalAverage->setAttribs(array('dojoType'=>$this->t_num,
+				'class'=>'fullside',
+				'readOnly'=>true,
+				'required'=>true));
+
+				
 			
 		$id = new Zend_Form_Element_hidden('id');
 		if($data!=null){
@@ -253,8 +273,36 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$divide_subject->setValue($data['amount_subject']);
 			$total_max_score->setValue($data['total_score']);
 			$_academic->setValue($data['academic_year']);
+
+			$semesterTotalScore->setValue($data['semesterTotalScore']);
+			$semesterTotalSubject->setValue($data['semesterTotalSubject']);
+			$semesterTotalAverage->setValue($data['semesterTotalAverage']);
 		}
-		$this->addElements(array($total_max_score,$divide_subject,$max_avg,$is_pass,$id,$degree,$_status,$_sex,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array(
+			$total_max_score,
+			$divide_subject,
+			$max_avg,
+			$is_pass,
+			$id,
+			$degree,
+			$_status,
+			$_sex,
+			$_sex,
+			$_reason,
+			$_type,
+			$room,
+			$_branch_id,
+			$_academic,
+			$_time,
+			$_note,
+			$session,
+			$_calture,
+			$_goup,
+			$semesterTotalScore,
+			$semesterTotalSubject,
+			$semesterTotalAverage
+
+		));
 		return $this;
 	}
 	

@@ -20,7 +20,7 @@ class Issuesetting_CommentController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllComment($search);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("COMMENT","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("COMMENT","COMENT_TYPE","CREATED_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'issuesetting','controller'=>'comment','action'=>'edit',
 			);

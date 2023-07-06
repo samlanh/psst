@@ -4,6 +4,8 @@
 	echo $this->headTitle($tr->translate("EDIT_STUDY_GROUP"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	$frm = $this->frm;
+	
+
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script type="text/javascript">
@@ -171,27 +173,8 @@
 											<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
 										 </div>
 									 </div>
-									 <div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_COMPLETED_GROUP");?> :</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<select name="is_pass" id="is_pass" class="fullside" dojoType="dijit.form.FilteringSelect">
-												<?php if (!empty($this->statustype)) foreach ($this->statustype as $rs){?>
-												<option value="<?php echo $rs['id'];?>" <?php if($this->rs['is_pass']==$rs['id']) echo 'selected="selected"';?>><?php echo $rs['name'];?></option>
-												<?php }?>
-											</select>
-										</div>
-									 </div>
-								 </div>
-							 </div>
-						 </div>
-					 </div>
-	    		</div>
-	    		<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
+									
+									 <div class="d-flex"> 
 										<div class="settings-main-icon ">
 											<i class="material-icons-outlined">difference</i>
 										</div> 
@@ -207,30 +190,97 @@
 										</div>
 									 </div>
 									 <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
-										<div class="col-md-7 col-sm-7 col-xs-12" >
-											<?php echo $frm->getElement("total_max_score");?>
-										</div>
-									 </div>
-									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?> <span class="required">*</span></label>
-										<div class="col-md-7 col-sm-7 col-xs-12" >
-											<?php echo $frm->getElement("divide_subject");?>
-										</div>
-									 </div>
-									 <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?></label>
-										<div class="col-md-7 col-sm-7 col-xs-12" >
-											<?php echo $frm->getElement("max_average");?>
-										</div>
-									 </div>
-									 <div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> :</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm->getElement("notes");?>
 										</div>
 									 </div>
-									 <div class="form-group">
+									 
+								 </div>
+							 </div>
+						 </div>
+					 </div>
+	    		</div>
+	    		<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">difference</i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MONTHLY_SCORE_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12" >
+											<?php echo $frm->getElement("total_max_score");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12" >
+											<?php echo $frm->getElement("divide_subject");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?></label>
+										<div class="col-md-7 col-sm-7 col-xs-12" >
+											<?php echo $frm->getElement("max_average");?>
+										</div>
+									</div>
+
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">difference</i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SEMESTER_SCORE_INFO");?></p>
+										</div> 
+									</div>
+						
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TOTAL_SCORE");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12" >
+											<?php echo $frm->getElement("semesterTotalScore");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("AMOUNT_DIVIDESUBJECT");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12" >
+											<?php echo $frm->getElement("semesterTotalSubject");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("MAX_AVERAGE");?></label>
+										<div class="col-md-7 col-sm-7 col-xs-12" >
+											<?php echo $frm->getElement("semesterTotalAverage");?>
+										</div>
+									</div>
+									
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">difference</i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STATUS");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("IS_COMPLETED_GROUP");?> :</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<select name="is_pass" id="is_pass" class="fullside" dojoType="dijit.form.FilteringSelect">
+												<?php if (!empty($this->statustype)) foreach ($this->statustype as $rs){?>
+												<option value="<?php echo $rs['id'];?>" <?php if($this->rs['is_pass']==$rs['id']) echo 'selected="selected"';?>><?php echo $rs['name'];?></option>
+												<?php }?>
+											</select>
+										</div>
+									 </div>
+									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> :</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<select name="status" id="status" class="fullside" dojoType="dijit.form.FilteringSelect">
@@ -239,6 +289,7 @@
 											</select>
 										</div>
 									 </div>
+									
 								 </div>
 							 </div>
 						 </div>
@@ -260,7 +311,7 @@
 											</div> 
 									</div>
 									<table class="collape responsiveTable">
-										<thead  id="head-title">
+									<thead  id="head-title" >
 											<tr class="head-td " align="center" style="border: 1px solid;">
 												<th rowspan="2" scope="col" width="4%" ><?php echo $tr->translate("DEL");?> <br> <?php echo $tr->translate("REFRESH");?></th>
 												<th rowspan="2" scope="col" width="4%"><?php echo $tr->translate("N_O");?></th>
@@ -273,7 +324,7 @@
 													</div>
 												</th>
 												<th colspan="3" scope="col" width="10%" ><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
-												<th colspan="2" scope="col" width="10%" ><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
+												<th colspan="4" scope="col" width="10%" ><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
 												<th rowspan="2" scope="col" width="20%"><?php echo $tr->translate("NOTE");?></th>
 											</tr>
 											<tr class="head-td " align="center">
@@ -285,19 +336,25 @@
 														</label>
 													</div>
 												</th>
-												<th scope="col" width="10%" ><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
-												<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("SCORE_SHORT");?></th>
-												<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MULTIPLY");?></th>
-												<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
-												<th scope="col" width="10%" style="white-space:nowrap"><?php echo $tr->translate("MULTIPLY");?></th>
+												<th scope="col" width="8%" ><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
+												<th scope="col" width="8%" style="white-space:nowrap"><?php echo $tr->translate("MULTIPLY");?></th>
+												<th scope="col" width="8%" style="white-space:nowrap"><?php echo $tr->translate("CONVERTED_SCORE");?></th>
+												<th scope="col" width="8%" style="white-space:nowrap"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
+												<th scope="col" width="8%" style="white-space:nowrap"><?php echo $tr->translate("MULTIPLY");?></th>
+												<th scope="col" width="8%" style="white-space:nowrap"><?php echo $tr->translate("CONVERTED_SCORE");?></th>
+												<th scope="col" width="8%" style="white-space:nowrap"><?php echo $tr->translate("SCORE_SHORT");?></th>
 											</tr>
 										</thead>
 										<tbody id="table_row"></tbody>
 										<tr>
-											<td colspan="5" align="right">&nbsp;&nbsp;</td>
-											<td><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
-											<td><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
-											<td><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.NumberTextBox" /></td>
+											<td colspan="4" align="right">&nbsp;&nbsp;</td>
+											<td ></td>
+											<td ><input type="text" readonly style="color:red" name="total_subject_month" id="total_subject_month" class="fullside" dojoType="dijit.form.TextBox" /></td>
+											<td ><input type="text" readonly style="color:red" name="total_convert_month" id="total_convert_month" class="fullside" dojoType="dijit.form.TextBox" /></td>
+											<td ></td>
+											<td ><input type="text" readonly style="color:red" name="total_subject_semester" id="total_subject_semester" class="fullside" dojoType="dijit.form.TextBox" /></td>
+											<td ><input type="text" readonly style="color:red" name="total_convert_semester" id="total_convert_semester" class="fullside" dojoType="dijit.form.TextBox" /></td>
+											<td ><input type="text" readonly style="color:red" name="total_score_cut" id="total_score_cut" class="fullside" dojoType="dijit.form.TextBox" /></td>
 											<td colspan="1" ></td>
 										</tr>
 									</table>
@@ -736,16 +793,19 @@ function Initailize() {
 			template='';
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-				template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subjectold+'</select></td>';
+				template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
 				template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 				template+=teacher_optionini;  
 				template+='</select></td>';
-				template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'" onKeyUp="calculateTotalSubject()" value="1" type="text"></td>';	
-				template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'"  onKeyUp="calculateTotalSubject()" type="text"></td>';
-				template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject'+col+'" value="1" type="text"></td>';	
-				template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_max_score'+col+'" id="semester_max_score'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
-				template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
-				template+='<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
+				template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'" value="0" type="text" onKeyUp="monthConvertedScore('+col+')"></td>';
+				template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="monthConvertedScore('+col+')" id="amount_subject'+col+'" value="1" type="text"></td>';
+				template+='<td data-label="<?php echo $tr->translate("CONVERTED_SCORE");?>" ><input readOnly="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="month_converted_score'+col+'" id="month_converted_score'+col+'" value="0" type="text" ></td>';
+
+				template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_max_score'+col+'" id="semester_max_score'+col+'" value="0" type="text" onKeyUp="semesterConvertedScore('+col+')"></td>';
+				template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="semesterConvertedScore('+col+') " id="amount_subject_semester'+col+'" value="1" type="text"></td>';
+				template+='<td data-label="<?php echo $tr->translate("CONVERTED_SCORE");?>" ><input readOnly="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_converted_score'+col+'" id="semester_converted_score'+col+'" value="0" type="text" ></td>';	
+				template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
+				template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 				
 			tmp='<tr class="rowData" id="row'+col+'">';
 			tmp+="</tr>";
@@ -766,8 +826,11 @@ function Initailize() {
 			dijit.byId('amount_subject_semester'+col).attr('value','<?php echo $rows['amount_subject_sem'];?>');
 			dijit.byId('group_note_'+col).attr('value',"<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rows['note'])));?>");
 			dijit.byId('teacher_'+col).attr('value','<?php echo $rows['teacher'];?>');
+			monthConvertedScore(col);
+			semesterConvertedScore(col);
 	<?php }}?>
 	calculateTotalSubject();
+
 }
 function popupTeacher(key){
 }
@@ -776,16 +839,19 @@ function addRow() {
 	template='';
 		template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
 		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+');" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
+		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
 		template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
-		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'" value="0" onKeyUp="calculateTotalSubject()" type="text"></td>';
-		template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" onKeyUp="calculateTotalSubject()" type="text"></td>';
-		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject'+col+'" value="1" type="text"></td>';
-		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_max_score'+col+'" id="semester_max_score'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
-		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="calculateTotalSubject()" id="amount_subject_semester'+col+'" value="1" type="text"></td>';	
-		template+='<td data-label="<?php echo $tr->translate("NOTE");?>"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
+		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="max_score'+col+'" id="max_score'+col+'" value="0" type="text" onKeyUp="monthConvertedScore('+col+')"></td>';
+		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject'+col+'" onKeyUp="monthConvertedScore('+col+')" id="amount_subject'+col+'" value="1" type="text"></td>';
+		template+='<td data-label="<?php echo $tr->translate("CONVERTED_SCORE");?>" ><input readOnly="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="month_converted_score'+col+'" id="month_converted_score'+col+'" value="0" type="text" ></td>';
+
+		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_max_score'+col+'" id="semester_max_score'+col+'" value="0" type="text" onKeyUp="semesterConvertedScore('+col+')"></td>';
+		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="semesterConvertedScore('+col+') " id="amount_subject_semester'+col+'" value="1" type="text"></td>';
+		template+='<td data-label="<?php echo $tr->translate("CONVERTED_SCORE");?>" ><input readOnly="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_converted_score'+col+'" id="semester_converted_score'+col+'" value="0" type="text" ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
+		template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 	tmp='<tr class="rowData" id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
@@ -901,20 +967,57 @@ function getSubjectByGrade(){
 		});
 }
 
+function monthConvertedScore(col){
+	max_score = dijit.byId("max_score"+col).get("value");
+	max_score = isNaN(max_score)?0:max_score;
+
+	coeffecient = dijit.byId("amount_subject"+col).get("value");
+	coeffecient = isNaN(coeffecient)?1:coeffecient;
+
+	convert_score= max_score * coeffecient ;	
+	dijit.byId("month_converted_score"+col).attr("value",convert_score);
+	CulculateAverage();
+	
+	calculateTotalSubject();
+}
+
+function semesterConvertedScore(col){
+
+	max_score = dijit.byId("semester_max_score"+col).get("value");
+	max_score = isNaN(max_score)?0:max_score;
+
+	coeffecient = dijit.byId("amount_subject_semester"+col).get("value");
+	coeffecient = isNaN(coeffecient)?1:coeffecient;
+
+	semester_convert_score= max_score * coeffecient ;	
+	dijit.byId("semester_converted_score"+col).attr("value",semester_convert_score);
+	CulculateSemesterAverage();
+	calculateTotalSubject();
+}
+
 function calculateTotalSubject(){
 	var identity = $('#identity1').val();
+	var total_month_converted_score=0;
+	var total_semester_converted_score=0;
+
 	var total_amt_subject_month=0;
 	var total_amt_subject_semester=0;
 	total_max_score=0;
 	total_score_cut = 0;
 	if(identity !=''){
 		var arrays = identity.split(',');
-		for(var i=0;i<arrays.length;i++) {
+		for(var i=0;i<arrays.length;i++){
 			amt_subject_month = dijit.byId("amount_subject"+arrays[i]).get("value");
 			amt_subject_month = isNaN(amt_subject_month)?0:amt_subject_month;
+
+			month_converted_score = dijit.byId("month_converted_score"+arrays[i]).get("value");
+			month_converted_score = isNaN(month_converted_score)?0:month_converted_score;
 			
 			amt_subject_semester = dijit.byId("amount_subject_semester"+arrays[i]).get("value");
 			amt_subject_semester = isNaN(amt_subject_semester)?0:amt_subject_semester;
+
+			semester_converted_score = dijit.byId("semester_converted_score"+arrays[i]).get("value");
+			semester_converted_score = isNaN(semester_converted_score)?0:semester_converted_score;
 			
 			max_score = dijit.byId("max_score"+arrays[i]).get("value");
 			max_score = isNaN(max_score)?0:max_score;
@@ -923,16 +1026,24 @@ function calculateTotalSubject(){
 			score_cut = isNaN(score_cut)?0:score_cut;
 			
 			total_max_score =total_max_score+max_score;
+
+			total_month_converted_score =total_month_converted_score+month_converted_score;
+			total_semester_converted_score =total_semester_converted_score+semester_converted_score;
+
 			total_score_cut =total_score_cut+score_cut;
 			 
 			total_amt_subject_month = total_amt_subject_month + amt_subject_month;
 			total_amt_subject_semester = total_amt_subject_semester + amt_subject_semester;
 		}
-		//dijit.byId("total_max_score").attr("value",dojo.number.format(total_max_score-total_score_cut,2));
-		dijit.byId("total_score_cut").attr("value",dojo.number.format(total_score_cut,2));
-		dijit.byId("total_subject_month").attr("value",dojo.number.format(total_amt_subject_month,2));
-		dijit.byId("total_subject_semester").attr("value",dojo.number.format(total_amt_subject_semester,2));
+	
+		dijit.byId("total_subject_month").attr("value",total_amt_subject_month);
+		dijit.byId("total_convert_month").attr("value",total_month_converted_score);
+
+		dijit.byId("total_subject_semester").attr("value",total_amt_subject_semester);
+		dijit.byId("total_convert_semester").attr("value",total_semester_converted_score);
+		dijit.byId("total_score_cut").attr("value",total_score_cut);
 		CulculateAverage();
+		CulculateSemesterAverage();
 	}
 }
 function CulculateAverage(){
@@ -945,6 +1056,17 @@ function CulculateAverage(){
 	max_average = parseFloat(total_max_score/divide_subject).toFixed(2);
 	dijit.byId("max_average").attr("value",max_average);
 }
+function CulculateSemesterAverage(){
+	semesterTotalScore = dijit.byId("semesterTotalScore").get("value");
+	semesterTotalScore=isNaN(semesterTotalScore)?1:semesterTotalScore;
+
+	semesterTotalSubject = dijit.byId("semesterTotalSubject").get("value");
+	semesterTotalSubject=isNaN(semesterTotalSubject)?1:semesterTotalSubject;
+
+	max_average_semester = parseFloat(semesterTotalScore/semesterTotalSubject).toFixed(2);
+	dijit.byId("semesterTotalAverage").attr("value",max_average_semester);
+}
+
 function hideDialogGrade() {		
 	dijit.byId("popup_grate").hide();
 }

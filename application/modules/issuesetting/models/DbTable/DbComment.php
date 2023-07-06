@@ -18,6 +18,7 @@ class Issuesetting_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 			}			
 			$_arr=array(
 					'comment'	  => $comment,
+					'commentType'	  =>$_data['commentType'],
 					'create_date' => date("Y-m-d H:i:s"),
 					'user_id'	  => $this->getUserId()
 			);
@@ -36,6 +37,7 @@ class Issuesetting_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 		$status = empty($data['status'])?0:1;
 		$_arr=array(
 			'comment'	  	=> $data['comment'],
+			'commentType'	  =>$data['commentType'],
 			'status'   		=> $status,
 			'user_id'	  	=> $this->getUserId()
 		);
@@ -43,10 +45,20 @@ class Issuesetting_Model_DbTable_DbComment extends Zend_Db_Table_Abstract
 		$this->update($_arr, $where);
 	}
 	function getAllComment($search){
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+    	$name = 'name_kh';
+    	if ($lang==1){
+    		$name = 'name_kh';
+    	}elseif($lang==2){
+			$name = 'name_en';
+		}
+
 		$db = $this->getAdapter();
 		$sql = " SELECT 
 					id,
 					comment,
+					(SELECT $name FROM rms_view WHERE type= 36 AND key_code=commentType )AS commentType,
 					create_date,
 					(SELECT CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
 			";

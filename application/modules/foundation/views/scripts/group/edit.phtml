@@ -771,7 +771,7 @@ function getSubject(col){
 
 function newoption(subject, col){
 	
-    option='<select  name="group_subject_study_'+col+'" dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
+    option='<select  name="group_subject_study_'+col+'" placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>" onchange="checkSubject('+col+')"  dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
     dojo.html.set(dojo.byId("subject_option"+col),option , {
          parseContent: true,
     });
@@ -878,20 +878,24 @@ function deleteRecord(index) {
 }
 
 function checkSubject(index){
+	function checkSubject(index){
 	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
 	current_subject = dijit.byId('group_subject_study_'+index).get('value');
-	if(current_subject==''){
-		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/subject/add?rightclick=true";?>','_blank');
-	}
-	for(var i=0;i<arrays.length;i++) {
-		if(arrays[i] == index){
-		}else{
-			old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
-			
-			if(current_subject == old_subject){
-				alert("Can not add the same subject");
-				deleteRecord(index);
+		if(current_subject==''){
+			window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/subject/add?rightclick=true";?>','_blank');
+			dijit.byId('group_subject_study_'+index).attr('value', 0);
+		}else if(current_subject!=0){
+			for(var i=0;i<arrays.length;i++) {
+				if(arrays[i] == index){
+				}else{
+					old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
+					
+					if(current_subject == old_subject){
+						alert("Can not add the same subject");
+						deleteRecord(index);
+					}
+				}
 			}
 		}
 	}
@@ -1042,6 +1046,13 @@ function calculateTotalSubject(){
 		dijit.byId("total_subject_semester").attr("value",total_amt_subject_semester);
 		dijit.byId("total_convert_semester").attr("value",total_semester_converted_score);
 		dijit.byId("total_score_cut").attr("value",total_score_cut);
+
+		dijit.byId("total_max_score").attr("value",total_month_converted_score);
+		dijit.byId("divide_subject").attr("value",total_amt_subject_month);
+
+		dijit.byId("semesterTotalScore").attr("value",total_semester_converted_score);
+		dijit.byId("semesterTotalSubject").attr("value",total_amt_subject_semester);
+
 		CulculateAverage();
 		CulculateSemesterAverage();
 	}

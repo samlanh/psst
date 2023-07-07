@@ -212,7 +212,6 @@ function checkDuplicateRecord(){
 		load: function(data) {
 			if(data==1){
 				isDuplicate = 1;
-				alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD");?>");
 				dijit.byId('subject_kh').focus();
 				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_RECORD");?> !');
 			
@@ -220,11 +219,11 @@ function checkDuplicateRecord(){
 				isDuplicate=0;
 				$("#message").html('');
 			}
-			HideloadingBlock();
+			
 		},
 		error: function(err) {
 			alert(err);
-			HideloadingBlock();
+			
 		}
 	});
 }

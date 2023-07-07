@@ -390,7 +390,8 @@
 				(SELECT amount_subject FROM rms_itemsdetail WHERE rms_itemsdetail.id=grade_id LIMIT 1) AS divide_subject
 			FROM rms_grade_subject_detail 
 				WHERE grade_id = ".$db->quote($id);
-		return $db->fetchAll($sql);
+		$order = " ORDER BY (SELECT subject_lang FROM `rms_subject` WHERE id = subject_id ) ";
+		return $db->fetchAll($sql.$order);
 	}
 	public function getDDegreeCommentById($id){
 		$db = $this->getAdapter();

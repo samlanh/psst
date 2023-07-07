@@ -126,12 +126,14 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    		WHERE s.score_setting_id=$id ORDER BY criteriaId ASC,forExamType ASC  ";
    	
    	$result =  $db->fetchAll($sql);
+   	return $result;
    	$resultOpt = array();
    	if(!empty($result)){
    		$key=0;
    		$criteriaId=0;
+   		$oldScore=0;
    		foreach($result as $key=> $rs){
-   			if($criteriaId!=$rs['criteriaId']){
+   			if($criteriaId!=$rs['criteriaId'] AND $oldScore!=$rs['pecentage_score']){
 	   			$resultOpt[$key]['id']=$rs['id'];
 	   			$resultOpt[$key]['score_setting_id']=$rs['score_setting_id'];
 	   			$resultOpt[$key]['criteriaId']=$rs['criteriaId'];
@@ -184,6 +186,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    				$resultOpt[$key_old]['duplicateRow']=$rs['id'];
    			}
    			$criteriaId=$rs['criteriaId'];
+   			$oldScore=$rs['pecentage_score'];
    		}
    	}
    	return $resultOpt;
@@ -220,9 +223,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    					if (!empty($_data['detailid'.$k])){
    						$detailId= $detailId.",".$_data['detailid'.$k];
    					}
-   					if(!empty($_data['duplicateRecord'.$k])){
-   						$detailId= $detailId.",".$_data['duplicateRecord'.$k];
-   					}
+   					
    				}
    			}
    		}
@@ -253,15 +254,6 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    					$where = " id =".$_data['detailid'.$i];
 					$this->update($arr, $where);
 					
-					if(!empty($_data['duplicateRecord'.$i])){//duplicate Row
-						
-						$arr['forExamType']=1;
-						$arr['subCriterialTitleKh']=$_data['subCriterialTitleKhMonth'.$i];
-						$arr['subCriterialTitleEng']=$_data['subCriterialTitleEngMonth'.$i];
-						
-						$where = "id=".$_data['duplicateRecord'.$i];
-						$this->update($arr, $where);
-					}
    				}else{
 	   				$arr=array(
 							'score_setting_id'		=>$id,

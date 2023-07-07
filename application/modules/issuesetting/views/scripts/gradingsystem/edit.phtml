@@ -312,14 +312,14 @@ tr.rowData {
 				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" > <input <?php echo $readOnly;?> class="fullside" type="text" required="true" name="timeInput'+col+'" id="timeInput'+col+'" dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['timeInput'];?>" />';
 
 				template+='<div class="form-group"><div class="col-md-6 col-sm-6 col-xs-12">';
-				template+='<div class="custom-control custom-checkbox "><input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamTypeMonth']==1 AND $rs['subjectId']>0){ echo "checked";}?> class="custom-control-input" name="forMonth'+col+'" id="forMonth'+col+'"  ><input class="fullside" type="hidden" value="<?php if($rs['duplicateRow']>0 AND $rs['subjectId']>0){echo $rs['duplicateRow'];}?>" name="duplicateRecord'+col+'" id="duplicateRecord'+col+'" dojoType="dijit.form.TextBox" />';
+				template+='<div class="custom-control custom-checkbox "><input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamType']==1){ echo "checked";}?> class="custom-control-input" name="forMonth'+col+'" id="forMonth'+col+'"  ><input class="fullside" type="hidden" value="<?php echo $rs['criteriaId'];?>" name="duplicateRecord'+col+'" id="duplicateRecord'+col+'" dojoType="dijit.form.TextBox" />';
 				template+='<label class="custom-control-label" for="forMonth'+col+'" >';
 				template+='<?php echo $tr->translate('MONTHLY');?>';
 				template+='</label>';
 				template+='</div></div></div>';	
 
 				template+='<div class="custom-control custom-checkbox ">';
-				template+='<input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamTypeSemester']==2 AND $rs['subjectId']>0){ echo "checked";}?> class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
+				template+='<input onClick="forSubject('+col+');" type="checkbox" <?php if($rs['forExamType']==2){ echo "checked";}?> class="custom-control-input" name="forExamType'+col+'" id="forExamType'+col+'"  >';
 				template+='<label class="custom-control-label" for="forExamType'+col+'" >';
 					template+='<?php echo $tr->translate('FOR_SEMESTER');?>';
 				template+='</label>';
@@ -333,20 +333,20 @@ tr.rowData {
 				template+='</div>';
 
 				template+='<div class="col-md-6 col-sm-6 col-xs-12">';
-					template+='<input class="fullside" readOnly type="text" name="subCriterialTitleKhMonth'+col+'" id="subCriterialTitleKhMonth'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorKH");?>" value="<?php echo $rs['subCriterialTitleKhMonth'];?>" />';
+					template+='<input class="fullside" readOnly type="text" name="subCriterialTitleKhMonth'+col+'" id="subCriterialTitleKhMonth'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorKH");?>" value="<?php if($rs['forExamType']==1){ echo $rs['subCriterialTitleKh']; } ?>" />';
 				template+='</div>';
 	
 				template+='<div class="col-md-6 col-sm-6 col-xs-12">';
-					template+='<input class="fullside" readOnly type="text" name="subCriterialTitleEngMonth'+col+'" id="subCriterialTitleEngMonth'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>" value="<?php echo $rs['subCriterialTitleEngMonth'];?>" />';
+					template+='<input class="fullside" readOnly type="text" name="subCriterialTitleEngMonth'+col+'" id="subCriterialTitleEngMonth'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>" value="<?php if($rs['forExamType']==1){ echo $rs['subCriterialTitleEng'];} ?>" />';
 				template+='</div>';
 				
 				template+='<div class="form-group">';
 					template+='<div class="col-md-6 col-sm-6 col-xs-12"';
-						template+='<input class="fullside" readOnly type="text"  name="subCriterialTitleKh'+col+'" id="subCriterialTitleKh'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorKH");?>" value="<?php echo $rs['subCriterialTitleKh'];?>" />';
+						template+='<input class="fullside" readOnly type="text"  name="subCriterialTitleKh'+col+'" id="subCriterialTitleKh'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorKH");?>" value="<?php if($rs['forExamType']==2){ echo $rs['subCriterialTitleKh']; } ?>" />';
 					template+='</div>';
 
 				template+='<div class="col-md-6 col-sm-6 col-xs-12"';
-						template+='<input  class="fullside" readOnly type="text"  name="subCriterialTitleEng'+col+'" id="subCriterialTitleEng'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>" value="<?php echo $rs['subCriterialTitleEng'];?>"/>';
+						template+='<input  class="fullside" readOnly type="text"  name="subCriterialTitleEng'+col+'" id="subCriterialTitleEng'+col+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("Sub_MajorEng");?>" value="<?php if($rs['forExamType']==2){  echo $rs['subCriterialTitleEng'];}?>"/>';
 					template+='</div>';
 				template+='</div>';
 				

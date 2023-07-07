@@ -581,61 +581,49 @@
 								</td>
 								<td align="center" class="bg_<?php echo $rs['sex'];?>">&nbsp;<?php echo $sex;?>&nbsp;</td>
 								<?php 
-									$amount_subject=0;
-									if($this->data['scoreresulttye']==1){
-										$total_score = 0; 
-										if (!empty($subj)) foreach ($subj as $subject){
-											$score = $db->getScoreBySubjectTranscript($rs['id'],$rs['student_id'],$subject['subject_id']); 
-											$tscore_subject = number_format($score['score'],2);
-											$total_score = $total_score + $tscore_subject;
-										 }
-								 	}
-								 	
-								 	$total_score = ($this->data['scoreresulttye']==1)?$rs['total_score']:$rs['total_scoreallsubject'];
-								 	if($rs['total_avg']==$old_avg AND $total_score==$old_totalscore){
+									$total_score = $rs['total_score'];
+									
+									if($total_score==$old_totalscore){
 										$duplicate=$duplicate+1;
 									}else{
 										$old_rank=$old_rank+1+$duplicate;
 										$duplicate=0;
 									}
 									
-									
-								?>
-								<td align="center">
-									<?php
-										$total_score = number_format($total_score,2);
-										echo $total_score;
-										$average = number_format($rs['total_avg'],2);
-									?>
-								</td>
-								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
-								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i;?>" id="rank<?php echo $i;?>" value="<?php echo $old_rank;?>" />
-								<td class="red border-bottom-none border-right-none" align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;"';}?>>
-								<?php  echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade'],$rs['totalMaxScore']);?>
-								</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;';}?>">
-									<?php  echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade'],$rs['totalMaxScore']);?>
-									<?php 
-									if($average>=($rs['pass_avrage'])){
+									$stringBgResult=' ';
+									if($total_score>=$rs['passScore']){
 										$count_pass++;
 										if($rs['sex']==2){
 											$pass_female=$pass_female+1;
 										}//femail
 									}else{
+										$stringBgResult=' background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;';
 										$count_fail++;
 										if($rs['sex']==2){
 											$fail_female = $fail_female+1;
 										}
 									}
+									
+								?>
+								<td align="center">
+									<?php
+										echo $total_score;
 									?>
 								</td>
-								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php if($average<($rs['pass_avrage'])){echo ' background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;';}?>">
+								<td align="center"><?php echo number_format($rs['total_avg'],2);?></td>
+								<td class="red bold"  align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
+								<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i;?>" id="rank<?php echo $i;?>" value="<?php echo $old_rank;?>" />
+								<td class="red border-bottom-none border-right-none" align="center" style=" <?php echo $stringBgResult;?>">
+								<?php  echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade'],$rs['totalMaxScore']);?>
+								</td>
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; style=" <?php echo $stringBgResult;?>">
+									<?php  echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade'],$rs['totalMaxScore']);?>
+								</td>
+								<td class="border-bottom-none border-right-none" align="center" style="white-space:nowrap; <?php echo $stringBgResult;?>">
 									<?php  echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'],$rs['degree_id'],3,$rs['grade'],$rs['totalMaxScore']);?>
 								</td>
 							</tr>
 							<?php 
-								$old_avg = $rs['total_avg'];
 								$old_totalscore = $total_score;
 								$old_groupid=$rs['group_id']; ?>
 							<?php }}?>

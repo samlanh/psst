@@ -226,35 +226,41 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$total_max_score = new Zend_Dojo_Form_Element_NumberTextBox('total_max_score');
 		$total_max_score->setAttribs(array('dojoType'=>$this->t_num,
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("MONTH_COVERTED_SCORED"),
 				'onkeyup'=>'CulculateAverage();',
 				'required'=>true));
 		
 		$max_avg = new Zend_Dojo_Form_Element_NumberTextBox('max_average');
 		$max_avg->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("MONTH_AVERAGE_SCORE"),
 				'required'=>true,
 				'readOnly'=>true));
 		
 		$divide_subject = new Zend_Dojo_Form_Element_NumberTextBox('divide_subject');
 		$divide_subject->setAttribs(array('dojoType'=>$this->t_num,
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("MONTH_SUBJECT_COEFFECTION"),
 				'onkeyup'=>'CulculateAverage();',
 				'required'=>true));
 
 		$semesterTotalScore = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalScore');
 		$semesterTotalScore->setAttribs(array('dojoType'=>$this->t_num,
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SEM_CONVERTED_SCORED"),
 				'onkeyup'=>'CulculateSemesterAverage();',
 				'required'=>true));
 		
 		$semesterTotalSubject = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalSubject');
 		$semesterTotalSubject->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
 				'required'=>true,
+				'placeholder'=>$this->tr->translate("SEM_COEFFECTION"),
 				'onkeyup'=>'CulculateSemesterAverage();',
 				));
 		
 		$semesterTotalAverage = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalAverage');
 		$semesterTotalAverage->setAttribs(array('dojoType'=>$this->t_num,
 				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("SEM_AVR_SCORED"),
 				'readOnly'=>true,
 				'required'=>true));
 

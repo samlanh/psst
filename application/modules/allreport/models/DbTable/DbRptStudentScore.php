@@ -354,9 +354,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	sm.total_score,
 		    sm.total_avg,
 		    sm.totalMaxScore,
-		    (g.max_average/2) as pass_avrage
-		   
-		   
+		    (sm.totalMaxScore/2) as passScore
+		    
    		FROM
 		   	`rms_score` AS s,
 		   	`rms_score_monthly` AS sm,

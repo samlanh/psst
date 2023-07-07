@@ -83,15 +83,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	 
     	$this->view->search=$search;
     	 
-    	$this->view->g_all_name=$db->getAllgroupStudyNotPass();
-    	
-    	 
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();
     	Application_Model_Decorator::removeAllDecorator($form);
     	$this->view->form_search=$form;
-    	$key = new Application_Model_DbTable_DbKeycode();
-    	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
     	 
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($result[0]['branch_id'])?1:$result[0]['branch_id'];

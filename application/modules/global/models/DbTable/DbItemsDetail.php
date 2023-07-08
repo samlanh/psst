@@ -152,14 +152,13 @@
 								'subject_id'	=> $_data['subject_study_'.$i],
 								'max_score'		=>$_data['max_score'.$i],
 								'cut_score'		=>$_data['score_cut_'.$i],
+								'amount_subject' =>$_data['amount_subject'.$i],
+								'amount_subject_sem' =>$_data['amount_subject_semester'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,
 						);
-						if($show==1){
-							$arr['amount_subject']=$_data['amount_subject'.$i];
-							$arr['amount_subject_sem']=$_data['amount_subject_semester'.$i];
-						}
+						
 						$this->insert($arr);
 					}
 				}
@@ -221,14 +220,12 @@
 								'subject_id'	=> $_data['subject_study_'.$i],
 								'max_score'=>$_data['max_score'.$i],
 								'cut_score'	=>$_data['score_cut_'.$i],
+								'amount_subject' =>$_data['amount_subject'.$i],
+								'amount_subject_sem' =>$_data['amount_subject_semester'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,
 						);
-						if($show==1){
-							$arr['amount_subject']=$_data['amount_subject'.$i];
-							$arr['amount_subject_sem']=$_data['amount_subject_semester'.$i];
-						}
 						$this->insert($arr);
 					}
 				}

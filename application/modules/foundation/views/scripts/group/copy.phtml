@@ -779,7 +779,7 @@ function Initailize() {
 				template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
 				template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 				
-			tmp='<tr class="rowData" id="row'+col+'">';
+			tmp='<tr class="rowData hover" id="row'+col+'">';
 			tmp+="</tr>";
 			dojo.query("#table_row").append(tmp);
 		
@@ -810,7 +810,7 @@ function addRow() {
 	template='';
 	template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
 	template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-	template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
+	template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select  placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>"  queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
 	template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 	template+=teacher_optionini;  
 	template+='</select></td>';
@@ -824,7 +824,7 @@ function addRow() {
 	template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
 	template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';			
 		
-	tmp='<tr class="rowData" id="row'+col+'">';
+	tmp='<tr class="rowData hover" id="row'+col+'">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);
 
@@ -849,26 +849,27 @@ function deleteRecord(index) {
 	calculateTotalSubject();
 }
 function checkSubject(index){
+	function checkSubject(index){
 	var identity = $('#identity1').val();
 	var arrays = identity.split(',');
 	current_subject = dijit.byId('group_subject_study_'+index).get('value');
-	if(current_subject==''){
-		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/subject/add?rightclick=true";?>','_blank');
-	}else{
-		for(var i=0;i<arrays.length;i++) {
-			if(arrays[i] == index){
-			}else{
-				old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
-				
-				if(current_subject == old_subject){
-					alert("Can not add the same subject");
-					deleteRecord(index);
+		if(current_subject==''){
+			window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/global/subject/add?rightclick=true";?>','_blank');
+			dijit.byId('group_subject_study_'+index).attr('value', 0);
+		}else if(current_subject!=0){
+			for(var i=0;i<arrays.length;i++) {
+				if(arrays[i] == index){
+				}else{
+					old_subject = dijit.byId('group_subject_study_'+arrays[i]).get('value');
+					
+					if(current_subject == old_subject){
+						alert("Can not add the same subject");
+						deleteRecord(index);
+					}
 				}
 			}
 		}
-
 	}
-	
 }
 
 function hideDialog(){
@@ -1032,7 +1033,7 @@ function getSubjectByGrade(){
 							template+='</select></td>';
 							template+='<td width="25%"><input dojoType="dijit.form.TextBox" class="fullside" name="group_note_'+col+'" id="group_note_'+col+'" value="" type="text"></td>';		
 						
-						tmp='<tr class="rowData" id="row'+col+'">';
+						tmp='<tr class="rowData hover" id="row'+col+'">';
 						tmp+="</tr>";
 						dojo.query("#table_row").append(tmp);
 

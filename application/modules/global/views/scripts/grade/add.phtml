@@ -3,7 +3,7 @@
 	echo $this->headTitle($tr->translate("ADD_GRADE"));
 	$baseurl = $this->baseUrl();
 	$frm_items= $this->frm_items;
-	$show = SHOW_IN_GRADE;
+	$show = 1;
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
 <div class="card">
@@ -146,13 +146,11 @@
 												<tr class="head-td" align="center">
 													<th scope="col" width="4%" ><?php echo $tr->translate("DEL");?></th>
 													<th scope="col" width="4%" ><?php echo $tr->translate("N_O");?></th>
-													<th scope="col" width="30%"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
+													<th scope="col" width="25%"><?php echo $tr->translate("SUBJECT_STUDY");?></th>
 													<th scope="col" width="10%"><?php echo $tr->translate("MAXSCORE_SUBJECT");?></th>
 													<th scope="col" width="10%"><?php echo $tr->translate("SCORE_SHORT");?></th>
-													<?php if($show==1){?>
-													<th scope="col" width="15%"><?php echo $tr->translate("MULTI_SUBJECT_MONTH");?></th>
-													<th scope="col" width="15%"><?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?></th>
-													<?php }?>
+													<th scope="col" width="15%"><?php echo $tr->translate("MULTIPLY_MONTH");?></th>
+													<th scope="col" width="15%"><?php echo $tr->translate("MULTIPLY_SEMESTER");?></th>
 												</tr>
 											</thead>
 											<tbody id="table_row">
@@ -233,10 +231,10 @@ function getSubjectByDegree(){
 					template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject_opt+'</select></td>';
 					template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" onKeyUp="calculateTotalScore();" class="fullside" name="max_score'+col+'" id="max_score'+col+'"  type="text"></td>';
 					template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" onKeyUp="calculateTotalScore();" class="fullside" name="score_cut_'+col+'" id="score_cut_'+col+'"  type="text"></td>';
-					<?php if($show==1){?>
-					template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" value="1" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="" type="text"></td>';		
-					template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" value="1" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="" type="text"></td>';		
-					<?php }?>	
+					
+					template+='<td data-label="<?php echo $tr->translate("MULTIPLY_MONTH");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" value="1" class="fullside" name="amount_subject'+col+'" id="amount_subject'+col+'" value="" type="text"></td>';		
+					template+='<td data-label="<?php echo $tr->translate("MULTIPLY_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" value="1" class="fullside" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="" type="text"></td>';		
+				
 					tmp='<tr id="row'+col+'" class="rowData">';
 					tmp+="</tr>";
 					dojo.query("#table_row").append(tmp);
@@ -257,7 +255,7 @@ function getSubjectByDegree(){
 		}
 	});
 }
-function addRow() {
+function addRow(){
 		col++;no++;
 	    template='';
 		template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
@@ -265,10 +263,10 @@ function addRow() {
 		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="subject_study_'+col+'" name="subject_study_'+col+'">'+subject_opt+'</select></td>';
 		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" onKeyUp="calculateTotalScore();" name="max_score'+col+'" id="max_score'+col+'"  type="text"></td>';
 		template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" onKeyUp="calculateTotalScore();" value="0" name="score_cut_'+col+'" id="score_cut_'+col+'"  type="text"></td>';
-		<?php if($show==1){?>
-		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" value="1" name="amount_subject'+col+'" id="amount_subject'+col+'" value="" type="text"></td>';		
-		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" value="1" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" value="" type="text"></td>';		
-		<?php }?>
+	
+		template+='<td data-label="<?php echo $tr->translate("MULTIPLY_MONTH");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" value="1" name="amount_subject'+col+'" id="amount_subject'+col+'"  type="text"></td>';		
+		template+='<td data-label="<?php echo $tr->translate("MULTIPLY_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" value="1" name="amount_subject_semester'+col+'" id="amount_subject_semester'+col+'" type="text"></td>';		
+	
 	tmp='<tr id="row'+col+'" class="rowData">';
 	tmp+="</tr>";
 	dojo.query("#table_row").append(tmp);

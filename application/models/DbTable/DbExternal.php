@@ -282,7 +282,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	   	return $db->fetchRow($sql);
 	}
 	
-	function getAllSubjectByGroup($data){
+	function getAllSubjectByGroupExternal($data){
 		$db=$this->getAdapter();
 		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
@@ -315,7 +315,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY (SELECT sj.subject_lang FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) ASC ";
 		return $db->fetchAll($sql);
 	}
-	function getSubjectGroupInfo($data){
+	function getSubjectGroupInfoExternal($data){
 		$db=$this->getAdapter();
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
@@ -327,21 +327,24 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$groupId = empty($data['groupId'])?0:$data['groupId'];
 		$examType = empty($data['examType'])?0:$data['examType'];
 		$subjectId = empty($data['subjectId'])?0:$data['subjectId'];
+		$strMaxScore='max_score';
+		if($examType==2){
+			$strMaxScore='semester_max_score';
+		}
+// 		gsjd.*
+// 		,(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent
+// 		,(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS isParent
+// 		,(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut
+// 		,(gsjd.amount_subject) amtsubjectMonth
+// 		,(gsjd.amount_subject_sem) amtsubjectSemester
+// 		,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitleKh
+// 		,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitleEn
+// 		,(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name,
+// 		,g.amount_subject AS amountSubjectDivide
+		
 		$sql="
 			SELECT 
-				gsjd.*
-				,g.amount_subject AS amountSubjectDivide
-				,gsjd.max_score AS maxSubjectscore
-				,(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent
-				
-				,(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS isParent
-				,(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut
-				
-				,(gsjd.amount_subject) amtsubjectMonth
-				,(gsjd.amount_subject_sem) amtsubjectSemester
-				,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitleKh
-				,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitleEn
-				,(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
+				gsjd.$strMaxScore AS maxSubjectscore
 			FROM 
 		 		rms_group_subject_detail AS gsjd ,
 		 		rms_group as g

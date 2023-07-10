@@ -108,6 +108,9 @@ class ExtreportController extends Zend_Controller_Action
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getClassAssessmentById($assessmentID);
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment/index");
+		}
 		$this->view->rs = $row;
 		
 		$groupId = empty($row['groupId'])?0:$row['groupId'];
@@ -132,16 +135,12 @@ class ExtreportController extends Zend_Controller_Action
 	
 	function rptTeachingScheduleAction(){
 		$this->_helper->layout()->disableLayout();
-    	$assessmentID=$this->getRequest()->getParam("id");
-    	$assessmentID =empty($assessmentID)?0:$assessmentID;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getDays();
 		$this->view->days = $row;
 		$row = $dbExternal->getTimeTeachingByTeacher();
 		$this->view->timeTeaching = $row;
-		
-		
 		
 		$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];

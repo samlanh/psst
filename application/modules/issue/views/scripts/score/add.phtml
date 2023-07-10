@@ -6,34 +6,21 @@
 ?>	
 <style>
 	select{ width:100%;}
-	tr.hover td.verites-col,
-	td.verites-col {
-	    text-align: center;
-	    white-space: nowrap;
-	    g-origin: 50% 50%;
-	    -webkit-transform: rotate(270deg);
-	    -moz-transform: rotate(270deg);
-	    -ms-transform: rotate(270deg);
-	    -o-transform: rotate(270deg);
-	    transform: rotate(300deg);
+	td.verites-col{
+		text-align: center;
+		vertical-align: bottom;
 	}
-	tr.hover td.verites-col span.verites,
-	td.verites-col span.verites {
-	     margin: 0 -85%;
-	    display: inline-block;
-		max-width: 150px;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		font-size: 10px;
+	.verites-col span {
+	   -ms-writing-mode: tb-rl;
+	  -webkit-writing-mode: vertical-rl;
+	   writing-mode: vertical-rl;
+	   transform: rotate(184deg);
+  	   white-space: nowrap;
 	}
-	tr.hover td.verites-col span.verites:before,
-	td.verites-col span.verites:before {
-	    content: '';
-	    width: 0;
-	    padding-top: 110%;
-	    display: inline-block;
-	    vertical-align: middle;
-	}
+.verites-col input {
+	   writing-mode: vertical-rl;
+	   transform: rotate(175deg);
+	}	
 	
 	
 	div#score-info .form-group {
@@ -49,8 +36,7 @@
 	span.red {
 	    color: #f00;
 	    font-weight: bold;
-	}
-		
+	}	
 </style>
 <link href="<?php echo $this->baseUrl();?>/css/externalstyle.css" media="screen" rel="stylesheet" type="text/css">
 <div class="card">
@@ -325,32 +311,33 @@ function filterStudent(){
 				str='';
 				column = 0;
 				record_num = 0;
-				temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
+				temp='<table border="1" class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
 					+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff;  "><td rowspan="3" class="tdheader"><?php echo $tr->translate('DEL');?></td>'
-					+'<td rowspan="3" class="tdheader" ><?php echo $tr->translate('NO');?></td>'
-					+'<td rowspan="3" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
-					+'<td rowspan="3" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
-					+'<td rowspan="3" class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
-					+'<td colspan="'+subjectList.length+'" class="tdheader header"><?php echo $tr->translate('SUBJECT');?></td>'
-					+'<td rowspan="3" class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>'
-					+'<td rowspan="3" class="tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr><tr>'
+					+'<td rowspan="2" class="tdheader" ><?php echo $tr->translate('NO');?></td>'
+					+'<td rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
+					+'<td rowspan="2" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
+					+'<td rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX');?></td>';
 					no=0;
 				
 				  for(j=0;j<subjectList.length;j++){
 	      			  no++;
 		      		  amtsubject = subjectList[j].amount_subjectdivide;
 		      		  stringsname = subjectList[j].name;
-		      	      temp+='<td class="tdheader verites-col criterialTitle" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>';
+		      	      temp+='<td class="tdheader verites-col criterialTitle" title="'+stringsname+'"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subjectList[j].subject_id+');"  class="checkbox" id="subject'+subjectList[j].subject_id+'" value="'+subjectList[j].subject_id+'"  name="selector[]"/> &nbsp;'+no+'-'+stringsname+'</span>&nbsp;</td>';
 	              }
-				   temp+='</tr><tr style="border:1px solid #000;">';
+				  temp+='<td rowspan="2" class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>'
+						+'<td rowspan="2" class="tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td></tr><tr>';
+					
+				  temp+='<td colspan="'+subjectList.length+'" class="tdheader header"><?php echo $tr->translate('SUBJECT');?></td>';
+				  temp+='</tr>';
 					  no=0;
 					  for(j=0;j<subjectList.length;j++){
 		      			  no++;
 			      		  stringsname = subjectList[j].subject_titleen;
-			      	      temp+='<td class="tdheader" title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subjectList[j].subject_id+');"  class="checkbox" id="subject'+subjectList[j].subject_id+'" value="'+subjectList[j].subject_id+'"  name="selector[]"/></td>';
+			      	      //temp+='<td class="tdheader" title="'+stringsname+'"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam('+subjectList[j].subject_id+');"  class="checkbox" id="subject'+subjectList[j].subject_id+'" value="'+subjectList[j].subject_id+'"  name="selector[]"/></td>';
 		              }
 				 
-				  temp+='</tr>';
+				 // temp+='</tr>';
 				  temp+='</thead>';
 				var rowClasss="";
 				for(i=0;i<data.length;i++){

@@ -109,7 +109,8 @@
 														<p class="tx-20 font-weight-semibold d-flex ">ការណែនាំ</p>
 													</div> 
 												</div>
-								                   <label class="control-label bold col-md-12 col-sm-12 col-xs-12">ចូរកំណត់មធ្យមភាគពិន្ទុពីទាប ទៅខ្ពស់ទៅតាមសាខានិងកម្រិត នីមួយៗផ្សេងៗគ្នា</label>
+								                   <label class="control-label bold col-md-12 col-sm-12 col-xs-12">ចូរកំណត់មធ្យមភាគពិន្ទុ(គិតជាភាគរយ)ពីទាប ទៅខ្ពស់ទៅតាមសាខានិងកម្រិត នីមួយៗផ្សេងៗគ្នា</label>
+								                   <label class="control-label bold col-md-12 col-sm-12 col-xs-12">បញ្ចូលមធ្យមភាគ ភាគរយដោយគ្មានសញ្ញា(%)</label>
 								                   <label class="control-label bold col-md-12 col-sm-12 col-xs-12">ឧទាហរណ៍ខ្លីៗខាងក្រោម</label>
 								                   <ul>
 								                   	   <li>មធ្យមភាពចាប់ពី 0 F ធ្លាក់ Failed</li>
@@ -250,7 +251,7 @@
 		if(title!=1){
 			temp+='<th scope="col" width="2%" ><?php echo $tr->translate("DEL");?></th>';
 			temp+='<th scope="col" width="2%"><?php echo $tr->translate("N_O");?></th>';
-			temp+='<th scope="col" width="10%"><?php echo $tr->translate("MAX_SCORE");?></th>';
+			temp+='<th scope="col" width="10%"><?php echo $tr->translate("PERCENTAGE");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_GRADE");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_KHMER");?></th>';
 			temp+='<th scope="col" width="10%"><?php echo $tr->translate("METION_IN_ENG");?></th>';
@@ -262,7 +263,7 @@
 			
 		template+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+');" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-		template+='<td data-label="<?php echo $tr->translate("MAX_SCORE");?>" ><input required="required" dojoType="dijit.form.NumberTextBox" class="fullside" id="max_score'+col+'" name="max_score'+col+'" placeholder="'+'<?php echo $tr->translate("MAX_SCORE");?>" value="" type="text"  ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>" ><input required="required" dojoType="dijit.form.NumberTextBox" class="fullside" id="max_score'+col+'" name="max_score'+col+'" placeholder="'+'<?php echo $tr->translate("MAX_SCORE");?>" value="" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_GRADE");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_grade'+col+'" name="metion_grade'+col+'" placeholder="'+'<?php echo $tr->translate("METION_GRADE")." eg:A,B,C...";?> " value="" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_IN_KHMER");?>" ><input required="required" dojoType="dijit.form.ValidationTextBox" class="fullside" id="metion_khmer'+col+'" name="metion_khmer'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_KHMER");?> eg:ល្អ,បង្គួរ..." value="" type="text"  ></td>';	
 		template+='<td data-label="<?php echo $tr->translate("METION_IN_ENG");?>" ><input dojoType="dijit.form.TextBox" class="fullside" id="metion_eng'+col+'" name="metion_eng'+col+'" placeholder="'+'<?php echo $tr->translate("METION_IN_ENG")." eg:Excellent,Good,Average... ";?> " value="" type="text"  ></td>';	

@@ -170,47 +170,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 		$order=" ORDER BY id DESC";
 		return $db->fetchAll($sql.$order);
 	}
-	function getAllYears(){
-		$db = $this->getAdapter();
-		$sql = "SELECT id,CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') AS name FROM rms_tuitionfee WHERE `status`=1
-						GROUP BY academic_year,generation ";
-		$order=' ORDER BY id DESC';
-		return $db->fetchAll($sql.$order);
-	}
-	function getGroupName($academic,$session){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
-		return $db->fetchAll($sql);
-	}
-	function getSubjectById($id){
-		$db = $this->getAdapter();
-		$sql =" SELECT 
-				  sd.student_id,
-				  (SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-				  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-				  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-				  sd.subject_id,
-				  (SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-				  (SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-				  sd.score ,
-  				  sd.`is_parent`
-				FROM
-				  rms_score_detail AS sd 
-				WHERE sd.score_id =$id ";
-		return $db->fetchAll($sql);
-	}
 	
-	function getStudent($year,$grade,$session){
-		$db=$this->getAdapter();
-		$sql="SELECT stu_id,stu_code,CONCAT(stu_enname,' - ',stu_khname) AS stu_name,sex
-	    	FROM rms_student AS s 
-		WHERE 
-			academic_year = $year 
-			and grade=$grade 
-			and session=$session";
-		$order=" ORDER BY stu_code DESC";
-		return $db->fetchAll($sql.$order);
-	}
 	function getSubjectBygroup($group_id){
 		$db=$this->getAdapter();
 		$sql="SELECT gsd.`subject_id` as id,

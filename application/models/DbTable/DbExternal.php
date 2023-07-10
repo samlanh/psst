@@ -298,7 +298,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 		SELECT 
 			gsjd.subject_id AS id
-			,(SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
+			,(SELECT CONCAT(sj.$colunmname,CASE WHEN subject_lang =1 THEN '(ខ្មែរ)' WHEN subject_lang =2 THEN '(English)' ELSE '' END) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
 		FROM 
 			rms_group_subject_detail AS gsjd ,
 			rms_group as g
@@ -312,7 +312,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$sql.=" AND gsjd.amount_subject_sem >0 ";
 		}
 		
-		$sql.=" ORDER BY (SELECT sj.$colunmname FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) ASC";
+		$sql.=" ORDER BY (SELECT sj.subject_lang FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) ASC ";
 		return $db->fetchAll($sql);
 	}
 	function getSubjectGroupInfo($data){

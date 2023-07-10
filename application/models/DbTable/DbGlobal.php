@@ -511,18 +511,18 @@ function getAllgroupStudyNotPass($action=null){
 	   	return $db->fetchAll($sql);
    }
    
-   public function getAllsubject(){
-	   	$db = $this->getAdapter();
+//    public function getAllsubject(){//not use yet
+// 	   	$db = $this->getAdapter();
 	   	
-	   	$lang = $this->currentlang();
-	   	$field = 'subject_titleen';
-	   	if ($lang==1){
-	   		$field = 'subject_titlekh';
-	   	}
-	   	$sql = "SELECT id ,$field AS  subject_name
-	   	FROM `rms_subject` WHERE status=1 AND(subject_titleen!='' OR subject_titlekh!='')";
-	   	return $db->fetchAll($sql);
-   }
+// 	   	$lang = $this->currentlang();
+// 	   	$field = 'subject_titleen';
+// 	   	if ($lang==1){
+// 	   		$field = 'subject_titlekh';
+// 	   	}
+// 	   	$sql = "SELECT id ,$field AS  name
+// 	   	FROM `rms_subject` WHERE status=1 AND (subject_titleen!='' OR subject_titlekh!='')";
+// 	   	return $db->fetchAll($sql);
+//    }
   
    
    public function getAllGroup(){
@@ -1471,8 +1471,6 @@ function getAllgroupStudyNotPass($action=null){
   	if ($lang==1){
   		$field = 'subject_titlekh';
   	}
-  	
-  	
   	
   	$sql=" SELECT id ,CONCAT($field,CASE WHEN subject_lang =1 THEN '(ខ្មែរ)' WHEN subject_lang =2 THEN '(English)' ELSE '' END) AS name,
   			shortcut 

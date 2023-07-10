@@ -276,7 +276,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if($opt!=null){return $rows;}
 		$options = '<option value="0">'.$tr->translate("CHOOSE_SUJECT").'</option>';
 		if(!empty($rows))foreach($rows as $value){
-			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']."-".$value['shortcut'], ENT_QUOTES).'</option>';
+			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'], ENT_QUOTES).'</option>';
 		}
 		return $options;
 	}

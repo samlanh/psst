@@ -196,23 +196,6 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$sql="SELECT id,group_code AS `name` FROM  rms_group WHERE  `session`=$session AND academic_year=$academic  ";
 		return $db->fetchAll($sql);
 	}
-	function getSubjectById($id){
-		$db = $this->getAdapter();
-		$sql =" SELECT 
-				  sd.student_id,
-				  (SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
-				  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
-				  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
-				  sd.subject_id,
-				  (SELECT CONCAT(`subject_titlekh`,'-',`subject_titleen`) FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_name,
-				  (SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
-				  sd.score ,
-  				  sd.`is_parent`
-				FROM
-				  rms_score_detail AS sd 
-				WHERE sd.score_id =$id ";
-		return $db->fetchAll($sql);
-	}
 	
 	function getStudent($year,$grade,$session){
 		$db=$this->getAdapter();

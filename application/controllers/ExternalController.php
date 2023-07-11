@@ -146,7 +146,7 @@ class ExternalController extends Zend_Controller_Action
 		if($this->getRequest()->isPost()){
 			$dbExternal = new Application_Model_DbTable_DbExternal();
 			$data = $this->getRequest()->getPost();
-			$row=$dbExternal->getAllSubjectByGroup($data);
+			$row=$dbExternal->getAllSubjectByGroupExternal($data);
 			print_r(Zend_Json::encode($row));
 			exit();
 		}
@@ -156,7 +156,7 @@ class ExternalController extends Zend_Controller_Action
 		if($this->getRequest()->isPost()){
 			$dbExternal = new Application_Model_DbTable_DbExternal();
 			$data = $this->getRequest()->getPost();
-			$row=$dbExternal->getSubjectGroupInfo($data);
+			$row=$dbExternal->getSubjectGroupInfoExternal($data);
 			
 			print_r(Zend_Json::encode($row));
 			exit();

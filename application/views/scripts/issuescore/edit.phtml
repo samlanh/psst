@@ -269,10 +269,14 @@ function getSubjectInfo(){
 		dojo.query("#table_row").append("");
 		return false;
 	}
+	
+	examType = dijit.byId('examType').get('value');
+	
 	dojo.xhrPost({
 	    url: urlGetSubjectInfo,
 	    content : { 
 			'groupId':group,
+			'examType':examType,
 			'subjectId':subjectId,
 		},				    
 	   handleAs:"json", 

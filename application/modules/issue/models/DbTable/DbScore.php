@@ -44,6 +44,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					
 					foreach ($rssubject as $subject){
 						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
+							if($_data['exam_type']==2){//semester exam
+								$totalMutiAll = $totalMaxScore/50;
+							}
 							$avg = $total_score/$totalMutiAll;
 							$arr = array(
 								'score_id'=>$id,
@@ -92,9 +95,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
 							$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
 							$score_cut = 0;
-						}else{
+						}else{//semester
 							$maxScore = $rsGroupSubject['maxScoreSemester'];
-							$totalMulti = $rsGroupSubject['totalSubjectSemester'];
+							$totalMulti = 1;//$rsGroupSubject['totalSubjectSemester'];
 							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
 								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
 								$score_cut = 0;
@@ -136,7 +139,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				
 				if(!empty($ids)){
 					if($total_score>0){
-						
+						if($_data['exam_type']==2){//semester exam
+							$totalMutiAll = $totalMaxScore/50;
+						}
 						$avg = $total_score/$totalMutiAll;
 							$arr = array(
 								'score_id'=>$id,
@@ -225,7 +230,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					
 					foreach ($rssubject as $subject){
 						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
-							
+							if($_data['exam_type']==2){//semester exam
+								$totalMutiAll = $totalMaxScore/50;
+							}
 							$avg = $total_score/$totalMutiAll;
 							
 							$arr = array(
@@ -277,7 +284,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$score_cut = 0;
 						}else{
 							$maxScore = $rsGroupSubject['maxScoreSemester'];
-							$totalMulti = $rsGroupSubject['totalSubjectSemester'];
+							$totalMulti =1;// $rsGroupSubject['totalSubjectSemester'];
 							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
 								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
 								$score_cut = 0;
@@ -319,6 +326,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			}
 			if(!empty($ids)){
 				if($total_score>0){
+					if($_data['exam_type']==2){//semester exam
+						$totalMutiAll = $totalMaxScore/50;
+					}
 					$avg = $total_score/$totalMutiAll;
 						$arr = array(
 							'score_id'=>$id,

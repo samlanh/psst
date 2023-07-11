@@ -1252,9 +1252,40 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		exit();
 	}
 	
+	public function getFormOptionSelectAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getFormOptionSelect($search);
+			if ($row['status']){
+				$arrResult = array(
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
 	public function checkExistingStudentAction($_data){
 		try{
-			$db = new Systemapi_Model_DbTable_DbApi();
+			$db = new Api_Model_DbTable_DbApi();
 			$_data['phoneNumber'] = empty($_data['phoneNumber'])?"":$_data['phoneNumber'];
 			$_data['countryCode'] = empty($_data['countryCode'])?"":$_data['countryCode'];
 			$_data['countryISOCode'] = empty($_data['countryISOCode'])?"":$_data['countryISOCode'];
@@ -1283,6 +1314,71 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			exit();
 		}
 	}
+	
+	public function submitNewRegisterAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			
+			$db = new Api_Model_DbTable_DbApi();
+			$resultSubmit = $db->submitNewRegister($search);
+			if ($resultSubmit['status']){
+				if(!empty($resultSubmit['value'])){
+					$row = $db->getPreRegisterInfo($resultSubmit['value']);
+					if ($row['status']){
+						if(!empty($row['value'])){
+							$arrResult = array(
+								"result" => $row['value'],
+								"code" => "SUCCESS",
+							);
+							
+							$dbPush = new Api_Model_DbTable_DbPushNotification();
+							$notify = array(
+								"typeNotify" => "successfulRegister",
+							);
+							$notify["notificationId"]  = $resultSubmit['value'];
+							$dbPush->pushNotificationAPI($notify);
+							
+						}else{
+							$arrResult = array(
+								"code" => "ERR_",
+								"message" => $row['value'],
+							);
+						}
+					}else{
+						$arrResult = array(
+							"code" => "ERR_",
+							"message" => $row['value'],
+						);
+					}
+				
+				}else{
+					$arrResult = array(
+						"code" => "ERR_",
+						"message" => $row['value'],
+					);
+				}
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			
+			
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	
 	
 	public function loginSchoolBusAction($_data){
 		try{

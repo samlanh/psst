@@ -119,6 +119,10 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->mobileNotifyAction($GetData);
 			}else if ($GetData['url']=="mobileNotifyDetail"){
     			$_dbAction->mobileNotificationDetailAction($GetData);
+				
+			}else if ($GetData['url']=="optionDegreeStudy"){
+				$GetData['getControlType'] = "studyDegree";
+    			$_dbAction->getFormOptionSelectAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
@@ -147,7 +151,7 @@ class Api_IndexController extends Zend_Controller_Action
 				}else if ($GetData['url']=="checkExistingStudent"){
     				$_dbAction->checkExistingStudentAction($postData);
 				}else if ($GetData['url']=="registerStudentTest"){
-    				$_dbAction->checkExistingStudentAction($postData);
+    				$_dbAction->submitNewRegisterAction($postData);
 				}else if ($GetData['url']=="loginSchoolBus"){
     				$_dbAction->loginSchoolBusAction($postData);
 					

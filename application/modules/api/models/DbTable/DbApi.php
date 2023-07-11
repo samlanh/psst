@@ -163,6 +163,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
 						(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
 						(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
+						,'1' AS isFromStudentTB
 						
 			FROM
 				rms_student AS s 
@@ -1818,7 +1819,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    		act.*,
 		    		(SELECT ad.description FROM `mobile_course_detail` AS ad WHERE ad.course_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description,
 		    		(SELECT ad.title FROM `mobile_course_detail` AS ad WHERE ad.course_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title,
-		    		DATE_FORMAT(act.`publish_date`, '%d-%m-%Y') AS publish_date,
+		    		DATE_FORMAT(act.`publish_date`, '%d-%m-%Y') AS publishDateFormat,
 		    		act.image_feature,
 		    		act.ordering,
 		    		(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name,
@@ -4124,20 +4125,44 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,s.stu_enname AS stuFirstName
 				,s.last_name AS stuLastName
 				,s.photo
+				,'1' AS isFromStudentTB
 			FROM
 				rms_student AS s
 			WHERE s.status = 1 AND s.customer_type NOT IN (2,3) ";
 			
 			if($_data['isCheckDuplicateRegister']=="0"){
 				$sql.= " AND s.tel= '".$_data['phoneNumber']."'";
-				$sql.= " AND s.countryCode='".$_data['countryCode']."'";
+				//$sql.= " AND s.countryCode='".$_data['countryCode']."'";
 			}else if($_data['isCheckDuplicateRegister']=="1"){
 				$sql.= " AND s.email='".$_data['emailAddress']."'";
 			}
 			
 			$sql.=" LIMIT 1 ";
 			$row = $db->fetchRow($sql);
+			
+			if(empty($row)){
+				$sql =" SELECT
+					pre.*
+					,'0' AS isFromStudentTB
+				FROM
+					rms_mobile_pre_register AS pre
+				WHERE pre.status = 1 ";
+				
+				if($_data['isCheckDuplicateRegister']=="0"){
+					$sql.= " AND pre.phoneNumber= '".$_data['phoneNumber']."'";
+					$sql.= " AND pre.countryCode='".$_data['countryCode']."'";
+				}else if($_data['isCheckDuplicateRegister']=="1"){
+					$sql.= " AND pre.email='".$_data['emailAddress']."'";
+				}
+				$sql.=" LIMIT 1 ";
+				$row = $db->fetchRow($sql);
+			}
+			
+			
 			$row = empty($row) ? null : $row;
+			
+			
+
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -4154,7 +4179,147 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	function radomNumber(){
+		$digits = 4;
+		return str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+	}
+	function getPreRegisterInfo($_data){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId = empty($_data['studentId'])?0:$_data['studentId'];
+		
+			$sql=" SELECT 
+						pre.*
+						,'0' AS isFromStudentTB 
+					FROM  rms_mobile_pre_register AS pre
+					WHERE pre.status = 1
+				";
+
+			$row = $db->fetchRow($sql);
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+				);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	function submitNewRegister($_data){
+    	$db = $this->getAdapter();
+		$db->beginTransaction();
+    	try{
+			
+			$format = 'Y-m-d';
+			$dateString = $_data['dob'];
+			$date = new DateTime($dateString);
+			$dateOfBirth = $date->format($format);
+			
+			$_data['branchId']	= empty($_data['branchId'])?0:$_data['branchId'];
+			$_data['note']	= empty($_data['note'])?"":$_data['note'];
+		
+			$arr = array(
+				'firstName' 		=> $_data['firstName'],
+				'lastName' 		=> $_data['lastName'],
+				'fullKhName' 		=> $_data['fullKhName'],
+				'countryISOCode' 	=> $_data['countryISOCode'],
+				'countryCode' 			=> $_data['countryCode'],
+				
+				'phoneNumber' 		=> $_data['phoneNumber'],
+				'deviceType' 		=> $_data['deviceType'],
+				'deviceToken' 		=> $_data['mobileToken'],
+				
+				'dob' 				=> $dateOfBirth,
+				'gender' 			=> $_data['gender'],
+				'degree' 			=> $_data['degree'],
+				'createDate' 		=> date("Y-m-d H:i:s"),
+				'modifyDate' 		=> date("Y-m-d H:i:s"),
+				'status' 			=> 1,
+				'isVerifiedAccount' 	=> 1,
+				'verifyCode' 			=> $this->radomNumber(),
+				'expireDateVerifyCode' 	=> date("Y-m-d H:i:s",strtotime("+1 day")),
+			);
+			
+    		$this->_name='rms_mobile_pre_register';
+    		$userId = $this->insert($arr);
+    		
+			
+			$db->commit();
+			$result = array(
+					'status' =>true,
+					'value' =>$userId,
+			);
+			return $result;
+    		
+    	}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+    	}
+    }
 	
+	
+	function getAllItems($_data){
+		$db = $this->getAdapter();
+		
+		$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		$type = empty($_data['type'])?1:$_data['type'];
+		$this->_name = "rms_items";
+		$sql="SELECT m.id, CONCAT(m.$colunmname,' (',COALESCE(`m`.`shortcut`,''),')' ) AS name FROM $this->_name AS m WHERE m.status=1 ";
+		if (!empty($type)){
+			$sql.=" AND m.type=$type";
+		}
+		$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';	
+		return $db->fetchAll($sql);
+	  }
+	public function getFormOptionSelect($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$getControlType = empty($_data['getControlType'])?"status":$_data['getControlType'];
+			$_data['userId'] = empty($_data['userId'])?0:$_data['userId'];
+			$_data['branchId'] = empty($_data['branchId'])?0:$_data['branchId'];
+			$row=array();
+			if($getControlType=="status"){
+				$row = array(
+					array("id"=>1,"name"=>$currentLang==1 ? "ប្រើប្រាស់" : "Active"),
+					array("id"=>2,"name"=>$currentLang==1 ? "មិនប្រើប្រាស់" : "Deactive"),
+				);
+			}else if($getControlType=="studyDegree"){
+				$_data["type"]=1;
+				$row = $this->getAllItems($_data);
+			}
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 	function getSchoolBusLogin($_data){
 		$db = $this->getAdapter();
 		$_data['userName']=trim($_data['userName']);

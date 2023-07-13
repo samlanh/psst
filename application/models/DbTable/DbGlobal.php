@@ -2284,7 +2284,7 @@ function getAllgroupStudyNotPass($action=null){
 				             <span class="title-info groupinfo">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value groupinfo">'.$rs['group_name'].'</span>
 					    </p>';
   			         	$strStatus=($rs['is_newstudent']==1)?'New Student':'Old Student';
-  			         	$studentStatus='<span class="user-badge bg-warning">Student Type</span>';
+  			         	$studentStatus='<span class="user-badge bg-warning">'.$strStatus.'</span>';
   			         	 		  
   	}
   	$result = array(
@@ -3229,6 +3229,7 @@ function getAllgroupStudyNotPass($action=null){
   		$field = 'name_kh';
   	}
   	
+  	$today=date('Y-m-d');
   	$sql="SELECT
   				
 				st.stu_code AS stu_code,
@@ -3251,6 +3252,8 @@ function getAllgroupStudyNotPass($action=null){
 				gs.degree AS itemId,
 				gs.grade,
 				gs.grade AS itemDetailId,
+				(SELECT dcs.discountType FROM `rms_dis_setting` dcs WHERE dcs.studentId=st.stu_id AND dcs.itemId=gs.grade AND end_date >='$today' LIMIT 1) discountType,
+				(SELECT dcs.discountValue FROM `rms_dis_setting` dcs WHERE dcs.studentId=st.stu_id AND dcs.itemId=gs.grade AND end_date >='$today' LIMIT 1) discountValue,
 				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel,
 				(SELECT rms_itemsdetail.is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as is_onepayment
@@ -3306,7 +3309,6 @@ function getAllgroupStudyNotPass($action=null){
   		if(!empty($data['orderitemType'])){
   			$order=" ORDER BY gs.`itemType` ASC ";
   		}
-  		
   		return $db->fetchAll($sql.$order);
   }
   function getAllGroupName($data=null){

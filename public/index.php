@@ -18,7 +18,7 @@ defined('HEADER_REPORT_TYPE') || define('HEADER_REPORT_TYPE', 2);//1,2,3
 defined('PHISYCAL_CONFIG') || define('PHISYCAL_CONFIG', '54-48-10-E2-F8-4E');
 defined('PICKUP_TYPE') || define('PICKUP_TYPE', 1);// type=1 for ELT and psis , type=2 for good will
 defined('CARD_TYPE') || define('CARD_TYPE', 1);// tyep=1 for ELT , type=2 for good will , type=3 for New World
-defined('BRANCHES') || define('BRANCHES', '3');
+defined('BRANCHES') || define('BRANCHES', '3');//working
 defined('EDUCATION_LEVEL') || define('EDUCATION_LEVEL', 0);//1=true to show,0=false not show
 defined('SHOW_IN_DEGREE') || define('SHOW_IN_DEGREE', 0);//1=show , 0=hide
 defined('SHOW_IN_GRADE') || define('SHOW_IN_GRADE', 0);//1=show , 0=hide
@@ -36,8 +36,9 @@ defined('TEST_CONDICTION') || define('TEST_CONDICTION', 1);//1=for general show 
 defined('TIEM_IS_MANUAL') || define('TIEM_IS_MANUAL', 1);//0=static 1= manual customize
 defined('FEATURE_SCAN_CALLOUT') || define('FEATURE_SCAN_CALLOUT', 1);//0=Disable Feature, 1= Enable Feature
 defined('SCORE_RESULT_TEMPLATE') || define('SCORE_RESULT_TEMPLATE', 2);//1=for general,2=for AHS
+defined('URL_STUDENT_PROFILE') || define('URL_STUDENT_PROFILE', 'SchoolDemo.cam-app.com/schoolDemo/');//
+defined('classHideHeight') || define('classHideHeight', '110px');//
 
-defined('URL_STUDENT_PROFILE') || define('URL_STUDENT_PROFILE', 'http:192.168.0.108/camappgit/psst');//
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(

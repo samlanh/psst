@@ -72,7 +72,6 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
 							exit();
 						}
-						Application_Form_FrmMessage::message("INSERT_SUCCESS");
 					}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

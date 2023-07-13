@@ -110,7 +110,7 @@ dojo.ready(function(){
 			  display: table-header-group;
 			  page-break-inside:avoid; page-break-after:auto;
 			}
-			.cheader{line-height:18px;white-space: nowrap;
+			.cheader{line-height:15px;white-space: nowrap;
 				color:#4839bd;font-weight:bold;
 			}
 			.hover:hover{background: #ccc;}
@@ -132,6 +132,8 @@ dojo.ready(function(){
 			.colorRed{color:red !important;}
 			.khmerBoldFont{font-family: 'Times New Roman','Khmer OS Muol Light';}
 			.doubleBorder{border:2px solid #000;}
+			.circleHeader{border: 2px solid #150781;padding:5px;border-radius:5px;}
+			table tr{line-height: 19px;}
 			@media print{
 				@page {
 					page: A4;
@@ -156,8 +158,8 @@ dojo.ready(function(){
 			</tr>
 			<tr>
 				<td colspan="3"  align="center">
-					<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; margin: 0;font-size:14px;">
-						របាយការណ៍លទ្ធផលសិក្សាប្រចាំខែ <strong>MONTHLY REPORT</strong>
+					<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; margin: 0;font-size:14px;margin-bottom:10px;">
+						<span class="circleHeader">របាយការណ៍ការវិវឌ្ឍ <strong>PROGRESS REPORT</strong></span>
 					</div>
 					<table class="studentInfo" cellpadding="0"​  style="width:100%;line-height:15px;" >
 						<tr>
@@ -179,7 +181,7 @@ dojo.ready(function(){
 							<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['stu_code'];?></td>
 							<td >&nbsp;</td>
 							<td align="right" width="25%">សម្រាប់ខែ​ / For : </td>
-							<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['forMonthKhLabel'].'-'.$scoreInfo['forMonthEnLabel']; ?></td>
+							<td class="bold" align="left" width="23%">&nbsp;<?php if($scoreInfo['exam_type']==1){echo $scoreInfo['forMonthKhLabel'].'-'.$scoreInfo['forMonthEnLabel']; }else{echo "SEMESTER ".$scoreInfo['for_semester'];}?></td>
 						</tr>
 						<tr>
 							<td align="right" width="25%">ភេទ / Gender : </td>
@@ -261,7 +263,7 @@ dojo.ready(function(){
 								if($resultScore['innerSubject']==0){
 									
 								?>
-									<tr class="hover blackColor" style=" line-height: 20px;">
+									<tr class="hover blackColor" >
 										<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
 										<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 										<td align="left" >&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
@@ -276,7 +278,7 @@ dojo.ready(function(){
 								foreach($resultScore['innerSubjectList'] as $resultSubList){
 									$i++;
 							?>
-								<tr class="hover blackColor" style=" line-height: 20px;">
+								<tr class="hover blackColor" >
 									<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
 									<td align="left">&nbsp;<?php echo $resultSubList['subCriterialTitleKh']; ?>&nbsp;</td>
 									<td align="left" >&nbsp;<?php echo $resultSubList['subCriterialTitleEng']; ?>&nbsp;</td>
@@ -313,19 +315,19 @@ dojo.ready(function(){
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore); ?></strong>&nbsp;</td>
 						</tr>
 			
-						<tr class="style hover doubleBorder" style=" line-height: 20px;">
+						<tr class="style hover doubleBorder" >
 							<td colspan="7" align="center" class="blue">
 								 សរុបមធ្យមមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Total Grade Point Average For Khmer and English Subjects.
 							</td>
 						</tr>
-						<tr class="style hover" style=" line-height: 20px;">
+						<tr class="style hover" >
 							<td colspan="5" align="center" class="blue">
 								 មធ្យមភាគសរុប Overall Grade Point Average 
 							</td>
 							<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
 							<td align="left"></td>
 						</tr>
-						<tr class="style hover" style=" line-height: 20px;">
+						<tr class="style hover" >
 							<td colspan="5" align="center" class="blue">
 								មធ្យមភាគពិន្ទុ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 							</td>
@@ -337,11 +339,11 @@ dojo.ready(function(){
 								អវត្តមាន ABSENCE RECORD
 							</td>
 						</tr>
-						<tr class="style hover" style=" line-height: 20px;">
+						<tr class="style hover" >
 							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃមករៀន Days Present&nbsp;</td>
 							<td colspan="4" align="right">&nbsp;&nbsp;</td>
 						</tr>
-						<tr class="style hover" style=" line-height: 20px;">
+						<tr class="style hover" >
 							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days Excused absences&nbsp;</td>
 							<td colspan="4" align="center">&nbsp;<?php 
 							$data = array(
@@ -353,13 +355,13 @@ dojo.ready(function(){
 								);
 							echo $db->countAttendenceTranscript($data); ?>&nbsp;</td>
 						</tr>
-						<tr class="style hover" style=" line-height: 20px;">
+						<tr class="style hover" >
 							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days Unxcused absences&nbsp;</td>
 							<td colspan="4" align="center" class="">&nbsp;<?php 
 								$data['attStatus'] = 2;
 							echo $db->countAttendenceTranscript($data)?>&nbsp;</td>
 						</tr>
-						<tr class="style hover" style=" line-height: 20px;">
+						<tr class="style hover" >
 							<td  colspan="3" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
 							<td colspan="4" align="center" class="">&nbsp;<?php 
 								$data['attStatus'] = 4;

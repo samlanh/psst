@@ -963,6 +963,10 @@ function getSubjectByGrade(){
 						dijit.byId('amount_subject'+col).attr('value',data[i].amount_subject);
 						dijit.byId('amount_subject_semester'+col).attr('value',data[i].amount_subject_sem);
 						dijit.byId('group_note_'+col).attr('value',data[i].note);
+						
+						calculateTotalSubject();
+						monthConvertedScore(col);
+						semesterConvertedScore(col);
 					}
 			    }
 			},

@@ -222,6 +222,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								'subjectId'			=> $subjectId,
 								'totalAverage'		=> number_format($totalScoreAverage,2),
 								'remark'			=> $_data['note_'.$i],
+								'maxScore'			=> $_data['maxSubjectScore'],
 							);
 							$this->_name='rms_grading_total';
 							$this->insert($arr);
@@ -345,6 +346,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							'subjectId'		=> $subjectId,
 							'totalAverage'	=> number_format($totalScoreAverage,2),
 							'remark'		=>$_data['note_'.$i],
+							'maxScore'			=> $_data['maxSubjectScore'],
 						);
 						
 						$this->_name='rms_grading_total';
@@ -478,6 +480,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								'subjectId'			=> $subjectId,
 								'totalAverage'		=> number_format($totalScoreAverage,2),
 								'remark'			=> $_data['note_'.$i],
+								'maxScore'			=> $_data['maxSubjectScore'],
 								
 							);
 							$this->_name='rms_grading_total';
@@ -608,6 +611,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							'totalAverage'	=> number_format($totalScoreAverage,2),
 							
 							'remark'		=>$_data['note_'.$i],
+							'maxScore'			=> $_data['maxSubjectScore'],
 							
 						);
 						

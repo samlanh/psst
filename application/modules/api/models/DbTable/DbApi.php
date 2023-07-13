@@ -107,10 +107,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}
 	//s.stu_khname,
 			$sql ="SELECT
-						s.stu_id,
-						s.stu_code,
-						s.stu_khname,
-						s.tel,
+						s.*,
+						s.stu_id AS studentId,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) as studenLatinName,
 						CASE
 								WHEN primary_phone = 1 THEN s.tel
@@ -120,29 +118,20 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						END as PrimaryContact,
 						COALESCE(DATE_FORMAT(s.dob, '%d-%m-%Y'),'') AS dobFormat,
 						
-						s.pob,
-						s.home_num,
-						s.street_num,
-						s.father_enname,
 						s.father_enname AS fatherLatinName,
 						s.father_khname AS fatherKhmerName,
-						s.father_phone,
-						COALESCE(DATE_FORMAT(s.father_dob, '%d-%m-%Y'),'') AS father_dob,
+						COALESCE(DATE_FORMAT(s.father_dob, '%d-%m-%Y'),'') AS fatherDobFormat,
 						
-						s.mother_enname,
 						s.mother_enname AS motherLatinName,
 						s.mother_khname AS motherKhmerName,
 						
-						COALESCE(DATE_FORMAT(s.mother_dob, '%d-%m-%Y'),'') AS mother_dob,
-						s.mother_phone,
+						COALESCE(DATE_FORMAT(s.mother_dob, '%d-%m-%Y'),'') AS motherDobFormat,
 						
-						s.guardian_enname,
 						s.guardian_enname AS guardianLatinName,
 						s.guardian_khname AS guardianKhmerName,
 						
-						s.guardian_tel,
-						COALESCE(DATE_FORMAT(s.guardian_dob, '%d-%m-%Y'),'') AS guardian_dob,
-						s.photo,
+						
+						COALESCE(DATE_FORMAT(s.guardian_dob, '%d-%m-%Y'),'') AS guardianDobFormat,
 						gds.group_id,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
 						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
@@ -4306,6 +4295,118 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $this->getAllItems($_data);
 			}
 			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getTotalStudentCreditMemo($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$label = "name_en";
+			$schooName = "school_nameen";
+    		$branch = "branch_nameen";
+			if($currentLang==1){// khmer
+				$label = "name_kh";
+				$schooName = "school_namekh";
+				$branch = "branch_namekh";
+			}
+			
+			$sql=" SELECT 
+    				credit.*
+    				,(SELECT $schooName FROM `rms_branch` WHERE br_id=credit.branch_id LIMIT 1) AS schoolName
+    				,(SELECT $branch FROM `rms_branch` WHERE br_id=credit.branch_id LIMIT 1) AS branchName
+					,COALESCE(SUM(credit.total_amount),0) AS totalCreditAmount 
+					,COALESCE(SUM(credit.total_amountafter),0) totalCreditAmountAfter  
+	 		       
+ 			   FROM 
+    				rms_creditmemo AS credit
+				WHERE 
+					credit.status = 1
+					";
+			$expireDate =" credit.end_date >= '".date("Y-m-d")." 23:59:59'";
+			$sql.= " AND ".$expireDate;
+			$sql.=" AND credit.student_id = ".$studentId;
+			$sql.= " LIMIT 1 ";
+			
+			$row = $db->fetchRow($sql);
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	public function getAllStudentCreditMemo($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$label = "name_en";
+			$schooName = "school_nameen";
+    		$branch = "branch_nameen";
+			if($currentLang==1){// khmer
+				$label = "name_kh";
+				$schooName = "school_namekh";
+				$branch = "branch_namekh";
+			}
+			
+			$sql=" SELECT 
+    				credit.*
+    				,(SELECT $schooName FROM `rms_branch` WHERE br_id=credit.branch_id LIMIT 1) AS schoolName
+    				,(SELECT $branch FROM `rms_branch` WHERE br_id=credit.branch_id LIMIT 1) AS branchName
+					,credit.total_amount AS totalCreditAmount 
+					,credit.total_amountafter AS totalCreditAmountAfter
+					,CASE
+						WHEN credit.end_date >= '".date("Y-m-d")." 23:59:59' THEN 0
+						ELSE 1
+					END as isExpired
+	 		       
+ 			   FROM 
+    				rms_creditmemo AS credit
+				WHERE 
+					credit.status = 1
+					";
+			//$expireDate =" credit.end_date >= '".date("Y-m-d")." 23:59:59'";
+			//$sql.= " AND ".$expireDate;
+			$sql.=" AND credit.student_id = ".$studentId;
+
+			$ordering=" ORDER BY credit.id DESC";
+			$limit=" ";
+			if(!empty($search['LimitStart'])){
+				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+			}else if(!empty($search['limitRecord'])){
+	    		$limit.=" LIMIT ".$search['limitRecord'];
+	    	}
+			
+			
+			$row = $db->fetchAll($sql.$ordering.$limit);
 			$result = array(
 				'status' =>true,
 				'value' =>$row,

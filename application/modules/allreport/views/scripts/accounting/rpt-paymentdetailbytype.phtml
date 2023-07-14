@@ -303,7 +303,7 @@
 							<td><?php echo $row['invoice'];?></td>
 							<td><?php echo date('d-m-Y',strtotime($row['date']));?></td>
 							<td align="right"><?php echo number_format($row['total_amount'],2);?></td>
-							<td><?php echo $row['name'];?></td>
+							<td><?php echo $row['byUser'];?></td>
 						</tr>
 					<?php }?>	
 					</table>

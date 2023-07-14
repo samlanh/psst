@@ -106,7 +106,67 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     }
-   
+    public function deletereceiptAction(){
+    	$id=$this->getRequest()->getParam("id");
+    	$db = new Registrar_Model_DbTable_DbRegister();
+//     	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+//     		try{
+//     		$data['void']=1;
+//     		$data['void_note']='';
+    			$db->updateRegister($id);
+    			Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
+    			
+//     		} catch (Exception $e) {
+//     			Application_Form_FrmMessage::message("UPDATE_FAIL");
+//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+//     		}
+//     	}
+    }
+    function editAction(){
+    	$id = $this->getRequest()->getParam("id");
+    	$id = empty($id)?0:$id;
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    
+    	$delete_sms=$tr->translate('CONFIRM_DELETE');
+    	echo "<script language='javascript'>
+    	var txt;
+    	var r = confirm('$delete_sms');
+    	if (r == true) {";
+    		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/registrar/register/deletereceipt/id/".$id."'";
+    	echo"}";
+    	echo"else {";
+    		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/registrar/register'";
+    	echo"}
+    	</script>";
+    }
+//     function editAction(){
+//     	$request=Zend_Controller_Front::getInstance()->getRequest();
+//     	$action=$request->getActionName();
+//     	$controller=$request->getControllerName();
+//     	$module=$request->getModuleName();
+    	 
+//     	$id = $this->getRequest()->getParam("id");
+//     	try {
+//     		$dbacc = new Application_Model_DbTable_DbUsers();
+//     		$rs = $dbacc->getAccessUrl($module,$controller,'delete');
+//     		if(!empty($rs)){
+//     			$row = $db->checkifExistingDelete($id);
+//     			if(!empty($row)){
+//     				$db->deleteReceipt($id);
+//     				$db->recordhistory($id);
+//     				$db->checkSaleCompletedPaymentPrincipleAmount($id);
+//     				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS","/loan/ilpayment");
+//     			}else{
+//     				Application_Form_FrmMessage::Sucessfull("has been delete","/loan/ilpayment");
+//     			}
+//     		}
+//     		Application_Form_FrmMessage::Sucessfull("You no permission to delete","/loan/ilpayment",2);
+//     	}catch (Exception $e) {
+//     		Application_Form_FrmMessage::message("INSERT_FAIL");
+//     		echo $e->getMessage();
+//     	}
+//     }
     
     function getGradeproductAction(){//filter product with current grade fo student 
     	if($this->getRequest()->isPost()){

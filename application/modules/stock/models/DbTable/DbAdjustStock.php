@@ -54,7 +54,7 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
 	    	(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
 	    	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
 	    	(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
-    		pro_qty,costing,price,
+    		pro_qty,costing,price,price_set,
     		date,
 			(SELECT (first_name) FROM rms_users WHERE user_id=id LIMIT 1 ) AS byuser,
     		status ";

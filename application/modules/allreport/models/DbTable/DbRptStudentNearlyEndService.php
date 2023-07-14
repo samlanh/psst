@@ -62,16 +62,16 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     			  and spd.is_suspend = 0 
     			  AND spd.is_onepayment =0 ";
     	$sql.=" ";
-     	$order=" ORDER by spd.itemdetail_id ASC ";
      	$where=" ";
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
      	
      	$where .= " AND ".$to_date;
      	if($search['item']>0){
-     		$where .=" and item.items_id=".$search['item'];
+//      		$where .=" and spd.itemdetail_id=".$search['item'];
+//      		$where .=" and (SELECT $item FROM `rms_items` WHERE rms_items.id=".$search['service'].")";
      	}
      	if(!empty($search['service'])){
-     		$where .=" and item.id=".$search['service'];
+     		$where .=" AND spd.itemdetail_id=".$search['service'];
      	}
  
      	if(($search['branch_id']>0)){
@@ -86,8 +86,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " s.last_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}    	
-//     	echo $sql.$where.$order;exit();	
+    	}    
+    		
+    	$order=" ORDER by spd.itemdetail_id ASC ";
     	return $db->fetchAll($sql.$where.$order);
     }
 } 

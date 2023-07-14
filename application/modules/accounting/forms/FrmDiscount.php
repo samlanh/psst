@@ -108,8 +108,8 @@ Class Accounting_Form_FrmDiscount extends Zend_Dojo_Form {
 			$_discount->setValue($data['discountType']);
 			$_dismax->setValue($data['discountValue']);
 			$_branch_id->setValue($data['branch_id']);
-			$end_date->setValue($data['start_date']);
-			$start_date->setValue($data['end_date']);
+			$start_date->setValue($data['start_date']);
+			$end_date->setValue($data['end_date']);
 			$_status->setValue($data['status']);
 			$discountOption->setValue($data['discountOption']);
 			

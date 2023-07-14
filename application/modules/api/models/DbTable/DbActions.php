@@ -1378,6 +1378,45 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	public function studentCreditMemoAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+		$row = $db->getAllStudentCreditMemo($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	public function studentCreditMemoTotalAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+		$row = $db->getTotalStudentCreditMemo($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
 	
 	
 	public function loginSchoolBusAction($_data){

@@ -320,6 +320,7 @@
 						'pro_qty'=>$_data['qty_'.$i],
 						'costing'=>$_data['costing_'.$i],
 						'price'=>$_data['price_'.$i],
+						'price_set'=>$_data['price_set_'.$i],
 						'stock_alert'=>$_data['qty_alert_'.$i],
 						'note'=>$_data['note_'.$i],
 						'date'=>$_data['create_date'],
@@ -441,7 +442,7 @@
 			$title = "td.title_en";
 		}
 		$sql = "SELECT td.id, $title AS product_name,
-			pl.price
+			pl.price, pl.price_set
 			FROM rms_itemsdetail AS td 
 			JOIN rms_product_location AS pl ON td.id = pl.pro_id AND pl.branch_id= ".$_data['branch_id'];
 

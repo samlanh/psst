@@ -24,7 +24,7 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$rows = $db->getAllProductLocattion($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","PRODUCT_NAME","BARCODE","CURRENT_QTY","UNIT_COST","SELL_PRICE","DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","PRODUCT_NAME","BARCODE","CURRENT_QTY","UNIT_COST","SELL_PRICE","PRICE_SET","DATE","BY_USER","STATUS");
 
 // 			$link=array(
 // 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
@@ -48,11 +48,11 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 					$db = new Global_Model_DbTable_DbItemsDetail();
 					$row = $db->AddInitizeqty($_data);
 					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/initizeqty/index");
+						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/initizeqty");
 					}else{
 						Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/initizeqty/add");
 					}
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}catch(Exception $e){
 					Application_Form_FrmMessage::message("INSERT_FAIL");
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

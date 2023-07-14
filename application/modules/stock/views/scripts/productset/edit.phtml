@@ -196,7 +196,7 @@ fieldset{  background:none;}
 		}else{
 			addRow();
 		}
-		getRefreshProduct();
+		//getRefreshProduct();
 	});	
 </script>
 <script type="text/javascript">
@@ -271,7 +271,7 @@ var urlGetProductInfo = '<?php echo $this->url(array('module'=>'global','control
 				template+='<td width="10%" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="5%"  align="center">'+no+'</td>';
 				template+='<td width="20%" ><input type="hidden" dojoType="dijit.form.TextBox" value="'+product_id+'" id="product_'+col+'" name="product_'+col+'" />'+data.product_name+'</td>';			
-				template+='<td width="10%"  ><input class="fullside" type="text" readonly="true" value="'+data.price+'" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
+				template+='<td width="10%"  ><input class="fullside" type="text" readonly="true" value="'+data.price_set+'" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%" ><input class="fullside" type="text" required="true" placeholder="'+'<?php echo $tr->translate("QTY");?> " onkeyup="subTotal('+col+');" name="qty_'+col+'"  id="qty_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%" ><input class="fullside" type="text" readonly="true"  placeholder="'+'<?php echo $tr->translate("TOTAL_PRICE");?> " name="total_'+col+'" id="total_'+col+'" value="0.00" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%"> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';

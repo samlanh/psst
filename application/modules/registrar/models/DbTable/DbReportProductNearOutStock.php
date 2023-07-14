@@ -35,7 +35,6 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
 				pl.pro_qty,
 				pl.price AS pro_price,
 				p.price,
-				pl.total_amount,
 				p.create_date AS DATE,
 				(SELECT name_kh FROM rms_view WHERE rms_view.key_code=p.status AND rms_view.type=1 LIMIT 1) AS `status` 
 			  FROM 
@@ -45,7 +44,7 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
 				p.id=pl.pro_id
     				$branch_id
     		";
-//     	echo $sql;
+
     	$where=" ";
     	if(!empty($search['title'])){
     		$s_where=array();
@@ -59,9 +58,7 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     	if(!empty($search['location'])){
     		$where.=" AND pl.branch_id=".$search['location'];
     	}
-//     	if($search['status_search']==1 OR $search['status_search']==0){
-//     		$where.=" AND p.status=".$search['status_search'];
-//     	}
+
     	if($search['category_id']>0){
     		$where.=" AND p.items_id=".$search['category_id'];
     	}

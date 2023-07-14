@@ -78,8 +78,8 @@ table.tb-footer tr.style-head {
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<style>
-							.style{
+				<style>
+					.style{
 						line-height: 20px;font-size: 11px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
@@ -143,8 +143,21 @@ table.tb-footer tr.style-head {
 					}
 					table.content-data tr td{
 						padding: 2px;
-					}								
-						</style>
+					}	
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							size:A4 portrait;
+						}
+					}
+
+				</style>
 						<table class="content-data" cellpadding="5"​ border="1" >
 							<thead>
 								<tr class="style" align="center">

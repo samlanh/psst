@@ -233,9 +233,11 @@ function langOption(){
 	if(type_sub == 2){
 		
 		dijit.byId("subject_lang").set('value','');
+		dijit.byId("subject_lang").set('required',false);
 		dijit.byId("subject_lang").set('readOnly',true);
 
 	}else{
+		
 		dijit.byId("subject_lang").set('readOnly',false);
 	}
 	

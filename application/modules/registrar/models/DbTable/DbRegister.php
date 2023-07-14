@@ -813,7 +813,254 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		return $results;
 	}
 
+// 	function updateRegister($data,$payment_id){
+// 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
+// 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 	
+// 		if($data['void']==1){  // void
+// 			try{
+// 				$rsold = $this->getStudentPaymentByID($payment_id);
+// 				if($rsold['data_from']!=1){ // not student study payments
+// 					if($rsold['data_from']==2){
+// 						$arr = array(
+// 								'is_registered'=>0,
+// 						);
+// 						$this->_name='rms_student_test_result';
+// 						$where="stu_test_id = ".$data['old_stu']." AND degree_result=".$rsold['degree_id']." AND grade_result=".$rsold['grade'];
+// 						$this->update($arr, $where);//reverse to tested student
+	
+// 						$arr = array(
+// 								'customer_type'=>4 //reverse to tested student
+// 						);
+// 					}elseif($rsold['data_from']==3){
+// 						$arr = array(
+// 								'customer_type' =>3, //reverse to crm
+// 								'is_studenttest' =>0,
+// 						);
+// 					}
+// 					$this->_name='rms_student';
+// 					$where='stu_id = '.$data['old_stu'];
+// 					$this->update($arr, $where);
+// 				}
+// 				// update payment and validate of service and tuition fee info back ,  and update stock back to origin
+// 				if($rsold['is_void']==0){
+// 					$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
+// 				}
+	
+// 				$this->_name='rms_student_payment';
+// 				$arra=array(
+// 						'is_void'=>$data['void'],
+// 						'void_by'=>$this->getUserId(),
+// 						'void_note'=>$data['void_note'],
+// 				);
+// 				$where = " id = ".$payment_id;
+// 				$this->update($arra, $where);
+					
+// 				if(!empty($data['credit_memo_id']) && $rsold['is_void']==0){//check again because it old code
+// 					$this->updateCreditMemoBack($data);
+// 				}
+	
+// 				$key = new Application_Model_DbTable_DbKeycode();
+// 				$keydata=$key->getKeyCodeMiniInv(TRUE);
+// 				$condictionSale = empty($keydata['sale_cut_stock'])?0:$keydata['sale_cut_stock'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+// 				if ($condictionSale!=1){
+// 					$sql="SELECT sd.* FROM `rms_saledetail` AS sd WHERE sd.payment_id =$payment_id";
+// 					$saleDetail = $db->fetchAll($sql);
+// 					if (!empty($saleDetail)) foreach ($saleDetail as $rs){
+// 						//Qurey Cut Stock Detail
+// 						$sql = "SELECT cd.* FROM `rms_cutstock_detail` AS cd WHERE cd.`student_paymentdetail_id` =".$rs['id'];
+// 						$cutDetail = $db->fetchAll($sql);
+// 						$qtyReceive = 0;
+// 						if (!empty($cutDetail)) foreach ($cutDetail as $cut){
+// 							$qtyReceive = $qtyReceive+$cut['qty_receive'];
+// 							//Void All This Payment Cut Stock
+// 							$_arr=array(
+// 									'status'	      => 0,
+// 									'user_id'  =>$this->getUserId(),
+// 									'modify_date'	  => date("Y-m-d H:i:s"),
+// 							);
+// 							$this->_name ='rms_cutstock';
+// 							$where = ' id = '.$cut['cutstock_id'];
+// 							$this->update($_arr, $where);
+// 						}
+// 						//Update Sale Detial back
+// 						$_arr=array(
+// 								'qty_after'	      => ($rs['qty_after']+$qtyReceive),
+// 						);
+// 						$this->_name ='rms_saledetail';
+// 						$where = ' id = '.$rs['id'];
+// 						$this->update($_arr, $where);
+	
+// 						$dbpu = new Stock_Model_DbTable_DbPurchase();
+// 						$dbpu->updateStock($rs['pro_id'],$data['branch_id'],+$qtyReceive);
+// 					}
+// 				}
+	
+// 				// 				$where = " payment_id = $payment_id";
+// 				// 				$this->_name='rms_saledetail';
+// 				// 				$this->delete($where);
+	
+// 				$db->commit();
+// 				return 0;
+// 			}catch (Exception $e){
+// 				Application_Form_FrmMessage::message("UPDATE_FAIL");
+// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 				$db->rollBack();
+// 				exit();
+// 			}
+// 		}
+// 	}
+	
+	function updateRegister($payment_id){
+		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
+		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
+	
+		//if($data['void']==1){  // void
+			try{
+				$rsold = $this->getStudentPaymentByID($payment_id);
+				if($rsold['is_void']==1){
+					return true;
+				}
+				$data['branch_id']=$rsold['branch_id'];
+				$data['void']=1;
+				$data['void_note']='';
+				$data['old_stu']=$rsold['stu_id'];
+				$data['credit_memo_id']= $rsold['memo_id'];
+				
+				if(!empty($rsold)){
+					$stu_id = empty($rsold['stu_id'])?0:$rsold['stu_id'];
+					$lastPaymentRecord = $this->getLastStudentPaymentRecord($stu_id);
+					$lastPayId = empty($lastPaymentRecord['id'])?0:$lastPaymentRecord['id'];
+					$voidOldreceipt = 0;
+					if ($lastPayId!=$payment_id){//void old receipt
+						$voidOldreceipt=1;
+					}
+		
+					if($rsold['data_from']!=1 AND $voidOldreceipt==0){ // not student study payments
+							
+						if($rsold['data_from']==2){
+		
+							$arr = array(
+									'is_registered'=>0,
+							);
+							$this->_name='rms_student_test_result';
+							$where="stu_test_id = ".$data['old_stu']." AND degree_result=".$rsold['degree_id']." AND grade_result=".$rsold['grade'];
+							$this->update($arr, $where);//reverse to tested student
+		
+							$arr = array(
+									'customer_type'=>4 //reverse to tested student
+							);
+		
+						}elseif($rsold['data_from']==3){
+		
+							$arr = array(
+									'customer_type' =>3, //reverse to crm
+									'is_studenttest' =>0,
+							);
+		
+						}
+							
+						$this->_name='rms_student';
+						$where='stu_id = '.$data['old_stu'];
+						$this->update($arr, $where);
+					}
+					// update payment and validate of service and tuition fee info back ,  and update stock back to origin
+					if($rsold['is_void']==0 AND $voidOldreceipt==0){
+						$this->updatePaymentInfoBack($payment_id,1);   // 1 is pay for both service and tuition fee
+					}
+		
+					$this->_name='rms_student_payment';
+					$arra=array(
+							'is_void'=>$data['void'],
+							'void_by'=>$this->getUserId(),
+							'void_note'=>$data['void_note'],
+					);
+					$where = " id = ".$payment_id;
+					$this->update($arra, $where);
+						
+					if(!empty($data['credit_memo_id']) AND $rsold['is_void']==0){//check again because it old code
+						$this->updateCreditMemoBack($data);
+					}
+		
+					$key = new Application_Model_DbTable_DbKeycode();
+					$keydata=$key->getKeyCodeMiniInv(TRUE);
+					$condictionSale = empty($keydata['sale_cut_stock'])?0:$keydata['sale_cut_stock'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+					if ($condictionSale!=1){
+						$sql="SELECT sd.* FROM `rms_saledetail` AS sd WHERE sd.payment_id =$payment_id";
+						$saleDetail = $db->fetchAll($sql);
+						if (!empty($saleDetail)) foreach ($saleDetail as $rs){
+							//Qurey Cut Stock Detail
+							$sql = "SELECT cd.* FROM `rms_cutstock_detail` AS cd WHERE cd.`student_paymentdetail_id` =".$rs['id'];
+							$cutDetail = $db->fetchAll($sql);
+							$qtyReceive = 0;
+							if (!empty($cutDetail)) foreach ($cutDetail as $cut){
+								$qtyReceive = $qtyReceive+$cut['qty_receive'];
+								//Void All This Payment Cut Stock
+								$_arr=array(
+										'status'	      => 0,
+										'user_id'  =>$this->getUserId(),
+										'modify_date'	  => date("Y-m-d H:i:s"),
+								);
+								$this->_name ='rms_cutstock';
+								$where = ' id = '.$cut['cutstock_id'];
+								$this->update($_arr, $where);
+							}
+							//Update Sale Detial back
+							$_arr=array(
+									'qty_after'	      => ($rs['qty_after']+$qtyReceive),
+							);
+							$this->_name ='rms_saledetail';
+							$where = ' id = '.$rs['id'];
+							$this->update($_arr, $where);
+		
+							$dbpu = new Stock_Model_DbTable_DbPurchase();
+							$dbpu->updateStock($rs['pro_id'],$data['branch_id'],+$qtyReceive);
+						}
+					}
+		
+					// 				$where = " payment_id = $payment_id";
+					// 				$this->_name='rms_saledetail';
+					// 				$this->delete($where);
+		
+					$db->commit();
+					return 0;
+				}
+			}catch (Exception $e){
+				echo $e->getMessage();exit();
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("UPDATE_FAIL");
+				$db->rollBack();
+			}
+		//}
+	}
+	
+	function getStudentPaymentByID($id){
+		$db=$this->getAdapter();
+		$sql="SELECT
+		sp.*,
+		s.stu_enname,
+		s.stu_khname,
+		s.sex,
+		s.stu_code,
+		s.stu_id,
+			
+		sp.degree as degree_id,
+		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
+		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
+		(SELECT first_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as first_name,
+		(SELECT last_name from rms_users as u where u.id=sp.user_id  LIMIT 1) as last_name
+		FROM
+		rms_student_payment as sp,
+		rms_student as s
+		WHERE
+		s.stu_id = sp.student_id
+		AND sp.id=$id AND is_closed=0 ";
+		
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$sql.= $_db->getUserAccessPermission('sp.branch_id');
+		
+		return $db->fetchRow($sql);
+	}
 	function getLastStudentPaymentRecord($stuId){
     	$db=$this->getAdapter();
     	$sql="SELECT 

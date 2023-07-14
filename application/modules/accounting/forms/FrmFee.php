@@ -221,7 +221,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
 		$_title->setAttribs(array(
-				'dojoType'=>$this->text,
+				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("SEARCH")));
 		$_title->setValue($request->getParam("title"));

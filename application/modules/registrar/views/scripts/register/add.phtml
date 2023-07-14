@@ -1496,6 +1496,10 @@ function getservicefee(key){
 	 			dijit.byId("remark"+key).attr("value",'');
 	 			dijit.byId("price_"+key).attr("value",data.price);
 	 			dijit.byId("service_type_"+key).attr("value",data.items_type);
+	 			if(data.onepayment==1){
+	 				$("#autoNextPay"+key).prop( "checked",false);
+	 				$("#autoNextPay"+key).prop( "disabled",true);
+		 		}
 	 			calculateTotal(key);
  				if(data.validate!=null){
  					dijit.byId("date_start_"+key).attr("value",data.validate);

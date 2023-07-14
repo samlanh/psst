@@ -232,8 +232,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	(SELECT sm.total_score FROM rms_score_monthly AS sm WHERE sm.score_id=s.id AND sm.student_id=st.stu_id LIMIT 1 ) AS total_score,
 		   	g.total_score AS total_scoreallsubject,
 		    (SELECT sm.total_avg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS average,
- 			(SELECT sm.totalMaxScore FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS totalMaxScore,
-		    (g.max_average/2) as pass_avrage
+ 			(SELECT sm.totalMaxScore FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS totalMaxScore
+		    
    		FROM 
    			`rms_score` AS s,
 		   	`rms_score_detail` AS sd,
@@ -755,7 +755,12 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    }
    public function getSubjectScoreGroup($group_id,$teacher_id=null,$exam_type=1){
    	$db = new Issue_Model_DbTable_DbScore();
-   	return $db->getSubjectScoreByGroup($group_id,$teacher_id=null,$exam_type);
+   	$data= array(
+   			'group_id'=>$group_id,
+   			'teacher_id'=>$teacher_id,
+   			'exam_type'=>$exam_type
+   			);
+   	return $db->getSubjectScoreByGroup($data);
    }
    
    public function getScoreBySubjectTranscript($score_id,$student_id,$subject_id){

@@ -107,6 +107,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	else{
     		$row = $db->getScoreExamByID($id);
     		$search = array(
+    				
     				'group' => $row['group_id'],
     				'study_year'=> $row['for_academic_year'],
     				'exam_type'=> $row['exam_type'],
@@ -119,10 +120,10 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		);
     		$resultScore = $db->getStundetScoreDetailGroup($search,$id,1);
     	}
+    	
     	 
     	$this->view->studentgroup = $resultScore;
     	$this->view->search=$search;
-    
     	
     	$form=new Registrar_Form_FrmSearchInfor();
     	$form->FrmSearchRegister();

@@ -195,7 +195,7 @@
 				<?php 
 				$colspan=1;
 				if($this->data['scoreresulttye']==1){
-					$colspan=2;
+					$colspan=3;
 				}?>
 					<td colspan="3" id="exportExcel" valign="top">
 						<table cellpadding="2"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: 2px solid #5a71b5;"  border="1" >
@@ -213,11 +213,20 @@
 								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RANK");?></td>
 								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RESULT");?></td>
 							</tr>
-							<?php if($this->data['scoreresulttye']==1){?>
+							<?php
+							$langKhmer=0;
+							$langEng=0;
+							if($this->data['scoreresulttye']==1){?>
 								<tr class="header" align="center" >
 									<?php
 									if (!empty($subj)){
 										foreach ($subj as $subject){
+											if($subject['subjectLang']==1){
+												$langKhmer=$langKhmer+1;
+											}else{
+												$langEng=$langEng+1;
+											}
+											
 										 if($this->data['scoreresulttye']==1){
 										 	if($show_subject==1){
 										 ?>
@@ -226,6 +235,11 @@
 											<td><?php echo $subject['shortcut'];?></td>
 									<?php }}}}?>
 								</tr>
+								<tr>
+									<td align="center" colspan="<?php echo $langKhmer;?>">កម្មវិធីភាសាខ្មែរ Khmer Program</td>
+									<td align="center" colspan="<?php echo $langEng;?>">កម្មវិធីភាសាអង់គ្លេស English Program</td>
+								</tr>
+								
 							<?php }?>
 							<?php } $i++;?>
 							<tr class="style hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id'];?>','<?php echo $rs['student_id'];?>','<?php echo $i;?>','<?php echo $rs['group_id'];?>','<?php echo $rs['exam_type'];?>','<?php echo $rs['for_semester'];?>','<?php echo $rs['for_month'];?>');return false;" style=" line-height: 20px;">
@@ -282,8 +296,8 @@
 								&nbsp;
 								</td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<td align="center" <?php if($average<($rs['pass_avrage'])){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php if($average>=($rs['pass_avrage'])){
+								<td align="center" <?php if($total_score<($rs['totalMaxScore']/2)){echo 'style=" background: #fdbdbd;"';}?>>
+									<?php if($total_score>=($rs['totalMaxScore'])){
 										echo $tr->translate("STUDENT_PASS");
 										$count_pass++;
 										if($rs['sex']==2){$pass_female=$pass_female+1;}//femail

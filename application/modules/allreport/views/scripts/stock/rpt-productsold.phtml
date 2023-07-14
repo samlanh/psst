@@ -167,18 +167,19 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('UNIT_COST');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL_COST');?>&nbsp;</td>
+									
 									<td scope="col">&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									
 									<td scope="col">&nbsp;<?php echo $tr->translate('PROFIT');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('PAID_AMOUNT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('RECEIPT_NO');?></td>
 									<td scope="col"> &nbsp;<?php echo $tr->translate('CREATED_DATE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 							   </tr>
 						   </thead>
 						<?php $i=0;
-							$grand_total=0;$profit=0; 
-							$total_cost=0;
+							$totalCost=0;
+							$totalSell=0;
 						if(!empty($this->product_sold)){ foreach ($this->product_sold AS $rs) { $i++;
 						?>
 							<tr class="style hover" align="left">
@@ -188,38 +189,40 @@
 							    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" style="text-align: left;"><?php echo $rs['student_name'];?></td>
 							    <td data-label="<?php echo $tr->translate("PRODUCT_CATEGORY");?>"><?php echo $rs['category'];?></td>
 							    <td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
-							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo number_format($rs['qty'],0);?></td>
-							    <td data-label="<?php echo $tr->translate("UNIT_COST");?>"><?php echo "$ ".$rs['cost'];?></td>
+							    
+							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo $rs['qty'];?></td>
+							    <td data-label="<?php echo $tr->translate("UNIT_COST");?>"><?php echo $rs['cost'];?></td>
 							    <td data-label="<?php echo $tr->translate("TOTAL_COST");?>">
 							    <?php 
-								    $totalCost = $rs['qty']*$rs['cost'];
-								    echo number_format($totalCost,2);
-								?></td>
-							    <td data-label="<?php echo $tr->translate("SELL_PRICE");?>"><?php echo "$ ".$rs['fee'];?></td>
-							    <td data-label="<?php echo $tr->translate("TOTAL");?>">&nbsp;$&nbsp;<?php echo $rs['subtotal'];?>&nbsp;</td>
-							    <td data-label="<?php echo $tr->translate("TOTAL");?>">&nbsp;$&nbsp;<?php echo $rs['subtotal']-$totalCost;?>&nbsp;</td>
-							    <td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>">&nbsp;$&nbsp;<?php echo $rs['paidamount'];?>&nbsp;</td>
+								    	$subTotalcost = $rs['qty']*$rs['cost'];
+								    	echo number_format($subTotalcost,2);
+								    	$subTotalSell=$rs['qty']*$rs['price'];
+								    	$totalCost = $totalCost+$subTotalcost;
+								    	$totalSell = $totalSell+$subTotalSell;
+							    ?>
+							    </td>
+							    <td data-label="<?php echo $tr->translate("SELL_PRICE");?>"><?php echo $rs['price'];?></td>
+							    <td data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($subTotalSell,2);?>&nbsp;</td>
+							    <td data-label="<?php echo $tr->translate("PROFIT");?>"><?php echo $subTotalSell-$subTotalcost;?>&nbsp;</td>
 							    <td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><strong><?php echo $rs['receipt_number'];?></strong></td>
 							    <td data-label="<?php echo $tr->translate("CREATED_DATE");?>"><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
 							    <td data-label="<?php echo $tr->translate("USER");?>"><?php echo $rs['user']; ?></td>
 							 </tr>
 						  		<?php 
-						  			$grand_total=$grand_total+$rs['subtotal'];
-						  			$profit = $profit + (($rs['fee']-$rs['cost'])*$rs['qty']);
-						  			$total_cost = $total_cost+($rs['cost']*$rs['qty']);
+						  			
 								}}
 								?>	  
 						</table>
 						<table width="40%" border="1" style="font-family:'Times New Roman','Khmer OS Battambang'; margin-top:15px;border: 1px solid #000;border-collapse: collapse;float:right"  >
 						   <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px; " align="center">
-							   <td width="33%"><?php echo $tr->translate('GRAND_TOTAL')?></td>
 							   <td width="33%"><?php echo $tr->translate('TOTAL_UNIT_PRICE')?></td>
+							    <td width="33%"><?php echo $tr->translate('TOTAL_SALE')?></td>
 							   <td width="33%"><?php echo $tr->translate('PROFIT')?></td>
 						   </tr>
-						   <tr align="center" style="font-size:12px; height: 20px;line-height: 30px;font-weight: bold;" align="center">
-							   <td>&nbsp;$&nbsp;<?php echo number_format($grand_total,2);?>&nbsp;</td>
-							   <td>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</td>
-							   <td>&nbsp;$&nbsp;<?php echo number_format($profit,2);?>&nbsp;</td>
+						    <tr align="center" style="font-size:12px; height: 20px;line-height: 30px; " align="center">
+							   <td>$ <?php echo number_format($totalCost,2);?></td>
+							   <td>$ <?php echo number_format($totalSell,2);?></td>
+							   <td>$ <?php echo number_format($totalSell-$totalCost,2);?></td>
 						   </tr>
 						</table>
 					</td>

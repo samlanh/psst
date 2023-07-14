@@ -142,7 +142,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		if(!empty($data['groupbySubjectId'])){//for get all subject in result detail
 			$sql.=" GROUP BY subject_id ";
 		}
-		$sql.=" ORDER  BY $strSubjectLange  ";
+		$sql.=" ORDER  BY $strSubjectLange ASC ";
 		return $db->fetchAll($sql);
 	}
 	function getScoreInformation($data){

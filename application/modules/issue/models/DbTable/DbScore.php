@@ -692,6 +692,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		return $this->getAdapter()->fetchRow($sql);
 	}
 	function getSubjectScoreByGroup($data){
+		
+		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE
+		s.id=gsjd.subject_id LIMIT 1) ";
+		
 		$db=$this->getAdapter();
 		$sql="SELECT
 			gsjd.*,
@@ -703,13 +707,14 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(sj.subject_titleen) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name_en,
 			(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
 			(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+			$strSubjectLange AS subjectLang,
 			(gsjd.amount_subject) amtsubject_month,
 			(gsjd.amount_subject_sem) amtsubject_semester,
 			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
 			(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
 		FROM
-		rms_group_subject_detail AS gsjd ,
-		rms_group as g
+			rms_group_subject_detail AS gsjd ,
+			rms_group as g
 		WHERE
 		g.id = gsjd.group_id
 		";
@@ -727,8 +732,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		}else{
 			$sql.=" AND gsjd.amount_subject_sem > 0 ";
 		}
-	
-		$sql.=' ORDER BY gsjd.id ASC ';
+		$sql.=" ORDER  BY $strSubjectLange ";
 		return $db->fetchAll($sql);
 	}
 }

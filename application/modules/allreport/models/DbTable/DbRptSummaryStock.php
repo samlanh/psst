@@ -518,21 +518,22 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 		    		s.tel,
 			    	sp.receipt_number,
 			    	sp.create_date,
-			    	spd.*,
 			    	(SELECT i.title FROM `rms_items` AS i WHERE i.id = i.items_id LIMIT 1) AS category,
 			    	i.title AS items_name,
 			    	i.code AS code,
-			    	spd.productCost AS cost, 
+			    	sd.cost , 
+			    	sd.qty,
+			    	sd.price,
 			    	(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = sp.user_id LIMIT 1) as user
     			FROM 
     				`rms_student_payment` AS sp,
-			    	`rms_student_paymentdetail` AS spd,
+    				rms_saledetail sd,
 			    	`rms_student` AS s,
 			    	rms_itemsdetail as i
     			WHERE 
-    				sp.id = spd.payment_id
+    				sp.id = sd.payment_id
 			    	AND s.stu_id = sp.student_id
-			    	AND i.id = spd.itemdetail_id
+			    	AND i.id = sd.pro_id
 			    	AND i.items_type = 3
 			    	AND sp.status = 1
 			    	AND sp.is_void = 0

@@ -208,6 +208,7 @@ dojo.require("dijit.form.Textarea");
 		    	items_id = dijit.byId('items_id').get('value');
 			    if(items_id==-1){
 			    	window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/productcate/add?rightclick=true";?>','_blank');
+					dijit.byId('items_id').attr('value', '');
 			    }
 				deplicateItem();
 		   }
@@ -225,6 +226,7 @@ dojo.require("dijit.form.Textarea");
 				product   = dijit.byId('itemId').get('value');
 				if(product==-1){
 					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
+					dijit.byId("itemId").attr('value','');
 				}else{
 					addRow();
 				}
@@ -232,24 +234,26 @@ dojo.require("dijit.form.Textarea");
 		}, "itemId");
 		addRow();
 		dijit.byId('is_onepayment').set('value',1);
-		getRefreshProduct();
+	
 		$("#title").keyup(function(){
 			deplicateItem();
 		});	
 	});	
 
 	function getRefreshProduct(){
+		
 		branch_id=dijit.byId("branch_search").get("value");
 	    if(branch_id=='' || branch_id==-1){
 		    alert("Please Selected Branch Name!");
 		    return false ;
 	    }										
-			loadingBlock();
 		var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
 		contentData = {
 			'itemsType':3,
 			'isProductset':0,
-			'proLocation':branch_id
+			'proLocation':branch_id,
+			'addNew':1,
+
 		}
 		getAllItemIdByType(urlGet,contentData);
 	}
@@ -330,7 +334,7 @@ function getRefreshItems(){//category
 				template+='<td width="10%" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 				template+='<td width="5%"  align="center">'+no+'</td>';
 				template+='<td width="20%" ><input type="hidden" dojoType="dijit.form.TextBox" value="'+product_id+'" id="product_'+col+'" name="product_'+col+'" />'+data.product_name+'</td>';			
-				template+='<td width="10%"  ><input class="fullside" type="text" readonly="true" value="'+data.price+'" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
+				template+='<td width="10%"  ><input class="fullside" type="text" readonly="true" value="'+data.price_set+'" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%" ><input class="fullside" type="text" required="true" placeholder="'+'<?php echo $tr->translate("QTY");?> " onkeyup="subTotal('+col+');" name="qty_'+col+'"  id="qty_'+col+'" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%" ><input class="fullside" type="text" readonly="true" required="true" placeholder="'+'<?php echo $tr->translate("TOTAL_PRICE");?> " name="total_'+col+'" id="total_'+col+'" value="0.00" dojoType="dijit.form.NumberTextBox"/></td>';
 				template+='<td width="10%"> <input class="fullside" type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox"/></td>';

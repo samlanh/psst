@@ -65,6 +65,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		}else{
       			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
       		}
+      		Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
       		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	}catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -128,9 +129,10 @@ class Registrar_RegisterController extends Zend_Controller_Action {
      	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
      		try{
-    			$db->updateRegister($$_data);
-    			Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
-    			
+    			$result = $db->updateRegister($_data);
+    			print_r(Zend_Json::encode($result));
+    			exit();
+    			//Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
      		} catch (Exception $e) {
      			Application_Form_FrmMessage::message("UPDATE_FAIL");
      			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

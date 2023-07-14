@@ -192,8 +192,11 @@ class Global_GradeController extends Zend_Controller_Action {
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
     		$rs = $db->getAllItemDetail($data);
-    		//array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-			//array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			if(!empty($data['addNew'])){
+				array_unshift($rs, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+			//	array_unshift($rs, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+			}
+    		
 			
     		print_r(Zend_Json::encode($rs));
     		exit();

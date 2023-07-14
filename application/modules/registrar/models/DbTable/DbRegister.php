@@ -65,13 +65,12 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			$stu_code=empty($data['student_code'])?$stu_code:$data['student_code'];
     		}
     	
-    		$data['degreeStudent'] =$degreeStudent;//For Insert To Tale Count ID
+    		$data['degreeStudent']=$degreeStudent;//For Insert To Tale Count ID
     		$dbg->updateAmountStudetByDegree($data);//For Insert To Tale Count ID
     	
     		$arr = array(
     				'customer_type' =>1,
     				'stu_code'=>$stu_code,
-    				//'academic_year'=>$data['study_year'],
     				'create_date'=>date("Y-m-d H:i:s")
     		);
     		$this->_name='rms_student';
@@ -91,9 +90,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				$where =" group_id=0 AND stu_id=".$data['old_stu'];
     				$this->_name="rms_group_detail_student";
     				$this->update($array, $where);
-    			}else{
+    			}else{//ករណីរើសបង់ថ្លៃកម្មវិធីផ្សេងៗវានឹងបន្ថែម ជួរក្រោម១ទៀត
     				$_arr = array(
     						'stu_id'			=>$data['old_stu'],
+    						'itemType'			=>1,
     						'is_newstudent'		=>1,
     						'status'			=>1,
     						'group_id'			=>$group_id,
@@ -102,10 +102,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     						'is_current'		=>1,
     						'is_setgroup'		=>$is_setgroup,
     						'is_maingrade'		=>1,
-    						'date'				=>date("Y-m-d"),
     						'create_date'		=>date("Y-m-d H:i:s"),
     						'modify_date'		=>date("Y-m-d H:i:s"),
     						'user_id'			=>$this->getUserId(),
+    						'note'				=>'data from payment then choose group when from tested student'
     				);
     				$this->_name="rms_group_detail_student";
     				$this->insert($_arr);
@@ -125,6 +125,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    		set.qty as set_qty,
 	    		idt.cost,
 	    		lo.price,
+	    		lo.price_set,
 	    		lo.costing
     		FROM
 	    		rms_itemsdetail as idt,
@@ -153,7 +154,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     						'qty'				=>$row['set_qty'] * $data['qty_'.$i], // (qty of set detail) * (qty buy)
     						'qty_after'			=>$qty_after,
     						'cost'				=>$row['costing'],
-    						'price'				=>$row['price'],
+    						'price'				=>$row['price_set'],
     						'user_id'			=>$this->getUserId(),
     				);
     				$this->_name="rms_saledetail";
@@ -190,18 +191,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				'productId'=>$data['item_id'.$i]
     		);
     		$resultItem = $dbs->getProductInfoByLocation($arr);
+    		$currentCosting = empty($resultItem['currentPrice'])?0:$resultItem['currentPrice'];
     		
-    		if(!empty($resultItem)){
-    			$totalCosting = $resultItem['currentPrice'];//costing
-    			$this->_name="rms_student_paymentdetail";
-    			$arr = array(
-    					'productCost'=>$totalCosting
-    			);
-    			$where ='id='.$data['paymentDetailId'];
-    			$this->update($arr, $where);
-    		}
+    		$arr = array(
+    				'productCost'=>$currentCosting
+    		);
+    		$where ='id='.$data['paymentDetailId'];
+    		$this->_name="rms_student_paymentdetail";
+    		$this->update($arr, $where);
     			
-//     		$totalQty = $totalQty+$data['qty_'.$i];//count QtyReceive
     		$qty_after = $data['qty_'.$i];
     		if ($condictionSale!=1){
     			$qty_after=0;
@@ -213,7 +211,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				'pro_id'			=>$data['item_id'.$i],
     				'qty'				=>$data['qty_'.$i],
     				'qty_after'			=>$qty_after,
-    				'cost'				=>$data['costing'],
+    				'cost'				=>$currentCosting,
     				'price'				=>$data['price_'.$i],
     				'user_id'			=>$this->getUserId(),
     		);
@@ -240,8 +238,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function addRegister($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		//$paid_date = $data['paid_date'];
-		$paid_date = date("Y-m-d H:i:s");
+		$paid_date = date("Y-m-d H:i:s",strtotime($data['paid_date']));
+		//$paid_date = date("Y-m-d H:i:s");
 		$gdb = new  Application_Model_DbTable_DbGlobal();
 		$stu_id = $data['old_stu'];//$this->getnewStudentId($data['dept']);
 		
@@ -263,8 +261,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'customer_type' =>4,
 								'is_studenttest' =>1,
 								'serial' => $newSerial,
-								'create_date'=>date("Y-m-d"),
-								'create_date_stu_test'=>date("Y-m-d"),
+								'create_date'=>date("Y-m-d H:i:s"),
+								'create_date_stu_test'=>date("Y-m-d H:i:s"),
 						);
 						$this->_name='rms_student';
 						$where="stu_id = ".$stu_id;
@@ -294,11 +292,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 				
 				$this->_name='rms_student_payment';
-				// 				$arr = array(
-				// 					'balance_due'=>0
-				// 				);
-// 				$where="student_id = ".$stu_id;
-// 				$this->update($arr, $where);//clear old balance
 				
 				$arr=array(
 					'branch_id'		=> $data['branch_id'],
@@ -314,13 +307,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'balance_due'	=> $data['balance_due'],
 					'amount_in_khmer'=> $data['money_in_khmer'],
 					'payment_method'=> $data['payment_method'],
-					'bank_id'		=>$data['bank_name'],
+					'bank_id'		=> $data['bank_name'],
 					'number'	    => $data['number'],
 					'note'			=> $data['note'],
 					'create_date'	=> $paid_date,
 					'user_id'		=> $this->getUserId(),
 					'academic_year'	=> $data['study_year'],
-					'paystudent_type'=> $rs_stu['is_stu_new'],//
+					'paystudent_type'=>$rs_stu['is_stu_new'],//
 					'group_id'		=> $data['group_id'],
 					'degree'		=> $rs_stu['degree'],
 					'grade'			=> $rs_stu['grade'],
@@ -346,7 +339,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$key = new Application_Model_DbTable_DbKeycode();
 				$keydata=$key->getKeyCodeMiniInv(TRUE);
-				$condictionSale = empty($keydata['sale_cut_stock'])?0:$keydata['sale_cut_stock'];//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
+				$condictionSale = Setting_Model_DbTable_DbGeneral::geValueByKeyName('sale_cut_stock');
+// 				$condictionSale = empty($stockSetting)?0:$stockSetting;//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
 				
 				$cut_id="";
 				$totalQty=0;
@@ -449,7 +443,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'discountAmount'=>'',
 								'balance'		=> $balance,
 								'schoolOption'	=> $rs_item['schoolOption'],
-								'isMaingrade'	=>1,
+								'isMaingrade'	=> 1,
 								'isCurrent'		=> 1,
 								'stopType'		=> 0,
 								'status'		=> 1,

@@ -129,7 +129,7 @@ fieldset{  background:none;}
 			 <div class="clearfix"></div>
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		<input type="button" onclick="submitDataClose()" name="save_close" id="save_close" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
+               		<input type="submit"  name="save_close" id="save_close" value="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>"  dojoType="dijit.form.Button" 
 					   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
 					 <input type="submit" name="save_new" id="save_new" value="រក្សាទុក" label="<?php echo $tr->translate('SAVE_NEW');?>"  dojoType="dijit.form.Button" 
 					 class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
@@ -162,21 +162,24 @@ fieldset{  background:none;}
 					pro_id   = dijit.byId('itemId').get('value');
 					if(pro_id==''){
 						return false;
-					}
-					location_id= dijit.byId('branch_id').get('value');
-					var rowId = $('#identity').val();
-	    			if(rowId!=''){ 
-						var rowIDArray = rowId.split(',');
-						for(var n = 0; n < rowIDArray.length; n++){
-						var product_name = dijit.byId('product_name_'+rowIDArray[n]).get('value');
-						if(product_name == pro_id && branch_id==location_id){
-								dijit.byId('itemId').attr('value','');
-								return false;
+					}else if(pro_id == -1){
+						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
+						dijit.byId("itemId").attr('value','');
+					}else{
+						location_id= dijit.byId('branch_id').get('value');
+						var rowId = $('#identity').val();
+						if(rowId!=''){ 
+							var rowIDArray = rowId.split(',');
+							for(var n = 0; n < rowIDArray.length; n++){
+							var product_name = dijit.byId('product_name_'+rowIDArray[n]).get('value');
+							if(product_name == pro_id && branch_id==location_id){
+									dijit.byId('itemId').attr('value','');
+									return false;
+								}
 							}
 						}
+						addRow();
 					}
-					addRow();
-				
 			}
 		}, "itemId");
 	});	
@@ -213,6 +216,7 @@ function addRow(){
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("UNIT_COST");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("SELL_PRICE");?></th>';
+			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("PRICE_SET");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("QTY_WARNING");?></th>';
 			temp+='<th id="lbl_titlemetion" width="100px"><?php echo $tr->translate("NOTE");?></th>';
 			dojo.query("#head-title").append(temp);
@@ -221,11 +225,12 @@ function addRow(){
 			template+='<td width="47px" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="15px" align="center"  >'+no+'</td>';
 			template+='<td width="300px" align="left">&nbsp;'+label_proname+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="product_name_'+col+'" name="product_name_'+col+'" value="'+pro_id+'" /></td>';
-			template+='<td width="100px"><input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;"/></td>';
-			template+='<td width="100px"><input type="text" required="true" name="costing_'+col+'" id="costing_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text" required="true" name="price_'+col+'" id="price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
-			template+='<td width="100px"><input type="text"  name="qty_alert_'+col+'" id="qty_alert_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;"  /></td>';
-			template+='<td ><input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" placeHolder="<?php echo $tr->translate("QTY");?>" dojoType="dijit.form.NumberTextBox" style="width:100%;"/></td>';
+			template+='<td width="100px"><input type="text" required="true" name="costing_'+col+'" id="costing_'+col+'" placeHolder="<?php echo $tr->translate("UNIT_COST");?>" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" required="true" name="price_'+col+'" id="price_'+col+'" placeHolder="<?php echo $tr->translate("SELL_PRICE");?>" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text" required="true" name="price_set_'+col+'" id="price_set_'+col+'" placeHolder="<?php echo $tr->translate("PRICE_SET");?>" dojoType="dijit.form.NumberTextBox" style="width:100%;" /></td>';
+			template+='<td width="100px"><input type="text"  name="qty_alert_'+col+'" id="qty_alert_'+col+'" placeHolder="<?php echo $tr->translate("QTY_WARNING");?>" dojoType="dijit.form.NumberTextBox" style="width:100%;"  /></td>';
+			template+='<td ><input type="text"  name="note_'+col+'" id="note_'+col+'" dojoType="dijit.form.TextBox" style="width:100%;" placeHolder="<?php echo $tr->translate("NOTE");?>" /></td>';
 		tmp='<tr align="center" id="row'+col+'">';
 		tmp+="</tr>";
 		dojo.query("#table_row").append(tmp);
@@ -248,28 +253,6 @@ function deleteRecord(index) {
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
 }
-function submitDataClose(){
-	pro_id=dijit.byId("itemId").get('value');
-	if(pro_id=='' || pro_id==null){
-		dijit.byId("itemId").focus();
-		return false;
-	}
-	if(dijit.byId('suspend_service').validate()) {
-		dijit.byId('save_close').set('disabled',true);
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'stock','controller'=>'initizeqty','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("frm_stock"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/stock/initizeqty";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
 
 function getProByBranch(){
     branch_id=dijit.byId("branch_id").get("value");
@@ -277,13 +260,15 @@ function getProByBranch(){
 	    alert("Please Selected Branch Name!");
 	    return false ;
     }
-    loadingBlock();
+	
 	var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
 	contentData = {
 		'itemsType':3,
 		'isProductset':0,
-		'notLocation':branch_id
+		'notLocation':branch_id,
+		'addNew':1
 	}
 	getAllItemIdByType(urlGet,contentData);
+	
 }
 </script>

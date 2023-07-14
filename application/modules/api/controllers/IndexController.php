@@ -119,6 +119,10 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->mobileNotifyAction($GetData);
 			}else if ($GetData['url']=="mobileNotifyDetail"){
     			$_dbAction->mobileNotificationDetailAction($GetData);
+			}else if ($GetData['url']=="studentCreditMemo"){
+    			$_dbAction->studentCreditMemoAction($GetData);
+			}else if ($GetData['url']=="studentCreditMemoTotal"){
+    			$_dbAction->studentCreditMemoTotalAction($GetData);
 				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";

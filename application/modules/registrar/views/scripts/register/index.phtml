@@ -232,22 +232,18 @@
 					url='<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/";?>';
 					gotoAction();
 				}else if(key=="void"){
-					url='<?php echo $this->baseUrl()."/registrar/register/edit/id/";?>';
-					gotoAction();
-				}else if(key=="stepup"){
 					dijit.byId('id').set('value',row);
 					dijit.byId('updateForm').show();
 				}
 			},
 			items: {
 				"issue": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-print", accesskey: "e"},
-				"void": {name: "<?php echo $tr->translate("VOID");?>", icon: "edit"},
 				<?php 
 						$dbacc = new Application_Model_DbTable_DbUsers();
 				 		$rs = $dbacc->getAccessUrl('registrar','register','edit');
 		 		if(!empty($rs)){
 				?>
-					"stepup": {name: "<?php echo $tr->translate("VOID1");?>", icon: "fa-file-text"},
+					"void": {name: "<?php echo $tr->translate("VOID");?>", icon: "fa-file-text"},
 			<?php }?>
 			}
 		});
@@ -278,7 +274,6 @@
 					dijit.byId('updateForm').hide();
 					if(data==1){
 						alert("<?php echo $tr->translate("VOID_SUCCESS");?>");
-						location.reload();
 					}else if(data==2){//not permission
 						alert("<?php echo $tr->translate("RECORD_NOTFUND");?>");
 					}else if(data==3){
@@ -287,9 +282,13 @@
 						alert("<?php echo $tr->translate("VOID_FAIL");?>");
 					}
 					dijit.byId('reason').set('value','');
+					location.reload();
 					HideloadingBlock();
 				},
 				error: function(err){
+					dijit.byId('voidFormInfo').reset();
+					dijit.byId('updateForm').hide();
+					HideloadingBlock();
 				}
 			});
 		}

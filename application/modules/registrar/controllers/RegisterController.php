@@ -106,39 +106,36 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     }
-    public function deletereceiptAction(){
-    	$id=$this->getRequest()->getParam("id");
+//     public function deletereceiptAction(){
+//     	$id=$this->getRequest()->getParam("id");
+//     	$db = new Registrar_Model_DbTable_DbRegister();
+// //     	if($this->getRequest()->isPost()){
+//     		$_data = $this->getRequest()->getPost();
+// //     		try{
+// //     		$data['void']=1;
+// //     		$data['void_note']='';
+//     			$db->updateRegister($id);
+//     			Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
+    			
+// //     		} catch (Exception $e) {
+// //     			Application_Form_FrmMessage::message("UPDATE_FAIL");
+// //     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// //     		}
+// //     	}
+//     }
+    function editAction(){
     	$db = new Registrar_Model_DbTable_DbRegister();
-//     	if($this->getRequest()->isPost()){
+     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-//     		try{
-//     		$data['void']=1;
-//     		$data['void_note']='';
-    			$db->updateRegister($id);
+     		try{
+    			$db->updateRegister($$_data);
     			Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
     			
-//     		} catch (Exception $e) {
-//     			Application_Form_FrmMessage::message("UPDATE_FAIL");
-//     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-//     		}
-//     	}
-    }
-    function editAction(){
-    	$id = $this->getRequest()->getParam("id");
-    	$id = empty($id)?0:$id;
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    
-    	$delete_sms=$tr->translate('CONFIRM_DELETE');
-    	echo "<script language='javascript'>
-    	var txt;
-    	var r = confirm('$delete_sms');
-    	if (r == true) {";
-    		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/registrar/register/deletereceipt/id/".$id."'";
-    	echo"}";
-    	echo"else {";
-    		echo "window.location ='".Zend_Controller_Front::getInstance()->getBaseUrl()."/registrar/register'";
-    	echo"}
-    	</script>";
+     		} catch (Exception $e) {
+     			Application_Form_FrmMessage::message("UPDATE_FAIL");
+     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+     		}
+     	}
     }
 //     function editAction(){
 //     	$request=Zend_Controller_Front::getInstance()->getRequest();

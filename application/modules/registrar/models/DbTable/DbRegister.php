@@ -911,19 +911,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 		}
 // 	}
 	
-	function updateRegister($payment_id){
+	function updateRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
-	
-		//if($data['void']==1){  // void
 			try{
+				
+				$payment_id = $data['id'];
 				$rsold = $this->getStudentPaymentByID($payment_id);
-				if($rsold['is_void']==1){
-					return true;
+				if(empty($rsold)){
+					return 2;//not permission
 				}
+				if($rsold['is_void']==1){
+					return 3;//ready
+				}
+				$data['void_note']=$data['reason'];
 				$data['branch_id']=$rsold['branch_id'];
 				$data['void']=1;
-				$data['void_note']='';
 				$data['old_stu']=$rsold['stu_id'];
 				$data['credit_memo_id']= $rsold['memo_id'];
 				
@@ -1007,7 +1010,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							}
 							//Update Sale Detial back
 							$_arr=array(
-									'qty_after'	      => ($rs['qty_after']+$qtyReceive),
+									'qty_after'	  => ($rs['qty_after']+$qtyReceive),
 							);
 							$this->_name ='rms_saledetail';
 							$where = ' id = '.$rs['id'];
@@ -1018,12 +1021,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						}
 					}
 		
-					// 				$where = " payment_id = $payment_id";
-					// 				$this->_name='rms_saledetail';
-					// 				$this->delete($where);
-		
 					$db->commit();
-					return 0;
+					return 1;
 				}
 			}catch (Exception $e){
 				echo $e->getMessage();exit();
@@ -1031,7 +1030,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				Application_Form_FrmMessage::message("UPDATE_FAIL");
 				$db->rollBack();
 			}
-		//}
 	}
 	
 	function getStudentPaymentByID($id){

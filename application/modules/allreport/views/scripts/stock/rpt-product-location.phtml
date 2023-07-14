@@ -150,7 +150,7 @@ table.tb-footer tr.style-head {
 								<tr class="style" align="center">
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-									<td scope="col" colspan="5">&nbsp;<?php echo $tr->translate("STOCK_INFO");?>&nbsp;</td>
+									<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("STOCK_INFO");?>&nbsp;</td>
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("DATE");?>&nbsp;</td>
 									<?php if($show_image==1){?>
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("IMAGE");?>&nbsp;</td>
@@ -165,8 +165,6 @@ table.tb-footer tr.style-head {
 									<td scope="col">&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 							   </tr>
 						   </thead>
 						<?php 
@@ -178,7 +176,7 @@ table.tb-footer tr.style-head {
 						   if($branch_name!=$rs['brand_name']){
 						  ?>
 							<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:12px; height: 18px;"​ align="center">
-							    <td colspan="12" ><span><?php echo $rs['brand_name']; ?></span></td>
+							    <td colspan="10" ><span><?php echo $rs['brand_name']; ?></span></td>
 							</tr>
 							<?php } $branch_name=$rs['brand_name'];?>
 							<tr class="style hover" align="center">
@@ -188,12 +186,10 @@ table.tb-footer tr.style-head {
 							    <?php //$url_barcode = $this->url(array("module"=>"allreport","controller"=>"accounting","action"=>"generate-barcode","pro_code"=>$rs['pro_code']),null,true); ?>
 							    <td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left">&nbsp;<?php echo $rs['pro_name'];?></td>
 							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo number_format($rs['pro_qty'],0); ?></td>
-							    <td data-label="<?php echo $tr->translate("UNIT_PRICE");?>"><?php echo number_format($rs['cost'],2);?></td>
-							    <td data-label="<?php echo $tr->translate("TOTAL");?>"  align="right"><?php echo number_format($rs['pro_qty']*$rs['cost'],2);?></td>
-								<td data-label="<?php echo $tr->translate("SELL_PRICE");?>" align="right"><?php echo number_format($rs['pro_price'],2);?></td>
-								<td data-label="<?php echo $tr->translate("TOTAL");?>" align="right"><?php echo number_format($rs['pro_qty']*$rs['pro_price'],2);?></td>
+							    <td data-label="<?php echo $tr->translate("UNIT_PRICE");?>"><?php echo number_format($rs['costing'],2);?></td>
+							    <td data-label="<?php echo $tr->translate("TOTAL");?>"  align="right"><?php echo number_format($rs['pro_qty']*$rs['costing'],2);?></td>
 								    <?php 
-								    $total_cost = $total_cost+($rs['pro_qty']*$rs['cost']);
+								    $total_cost = $total_cost+($rs['pro_qty']*$rs['costing']);
 								    $total_sell = $total_sell+($rs['pro_qty']*$rs['pro_price']);
 								    ?>
 							    <td data-label="<?php echo $tr->translate("DATE");?>"><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
@@ -206,28 +202,20 @@ table.tb-footer tr.style-head {
 								<?php
 									} 
 								?>
-						</table>	
+								
+						</table>
+						
+						<?php if(!empty($this->pro_loc)){?>
+						     <br />
+						     <table width="25%"  style="float:right;font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
+						           <tr align="center" style="font-size:12px; height: 20px; background-color: #ccd9ff; line-height: 30px;" align="center">
+						               <td><?php echo $tr->translate('TOTAL_UNIT_PRICE');?> :</td>
+						               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</strong></td>
+						           </tr>
+						     </table>
+						<?php }?>	
 					</td>
 				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
-				</tr>
-				<?php if(!empty($this->pro_loc)){?>
-				<tr>
-					<td colspan="3" align="right">
-					     <table width="25%"  style="font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
-					           <tr align="center" style="font-size:12px; height: 20px; background-color: #ccd9ff; line-height: 30px;" align="center">
-					               <td><?php echo $tr->translate('TOTAL_UNIT_PRICE');?> :</td>
-					               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</strong></td>
-					           </tr>
-					           <tr align="center" style="font-size:12px; height: 20px; background-color: #ccd9ff; line-height: 30px;" align="center">
-					               <td><?php echo $tr->translate('TOTAL_SELL_PRICE');?> :</td>
-					               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_sell,2);?>&nbsp;</strong></td>
-					           </tr>
-					     </table>
-					</td>
-				</tr>
-				<?php }?>
 				<tr>
 					<td colspan="3" width="100%">
 						<?php echo $this->rsfooteracc;?>

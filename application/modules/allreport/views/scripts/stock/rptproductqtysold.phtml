@@ -160,7 +160,6 @@ table.tb-footer tr.style-head {
 								<td scope="col">&nbsp;<?php echo $tr->translate("CATEGORY");?>&nbsp;</td>
 								<td scope="col">&nbsp;<?php echo $tr->translate("PRODUCT_CODE");?>&nbsp;</td>
 							    <td scope="col">&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
-							    <!-- <td>&nbsp;<?php //echo $tr->translate("RECEIPT");?>&nbsp;</td> -->
 							    <td scope="col">&nbsp;<?php echo $tr->translate("PRICE");?>&nbsp;</td>
 							    <td scope="col">&nbsp;<?php echo $tr->translate("QTY");?>&nbsp;</td>
 							    <td scope="col">&nbsp;<?php echo $tr->translate("TOTAL");?>&nbsp;</td>
@@ -173,7 +172,6 @@ table.tb-footer tr.style-head {
 								<td data-label="<?php echo $tr->translate("CATEGORY");?>" align="center">&nbsp;<?php echo $rs['category'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("PRODUCT_CODE");?>">&nbsp;<?php echo $rs['code'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left">&nbsp;<?php echo $rs['items_name'];?>&nbsp;</td>
-								<!-- <td>&nbsp;<strong><?php //echo $rs['receipt_number'];?></strong>&nbsp;</td> -->
 								<td data-label="<?php echo $tr->translate("PRICE");?>">&nbsp;<?php echo $rs['fee'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("QTY");?>">&nbsp;<?php echo $rs['qty'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("TOTAL");?>"> &nbsp;<?php echo number_format($rs['subtotal'],2);?>&nbsp;</td>
@@ -211,7 +209,8 @@ table.tb-footer tr.style-head {
 			autoComplete: false,
 			queryExpr: "*${0}*",                     
 			id: "product",
-			name: "product",   
+			name: "product",  
+			placeholder:'<?php echo $tr->translate("SELECT_PRODUCT");?>', 
 			required:false,        
 			class: 'fullside', 
 		}, "product");

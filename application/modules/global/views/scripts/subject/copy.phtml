@@ -231,7 +231,9 @@ function checkDuplicateRecord(){
 function langOption(){
 	type_sub = dijit.byId('type_subject').get('value');
 	if(type_sub == 2){
+	
 		dijit.byId("subject_lang").set('value','0');
+		dijit.byId("subject_lang").set('required',false);
 		dijit.byId("subject_lang").set('readOnly',true);
 		 
 

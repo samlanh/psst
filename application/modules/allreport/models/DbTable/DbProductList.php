@@ -35,7 +35,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     				pl.note,
     				p.price,
     				pl.price AS pro_price, 
-    				p.cost,
+    				pl.costing,
 			        p.create_date AS date,
 			        (SELECT v.$label FROM rms_view AS v WHERE v.key_code=p.status AND v.type=1 LIMIT 1) AS `status` 
 			  FROM 

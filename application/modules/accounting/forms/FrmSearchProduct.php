@@ -42,7 +42,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$user->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("USER"),
 				'class'=>'fullside',
-				'required'=>false
+				'required'=>'false'
 		));
 		$user->setValue($request->getParam('user'));
 		$opt_user = array(''=>$this->tr->translate("USER"));
@@ -139,11 +139,12 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		//product name 
 		$product= new Zend_Dojo_Form_Element_FilteringSelect('product');
 		$product->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("SELECT_PRODUCT")
 		));
 		
 		$product->setValue($request->getParam("product"));
@@ -160,7 +161,7 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'class'=>'fullside',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false',
 		));
 		$location->setValue($request->getParam("location"));
 		$opt_ls = array(''=>$this->tr->translate("SELECT_LOCATION"));
@@ -174,7 +175,8 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'class'=>'fullside',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
-				'required'=>false
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH")
 		));
 		$branch_id->setMultiOptions($opt_ls);
 		$branch_id->setValue($request->getParam("branch_id"));
@@ -185,8 +187,9 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 				'class'=>'fullside',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
-				'required'=>false,
+				'required'=>'false',
 				'onChange'=>'getProductByCate();',
+				'placeholder'=>$this->tr->translate("SELECT_PRODUCT")
 		));
 		$cate->setValue($request->getParam("category_id"));
 		
@@ -225,5 +228,4 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		$this->addElements(array($_pay_status,$_sort_by,$product_type,$supplier_id,$cate,$branch_id,$location,$product,$category,$start_date,$user,$end_date,$_title,$generation,$_status,$service));
 		return $this;
 	} 
-
 }

@@ -2604,9 +2604,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}
 			$sql="SELECT
 					s.*
-					
-					
-					
 					,st.`stu_id`
 					,g.`branch_id`
 					,(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchName
@@ -2696,7 +2693,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				}
 			}
 			
-			$ordering=" ORDER BY s.date_input DESC";
+			$ordering=" ORDER BY s.date_input DESC,s.id DESC";
 			$limit=" ";
 			if(!empty($search['LimitStart'])){
 				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
@@ -4432,7 +4429,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				'studentInfo'=>$studentInfo,
 				'scoreInfo'=>$scoreInfo,
 				'scoreSubjectInfo'=>$scoreResultList,
-				'EvalueationList'=>$resultEvalueAtion,
+				'evaluationList'=>$resultEvalueAtion,
 			);
 				
 			

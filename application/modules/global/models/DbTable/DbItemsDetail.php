@@ -409,11 +409,6 @@
 		}
 	}
 
-   function checkProduct(){
-
-   }
-
-	
 	function getAllProduct($search = '',$items_type=null){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();

@@ -71,7 +71,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$sql="SELECT * FROM `rms_product_setdetail` WHERE pro_id=$pro_id";
     	return $db->fetchAll($sql);
     }
-    function updateStock($pro_id,$location_id,$qty_order){
+    function updateStock($pro_id,$location_id,$qty_order, $cost){
     	$db=$this->getAdapter();
     	$sql="SELECT * FROM `rms_itemsdetail` WHERE id=$pro_id LIMIT 1 ";
     	$rs_pro = $db->fetchRow($sql);
@@ -122,7 +122,9 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     					'pro_id'=>$pro_id,
     					'branch_id'=>$location_id,
     					'pro_qty'=>$qty_order,
+						'coting'=>$cost,
     					'price'=>0,
+						
     			);
     			$this->insert($_arrs);
     		}
@@ -141,6 +143,8 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				'address'		=> $_data['address'],
     				'status'		=> 1,
     				'date'			=> $_data['purchase_date'],
+					'create_date'	=>date("Y-m-d H:i:s"),
+    				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=> $this->getUserId()
     				);
     		$this->_name='rms_supplier';
@@ -186,7 +190,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 	    				);
     				$this->insert($_arr);
     				$this->updateProductCost($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i],$_data['amount_'.$i]);
-    				$this->updateStock($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i]);
+    				$this->updateStock($_data['product_name_'.$i],$_data['branch'],$_data['qty_'.$i], $_data['cost_'.$i]);
 	    		}
     			$db->commit();
 		   	}catch (Exception $e){

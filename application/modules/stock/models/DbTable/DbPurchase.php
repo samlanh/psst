@@ -122,8 +122,10 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     					'pro_id'=>$pro_id,
     					'branch_id'=>$location_id,
     					'pro_qty'=>$qty_order,
-						'coting'=>$cost,
+						'costing'=>$cost,
     					'price'=>0,
+						'date' =>date("Y-m-d H:i:s"),
+    					'user_id' => $this->getUserId()
 						
     			);
     			$this->insert($_arrs);

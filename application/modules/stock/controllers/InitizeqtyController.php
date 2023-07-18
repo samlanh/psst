@@ -30,7 +30,7 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 // 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',
 // 			);
 
-			$this->view->list=$list->getCheckList(0, $collumns, $rows,array());
+			$this->view->list=$list->getCheckList(11, $collumns, $rows,array());
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("Application Error!");
@@ -67,46 +67,69 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
 	}
-	public function editAction(){
-		$id=$this->getRequest()->getParam('id');
-		$id = empty($id)?0:$id;
+	// public function editAction(){
+	// 	$id=$this->getRequest()->getParam('id');
+	// 	$id = empty($id)?0:$id;
+	// 	if($this->getRequest()->isPost()){
+	// 		$_data = $this->getRequest()->getPost();
+	// 		$_data['id']=$id;
+	// 		try{
+	// 				$db = new Stock_Model_DbTable_DbAdjustStock();
+	// 				$row = $db->updateAdjustStock($_data);
+	// 				if(isset($_data['save_close'])){
+	// 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
+	// 				}else{
+	// 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
+	// 				}
+	// 				Application_Form_FrmMessage::message("EDIT_SUCCESS");
+	// 			}catch(Exception $e){
+	// 				Application_Form_FrmMessage::message("EDIT_FAIL");
+	// 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	// 			}
+	// 		}
+	// 		$_pur = new Stock_Model_DbTable_DbAdjustStock();
+	// 		$row =$_pur->getAdjustStockById($id);
+	// 		if (empty($row)){
+	// 			Application_Form_FrmMessage::Sucessfull("No Record","/stock/adjuststock");
+	// 			exit();
+	// 		}
+	// 		$this->view->row = $row;
+	// 		$this->view->row_detail=$_pur->getAdjustStockDetail($id);
+	// 		$this->view->rq_code=$_pur->getAjustCode();
+			 
+	// 		$model = new Application_Model_DbTable_DbGlobal();
+	// 		$branch = $model->getAllBranchName();
+	// 		$this->view->branchopt = $branch;
+			
+	// 		$db = new Global_Model_DbTable_DbItemsDetail();
+	// 		$d_row= $db->getAllProductsNormal(2);//
+	// 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+	// 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
+	// 		$this->view->product= $d_row;
+	// }
+
+	public function updateAction(){
+		$db = new Global_Model_DbTable_DbItemsDetail();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			$_data['id']=$id;
 			try{
-					$db = new Stock_Model_DbTable_DbAdjustStock();
-					$row = $db->updateAdjustStock($_data);
-					if(isset($_data['save_close'])){
-						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
-					}else{
-						Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/stock/adjuststock");
-					}
-					Application_Form_FrmMessage::message("EDIT_SUCCESS");
-				}catch(Exception $e){
-					Application_Form_FrmMessage::message("EDIT_FAIL");
-					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-				}
+
+				$db->updateProductPrice($_data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/initizeqty");
+				
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$_pur = new Stock_Model_DbTable_DbAdjustStock();
-			$row =$_pur->getAdjustStockById($id);
-			if (empty($row)){
-				Application_Form_FrmMessage::Sucessfull("No Record","/stock/adjuststock");
-				exit();
-			}
-			$this->view->row = $row;
-			$this->view->row_detail=$_pur->getAdjustStockDetail($id);
-			$this->view->rq_code=$_pur->getAjustCode();
-			 
-			$model = new Application_Model_DbTable_DbGlobal();
-			$branch = $model->getAllBranchName();
-			$this->view->branchopt = $branch;
-			
-			$db = new Global_Model_DbTable_DbItemsDetail();
-			$d_row= $db->getAllProductsNormal(2);//
-			array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
-			array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
-			$this->view->product= $d_row;
+		}
+		$type=3; //Product
+		$frm = new Global_Form_FrmItemsDetail();
+		$frm->FrmAddItemsDetail(null,$type);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_items = $frm;
 	}
+
+	
     
     function getProductqtyAction(){
     	if($this->getRequest()->isPost()){

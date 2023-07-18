@@ -78,7 +78,7 @@ table.tb-footer tr.style-head {
 				</tr>
 					<style>
 							.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 20px;font-size: 12px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.hideblog{display: none;}
@@ -113,18 +113,18 @@ table.tb-footer tr.style-head {
 						width:100%;
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
 					table.tb-footer{
 						border-collapse:collapse;
 						border:1px solid #000; 
-						font-size:11px;
+						font-size:12px;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					table.tb-footer tr{
-					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
+					 line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
 					}
 					table tr td{
 						padding:0 2px;
@@ -141,6 +141,18 @@ table.tb-footer tr.style-head {
 					}
 					table.content-data tr td{
 						padding: 2px;
+					}
+					@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							size:A4 portrait;
+						}
 					}	
 						
 					</style>
@@ -165,7 +177,7 @@ table.tb-footer tr.style-head {
 								$i++;
 									if($branch_name!=$rs['brand_name']){
 								?>
-									<tr class="hover" style="font-size:15px; height: 18px;"​ align="center">
+									<tr class="hover" style="font-size:12px; height: 18px; font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
 										  <td colspan="9" ><?php echo $rs['brand_name']; ?></td>
 									</tr>
 								<?php } $branch_name=$rs['brand_name'];?>

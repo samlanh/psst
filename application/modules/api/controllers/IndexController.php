@@ -98,12 +98,18 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentScheduleAction($GetData);
 			}else if ($GetData['url']=="studentScore"){
     			$_dbAction->studentScoreAction($GetData);
-			}else if ($GetData['url']=="scoreInformation"){
+			}else if ($GetData['url']=="studentScoreTranscriptNew"){
+    			$_dbAction->studentTranscriptAction($GetData);	
+			}else if ($GetData['url']=="mentionScoreSetting"){
+    			$_dbAction->metionScoreSettingAction($GetData);
+				
+			}else if ($GetData['url']=="scoreInformation"){//remove in future
     			$_dbAction->scoreInformationAction($GetData);
-			}else if ($GetData['url']=="subjectByGroup"){
+			}else if ($GetData['url']=="subjectByGroup"){//remove in future
     			$_dbAction->subjectByGroupAction($GetData);
-			}else if ($GetData['url']=="studentScoreBySubject"){
+			}else if ($GetData['url']=="studentScoreBySubject"){//remove in future
     			$_dbAction->studentScoreBySubjectAction($GetData);
+				
 			}else if ($GetData['url']=="studentPayment"){
     			$_dbAction->studentPaymentAction($GetData);
 			}else if ($GetData['url']=="studentPaymentInfo"){

@@ -335,6 +335,72 @@
 	}
 
 	
+	public function updateProductPrice($_data){
+		$_db= $this->getAdapter();
+		try{
+			$db_items = new Global_Model_DbTable_DbItems();
+
+			//Update Product Location Price
+
+			$this->_name='rms_product_location';
+			$ids = explode(',', $_data['identity']);
+			foreach ($ids as $i){
+				$_arr = array(
+						'price'=>$_data['sell_price_'.$i],
+						'price_set'=>$_data['price_set_'.$i],
+						'stock_alert'=>$_data['qty_alert_'.$i],
+						'note'=>$_data['note_'.$i],
+						'date' 	=> date("Y-m-d"),
+						'user_id'=>$this->getUserId()
+				);
+			
+				$where ="pro_id =".$_data['product_'.$i]." AND branch_id =".$_data['branch_search'];
+				$this->update($_arr, $where);
+			}
+
+            // update productset Price
+
+			$this->_name='rms_itemsdetail';
+			foreach ($ids as $j){
+				$sql="SELECT * FROM rms_product_setdetail WHERE subpro_id =".$_data['product_'.$j];
+				$pro_set_detail = $_db->fetchRow($sql);
+
+				$oldprice  = $pro_set_detail['price']*$pro_set_detail['qty'];
+				$newprice  = $_data['price_set_'.$j]*$pro_set_detail['qty'];
+
+				$totalprice = $newprice - $oldprice;
+
+				$sql1="SELECT  price  FROM `rms_itemsdetail` WHERE items_type = 3 AND is_productseat = 1 AND id  =".$pro_set_detail['pro_id'];
+				$pro_set_price = $_db->fetchOne($sql1);
+
+				$updatePrice = $pro_set_price + $totalprice;
+
+				$_arr = array(
+						'price'=> $updatePrice,
+				);
+				$where ="id =".$pro_set_detail['pro_id'];
+				$this->update($_arr, $where);
+
+			}
+
+			 // Update sub productset Price
+
+			$this->_name='rms_product_setdetail';
+			foreach ($ids as $k){
+				$_arr = array(
+						'price'=>$_data['price_set_'.$k],
+				);
+				$where ="subpro_id =".$_data['product_'.$k];
+				$this->update($_arr, $where);
+			}
+
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("Application Error!");
+		}
+	}
+
+	
 	function getAllProduct($search = '',$items_type=null){
 		$db = $this->getAdapter();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -442,7 +508,7 @@
 			$title = "td.title_en";
 		}
 		$sql = "SELECT td.id, $title AS product_name,
-			pl.price, pl.price_set
+			pl.price, pl.price_set, pl.stock_alert, pl.note
 			FROM rms_itemsdetail AS td 
 			JOIN rms_product_location AS pl ON td.id = pl.pro_id AND pl.branch_id= ".$_data['branch_id'];
 

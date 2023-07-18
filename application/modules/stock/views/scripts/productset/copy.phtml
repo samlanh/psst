@@ -263,7 +263,7 @@ function addRow() {
 				temp+='<th><?php echo $tr->translate("DEL");?></th>';
 				temp+='<th><?php echo $tr->translate("N_O");?></th>';
 				temp+='<th><?php echo $tr->translate("PRODUCT_NAME");?></th>';
-				temp+='<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>';
+				temp+='<th><?php echo $tr->translate("PRICE_SET");?><span class="required">*</span></th>';
 				temp+='<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
 				temp+='<th><?php echo $tr->translate("TOTAL_PRICE");?><span class="required">*</span></th>';
 				temp+='<th><?php echo $tr->translate("NOTE");?></th>';
@@ -335,7 +335,7 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("DEL");?></th>';
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th><?php echo $tr->translate("PRODUCT_NAME");?></th>';
-		temp+='<th><?php echo $tr->translate("SELL_PRICE");?><span class="required">*</span></th>';
+		temp+='<th><?php echo $tr->translate("PRICE_SET");?><span class="required">*</span></th>';
 		temp+='<th><?php echo $tr->translate("QTY");?><span class="required">*</span></th>';
 		temp+='<th><?php echo $tr->translate("TOTAL_PRICE");?><span class="required">*</span></th>';
 		temp+='<th><?php echo $tr->translate("NOTE");?></th>';
@@ -345,7 +345,7 @@ function addRow() {
 		template+='<td width="10%" align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td width="5%" align="center">'+no+'</td>';
 		template+='<td width="20%"><input type="hidden" dojoType="dijit.form.TextBox" value="" id="product_'+col+'" name="product_'+col+'" /><?php echo str_replace("'", '', $rs['title']); ?></td>';	
-		template+='<td width="10%"><input type="text" required="true" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['price'];?>" /> </td>';
+		template+='<td width="10%"><input type="text" readonly="true" name="sell_price_'+col+'" id="sell_price_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['price'];?>" /> </td>';
 		template+='<td width="10%"><input type="text" required="true" name="qty_'+col+'" id="qty_'+col+'" onkeyup="subTotal('+col+');" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="<?php echo $rs['qty'];?>" /> </td>';
 		template+='<td width="10%"><input type="text" readonly="true" name="total_'+col+'" id="total_'+col+'" dojoType="dijit.form.NumberTextBox" style="width:100%;" value="0.00" /> </td>';
 		note_remark = '<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($rs['remark'])));?>';

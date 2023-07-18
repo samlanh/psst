@@ -338,8 +338,7 @@
 	public function updateProductPrice($_data){
 		$_db= $this->getAdapter();
 		try{
-			$db_items = new Global_Model_DbTable_DbItems();
-
+			
 			//Update Product Location Price
 
 			$this->_name='rms_product_location';
@@ -358,32 +357,42 @@
 				$this->update($_arr, $where);
 			}
 
-            // update productset Price
+            // update Total Price Of ProductSet
 
 			$this->_name='rms_itemsdetail';
 			foreach ($ids as $j){
-				$sql="SELECT * FROM rms_product_setdetail WHERE subpro_id =".$_data['product_'.$j];
-				$pro_set_detail = $_db->fetchRow($sql);
+				$sql="SELECT pro_id FROM rms_product_setdetail WHERE subpro_id =".$_data['product_'.$j];
+				$pro_set_detail = $_db->fetchAll($sql);
+				if(!empty($pro_set_detail)){
+					foreach ($pro_set_detail as $pro_set){
 
-				$oldprice  = $pro_set_detail['price']*$pro_set_detail['qty'];
-				$newprice  = $_data['price_set_'.$j]*$pro_set_detail['qty'];
+						$sql="SELECT * FROM rms_product_setdetail WHERE subpro_id =".$_data['product_'.$j]." AND pro_id =".$pro_set['pro_id'];
+						$pro_price_detail = $_db->fetchRow($sql);
 
-				$totalprice = $newprice - $oldprice;
+						if(!empty($pro_price_detail)){
 
-				$sql1="SELECT  price  FROM `rms_itemsdetail` WHERE items_type = 3 AND is_productseat = 1 AND id  =".$pro_set_detail['pro_id'];
-				$pro_set_price = $_db->fetchOne($sql1);
+							$oldprice  = $pro_price_detail['price']*$pro_price_detail['qty'];
+							$newprice  = $_data['price_set_'.$j]*$pro_price_detail['qty'];
 
-				$updatePrice = $pro_set_price + $totalprice;
+							$totalPrice = $newprice - $oldprice;
 
-				$_arr = array(
-						'price'=> $updatePrice,
-				);
-				$where ="id =".$pro_set_detail['pro_id'];
-				$this->update($_arr, $where);
+							$sql1="SELECT  price  FROM `rms_itemsdetail` WHERE items_type = 3 AND is_productseat = 1 AND id  =".$pro_set['pro_id'];
+							$old_total_price = $_db->fetchOne($sql1);
+                            
+							$updateTotalPrice = $old_total_price + $totalPrice;
 
+							$_arr = array(
+								'price'=> $updateTotalPrice,
+							);
+							$where ="id =".$pro_set['pro_id'];
+							$this->update($_arr, $where);
+						}
+					}
+				}
+               
 			}
 
-			 // Update sub productset Price
+			 // Update productse Detail Price
 
 			$this->_name='rms_product_setdetail';
 			foreach ($ids as $k){
@@ -399,6 +408,10 @@
 			Application_Form_FrmMessage::message("Application Error!");
 		}
 	}
+
+   function checkProduct(){
+
+   }
 
 	
 	function getAllProduct($search = '',$items_type=null){

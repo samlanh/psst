@@ -53,6 +53,18 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
 //     	$db = new Api_Model_DbTable_DbsensokabaApi();
 //     	$db->sendMessagetoTeleagrame('419707100','hello from php');
+	
+    	$data =array(
+    			'branch_id'=>1,
+    			'studentId'=>15,
+    			'studentType'=>1,
+    			'isCurrent'=>1,
+    			'stopType'=>0,
+    			'isAutopayment'=>''
+    			);
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$data=$db->getServiceForPaymentRecord($data);
+    	print_r($data);
     }
     public function addAction(){
       if($this->getRequest()->isPost()){
@@ -107,23 +119,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     	}
     }
-//     public function deletereceiptAction(){
-//     	$id=$this->getRequest()->getParam("id");
-//     	$db = new Registrar_Model_DbTable_DbRegister();
-// //     	if($this->getRequest()->isPost()){
-//     		$_data = $this->getRequest()->getPost();
-// //     		try{
-// //     		$data['void']=1;
-// //     		$data['void_note']='';
-//     			$db->updateRegister($id);
-//     			Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
-    			
-// //     		} catch (Exception $e) {
-// //     			Application_Form_FrmMessage::message("UPDATE_FAIL");
-// //     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// //     		}
-// //     	}
-//     }
+
     function editAction(){
     	$db = new Registrar_Model_DbTable_DbRegister();
      	if($this->getRequest()->isPost()){
@@ -139,33 +135,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
      		}
      	}
     }
-//     function editAction(){
-//     	$request=Zend_Controller_Front::getInstance()->getRequest();
-//     	$action=$request->getActionName();
-//     	$controller=$request->getControllerName();
-//     	$module=$request->getModuleName();
-    	 
-//     	$id = $this->getRequest()->getParam("id");
-//     	try {
-//     		$dbacc = new Application_Model_DbTable_DbUsers();
-//     		$rs = $dbacc->getAccessUrl($module,$controller,'delete');
-//     		if(!empty($rs)){
-//     			$row = $db->checkifExistingDelete($id);
-//     			if(!empty($row)){
-//     				$db->deleteReceipt($id);
-//     				$db->recordhistory($id);
-//     				$db->checkSaleCompletedPaymentPrincipleAmount($id);
-//     				Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS","/loan/ilpayment");
-//     			}else{
-//     				Application_Form_FrmMessage::Sucessfull("has been delete","/loan/ilpayment");
-//     			}
-//     		}
-//     		Application_Form_FrmMessage::Sucessfull("You no permission to delete","/loan/ilpayment",2);
-//     	}catch (Exception $e) {
-//     		Application_Form_FrmMessage::message("INSERT_FAIL");
-//     		echo $e->getMessage();
-//     	}
-//     }
+
+    function getitemforpaymentrecordAction(){//for payment record
+    	if($this->getRequest()->isPost()){
+    		$data = $this->getRequest()->getPost();
+    		$db = new Application_Model_DbTable_DbGlobal();
+    		$data=$db->getServiceForPaymentRecord($data);
+    		print_r(Zend_Json::encode($data));
+    		exit();
+    	}
+    }
     
     function getGradeproductAction(){//filter product with current grade fo student 
     	if($this->getRequest()->isPost()){

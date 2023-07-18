@@ -101,9 +101,16 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}
-	function getTermStudy($branch,$year=null,$option=1){
+	function getTermStudyInterm($branch,$year=null,$option=1){
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		return $dbp->getAllTermStudy($branch,$year,$option);
+		
+		$param = array(
+				'branch_id'=>$branch,
+				'study_year'=>$year,
+				'option'=>$option,
+		);
+		
+		return $dbp->getAllStudyPeriod($branch,$year,$option);
 	}
 }
 

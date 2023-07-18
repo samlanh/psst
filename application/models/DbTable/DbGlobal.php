@@ -1575,18 +1575,18 @@ function getAllgroupStudyNotPass($action=null){
   	return $db->fetchAll($sql);
   }
 
-  function getAllTermStudy($branch=null,$year=null,$option=null){
+  function getAllStudyPeriod($data){
 
   	$db = $this->getAdapter();
   	$sql=" SELECT id,CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name from rms_startdate_enddate WHERE status=1 ";
-  	if($branch!=null){
-  		$sql.=" AND branch_id = $branch ";
+  	if(!empty($data['branch_id'])){
+  		$sql.=" AND branch_id = ".$data['branch_id'];
   	}
-  	if($year!=null){
-  		$sql.=" AND academic_year = $year ";
+  	if(!empty($data['academic_year'])){
+  		$sql.=" AND academic_year = ".$data['academic_year'];
   	}
   	$rows = $db->fetchAll($sql);
-  	if($option==null){
+  	if(empty($data['option'])){
   		return $rows;
   	}else{
   		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -3218,15 +3218,13 @@ function getAllgroupStudyNotPass($action=null){
   	$sql="SELECT schoolOption FROM rms_items WHERE id=".$degree_id;
   	return $db->fetchOne($sql);
   }
-  function getStudentByGroupGlobal($data){
+  function getStudentByGroupGlobal($data){//check again
   	$db=$this->getAdapter();
   	
   	$currentLang = $this->currentlang();
   	$colunmname='title_en';
-  	$field = 'name_en';
   	if ($currentLang==1){
   		$colunmname='title';
-  		$field = 'name_kh';
   	}
   	
   	$today=date('Y-m-d');
@@ -3310,6 +3308,154 @@ function getAllgroupStudyNotPass($action=null){
   			$order=" ORDER BY gs.`itemType` ASC ";
   		}
   		return $db->fetchAll($sql.$order);
+  }
+  function getItemForPayment($data){
+  		$db=$this->getAdapter();
+	  	$currentLang = $this->currentlang();
+	  	$colunmname='title_en';
+	  	if ($currentLang==1){
+	  		$colunmname='title';
+	  	}
+	  	 
+	  	$today=date('Y-m-d');
+	  	
+	  	$sql="SELECT
+			  	gs.itemType,
+			  	gs.startDate,
+			  	gs.endDate,
+			  	gs.feeId,
+			  	gs.balance,
+			  	gs.academic_year,
+			  	gs.grade AS itemDetailId,
+			  	(SELECT dcs.discountType FROM `rms_dis_setting` dcs WHERE dcs.studentId=st.stu_id AND dcs.itemId=gs.grade AND end_date >='$today' LIMIT 1) discountType,
+			  	(SELECT dcs.discountValue FROM `rms_dis_setting` dcs WHERE dcs.studentId=st.stu_id AND dcs.itemId=gs.grade AND end_date >='$today' LIMIT 1) discountValue,
+			  	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as itemDetaillabel,
+			  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel,
+			  	(SELECT rms_itemsdetail.is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as is_onepayment
+	  	FROM
+		  	`rms_group_detail_student` AS gs,
+		  	rms_student as st
+	  	WHERE
+	  		st.stu_id=gs.stu_id ";
+	  	if(!empty($data['studentId'])){
+	  		$sql.=" AND gs.`stu_id` = ".$data['studentId'];
+	  	}
+	  	if(isset($data['isMaingrade'])){
+	  			$sql.=" AND gs.`is_maingrade` = ".$data['isMaingrade'];
+	  	}
+	  	if(isset($data['isCurrent'])){
+	  		$sql.=" AND gs.`is_current` = ".$data['isCurrent'];
+	  	}
+// 	   if(!empty($data['degree'])){
+// 	  		$sql.=" AND gs.`degree` = ".$data['degree'];
+// 	   }
+// 	   if(!empty($data['grade'])){
+// 	  	$sql.=" AND gs.`grade` = ".$data['grade'];
+// 	   }
+	   if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
+	  	$sql.=" AND gs.`stop_type` = ".$data['stopType'];
+	   }
+// 	   if(!empty($data['groupId'])){
+// 	 	 $sql.=" AND gs.`group_id` = ".$data['groupId'];
+// 	   }
+	  
+	 	 $order=" ORDER BY gs.`itemType` ASC ";
+	  
+	  	return $db->fetchAll($sql.$order);
+  }
+  public function getAllTermbyItemdetail($data){
+  	$db=$this->getAdapter();
+  	$session_lang=new Zend_Session_Namespace('lang');
+  	$lang = $session_lang->lang_id;
+  
+  	if($lang==1){// khmer
+  		$label = "name_kh";
+  	}else{ // English
+  		$label = "name_en";
+  	}
+  
+  	$sql="SELECT
+			  	distinct(tfd.`payment_term`) AS id,
+			  	(SELECT $label FROM rms_view WHERE `type`=6 AND key_code =tfd.`payment_term` AND `status`=1 LIMIT 1) as name
+		  	FROM
+			  	rms_tuitionfee AS tf,
+			  	rms_tuitionfee_detail AS tfd
+		  	WHERE
+			  	tf.id = tfd.fee_id
+			  	AND tf.status=1
+			  	AND tfd.tuition_fee>0 ";
+  	if(!empty($data['itemId'])){
+  		$sql.=" AND tfd.class_id=".$data['itemId'];
+  	}
+  	if(!empty($data['branchId'])){
+  		$sql.=" AND tf.branch_id =".$data['branchId'];
+  	}
+  	if($data['itemType']==1 AND !empty($data['academicYear'])){//school fee
+  		$sql.=" AND tf.type =1 AND tf.id = ".$data['academicYear'];
+  	}
+  	
+  	$rows = $db->fetchAll($sql);
+  	
+  	$options = '';
+  	if(!empty($rows))foreach($rows as $value){
+  		$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']).'</option>';
+  	}
+  
+  	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  	if($data['itemType']==3){
+  		$options .= '<option value="5" >'.$tr->translate('ONE_PAYMENTONLY').'</option>';
+  	}
+  	$options .= '<option value="6" >'.$tr->translate('OTHER').'</option>';
+  	return $options;
+  }
+  
+  function getServiceForPaymentRecord($data){//for payment only
+  	$itemList = $this->getItemForPayment($data);
+  	
+  	$items=array();
+  	foreach ($itemList as $key => $item){
+  		$items[$key]=array(
+  				'itemType'=>$item['itemType'],
+  				'startDate'=>$item['startDate'],
+  				'endDate'=>$item['endDate'],
+  				'feeId'=>$item['feeId'],
+  				'balance'=>$item['balance'],
+  				'academic_year'=>$item['academic_year'],
+  				'itemDetailId'=>$item['itemDetailId'],
+  				'discountType'=>$item['discountType'],
+  				'discountValue'=>$item['discountValue'],
+  				'itemDetaillabel'=>$item['itemDetaillabel'],
+  				'isOnepayment'=>$item['is_onepayment'],
+  			);
+  		
+  		$param = array(
+  				'branchId'=>$data['branch_id'],//not yet pass data
+  				'itemType'=>$item['itemType'],
+  				'itemId'=>$item['itemDetailId'],
+  				'academicYear'=>$item['feeId'],
+  				);
+  		
+  		$items[$key]['termTypeList']=$this->getAllTermbyItemdetail($param);
+  		
+  		$param = array(
+  				'branch_id'=>$data['branch_id'],
+  				'option'=>1,
+//   				'isFinished'=>$data['isFinished'],
+  			);
+  		$academicYearList = $this->getAllYearByBranch($param);
+  		$items[$key]['academicYearList']=$academicYearList;
+  		
+  		$param = array(
+  				'branch_id'=>$data['branch_id'],
+  				'academic_year'=>$item['academic_year'],
+  				'option'=>1,
+  				);
+  		
+  		$termStudy  = $this->getAllStudyPeriod($param);
+  		$items[$key]['studyPeriodList']=$termStudy;
+  	}
+  	
+  	return $items;
   }
   function getAllGroupName($data=null){
   	$db = $this->getAdapter();

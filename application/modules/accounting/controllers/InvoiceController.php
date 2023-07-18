@@ -98,7 +98,12 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$this->view->branch =  $model->getAllBranch();
 		
 		$db = new Global_Model_DbTable_DbTerm();
-		$this->view->rs_term = $db->getTermStudy($branch_id,$data['study_year'],1);
+		$param = array(
+			'branch_id'=>$branch_id,
+			'study_year'=>$data['study_year'],
+			'option'=>1,
+		);
+		$this->view->rs_term = $db->getTermStudyInterm($param);
 	}
 	function getitemsdetailAction(){
 		if($this->getRequest()->isPost()){

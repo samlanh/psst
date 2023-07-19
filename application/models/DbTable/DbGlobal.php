@@ -2253,6 +2253,13 @@ function getAllgroupStudyNotPass($action=null){
   		$db = new Application_Form_FrmGlobal();
   		$resultBranch = $db->getHeaderReceipt($branchId);
   		
+  		$dbRegister = new Registrar_Model_DbTable_DbRegister();
+  		$param = array(
+  				'studentId'=>$student_id,
+  				'returnHtml'=>1
+  				);
+  		$resultPaymentHistory = $dbRegister->getStudentPaymentHistory($param);
+  		
   		
   		$str='<div class="col-md-2 col-sm-2 col-xs-12">
   				<div class="form-group">
@@ -2324,6 +2331,7 @@ function getAllgroupStudyNotPass($action=null){
   					'studentInfo'=>$str,
   					'studentCode'=>$studentCode,
   					'studyinfo'=>$studyInfo,
+  					'resultPaymentHistory'=>$resultPaymentHistory,
   					'studenttypeinfo'=>$studentStatus,
   					'studentData'=>$studentData,
   				    'groupStore'=>$groupResult,
@@ -2575,7 +2583,17 @@ function getAllgroupStudyNotPass($action=null){
 		$id = $this->insert($_arr);
 	return $id;
   }
-  
+  function getFeeStudyinfoByIdGloable($fee_id){
+  	$db  = $this->getAdapter();
+  	$sql = " SELECT
+  	t.academic_year AS id ,
+  	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academic_year,
+  	(SELECT title_kh FROM `rms_studytype` WHERE id=t.term_study LIMIT 1) AS session_type
+  	FROM
+  	`rms_tuitionfee` as t
+  	WHERE t.id=$fee_id LIMIT  1";
+  	return $db->fetchRow($sql);
+  }
   function getAllYearServiceFeeByBranch($branch_id){
   	$db  = $this->getAdapter();
   	$sql = " SELECT 
@@ -3293,7 +3311,7 @@ function getAllgroupStudyNotPass($action=null){
   		if(!empty($data['group_id'])){
   			$sql.=" AND gs.`group_id` = ".$data['group_id'];
   		}
-  		if(!empty($data['studentId'])){
+  		if(!empty($data['studentId'])){//required
   			$sql.=" AND gs.`stu_id` = ".$data['studentId']; 
   		}
   		if(isset($data['isMaingrade'])){
@@ -3314,9 +3332,7 @@ function getAllgroupStudyNotPass($action=null){
   		if(!empty($data['groupId'])){
   			$sql.=" AND gs.`group_id` = ".$data['groupId'];
   		}
-  		if(!empty($data['studentType'])){
-  			//$sql.=" AND gs.`group_id` = ".$data['groupId'];
-  		}
+  		
   		
   		$order=" ORDER BY st.stu_khname ASC ";
   		
@@ -3336,7 +3352,7 @@ function getAllgroupStudyNotPass($action=null){
   		}
   		return $db->fetchAll($sql.$order);
   }
-  function getItemForPayment($data){
+  function getItemForPayment($data){//one calling
   		$db=$this->getAdapter();
 	  	$currentLang = $this->currentlang();
 	  	$colunmname='title_en';
@@ -3360,31 +3376,27 @@ function getAllgroupStudyNotPass($action=null){
 			  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=gs.degree LIMIT 1) as itemLabel,
 			  	(SELECT rms_itemsdetail.is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=gs.grade LIMIT 1) as is_onepayment
 	  	FROM
-		  	`rms_group_detail_student` AS gs,
-		  	rms_student as st
-	  	WHERE
-	  		st.stu_id=gs.stu_id ";
+	  			rms_student as st
+	  		LEFT JOIN
+		  		`rms_group_detail_student` AS gs
+		  	ON st.stu_id=gs.stu_id
+		  	
+	  	WHERE 1 ";
 	  	if(!empty($data['studentId'])){
-	  		$sql.=" AND gs.`stu_id` = ".$data['studentId'];
+	  		$sql.=" AND st.`stu_id` = ".$data['studentId'];
 	  	}
 	  	if(isset($data['isMaingrade'])){
-	  			$sql.=" AND gs.`is_maingrade` = ".$data['isMaingrade'];
+	  		$sql.=" AND gs.`is_maingrade` = ".$data['isMaingrade'];
 	  	}
 	  	if(isset($data['isCurrent'])){
 	  		$sql.=" AND gs.`is_current` = ".$data['isCurrent'];
 	  	}
-// 	   if(!empty($data['degree'])){
-// 	  		$sql.=" AND gs.`degree` = ".$data['degree'];
-// 	   }
-// 	   if(!empty($data['grade'])){
-// 	  	$sql.=" AND gs.`grade` = ".$data['grade'];
-// 	   }
-	   if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
-	  	$sql.=" AND gs.`stop_type` = ".$data['stopType'];
+	   if(!empty($data['grade'])){
+	  	   $sql.=" AND gs.`grade` = ".$data['grade'];//of product or not in group detail not get data 
 	   }
-// 	   if(!empty($data['groupId'])){
-// 	 	 $sql.=" AND gs.`group_id` = ".$data['groupId'];
-// 	   }
+	   if(isset($data['stopType'])){	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
+	  	  $sql.=" AND gs.`stop_type` = ".$data['stopType'];
+	   }
 	  
 	 	 $order=" ORDER BY gs.`itemType` ASC ";
 	  
@@ -3437,11 +3449,39 @@ function getAllgroupStudyNotPass($action=null){
   }
   
   function getServiceForPaymentRecord($data){//for payment only
-  	$itemList = $this->getItemForPayment($data);
   	
+  
   	$items=array();
-  	foreach ($itemList as $key => $item){
-  		$items[$key]=array(
+  	
+  	if($data['studentType']==1){//tested
+  		$resultItems = $this->getItemForPayment($data);
+  		
+  		if(!empty($data['grade']) ){
+  			$data['Id']=$data['grade'];
+  			unset($data['isAutopayment']);
+  		}
+  		unset($data['studentId']);
+  		
+  		$resultItem2 =$this->getItemAllDetail($data);
+  		$resultItems = array_merge($resultItems,$resultItem2);
+  	}elseif($data['studentType']==2){
+  		
+  		$resultItems = $this->getItemForPayment($data);
+  		
+  		if(!empty($data['grade'])){
+  			$data['Id']=$data['grade'];
+  		}
+  		unset($data['studentId']);
+  		$resultItem2 =$this->getItemAllDetail($data);
+  		$resultItems = array_merge($resultItems,$resultItem2);
+  	}else{//corrected
+  			if(!empty($data['grade'])){
+  				$data['Id']=$data['grade'];
+  			}
+	  		$resultItems  = $this->getItemAllDetail($data);
+	  }
+	  	foreach ($resultItems as $key => $item){
+	  		$items[$key]=array(
   				'itemType'=>$item['itemType'],
   				'startDate'=>$item['startDate'],
   				'endDate'=>$item['endDate'],
@@ -3453,37 +3493,38 @@ function getAllgroupStudyNotPass($action=null){
   				'discountValue'=>$item['discountValue'],
   				'itemDetaillabel'=>$item['itemDetaillabel'],
   				'isOnepayment'=>$item['is_onepayment'],
-  			);
-  		
-  		$param = array(
-  				'branchId'=>$data['branch_id'],//not yet pass data
-  				'itemType'=>$item['itemType'],
-  				'itemId'=>$item['itemDetailId'],
-  				'academicYear'=>$item['feeId'],
-  				);
-  		
-  		$items[$key]['termTypeList']=$this->getAllTermbyItemdetail($param);
-  		
-  		$param = array(
-  				'branch_id'=>$data['branch_id'],
-  				'option'=>1,
-//   				'isFinished'=>$data['isFinished'],
-  			);
-  		$academicYearList = $this->getAllYearByBranch($param);
-  		$items[$key]['academicYearList']=$academicYearList;
-  		
-  		$param = array(
-  				'branch_id'=>$data['branch_id'],
-  				'academic_year'=>$item['academic_year'],
-  				'option'=>1,
-  				);
-  		
-  		$termStudy  = $this->getAllStudyPeriod($param);
-  		$items[$key]['studyPeriodList']=$termStudy;
-  	}
+	  		);
+	  		 
+	  		$param = array(
+	  				'branchId'=>$data['branch_id'],//not yet pass data
+	  				'itemType'=>$item['itemType'],
+	  				'itemId'=>$item['itemDetailId'],
+	  				'academicYear'=>$item['feeId'],
+	  		);
+	  		 
+	  		$items[$key]['termTypeList']=$this->getAllTermbyItemdetail($param);
+	  		 
+	  		$param = array(
+	  				'branch_id'=>$data['branch_id'],
+	  				'option'=>1,
+	  		);
+	  		$academicYearList = $this->getAllYearByBranch($param);
+	  		$items[$key]['academicYearList']=$academicYearList;
+	  		 
+	  		$param = array(
+	  				'branch_id'=>$data['branch_id'],
+	  				'academic_year'=>$item['academic_year'],
+	  				'option'=>1,
+	  		);
+	  		 
+	  		$termStudy  = $this->getAllStudyPeriod($param);
+	  		$items[$key]['studyPeriodList']=$termStudy;
+	  	}
+	  	
   	
   	return $items;
   }
+  
   function getAllGroupName($data=null){
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
@@ -3597,64 +3638,46 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	return $this->getAdapter()->fetchRow($sql);
   }
+  
   function getItemAllDetail($data){
   	$currentLang = $this->currentlang();
   	$colunmname='title_en';
   	if ($currentLang==1){
   		$colunmname='title';
   	}
+  	$studentId = !empty($data['studentId'])?$data['studentId']:0;
   	
   	$sql="SELECT
-		  	i.id AS itemDetailId,
-		  	i.items_id as itemId,
-		  	i.items_type,
-		  	i.code,
+  			i.items_type AS itemType,
+  			i.id AS itemDetailId,
 		  	$colunmname  AS itemDetaillabel,
-			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=items_id LIMIT 1) as itemLabel,
-		  	i.ordering,
-		  	i.shortcut,
-		  	i.product_type,
-		  	i.is_productseat,
-		  	i.schoolOption,
-		  	i.is_autopayment,
-		  	is_onepayment
+		  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=items_id LIMIT 1) as itemLabel,
+		  	is_onepayment,
+		  	i.items_id as itemId,
+		  	(SELECT ds.discountType FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS discountType,
+		  	(SELECT ds.discountValue FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS discountValue,
+		  	(SELECT ds.start_date FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS startDate,
+		  	(SELECT ds.end_date FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS endDate,
+  			'' AS feeId,
+  			0 AS balance,
+  			'' AS academic_year
+		  	
   		FROM `rms_itemsdetail` i WHERE
   			i.status=1 ";
   	 
   	if(!empty($data['Id'])){
   		$sql.=" AND i.id=".$data['Id'];
   	}
-  	if(!empty($data['itemsId'])){
-  		$sql.=" AND i.items_id=".$data['itemsId'];
-  	}
-  	if(!empty($data['itemsType'])){
-  		$sql.=" AND i.items_type=".$data['itemsType'];
-  	}
-  	if(!empty($data['productType'])){
-  		$sql.=" AND i.product_type=".$data['productType'];
-  	}
-  	
-  	if(isset($data['isProductseat'])){
-  		$sql.=" AND i.is_productseat=".$data['isProductseat'];
-  	}if(isset($data['isProductseat'])){
-  		$sql.=" AND i.is_productseat=".$data['isProductseat'];
-  	}
   	if(isset($data['isOnepayment'])){
   		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
   	}
-  	if(isset($data['isAutopayment'])){
+  	if(isset($data['isAutopayment']) AND $data['isInititilize']==1){
   		$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
   	}
-  	if(!empty($data['studentId'])){
-  		if(!empty($data['studentType']) AND ($data['studentType']==1 OR $data['studentType']==2)){
-  			$sql.=" OR ( i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE stu_id=".$data['studentId']."))";
-  		}
-  	}
   	$sql.=" ORDER BY i.items_type ASC ";
-  	
-  	return $this->getAdapter()->fetchAll($sql);
-  }
+  	return $this->getAdapter()->fetchAll($sql);//fetch all but got only 1 row only .
 
+  }
 
 	public function getAllGradingSetting($data=array()){
 		$db = $this->getAdapter();
@@ -3758,7 +3781,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		if(empty($resultDetail)){
 	   			$academicYear='';
 		   			if(!empty($data['feeId'])){
-			   			$result = $this->getFeeStudyinfoByIdGloabl($data['feeId']);
+			   			$result = $this->getFeeStudyinfoByIdGloable($data['feeId']);
 			   			$academicYear = empty($result)?'':$result['id'];
 		   			}
 	   			

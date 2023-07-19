@@ -688,7 +688,6 @@ span.user-badge.bg-warning {
 					getOldStudentInfo();
 					getExistingService();
 					stu_id = dijit.byId('old_stu').get('value');
-					getPaymentHistory(stu_id);
 				}
 			}, "old_stu");
 		
@@ -827,25 +826,6 @@ function checkAutoControl(studentType){
 	}
 }
 
-	function getPaymentHistory(student_id){
-		let url_studentpayment = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-studentpaymenthistory')); ?>';
-		
-		if(student_id==-1 || student_id==''){return false;}
-		dojo.xhrPost({
-			url:url_studentpayment,
-			content:{
-				'studentId':student_id,
-				'returnHtml':1
-			},
-			handleAs:"json",
-			load: function(responeHtml) {
-				dojo.byId('table_paymenthistory').innerHTML = responeHtml;
-			},
-			error: function(err) {
-			}
-		});
-	}
-	
 	function getOldStudentInfo(){
 
 		dijit.byId('studentBalanceId').set('value',0);
@@ -854,13 +834,16 @@ function checkAutoControl(studentType){
 		$(".stuCodeControl").css("display", "none");
 		dijit.byId('group_id').reset();
 		
-	student_type = dijit.byId("student_type").attr("value");
+	    student_type = dijit.byId("student_type").attr("value");
 		data_from= 1;
 		if(student_type==2){//tested student
 			data_from=2;
 		}else if(student_type==3){//crm
 			data_from=3;
-		}		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+		}
+
+		var url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinfo')); ?>';
+
 		student_id=dijit.byId('old_stu').get('value');
 		customer_type = dijit.byId("customer_type").attr("value");
 		if(student_id==''){return false;}
@@ -878,6 +861,7 @@ function checkAutoControl(studentType){
 					   dojo.byId("lbl_blog").innerHTML = data.studentInfo;
 					   dojo.byId("lblstudyinfo").innerHTML = data.studyinfo;
 					   dojo.byId("lblstudenttypeinfo").innerHTML = data.studenttypeinfo;
+					   dojo.byId("table_paymenthistory").innerHTML = data.resultPaymentHistory;
 
 					   studentData = data.studentData;
 
@@ -925,7 +909,81 @@ function checkAutoControl(studentType){
 			}
 		});
 	}
+	var academicOption = '';
+	term_option = '<?php echo $this->term_option;?>';
 
+function getExistingService(){//get existing server and default server
+		var col = 0;
+		var no = 0;
+		dojo.query("#table_row").append("");
+		$("#identity").val("");
+		getItemTermOption();
+	}
+	
+	function getItemTermOption(){
+		
+		isInititilize=1;
+		serviceId = dijit.byId("item").get("value");
+		if(serviceId!=''){
+			isInititilize=0;
+		}else{
+			loadingBlock();
+			}
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id==''){
+			dijit.byId('branch_id').focus();return false;
+		}
+
+		studentId = dijit.byId('old_stu').get('value');
+		if(studentId==''){
+			dijit.byId('studentId').focus();return false;
+		}
+		student_type = dijit.byId('student_type').get('value');
+		isAutopayment = '3';
+		 if(student_type==2){//test
+			isAutopayment = 2;
+		}else if(student_type==3){//crm
+			isAutopayment = 1;
+		}
+		var urlget = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getitemforpaymentrecord')); ?>";
+		
+		contentData = {
+				'branch_id':branch_id,
+				'studentId':studentId,
+				'grade':serviceId,
+				'studentType':student_type,
+				'isCurrent':1,
+				'stopType':0,
+				'isAutopayment':isAutopayment,
+				'isInititilize':isInititilize,
+			}
+		prepareAddNewRow(urlget,contentData);
+	}
+
+	function prepareAddNewRow(urlRequest,contentData){
+		dojo.xhrPost({
+			url:urlRequest,
+			content:contentData,
+			handleAs:"json",
+			load: function(data){
+				HideloadingBlock();
+				for(i=0;i<data.length;i++){
+					term_option = data[i].termTypeList;
+					academicOption = data[i].academicYearList;
+					term_study_option = data[i].studyPeriodList;
+					
+					serviceId = data[i].itemDetailId;
+					dataLabel = data[i].itemDetaillabel;
+					addRow(serviceId,dataLabel,data[i]);
+				}
+			},
+			error: function(err){
+				HideloadingBlock();
+			}
+		});
+	}
+
+	
 var template = '';
 var col = 0;
 var no = 0;
@@ -1020,8 +1078,10 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			if(dataRow.feeId>0){
 				dijit.byId('academic_year_'+col).attr('value',dataRow.feeId);
 			}
-			if(dataRow.is_onepayment=='1'){
+			if(dataRow.is_onepayment==1){
 				dijit.byId('term_'+col).attr('value',5);
+				dijit.byId('date_start_'+col).attr('value','');
+				dijit.byId('validate_'+col).attr('value','');
 			}
 			
 			if(dataRow.discountType>0 && dataRow.discountType!=null){
@@ -1042,7 +1102,9 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				dijit.byId('date_start_'+col).set('readOnly',true);
 				dijit.byId('validate_'+col).set('readOnly',true);
 			}else{
-				dijit.byId('date_start_'+col).attr('value',dataRow.endDate);
+				if(dataRow.endDate=!''){
+					dijit.byId('date_start_'+col).attr('value',dataRow.endDate);
+				}
 				getservicefee(col);
 			}
 		}else{
@@ -1051,66 +1113,8 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		}
 }
 
-var academicOption = '';
-term_option = '<?php echo $this->term_option;?>';
 
-function getExistingService(){
-	var col = 0;
-	var no = 0;
-	
-	dojo.query("#table_row").append("");
-	$("#identity").val("");
-	
-	var urlget = "<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-student-bygroup')); ?>";
-	studentId = dijit.byId('old_stu').get('value');
-	if(studentId==''){
-		dijit.byId('studentId').focus();return false;
-	}
 
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id==''){
-		dijit.byId('branch_id').focus();return false;
-	}
-	
-	student_type = dijit.byId('student_type').get('value');
-	isAutopayment = '';
-	if(student_type==1){//student
-		var urlget = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getitemforpaymentrecord')); ?>";
-	}else{//2 crm/3
-		if(student_type==2){//test
-			isAutopayment = 2;
-		}else if(student_type==3){//crm
-			isAutopayment = 1;
-		}
-		var urlget = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getserviceitem')); ?>";
-	}
-	
-	dojo.xhrPost({
-		url:urlget,
-		content:{
-			'branch_id':branch_id,
-			'studentId':studentId,
-			'studentType':student_type,
-			'isCurrent':1,
-			'stopType':0,
-			'isAutopayment':isAutopayment
-		},
-		handleAs:"json",
-		load: function(data){
-			for(i=0;i<data.length;i++){
-				term_option = data[i].termTypeList;
-				academicOption = data[i].academicYearList;
-				term_study_option = data[i].studyPeriodList;
-				
-				serviceId = data[i].itemDetailId;
-				dataLabel = data[i].itemDetaillabel;
-				addRow(serviceId,dataLabel,data[i]);
-			}
-		},
-		error: function(err){
-		}
-	});
-}
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -1120,11 +1124,6 @@ function deleteRecord(index) {
 	var strings = arrays.join(',');
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
-}
-function getItemTermOption(){
-	serviceId = dijit.byId("item").get("value");
-	serviceLabel = dijit.byId("item").attr("displayedValue");
-	addRow(serviceId,serviceLabel);
 }
 
 function getValidate(key){
@@ -1148,7 +1147,13 @@ function getValidate(key){
 		else if(term==4){
 			var a = new Date(start_date);
 			mm = a.getMonth()+(amount*12)+1;
-		}else{
+		}
+		else if(term==5){
+			dijit.byId("date_start_"+key).reset();
+			dijit.byId("validate_"+key).reset();
+			return false;
+		}
+		else{
 			var a = new Date(start_date);
 			mm = a.getMonth()+1;
 		}
@@ -1172,6 +1177,10 @@ var url_get_start_end_date = "<?php echo $this->url(array('module'=>'registrar',
 function getTermStudy(key){
 	term_study = dijit.byId('term_study'+key).get('value');
 	if(term_study==''){
+		return false;
+	}else if(term_study==5){
+		dijit.byId("date_start_"+key).reset();
+		dijit.byId("validate_"+key).reset();
 		return false;
 	}
 	if(term_study>0){
@@ -1225,19 +1234,24 @@ function getservicefee(key){
  			},
  			handleAs:"json",
  			load: function(data){
+ 	 			
 	 			dijit.byId("remark"+key).attr("value",'');
 	 			dijit.byId("price_"+key).attr("value",data.price);
 	 			dijit.byId("service_type_"+key).attr("value",data.items_type);
-	 			if(data.onepayment==1){
-	 				$("#autoNextPay"+key).prop( "checked",false);
-	 				$("#autoNextPay"+key).prop( "disabled",true);
-		 		}
+	 			
 	 			calculateTotal(key);
  				if(data.validate!=null){
  					dijit.byId("date_start_"+key).attr("value",data.validate);
  	 	 		}else{
  	 	 			dijit.byId('date_start_'+key).attr('value','<?php echo date('Y-m-d');?>');
  	 	 	 	}
+ 				
+	 			if(data.onepayment==1){
+	 				$("#autoNextPay"+key).prop( "checked",false);
+	 				$("#autoNextPay"+key).prop( "disabled",true);
+	 				dijit.byId('date_start_'+key).reset();
+					dijit.byId('validate_'+key).reset();
+		 		}
  		},
  		error: function(err){
  		}

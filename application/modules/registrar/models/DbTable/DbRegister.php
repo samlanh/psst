@@ -685,8 +685,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			WHERE 
 					item.id=spd.itemdetail_id
     				AND s.stu_id = sp.student_id
-    				AND sp.id=spd.payment_id 
-    				  ";
+    				AND sp.id=spd.payment_id ";
 		if(!empty($data['studentId'])){
 			$sql.=" AND sp.student_id =".$data['studentId'];
 		}
@@ -977,7 +976,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					return 1;
 				}
 			}catch (Exception $e){
-				echo $e->getMessage();exit();
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("UPDATE_FAIL");
 				$db->rollBack();

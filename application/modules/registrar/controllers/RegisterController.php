@@ -56,15 +56,16 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	
     	$data =array(
     			'branch_id'=>1,
-    			'studentId'=>15,
+    			'studentId'=>17,
     			'studentType'=>1,
     			'isCurrent'=>1,
     			'stopType'=>0,
+    			'grade'=>'',
     			'isAutopayment'=>''
     			);
     	$db = new Application_Model_DbTable_DbGlobal();
     	$data=$db->getServiceForPaymentRecord($data);
-    	print_r($data);
+//     	print_r($data);
     }
     public function addAction(){
       if($this->getRequest()->isPost()){
@@ -77,7 +78,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		}else{
       			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
       		}
-      		Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
+      		//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
       		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	}catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
@@ -221,15 +222,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getStudentpaymenthistoryAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$payment = $db->getStudentPaymentHistory($data);
-			print_r(Zend_Json::encode($payment));
-			exit();
-		}
-	}
+	
 	function getallstudenttestAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -310,14 +303,5 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
-	function getserviceitemAction(){
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$rows = $db->getItemAllDetail($data);
-			print_r(Zend_Json::encode($rows));
-			exit();
-		}
-	}
+
 }

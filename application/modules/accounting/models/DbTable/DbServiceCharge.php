@@ -188,7 +188,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     	$sql="SELECT id, CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') as year from rms_tuitionfee where status=1  $branch_id  ";
     	return $db->fetchAll($sql);
     }
-    public function getServiceFee($data){
+    public function getServiceFeeInServiceCharge($data){
     	$db=$this->getAdapter();
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$item_id = $data['service'];
@@ -256,17 +256,17 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     									id=$item_id LIMIT 1 ";
     				}else{
     					$sql="SELECT
-	    						price,
-	    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as onepayment,
-	    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
-	    						(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
-	    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
+		    						price,
+		    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as onepayment,
+		    						(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
+		    						(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
+		    						(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
     							WHERE sp.student_id = ".$data['studentid']."
-    							AND spd.itemdetail_id = $item_id
-    							ANd spd.is_start=1
-    							AND sp.`id`=spd.`payment_id`
-    							AND sp.is_void=0
-    							ORDER BY spd.validate DESC LIMIT 1) AS validate
+	    							AND spd.itemdetail_id = $item_id
+	    							ANd spd.is_start=1
+	    							AND sp.`id`=spd.`payment_id`
+	    							AND sp.is_void=0
+	    							ORDER BY spd.validate DESC LIMIT 1) AS validate
     							FROM
     								`rms_product_location`
     							WHERE
@@ -274,6 +274,6 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     								AND branch_id = ".$data['branch_id']." LIMIT 1 ";
     				}
     				return $db->fetchRow($sql);
-    			}
+    		}
     	}
 }

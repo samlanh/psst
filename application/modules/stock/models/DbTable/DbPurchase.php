@@ -71,7 +71,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$sql="SELECT * FROM `rms_product_setdetail` WHERE pro_id=$pro_id";
     	return $db->fetchAll($sql);
     }
-    function updateStock($pro_id,$location_id,$qty_order, $cost){
+    function updateStock($pro_id,$location_id,$qty_order, $cost=0){
     	$db=$this->getAdapter();
     	$sql="SELECT * FROM `rms_itemsdetail` WHERE id=$pro_id LIMIT 1 ";
     	$rs_pro = $db->fetchRow($sql);

@@ -487,7 +487,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				if($test!=null){
 					$_arr = array(
 						'stu_id'			=>$data['stu_test_id'],
-						'feeId'				=>$data['academic_year'],
+						'feeId'				=>$data['fee_id'],
 						'is_newstudent'		=>1,
 						'status'			=>1,
 						'group_id'			=>0,
@@ -508,6 +508,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						$this->_name="rms_group_detail_student";
 						$this->update($_arr, $where);
 					}else{
+						$_arr['branch_id']=$data['branch_id'];
+						$_arr['entryFrom']=6;
 						$this->_name="rms_group_detail_student";
 						$this->insert($_arr);
 					}
@@ -526,7 +528,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				
 				$_arr = array(
 						'stu_id'			=>$data['stu_test_id'],
-						'feeId'				=>$data['academic_year'],
+						'feeId'				=>$data['fee_id'],
 						'academic_year'		=>$data['academic_year'],
 						'is_newstudent'		=>1,
 						'status'			=>1,
@@ -556,6 +558,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				}else{
 					$schoolOption = empty($data['schoolOption'])?1:$check['schoolOption'];
 					$_arr['school_option']=$schoolOption;
+					$_arr['branch_id']=$data['branch_id'];
+					$_arr['entryFrom']=6;
+					
 					$this->_name="rms_group_detail_student";
 					$this->insert($_arr);
 				}

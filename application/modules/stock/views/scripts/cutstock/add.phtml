@@ -94,6 +94,13 @@ tr.head-td th {
 												</div>
 											</div>
 											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CUT_STOCK_TYPE");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("cut_stock_type");?>
+												</div>
+											</div>
+											<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
@@ -240,10 +247,10 @@ tr.head-td th {
 										<div class="col-md-12 col-sm-12 col-xs-12">
 											<div class="d-flex "> 
 													<div class="settings-main-icon ">
-														<i class="glyphicon glyphicon-usd" aria-hidden="true"></i>
+														<i class="glyphicon glyphicon-th-list" aria-hidden="true"></i>
 													</div> 
 													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MONEY");?></p>
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TOTAL");?></p>
 													</div> 
 												</div>
 
@@ -553,6 +560,11 @@ function getallstudentname(){
 			dijit.byId("studentId").focus();
 			return false;
 		}
+		cut_stock_type = dijit.byId('cut_stock_type').get('value');
+		if(cut_stock_type==""){
+			dijit.byId("cut_stock_type").focus();
+			return false;
+		}
 		invoicesearch = dijit.byId('bypuchase_no').get('value');
 		loadingBlock();
 		dojo.xhrPost({
@@ -562,6 +574,7 @@ function getallstudentname(){
 				'student_id':studentId,
 				'keyindex':keyindex,
 				'bypuchase_no':invoicesearch,
+				'cut_stock_type':cut_stock_type,
 	 			},
 			handleAs:"json",
 			load: function(data) {

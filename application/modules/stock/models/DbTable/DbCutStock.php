@@ -66,7 +66,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$student_id = $data['student_id'];
     	$branch_id = $data['branch_id'];
-    	
+    	$type = $data['cut_stock_type'];
     	$sql=" SELECT 
 				spd.*,
 				sp.branch_id,
@@ -83,9 +83,16 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				WHERE spd.payment_id = sp.id
 				AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
 				AND sp.is_void=0
-				AND spd.qty_after >0
 				AND sp.student_id=$student_id
 				AND sp.branch_id=$branch_id";
+
+			if(!empty($type )){
+                if($type ==1){
+                    $sql.= " AND spd.qty_after >0 ";
+				}elseif($type ==2){
+ 					$sql.= " AND spd.qty_after = 0 ";
+				}
+			}
 	    	if (!empty($data['bypuchase_no'])){
 	    		$s_search=addslashes(trim($data['bypuchase_no']));
 	    		$sql.= " AND sp.receipt_number LIKE '%{$s_search}%'";
@@ -186,6 +193,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		$itemsCode = $this->getCutStockode($_data['branch_id']);
     		$_arr=array(
     				'branch_id'	   => $_data['branch_id'],
+					'cut_stock_type'  => $_data['cut_stock_type'],
     				'serailno'	   => $itemsCode,
     				'student_id'   => $_data['studentId'],
     				'balance'      => $_data['balance'],
@@ -257,6 +265,9 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     function getAllCutStock($search){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$cut_stock=$tr->translate('CUT_STOCK');
+		$debt_stock=$tr->translate('DEBT_STOCK');
     	$db = $this->getAdapter();
     	try{
     		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -267,6 +278,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
     		pp.serailno,
     		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS student_name,
+			CASE 
+				WHEN pp.cut_stock_type=1 THEN   '$cut_stock'
+			    WHEN pp.cut_stock_type=2 THEN  '$debt_stock'
+			END
+			AS cutstocktype,
     		pp.balance,
     		pp.total_received,pp.total_qty_due,
     		pp.received_date ";

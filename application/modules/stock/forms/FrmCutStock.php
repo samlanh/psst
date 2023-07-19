@@ -42,6 +42,18 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		));
 		$itemsCode = $_dbcht->getCutStockode();
 		$_serailno->setValue($itemsCode);
+
+		$_cut_stock_type = new Zend_Dojo_Form_Element_FilteringSelect('cut_stock_type');
+		$_cut_stock_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'placeholder'=>$this->tr->translate("SELECT_CUT_STOCK_TYPE"),
+		));
+		$_cut_stock = array(
+				''=>$this->tr->translate("SELECT_CUT_STOCK_TYPE"),
+				1=>$this->tr->translate("CUT_STOCK"),
+				2=>$this->tr->translate("DEBT_STOCK"));
+		$_cut_stock_type->setMultiOptions($_cut_stock);
 		
 		
 		$_balance = new Zend_Dojo_Form_Element_NumberTextBox('balance');
@@ -239,6 +251,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				$_adv_search,
 				$_paid_by_search,
 				$_status_search,
+				$_cut_stock_type,
 				));
 		
 		return $this;

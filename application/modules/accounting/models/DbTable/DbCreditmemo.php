@@ -65,12 +65,12 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	function addCreditmemo($data){
 		$db = $this->getAdapter();
 		try{
-		$sql="SELECT id FROM rms_creditmemo WHERE branch_id =".$data['branch_id'];
-		$sql.=" AND student_id='".$data['studentId']."'";
-		$rs = $db->fetchOne($sql);
-		if(!empty($rs)){
-			return -1;
-		}
+// 		$sql="SELECT id FROM rms_creditmemo WHERE branch_id =".$data['branch_id'];
+// 		$sql.=" AND student_id='".$data['studentId']."'";
+// 		$rs = $db->fetchOne($sql);
+// 		if(!empty($rs)){
+// 			return -1;
+// 		}
 			$arr = array(
 				'branch_id'		=>$data['branch_id'],
 				'student_id'	=>$data['studentId'],
@@ -79,7 +79,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'note'			=>$data['Description'],
 				'prob'			=>$data['prob'],
 				'type'			=>0,
-				'date'			=>date('Y-m-d H:i:s',strtotime($data['date'])),
+				'date'			=>date('Y-m-d H:i:s',strtotime($data['Date'])),
 				'end_date'		=>$data['end_date'],
 				'status'		=>1,
 				'user_id'		=>$this->getUserId()
@@ -93,9 +93,6 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
  	 }
- 	 function getCreditMemobyStudent(){
- 	 	
- 	 }
 	 function updatcreditMemo($data){
 			$arr = array(
 				'branch_id'		=>$data['branch_id'],
@@ -105,7 +102,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'note'			=>$data['Description'],
 				'prob'			=>$data['prob'],
 				'type'			=>0,
-				'date'			=>$data['Date'],
+// 				'date'			=>$data['Date'],
 				'end_date'		=>$data['end_date'],
 				'status'		=>$data['status'],
 				'user_id'		=>$this->getUserId(),

@@ -351,7 +351,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 				$gdb = new  Application_Model_DbTable_DbGlobal();
 				$customer_type=1;
 				if($data['student_type']==1){//existing student
-					$rs_stu = $gdb->getStudentinfoById($stu_id);
+					$rs_stu = $gdb->getStudentinfoGlobalById($stu_id);
 					
 					if($rs_stu['is_setstudentid']==0 AND !empty($data['student_code'])){
 						$arr = array(
@@ -423,7 +423,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					}
 					
 				}elseif($data['student_type']==3){//from crm
-					$rs_stu = $gdb->getStudentinfoById($stu_id);
+					$rs_stu = $gdb->getStudentinfoGlobalById($stu_id);
 					$_dbgb = new Application_Model_DbTable_DbGlobal();
 					$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
 					$arr = array(
@@ -674,7 +674,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 				}
 				$db->commit();
 // 				return $receipt_number;
-				$rs_stu = $gdb->getStudentinfoById($stu_id);
+				$rs_stu = $gdb->getStudentinfoGlobalById($stu_id);
 				$rs_stu['receipt_number'] = $receipt_number;
 				return $rs_stu;
 		}catch (Exception $e){

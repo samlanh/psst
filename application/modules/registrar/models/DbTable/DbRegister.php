@@ -32,7 +32,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 
     function setStudentId($data){
     	$gdb = new  Application_Model_DbTable_DbGlobal();
-    	$rs_stu = $gdb->getStudentinfoById($data['old_stu']);
+    	$rs_stu = $gdb->getStudentinfoGlobalById($data['old_stu']);
     	if($rs_stu['is_setstudentid']==0 AND !empty($data['student_code'])){
     		$branch_id = $data['branch_id'];
     		$stu_no = $gdb->getnewStudentId($branch_id,0);
@@ -243,7 +243,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$gdb = new  Application_Model_DbTable_DbGlobal();
 		$stu_id = $data['old_stu'];//$this->getnewStudentId($data['dept']);
 		
-		$rs_stu = $gdb->getStudentinfoById($stu_id);
+		$rs_stu = $gdb->getStudentinfoGlobalById($stu_id);
 		$receipt_number = $this->getRecieptNo($data['branch_id']);
 			try{
 				
@@ -477,7 +477,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				}
 				$db->commit();
 
-				$stuResult = $gdb->getStudentinfoById($stu_id);
+				$stuResult = $gdb->getStudentinfoGlobalById($stu_id);
 				$stuResult['receipt_number'] = $receipt_number;
 				return $stuResult;
 		}catch (Exception $e){

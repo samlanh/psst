@@ -177,7 +177,7 @@ span.custom-switch-indicator{line-height: 20px;}
 				                <div class="form-group">
 				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getbranchHeader();getallstudentname();getAllAcademicBy();">
+				                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();getAllAcademicBy();">
 							    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
 							    			<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
 							    			<?php }?>
@@ -228,13 +228,13 @@ span.custom-switch-indicator{line-height: 20px;}
 					                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 					                   </div>
 					            </div>
-					            <div class="form-group" <?php if ($settingShowGroup==0){?>style="display: none;"<?php }?>>
+					            <div class="form-group" <?php //if ($settingShowGroup==0){?>style="display: block;"<?php //}?>>
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?>  :
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
 					                   		<input id="group_id" />
-											<input type="hidden" id="degree" name="degree" dojoType="dijit.form.TextBox" />
-					                   		<input type="hidden" id="grade"  name="grade" dojoType="dijit.form.TextBox" />
+											<input type="text" id="degree" name="degree" dojoType="dijit.form.TextBox" />
+					                   		<input type="text" id="grade"  name="grade" dojoType="dijit.form.TextBox" />
 					                   </div>
 					            </div>
 				                <div class="form-group">
@@ -397,7 +397,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					           		 <div class="form-group">
 					                   <label class="control-label  col-md-3 col-sm-3 col-xs-12" ><?php echo $tr->translate("CATEGORY");?></label>
 					                   <div class="col-md-9 col-sm-9 col-xs-12">
-					                   		<select style="height: 30px;" required="false" type="text" name="category" id="category"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getgradebyDegree(1,1,2);" >
+					                   		<select style="height: 30px;" required="false" type="text" name="category" id="category"  class="fullside" dojoType="dijit.form.FilteringSelect"  autoComplete="false" queryExpr="*${0}*" onchange="getItemDetail(1,1,2);" >
 												<option value="-1"></option>
 												<?php if(!empty($this->rs_type)){foreach ($this->rs_type as $rs){?>
 												<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
@@ -671,19 +671,9 @@ span.user-badge.bg-warning {
 
 	require(["dojo/ready"], function(ready){
 			ready(function(){
-				getbranchHeader();
-				getallgroupby();
 				getallstudentname();
-				getgradebyDegree(-1,1,2);
+				getItemDetail(-1,1,2);
 				getAllAcademicBy();
-				
-				<?php if ($settingNewStuID==1){?>
-				var student_type = dijit.byId('student_type');
-				student_type.on('change', function(evt) {
-					dijit.byId('group_id').attr('value','')
-					getallgroupby();
-				});
-				<?php }?>
 			});
 		
 			new dijit.form.FilteringSelect({
@@ -696,7 +686,6 @@ span.user-badge.bg-warning {
 				placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 				onChange: function(){  
 					getOldStudentInfo();
-					getCreditMemo();
 					getExistingService();
 					stu_id = dijit.byId('old_stu').get('value');
 					getPaymentHistory(stu_id);
@@ -743,65 +732,6 @@ span.user-badge.bg-warning {
 		
 		});	
 
-function getallgroupby(){// 
-		dijit.byId('group_id').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		student_type = dijit.byId("student_type").attr("value");
-		if(student_type!=2){
-			group_store  = getDataStorefromJSON('id','name');
-		    dijit.byId('group_id').set('store',group_store);
-		    return false;
-		}
-		degree = dijit.byId('degree').get('value');
-		if(degree=='' || degree==-1){
-			degree ="";
-		}
-		grade = dijit.byId('grade').get('value');
-		if(grade=='' || grade==-1){
-			grade ="";
-		}
-		url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
-		dojo.xhrPost({
-			url: url_getallgroup,
-			content:{
-				'branch_id':branch_id,
-				'degree':degree,
-				'grade':grade,
-				'noaddnew':1
-			},
-			handleAs:"json",
-			load: function(data) {
-			    group_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('group_id').set('store',group_store);   
-			},
-			error: function(err) {
-			}
-		});
-}
-
-function getStudentNo(degree_id=0){
-	let url_getstuno = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'get-stu-no')); ?>';
-	dijit.byId('student_code').attr('value',""); 
-	branch_id = dijit.byId('branch_id').get('value');
-	dojo.xhrPost({
-		url:url_getstuno,
-		content:{
-			'branch_id':branch_id,
-			'dept_id':degree_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			dijit.byId('student_code').attr('value',data);   
-		},
-		error: function(err) {
-		}
-	});
-}
-
 function getAllAcademicBy(){
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -816,8 +746,8 @@ function getAllAcademicBy(){
 	getAllAcademicByBranch(url_getacademic,contentData);
 }
 
-function getgradebyDegree(dept_id,a,type=1){
-	dept_id = dijit.byId("category").get("value");
+function getItemDetail(dept_id,a,type=1){
+	ItemTypeId = dijit.byId("category").get("value");
 	student_id = dijit.byId("old_stu").get("value");
 
 	student_type = dijit.byId("student_type").get("value");
@@ -826,11 +756,11 @@ function getgradebyDegree(dept_id,a,type=1){
 		is_stutested  = 1;
 	}
 	
-	let url_dept = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-gradeproduct')); ?>';
+	let urlItemId = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-gradeproduct')); ?>';
 	dojo.xhrPost({
-		url:url_dept,
+		url:urlItemId,
 		content:{
-			'dept_id':dept_id,
+			'dept_id':ItemTypeId,
 			'student_id':student_id,
 			'is_stutested':is_stutested,
 			'groupDetailId':0
@@ -842,15 +772,6 @@ function getgradebyDegree(dept_id,a,type=1){
 		error: function(err) {
 		}
 	});
-}
-function confirmBeforePrint(){
-	dijit.byId('alertBeforePrint').show();
-}
-function hideDialog(){
-	dijit.byId('terms').hide();
-}
-function hideDialog1(){
-	dijit.byId('alertBeforePrint').hide();
 }
 
 function getallstudentname(){//
@@ -926,6 +847,13 @@ function checkAutoControl(studentType){
 	}
 	
 	function getOldStudentInfo(){
+
+		dijit.byId('studentBalanceId').set('value',0);
+		dijit.byId('groupDetailId').set('value',0);
+		dojo.byId("lb_grade").innerHTML = "";
+		$(".stuCodeControl").css("display", "none");
+		dijit.byId('group_id').reset();
+		
 	student_type = dijit.byId("student_type").attr("value");
 		data_from= 1;
 		if(student_type==2){//tested student
@@ -950,103 +878,53 @@ function checkAutoControl(studentType){
 					   dojo.byId("lbl_blog").innerHTML = data.studentInfo;
 					   dojo.byId("lblstudyinfo").innerHTML = data.studyinfo;
 					   dojo.byId("lblstudenttypeinfo").innerHTML = data.studenttypeinfo;
+
+					   studentData = data.studentData;
+
+					   dijit.byId('study_year').set('value',studentData.feeId);
+					   dijit.byId("degree").set('value',studentData.degree);
+					   dijit.byId("grade").set('value',studentData.grade);
+
+					   grouplabel = studentData.groupCode;
+					   if(grouplabel== null){
+						   grouplabel='';
+						}else{
+							grouplabel='('+grouplabel+')';
+						}
+					   dojo.byId("lb_grade").innerHTML =grouplabel;
+
+					   if(studentData.isSetStudentid==0){
+							$(".stuCodeControl").css("display", "flow-root");
+							dijit.byId('student_code').focus();
+						}
+						
+					   if(studentData.creditAmountAfter){
+							dijit.byId("credit_memo").attr("value",studentData.creditAmountAfter);
+							dijit.byId("credit_memo_id").attr("value",studentData.creditMemoId);
+							
+						}else{
+							dijit.byId("credit_memo").attr("value",0);
+							dijit.byId("credit_memo_id").attr("value",'');
+						}
+
+						if(studentData.groupStore){
+							 groupStore  = getDataStorefromJSON('id','name', data);
+							 dijit.byId('group_id').set('store',studentData.groupStore);   
+						}
 				   }
-				   getStudentInformation();
-				   getgradebyDegree(-1,1,2);
-				   
+				   if(studentData.studentCode){
+					   dijit.byId('student_code').attr('value',studentData.studentCode);
+					}
+					if(studentData.branchHeader){
+						 dojo.byId('lbl_header').innerHTML=studentData.branchHeader;
+					}
+				  
+					getItemDetail(-1,1,2);
 			},
 			error: function(err) {
 			}
 		});
 	}
-
-function getStudentInformation(){
-
-	dijit.byId('studentBalanceId').set('value',0);
-	dijit.byId('groupDetailId').set('value',0);
-	
-	let url_getdata = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getstudentinformation')); ?>';
-
-	student_type = dijit.byId("student_type").attr("value");
-	
-	student_id=dijit.byId('old_stu').get('value');
-	dojo.byId("lb_grade").innerHTML = "";
-	dojo.byId("lb_academic_year").innerHTML ="";
-	$(".stuCodeControl").css("display", "none");
-	if(student_id==''){return false;}
-	loadingBlock();
-	dojo.xhrPost({
-		url:url_getdata,
-		content:{
-			'student_id':student_id
-			},
-		handleAs:"json",
-		load: function(data) {
-			fee_id = data.fee_id;
-			if(data.is_setstudentid==0){
-				$(".stuCodeControl").css("display", "flow-root");
-				dijit.byId('student_code').focus();
-			}
-			dijit.byId('study_year').set('value',fee_id);
-			dijit.byId("degree").set('value',data.degree);
-			dijit.byId("grade").set('value',data.grade);
-			
-			grade_label = data.grade_label;
-			if(grade_label== undefined){
-				grade_label='&nbsp;';
-			}else if(grade_label== null){
-				grade_label='&nbsp;';
-			}
-			grouplabel = data.group_name;
-			if(grouplabel== undefined){
-				grouplabel='&nbsp;';
-			}else if(grouplabel== null){
-				grouplabel='&nbsp;';
-			}else{
-				grouplabel = '('+grouplabel+')';
-			}
-			dojo.byId("lb_grade").innerHTML = grade_label+grouplabel;
-			
-			academic_year_label = data.academic_year_label;
-			if(academic_year_label=='undefined' || isNaN(academic_year_label)){
-				academic_year_label=dijit.byId('study_year').attr("displayedValue");
-			}
-			
-			dojo.byId("lb_academic_year").innerHTML = academic_year_label;
-			//get New ID From Student Test
-			getStudyFeeId(fee_id);
-			getStudentNo(data.degree);
-			getallgroupby();
-			HideloadingBlock();
-		},
-		error: function(err) {
-			HideloadingBlock();
-		}
-	});
-}
-
-
-
-url_study = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getfeestudyinfo'));?>';
-function getStudyFeeId(study_year){
-	if( study_year=='' || study_year==-1){
-		return false;
-	}
-	dojo.xhrPost({
-		url: url_study,
-		content:{
-			'study_year':study_year,
-		},
-		handleAs:"json",
-		load: function(data){
-			if(!isNaN(data.session_type)){
-				dojo.byId("lb_sesiontype").innerHTML = data.session_type;
-			}
-		},
-		error: function(err) {
-		}
-	});
-}
 
 var template = '';
 var col = 0;
@@ -1149,7 +1027,6 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			if(dataRow.discountType>0 && dataRow.discountType!=null){
 				dijit.byId('discount_type'+col).attr('value',dataRow.discountType);
 				dijit.byId('discount_'+col).attr('value',dataRow.discountValue);
-				
 			}
 			
 			if(balance>0 && balance!=null){
@@ -1234,12 +1111,6 @@ function getExistingService(){
 		}
 	});
 }
-
-function getItemTermOption(){
-	serviceId = dijit.byId("item").get("value");
-	serviceLabel = dijit.byId("item").attr("displayedValue");
-	addRow(serviceId,serviceLabel);
-}
 function deleteRecord(index) {
 	var identity = $('#identity').val();
 	var arrays = identity.split(',');
@@ -1250,6 +1121,12 @@ function deleteRecord(index) {
 	$('#identity').val(strings);
 	dojo.query("#row"+index).remove();
 }
+function getItemTermOption(){
+	serviceId = dijit.byId("item").get("value");
+	serviceLabel = dijit.byId("item").attr("displayedValue");
+	addRow(serviceId,serviceLabel);
+}
+
 function getValidate(key){
 	start_date = dijit.byId('date_start_'+key).get('value');
 	if(start_date!=null){
@@ -1315,98 +1192,6 @@ function getTermStudy(key){
 		});
 	}
 }
-function calculateTotal(index){
-		price = dijit.byId('price_'+index).get('value');
-		qty = dijit.byId('qty_'+index).get('value');
-		qty=isNaN(qty)?0:qty;
-		subtotal = price * qty;
-		dijit.byId('subtotal_'+index).attr('value',subtotal);
-		additional_fee = dijit.byId('extra_fee'+index).get('value');
-		additional_fee = isNaN(additional_fee)?0:additional_fee;
-		total = subtotal + additional_fee ;
-		discount = dijit.byId('discount_amount'+index).get('value');
-		discount = isNaN(discount)?0:discount;
-		if(discount>total){
-			alert("the value must be <="+total);
-			dijit.byId('discount_amount'+index).attr('value','');
-			calculateTotal(index);
-			dijit.byId('discount_amount'+index).get('value').focus();
-		}
-		
-		total_pay = parseFloat(total) - parseFloat(discount) ;
-		discount_percent = dijit.byId('discount_'+index).get('value');
-		if(discount_percent>100){
-			alert("the value must be <=100% !");
-			dijit.byId('discount_'+index).attr('value','');
-			calculateTotal(index);
-			dijit.byId('discount_'+index).get('value').focus();
-		}
-		discount_percent = isNaN(discount_percent)?0:discount_percent;
-		totalDiscountPercent = (total_pay*discount_percent/100);
-		total_pay = total_pay-totalDiscountPercent;
-
-		totalDiscount = discount+totalDiscountPercent;
-
-		dijit.byId('total_discount'+index).attr('value',totalDiscount);
-		dijit.byId('total_amount'+index).attr('value',total_pay);
-		dijit.byId('paid_amount'+index).attr('value',total_pay);
-		netTotal();
-}
-function paidAmount(index){
-	totalPayment = dijit.byId('total_amount'+index).get('value');
-	PaidPayment = dijit.byId('paid_amount'+index).get('value');
-	if(PaidPayment>totalPayment){
-		dijit.byId('paid_amount'+index).attr('value',totalPayment);
-	}
-	netTotal();	
-}
-function netTotal(){
-	var rowId = $('#identity').val();
-	var rowIDArray = rowId.split(',');
-	
-	var totalPayment = 0; 
-	var PaidAmount=0;
-
-	for(var n = 0; n < rowIDArray.length; n++) {
-		totalPayment += dijit.byId('total_amount'+rowIDArray[n]).get('value');
-		PaidAmount += isNaN(dijit.byId('paid_amount'+rowIDArray[n]).get('value'))?0:dijit.byId('paid_amount'+rowIDArray[n]).get('value'); ;
-	}
-	dijit.byId('grand_total').attr('value',totalPayment);
-	credit_memo = dijit.byId('credit_memo').get('value');
-	credit_memo = isNaN(credit_memo)?0:credit_memo;
-	netPaidAmount = PaidAmount - credit_memo;
-	
-	dijit.byId('paid_amount').attr('value',netPaidAmount.toFixed(2));
-	balance = totalPayment-netPaidAmount;
-	dijit.byId('balance_due').attr('value',balance);
-	readMoneyInKhmer(netPaidAmount.toFixed(2));
-}	
-
-function readMoneyInKhmer(netTotal){
-	var str = netTotal.toString();
-    str_cent = 'សេន';
-	first_decimal = str.substr(-2);
-	last_decimal = str.substr(-1);
-    if(first_decimal>0){string=' ចុច ';}else{string="";str_cent=""}
-	if(first_decimal!='00' && first_decimal<10 ){str_zero = "សូន្យ";}else{str_zero='';}
-	first_money_decimal = read_in_khmer_from_10_to_99(first_decimal);
-	last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
-	money_khmer=read_money_in_khmer(netTotal);
-
-	if(first_decimal>0){string_en=' dot ';}else{string_en="";str_cent_en=""}
-	if(first_decimal!='00' && first_decimal<10 ){str_zero_en = "Zero";}else{str_zero_en='';}
-	first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
-	last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
-	money_english=read_money_in_english(netTotal);
-	read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
-	
-	english_amount = ' Dollar Only';
-	if(netTotal==0){english_amount='';}
-	read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+english_amount+')'
-	khmer_amount = 'ដុល្លារគត់';
-	if(netTotal==0){khmer_amount='';}
-	dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng);
-}
 var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
 	 	stu_type = dijit.byId('student_type').get('value');
@@ -1458,6 +1243,103 @@ function getservicefee(key){
  		}
  	});
  }
+function calculateTotal(index){
+		price = dijit.byId('price_'+index).get('value');
+		qty = dijit.byId('qty_'+index).get('value');
+		qty=isNaN(qty)?0:qty;
+		subtotal = price * qty;
+		dijit.byId('subtotal_'+index).attr('value',subtotal);
+		additional_fee = dijit.byId('extra_fee'+index).get('value');
+		additional_fee = isNaN(additional_fee)?0:additional_fee;
+		total = subtotal + additional_fee ;
+		discount = dijit.byId('discount_amount'+index).get('value');
+		discount = isNaN(discount)?0:discount;
+		if(discount>total){
+			alert("the value must be <="+total);
+			dijit.byId('discount_amount'+index).attr('value','');
+			calculateTotal(index);
+			dijit.byId('discount_amount'+index).get('value').focus();
+		}
+		
+		total_pay = parseFloat(total) - parseFloat(discount) ;
+		discount_percent = dijit.byId('discount_'+index).get('value');
+		if(discount_percent>100){
+			alert("the value must be <=100% !");
+			dijit.byId('discount_'+index).attr('value','');
+			calculateTotal(index);
+			dijit.byId('discount_'+index).get('value').focus();
+		}
+		discount_percent = isNaN(discount_percent)?0:discount_percent;
+		totalDiscountPercent = (total_pay*discount_percent/100);
+		total_pay = total_pay-totalDiscountPercent;
+
+		totalDiscount = discount+totalDiscountPercent;
+
+		dijit.byId('total_discount'+index).attr('value',totalDiscount);
+		dijit.byId('total_amount'+index).attr('value',total_pay);
+		dijit.byId('paid_amount'+index).attr('value',total_pay);
+		netTotal();
+}
+
+function paidAmount(index){
+	totalPayment = dijit.byId('total_amount'+index).get('value');
+	PaidPayment = dijit.byId('paid_amount'+index).get('value');
+	if(PaidPayment>totalPayment){
+		dijit.byId('paid_amount'+index).attr('value',totalPayment);
+	}
+	netTotal();	
+}
+
+function netTotal(){
+	var rowId = $('#identity').val();
+	var rowIDArray = rowId.split(',');
+	
+	var totalPayment = 0; 
+	var PaidAmount=0;
+
+	for(var n = 0; n < rowIDArray.length; n++) {
+		totalPayment += dijit.byId('total_amount'+rowIDArray[n]).get('value');
+		PaidAmount += isNaN(dijit.byId('paid_amount'+rowIDArray[n]).get('value'))?0:dijit.byId('paid_amount'+rowIDArray[n]).get('value'); ;
+	}
+	
+	dijit.byId('grand_total').attr('value',totalPayment);
+	credit_memo = dijit.byId('credit_memo').get('value');
+	credit_memo = isNaN(credit_memo)?0:credit_memo;
+	netPaidAmount = PaidAmount - credit_memo;
+	
+	dijit.byId('paid_amount').attr('value',netPaidAmount.toFixed(2));
+	balance = totalPayment-netPaidAmount;
+	
+	dijit.byId('balance_due').attr('value',balance-credit_memo);
+	readMoneyInKhmer(netPaidAmount.toFixed(2));
+}	
+
+function readMoneyInKhmer(netTotal){
+	var str = netTotal.toString();
+    str_cent = 'សេន';
+	first_decimal = str.substr(-2);
+	last_decimal = str.substr(-1);
+    if(first_decimal>0){string=' ចុច ';}else{string="";str_cent=""}
+	if(first_decimal!='00' && first_decimal<10 ){str_zero = "សូន្យ";}else{str_zero='';}
+	first_money_decimal = read_in_khmer_from_10_to_99(first_decimal);
+	last_money_decimal = read_in_khmer_from_0_to_9(last_decimal)
+	money_khmer=read_money_in_khmer(netTotal);
+
+	if(first_decimal>0){string_en=' dot ';}else{string_en="";str_cent_en=""}
+	if(first_decimal!='00' && first_decimal<10 ){str_zero_en = "Zero";}else{str_zero_en='';}
+	first_money_decimal_en = read_in_english_from_10_to_99(first_decimal);
+	last_money_decimal_en = read_in_english_from_0_to_9(last_decimal)
+	money_english=read_money_in_english(netTotal);
+	read_eng = money_english.trim()+string+ first_money_decimal+str_zero+last_money_decimal+'ដុល្លារគត់'
+	
+	english_amount = ' Dollar Only';
+	if(netTotal==0){english_amount='';}
+	read_eng = '( '+money_english.trim()+string_en+ first_money_decimal_en+str_zero_en+last_money_decimal_en+english_amount+')'
+	khmer_amount = 'ដុល្លារគត់';
+	if(netTotal==0){khmer_amount='';}
+	dijit.byId('money_in_khmer').attr('value',money_khmer.trim()+string+ first_money_decimal+str_zero+last_money_decimal+khmer_amount+read_eng);
+}
+
 function printSave(){	
 	checkSession();
 	var receipt_type =<?php echo RECEIPT_TYPE; ?>;
@@ -1480,7 +1362,7 @@ function printSave(){
 		dojo.byId("lb_sex").innerHTML = $("#lbl_gender").val();
 		dojo.byId("lbl_note").innerHTML = dijit.byId("note").attr('displayedValue');
 
-		var d = new Date(); // for now
+		var d = new Date(); //for now
 		dojo.byId("lb_date").innerHTML  = dd+'-'+mon+'-'+yyyy+' '+d.toLocaleTimeString();
 
 		 var nameKhValue = dojo.byId("lbl_namekh").innerHTML; 
@@ -1502,12 +1384,12 @@ function printSave(){
 		dojo.byId("lb_paid_amount").innerHTML = dojo.number.format(dijit.byId("paid_amount").get('value'),{places:2});
 		dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'),{places:2});
 		dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
+
+		academicYearLabel=dijit.byId('study_year').attr("displayedValue");
+		dojo.byId("lb_academic_year").innerHTML = academicYearLabel;
+		
 		let bankName = (dijit.byId("bank_name").get('value')==0)?'':dijit.byId("bank_name").attr('displayedValue');
 
-		if(dijit.byId('student_type').get('value')==3 || dijit.byId('student_type').get('value')==2){
-			dojo.byId("lb_academic_year").innerHTML = dijit.byId('study_year').attr("displayedValue");
-		}
-		
 		dojo.byId("lb_paymentnumber").innerHTML = bankName+' '+dijit.byId("number").get('value');
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $username;?>';
 		
@@ -1586,65 +1468,6 @@ function printSave(){
 								  
 								  i++;
 							}
-					}else{
-						
-						dojo.byId("lbFather").innerHTML = dojo.byId("lbl_father").innerHTML;
-						dojo.byId("lbFatherTel").innerHTML = dojo.byId("lbl_fathertel").innerHTML;
-						dojo.byId("lbMother").innerHTML = dojo.byId("lbl_mother").innerHTML;
-						dojo.byId("lbMotherTel").innerHTML = dojo.byId("lbl_mothertel").innerHTML;
-						
-						temp='<table border="1" class="collape tablesorter" width="100%" align="center" style="border-collapse: collapse; border: solid 1px #000;line-height:20px;white-space:nowrap; padding: 0px; margin: 0px;font-family: Khmer OS Battambang;" id="table">'
-							  temp+='<tr class="hearder_table" style="border-collapse: collapse;border: solid 1px #000;font-size:inherit !important;text-align:center;font-weight:bold;">';
-								  temp+='<td>លេខរៀង<br />No.</td>';
-								  temp+='<td><strong style="color:#000;">បរិយាយ<br />Description</strong></td>';
-								  temp+='<td><strong style="color:#000;">សម្គាល់<br />Remark</strong></td>';
-								  temp+='<td><strong style="color:#000;">បរិមាណ<br />Qty</strong></td>';
-								  temp+='<td><strong style="color:#000;">តម្លៃ<br />Price</strong></td>';
-								  temp+='<td><strong style="color:#000;">សរុប<br />Total Amount($)</strong></td>';
-								  temp+='<td><strong style="color:#000;">សុពលភាព<br />Valid​ Date</strong></td>';
-							  temp+='</tr>';
-
-							  i=1;  
-								for(var n = 0; n < rowIDArray.length; n++) {
-									
-									var items_type = dijit.byId("service_type_"+rowIDArray[n]).get("value");
-									var term_label = "-";
-									if(items_type!=3){
-										term_label = dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
-									}
-								  temp+='<tr style="font-size:inherit;height:25px;" align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
-								  
-								  item_label = dojo.byId('item_label_'+rowIDArray[n]).innerHTML ;
-								  if(dijit.byId("service_type_"+rowIDArray[n]).get("value")==1){
-									  item_label='School Fee '+item_label;
-								  }
-								  temp+='<td align="left" style="border:1px solid #000;line-height:10px;">'+item_label+'<br >'+term_label+'</td>'; 
-								  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+dijit.byId("remark"+rowIDArray[n]).get('value')+'</td>';
-								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+'</td>';
-								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
-
-								  disc_amounts = dijit.byId("discount_amount"+rowIDArray[n]).get('value')
-								  disc_amount=isNaN(disc_amounts)?'':'$ '+disc_amounts;
-								  percents = dijit.byId("discount_"+rowIDArray[n]).get('value');
-								  percent = isNaN(percents)?'':percents+'%';
-		
-								  sign='';					  
-								  if(!isNaN(disc_amounts) && !isNaN(disc_amounts)){
-									  sign=' & ';
-								  }
-								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
-		
-								  if(is_onePayment==5){//one payment only
-									  start_date = '';
-									  epx_date='';
-								  }else{//period
-									  var start_date = dijit.byId("date_start_"+rowIDArray[n]).attr('displayedValue');
-									  var epx_date =dijit.byId("validate_"+rowIDArray[n]).attr('displayedValue'); 
-								  }
-								  temp+='<td align="center" style="border:1px solid #000;"> ' + start_date + ' - ' + epx_date + ' </td>';
-								  temp+='</tr>';
-								  i++;
-						}
 					}
 							
 		temp+='</table>';
@@ -1720,52 +1543,6 @@ function submitAction(){
 		$('#office_receipt').submit();
 	}
 }
-var url_creditmemo = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'get-credit-memo')); ?>";
-function getCreditMemo(){
-	stu_id = dijit.byId('old_stu').get('value');
-	if(stu_id != ""){
-		dojo.xhrPost({
-			url:url_creditmemo,
-			content:{
-				'stu_id':stu_id,
-				},
-			handleAs:"json",
-			load: function(data){
-				if(data){
-					dijit.byId("credit_memo").attr("value",data.total_amountafter);
-					dijit.byId("credit_memo_id").attr("value",data.id);
-				}else{
-					dijit.byId("credit_memo").attr("value",0);
-					dijit.byId("credit_memo_id").attr("value",'');
-				}
-			},
-			error: function(err) {
-			}
-		});	
-	} 
-}
-var url_getbranch = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getbranchinfo')); ?>";
-function getbranchHeader(){
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || isNaN(branch_id)){
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		if(branch_id != ""){
-			dojo.xhrPost({
-				url:url_getbranch,
-				content:{
-					'branch_id':branch_id,
-					},
-				handleAs:"json",
-				load: function(data){
-					dojo.byId('lbl_header').innerHTML=data;
-				},
-				error: function(err) {
-				}
-			});	
-		} 
-}
 function checkPaymentMethod(){
 	paymentId = dijit.byId('payment_method').get('value');
 	dijit.byId('bank_name').set('readOnly',false);
@@ -1777,6 +1554,15 @@ function checkPaymentMethod(){
 		dijit.byId('number').attr('value','');
 		dijit.byId('number').set('readOnly',true);
 	}
+}
+function confirmBeforePrint(){
+	dijit.byId('alertBeforePrint').show();
+}
+function hideDialog(){
+	dijit.byId('terms').hide();
+}
+function hideDialog1(){
+	dijit.byId('alertBeforePrint').hide();
 }
 
 </script>

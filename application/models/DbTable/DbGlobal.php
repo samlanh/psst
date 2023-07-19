@@ -983,7 +983,7 @@ function getAllgroupStudyNotPass($action=null){
    	return $db->fetchAll($sql);
    }
   
-   function getStudentinfoById($stu_id){
+   function getStudentinfoGlobalById($stu_id){
 	   	$db=$this->getAdapter();
 	   	$currentLang = $this->currentlang();
 	   	$colunmname='title_en';
@@ -1001,9 +1001,8 @@ function getAllgroupStudyNotPass($action=null){
 			   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label,
 		   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,			   		
-		   		
-		   		(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
-		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,
+		   		(SELECT SUM(total_amountafter) FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS total_amountafter,
+		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS credit_memo_id,
 		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
 		   		sgd.academic_year,
 		   		sgd.is_newstudent,
@@ -2205,7 +2204,7 @@ function getAllgroupStudyNotPass($action=null){
   	
   	if($customer_type==1){//student
 	  	if($data_from==1 OR $data_from==3){//test ,student
-	  		$rs = $this->getStudentinfoById($student_id);
+	  		$rs = $this->getStudentinfoGlobalById($student_id);
 	    }elseif($data_from==2){//test
 	  		$rs = $this->getStudentTestinfoById($student_id);
 	  	}
@@ -2223,7 +2222,38 @@ function getAllgroupStudyNotPass($action=null){
   		$student_type=$tr->translate("New Student");
   		$style="style='color:#99e5fd'";
   	}*/
-  	if(!empty($rs)){
+  	
+  	if(!empty($rs)){ 
+  		
+  		$degree = empty($rs['degree'])?'':$rs['degree'];
+  		$grade = empty($rs['grade'])?'':$rs['grade'];
+  		$branchId = $rs['branch_id'];
+  		
+  		$studentData= array(
+  				'isSetStudentid'=>empty($rs['is_setstudentid'])?0:$rs['is_setstudentid'],
+  				'groupCode'=>$rs['group_name'],
+  				'grade'=>$grade,
+  				'degree'=>$degree,
+  				'feeId'=>empty($rs['fee_id'])?'':$rs['fee_id'],
+  				'creditAmountAfter'=>empty($rs['total_amountafter'])?'':$rs['total_amountafter'],
+  				'creditMemoId'=>empty($rs['credit_memo_id'])?'':$rs['credit_memo_id'],
+  			);
+  		
+  		$param = array(
+  				'branch_id'=>$branchId,
+  				'degree'=>$degree,
+  				'grade'=>$grade,
+  				'noaddnew'=>1,
+  			);
+  		//NEW_STU_ID_FROM_TEST==0 should not call group
+  		$groupResult = $this->getAllGroupName($param);
+  		
+  		$studentCode = $this->getnewStudentId($branchId,$degree);
+  		
+  		$db = new Application_Form_FrmGlobal();
+  		$resultBranch = $db->getHeaderReceipt($branchId);
+  		
+  		
   		$str='<div class="col-md-2 col-sm-2 col-xs-12">
   				<div class="form-group">
   					<div class="thumb-xl member-thumb m-b-10 center-block">';
@@ -2287,10 +2317,17 @@ function getAllgroupStudyNotPass($action=null){
   			         	$studentStatus='<span class="user-badge bg-warning">'.$strStatus.'</span>';
   			         	 		  
   	}
+  	
+  	
+  	
   	$result = array(
   					'studentInfo'=>$str,
+  					'studentCode'=>$studentCode,
   					'studyinfo'=>$studyInfo,
-  					'studenttypeinfo'=>$studentStatus
+  					'studenttypeinfo'=>$studentStatus,
+  					'studentData'=>$studentData,
+  				    'groupStore'=>$groupResult,
+  					'branchHeader'=>$resultBranch,
   			);
   	return $result;
   }
@@ -2554,17 +2591,7 @@ function getAllgroupStudyNotPass($action=null){
   					id DESC ";
   	return $db->fetchAll($sql);
   }
-  function getFeeStudyinfoById($fee_id){
-  	$db  = $this->getAdapter();
-  	$sql = " SELECT
-	  	t.academic_year AS id ,
-	  	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academic_year,
-	  	(SELECT title_kh FROM `rms_studytype` WHERE id=t.term_study LIMIT 1) AS session_type
-  	FROM
-	  	`rms_tuitionfee` as t
-	  	WHERE t.id=$fee_id LIMIT  1";
-  	return $db->fetchRow($sql);
-  }
+  
   
   function getExamTypeEngItems(){
   	
@@ -2940,7 +2967,7 @@ function getAllgroupStudyNotPass($action=null){
   }
   
   function resultScan($student_id){
-  	$rs = $this->getStudentinfoById($student_id);
+  	$rs = $this->getStudentinfoGlobalById($student_id);
   	$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
   	$photo = $baseUrl."/images/no-profile.png";
   	if (!empty($rs["photo"])){
@@ -3731,7 +3758,7 @@ function getAllgroupStudyNotPass($action=null){
 	   		if(empty($resultDetail)){
 	   			$academicYear='';
 		   			if(!empty($data['feeId'])){
-			   			$result = $this->getFeeStudyinfoById($data['feeId']);
+			   			$result = $this->getFeeStudyinfoByIdGloabl($data['feeId']);
 			   			$academicYear = empty($result)?'':$result['id'];
 		   			}
 	   			

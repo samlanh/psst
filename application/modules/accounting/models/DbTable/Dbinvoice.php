@@ -87,7 +87,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	$db->beginTransaction();
     	try{
     		$dbg = new Application_Model_DbTable_DbGlobal();
-    		$rs_stu = $dbg->getStudentinfoById($data['studentId']);
+    		$rs_stu = $dbg->getStudentinfoGlobalById($data['studentId']);
     		$degree_id = 0;
     		$grade_id = 0;
     		if(!empty($rs_stu)){

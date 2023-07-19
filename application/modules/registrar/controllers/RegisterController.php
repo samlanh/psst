@@ -212,15 +212,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getCreditMemoAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Registrar_Model_DbTable_DbRegister();
-			$credit_memo = $db->getStudentInfoBalance($data['stu_id']);
-			print_r(Zend_Json::encode($credit_memo));
-			exit();
-		}
-	}
 	function getStartDateAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
@@ -316,27 +307,6 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Registrar_Model_DbTable_DbRegister();
 			$term_result = $db->getAllTermbyItemdetail($data['branch_id'],$data['year'],$data['items_id']);
 			print_r(Zend_Json::encode($term_result));
-			exit();
-		}
-	}
-	
-	function getstudentinformationAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$stuId = empty($data['student_id'])?0:$data['student_id'];
-			$rs = $db->getStudentinfoById($stuId);
-			print_r(Zend_Json::encode($rs));
-			exit();
-		}
-	}
-	
-	function getfeestudyinfoAction(){
-		if($this->getRequest()->isPost()){
-			$data=$this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$rs = $db->getFeeStudyinfoById($data['study_year']);
-			print_r(Zend_Json::encode($rs));
 			exit();
 		}
 	}

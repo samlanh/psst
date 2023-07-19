@@ -1,1 +1,134 @@
-<a href="http://localhost/psst/trunk/public/api/index/transcriptpdf" download>Download</a>
+<?php
+require_once PUBLIC_PATH. '\mpdf\vendor\autoload.php';
+require_once PUBLIC_PATH. '\mpdf\vendor\mpdf\mpdf\mpdf.php';
+
+
+
+$html='<html>
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+			<style type="text/css">
+				table{
+					line-height: 16px;
+				}
+				.style{
+					line-height: 20px; 
+					font-size: 12px !important;
+					color:#4839bd;
+				}
+				.padding{ padding: 0 1px !important;}
+				table .header{ font-family:khmeros; }
+				.cheader{height: 30px;background: #ffdbdb; white-space: nowrap;
+						height:50px;
+						color:#5a71b5;font-size: 12px;
+				}
+				.hover:hover{background: #ccc;}
+				 td.rotate {
+					height: 130px;
+		    		vertical-align: bottom;
+				}				
+				td.rotate > div {
+					transform: rotate(270deg);
+					width: 30px;
+				}
+				td.rotate span{
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: inline-block;
+				}
+				td.bg_1 {
+				    background: #fffbcb73;
+				}
+				td.bg_2 {
+				    background: #fbbdbd73;
+				}
+				h3.green {
+				    color: #1ABB9C;
+				}
+				.red {
+				    color: #ff1a02;
+				}
+				
+				.border-right-none{
+	    			border-right: #fff solid 1px;
+				}
+				.border-bottom-none{
+	    			border-bottom: #fff solid 1px;
+				}
+				@page {
+     margin: 0px;
+    }
+				.khmermoullight{font-family:khmermoullight;}
+				.khmeros{font-family:khmeros;}
+			</style>
+		</head>';
+	//if ($this->rs['exam_type']==1){
+		$html.='<body>
+			<div style="min-height:10cm;">
+				<table style="width:100%;background:#fff;margin: 0 auto;" class="khmeros">
+					<tr>
+						<td width="25%" align="center" >
+							<br />
+						</td>
+						<td width="50%" align="center" valign="top">
+						</td>
+						<td width="25%" align="center" >&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="3" style=" border-top:#4839bd solid 3px;" align="center">
+							<h3 style="font-weight:normal; color:#4839bd; font-size: 14px; line-height:28px; margin: 0; font-family:Times New Roman,Khmer OS Muol Light">
+								<br /><span class="khmermoullight">របាយការណ៍ចំពោះមាតាបិតា<span><strong>REPORT TO PARENTS</strong>
+							</h3>
+							<table cellpadding="0"​ border="0" style="width:100%font-weight:normal; color:#4839bd; font-size: 12px; line-height:20px; margin: 0; font-family:Times New Roman,Khmer OS Muol Light">
+								<tr>
+									<td align="right" width="25%" class="khmeros">សិស្សឈ្មោះ : </td>
+									<td width="4%">&nbsp;</td>
+									<td align="right" width="30%">Ref No : </td>
+									<td class="bold" align="left" width="25%"></td>
+								</tr>
+								<tr>
+									<td align="right" width="25%" class="khmeros">អត្តលេខ / ID : </td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%" class="khmeros">ថ្នាក់ទី​ / Grade : </td>
+									<td class="bold" align="left" width="23%" class="khmeros"></td>
+								</tr>
+								<tr>
+									<td align="right" width="25%" class="khmeros">ភេទ / Gender : </td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%" class="khmeros">ឆ្នាំសិក្សា / Academic Year : </td>
+								</tr>
+							</table>
+							<h3 class="khmermoullight" style="font-weight:normal; color:#4839bd; font-size: 12px; line-height:28px; margin: 0;">
+								ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENTS PROGESS IN BASIC SKILLS</strong>
+							</h3>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" id="exportExcel" valign="top" align="center">
+							<table cellpadding="5"​ style="margin:0 auto;width:100%; border-collapse:collapse; border: solid 3px #4839bd;" border="1" >
+								<tr class="cheader khmeros" align="center"  >
+									<td>ល.រ</td>
+									<td colspan="2">មុខវិជ្ជា Subject</td>
+									<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
+									<td>ពិន្ទុ score</td>
+									<td >និទ្ទេស Grade</td>
+								</tr>
+								
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</body>';
+		// }
+$html.='</html>';
+
+	$mpdf = new Mpdf();
+	$mpdf->SetMargins(1.0, 1, 1,1); // Set by default to TRUE
+	$mpdf->SetDisplayMode('fullpage');
+	$mpdf->WriteHTML($html);
+	$mpdf->addPage('P'); 
+	$mpdf->output();
+?>

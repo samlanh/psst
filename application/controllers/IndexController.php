@@ -497,7 +497,7 @@ class IndexController extends Zend_Controller_Action
 			$qr_serial = empty($data['students'])?0:$data['students'];
 			$dbgb = new Application_Model_DbTable_DbGlobal();
 	
-			$check = $dbgb->getStudentinfoById($qr_serial);
+			$check = $dbgb->getStudentinfoGlobalById($qr_serial);
 			if (!empty($check)){
 				$string = $dbgb->resultScan($qr_serial);
 				print_r(Zend_Json::encode($string));

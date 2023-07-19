@@ -233,7 +233,7 @@ class Api_IndexController extends Zend_Controller_Action
    	
    }
    function downloadAction(){
-   	
+   	$this->_helper->layout()->disableLayout();
    }
    
    function examscorepdfAction(){

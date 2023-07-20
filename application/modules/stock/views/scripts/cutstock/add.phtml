@@ -58,10 +58,11 @@ tr.head-td th {
 					alert("<?php echo $tr->translate('PLEASE_CHECK_PRODUCT_TO_RETURN');?>");
 					return false;
 				}
-				total_paid = dijit.byId('total_paid').get('value');
-				if(total_paid==""){
+				total_received = dijit.byId('total_received').get('value');
+				total_due = dijit.byId('total_due').get('value');
+				if(total_received=="" && total_due==""){
 					alert("<?php echo $tr->translate('PLEASE_ENTER_QTY_TO_RETURN');?>");
-					dijit.byId("amount").focus();
+				
 					return false;
 				}
                 loadingBlock();
@@ -87,17 +88,35 @@ tr.head-td th {
 												</div> 
 											</div>
 											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("cut_stock_type");?>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+							</div>	
+						</div>
+					   <div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-export" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CUT_STOCK_INFO");?></p>
+												</div> 
+											</div>
+											<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 													<?php echo $frm->getElement("branch_id");?>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CUT_STOCK_TYPE");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("cut_stock_type");?>
 												</div>
 											</div>
 											<div class="form-group">
@@ -108,20 +127,7 @@ tr.head-td th {
 														<input type="hidden" name="student_name" id="student_name"  value="<?php echo $this->exchange_rate;?>" class="form-control" />
 												</div>
 											</div>
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMAIN");?> 
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement("balance");?>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ALL_QTY_BALANCE");?> 
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement("all_balance");?>
-												</div>
-											</div>
+											
 										</div>
 									</div>
 							</div>	
@@ -154,18 +160,41 @@ tr.head-td th {
 														<?php echo $frm->getElement("date_payment");?>
 												</div>
 											</div>
+
 											<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("PAID_BY");?> 
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BALANCE");?> 
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php //echo $frm->getElement("paid_by");?>
+														<?php echo $frm->getElement("balance");?>
 												</div>
 											</div>
-											<div class="form-group">
+											
+											<div class="form-group" style="display: none;">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> 
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 														<?php echo $frm->getElement("amount");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_RECEIVED");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("total_received");?>
+												</div>
+											</div>
+											<div class="form-group" style="display: none;">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DISCOUNT");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("total_discount");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_QTY_DUE");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("total_due");?>
 												</div>
 											</div>
 										</div>
@@ -245,37 +274,7 @@ tr.head-td th {
 							<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-											<div class="d-flex "> 
-													<div class="settings-main-icon ">
-														<i class="glyphicon glyphicon-th-list" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TOTAL");?></p>
-													</div> 
-												</div>
-
-											<div class="form-group">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_RECEIVED");?> 
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("total_paid");?>
-											</div>
-											</div>
-											<div class="form-group" style="display: none;">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DISCOUNT");?> 
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("total_discount");?>
-											</div>
-											</div>
-											<div class="form-group">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_QTY_DUE");?> 
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("total_due");?>
-											</div>
-											</div>
-
+		
 										</div>
 									</div>
 							</div>
@@ -504,7 +503,7 @@ function printSave(new_receipt){
 			}
 			temp+='<tr class="rowlist">';
 				temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Received :</td>';
-				temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_paid').get('value')+'&nbsp;</td>';
+				temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_received').get('value')+'&nbsp;</td>';
 			temp+='</tr>';
 			temp+='<tr class="rowlist">';
 				temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Remain :</td>';
@@ -584,7 +583,7 @@ function getallstudentname(){
 				dojo.html.set(dojo.byId("table_row"),data.stringrow,{
 				     parseContent: true,
 					});
-				dijit.byId('all_balance').set('value',data.all_balance);
+				
 				dijit.byId('amount').set('value',data.all_balance);	
 
 				dojo.byId("lb_name").innerHTML =  data.stuName;
@@ -759,7 +758,7 @@ function getallstudentname(){
 			totaldis= totaldis+parseFloat(amountrowafterdis);
 		}
 		dijit.byId('total_discount').attr('value',totaldis);
-		dijit.byId('total_paid').attr('value',payment.toFixed(2));
+		dijit.byId('total_received').attr('value',payment.toFixed(2));
 		dijit.byId('total_due').attr('value',due.toFixed(2));
 	}
 	function calculateamount(index){
@@ -776,6 +775,21 @@ function getallstudentname(){
 		}else{
 			dijit.byId('remain'+index).set('value',(subtotal-paid).toFixed(2));
 		}
+		calBalance();
+		calculateAmountCheckByKeyup();
+	}
+	function calculateamountdue(index){
+		var qty = dijit.byId('qty'+index).get('value');
+		var discount = 0;
+		var balance = dijit.byId('qty_balance'+index).get('value');
+		var paid =0;
+		var subtotal=0;
+		paid = parseFloat(balance);
+		subtotal= parseFloat(qty) - ((parseFloat(qty)*parseFloat(discount))/100).toFixed(2);
+		if(paid > subtotal){
+			dijit.byId('qty_balance'+index).set('value',subtotal.toFixed(2));
+		}
+		dijit.byId('remain'+index).set('value',(paid).toFixed(2));
 		calBalance();
 		calculateAmountCheckByKeyup();
 	}
@@ -802,7 +816,7 @@ function getallstudentname(){
 			}
 		amount = parseFloat(payment).toFixed(2);
 		dijit.byId('total_discount').attr('value',totaldis.toFixed(2));
-		dijit.byId('total_paid').attr('value',payment.toFixed(2));
+		dijit.byId('total_received').attr('value',payment.toFixed(2));
 		dijit.byId('total_due').attr('value',due.toFixed(2));
 		dijit.byId('amount').attr('value',parseFloat(amount).toFixed(2));
 	}

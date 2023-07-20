@@ -129,6 +129,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentCreditMemoAction($GetData);
 			}else if ($GetData['url']=="studentCreditMemoTotal"){
     			$_dbAction->studentCreditMemoTotalAction($GetData);
+			}else if ($GetData['url']=="summaryAttAndDis"){
+    			$_dbAction->studentSummaryAttendanceAndDisciplineAction($GetData);
 				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";

@@ -50,8 +50,8 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 			'placeholder'=>$this->tr->translate("SELECT_CUT_STOCK_TYPE"),
 		));
 		$_cut_stock = array(
-				''=>$this->tr->translate("SELECT_CUT_STOCK_TYPE"),
-				1=>$this->tr->translate("CUT_STOCK"),
+				''=>$this->tr->translate("SELECT_TYPE"),
+				1=>$this->tr->translate("USAGE_STOCK"),
 				2=>$this->tr->translate("DEBT_STOCK"));
 		$_cut_stock_type->setMultiOptions($_cut_stock);
 		
@@ -65,12 +65,12 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
 		
-		$_total_paid = new Zend_Dojo_Form_Element_NumberTextBox('total_paid');
-		$_total_paid->setAttribs(array(
+		$total_received = new Zend_Dojo_Form_Element_NumberTextBox('total_received');
+		$total_received->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>' fullside height-text',
 				'readonly'=>'readonly',
-				'placeholder'=>$this->tr->translate("TOTAL_PAID"),
+				'placeholder'=>$this->tr->translate("TOTAL_RECEIVED"),
 				'missingMessage'=>$this->tr->translate("Forget Enter Total Paid")
 		));
 		
@@ -218,7 +218,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 			$_branch_id->setValue($data["branch_id"]);
 			$_serailno->setValue($data["serailno"]);
 			$_balance->setValue($data["balance"]);
-			$_total_paid->setValue($data["total_received"]);
+			$total_received->setValue($data["total_received"]);
 			$_amount->setValue($data["total_received"]);
 			$_total_due->setValue($data["total_qty_due"]);
 			if (!empty($data["received_date"])){
@@ -236,7 +236,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				$_serailno,
 				$_all_balance,
 				$_balance,
-				$_total_paid,
+				$total_received,
 				$_total_discount,
 				$_total_due,
 				$_date_payment,

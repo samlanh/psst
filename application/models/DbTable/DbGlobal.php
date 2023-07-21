@@ -3449,29 +3449,32 @@ function getAllgroupStudyNotPass($action=null){
   }
   
   function getServiceForPaymentRecord($data){//for payment only
-  	
   
   	$items=array();
   	
   	if($data['studentType']==1){//tested
-  		$resultItems = $this->getItemForPayment($data);
   		
-  		if(!empty($data['grade']) ){
+  		$resultItems = array();
+  		if($data['isInititilize']==1){
+  			$resultItems = $this->getItemForPayment($data);
+  		}
+  		if(!empty($data['grade'])){
   			$data['Id']=$data['grade'];
   			unset($data['isAutopayment']);
   		}
-  		unset($data['studentId']);
-  		
   		$resultItem2 =$this->getItemAllDetail($data);
-  		$resultItems = array_merge($resultItems,$resultItem2);
-  	}elseif($data['studentType']==2){
   		
-  		$resultItems = $this->getItemForPayment($data);
+  		$resultItems = array_merge($resultItems,$resultItem2);
+  		
+  	}elseif($data['studentType']==2){  	
+  		$resultItems = array();
+  		if($data['isInititilize']==1){
+  			$resultItems = $this->getItemForPayment($data);
+  		}
   		
   		if(!empty($data['grade'])){
   			$data['Id']=$data['grade'];
   		}
-  		unset($data['studentId']);
   		$resultItem2 =$this->getItemAllDetail($data);
   		$resultItems = array_merge($resultItems,$resultItem2);
   	}else{//corrected
@@ -3481,6 +3484,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		$resultItems  = $this->getItemAllDetail($data);
 	  }
 	  	foreach ($resultItems as $key => $item){
+	  		
 	  		$items[$key]=array(
   				'itemType'=>$item['itemType'],
   				'startDate'=>$item['startDate'],
@@ -3496,25 +3500,25 @@ function getAllgroupStudyNotPass($action=null){
 	  		);
 	  		 
 	  		$param = array(
-	  				'branchId'=>$data['branch_id'],//not yet pass data
-	  				'itemType'=>$item['itemType'],
-	  				'itemId'=>$item['itemDetailId'],
-	  				'academicYear'=>$item['feeId'],
+  				'branchId'=>$data['branch_id'],//not yet pass data
+  				'itemType'=>$item['itemType'],
+  				'itemId'=>$item['itemDetailId'],
+  				'academicYear'=>$item['feeId'],
 	  		);
 	  		 
 	  		$items[$key]['termTypeList']=$this->getAllTermbyItemdetail($param);
 	  		 
 	  		$param = array(
-	  				'branch_id'=>$data['branch_id'],
-	  				'option'=>1,
+  				'branch_id'=>$data['branch_id'],
+  				'option'=>1,
 	  		);
 	  		$academicYearList = $this->getAllYearByBranch($param);
 	  		$items[$key]['academicYearList']=$academicYearList;
 	  		 
 	  		$param = array(
-	  				'branch_id'=>$data['branch_id'],
-	  				'academic_year'=>$item['academic_year'],
-	  				'option'=>1,
+  				'branch_id'=>$data['branch_id'],
+  				'academic_year'=>$item['academic_year'],
+  				'option'=>1,
 	  		);
 	  		 
 	  		$termStudy  = $this->getAllStudyPeriod($param);
@@ -3646,22 +3650,24 @@ function getAllgroupStudyNotPass($action=null){
   		$colunmname='title';
   	}
   	$studentId = !empty($data['studentId'])?$data['studentId']:0;
+  	$today=date('Y-m-d');
   	
   	$sql="SELECT
+  	
   			i.items_type AS itemType,
   			i.id AS itemDetailId,
 		  	$colunmname  AS itemDetaillabel,
 		  	(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=items_id LIMIT 1) as itemLabel,
 		  	is_onepayment,
 		  	i.items_id as itemId,
-		  	(SELECT ds.discountType FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS discountType,
-		  	(SELECT ds.discountValue FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS discountValue,
-		  	(SELECT ds.start_date FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS startDate,
-		  	(SELECT ds.end_date FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id LIMIT 1) AS endDate,
+		  	(SELECT ds.discountType FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id AND end_date >='$today' LIMIT 1) AS discountType,
+		  	(SELECT ds.discountValue FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id AND end_date >='$today' LIMIT 1) AS discountValue,
+		  	(SELECT ds.start_date FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id AND end_date >='$today' LIMIT 1) AS startDate,
+		  	(SELECT ds.end_date FROM `rms_dis_setting` ds WHERE studentId=$studentId AND ds.itemId=i.id AND end_date >='$today' LIMIT 1) AS endDate,
   			'' AS feeId,
   			0 AS balance,
   			'' AS academic_year
-		  	
+  			
   		FROM `rms_itemsdetail` i WHERE
   			i.status=1 ";
   	 

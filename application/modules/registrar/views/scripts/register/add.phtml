@@ -924,11 +924,12 @@ function getExistingService(){//get existing server and default server
 		
 		isInititilize=1;
 		serviceId = dijit.byId("item").get("value");
+		dijit.byId("item").attr('value','');
 		if(serviceId!=''){
 			isInititilize=0;
 		}else{
 			loadingBlock();
-			}
+		}
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id==''){
 			dijit.byId('branch_id').focus();return false;

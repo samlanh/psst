@@ -117,12 +117,15 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			$this->update($array, $where);
     		
     		}elseif(empty($qty_stock)){
+				if(!empty($cost)){
+					$costing = $cost;
+				}
     			$this->_name="rms_product_location";
     			$_arrs = array(
     					'pro_id'=>$pro_id,
     					'branch_id'=>$location_id,
     					'pro_qty'=>$qty_order,
-						'costing'=>$cost,
+						'costing'=>$costing,
     					'price'=>0,
 						'date' =>date("Y-m-d H:i:s"),
     					'user_id' => $this->getUserId()
@@ -328,7 +331,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     				
     				if($_data['status']==1){
     					$this->updateProductCost($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i],$_data['amount_'.$i]);
-	    				$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i]);
+	    				$this->updateStock($_data['product_name_'.$i],$_data['branch_id'],$_data['qty_'.$i],$_data['cost_'.$i]);
     				}
 	    		}
     			$db->commit();

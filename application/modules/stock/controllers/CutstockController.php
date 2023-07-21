@@ -16,6 +16,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
     			$search=array(
     							'branch_id' => '',
     							'adv_search' => '',
+								'cut_stock_type' => '',
     					        'student_id'=>'',
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
@@ -96,6 +97,9 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			exit();
 		}else if ($row['status']==0){
 			Application_Form_FrmMessage::Sucessfull("This Record already void",self::REDIRECT_URL."/index");
+			exit();
+		}else if ($row['cut_stock_type']==2){
+			Application_Form_FrmMessage::Sucessfull("Cant Not Edit",self::REDIRECT_URL."/index");
 			exit();
 		}
 		

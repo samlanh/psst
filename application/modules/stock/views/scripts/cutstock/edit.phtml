@@ -88,6 +88,31 @@ tr.head-td th {
 													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CUT_STOCK_INFO");?></p>
 												</div> 
 											</div>
+											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?> <span class="required">*</span>
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("cut_stock_type");?>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+							</div>	
+						</div>
+					   <div class="card-blogform">
+							<div class="card-body"> 
+									<div class="row"> 
+										<div class="col-md-12 col-sm-12 col-xs-12">
+
+											<div class="d-flex "> 
+												<div class="settings-main-icon ">
+													<i class="glyphicon glyphicon-export" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-10 col-sm-10 col-xs-12"> 
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
+												</div> 
+											</div>
 
 											<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
@@ -103,22 +128,7 @@ tr.head-td th {
 												<div class="col-md-7 col-sm-7 col-xs-12">
 														<input id="student_id" />
 												</div>
-												</div>
-												<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMAIN");?> 
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement("balance");?>
-												</div>
-												</div>
-												<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ALL_QTY_BALANCE");?> 
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement("all_balance");?>
-												</div>
 											</div>
-
 										</div>
 									</div>
 							</div>
@@ -156,21 +166,43 @@ tr.head-td th {
 													<?php echo $frm->getElement("date_payment");?>
 											</div>
 											</div>
-											<div class="form-group">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("PAID_BY");?> 
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php //echo $frm->getElement("paid_by");?>
-											</div>
-											</div>
-											<div class="form-group">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> 
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("amount");?>
-											</div>
-											</div>
 
+											<div class="form-group">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DUE");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("balance");?>
+												</div>
+											</div>
+											<div class="form-group" style="display: none;">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+														<?php echo $frm->getElement("amount");?>
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_RECEIVED");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("total_received");?>
+												</div>
+											</div>
+											<div class="form-group" style="display: none;">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DISCOUNT");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("total_discount");?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMAIN");?> 
+												</label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("total_due");?>
+												</div>
+											</div>
 										</div>
 									</div>
 							</div>
@@ -273,27 +305,6 @@ tr.head-td th {
 													</div> 
 												</div>
 
-												<div class="form-group">
-													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_RECEIVED");?> 
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("total_received");?>
-													</div>
-													</div>
-													<div class="form-group" style="display: none;">
-													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DISCOUNT");?> 
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("total_discount");?>
-													</div>
-													</div>
-													<div class="form-group">
-													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_QTY_DUE");?> 
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("total_due");?>
-													</div>
-													</div>
 
 											</div>
 										</div>

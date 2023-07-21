@@ -336,6 +336,9 @@ if(!empty($type)){
     		if(!empty($search['branch_id'])){
     			$where.=" AND pp.branch_id=".$search['branch_id'];
     		}
+			if(!empty($search['cut_stock_type'])){
+    			$where.=" AND pp.cut_stock_type=".$search['cut_stock_type'];
+    		}
     		
     		$where.=$dbp->getAccessPermission('pp.branch_id');
     		$order=" ORDER BY pp.id DESC";

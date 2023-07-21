@@ -546,6 +546,19 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		);
 		$receipt_order->setMultiOptions($opt);
 		$receipt_order->setValue($request->getParam("receipt_order"));
+
+		$_cut_stock_type = new Zend_Dojo_Form_Element_FilteringSelect('cut_stock_type');
+		$_cut_stock_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("SELECT_CUT_STOCK_TYPE"),
+		));
+		$_cut_stock = array(
+				''=>$this->tr->translate("SELECT_TYPE"),
+				1=>$this->tr->translate("USAGE_STOCK"),
+				2=>$this->tr->translate("DEBT_STOCK"));
+		$_cut_stock_type->setMultiOptions($_cut_stock);
 		
 		$this->addElements(array(
 				$receipt_order,
@@ -560,7 +573,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$_exam_type,
 				$_for_semester,
 				$_for_month,
-				$_test_type
+				$_test_type,
+				$_cut_stock_type
 				));
 		return $this;
 	} 

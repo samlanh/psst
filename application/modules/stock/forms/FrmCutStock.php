@@ -47,6 +47,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		$_cut_stock_type->setAttribs(array(
 			'dojoType'=>$this->filter,
 			'class'=>'fullside',
+			'required'=>'true',
 			'placeholder'=>$this->tr->translate("SELECT_CUT_STOCK_TYPE"),
 		));
 		$_cut_stock = array(
@@ -216,6 +217,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		
 		if(!empty($data)){
 			$_branch_id->setValue($data["branch_id"]);
+			$_cut_stock_type->setValue($data["cut_stock_type"]);
 			$_serailno->setValue($data["serailno"]);
 			$_balance->setValue($data["balance"]);
 			$total_received->setValue($data["total_received"]);
@@ -230,6 +232,9 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 			$_branch_id->setAttribs(array(
 					'readonly'=>'readonly',
 					));
+			$_cut_stock_type->setAttribs(array(
+				'readonly'=>'readonly',
+			));
 		}
 		$this->addElements(array(
 				$_branch_id,

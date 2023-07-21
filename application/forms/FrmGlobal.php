@@ -815,9 +815,10 @@ class Application_Form_FrmGlobal{
 				<div class='no_display'>
 					<span id='lb_grade'></span>
 					<span id='lb_academic_year'></span>
-					
 					<span id='lbParentName' >&nbsp;</span>
 					<span id='lbParentPhone' >&nbsp;</span>
+					
+					
 				</div>
 				
 				
@@ -1071,9 +1072,16 @@ class Application_Form_FrmGlobal{
 							<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
 								<td >&#9742; <label id='lbl_branchphone' style='width:20%;display:in-line;'></label> &#9993; <label id='lbl_email' style='width:20%;display:in-line;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
 							</tr>
+							
 						</table>
 						<span id='lbParentName' >&nbsp;</span>
 						<span id='lbParentPhone' >&nbsp;</span>
+						
+						<span id='lbFather' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
+						<span id='lbFatherTel'></span>
+						<span id='lbMother' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
+						<span id='lbMotherTel'></span>
+											
 						<div id='lbl_branchlogo'></div>
 						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
 						<label id='lb_branchname'></label>

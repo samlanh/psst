@@ -54,18 +54,17 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //     	$db = new Api_Model_DbTable_DbsensokabaApi();
 //     	$db->sendMessagetoTeleagrame('419707100','hello from php');
 	
-    	$data =array(
-    			'branch_id'=>1,
-    			'studentId'=>17,
-    			'studentType'=>1,
-    			'isCurrent'=>1,
-    			'stopType'=>0,
-    			'grade'=>'',
-    			'isAutopayment'=>''
-    			);
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$data=$db->getServiceForPaymentRecord($data);
-//     	print_r($data);
+//     	$data =array(
+//     			'branch_id'=>1,
+//     			'studentId'=>17,
+//     			'studentType'=>1,
+//     			'isCurrent'=>1,
+//     			'stopType'=>0,
+//     			'grade'=>'',
+//     			'isAutopayment'=>''
+//     			);
+//     	$db = new Application_Model_DbTable_DbGlobal();
+//     	$data=$db->getServiceForPaymentRecord($data);
     }
     public function addAction(){
       if($this->getRequest()->isPost()){

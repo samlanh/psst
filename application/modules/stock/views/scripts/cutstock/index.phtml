@@ -26,11 +26,14 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("adv_search");?>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
+				   <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("branch_id");?>
                    </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input id="student_id" />
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("cut_stock_type");?>
                    </div>
                 	<div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("start_date");?>
@@ -38,13 +41,13 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
-                   
+                </div>
+				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
 								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   </div>
+                  
                 </div>
 			</form>
 		</div>

@@ -418,7 +418,7 @@ span.custom-switch-indicator{line-height: 20px;}
 				           </div>
 				          </div>
 				    </div>
-		        </div>
+		      </div>
 	       <!-- Tab Menu -->
 	    	<div class="card-box">
 	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
@@ -433,8 +433,9 @@ span.custom-switch-indicator{line-height: 20px;}
 		        </ul>
 		    </div>
 		    <div class="tab-content vertical">
+			        	 
 			        <!--Panel 1-->
-			        <div class="fade in active" id="panel21" role="tabpanel">
+			        <div class="tab-pane fade in active" id="panel21" role="tabpanel">
 			        	 <div class="card-box">
 			        	 	<div class="col-md-12 col-sm-12 col-xs-12">
 			        	 		<table class="responsiveTable ItemPayment" style="border-collapse: collapse; width:100%;">
@@ -508,7 +509,7 @@ span.custom-switch-indicator{line-height: 20px;}
 			        	 <div class="card-box">
 			        	 	<div class="col-md-12 col-sm-12 col-xs-12">
 			        	 		<table border="1" id="table_paymenthistory" style="width:100%;border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">
-								 <tr id="head-paymenttitle" class="head-td" align="right" style="background:#dff7fd;font-size:12px;"></tr>
+								 	<tr id="head-paymenttitle" class="head-td" align="right" style="background:#dff7fd;font-size:12px;"></tr>
 								</table>
 			        	 	</div>
 			        	 </div>
@@ -917,14 +918,14 @@ function getExistingService(){//get existing server and default server
 		var no = 0;
 		dojo.query("#table_row").append("");
 		$("#identity").val("");
-		getItemTermOption();
+		getItemTermOption(1);
 	}
 	
-	function getItemTermOption(){
+	function getItemTermOption(init=0){
 		
 		isInititilize=1;
 		serviceId = dijit.byId("item").get("value");
-		dijit.byId("item").attr('value','');
+		
 		if(serviceId!=''){
 			isInititilize=0;
 		}else{
@@ -977,6 +978,7 @@ function getExistingService(){//get existing server and default server
 					dataLabel = data[i].itemDetaillabel;
 					addRow(serviceId,dataLabel,data[i]);
 				}
+				
 			},
 			error: function(err){
 				HideloadingBlock();

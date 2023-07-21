@@ -21,12 +21,12 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   	$db->beginTransaction();
    		try{
 	   		$arr = array(
-	   				'branch_id'		=> $data['branch_id'],
-		   			'student_id'	=> $data['studentId'],
-	   				'note'			=> $data['note'],
-		   			'create_date'	=> date("Y-m-d"),
-		   			'user_id'		=>$this->getUserId()
-	   			);
+   				'branch_id'	 => $data['branch_id'],
+	   			'student_id' => $data['studentId'],
+   				'note'		 => $data['note'],
+	   			'create_date'=> date("Y-m-d"),
+	   			'user_id'	 => $this->getUserId()
+	   		);
 	   		$id = $this->insert($arr);
 	   		
 	   		if($data['identity']!=""){
@@ -41,20 +41,17 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 			   		$this->insert($_arr);
 			   		
 			   		$array=array(
-			   				'is_suspend'=> 2, // 2=stop
-			   				'is_start'	=> 0,
+		   				'stop_type'=> 1, 
 			   		);
-			   		$where=" id = ".$data['spd_id_'.$i];
-			   		$this->_name = 'rms_student_paymentdetail';
+			   		$where=" stu_id =".$data['studentId']." AND grade=".$data['spd_id_'.$i];
+			   		$this->_name = 'rms_group_detail_student';
 			   		$this->update($array, $where);
-			   		
 		   		}
 	   		}
 		   	$db->commit();
    		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
    			$db->rollBack();
-   			
    		}
    }
    
@@ -174,7 +171,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
 	   		$where .=' AND ( '.implode(' OR ',$s_where).')';
 	   	}
-	   	if(!empty($search['branch_id'])){
+	   	if($search['branch_id']>0){
 	   		$where.=" AND ss.branch_id=".$search['branch_id'];
 	   	}
 	   	if(!empty($search['studentId'])){
@@ -235,7 +232,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 	   	return $db->fetchAll($sql);
    }
    
-	function getAllSerivesById($stu_id){
+	function getAllSerivesByIdInsuspend($stu_id){
    		$db = $this->getAdapter();
    		$_db = new Application_Model_DbTable_DbGlobal();
    		$currentLang = $_db->currentlang();
@@ -243,23 +240,14 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    		if ($currentLang==1){
    			$service='title';
    		}
-   		$sql = "SELECT 
-	   				spd.id,
-	   				(select $service from rms_itemsdetail as i where i.id = spd.itemdetail_id) as name
-	   			FROM 
-	   				rms_student_paymentdetail AS spd,
-	   				rms_student_payment AS sp 
-	   			WHERE 
-	   				sp.student_id=$stu_id
-	   				AND sp.id=spd.payment_id
-		   			AND spd.service_type=2
-		   	 		AND spd.is_start=1 
-	   				AND spd.is_suspend=0
-	   		";
+   		$sql = "SELECT gd.grade AS id,
+			      (SELECT $service FROM rms_itemsdetail AS i WHERE i.id = gd.grade LIMIT 1) AS name
+			FROM 
+				   rms_group_detail_student AS gd
+		    WHERE 
+				 gd.stu_id=$stu_id
+				 AND gd.itemType!=1
+			     AND gd.stop_type=0 ";
    		return $db->fetchAll($sql);
 	}
-   
 }
-
-
-

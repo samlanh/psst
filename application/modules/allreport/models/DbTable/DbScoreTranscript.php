@@ -11,6 +11,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 				);
 		$studentInfo =  $this->getStudentProfile($arrStudent);
 		
+		
 		$resultArray= array(
 				'scoreId'=>$scoreId,
 				'studentId'=>$studentId
@@ -32,6 +33,8 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 						'subject_id'=>$result['subject_id'],
 						'gradingTotalId'=>$result['gradingTotalId'],
 						'totalAverage'=>$result['totalAverage'],
+						'rankingSubject'=>$result['rankingSubject'],
+						
 						'score_cut'=>$result['score_cut'],
 						'sub_name'=>$result['sub_name'],
 						'subjectLang'=>$result['subjectLang'],
@@ -96,11 +99,6 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
 						s.id=sd.subject_id LIMIT 1) ";
 		
-		//amount_subject_sem
-		//amount_subject
-		
-		
-		
 		$strCollect='amount_subject';
 		$strMaxScore='max_score';
 		if($data['examType']==2){//semester
@@ -116,7 +114,8 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		group_id=sd.group_id AND subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
 		//need to check this score is monthly or semester?
 		
-		
+		$subjectId = empty($data['subjectId'])?0:$data['subjectId'];
+		$scoreId = empty($data['scoreId'])?0:$data['scoreId'];
 		$sql="SELECT
 					$strSubjectLange AS subjectLang,
 					$strSubjecMaxScore AS maxScore,
@@ -124,20 +123,29 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 					sd.`subject_id`,
 					sd.gradingTotalId,
 					sd.`score` AS totalAverage,
+					
+					FIND_IN_SET(sd.`score`,
+						(SELECT GROUP_CONCAT(insd.score ORDER BY insd.score DESC)
+						FROM 
+							rms_score_detail AS insd 
+						 WHERE
+							insd.`score_id`=$scoreId
+						 	AND sd.`subject_id`=insd.subject_id
+						ORDER BY insd.`score` DESC )) AS rankingSubject,	
 					sd.score_cut,
 					(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
 					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
 					sd.amount_subject
 				FROM  `rms_score_detail` AS sd
 					WHERE 1 ";
-		if(!empty($data['scoreId'])){
-			$sql.=" AND sd.`score_id`=".$data['scoreId'];
+		if(!empty($scoreId)){
+			$sql.=" AND sd.`score_id`=".$scoreId;
 		}
 		if(!empty($data['studentId'])){
 			$sql.=" AND sd.`student_id`=".$data['studentId'];
 		}
-		if(!empty($data['subjectId'])){
-			$sql.=" AND sd.`subject_id`=".$data['subjectId'];
+		if(!empty($subjectId)){
+			$sql.=" AND sd.`subject_id`=".$subjectId;
 		}
 		if(!empty($data['groupbySubjectId'])){//for get all subject in result detail
 			$sql.=" GROUP BY subject_id ";
@@ -145,8 +153,12 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		$sql.=" ORDER  BY $strSubjectLange ASC ";
 		return $db->fetchAll($sql);
 	}
+	
 	function getScoreInformation($data){
 		$db = $this->getAdapter();
+		$studentId = empty($data['studentId'])?0:$data['studentId'];
+		$scoreId = empty($data['scoreId'])?0:$data['scoreId'];
+		$strSubLang=" (SELECT subject_lang FROM `rms_subject` sub WHERE sub.id=sd.subject_id LIMIT 1) ";
 		$sql="SELECT 
 					g.degree AS degreeId,
 					g.group_code AS groupCode,
@@ -171,15 +183,48 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 						)
 				 ) AS rank,	
 				 
+				 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =1
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =1
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)) AS rankingInKhmer,
+					
+					
+					
+					 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =2
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =2
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)) AS rankingInEnglish,
+				 
+
+				 
+				 
 				 (SELECT sm.total_avg 
 				 		FROM rms_score_monthly sm WHERE 
 				 		sm.score_id=s.id 
-				 		AND sm.student_id=".$data['studentId']." LIMIT 1) AS totalAvg,
+				 		AND sm.student_id=".$studentId." LIMIT 1) AS totalAvg,
 				 		
 				  (SELECT sm.total_score 
 				 		FROM rms_score_monthly sm WHERE 
 				 		sm.score_id=s.id 
-				 		AND sm.student_id=".$data['studentId']." LIMIT 1) AS totalScoreAvg,
+				 		AND sm.student_id=".$studentId." LIMIT 1) AS totalScoreAvg,
 				 		
 				 (SELECT COUNT(sm.`id`) FROM rms_score_monthly AS sm WHERE
 					s.`id`=sm.`score_id` LIMIT 1) as amountStudent

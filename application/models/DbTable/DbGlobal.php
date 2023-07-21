@@ -1996,8 +1996,10 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getProductbyBranch($category_id=null,$product_type=null){
   	$db = $this->getAdapter();
-  	$sql="SELECT t.id,title AS name FROM `rms_itemsdetail` AS t,
-		      `rms_product_location`
+  	$sql="SELECT t.id,title AS name 
+  				FROM 
+  					`rms_itemsdetail` AS t,
+		      		`rms_product_location`
 			   WHERE t.items_type=3 AND t.status=1 
   					 AND ( t.is_productseat=1 OR (t.id=rms_product_location.pro_id)) ";
   	$sql.=$this->getAccessPermission("branch_id");
@@ -3530,6 +3532,7 @@ function getAllgroupStudyNotPass($action=null){
   }
   
   function getAllGroupName($data=null){
+  	
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
   	$grade = "rms_itemsdetail.title_en";
@@ -3542,9 +3545,7 @@ function getAllgroupStudyNotPass($action=null){
 				  	FROM `rms_group` AS `g` 
   					
   					WHERE g.status=1 
-  						AND group_code!=''
-  		";
-	//CONCAT(COALESCE(`g`.`group_code`,''),' (',COALESCE((SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1),''),')') AS name		  
+  						AND group_code!='' ";
 	  	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
 	  	if (!empty($forfilterreport)){
 	  			$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed

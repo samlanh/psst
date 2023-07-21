@@ -128,6 +128,11 @@ tr.balance{background:#fff4f4;}
   background: #fff;
 }
 span.custom-switch-indicator{line-height: 20px;}
+.fullwidth{width:100% !important;}
+.removePadding .col-md-6, .removePadding .col-sm-6,.removePadding .col-xs-12{
+	padding-right: 2px;
+    padding-left: 2px
+}
 
 </style>
 <div class="card">
@@ -228,13 +233,13 @@ span.custom-switch-indicator{line-height: 20px;}
 					                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 					                   </div>
 					            </div>
-					            <div class="form-group" <?php //if ($settingShowGroup==0){?>style="display: block;"<?php //}?>>
+					            <div class="form-group" <?php if ($settingShowGroup==0){?>style="display: none;"<?php }?>>
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?>  :
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
 					                   		<input id="group_id" />
-											<input type="text" id="degree" name="degree" dojoType="dijit.form.TextBox" />
-					                   		<input type="text" id="grade"  name="grade" dojoType="dijit.form.TextBox" />
+											<input type="hidden" id="degree" name="degree" dojoType="dijit.form.TextBox" />
+					                   		<input type="hidden" id="grade"  name="grade" dojoType="dijit.form.TextBox" />
 					                   </div>
 					            </div>
 				                <div class="form-group">
@@ -669,7 +674,8 @@ span.user-badge.bg-warning {
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
-
+	
+	var Itemstore  = getDataStorefromJSON('id','name',[] );
 	require(["dojo/ready"], function(ready){
 			ready(function(){
 				getallstudentname();
@@ -693,18 +699,19 @@ span.user-badge.bg-warning {
 			}, "old_stu");
 		
 			new dijit.form.FilteringSelect({
+				store:Itemstore,
+				queryExpr: "*${0}*",   
 				autoComplete: false,
-				queryExpr: "*${0}*",                     
+				required:false,                    
 				id: "item",
 				name: "item",   
-				required:false,        
 				class: 'fullside', 
 				style:'height: 30px;',
 				onChange: function() {  
-					getItemTermOption();
+					getItemTermOption(0);
 				}
 			}, "item");
-			
+
 			new dijit.form.FilteringSelect({
 				queryExpr: "*${0}*",
 				autoComplete: false,                     
@@ -767,7 +774,8 @@ function getItemDetail(dept_id,a,type=1){
 		},
 		handleAs:"json",
 		load: function(data) {
-			dijit.byId('item').set('store',getDataStorefromJSON('id','name', data));  	
+			Itemstore  = getDataStorefromJSON('id','name', data);
+			dijit.byId('item').set('store',Itemstore);  	
 		},
 		error: function(err) {
 		}
@@ -814,16 +822,21 @@ function getallstudentname(){//
 }
 function checkAutoControl(studentType){
 	$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_TEST");?>');
-	
 	$("#displayControl").css("display", "block");
-	$(".stuCodeControl").css("display", "none");
+
+	dijit.byId('student_code').attr('value','');
 	
 	if(studentType==1){//existing
 		$("#displayControl").css("display", "none");
 	}
 	else if(studentType==2){//from
-		$(".stuCodeControl").css("display", "block");
 		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
+	}
+
+	if(<?php echo $settingNewStuID;?>==1 && studentType==2){
+		$(".stuCodeControl").css("display", "block");
+	}else{
+		$(".stuCodeControl").css("display", "none");
 	}
 }
 
@@ -832,7 +845,7 @@ function checkAutoControl(studentType){
 		dijit.byId('studentBalanceId').set('value',0);
 		dijit.byId('groupDetailId').set('value',0);
 		dojo.byId("lb_grade").innerHTML = "";
-		$(".stuCodeControl").css("display", "none");
+		//$(".stuCodeControl").css("display", "none");
 		dijit.byId('group_id').reset();
 		
 	    student_type = dijit.byId("student_type").attr("value");
@@ -891,10 +904,9 @@ function checkAutoControl(studentType){
 							dijit.byId("credit_memo").attr("value",0);
 							dijit.byId("credit_memo_id").attr("value",'');
 						}
-
-						if(studentData.groupStore){
-							 groupStore  = getDataStorefromJSON('id','name', data);
-							 dijit.byId('group_id').set('store',studentData.groupStore);   
+						if(data.groupStore){
+							 groupStore  = getDataStorefromJSON('id','name', data.groupStore);
+							 dijit.byId('group_id').set('store',groupStore);   
 						}
 				   }
 				   if(studentData.studentCode){
@@ -915,7 +927,7 @@ function checkAutoControl(studentType){
 
 function getExistingService(){//get existing server and default server
 		var col = 0;
-		var no = 0;
+		numberRange = 0;
 		dojo.query("#table_row").append("");
 		$("#identity").val("");
 		getItemTermOption(1);
@@ -926,10 +938,14 @@ function getExistingService(){//get existing server and default server
 		isInititilize=1;
 		serviceId = dijit.byId("item").get("value");
 		
+		if(serviceId=='' && init==0){
+			return false;
+		}
+		
 		if(serviceId!=''){
 			isInititilize=0;
 		}else{
-			loadingBlock();
+			//loadingBlock();
 		}
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id==''){
@@ -938,7 +954,7 @@ function getExistingService(){//get existing server and default server
 
 		studentId = dijit.byId('old_stu').get('value');
 		if(studentId==''){
-			dijit.byId('studentId').focus();return false;
+			dijit.byId('old_stu').focus();return false;
 		}
 		student_type = dijit.byId('student_type').get('value');
 		isAutopayment = '3';
@@ -948,7 +964,6 @@ function getExistingService(){//get existing server and default server
 			isAutopayment = 1;
 		}
 		var urlget = "<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getitemforpaymentrecord')); ?>";
-		
 		contentData = {
 				'branch_id':branch_id,
 				'studentId':studentId,
@@ -963,6 +978,9 @@ function getExistingService(){//get existing server and default server
 	}
 
 	function prepareAddNewRow(urlRequest,contentData){
+
+		//dijit.byId("item").reset();
+		
 		dojo.xhrPost({
 			url:urlRequest,
 			content:contentData,
@@ -989,13 +1007,13 @@ function getExistingService(){//get existing server and default server
 	
 var template = '';
 var col = 0;
-var no = 0;
+var numberRange = 0;
 tmp = '';
 temp='';
 
 function addRow(serviceId,dataLabel,dataRow=null) {
 		col++;
-		strCol6='<label class="control-label col-md-6 col-sm-6 col-xs-12">';
+		strCol6='<div class="col-md-6 col-sm-6 col-xs-12">';
 		study_year = dijit.byId('study_year').get('value');
 	
 		customer_type = dijit.byId('customer_type').get('value');
@@ -1010,9 +1028,9 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 		}
 		if(serviceId ==''){return false;}
 
-			col++;no++;
+			col++;numberRange++;
 			template='';
-			template+='<td align="center"><div class="form-group">'+no+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
+			template+='<td align="center"><div class="form-group">'+numberRange+'</div><div class="form-group"><img onclick="deleteRecord('+col+');calculateTotal('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></div></td>';
 			template+='<td class="bgBox" style="font-size:12px;"><div class="form-group"><label class="notedDescription" id="item_label_'+col+'">'+dataLabel+'<label></div>';
 			template+='<label class="control-label custom-switch float-end">';
 				template+='<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
@@ -1033,14 +1051,14 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('PRICE');?></span></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('PRICE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="price_'+col+'" id="price_'+col+'"  value="0" dojoType="dijit.form.NumberTextBox" />';
 			template+='<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_'+col+'" id="subtotal_'+col+'"  /></div></td>';	
 
-			template+='<td class="bgBox"><select placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
+			template+='<td class="bgBox removePadding"><select placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type'+col+'" name="discount_type'+col+'" >';
 				template+='<option value="0"></option>';	
 				<?php if(!empty($this->rsdiscount))foreach($this->rsdiscount as $rsdis){?>
 					template+='<option value="'+<?php echo $rsdis['id']?>+'"><?php echo addslashes($rsdis['dis_name']);?></option>';
 				<?php }?>
 				template+='</select>';
-				template+=strCol6+'<input type="text" class="fullside" placeHolder="<?php echo $tr->translate('DISCOUNT_AMOUNT');?>" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></label>';
-				template+=strCol6+'<input type="text" class="fullside" placeHolder="<?php echo $tr->translate('PERCENTAGE');?>" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></label>';
+				template+=strCol6+'<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('DISCOUNT_AMOUNT');?>" onkeyup="calculateTotal('+col+');"  name="discount_amount'+col+'" value="0" id="discount_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
+				template+=strCol6+'<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('PERCENTAGE');?>" onkeyup="calculateTotal('+col+');" name="discount_'+col+'" value="<?php echo 0;?>" id="discount_'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
 			template+='</td>';
 			template+='<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" name="total_discount'+col+'" id="total_discount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
 			template+='<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE');?>" class="fullside" onkeyup="calculateTotal('+col+');" name="extra_fee'+col+'" id="extra_fee'+col+'" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
@@ -1048,15 +1066,15 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 			template+='<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal('+col+');netTotal('+col+');"  name="total_amount'+col+'" value="0" id="total_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /></div>';
 			template+='<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID');?>" class="fullside" onkeyup="paidAmount('+col+');"  name="paid_amount'+col+'" id="paid_amount'+col+'" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="0" name="isoldBalance'+col+'" id="isoldBalance'+col+'" dojoType="dijit.form.TextBox"  /></div></td>';
 
-			template+='<td class="bgBox"><div class="form-group"><select class="fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy('+col+');" id="term_study'+col+'" name="term_study'+col+'" dojoType="dijit.form.FilteringSelect" >'+term_study_option+'</select></div>';
-			template+=strCol6+'<input type="text" onchange="getValidate('+col+');" placeHolder="<?php echo $tr->translate('START_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></label>';
-			template+=strCol6+'<input type="text" placeHolder="<?php echo $tr->translate('END_DATE');?>" class="fullside" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></label></td>';
+			template+='<td class="bgBox removePadding"><div class="form-group"><select placeHolder="Valid Date" required="false" onchange="getTermStudy('+col+');" id="term_study'+col+'" name="term_study'+col+'" dojoType="dijit.form.FilteringSelect" >'+term_study_option+'</select></div>';
+			template+=strCol6+'<input class="fullwidth" type="text" onchange="getValidate('+col+');" placeHolder="<?php echo $tr->translate('START_DATE');?>" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="date_start_'+col+'" id="date_start_'+col+'" dojoType="dijit.form.DateTextBox" /></div>';
+			template+=strCol6+'<input class="fullwidth" type="text" placeHolder="<?php echo $tr->translate('END_DATE');?>" constraints='+'{datePattern:"dd/MM/yyyy"}'+'  name="validate_'+col+'" id="validate_'+col+'" dojoType="dijit.form.DateTextBox" /></div></td>';
 
 			template+='<td><input type="text" class="fullside" name="remark'+col+'" id="remark'+col+'" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE");?>" style="min-height:60px;" />';
 			template+='<input type="hidden" value="'+serviceId+'" dojoType="dijit.form.TextBox" name="item_id'+col+'" id="item_id'+col+'"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_'+col+'" id="service_type_'+col+'"/></td>';
 			
 			classOddRow='listBox evenRow';
-			if(no%2==0){
+			if(numberRange%2==0){
 				classOddRow='listBox oddRow';
 			}
 			if(dataRow!=null){

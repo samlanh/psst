@@ -2362,6 +2362,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				if(!empty($search['academicYear'])){
 					$sql.=" AND g.academic_year = ".$search['academicYear'];
 				}
+				if(!empty($search['groupId'])){
+					$sql.=" AND g.id = ".$search['groupId'];
+				}
 				$sql.=" GROUP BY sat.`group_id`
 					,DATE_FORMAT(sat.`date_attendence`,'%Y%m') ";
 				$sql.=" ORDER BY DATE_FORMAT(sat.`date_attendence`,'%Y%m') DESC ";
@@ -2372,7 +2375,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				}else if(!empty($search['limitRecord'])){
 					$sql.=" LIMIT ".$search['limitRecord'];
 				}
-    			 
 				$row = $db->fetchAll($sql);
 				$result = array(
 					'status' =>true,
@@ -4170,6 +4172,27 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$sql .=' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';	
 		return $db->fetchAll($sql);
 	  }
+	function getAllGroupStudyByStudent($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?0:$_data['studentId'];
+		$_data['academicYear'] = empty($_data['academicYear'])?0:$_data['academicYear'];
+		$sql="SELECT 
+				g.id,
+				g.group_code AS name
+			FROM 
+				`rms_group_detail_student` AS gds
+				join `rms_group` AS g ON g.id = gds.group_id
+			WHERE gds.stu_id = $studentId 
+				AND g.status = 1
+				AND gds.group_id >0
+			";
+			if(!empty($_data['academicYear'])){
+				$sql.=" AND g.academic_year = ".$_data['academicYear'];	
+			}
+		
+		$sql .=' ORDER BY g.id DESC';	
+		return $db->fetchAll($sql);
+	}
 	public function getFormOptionSelect($_data){
 		$db = $this->getAdapter();
 		try{
@@ -4177,7 +4200,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$getControlType = empty($_data['getControlType'])?"status":$_data['getControlType'];
-			$_data['userId'] = empty($_data['userId'])?0:$_data['userId'];
+			$_data['studentId'] = empty($_data['studentId'])?0:$_data['studentId'];
 			$_data['branchId'] = empty($_data['branchId'])?0:$_data['branchId'];
 			$row=array();
 			if($getControlType=="status"){
@@ -4188,6 +4211,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}else if($getControlType=="studyDegree"){
 				$_data["type"]=1;
 				$row = $this->getAllItems($_data);
+			}else if($getControlType=="groupStudy"){
+				$row = $this->getAllGroupStudyByStudent($_data);
 			}
 			
 			$result = array(
@@ -4488,6 +4513,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalPSemester2
 					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalLSemester2
 					,COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalELSemester2
+					
+					,COUNT(IF(satd.attendence_status = '1', satd.attendence_status, NULL)) AS gTotalCome
+					,COUNT(IF(satd.attendence_status = '2', satd.attendence_status, NULL)) AS gTotalA
+					,COUNT(IF(satd.attendence_status = '3', satd.attendence_status, NULL)) AS gTotalP
+					,COUNT(IF(satd.attendence_status = '4', satd.attendence_status, NULL)) AS gTotalL
+					,COUNT(IF(satd.attendence_status = '5', satd.attendence_status, NULL)) AS gTotalEL
+					
 					,sat.`date_attendence`
 					,satd.description
 	 		       
@@ -4521,6 +4553,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalMediumSemester2
 					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalMajorSemester2
 					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalOtherSemester2
+					
+					,COUNT(IF(satd.attendence_status = '1', satd.attendence_status, NULL)) AS gTotalMinor
+					,COUNT(IF(satd.attendence_status = '2', satd.attendence_status, NULL)) AS gTotalMedium
+					,COUNT(IF(satd.attendence_status = '3', satd.attendence_status, NULL)) AS gTotalMajor
+					,COUNT(IF(satd.attendence_status = '4', satd.attendence_status, NULL)) AS gTotalOther
+					
+					
 					,sat.`date_attendence`
 					,satd.description
 	 		       
@@ -4532,13 +4571,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					";
 			$sql.=" AND satd.stu_id = ".$studentId;
 			$sql.=" AND sat.`group_id` = ".$groupId;
-			
 			$sql.= " GROUP BY satd.`stu_id` ";
 			$rowMistake = $db->fetchRow($sql);
 			
 			
-			$rowAttendance = empty($rowAttendance) ? array() : $rowAttendance;
-			$rowMistake = empty($rowMistake) ? array() : $rowMistake;
+			$rowAttendance = empty($rowAttendance) ? null : $rowAttendance;
+			$rowMistake = empty($rowMistake) ? null : $rowMistake;
 			$row = array(
 				"attendance" => $rowAttendance,
 				"mistake" => $rowMistake,

@@ -128,7 +128,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Accounting_Model_DbTable_DbSuspendservice();
-			$studentinfo = $db->getAllSerivesById($data['student']);
+			$studentinfo = $db->getAllSerivesByIdInsuspend($data['student']);
 			//array_unshift($makes, array ( 'id' => -1, 'name' => 'បន្ថែមថ្មី') );
 			print_r(Zend_Json::encode($studentinfo));
 			exit();

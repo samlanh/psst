@@ -210,9 +210,6 @@ function getSubjectOpt(){
 			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 			    }
 		    }
-		  //  dojo.query("#table_row").append("");
-		   // $("#identity").val("");
-		    //addRow();
 		   HideloadingBlock();
 		},
 		error: function(err) {
@@ -258,7 +255,7 @@ function getSubjectOpt(){
 				template+='</div>';
 				
 				template+='<div class="form-group"><div class="col-md-6 col-sm-6 col-xs-12">';
-					template+='<div class="custom-control custom-checkbox "><input onClick="forSubject('+col+');" type="checkbox" class="custom-control-input" name="forMonth'+col+'" id="forMonth'+col+'"  >';
+					template+='<div class="custom-control custom-checkbox "><input checked="checked" onClick="forSubject('+col+');" type="checkbox" class="custom-control-input" name="forMonth'+col+'" id="forMonth'+col+'"  >';
 					template+='<label class="custom-control-label" for="forMonth'+col+'" >';
 					template+='<?php echo $tr->translate('MONTHLY');?>';
 					template+='</label>';

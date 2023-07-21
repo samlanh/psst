@@ -191,14 +191,20 @@ dojo.ready(function(){
 							<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['academicYearLabel'];?></td>
 						</tr>
 					</table>
-					<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; font-size:12px;margin: 0;">
-						ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENTS PROGESS IN BASIC SKILLS</strong>
-					</div>
+					
 				</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel" valign="top">
 					<table class="header"  cellpadding="2"​ border="1"  style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;" >
+						<tr class="style hover">
+							<td colspan="8" align="center" class="blue khmerBoldFont doubleBorder">
+								<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; font-size:12px;margin: 0;">
+									ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENTS PROGESS IN BASIC SKILLS</strong>
+								</div>
+							</td>
+						</tr>
+						
 						<?php 
 						$totalAveragescore=0; 
 						$totalMaxScore=0;
@@ -219,10 +225,14 @@ dojo.ready(function(){
 								?>
 								<?php if($keyLang>0){?>	
 									<tr class="style hover">
-										<td colspan="5" align="center" class="blue khmerBoldFont">&nbsp;
-											មធ្យមភាគសរុប Total Grade Point Average 
+										<td colspan="3" align="center" class="blue khmerBoldFont">&nbsp;
+											22 មធ្យមភាគសរុប Total Grade Point Average 
 										</td>
-										<td class="" align="center">&nbsp;<strong><?php echo number_format($totalAveragescore,2); ?></strong>&nbsp;</td>
+										<td align="center"><strong><?php echo $totalSubMaxScore;?></strong></td>
+										<td class="border-right-none"></td>
+										<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore,2); ?></strong>&nbsp;</td>
+										<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore); ?></strong>&nbsp;</td>
+										<td align="center"><strong><?php echo $scoreInfo['rankingInKhmer'];?></strong></td>
 									</tr>
 									<tr class="style hover">
 										<td colspan="5" align="center" class="blue khmerBoldFont">&nbsp;
@@ -251,6 +261,7 @@ dojo.ready(function(){
 										<td>ពិន្ទុ<br />score</td>
 										<td>មធ្យមភាគ<br />Average</td>
 										<td >និទ្ទេស<br />Grade</td>
+										<td >ចំណាត់ថ្នាក់<br />Rank</td>
 									</tr>
 							<?php }
 							    $currentLang = $resultScore['subjectLang'];
@@ -271,6 +282,7 @@ dojo.ready(function(){
 										<td class="border-right-none"></td>
 										<td align="center"><?php echo $resultScore['totalAverage']; ?></td>
 										<td align="center" class="colorRed"><?php echo $grade?></td>
+										<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
 									</tr>
 							<?php }else{ 
 								$issetMerge=0;
@@ -287,6 +299,7 @@ dojo.ready(function(){
 									<?php if($issetMerge==0){?>
 									<td rowspan="<?php echo $rowspan;?>" align="center"><?php echo $resultScore['totalAverage']; ?></td>
 									<td class="colorRed" rowspan="<?php echo $rowspan;?>"  align="center"><?php echo $grade?></td>
+									<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
 									<?php }?>
 								</tr>
 							<?php 
@@ -296,10 +309,14 @@ dojo.ready(function(){
 							}?>
 						<?php }?>
 						<tr class="style hover">
-							<td colspan="5" align="center" class="blue khmerBoldFont">&nbsp;
-								មធ្យមភាគសរុប Total Grade Point Average 
+							<td colspan="3" align="center" class="blue khmerBoldFont">&nbsp;
+								33 មធ្យមភាគសរុប Total Grade Point Average 
 							</td>
-							<td class="" align="center">&nbsp;<strong><?php echo number_format($totalAveragescore,2); ?></strong>&nbsp;</td>
+							<td align="center"><strong><?php echo $totalSubMaxScore;?></strong></td>
+							<td class="border-right-none"></td>
+							<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore,2); ?></strong>&nbsp;</td>
+							<td></td>
+							<td align="center"><?php echo $scoreInfo['rankingInEnglish']; ?></td>
 						</tr>
 						<tr class="style hover">
 							<td colspan="5" align="center" class="blue khmerBoldFont">&nbsp;
@@ -313,6 +330,7 @@ dojo.ready(function(){
 								</strong>
 							</td>
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore); ?></strong>&nbsp;</td>
+							<td></td>
 						</tr>
 			
 						<tr class="style hover doubleBorder" >
@@ -322,7 +340,7 @@ dojo.ready(function(){
 						</tr>
 						<tr class="style hover" >
 							<td colspan="5" align="center" class="blue">
-								 មធ្យមភាគសរុប Overall Grade Point Average 
+								11 មធ្យមភាគសរុប Overall Grade Point Average 
 							</td>
 							<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
 							<td align="left"></td>

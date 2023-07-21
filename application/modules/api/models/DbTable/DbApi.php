@@ -4449,6 +4449,115 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	public function getTotalStudentAttendance($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			$groupId = empty($search['groupId'])?0:$search['groupId'];
+			
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$label = "name_en";
+			$colunmname = "title_en";
+			$schooName = "school_nameen";
+    		$branch = "branch_nameen";
+			if($currentLang==1){// khmer
+				$label = "name_kh";
+				$schooName = "school_namekh";
+				$branch = "branch_namekh";
+				$colunmname='title';
+			}
+			
+			$sql=" SELECT 
+    				sat.*
+					,(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle
+					,(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle
+					,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
+    				,g.group_code as groupCode
+					
+					,COUNT(if(satd.attendence_status = '1' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalComeSemester1
+					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalASemester1
+					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalPSemester1
+					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalLSemester1
+					,COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalELSemester1
+					
+					,COUNT(IF(satd.attendence_status = '1' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalComeSemester2
+					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalASemester2
+					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalPSemester2
+					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalLSemester2
+					,COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalELSemester2
+					,sat.`date_attendence`
+					,satd.description
+	 		       
+ 			   FROM
+					`rms_student_attendence` AS sat 
+						JOIN `rms_student_attendence_detail` AS satd ON sat.`id`= satd.`attendence_id`
+						LEFT JOIN `rms_group` AS g ON g.id = sat.`group_id`
+				WHERE sat.type=1 AND sat.status=1
+					";
+			$sql.=" AND satd.stu_id = ".$studentId;
+			$sql.=" AND sat.`group_id` = ".$groupId;
+			
+			$sql.= " GROUP BY satd.`stu_id` ";
+		
+			$rowAttendance = $db->fetchRow($sql);
+			
+			
+			$sql=" SELECT 
+    				sat.*
+					,(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle
+					,(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle
+					,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
+    				,g.group_code as groupCode
+					
+					,COUNT(if(satd.attendence_status = '1' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalMinorSemester1
+					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalMediumSemester1
+					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalMajorSemester1
+					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalOtherSemester1
+					
+					,COUNT(IF(satd.attendence_status = '1' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalMinorSemester2
+					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalMediumSemester2
+					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalMajorSemester2
+					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalOtherSemester2
+					,sat.`date_attendence`
+					,satd.description
+	 		       
+ 			   FROM
+					`rms_student_attendence` AS sat 
+						JOIN `rms_student_attendence_detail` AS satd ON sat.`id`= satd.`attendence_id`
+						LEFT JOIN `rms_group` AS g ON g.id = sat.`group_id`
+				WHERE sat.type=2 AND sat.status=1
+					";
+			$sql.=" AND satd.stu_id = ".$studentId;
+			$sql.=" AND sat.`group_id` = ".$groupId;
+			
+			$sql.= " GROUP BY satd.`stu_id` ";
+			$rowMistake = $db->fetchRow($sql);
+			
+			
+			$rowAttendance = empty($rowAttendance) ? array() : $rowAttendance;
+			$rowMistake = empty($rowMistake) ? array() : $rowMistake;
+			$row = array(
+				"attendance" => $rowAttendance,
+				"mistake" => $rowMistake,
+			);
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
 	function getSchoolBusLogin($_data){
 		$db = $this->getAdapter();
 		$_data['userName']=trim($_data['userName']);

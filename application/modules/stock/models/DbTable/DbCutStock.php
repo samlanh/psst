@@ -63,10 +63,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	return $rows;
     }
     public function getStudentProductPaymentDetail($data){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$db = $this->getAdapter();
     	$student_id = $data['student_id'];
     	$branch_id = $data['branch_id'];
-    	
+    	$type = $data['cut_stock_type'];
     	$sql=" SELECT 
 				spd.*,
 				sp.branch_id,
@@ -83,9 +84,16 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 				WHERE spd.payment_id = sp.id
 				AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
 				AND sp.is_void=0
-				AND spd.qty_after >0
 				AND sp.student_id=$student_id
 				AND sp.branch_id=$branch_id";
+
+			if(!empty($type )){
+                if($type ==1){
+                    $sql.= " AND spd.qty_after >0 ";
+				}elseif($type ==2){
+ 					$sql.= " AND spd.qty_after = 0 ";
+				}
+			}
 	    	if (!empty($data['bypuchase_no'])){
 	    		$s_search=addslashes(trim($data['bypuchase_no']));
 	    		$sql.= " AND sp.receipt_number LIKE '%{$s_search}%'";
@@ -97,16 +105,17 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$no = $data['keyindex'];
     	$identity='';
     	$baseurl= Zend_Controller_Front::getInstance()->getBaseUrl();
-    	
     	$allproduct = $this->getAllProducts(1);
     	if(!empty($rs)){
     		foreach ($rs as $key => $row){
     			if (empty($identity)){
     				$identity=$no;
-    			}else{$identity=$identity.",".$no;
+    			}else{
+					$identity=$identity.",".$no;
     			}
     			$stuName=$row['stu_enname']." ".$row['last_name'];
     			$stuCode=$row['stu_code'];
+				
     			$string.='
     			<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
 	    			<td align="center" style="  padding: 0 10px;"><input checked="checked"  OnChange="CheckAllTotal('.$no.')" style=" vertical-align: top; height: initial;" type="checkbox" class="checkbox" id="mfdid_'.$no.'" value="'.$no.'"  name="selector[]"/></td>
@@ -132,20 +141,31 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$string.='</select>
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-    			<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
-    			</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-    			<label id="duelabel'.$no.'">'.number_format($row['qty_after'],2).'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_after'].'" >
-    			</td>
-    			<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
-    			<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
-    			<td >
-    				<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
-    			</td>
-    			</tr>
-    			';$no++;
+    				<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+    				<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
+    			</td> ';
+if(!empty($type)){
+	if($type==1){
+		$string.='<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
+						<label id="duelabel'.$no.'">'.number_format($row['qty_after'],2).'</label>
+						<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_after'].'" >
+					</td>
+					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
+					<td >
+						<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+					</td> ';
+	}elseif($type==2){
+		$string.='
+					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamountdue('.$no.');" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty'].'" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0.00" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
+					<td >
+						<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+					</td> ';
+	}
+	}
+    	$string.='</tr> ';$no++;
     		}
     	}else{
     		$no++;
@@ -184,12 +204,14 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     function addCutStock($_data){
     	try{
     		$itemsCode = $this->getCutStockode($_data['branch_id']);
+			$type= $_data['cut_stock_type'];
     		$_arr=array(
     				'branch_id'	   => $_data['branch_id'],
+					'cut_stock_type'  => $_data['cut_stock_type'],
     				'serailno'	   => $itemsCode,
     				'student_id'   => $_data['studentId'],
     				'balance'      => $_data['balance'],
-    				'total_received'=> $_data['total_paid'],
+    				'total_received'=> $_data['total_received'],
     				'total_qty_due' => $_data['total_due'],
     				'received_date' => $_data['date_payment'],
     				'create_date'   => date("Y-m-d H:i:s"),
@@ -206,9 +228,15 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		foreach ($ids as $i){
     			$stupaydetail = $this->getStudentPaymentDetailById($_data['paymentdetail_id'.$i],$_data['payment_id'.$i],$_data['branch_id']);
     			$qtyreceive = $_data['qty_receive'.$i];
+				$qtybalance = $_data['qty_balance'.$i];
     			
     			if (!empty($stupaydetail)){
-    				$qtyfter = $stupaydetail['qty_after']-$qtyreceive;
+					if($type==1){
+						$qtyfter = $stupaydetail['qty_after']-$qtyreceive;
+					}elseif($type==2){
+						$qtyfter = $stupaydetail['qty_after']+$qtybalance;
+					}
+    			
     				// update Purchase Balance
     				$array=array(
     						'qty_after'=>$qtyfter,
@@ -234,7 +262,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			
     			//cut stock
     			$dbpu = new Stock_Model_DbTable_DbPurchase();
-    			$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],-$_data['qty_receive'.$i]);
+				if($type==1){
+					$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],-$_data['qty_receive'.$i]);
+				}elseif($type==2){
+					$dbpu->updateStock($_data['itemdetail_id'.$i],$_data['branch_id'],+$_data['qty_balance'.$i]);
+				}
     		}
     		return $cut_id;
     	}catch(Exception $e){
@@ -257,6 +289,9 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     function getAllCutStock($search){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$cut_stock=$tr->translate('USAGE_STOCK');
+		$debt_stock=$tr->translate('DEBT_STOCK');
     	$db = $this->getAdapter();
     	try{
     		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -267,6 +302,11 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
     		pp.serailno,
     		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS student_name,
+			CASE 
+				WHEN pp.cut_stock_type=1 THEN   '$cut_stock'
+			    WHEN pp.cut_stock_type=2 THEN  '$debt_stock'
+			END
+			AS cutstocktype,
     		pp.balance,
     		pp.total_received,pp.total_qty_due,
     		pp.received_date ";
@@ -526,7 +566,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     				'serailno'	   => $_data['serailno'],
     				'student_id'   => $_data['student_id'],
     				'balance'      => $_data['balance'],
-    				'total_received'=> $_data['total_paid'],
+    				'total_received'=> $_data['total_received'],
     				'total_qty_due' => $_data['total_due'],
     				'received_date' => $_data['date_payment'],
 //     				'create_date'   => date("Y-m-d H:i:s"),

@@ -131,12 +131,17 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentCreditMemoTotalAction($GetData);
 			}else if ($GetData['url']=="summaryAttAndDis"){
     			$_dbAction->studentSummaryAttendanceAndDisciplineAction($GetData);
+			}else if ($GetData['url']=="studentRequestPermissionList"){
+    			$_dbAction->getStudentRequestPermissionAction($GetData);
 				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";
     			$_dbAction->getFormOptionSelectAction($GetData);
 			}else if ($GetData['url']=="optionGroupStudy"){
 				$GetData['getControlType'] = "groupStudy";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionRequest"){
+				$GetData['getControlType'] = "requestStatus";
     			$_dbAction->getFormOptionSelectAction($GetData);
     		}
     		else{
@@ -167,6 +172,10 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->checkExistingStudentAction($postData);
 				}else if ($GetData['url']=="registerStudentTest"){
     				$_dbAction->submitNewRegisterAction($postData);
+				}else if ($GetData['url']=="studentRequestPermission"){
+    				$_dbAction->studentRequestPermissionAction($postData);
+				}else if ($GetData['url']=="studentRequestPermissionEdit"){
+    				$_dbAction->studentRequestPermissionEditAction($postData);
 				}else if ($GetData['url']=="loginSchoolBus"){
     				$_dbAction->loginSchoolBusAction($postData);
 					

@@ -1317,7 +1317,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	
 	public function submitNewRegisterAction($search){
 		try{
-			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
 			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
 			
 			$db = new Api_Model_DbTable_DbApi();
@@ -1361,7 +1361,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			}else{
 				$arrResult = array(
 					"code" => "ERR_",
-					"message" => $row['value'],
+					"message" => $resultSubmit['value'],
 				);
 			}
 			
@@ -1473,6 +1473,87 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		}
 		print_r(Zend_Json::encode($arrResult));
 		exit();
+	}
+	
+	
+	public function getStudentRequestPermissionAction($search){
+		$db = new Api_Model_DbTable_DbApi();
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+		$row = $db->getStudentRequestPermission($search);
+		if ($row['status']){
+			$arrResult = array(
+				"result" => $row['value'],
+				"code" => "SUCCESS",
+			);
+		}else{
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $row['value'],
+			);
+		}
+		print_r(Zend_Json::encode($arrResult));
+		exit();
+	}
+	
+	public function studentRequestPermissionAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			
+			$db = new Api_Model_DbTable_DbApi();
+			$resultSubmit = $db->submitStudentRequestPermission($search);
+			if ($resultSubmit['status']){
+				$arrResult = array(
+								"result" => $resultSubmit,
+								"code" => "SUCCESS",
+							);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $resultSubmit['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function studentRequestPermissionEditAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			
+			$db = new Api_Model_DbTable_DbApi();
+			$resultSubmit = $db->editStudentRequestPermission($search);
+			if ($resultSubmit['status']){
+				$arrResult = array(
+								"result" => $resultSubmit,
+								"code" => "SUCCESS",
+							);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $resultSubmit['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
 	}
 	
 	public function loginSchoolBusAction($_data){

@@ -690,7 +690,7 @@ if(!empty($type)){
     	}
     }
     
-    function voidCutStock($id,$branch_id){
+    function voidCutStock($id,$branch_id,$type){
     	try{
 	    	$_arr=array(
 	    			'status'	      => 0,
@@ -709,15 +709,19 @@ if(!empty($type)){
     				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$branch_id);
     					
     				$qtyreceive=$rowpaymentdetail['qty_receive'];
-    				
-    				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    				$qtyfter = $stupaydetail['qty_after']+$qtyreceive;
+					$qtybalance=$rowpaymentdetail['due_amount'];
+					
+    			//	$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
+					if($type==1){
+						$qtyfter = $stupaydetail['qty_after']+$qtyreceive;
+					}elseif($type==2){
+						$qtyfter = $stupaydetail['qty_after']-$qtybalance;
+					}
     				//     				echo $dueafters;exit();
-    				if (!empty($paymenttailbysale['tolalpayamount'])){
-    					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
-    					$qtyfter =$duevalu;
-    				}
-    				
+    				// if (!empty($paymenttailbysale['tolalpayamount'])){
+    				// 	$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
+    				// 	$qtyfter =$duevalu;
+    				// }
     				$array=array(
     						'qty_after'=>$qtyfter,
     				);
@@ -726,8 +730,15 @@ if(!empty($type)){
     				$this->update($array, $where);
     				
     				//return product to stock
-    				$dbpu = new Stock_Model_DbTable_DbPurchase();
-    				$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
+					if($type==1){
+						$dbpu = new Stock_Model_DbTable_DbPurchase();
+						$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
+
+					}elseif($type==2){
+						$dbpu = new Stock_Model_DbTable_DbPurchase();
+						$dbpu->updateStock($pay_detail['product_id'],$branch_id,-$qtyreceive);
+					}
+    			
     			}
     		}
     		

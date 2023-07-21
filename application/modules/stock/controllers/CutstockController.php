@@ -126,7 +126,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("This Record already void",self::REDIRECT_URL."/index");
 					exit();
 				}
-				$db->voidCutStock($id,$row['branch_id']);
+				$db->voidCutStock($id,$row['branch_id'],$row['cut_stock_type']);
 				Application_Form_FrmMessage::Sucessfull("Void Successfully",self::REDIRECT_URL."/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Void Payment Faile");

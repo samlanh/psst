@@ -4811,7 +4811,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$_data['userName']=trim($_data['userName']);
 		$_data['password']=trim($_data['password']);
 		try{
-			/*
 			$sql =" SELECT
 				s.*
 			FROM
@@ -4820,8 +4819,46 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.= " AND ".$db->quoteInto('s.busCode=?', $_data['userName']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
 			$row = $db->fetchRow($sql);
-			*/
-			$row = array();
+			$row = empty($row) ? null : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function getSchoolBusForStudent($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
+			
+			$branch = "branch_nameen";
+			if ($currentLang==1){
+				$branch = "branch_namekh";
+			}		
+			$sql =" 
+				SELECT
+					bus.*
+					,b.$branch AS branchName
+				FROM
+					rms_student_bus AS bus
+						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
+				WHERE bus.status = 1 ";
+				
+			$sql.=" LIMIT 1 ";
+			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,

@@ -133,6 +133,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentSummaryAttendanceAndDisciplineAction($GetData);
 			}else if ($GetData['url']=="studentRequestPermissionList"){
     			$_dbAction->getStudentRequestPermissionAction($GetData);
+			}else if ($GetData['url']=="schoolBusForStudent"){
+    			$_dbAction->getSchoolBusForStudentAction($GetData);
 				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";

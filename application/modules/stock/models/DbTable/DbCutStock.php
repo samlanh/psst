@@ -306,9 +306,7 @@ if(!empty($type)){
 				WHEN pp.cut_stock_type=1 THEN   '$cut_stock'
 			    WHEN pp.cut_stock_type=2 THEN  '$debt_stock'
 			END
-			AS cutstocktype,
-    		pp.balance,
-    		pp.total_received,pp.total_qty_due,
+			AS cutstocktype,pp.note,
     		pp.received_date ";
     		$sql.=$dbp->caseStatusShowImage("pp.status");
     		$sql.=" FROM `rms_cutstock` AS pp WHERE 1 ";

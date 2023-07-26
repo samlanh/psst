@@ -208,7 +208,7 @@
 							 ?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("QTY_AFTER");?>" align="center">&nbsp;<?php echo $row['qty_after'];?>&nbsp;</td>
 							
-							<td data-label="<?php echo $tr->translate("STATUS");?>"  align="center"  <?php if($row['qty_after']>0 ){?> class="redBold"<?php } ?> >&nbsp;<?php if($row['qty_after']==0){ echo $tr->translate("RECEIVED");}else if($row['qty_after']>0){ echo $tr->translate("ជំពាក់ស្តុក");}?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("STATUS");?>"  align="center"  <?php if($row['is_void']==1 ){?> class="redBold"<?php } ?> >&nbsp;<?php if($row['is_void']==1){ echo $tr->translate("VOID");}else if($row['is_closed']==1){ echo $tr->translate("CLOSED");}else{ echo "-";}?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("USER");?>" align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $row['user_close'];}else if($row['status']==1){ echo $row['user_enter'];}else{ echo "-";}?>&nbsp;</td>
 						</tr>
 						<?php }?>

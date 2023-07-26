@@ -673,6 +673,40 @@ class Allreport_StockController extends Zend_Controller_Action {
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		
 	}
+	public function rptCutstockAction(){
+		try{
+			if($this->getRequest()->isPost()){
+    			$search = $this->getRequest()->getPost();
+    		}
+    		else{
+    			$search=array(
+    							'branch_id' => '',
+    							'adv_search' => '',
+    					        'student_id'=>'',
+								'cut_stock_type'=>'',
+    							'start_date'=> date('Y-m-d'),
+    							'end_date'=>date('Y-m-d'),
+    							'status'=>'',
+    					);
+    		}
+			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
+			$rows = $db->getAllCutStock($search);
+			$this->view->rs=$rows;
+			
+			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$this->view->search = $search;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+	}
 	public function rptStudentGetProductAction(){
 		try{
 			if($this->getRequest()->isPost()){
@@ -689,7 +723,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     					);
     		}
 			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();
-			$rows = $db->getAllCutStock($search);
+			$rows = $db->studentGetProduct($search);
 			$this->view->rs=$rows;
 			
 			$branch_id = empty($search['branch_search'])?null:$search['branch_search'];

@@ -281,13 +281,5 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	public function letterAction(){
-		$id=$this->getRequest()->getParam("id");
-		
-		$db= new Foundation_Model_DbTable_DbTeacher();
-		$param['id']=$id;
-		$this->view->rs = $rs = $db->getTeacherinfoById($param);
-		$frm = new Application_Form_FrmGlobal();
-		$this->view->rsheader = $frm->getLeftLogo($rs['branch_id']);
-	}
+	
 }

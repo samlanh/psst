@@ -5,7 +5,6 @@
 	$urlCopy = $this->baseUrl()."/foundation/lecturer/copy/id/";
 	$urlView = $this->baseUrl()."/foundation/lecturer/view/id/";
 	$urlEdit = $this->baseUrl()."/foundation/lecturer/edit/id/";
-	$urlLetter = $this->baseUrl()."/foundation/lecturer/letter/id/";
 ?>	
 <?php $frm =  $this->frm_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -81,16 +80,13 @@ dojo.require("dijit.form.DateTextBox");
 				else if(key=="edit"){
 					url='<?php echo $urlEdit;?>';
 				}
-				else if(key=="letter"){
-					url='<?php echo $urlLetter;?>';
-				}
+				
 				gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit"},
 				"copy": {name: "<?php echo $tr->translate("COPY");?>", icon: "copy"},
 				"view": {name: "<?php echo $tr->translate("FRONTDESK_INFO");?>", icon: "fa-user"},
-				"letter": {name: "<?php echo $tr->translate("APPOINTMENT_LETTER");?>", icon: "fa-file"},
 			}
 		});
 	});

@@ -4901,11 +4901,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		try{
 			$sql =" SELECT
 				mt.*
+				,mt.stu_id as accountId
 			FROM
 				mobile_mobile_token AS mt
 			WHERE 1 ";
 			$sql.= " AND ".$db->quoteInto('mt.tokenType=?', $tokenType);
-			$sql.= " AND ".$db->quoteInto('mt.busCode=?', $mobileToken);
+			$sql.= " AND ".$db->quoteInto('mt.token=?', $mobileToken);
 			$row = $db->fetchRow($sql);
 			$row = empty($row) ? null : $row;
 			$result = array(

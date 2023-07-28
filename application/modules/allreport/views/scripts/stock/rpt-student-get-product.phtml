@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate('RPT_STUDENT_GOT_PRODUCT')); 
 	$frm = $this->form_search;
 	$classHideHeight=classHideHeight;
+	//print_r($this->rs);
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
@@ -161,44 +162,54 @@
 			<tr>
 				<td colspan="3">
 				<div id="exportExcel">
-					<table cellpadding="4"​ class="content-data"  border="1" >
+					<table cellpadding="4" class="content-data"  border="1" >
 						<thead>
 							<tr class="style" align="center" >
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-								<td scope="col"  colspan="4">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
-								<td scope="col"  colspan="5">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
+								<td scope="col"  colspan="3">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
+								<td scope="col"  colspan="6">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
 							</tr>
-							<tr class="style" align="center" >
-								<td scope="col" >&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("Total Received");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("Total Remain");?>&nbsp;</td>
+							<tr class="style hover" align="center" >
 								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_CODE");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_NAME");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("PHONE");?>&nbsp;</td>
+
+								<!-- <td scope="col" >&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td> -->
+								<td scope="col" >&nbsp;<?php echo $tr->translate("Receipt Num");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
+
+								<td scope="col" >&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("QTY_ORDER");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("RECEIVE_QTY");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("QTY_AFTER");?>&nbsp;</td>
 							</tr>
 						</thead>
 						<?php $i=0; if (!empty($this->rs)) foreach ($this->rs as $key=> $row){$i++;?>
 						<tr class="style hover" align="center" >
 							<td data-label="<?php echo $tr->translate("NUM");?>" align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("BRANCH");?>">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
-							<td data-label="<?php echo $tr->translate("Ref Receipt No");?>" align="center"><a style="text-decoration: none; color: #000;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td>
-							<td data-label="<?php echo $tr->translate("Received Date");?>" align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['received_date']))?>&nbsp;</td>
-							<td data-label="<?php echo $tr->translate("Total Received");?>" align="center">&nbsp;<?php echo $row['total_received'];?>&nbsp;</td>
-							<td data-label="<?php echo $tr->translate("Total Remain");?>" align="center">&nbsp;<?php echo $row['total_qty_due'];?>&nbsp;</td>
-							
-							<td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" align="center">&nbsp;<?php echo $row['stu_code'];?></td>
+
+							<td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" align="center">&nbsp;<?php echo $row['student_code'];?></td>
 							<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left">&nbsp;&nbsp;&nbsp;<?php echo $row['student_name'];?>&nbsp;</td>
-							<td data-label="<?php echo $tr->translate("DEGREE");?>" >&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
-							<td data-label="<?php echo $tr->translate("GRADE");?>" >&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("PHONE");?>" >&nbsp;<?php echo $row['tel'];?>&nbsp;</td>
-							<td data-label="<?php echo $tr->translate("STATUS");?>"  align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $tr->translate("CLOSED");}else if($row['status']==0){ echo $tr->translate("VOID");}else{ echo "-";}?>&nbsp;</td>
-							<td data-label="<?php echo $tr->translate("USER");?>" align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $row['user_close'];}else if($row['status']==0){ echo $row['user_enter'];}else{ echo "-";}?>&nbsp;</td>
+
+							<!-- <td data-label="<?php echo $tr->translate("Ref Receipt No");?>" align="center"><a style="text-decoration: none; color: red;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['cutstock_id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td> -->
+							<td data-label="<?php echo $tr->translate("Receipt Num");?>" align="center"><a style="text-decoration: none; color: red;" ></a>&nbsp;<?php echo $row['receipt_number'];?>&nbsp;</a></td>
+							<td data-label="<?php echo $tr->translate("Received Date");?>" align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['receive_date']))?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="center">&nbsp;<?php echo $row['product_name'];?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("QTY_ORDER");?>" align="center">&nbsp;<?php echo $row['qty'];?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("RECEIVE_QTY");?>" align="center">&nbsp;
+							<?php
+								$qtyReceived = $row['qty']-$row['qty_after'];
+								 echo number_format($qtyReceived,2);
+							 ?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("QTY_AFTER");?>" align="center">&nbsp;<?php echo $row['qty_after'];?>&nbsp;</td>
+							
+							<td data-label="<?php echo $tr->translate("STATUS");?>"  align="center"  <?php if($row['is_void']==1 ){?> class="redBold"<?php } ?> >&nbsp;<?php if($row['is_void']==1){ echo $tr->translate("VOID");}else if($row['is_closed']==1){ echo $tr->translate("CLOSED");}else{ echo "-";}?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("USER");?>" align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $row['user_close'];}else if($row['status']==1){ echo $row['user_enter'];}else{ echo "-";}?>&nbsp;</td>
 						</tr>
 						<?php }?>
 					</table>	

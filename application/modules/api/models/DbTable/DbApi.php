@@ -81,7 +81,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	}
 	function getStudentInformation($stu_id=0,$currentLang=1){
 		$_db = $this->getAdapter();
-		$_db->beginTransaction();
 		try{
 			$colunmname='title_en';
 			$lbView="name_en";
@@ -132,6 +131,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						
 						
 						COALESCE(DATE_FORMAT(s.guardian_dob, '%d-%m-%Y'),'') AS guardianDobFormat,
+						g.branch_id AS branchId,
 						gds.group_id,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
 						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
@@ -981,32 +981,54 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$this->_name = "mobile_mobile_token";
     		
     		$token = $row['mobileToken'];
-    		
     		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' AND stu_id=0 LIMIT 1";
     		$rsid = $db->fetchOne($sql);
     		if(!empty($rsid)){
+				if($row['tokenType']==2){
+					$_arr =array(
+						'stu_id' 	=> 0,
+					);
+					$this->_name = "mobile_mobile_token";
+					$where=" stu_id =  ".$row['id'];
+					$this->update($_arr,$where);
+				}
+				
     			$_arr =array(
-    					'stu_id' 	=> $row['id'],
-    					'device_type' => $row['deviceType'],
-    					'device_model' 		=> "",
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+    					'device_model' 	=> "",
     			);
     			$where ='id= '.$rsid;
     			$this->update($_arr, $where);
     		}else{
+				
 	    		$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['id']." AND token='".$token."' LIMIT 1";
 	    		$rs = $db->fetchOne($sql);
 	    		if(empty($rs)){
+					if($row['tokenType']==2){
+						$_arr =array(
+							'stu_id' 	=> 0,
+						);
+						$this->_name = "mobile_mobile_token";
+						$where=" stu_id =  ".$row['id'];
+						$this->update($_arr,$where);
+					}
+				
+				
+					$_arr =array(
+	    				'stu_id' 	=> $row['id'],
+	    				'token' 	=> $token,
+	    				'device_type' => $row['deviceType'],
+						'tokenType' => $row['tokenType'],
+	    				'device_model' => "",
+	    			);
+					
 					$currentStudentCheck = 0;
 					if($row['currentStudentId']>0){
 						$sql="SELECT id FROM mobile_mobile_token WHERE stu_id=".$row['currentStudentId']." AND token='".$token."' LIMIT 1";
 						$currentStudentCheck = $db->fetchOne($sql);
 					}
-					$_arr =array(
-	    				'stu_id' 	=> $row['id'],
-	    				'token' 	=> $token,
-	    				'device_type' => $row['deviceType'],
-	    				'device_model' => "",
-	    			);
 					if($currentStudentCheck >0){
 						$this->_name = "mobile_mobile_token";
 						$where=" id = $currentStudentCheck ";
@@ -3845,7 +3867,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    				'stu_id' 	=> $studentId,
 	    				'token' 	=> $mobileToken,		
 	    				'device_type' => $deviceType,
-	    				'device_model' => "",
+	    				'tokenType' => "0",
 	    			);
 					if($currentStudentCheck >0){
 						$this->_name = "mobile_mobile_token";
@@ -4213,6 +4235,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $this->getAllItems($_data);
 			}else if($getControlType=="groupStudy"){
 				$row = $this->getAllGroupStudyByStudent($_data);
+			}else if($getControlType=="requestStatus"){
+				$row = array(
+					array("id"=>1,"name"=>$currentLang==1 ? "កំពុងរង់ចាំ" : "Pending"),
+					array("id"=>2,"name"=>$currentLang==1 ? "បានយល់ព្រម" : "Approved"),
+					array("id"=>3,"name"=>$currentLang==1 ? "បានបដិសេធ" : "Rejected"),
+				);
 			}
 			
 			$result = array(
@@ -4596,12 +4624,214 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	function getStudentRequestPermission($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId = empty($_data['studentId'])?0:$_data['studentId'];
+			
+			
+			$colunmName='title_en';
+			$label = 'name_en';
+			$teacherName = "teacher_name_en";
+			$branch = "branch_nameen";
+			if ($currentLang==1){
+				$teacherName='teacher_name_kh';
+				$colunmName='title';
+				$label = 'name_kh';
+				$branch = "branch_namekh";
+			}
+				
+			$sql="
+				SELECT 
+					srq.*
+					,b.$branch AS branchName
+					,g.group_code AS  groupCode
+					,(SELECT t.$teacherName FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName
+					,(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherNameKh
+					,(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teaccherNameEng
+					,(SELECT t.signature FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherSigature
+					,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherTel
+					,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+					,(SELECT rms_items.$colunmName FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
+					,(SELECT rms_itemsdetail.$colunmName FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
+					,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
+					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+					
+					
+				FROM `rms_student_request_permission` AS srq
+					JOIN `rms_branch` AS b ON b.br_id = srq.branchId
+					LEFT JOIN `rms_group` AS g ON g.id = srq.groupId
+				WHERE srq.status = 1
+					AND srq.studentId=$studentId
+			";
+			
+			if(!empty($_data['academicYear'])){
+				$sql.=" AND g.academic_year = ".$_data['academicYear'];	
+			}
+			if(!empty($_data['degreeId'])){
+				$sql.=" AND g.degree = ".$_data['degreeId'];	
+			}
+			if(!empty($_data['requestStatus'])){
+				$requestStatus=0;
+				if($_data['requestStatus']==2){
+					$requestStatus=1;
+				}else if($_data['requestStatus']==3){
+					$requestStatus=2;
+				}
+				$sql.=" AND srq.requestStatus = ".$requestStatus;	
+			}
+			$sql.=" ORDER BY srq.id DESC ";
+			
+			$limit=" ";
+			if(!empty($search['LimitStart'])){
+				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+			}else if(!empty($search['limitRecord'])){
+	    		$limit.=" LIMIT ".$search['limitRecord'];
+	    	}
+			
+			$row = $db->fetchAll($sql.$limit);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function submitStudentRequestPermission($_data){
+    	$db = $this->getAdapter();
+		$db->beginTransaction();
+    	try{
+			
+			$format = 'Y-m-d';
+			$dateString = $_data['fromDate'];
+			$date = new DateTime($dateString);
+			$fromDate = $date->format($format);
+			
+			$toDateString = $_data['toDate'];
+			$toDate = new DateTime($toDateString);
+			$toDate = $toDate->format($format);
+			
+			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
+			$branchId		= empty($_data['branchId'])?0:$_data['branchId'];		
+			$groupId		= empty($_data['groupId'])?0:$_data['groupId'];
+			$_data['amountDay']		= empty($_data['amountDay'])?0:$_data['amountDay'];
+			$_data['phoneNumber']	= empty($_data['phoneNumber'])?0:$_data['phoneNumber'];
+			
+			$studentInfo = $this->getStudentInformation($studentId,$currentLang);
+			if(!empty($studentInfo['value'][0])){
+				$groupId  = empty($studentInfo['value'][0]['group_id'])?0:$studentInfo['value'][0]['group_id'];
+				$branchId  = empty($studentInfo['value'][0]['branchId'])?0:$studentInfo['value'][0]['branchId'];
+			}
+			
+	
+			$arr = array(
+				'branchId' 			=> $branchId,
+				'groupId' 			=> $groupId,
+				'studentId' 		=> $studentId,
+				'amountDay' 		=> $_data['amountDay'],
+				'fromDate' 			=> $fromDate,
+				'toDate' 			=> $toDate,
+				'reason' 			=> $_data['reason'],
+				'phoneNumber' 		=> $_data['phoneNumber'],
+				'requestStatus' 	=> 0,
+				
+				'createDate' 		=> date("Y-m-d H:i:s"),
+				'modifyDate' 		=> date("Y-m-d H:i:s"),
+				'status' 			=> 1,
+				'inputFrom' 		=> $_data['inputFrom'],
+			);
+    		$this->_name='rms_student_request_permission';
+    		$requestId = $this->insert($arr);
+    			
+			$db->commit();
+			$result = array(
+					'status' =>true,
+					'value' =>$requestId,
+			);
+			return $result;
+    		
+    	}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+    	}
+    }
+	
+	function editStudentRequestPermission($_data){
+    	$db = $this->getAdapter();
+		$db->beginTransaction();
+    	try{
+			
+			$format = 'Y-m-d';
+			$dateString = $_data['fromDate'];
+			$date = new DateTime($dateString);
+			$fromDate = $date->format($format);
+			
+			$toDateString = $_data['toDate'];
+			$toDate = new DateTime($toDateString);
+			$toDate = $toDate->format($format);
+			
+			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
+			$_data['amountDay']		= empty($_data['amountDay'])?0:$_data['amountDay'];
+			$_data['phoneNumber']	= empty($_data['phoneNumber'])?0:$_data['phoneNumber'];
+			$requestId	= empty($_data['recordId'])?0:$_data['recordId'];
+			
+			$arr = array(
+				'studentId' 		=> $studentId,
+				'amountDay' 		=> $_data['amountDay'],
+				'fromDate' 			=> $fromDate,
+				'toDate' 			=> $toDate,
+				'reason' 			=> $_data['reason'],
+				'phoneNumber' 		=> $_data['phoneNumber'],
+				
+				'modifyDate' 		=> date("Y-m-d H:i:s"),
+				'status' 			=> $_data['status'],
+				'inputFrom' 		=> $_data['inputFrom'],
+			);
+    		$this->_name='rms_student_request_permission';
+			$where="id=".$requestId;
+    		$this->update($arr, $where);
+    			
+			$db->commit();
+			$result = array(
+					'status' =>true,
+					'value' =>$requestId,
+			);
+			return $result;
+    		
+    	}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+    	}
+    }
+	
 	function getSchoolBusLogin($_data){
 		$db = $this->getAdapter();
 		$_data['userName']=trim($_data['userName']);
 		$_data['password']=trim($_data['password']);
 		try{
-			/*
 			$sql =" SELECT
 				s.*
 			FROM
@@ -4610,8 +4840,113 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.= " AND ".$db->quoteInto('s.busCode=?', $_data['userName']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
 			$row = $db->fetchRow($sql);
-			*/
-			$row = array();
+			$row = empty($row) ? null : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	function onlineOfflineSchoolBus($_data){
+    	$db = $this->getAdapter();
+		$db->beginTransaction();
+    	try{
+			
+			
+			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$busId		= empty($_data['userId'])?0:$_data['userId'];
+			$_data['onlineStatus']		= empty($_data['onlineStatus'])?0:$_data['onlineStatus'];
+			
+			
+			$arr = array(
+				'onlineStatus' 		=> $_data['onlineStatus'],
+				'modifyDate' 		=> date("Y-m-d H:i:s"),
+			);
+			
+    		$this->_name='rms_student_bus';
+			$where="id=".$busId;
+    		$this->update($arr, $where);
+    			
+			$db->commit();
+			$result = array(
+					'status' =>true,
+					'value' =>$busId,
+			);
+			return $result;
+    		
+    	}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+    	}
+    }
+	
+	function checkCurrentTokenScoolBusAccount($_data){
+		$db = $this->getAdapter();
+		$mobileToken 	= empty($_data['mobileToken'])?"":$_data['mobileToken'];
+		$tokenType 	= empty($_data['tokenType'])?"1":$_data['tokenType'];
+		try{
+			$sql =" SELECT
+				mt.*
+			FROM
+				mobile_mobile_token AS mt
+			WHERE 1 ";
+			$sql.= " AND ".$db->quoteInto('mt.tokenType=?', $tokenType);
+			$sql.= " AND ".$db->quoteInto('mt.busCode=?', $mobileToken);
+			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function getSchoolBusForStudent($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
+			
+			$branch = "branch_nameen";
+			if ($currentLang==1){
+				$branch = "branch_namekh";
+			}		
+			$sql =" 
+				SELECT
+					bus.*
+					,b.$branch AS branchName
+				FROM
+					rms_student_bus AS bus
+						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
+				WHERE bus.status = 1 ";
+				
+			$sql.=" LIMIT 1 ";
+			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,

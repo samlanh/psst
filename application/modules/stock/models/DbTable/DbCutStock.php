@@ -122,7 +122,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    			<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
 	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
 	    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
-	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+	    			<input type="text" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
     			</td>
@@ -248,13 +248,13 @@ if(!empty($type)){
     			
     			$arrs = array(
     					'cutstock_id'=>$cut_id,
-//     					'payment_id'=>$_data['payment_id'.$i],
+    					'paymentId'=>$_data['payment_id'.$i],
     					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
     					'product_id'=>$_data['itemdetail_id'.$i],
     					'due_amount'=>$_data['qty_balance'.$i],
     					'qty_receive'=>$_data['qty_receive'.$i],
     					'remain'=>$_data['remain'.$i],
-//     					'received_date'=>date("Y-m-d"),
+     					'received_date'=>date("Y-m-d"),
     					'remide_date'=>$_data['remide_date'.$i],
     			);
     			$this->_name ='rms_cutstock_detail';
@@ -306,9 +306,7 @@ if(!empty($type)){
 				WHEN pp.cut_stock_type=1 THEN   '$cut_stock'
 			    WHEN pp.cut_stock_type=2 THEN  '$debt_stock'
 			END
-			AS cutstocktype,
-    		pp.balance,
-    		pp.total_received,pp.total_qty_due,
+			AS cutstocktype,pp.note,
     		pp.received_date ";
     		$sql.=$dbp->caseStatusShowImage("pp.status");
     		$sql.=" FROM `rms_cutstock` AS pp WHERE 1 ";
@@ -690,7 +688,7 @@ if(!empty($type)){
     	}
     }
     
-    function voidCutStock($id,$branch_id){
+    function voidCutStock($id,$branch_id,$type){
     	try{
 	    	$_arr=array(
 	    			'status'	      => 0,
@@ -709,15 +707,19 @@ if(!empty($type)){
     				$stupaydetail = $this->getStudentPaymentDetailById($pay_detail['student_paymentdetail_id'],null,$branch_id);
     					
     				$qtyreceive=$rowpaymentdetail['qty_receive'];
-    				
-    				$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
-    				$qtyfter = $stupaydetail['qty_after']+$qtyreceive;
+					$qtybalance=$rowpaymentdetail['due_amount'];
+					
+    			//	$paymenttailbysale = $this->getSumCutStockDetailByStuPayDetId($pay_detail['student_paymentdetail_id'], $pay_detail['id']);// get other pay amount on this Purchase id on other payment receipt number
+					if($type==1){
+						$qtyfter = $stupaydetail['qty_after']+$qtyreceive;
+					}elseif($type==2){
+						$qtyfter = $stupaydetail['qty_after']-$qtybalance;
+					}
     				//     				echo $dueafters;exit();
-    				if (!empty($paymenttailbysale['tolalpayamount'])){
-    					$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
-    					$qtyfter =$duevalu;
-    				}
-    				
+    				// if (!empty($paymenttailbysale['tolalpayamount'])){
+    				// 	$duevalu = ($rowpaymentdetail['qty']-$paymenttailbysale['tolalpayamount']);
+    				// 	$qtyfter =$duevalu;
+    				// }
     				$array=array(
     						'qty_after'=>$qtyfter,
     				);
@@ -726,8 +728,15 @@ if(!empty($type)){
     				$this->update($array, $where);
     				
     				//return product to stock
-    				$dbpu = new Stock_Model_DbTable_DbPurchase();
-    				$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
+					if($type==1){
+						$dbpu = new Stock_Model_DbTable_DbPurchase();
+						$dbpu->updateStock($pay_detail['product_id'],$branch_id,$qtyreceive);
+
+					}elseif($type==2){
+						$dbpu = new Stock_Model_DbTable_DbPurchase();
+						$dbpu->updateStock($pay_detail['product_id'],$branch_id,-$qtyreceive);
+					}
+    			
     			}
     		}
     		

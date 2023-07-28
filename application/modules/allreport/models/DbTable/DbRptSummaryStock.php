@@ -275,6 +275,66 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
+	function studentGetProduct($search){
+    	$db = $this->getAdapter();
+    	try{
+    		$dbp = new Application_Model_DbTable_DbGlobal();
+    		$currentLang = $dbp->currentlang();
+    		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
+    		if ($currentLang==1){
+    			$stuname="s.stu_khname";
+    		}
+    		$sql="SELECT *,
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = p.branch_id LIMIT 1) AS branch_name,
+			sd.receive_date,
+			(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS student_code,
+			(SELECT $stuname FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS student_name,
+			(SELECT s.tel FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS tel,
+			p.receipt_number,
+			(SELECT pd.title FROM `rms_itemsdetail` AS pd  WHERE pd.id = sd.pro_id LIMIT 1) AS product_name,
+			sd.qty, 
+			sd.qty_after,
+			(SELECT CONCAT(first_name,' ',last_name) FROM rms_users AS u WHERE u.id = p.user_id LIMIT 1) AS user_enter
+		
+			 FROM `rms_saledetail` AS sd INNER JOIN `rms_student_payment` AS p WHERE sd.payment_id=p.id
+    		";
+    		$from_date =(empty($search['start_date']))? '1': " p.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    		$to_date = (empty($search['end_date']))? '1': " p.create_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    		$sql.= " AND  ".$from_date." AND ".$to_date;
+    		$where="";
+    		if(!empty($search['adv_search'])){
+    			$s_where=array();
+    			$s_search=addslashes(trim($search['adv_search']));
+    			$s_where[]= " p.receipt_number LIKE '%{$s_search}%'";
+    			$s_where[]= " sd.qty_after LIKE '%{$s_search}%'";
+    			$s_where[]= " sd.qty LIKE '%{$s_search}%'";
+    		
+    			$where.=' AND ('.implode(' OR ', $s_where).')';
+    		}
+    		if(!empty($search['student_id'])){
+    			$where.=" AND p.student_id=".$search['student_id'];
+    		}
+    		if(!empty($search['status_search'])){
+    			$where.=" AND p.status=".$search['status_search'];
+    		}
+    		if(!empty($search['branch_id'])){
+    			$where.=" AND p.branch_id=".$search['branch_id'];
+    		}
+    		if(!empty($search['status'])){
+    			if($search['status']==1){
+    				$where.=' AND p.status=0';
+    			}else if($search['status']==2){
+    				$where.=' AND p.is_closed=1';
+    			}
+    		}
+    		$where.=$dbp->getAccessPermission('p.branch_id');
+    		$order=" ORDER BY p.id DESC";
+    		return $db->fetchAll($sql.$where.$order);
+    
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+    }
     function getAllCutStock($search){
     	$db = $this->getAdapter();
     	try{
@@ -284,62 +344,58 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		if ($currentLang==1){
     			$stuname="s.stu_khname";
     		}
-    		$sql="
-    		SELECT
-				(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
-				s.stu_khname,
-				$stuname AS student_name,
-				s.stu_enname,
-				s.last_name,
-				s.stu_code,
-				s.tel,
-				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gds.academic_year LIMIT 1) AS academic,
-				(SELECT `title` FROM `rms_items` WHERE `id`=gds.degree AND type=1 LIMIT 1) AS degree,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=gds.grade AND items_type=1 LIMIT 1) AS grade,
-				pp.*,
-				(SELECT CONCAT(first_name,' ',last_name) FROM rms_users AS u where u.id = pp.closed_by LIMIT 1) as user_close,
-	    		(SELECT CONCAT(first_name,' ',last_name) FROM rms_users AS u where u.id = pp.user_id LIMIT 1) as user_enter
-			FROM `rms_cutstock` AS pp,
-				  `rms_student` AS s,
-				  rms_group_detail_student AS gds
-			WHERE 
-				gds.itemType=1 
-				AND	s.stu_id = gds.stu_id
-				AND s.stu_id = pp.student_id
-				AND gds.is_maingrade =1
+    		$sql="SELECT  *, c.id AS cutstock_id, c.received_date AS receivedDate,
+			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+			(SELECT p.title FROM `rms_itemsdetail` AS p  WHERE p.id = sd.product_id LIMIT 1) AS product_name,
+			
+			(SELECT t.qty FROM `rms_saledetail` AS t  WHERE t.id = sd.student_paymentdetail_id LIMIT 1) AS buyQty,
+			sd.qty_receive, sd.remain,
+			
+			(SELECT $stuname FROM `rms_student` AS s  WHERE s.stu_id = c.student_id LIMIT 1) AS student_name,
+			(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = c.student_id LIMIT 1) AS student_code,
+			(SELECT s.tel FROM `rms_student` AS s  WHERE s.stu_id = c.student_id LIMIT 1) AS tel,
+			(SELECT sp.receipt_number FROM `rms_student_payment` AS sp  WHERE sp.id = sd.paymentId LIMIT 1) AS receipt_num,
+			
+			(SELECT CONCAT(first_name,' ',last_name) FROM rms_users AS u WHERE u.id = c.closed_by LIMIT 1) AS user_close,
+			(SELECT CONCAT(first_name,' ',last_name) FROM rms_users AS u WHERE u.id = c.user_id LIMIT 1) AS user_enter,
+			c.status AS STATUS 
+			 FROM `rms_cutstock` AS c 
+			INNER JOIN `rms_cutstock_detail` AS sd WHERE c.id = sd.cutstock_id
     		";
-    		$from_date =(empty($search['start_date']))? '1': " pp.received_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
-    		$to_date = (empty($search['end_date']))? '1': " pp.received_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    		$from_date =(empty($search['start_date']))? '1': " c.received_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    		$to_date = (empty($search['end_date']))? '1': " c.received_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
     		$sql.= " AND  ".$from_date." AND ".$to_date;
     		$where="";
     		if(!empty($search['adv_search'])){
     			$s_where=array();
     			$s_search=addslashes(trim($search['adv_search']));
-    			$s_where[]= " pp.serailno LIKE '%{$s_search}%'";
-    			$s_where[]= " pp.balance LIKE '%{$s_search}%'";
-    			$s_where[]= " pp.total_received LIKE '%{$s_search}%'";
-    			$s_where[]= " pp.total_qty_due LIKE '%{$s_search}%'";
-    
+    			$s_where[]= " c.serailno LIKE '%{$s_search}%'";
+    			$s_where[]= " sd.qty_receive LIKE '%{$s_search}%'";
+    			$s_where[]= " sd.due_amount LIKE '%{$s_search}%'";
+    		
     			$where.=' AND ('.implode(' OR ', $s_where).')';
     		}
     		if(!empty($search['student_id'])){
-    			$where.=" AND pp.student_id=".$search['student_id'];
+    			$where.=" AND sd.student_id=".$search['student_id'];
+    		}
+			if(!empty($search['cut_stock_type'])){
+    			$where.=" AND c.cut_stock_type=".$search['cut_stock_type'];
     		}
     		if(!empty($search['status_search'])){
-    			$where.=" AND pp.status=".$search['status_search'];
+    			$where.=" AND c.status=".$search['status_search'];
     		}
     		if(!empty($search['branch_id'])){
-    			$where.=" AND pp.branch_id=".$search['branch_id'];
+    			$where.=" AND c.branch_id=".$search['branch_id'];
     		}
     		if(!empty($search['status'])){
     			if($search['status']==1){
-    				$where.=' AND pp.status=0';
+    				$where.=' AND c.status=0';
     			}else if($search['status']==2){
-    				$where.=' AND pp.is_closed=1';
+    				$where.=' AND c.is_closed=1';
     			}
     		}
-    		$where.=$dbp->getAccessPermission('pp.branch_id');
-    		$order=" ORDER BY pp.id DESC";
+    		$where.=$dbp->getAccessPermission('c.branch_id');
+    		$order=" ORDER BY c.id DESC";
     		return $db->fetchAll($sql.$where.$order);
     
     	}catch(Exception $e){

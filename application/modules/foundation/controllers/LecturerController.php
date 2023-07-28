@@ -281,4 +281,5 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	
 }

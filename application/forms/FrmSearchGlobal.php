@@ -517,6 +517,20 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			);
 		$_student_group_status->setMultiOptions($_group_status_opt);
 		$_student_group_status->setValue($request->getParam("student_group_status"));
+
+		$_cut_stock_type = new Zend_Dojo_Form_Element_FilteringSelect('cut_stock_type');
+		$_cut_stock_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("TYPE"),
+		));
+		$_stock_opt = array(
+				''=>$this->tr->translate("SELECT_TYPE"),
+				1=>$this->tr->translate("USAGE_STOCK"),
+				2=>$this->tr->translate("DEBT_STOCK"));
+		$_cut_stock_type->setMultiOptions($_stock_opt);
+		$_cut_stock_type->setValue($request->getParam("cut_stock_type"));
 		
 		
 		$this->addElements(array(
@@ -552,7 +566,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_province_search,
 				$_result_status,
 				$_register_status,
-				$_student_group_status
+				$_student_group_status,
+				$_cut_stock_type
 				)
 			);
 		return $this;

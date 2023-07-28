@@ -163,6 +163,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				if ($condictionSale!=1){
     					$arrs = array(
     							'cutstock_id'=>$data['cutStockId'],
+								'paymentId'=>$data['paymentId'],
     							'student_paymentdetail_id'=>$sale_detailid,
     							'product_id'=>$row['pro_id'],
     							'due_amount'=>0,
@@ -220,6 +221,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			
     		if ($condictionSale!=1){
     			$arrs = array(
+						'paymentId'		=>$data['paymentId'],
     					'cutstock_id'=>$data['cutStockId'],
     					'student_paymentdetail_id'=>$sale_detailid,
     					'product_id'=>$data['item_id'.$i],

@@ -131,12 +131,19 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentCreditMemoTotalAction($GetData);
 			}else if ($GetData['url']=="summaryAttAndDis"){
     			$_dbAction->studentSummaryAttendanceAndDisciplineAction($GetData);
+			}else if ($GetData['url']=="studentRequestPermissionList"){
+    			$_dbAction->getStudentRequestPermissionAction($GetData);
+			}else if ($GetData['url']=="schoolBusForStudent"){
+    			$_dbAction->getSchoolBusForStudentAction($GetData);
 				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";
     			$_dbAction->getFormOptionSelectAction($GetData);
 			}else if ($GetData['url']=="optionGroupStudy"){
 				$GetData['getControlType'] = "groupStudy";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionRequest"){
+				$GetData['getControlType'] = "requestStatus";
     			$_dbAction->getFormOptionSelectAction($GetData);
     		}
     		else{
@@ -167,6 +174,10 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->checkExistingStudentAction($postData);
 				}else if ($GetData['url']=="registerStudentTest"){
     				$_dbAction->submitNewRegisterAction($postData);
+				}else if ($GetData['url']=="studentRequestPermission"){
+    				$_dbAction->studentRequestPermissionAction($postData);
+				}else if ($GetData['url']=="studentRequestPermissionEdit"){
+    				$_dbAction->studentRequestPermissionEditAction($postData);
 				}else if ($GetData['url']=="loginSchoolBus"){
     				$_dbAction->loginSchoolBusAction($postData);
 					
@@ -238,7 +249,17 @@ class Api_IndexController extends Zend_Controller_Action
    	
    }
    function downloadAction(){
-   	$this->_helper->layout()->disableLayout();
+	   	$this->_helper->layout()->disableLayout();
+	   	$scoreId =$this->getRequest()->getParam("scoreId");
+	   	$stuId =$this->getRequest()->getParam("studentId");
+	   	
+	   	$data = array(
+	   			'scoreId'=>$scoreId,//use
+	   			'studentId'=>$stuId,//use and all above not use
+	   	);
+	   	$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
+	   	$resultData = $dbscore->getTranscriptExam($data);
+	   	$this->view->resultData = $resultData;
    }
    
    function examscorepdfAction(){

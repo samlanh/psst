@@ -864,6 +864,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			
 			,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleKh
 			,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleEng
+			,(SELECT sj.subject_lang FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjecLang
 			,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameKh
 			,(SELECT te.teacher_name_en FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameEng
 			

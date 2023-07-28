@@ -26,8 +26,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			$db =  new Stock_Model_DbTable_DbCutStock();
 			$rows = $db->getAllCutStock($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","RECEIPT_NO","STUDENT","TYPE","QTY_BALANCE","TOTAL_RECEIVED","TOTAL_QTY_DUE",
-					"DATE","STATUS");
+			$collumns = array("BRANCH","RECEIPT_NO","STUDENT","TYPE","NOTE","DATE","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'cutstock','action'=>'edit',
 			);
@@ -126,7 +125,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
 					Application_Form_FrmMessage::Sucessfull("This Record already void",self::REDIRECT_URL."/index");
 					exit();
 				}
-				$db->voidCutStock($id,$row['branch_id']);
+				$db->voidCutStock($id,$row['branch_id'],$row['cut_stock_type']);
 				Application_Form_FrmMessage::Sucessfull("Void Successfully",self::REDIRECT_URL."/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Void Payment Faile");

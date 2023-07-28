@@ -2,26 +2,21 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('លិខិតចាត់តាំង')); 
 	echo $this->headTitle(''); 
-	$sex='';
-	if($this->rs['sex']==1){
-		$sex=$tr->translate("MALE");
-	}else{
-		$sex=$tr->translate("FEMALE");
-	}
-	//$image = $this->baseUrl().'/images/no-profile.png';
-	$image = "";
-	if(!empty($this->rs['photo'])){
-		if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
-			$image = $this->baseUrl().'/images/photo/'.$this->rs['photo'];
-		}
-	}
+
+
 	$session_lang=new Zend_Session_Namespace('lang');
 	$lang_id=$session_lang->lang_id;	
-
 	$dbgb = new Application_Model_DbTable_DbGlobal();
-	
-	$template = SCORE_RESULT_TEMPLATE;
+
+	$teacherId = $this->teacherId;
+
 	$branchInfo = $this->branchInfo;
+
+	if($lang_id==1){
+       $schoolName = $branchInfo['school_namekh'];
+	}elseif($lang_id==2){
+		$schoolName = $branchInfo['school_nameen'];
+	}
 	
 	$signature="";
 	$stamp="";
@@ -44,22 +39,6 @@
 		if (file_exists(PUBLIC_PATH."/images/photo/".$rs['mainTeacherSigature'])){
 			$mainTeacherSigature = $this->baseUrl().'/images/photo/'.$rs['mainTeacherSigature'];
 		}
-	}
-	$teacherInfo =$dbExternal->getCurrentTeacherInfo();
-	$teacherNameKh = empty($teacherInfo['teacher_name_kh'])?"":$teacherInfo['teacher_name_kh'];
-	$teacherNameEn = empty($teacherInfo['teacher_name_en'])?"":$teacherInfo['teacher_name_en'];
-
-	$teachName = $teacherNameKh;
-	if(empty($teachName)){
-		$teachName = $teacherNameEn;
-	}else{
-		if(!empty($teacherNameEn)){
-			$teachName = $teachName." / ".$teacherNameEn;
-		}
-	}
-	$teacherTItle = "អ្នកគ្រូ";
-	if($teacherInfo['sex']==1){
-		$teacherTItle = "លោកគ្រូ";
 	}
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
@@ -240,15 +219,7 @@ dojo.ready(function(){
 							display: block;
 							line-height: inherit;
 						}
-						span.empty {
-							color: #8e834e;
-						}
-						span.red {
-							color: #f00;
-						}
-						span.blue {
-							color: #0053ff;
-						}
+					
 						span.valueLabel.timeLabel {
 							font-size: 12px;
 							font-weight: 600;
@@ -264,8 +235,25 @@ dojo.ready(function(){
 							font-size: 12px;
 							line-height: 16px;
 							margin: 5px 0;
+							font-family:Tahoma,'Khmer OS Battambang';
 						}
-				@media print{
+						span.ValueLabelTeacher{
+							display: inline-block;
+							font-size:12px;
+							font-weight: bold;
+							font-family:'Khmer OS Battambang';
+							color:#f00;
+						}
+						span.empty {
+							color: #8e834e;
+						}
+						span.red {
+							color: #f00;
+						}
+						span.blue {
+							color: #0053ff;
+						}
+						@media print{
 							@page {
 								page:A4;
 								margin: 0.8cm;
@@ -279,9 +267,15 @@ dojo.ready(function(){
 						<td width="35%" align="center"></td>
 					</tr>
 					<tr class="head">
-					   <td align="center" colspan="3" valign="top">
-					   		<h2 style="font-size:13px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
-					   		<h2 style="font-size:13px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+						<td colspan="2" valign="bottom" >
+							<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';" >  &nbsp;</h2>
+					   		<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';">មន្ទីរអបរំ យុវជន និងកីឡា</h2>
+							<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';"><?php echo $schoolName; ?></h2>
+							<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Battambang';">លេខ................. <?php echo $branchInfo['branch_code']; ?></h2>
+					   </td>
+					   <td align="center" valign="top">
+					   		<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
+					   		<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
 					   		<img alt="" src="<?php echo $this->baseUrl()."/images/sign.PNG"?>" style=" width: 120px;">
 					   </td>
 					</tr>
@@ -291,47 +285,14 @@ dojo.ready(function(){
 					   </td>
 					</tr>
 					<tr class="head">
-						<td colspan="2" valign="bottom" >
-							<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';" >មន្ទីរអបរំ យុវជន និងកីឡារាជធានីភ្នំពេញ</h2>
-					   		<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';">ការិយាល័យអប់រំ យុវជន និងកីឡាខ័ណ្ឌសែនសុខ</h2>
-							<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Muol Light';">សាលាបញ្ញាសាស្រ្តអន្តរជាតិ-សាងខាទី១</h2>
-							<h2 style="font-size:12px;line-height: 13px; font-weight: initial; font-family:'Khmer OS Battambang';">លេខ......................ស.ប.ស.អ.ទ ១</h2>
-					   </td>
-					   <td align="center" valign="top">
-
-					   </td>
-					</tr>
-
-					<!-- <tr class="head">
-						<td colspan="2" valign="middle" >
-							<div style=" display: inline-block;  vertical-align: top; text-align: center;">
-								<?php echo $this->rsheader;?>
-								<span style="font-size:12px;line-height: 14px; font-weight: initial; font-family:'Khmer OS Battambang';">(<?php echo $this->rs['branch_name'];?>)</span>
-							</div>
-					   </td>
-					   <td align="center" valign="top">
-
-					   </td>
-					</tr> -->
-					<tr class="head">
 					   <td colspan="3" align="center">
-					   		<h1 style="font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';" >លិខិតចាត់តាំង</h1>
+					   		<h1 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >លិខិតចាត់តាំង</h1>
 					   </td>
 					</tr>
-					<tr class="head">
-					   <td colspan="3" align="center">
-					   		<h1 style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';" >គ្រូបង្រៀនវគ្គសិក្សាខ្លីពេលវិស្សមកាល ឆ្នាំសិក្សា២០២៣​-២០២៤</h1>
-					   </td>
-					</tr>
+
 					<tr class="head">
 					   <td colspan="3" align="left">
-					   		<h1 style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';" >យោង ៖ លិខិតបើកសាលា និងកិច្ចសន្យាការងារ</h1>
-					   </td>
-					</tr>
-					<tr class="head">
-					   <td colspan="3" align="left">
-					   		<h1 style="font-size:14px; line-height: 13px; font-weight: initial;font-family:'Khmer OS Battambang';" >លោកគ្រូ Mai Seyha បង្រៀនផ្នែកចំណេះដឹងទូទៅកម្រិតបឋម ជាបុគ្គលិកនៃ</h1>
-							<h1 style="font-size:14px; line-height: 13px; font-weight: initial;font-family:'Khmer OS Battambang';" >សាលាបញ្ញាសាស្រ្តអន្តរជាតិសាខាទី១ ត្រូវបានចាត់តាំងបង្រៀនតាមកាលវិភាគខាងក្រោម​។</h1>
+					 	  <label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >យោង ៖ </label> &nbsp;<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';" >លិខិតបើកសាលា និងកិច្ចសន្យាការងារ </label>
 					   </td>
 					</tr>
 					<tr class="head">
@@ -339,14 +300,16 @@ dojo.ready(function(){
 						   &nbsp;
 					   </td>
 					</tr>
-					<tr class="head">
-					   <td colspan="3" align="center">
-					   		<h1 style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';" >ចាប់ពីថ្ងៃទី ២៣ ខែ កក្កដា ឆ្នាំ ២០២៣ ដល់ថ្ងៃទី ៣០ ខែ មករា ឆ្នាំ​ ២០២៤</h1>
+					<tr class="head"></tr>
+					   <td colspan="3" align="left">
+					  	 <label style="font-size:12px; line-height: 25px; font-weight: initial;font-family:'Khmer OS Battambang';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  លោក <span class="ValueLabelTeacher red"><?php echo $this->rs['teacher_name_kh'];?></span> ភេទ <span class="ValueLabelTeacher red"><?php echo $this->rs['sex'];?></span> ឯកទេស <span class="ValueLabelTeacher red">គណិតវិទ្យា</span> ជាបុគ្គលិកនៃសាលាបញ្ញាសាស្រ្តអន្តរជាតិហ្គ្រេនភ្នំពេញ ត្រូវបានចាត់តាំងអោយបង្រៀនថ្នាក់ទី <span class="ValueLabelTeacher red"> <?php echo $this->rs['teachingGroup'];?> </span> ដូចមានភ្ជាប់ជូនក្នុងកាលវិភាគខាងក្រោម ចាប់ពី<span class="ValueLabelTeacher red"> ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d"));?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m"));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y"));?> </span>នេះតទៅ ។</label>
+						 
 					   </td>
 					</tr>
+				
 					<tr class="head">
 					   <td colspan="3" align="center">
-					   		<h1 style="font-size:13px;font-weight: initial;font-family:'Khmer OS Muol Light';" >កាលវិភាគបង្រៀនវគ្គសិក្សាពេលវិស្សមកាលឆ្ឆ្នាំសិក្សា​ ២០២៣​-២០២៤</h1>
+					   		<h1 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >កាលវិភាគបង្រៀនវគ្គសិក្សាពេលវិស្សមកាលឆ្ឆ្នាំសិក្សា​ ២០២៣​-២០២៤</h1>
 					   </td>
 					</tr>
 					<tr class="head">
@@ -356,13 +319,13 @@ dojo.ready(function(){
 					</tr>
 					<tr class="head">
 					   <td align="left">
-					   		<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ឈ្មោះ </label> &nbsp;<label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';" >ម៉ៃ សីហា </label>
+					   		<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ឈ្មោះ </label> &nbsp;<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';" ><?php echo $this->rs['teacher_name_kh'];?> </label>
 					   </td>
 					   <td  align="center">
-					   		<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ថ្នាក់ទី</label> &nbsp;<label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';" >4B, 5A, 6A </label>
+					   		<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ថ្នាក់ទី</label> &nbsp;<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';" ><?php echo $this->rs['teachingGroup'];?></label>
 					   </td>
 					   <td align="right">
-					   		<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >លេខទូរស័ព្ទ</label> &nbsp;<label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';" >០៩៦៦៧៣៧២០៦ </label>
+					   		<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';" >លេខទូរស័ព្ទ</label> &nbsp;<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';" > <?php echo $this->rs['tel'];?> </label>
 					   </td>
 					</tr>
 					<tr class="head">
@@ -391,17 +354,25 @@ dojo.ready(function(){
 										<?php } ?>
 									</tr>
 								</thead>
-										<tr class="rowValue" >
-											<td colspan="<?php echo $day+1; ?>" align="center">
-												<strong><span class="className khmerLabel  blue"><?php echo $tr->translate("ពេលព្រឹក") ;?></span></strong>
-											</td>
-										</tr>
+										
 									<?php 
 										$i=0; 
 										$m=0;$f=0;
+										$moment=1;
+										$momentev=1;
 										if(!empty($this->timeTeaching)) foreach($this->timeTeaching as $time){ 
 										$i++;
-										
+										?>
+										<?php if($time['from_hour']< 12 ){ if( $moment==1){ 
+											?>
+											<tr class="rowValue" >
+												<td colspan="<?php echo $day+1; ?>" align="center">
+													<strong><span class="className khmerLabel  blue"><?php echo $tr->translate("ពេលព្រឹក") ;?></span></strong>
+												</td>
+											</tr>
+										<?php
+											$moment++;
+											}
 										?>
 										<tr  class="rowValue">
 											<td data-label="ម៉ោងបង្រៀន/Teaching Time" align="center" style="white-space:nowrap;">
@@ -420,6 +391,7 @@ dojo.ready(function(){
 														'fromHour'	=>$fromHour
 														,'toHour'	=>$toHour
 														,'dayID'	=>$dayID
+														,'teacherId'	=>$teacherId 
 													);
 													$row = $dbExternal->getScheduleInfoDetail($arrCondiction);
 												?>
@@ -438,7 +410,58 @@ dojo.ready(function(){
 												<?php }?>
 											</td>
 											<?php } ?>
-									</tr>
+										</tr>
+									<?php  }else{ ?>
+										<?php if( $momentev==1){ 
+											?>
+											<tr class="rowValue" >
+												<td colspan="<?php echo $day+1; ?>" align="center">
+													<strong><span class="className khmerLabel  blue"><?php echo $tr->translate("ពេលរសៀល") ;?></span></strong>
+												</td>
+											</tr>
+										<?php
+											$momentev++;
+											}
+										?>
+										<tr  class="rowValue">
+											<td data-label="ម៉ោងបង្រៀន/Teaching Time" align="center" style="white-space:nowrap;">
+												<?php 
+													
+													$fromHour = $time['from_hour'];
+													$toHour = $time['to_hour'];
+												?>
+												<span class="valueLabel timeLabel"><?php echo $time['fromHourTitle'];?> - <?php echo $time['toHourTitle'];?></span>
+											</td>
+											
+											<?php 
+												if(!empty($this->days)) foreach($this->days AS $key => $days){ 
+													$dayID = $days['id'];
+													$arrCondiction = array(
+														'fromHour'	=>$fromHour
+														,'toHour'	=>$toHour
+														,'dayID'	=>$dayID
+														,'teacherId'	=>$teacherId 
+													);
+													$row = $dbExternal->getScheduleInfoDetail($arrCondiction);
+												?>
+											<td data-label="<?php echo $days['daysKh']."/".$days['daysEng'];?>" align="center" >
+												<?php if(empty($row)){ ?>
+													<span class="valueLabel khmerLabel "></span>
+													<!-- <span class="valueLabel khmerLabel empty">មិនមាន</span>
+													<span class="valueLabel englishLabel empty">(Empty)</span> -->
+												<?php }else{
+													$gradeTitle = $row['gradeTitle'];
+													if(empty($gradeTitle)){ $gradeTitle = $row['gradeTitleEng']; }else{ if(!empty($row['gradeTitleEng'])){$gradeTitle = $gradeTitle."/".$row['gradeTitleEng'];}}
+													?>
+													<span class="valueLabel khmerLabel red"><?php echo $row['subjectTitleKh']?> (<?php if(!empty($row['subjecLang'])){ if($row['subjecLang']==1){ echo "ខ្មែរ"; }else{  echo "English"; }}?>) </span>
+													<span class="className valueLabel blue"><?php echo ' <strong>'.$row['groupCode'].'</strong>';?></span>
+												
+												<?php }?>
+											</td>
+											<?php } ?>
+										</tr>
+
+									<?php	} ?>
 								<?php } ?>
 							</table>				  
 					   </td>
@@ -455,8 +478,8 @@ dojo.ready(function(){
 									<td align="left" colspan="2" >
 									</td>
 									<td colspan="2" align="center" >
-										<h1 style="font-size:14px;font-weight: initial;font-family:'Khmer OS Battambang';"><?php echo $branchInfo['workat'];?> ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d"));?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m"));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y"));?></h1>
-										<h1 style="font-size:14px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយកស្តីទី</h1>
+										<h1 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';"><?php echo $branchInfo['workat'];?> ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d"));?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m"));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y"));?></h1>
+										<h1 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយកស្តីទី</h1>
 									</td>
 								</tr>
 								<tr class="head">
@@ -481,101 +504,6 @@ dojo.ready(function(){
 						  </table>
 					   </td>
 					</tr>
-
-				
-					
-					<!-- <tr>
-					   <td colspan="3">
-					   		<table id="exportExcel" style="font-family:'Khmer OS Battambang'; border-collapse:collapse;  font-size:14px; white-space: nowrap;" width="100%" cellspacing="0">
-						    	
-						    	<tr>
-						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			I. <?php echo $tr->translate("LECTURER_INFO");?>
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
-						    			<p class="padding-left">
-						    			<label class="title">ឈ្មោះគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_name_kh'];?></label> <label class="title">ជាអក្សរឡាតាំង</label> : <label class="value"><?php echo $this->rs['teacher_name_en'];?></label>  <label class="title">អត្តលេខ</label> : <label class="value"><?php echo $this->rs['teacher_code'];?></label>
-						    			</p>
-						    			<p class="padding-left">
-										<label class="title">ភេទ</label> : <label class="value"><?php echo $this->rs['sex'];?></label> 	<label class="title">សញ្ជាតិ</label> : <label class="value"><?php echo $this->rs['nationality'];?></label> <label class="title">ជនជាតិ</label> : <label class="value"><?php echo $this->rs['nation'];?></label>
-						    			</p>
-										<p class="padding-left">
-											<label class="title">ថ្ងៃ-ខែ-ឆ្នាំកំណើត</label> : <label class="value"><?php echo empty($this->rs['dob'])?"":date("d/m/Y",strtotime($this->rs['dob']));?></label>	<label class="title">ទីកន្លែងកំណើត</label> : <label class="value"><?php echo $this->rs['pob'];?></label> 
-						    			</p>
-						    			<p class="padding-left">
-											<label class="title">ប្រភេទគ្រូ</label> : <label class="value"><?php echo $this->rs['teacher_type'];?></label> 
-						    			</p>
-						    		</td>
-						    	</tr>
-						    	<tr><td>&nbsp;</td></tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			II. <?php echo $tr->translate("CURRENT_ADDRESS");?>
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
-						    			<p class="padding-left">
-						    			<label class="title">លេខផ្ទះ</label> : <label class="value"><?php echo $this->rs['home_num'];?></label><label class="title">ផ្លូវលេខ</label> : <label class="value"><?php echo $this->rs['street_num'];?></label><label class="title">ភូមិ</label> : <label class="value"><?php echo $this->rs['Village_name'];?></label>​ 
-						    			</p>
-						    			<p class="padding-left">
-						    			 <label class="title">ឃុំ/សង្កាត់ </label> : <label class="value"><?php echo $this->rs['com_name'];?></label><label class="title">ស្រុក /ខណ្ឌ</label> : <label class="value"><?php echo $this->rs['dis_name'];?></label> <label class="title">រាជធានី/ខេត្ត </label> : <label class="value"><?php echo $this->rs['province_name'];?></label>  
-						    			</p>
-						    		</td>
-						    	</tr>
-						    	<tr><td>&nbsp;</td></tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			III. <?php echo $tr->translate("CONTACT_INFO");?>
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
-						    			<p class="padding-left">
-						    			<label class="title">លេខទូរស័ព្ទ </label> : <label class="value"><?php echo $this->rs['tel'];?></label><label class="title">អ៊ីម៉ែល </label> : <label class="value"><?php echo $this->rs['email'];?></label> 
-						    			</p>
-						    			<p class="padding-left">
-						    			<label class="title">លេខអត្តសញ្ញាណប័ណ្ណ</label> : <label class="value"><?php echo $this->rs['card_no'];?></label>  <label class="title">លិខិតឆ្លងដែនលេខ</label> : <label class="value"><?php echo $this->rs['passport_no'];?></label>
-						    			</p>
-						    			<p class="padding-left">
-						    			 
-						    			</p>
-						    			<p class="padding-left">
-						    			 <label class="title">សម្គាល់  </label> : <label class="value"><?php echo $this->rs['note'];?></label> 
-						    			</p>
-						    		</td>
-						    	</tr>
-						    	<tr><td>&nbsp;</td></tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight: initial; font-family:'Khmer OS Battambang';">
-						    			VI. <?php echo $tr->translate("CONTACT_INFO_EXPER");?>
-						    			<div class="border"></div>
-						    		</td>
-						    	</tr>
-						    	<tr>
-						    		<td style="font-size:12px; font-weight:600;  font-family:'Khmer OS Battambang';">
-						    			<p class="padding-left">
-						    			<label class="title">កម្រិតសិក្សា</label> : <label class="value"><?php echo $this->rs['degree'];?></label>  <label class="title">ថ្ងៃចាប់ផ្តើម</label> : <label class="value"><?php echo $this->rs['start_date'];?></label><label class="title">ថ្ងៃបញ្ចប់ </label> : <label class="value"><?php echo $this->rs['end_date'];?></label> 
-						    			</p>
-						    			<p class="padding-left">
-						    			<label class="title">តួនាទី </label> : <label class="value"><?php echo $this->rs['position_add'];?></label>
-						    			</p>
-						    			<p class="padding-left">
-						    			<label class="title">បទពិសោធន៍ការងារ  </label> : <label class="value"><?php echo $this->rs['experiences'];?></label> 
-						    			</p>
-						    			<p class="padding-left">
-						    			<label class="title">កិច្ចព្រមព្រៀង </label> : <label class="value"><?php echo $this->rs['agreement'];?></label> 
-						    			</p>
-						    		</td>
-						    	</tr>
-						    </table>
-					   </td>
-					</tr> -->
 	  		 	</table>
 	   		</div>
 		 </div>

@@ -45,19 +45,19 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT v.$view FROM rms_view v WHERE v.type=24 AND v.key_code=g.teacher_type LIMIT 1) AS teacher_type, 
 				(SELECT v.$view FROM rms_view v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality, 
 				(SELECT v.$view FROM rms_view v WHERE v.type=21 AND v.key_code=g.nation LIMIT 1) AS nation, 
-				(SELECT v.$view FROM rms_view v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree
+				(SELECT v.$view FROM rms_view v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree,
+				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.group_code FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) as teachingGroup
 				
 			FROM rms_teacher AS g 
 				WHERE  1 ";
 		if(!empty($data['id'])){
-			$sql.=" AND id=".$data['id'];
+			$sql.=" AND g.id=".$data['id'];
 		}
 		if(!empty($data['token'])){
-			$sql.=" AND teacher_code='".addslashes($data['token'])."'";
+			$sql.=" AND g.teacher_code='".addslashes($data['token'])."'";
 		}
 		$sql.=" LIMIT 1";
 		$row=$db->fetchRow($sql);
-        
 		return $row;
 	}
 	

@@ -285,9 +285,13 @@ table.tb-footer tr.style-head {
 </div>
 <table width="100%">
 	<tr>
-		<td align="center">
+		<td align="right">
 			<button dojoType="dijit.form.Button" id="printselected" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
 				type="button" onclick="printSelected();"><?php echo $tr->translate('PRINT_CARD')?></button>
+		</td>
+		<td align="left">
+			<button dojoType="dijit.form.Button" id="print_appointment_letter" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+				type="button" onclick="printAppointmentLetter();"><?php echo $tr->translate('APPOINTMENT_LETTER')?></button>
 		</td>
 	</tr>
 </table>
@@ -588,7 +592,28 @@ function getKHMonthByNumber(m){
 
     	 id_selected = dijit.byId('id_selected').get('value');
 		 if(id_selected!=''){
-			window.location.href = '<?php echo $url_copy;?>'+'/id/'+id_selected;
+			window.open(
+					'<?php echo $url_copy;?>'+'/id/'+id_selected,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
+		 }else{
+			alert('Please select record you want to print');
+			return false;
+		 }
+	}
+	function printAppointmentLetter(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_print =$this->url(array('module'=>'allreport','controller'=>'allstaff','action'=>'appointment-letter'));
+    	?>
+
+    	 id_selected = dijit.byId('id_selected').get('value');
+		 if(id_selected!=''){
+			window.open(
+					'<?php echo $url_print;?>'+'/id/'+id_selected,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
 		 }else{
 			alert('Please select record you want to print');
 			return false;

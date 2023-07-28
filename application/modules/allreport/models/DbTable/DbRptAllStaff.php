@@ -175,6 +175,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				(SELECT dept.$colunmName FROM rms_department AS dept WHERE dept.depart_id=g.department LIMIT 1) AS deptName
 				FROM rms_teacher AS g WHERE status = 1 and id = $staff_id
 		";
+		echo $staff_id;
     	return $db->fetchAll($sql);
     }
     public function getAllStaffSelectedGroupBy($staff_id){

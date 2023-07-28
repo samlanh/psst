@@ -94,7 +94,7 @@ public function init()
 
 	public function appointmentLetterAction(){
 		$id=$this->getRequest()->getParam("id");
-		
+		$this->view->teacherId = $id;
 		$db= new Foundation_Model_DbTable_DbTeacher();
 		$param['id']=$id;
 		$this->view->rs = $rs = $db->getTeacherinfoById($param);
@@ -104,7 +104,7 @@ public function init()
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getDays();
 		$this->view->days = $row;
-		$row = $dbExternal->getTimeTeachingByTeacher();
+		$row = $dbExternal->getTimeTeachingByTeacher($param);
 		$this->view->timeTeaching = $row;
 		
 		

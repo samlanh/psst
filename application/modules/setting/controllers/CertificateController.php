@@ -21,9 +21,9 @@ class Setting_CertificateController extends Zend_Controller_Action {
 					'adv_search' => '',
 					'status' => -1);   		
 				 }
-			 $rs_rows= $db->getAllCertificate($search);
+			  $rs_rows= $db->getAllCertificate($search);
 			  $list = new Application_Form_Frmtable();
-			  $collumns = array("TITLE","BRANCH","SCHOOL_OPTION","CREATE_DATE","STATUS");
+			  $collumns = array("DEFAULT","TITLE","BRANCH","SCHOOL_OPTION","CREATE_DATE","STATUS");
 			  $link=array(
 							'module'=>'setting','controller'=>'certificate','action'=>'edit',
 			  );
@@ -64,7 +64,6 @@ class Setting_CertificateController extends Zend_Controller_Action {
 		$frm = $fm->FrmCertificate();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_branch = $frm;
-  
 	}	
 
 	public function editAction(){

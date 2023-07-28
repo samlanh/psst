@@ -32,44 +32,34 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
     		}
 			
 	    	$_arr = array(
-	    			'branch_id'	    =>$_data['branch_id'],
-	    			'schoolOption'	=>$_data['schoolOption'],
-					'title'	=>$_data['title'],
-					'certificate_describe'	=>$_data['certificate_describe'],
+	    			'branch_id'	    => $_data['branch_id'],
+	    			'schoolOption'	=> $_data['schoolOption'],
+					'title'			=> $_data['title'],
+					'certificate_describe'=>$_data['certificate_describe'],
+	    			'describe_font'	=>$_data['font_size'],
 	    			'background' 	=>$photo,
-
-	    			'name_left'	=>$_data['name_left'],
-					'name_top'	=>$_data['name_top'],
-
+	    			'name_left'		=>$_data['name_left'],
+					'name_top'		=>$_data['name_top'],
 					'gender_left'	=>$_data['gender_left'],
 					'gender_top'	=>$_data['gender_top'],
-
-					'date_left'	=>$_data['date_left'],
-					'date_top'	=>$_data['date_top'],
-
-					'code_left'	=>$_data['code_left'],
-					'code_top'	=>$_data['code_top'],
-
+					'date_left'		=>$_data['date_left'],
+					'date_top'		=>$_data['date_top'],
+					'code_left'		=>$_data['code_left'],
+					'code_top'		=>$_data['code_top'],
 					'academic_left'	=>$_data['academic_left'],
 					'academic_top'	=>$_data['academic_top'],
-
-					'rank_left'	=>$_data['rank_left'],
-					'rank_top'	=>$_data['rank_top'],
-					
+					'rank_left'		=>$_data['rank_left'],
+					'rank_top'		=>$_data['rank_top'],
 					'grade_left'	=>$_data['grade_left'],
-					'grade_top'	=>$_data['grade_top'],
-
+					'grade_top'		=>$_data['grade_top'],
 					'describe_left'	=>$_data['describe_left'],
 					'describe_top'	=>$_data['describe_top'],
-
 					'month_left'	=>$_data['month_left'],
-					'month_top'	=>$_data['month_top'],
-
-					'day_left'	=>$_data['day_left'],
-					'day_top'	=>$_data['day_top'],
-
-					'year_left'	=>$_data['year_left'],
-					'year_top'	=>$_data['year_top'],
+					'month_top'		=>$_data['month_top'],
+					'day_left'		=>$_data['day_left'],
+					'day_top'		=>$_data['day_top'],
+					'year_left'		=>$_data['year_left'],
+					'year_top'		=>$_data['year_top'],
 					'default'		=>1,
 	    			'status'		=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
@@ -95,41 +85,32 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'branch_id'	    =>$_data['branch_id'],
 					'schoolOption'	=>$_data['schoolOption'],
-					'title'	=>$_data['title'],
-					'certificate_describe'	=>$_data['certificate_describe'],
-	    			'name_left'	=>$_data['name_left'],
-					'name_top'	=>$_data['name_top'],
-
+					'title'			=>$_data['title'],
+					'certificate_describe'=>$_data['certificate_describe'],
+					'describe_font'	=>$_data['font_size'],
+	    			'name_left'		=>$_data['name_left'],
+					'name_top'		=>$_data['name_top'],
 					'gender_left'	=>$_data['gender_left'],
 					'gender_top'	=>$_data['gender_top'],
-
-					'date_left'	=>$_data['date_left'],
-					'date_top'	=>$_data['date_top'],
-
-					'code_left'	=>$_data['code_left'],
-					'code_top'	=>$_data['code_top'],
-
+					'date_left'		=>$_data['date_left'],
+					'date_top'		=>$_data['date_top'],
+					'code_left'		=>$_data['code_left'],
+					'code_top'		=>$_data['code_top'],
 					'academic_left'	=>$_data['academic_left'],
 					'academic_top'	=>$_data['academic_top'],
 
-					'rank_left'	=>$_data['rank_left'],
-					'rank_top'	=>$_data['rank_top'],
-					
+					'rank_left'		=>$_data['rank_left'],
+					'rank_top'		=>$_data['rank_top'],
 					'grade_left'	=>$_data['grade_left'],
-					'grade_top'	=>$_data['grade_top'],
-
+					'grade_top'		=>$_data['grade_top'],
 					'describe_left'	=>$_data['describe_left'],
 					'describe_top'	=>$_data['describe_top'],
-
 					'month_left'	=>$_data['month_left'],
-					'month_top'	=>$_data['month_top'],
-
-					'day_left'	=>$_data['day_left'],
-					'day_top'	=>$_data['day_top'],
-
-					'year_left'	=>$_data['year_left'],
-					'year_top'	=>$_data['year_top'],
-
+					'month_top'		=>$_data['month_top'],
+					'day_left'		=>$_data['day_left'],
+					'day_top'		=>$_data['day_top'],
+					'year_left'		=>$_data['year_left'],
+					'year_top'		=>$_data['year_top'],
 	    			'status'		=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'create_date'	=>date("Y-m-d H:i:s"),
@@ -173,10 +154,10 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
     	$check = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
     	$uncheck = '<i class="fa fa-square-o" aria-hidden="true"></i>';
     	$sql = "SELECT b.id,
-    	-- CASE    
-		-- 		WHEN  b.default = 1 THEN '$check'
-		-- 		WHEN  b.default = 0 THEN '$uncheck'
-		-- 		END AS student_statustitle,
+    	 CASE    
+		 		WHEN  b.default = 1 THEN '$check'
+		 		WHEN  b.default = 0 THEN '$uncheck'
+		 		END AS student_statustitle,
     	b.title,
     	(SELECT bs.branch_nameen FROM rms_branch as bs WHERE bs.br_id =b.branch_id LIMIT 1) as branch_name,
     	(SELECT sp.title FROM `rms_schooloption` AS sp WHERE sp.id = b.schoolOption LIMIT 1) AS schoolOption,

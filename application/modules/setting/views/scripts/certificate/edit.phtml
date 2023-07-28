@@ -85,6 +85,13 @@ $frm = $this->frm_branch;
 											<?php echo $frm->getElement("certificate_describe");?>
 									   </div>
 									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FONT_SIZE");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("font_size");?>
+									   </div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -339,49 +346,14 @@ ul.opt-school {
 }
 </style>
 <script>
-dojo.require("dojo.data.ObjectStore");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.NumberTextBox");
-var schooloptionstore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: schooloptionstore,
-		queryExpr: "*${0}*",
-		autoComplete: false,                        
-		id: "schoolOption",
-		name: "schoolOption",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("PLEASE_SELECT");?>",          
-	}, "schoolOption");
-
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-		 getSchoolOption();
   });
 });
-function getSchoolOption(){
-	var url_getoptionSchool = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"getschooloption")); ?>';
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=="" || branch_id==-1){
-			schooloptionstore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getoptionSchool,
-			content:{
-				'branch_id':branch_id,
-			},
-			handleAs:"json",
-			load: function(data) {
-				schooloptionstore  = getDataStorefromJSON('id','name', data );
-			    dijit.byId('schoolOption').set('store', schooloptionstore);
-			},
-			error: function(err) {
-				alert(err);
-			}
-		});
-}
 
 function readURLBack(input) {
     if (input.files && input.files[0]) {

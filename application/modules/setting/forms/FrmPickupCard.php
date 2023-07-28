@@ -292,6 +292,8 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		
+		
 		$describe_top = new Zend_Dojo_Form_Element_NumberTextBox('describe_top');
 		$describe_top->setAttribs(array(
 			'dojoType'=>'dijit.form.NumberTextBox',
@@ -346,6 +348,13 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				'required'=>true,
 		));
 		
+		$describe_font = new Zend_Dojo_Form_Element_NumberTextBox('font_size');
+		$describe_font->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+		));
+		
+		
 		$_id = new Zend_Form_Element_Hidden('id');
 		$old_photo = new Zend_Form_Element_Hidden('old_photo');
 		if(!empty($data)){
@@ -379,10 +388,11 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 			$describe_left->setValue($data['describe_left']);
 			$describe_top->setValue($data['describe_top']);
 			$old_photo->setValue($data['background']);
-			
+			$describe_font->setValue($data['describe_font']);
 		}
 		
 		$this->addElements(array(
+				$describe_font,
 				$old_photo ,
 				$_id,
 				$title,

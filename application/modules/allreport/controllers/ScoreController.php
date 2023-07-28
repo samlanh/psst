@@ -184,6 +184,9 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		exit();
     	}
     	$this->view->rs = $result;
+    	
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->certificateSetting = $db->getCertificateSetting(1);
     }
     function monthlyOutstandingStudentAction(){
     	$id=$this->getRequest()->getParam("id");

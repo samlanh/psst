@@ -814,6 +814,8 @@ function getSubjectByGrade(){
 						dijit.byId('max_score'+col).attr('value',data[i].max_score);
 						dijit.byId('scoreshort_'+col).attr('value',data[i].cut_score);
 						dijit.byId('amount_subject'+col).attr('value',data[i].amount_subject);
+
+						dijit.byId('semester_max_score'+col).attr('value',data[i].max_score_semester);
 						dijit.byId('amount_subject_semester'+col).attr('value',data[i].amount_subject_sem);
 						dijit.byId('group_note_'+col).attr('value',data[i].note);
 						

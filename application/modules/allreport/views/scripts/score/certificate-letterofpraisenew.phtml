@@ -3,6 +3,8 @@
 	echo $this->headTitle($tr->translate('Letter of praise'));
 	$_dbgb = new Application_Model_DbTable_DbGlobal();
 	$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+	
+	$setting = $this->certificateSetting;
 ?>
 <div style="margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -36,110 +38,111 @@
 				}
 				span.student_name {
 				   position: absolute;
-				    top: 377px;
-				    left: 200px;
+				   top:<?php echo $setting['name_top'];?>px;
+				   left: <?php echo $setting['name_left'];?>px;
 				    min-width: 150px;
 				    text-align: center;
 				}
 				
 				span.gender {
 				   position: absolute;
-				    top: 377px;
-				    left: 382px;
-				    min-width: 75px;
-				    text-align: center;
+				   top:<?php echo $setting['gender_top'];?>px;
+				   left: <?php echo $setting['gender_left'];?>px;
+				   min-width: 75px;
+				   text-align: center;
 				}
 					
 				span.dob {
 				   position: absolute;
-				    top: 377px;
-				    right: 452px;
-				    min-width: 145px;
-				    text-align: center;
+				   top:<?php echo $setting['date_top'];?>px;
+				   left: <?php echo $setting['date_left'];?>px;
+				   min-width: 145px;
+				   text-align: center;
 				}
 									span.stu_code {
 					position: absolute;
-					top: 377px;
-					right: 285px;
+					top:<?php echo $setting['code_top'];?>px;
+				    left: <?php echo $setting['code_left'];?>px;
 					min-width: 100px;
 					text-align: center;
 					font-weight: bold;
 				}	
 				span.rank {
-				   position: absolute;
-    top: 437px;
-    right: 760px;
-    min-width: 70px;
-    text-align: center;color:red !important;
-    font-weight: bold;
+				    position: absolute;
+				    min-width: 70px;
+				    top:<?php echo $setting['rank_top'];?>px;
+				    left: <?php echo $setting['rank_left'];?>px;
+				    text-align: center;color:red !important;
+				    font-weight: bold;
 				}	
 				span.class {
 					position: absolute;
-				    top: 437px;
-				    right: 477px;
+				    top:<?php echo $setting['grade_top'];?>px;
+				    left: <?php echo $setting['grade_left'];?>px;
 				    min-width: 70px;
 				    text-align: center;
 				    font-weight: bold;
 				}
-				span.academic_year {
+				span.academic_year{
 					position: absolute;
-   top: 377px;
-    right: 100px;
-    font-size: 17px;
-    min-width: 120px;
-    text-align: center;
-    color:red !important;
+				    top:<?php echo $setting['academic_top'];?>px;
+				    left: <?php echo $setting['academic_left'];?>px;
+				    font-size: 17px;
+				    min-width: 120px;
+				    text-align: center;
+				    color:red !important;
 				}
-				
-				span.issue_day {
+				span.issue_day{
 					position: absolute;
-   top: 533px;
-    right: 273px;
-    font-size: 17px;
-    min-width: 40px;
-    text-align: center;
-    font-family: 'Times New Roman','Khmer OS Battambang';
+				    top:<?php echo $setting['day_top'];?>px;
+				    left: <?php echo $setting['day_left'];?>px;
+				    font-size: 17px;
+				    min-width: 40px;
+				    text-align: center;
+				    font-family: 'Times New Roman','Khmer OS Battambang';
 				}
-				span.issue_month {
+				span.issue_month{
 					position: absolute;
-					top: 533px;
-    right: 181px;
+					top:<?php echo $setting['month_top'];?>px;
+				    left: <?php echo $setting['month_left'];?>px;
 					font-size: 17px;
 					min-width: 70px;
 					text-align: center;
 					font-family: 'Times New Roman','Khmer OS Battambang';
 				}
-					span.noted{position: absolute;
-						    top: 500px;
-						    right: 303px;
-						    font-size: 17px;
-						    min-width: 40px;
-						    text-align: center;color:#1e3b77;font-family: 'Times New Roman','Khmer OS Battambang';
-					}
-				span.issue_year {
+				span.noted{
 					position: absolute;
-				    top: 533px;
-    right: 105px;
+				    top:<?php echo $setting['describe_top'];?>px;
+				    left: <?php echo $setting['describe_left'];?>px;
+				    font-size: 17px;
+				    min-width: 40px;
+				    font-size: 17px;
+				    text-align: center;color:#1e3b77;font-family: 'Times New Roman','Khmer OS Battambang';
+				}
+				span.issue_year{
+					position: absolute;
+				    top:<?php echo $setting['year_top'];?>px;
+				    left:<?php echo $setting['year_left'];?>px;
 				    font-size: 17px;
 				    min-width: 40px;
 				    text-align: center;
 				    font-family: 'Times New Roman','Khmer OS Battambang';
 				}
 				* {
-				margin: 0;
-				padding: 0;
+					margin: 0;
+					padding: 0;
 				}	
-	
 			
-							@page {
-								page: A4;
-								size: landscape;
-								margin:0.5cm;
-								pading:0.5cm;
-								background: red;
-	
-						}
-							body{padding:0;margin:0}
+				@page{
+					page: A4;
+					size: landscape;
+					margin:0.5cm;
+					pading:0.5cm;
+					background: red;
+
+				}
+				body{padding:0;margin:0}
+					
 				</style>
 			<div class="one-row-certif" >
 				<div class="certificate">

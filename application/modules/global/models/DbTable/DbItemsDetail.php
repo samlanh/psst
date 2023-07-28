@@ -151,9 +151,12 @@
 								'grade_id'		=> $id,
 								'subject_id'	=> $_data['subject_study_'.$i],
 								'max_score'		=>$_data['max_score'.$i],
-								'cut_score'		=>$_data['score_cut_'.$i],
 								'amount_subject' =>$_data['amount_subject'.$i],
+								
+								'max_score_semester' =>$_data['max_score_semester'.$i],
 								'amount_subject_sem' =>$_data['amount_subject_semester'.$i],
+								'cut_score'		=>$_data['score_cut_'.$i],
+								
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,

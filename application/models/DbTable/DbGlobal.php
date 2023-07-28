@@ -3842,5 +3842,10 @@ function getAllgroupStudyNotPass($action=null){
    		$userId = empty($userId)?0:$userId;
    		return $userId;
    	}
+   	public function getCertificateSetting($id){
+   		$db = $this->getAdapter();
+   		$sql=" SELECT * FROM `rms_certificate_setting` WHERE TYPE=".$id;
+   		return $db->fetchRow($sql);
+   	}
 }
 ?>

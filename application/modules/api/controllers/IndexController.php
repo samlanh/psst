@@ -253,7 +253,17 @@ class Api_IndexController extends Zend_Controller_Action
    	
    }
    function downloadAction(){
-   	$this->_helper->layout()->disableLayout();
+	   	$this->_helper->layout()->disableLayout();
+	   	$scoreId =$this->getRequest()->getParam("scoreId");
+	   	$stuId =$this->getRequest()->getParam("studentId");
+	   	
+	   	$data = array(
+	   			'scoreId'=>$scoreId,//use
+	   			'studentId'=>$stuId,//use and all above not use
+	   	);
+	   	$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
+	   	$resultData = $dbscore->getTranscriptExam($data);
+	   	$this->view->resultData = $resultData;
    }
    
    function examscorepdfAction(){

@@ -181,7 +181,8 @@ dojo.ready(function(){
 							<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['stu_code'];?></td>
 							<td >&nbsp;</td>
 							<td align="right" width="25%">សម្រាប់ខែ​ / For : </td>
-							<td class="bold" align="left" width="23%">&nbsp;<?php if($scoreInfo['exam_type']==1){echo $scoreInfo['forMonthKhLabel'].'-'.$scoreInfo['forMonthEnLabel']; }else{echo "SEMESTER ".$scoreInfo['for_semester'];}?></td>
+							<?php $scoreTitle=($scoreInfo['exam_type']==1)?$scoreInfo['forMonthKhLabel'].'-'.$scoreInfo['forMonthEnLabel']:"SEMESTER ".$scoreInfo['for_semester'];?>
+							<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreTitle;?></td>
 						</tr>
 						<tr>
 							<td align="right" width="25%">ភេទ / Gender : </td>
@@ -191,7 +192,6 @@ dojo.ready(function(){
 							<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['academicYearLabel'];?></td>
 						</tr>
 					</table>
-					
 				</td>
 			</tr>
 			<tr>

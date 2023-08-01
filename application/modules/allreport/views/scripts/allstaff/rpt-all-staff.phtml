@@ -84,13 +84,16 @@ table.tb-footer tr.style-head {
 											<option value="2"><?php echo $tr->translate("SELECTED_STAFF_OPTION");?></option>
 										</select>
 									</div>
-									<div class="col-md-5 col-sm-5 col-xs-12">
+									<div class="col-md-3 col-sm-3 col-xs-12">
 										<select name="staffID" id="staffID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
 											<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
 											<?php if(!empty($this->rs)){ foreach ($this->rs AS $row) { ?>
 											<option value="<?php echo $row['id']; ?>"><?php echo $row['teacher_code']." ".$row['teacher_name_kh'];?></option>
 											<?php }} ?>
 										</select>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<input type="date" id="appointment_date" name="appointment_date" constraints="{datePattern:'dd-MM-yyyy'}" dojoType="dijit.form.DateTextBox" class="fullside" placeholder="<?php echo $tr->translate("APPOINTMENT_DATE");?>"> 
 									</div>
 								</div>
 
@@ -608,14 +611,22 @@ function getKHMonthByNumber(m){
     		$url_print =$this->url(array('module'=>'allreport','controller'=>'allstaff','action'=>'appointment-letter'));
     	?>
 
+         appt_date = dijit.byId('appointment_date').attr('displayedValue');
     	 id_selected = dijit.byId('id_selected').get('value');
-		 if(id_selected!=''){
+		 if(id_selected!='' &&  appt_date!=''){
+			if(appt_date!=''){
+				var urlDate="?appointment_date="+appt_date;
+			}
 			window.open(
-					'<?php echo $url_print;?>'+'/id/'+id_selected,
+					'<?php echo $url_print;?>'+'/id/'+id_selected+urlDate,
 					  '_blank' // <- This is what makes it open in a new window.
 					);
-		 }else{
+		 }else if(id_selected ==''){
 			alert('Please select record you want to print');
+			return false;
+		 }else if(appt_date ==''){
+			alert('Please Select appointment Date!');
+			appt_date = dijit.byId('appointment_date').focus();
 			return false;
 		 }
 	}

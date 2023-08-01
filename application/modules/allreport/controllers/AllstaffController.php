@@ -95,6 +95,10 @@ public function init()
 	public function appointmentLetterAction(){
 		$id=$this->getRequest()->getParam("id");
 		$this->view->teacherId = $id;
+
+		$date=$this->getRequest()->getParam("appointment_date");
+		$this->view->appointment_date = $date;
+
 		$db= new Foundation_Model_DbTable_DbTeacher();
 		$param['id_select']=$id;
 		$this->view->rs = $rs = $db->getTeacherinfoById($param);

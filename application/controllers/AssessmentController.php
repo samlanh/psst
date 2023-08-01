@@ -77,6 +77,15 @@ class AssessmentController extends Zend_Controller_Action
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/external/dashboard");
 		}
 		$this->view-> month = $dbExternal->getAllMonth();
+		
+		$data = array(
+				'groupId'=>'6',
+				'sortStundent'=>'0',
+				'degree'=>'3',
+				'keyIndex'=>1);
+		$rs =$db->getSecondFormatStudentForAssessment($data); // format 2
+		
+// 		print_r($rs);exit();
 	}
 
 	public function editAction()
@@ -132,7 +141,8 @@ class AssessmentController extends Zend_Controller_Action
 			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
 			
 			
-			$rs=$db->getStudentForAssessment($data);
+// 			$rs=$db->getStudentForAssessment($data);//format 1
+			$rs =$db->getSecondFormatStudentForAssessment($data); // format 2
 			print_r(Zend_Json::encode($rs));
 			exit();
 		}

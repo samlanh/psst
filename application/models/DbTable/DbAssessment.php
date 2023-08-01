@@ -161,7 +161,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$dbExternal = new Application_Model_DbTable_DbExternal();
+// 			$dbExternal = new Application_Model_DbTable_DbExternal();
 			$degreeId = empty($_data['degree'])?0:$_data['degree'];
 			$_arr = array(
 					'branchId'			=>$_data['branchId'],
@@ -184,8 +184,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			$this->_name='rms_studentassessment';		
 			$assessmentId=$this->insert($_arr);
 			
-			
-			$comments = $dbExternal->getCommentByDegree($degreeId);
+// 			$comments = $dbExternal->getCommentByDegree($degreeId);
+			$comments = explode(',', $_data['identityComment']);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				
@@ -193,7 +193,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 					$studentId 		= $_data['student_id'.$i];
 					$teacherComment = $_data['teacherComment'.$i];
 					if(!empty($comments)) foreach($comments AS $rowCri){
-						$commentId = $rowCri['id'];
+						$commentId =$rowCri;// $rowCri['id'];
 						$arr=array(
 								'assessmentId'		=> $assessmentId,
 								'studentId'			=> $studentId,
@@ -204,11 +204,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 								);
 							$this->_name='rms_studentassessment_detail';
 							$this->insert($arr);
-					
 					}
 				}
-				
-				
 			}
 		
 		  $db->commit();
@@ -249,6 +246,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	   
 	   
 	   $identity="";
+	   $identityComment='';
+	   
 	   $arrClassCol = array(
 			2=>"col-md-6 col-sm-6 col-xs-12"
 			,3=>"col-md-4 col-sm-4 col-xs-12"
@@ -318,10 +317,9 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 					$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
 				$string.='</td>';
 				$string.='<td  rowspan="2" data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
-				
-				if(!empty($comments)) foreach($comments AS $key => $rComment){ 
-				
-					
+				$number=1;
+				if(!empty($comments)) foreach($comments AS $keyComment => $rComment){ 
+					$number = $number+$keyComment;
 					$string.='<td  data-label="'.$rComment['name'].'">';
 						$string.='<input dojoType="dijit.form.TextBox" class="fullside" name="commentId'.$keyIndex.'_'.$rComment['id'].'"  value="'.$rComment['id'].'" type="hidden" >';
 						$string.='<select queryExpr="*${0}*" autoComplete="false" name="rating_id_'.$keyIndex.'_'.$rComment['id'].'" class="fullside" id="rating_id_'.$keyIndex.'_'.$rComment['id'].'" dojoType="dijit.form.FilteringSelect" >';
@@ -332,6 +330,15 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 								}}
 							$string.='</select>';						
 					$string.='</td>';
+					
+					if($key==1){//for first student
+						if (empty($identityComment)){
+							$identityComment=$number;
+						}else{
+							$identityComment=$identityComment.",".$number;
+						}
+					
+					}
 				}
 				
 				$string.='';
@@ -343,22 +350,180 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			
 		}
 		
-		
-		
 		$string.='';
 		$string.='</table>';
 		
-		
-				
-	   
 	   $arrContent = array(
 		'contentHtml'=>$string
 		,'identity'=>$identity
+	   	,'identityComment'=>$identityComment
 		,'keyIndex'=>$keyIndex
 		,'commentContentInfo'=>$commentContentInfo
 	   );
 	   
 	   return $arrContent;
+   }
+   function getSecondFormatStudentForAssessment($data){
+		   	$dbExternal = new Application_Model_DbTable_DbExternal();
+		   	$students = $dbExternal->getStudentByGroup($data);
+		   
+		   	$degreeId = empty($data['degree'])?0:$data['degree'];
+		   	$comments = $dbExternal->getCommentByDegree($degreeId);
+		   	$countComment = count($comments);
+		   	$countComment = empty($countComment)?1:$countComment;
+		   	
+		   	$rating = $this->getAllRating();
+		   	
+		   
+		   	
+		   	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+		   	$db=$this->getAdapter();
+		   	
+		   	$keyIndex = $data['keyIndex'];
+		  
+		   	
+		   	$identity="";
+		   	$identityComment = '';
+		   	$arrClassCol = array(
+		   			2=>"col-md-6 col-sm-6 col-xs-12"
+		   			,3=>"col-md-4 col-sm-4 col-xs-12"
+		   			,4=>"col-md-3 col-sm-3 col-xs-12"
+		   	);
+		   	$commentContentInfo="";
+		   	$commentContentInfo='';
+		   	$commentContentInfo.='<div class="card-info bg-gradient-directional-notice">';
+		   	$commentContentInfo.='<div class="card-content">';
+		   	$commentContentInfo.='<div class="card-body">';
+		   	$commentContentInfo.='<div class="media d-flex">';
+		   	$commentContentInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
+		   	$commentContentInfo.='<ul class="optListRow gradingInfo">';
+		   	$commentContentInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</h4></li>';
+		   	$string='';
+		   	$string='';
+		   	$string.='<table class="collape responsiveTable" id="table" >';
+		   	$string.='<thead>';
+		   	$string.='<tr class="head-td" align="center">';
+		   	$string.='<th scope="col" width="10px"  >ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+		   	$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
+		   	$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
+		   		
+// 		   	if(!empty($comments)) foreach($comments AS $key => $rComment){
+// 		   		$string.='<th scope="col">ចំនុចទី '.($key+1).'<small class="lableEng" >Section '.($key+1).'</small></th>';
+// 		   		$commentContentInfo.='<li class="opt-items "><strong>ចំនុចទី '.($key+1).'/Section '.($key+1).'</strong>.) '.$rComment['name'].'</li>';
+// 		   	}
+		   		
+		   	$string.='</tr>';
+		   	$string.='</thead>';
+		   	
+		   	$commentContentInfo.='</ul>';
+		   	$commentContentInfo.='</div>';
+		   	$commentContentInfo.='<div class="align-self-top">';
+		   	$commentContentInfo.='<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>';
+		   	$commentContentInfo.='</div>';
+		   	$commentContentInfo.='</div>';
+		   	$commentContentInfo.='</div>';
+		   	$commentContentInfo.='</div>';
+		   	$commentContentInfo.='</div>';
+		   	
+		   
+		   	if(!empty($students)) foreach($students AS $key => $stu){
+		   		$key++;
+		   		$keyIndex=$keyIndex+1;
+		   			
+		   		if (empty($identity)){
+		   			$identity=$keyIndex;
+		   		}else{
+		   			$identity=$identity.",".$keyIndex;
+		   		}
+		   			
+		   		$rowClasss="odd";
+		   		if(($keyIndex%2)==0){
+		   			$rowClasss= "regurlar";
+		   		}
+		   		$gender = $tr->translate('MALE');
+		   		if($stu['sex']==2){
+		   			$gender = $tr->translate('FEMALE');
+		   		}
+		   			
+		   		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="true" class="rowData '.$rowClasss.' accordion-toggle bg-secondary text-primary text-center" id="row'.$keyIndex.'">';
+			   		$string.='<td rowspan="2" data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
+			   		$string.='<td rowspan="2" data-label="'.$tr->translate("STUDENT").'"  align="left">';
+			   		$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
+			   		$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
+			   		$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
+			   			$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
+		   			$string.='</td>';
+		   		$string.='<td  rowspan="2" data-label="'.$tr->translate("SEX").'" >'.$gender.'';
+		   		$string.='<input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-comment" label="ចូលវាយតម្លៃសិស្ស" dojoType="dijit.form.Button"/>';
+		   		 
+		   		$string.='</td>';
+		   		$string.='</tr>';
+		   		$stringOption='';
+		   		if(!empty($rating)){
+		   			foreach($rating as $rate){
+		   				// 		   					$selected="";
+		   				// 		   					if($rate['id']==2){
+		   				$selected="selected='selected'";
+		   				// 		   					}
+		   				$stringOption.='<option '.$selected.' value="'.$rate['id'].'">'.$rate['id'].'-'.$rate['name'].'</option>';
+		   			}
+		   		}
+		   		$string.='<tr >';
+// 			   		$string.='<td colspan="'.$countComment.'" ><div >មតិយោបល់របស់គ្រូ/Teacher Comment</div>';
+		   		$string.='<td colspan="'.$countComment.'"><div  class="accordian-body collapse" aria-expanded="true"  id="demo_'.$keyIndex.'" >';
+		   		$string.='<table class="table table-striped">'; 
+		   					$string.='<thead><tr class="bg-primary">';
+							   		$string.='<td>'.$tr->translate('N_O').'</td>';
+							   		$string.='<td>'.$tr->translate('COMMENT').'</td>';
+							   		$string.='<td>'.$tr->translate('PREVIUSE_RATING').'</td>';
+							   		$string.='<td>'.$tr->translate('RATING').'</td>';
+			   				$string.='</tr></thead>';
+					   		$string.='<tbody  class="accordion-toggle" id="table_cmt_row_" >';
+					   		$commentType='';
+					   		if(!empty($comments)) foreach($comments AS $keyComment => $rComment){
+					   		if($commentType!=$rComment['commentType']){
+					   			$string.='<tr>';
+					   				$string.='<td colspan="4" align="center">'.$rComment['commentType'].'</td>';
+					   			$string.='</tr>';
+					   		}
+					   		$commentType=$rComment['commentType'];
+					   		$number = $keyComment+1;
+					   		$string.='<tr>';
+						   		$string.='<td align="center">'.($number).'</td>';
+						   		$string.='<td>'.$rComment['name'].'</td>';
+						   		$string.='<td>Previuse Rating</td>';
+						   		$string.='<td><select queryExpr="*${0}*" autoComplete="false" name="rating_id_'.$keyIndex.'_'.$number.'" class="fullside"  dojoType="dijit.form.FilteringSelect" >'.$stringOption.'</select></td>';
+					   		$string.='</tr>';
+					   		
+					   			if($key==1){//for first student
+							   		if (empty($identityComment)){
+							   			$identityComment=$number;
+							   		}else{
+							   			$identityComment=$identityComment.",".$number;
+							   		}
+					   		
+					   			}
+					   		}
+					   		$string.='</tbody>';
+		   		
+		   			$string.='</table></div>';
+			   		$string.='<textarea dojoType="dijit.form.Textarea" class="fullside" name="teacherComment'.$keyIndex.'"  value="" ></textarea></td>';
+		   		$string.='</td></tr>';
+		   			
+		   	}
+		   	
+		   	$string.='';
+		   	$string.='</table>';
+		   	
+		   	
+		   	$arrContent = array(
+		   			'contentHtml'=>$string
+		   			,'identity'=>$identity
+		   			,'identityComment'=>$identityComment
+		   			,'keyIndex'=>$keyIndex
+		   			,'commentContentInfo'=>$commentContentInfo
+		   	);
+		   	return $arrContent;
    }
    
    function getAssessmentDetail($data){

@@ -818,9 +818,7 @@ class Application_Form_FrmGlobal{
 					<span id='lbParentName' >&nbsp;</span>
 					<span id='lbParentPhone' >&nbsp;</span>
 					
-					
 				</div>
-				
 				
 			</div>
 			
@@ -932,13 +930,9 @@ class Application_Form_FrmGlobal{
 						@media print{
 							@page{
 								margin:0cm 0.7cm 0cm 0.7cm;
-								page-break-before: avoid;
-								-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-								-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-								-ms-transform: scale(0.5);   /* IE 9 */
-								-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-								transform: scale(0.5);
 								$pageSetup
+								page-break-before: avoid;
+								transform: scale(0.5);
 							}
 							a{text-decoration:none;color:#000;}
 						}
@@ -961,28 +955,26 @@ class Application_Form_FrmGlobal{
 						<tr>
 							<td width='20%'></td>
 							<td width='20%'>&nbsp;</td>
-							<td width='20%' align='center' valign='bottom'>
+							<td align='center' valign='bottom'>
 								<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:11px;position:relative'>បង្កាន់ដៃបង់ប្រាក់</div>
 							</td>
-							<td width='20%'>លេខបង្កាន់ដៃ/Receipt No
-							</td>
-							<td width='20%'><strong style='font-size:12px;'><label id='lb_receipt_no'></label></strong>
-							</td>
+							<td width='20%'>&nbsp;លេខបង្កាន់ដៃ/Receipt No</td>
+							<td width='15%'><strong style='font-size:12px;'><label id='lb_receipt_no'></label></strong></td>
 						</tr>
 						<tr>
-							<td width='20%'><span class='spanBlog'>Print Date:".date('d-m-Y g:iA')."</span></td>
-							<td width='20%'><span class='spanBlog'>Print By : ".$username."</span></td>
-							<td width='20%' align='center' valign='bottom'>
+							<td><span class='spanBlog'>Print Date:".date('d-m-Y g:iA')."</span></td>
+							<td><span class='spanBlog'>&nbsp;Print By : ".$username."</span></td>
+							<td align='center' valign='bottom'>
 								<div style='font-family:Times New Roman;font-size:11px;font-weight:bold'>Official Receipt</div>
 							</td>
-							<td width='20%'>&nbsp;ថ្ងៃបង់ប្រាក់/Pay Date</td>
-							<td width='20%'><label id='lb_date' class='one bold'></label></td>
+							<td>&nbsp;ថ្ងៃបង់ប្រាក់/Pay Date</td>
+							<td><label id='lb_date' class='one bold'></label></td>
 						</tr>
 						<tr>
 							<td>អត្តលេខ,Student ID/Test ID</td>
 							<td> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
 							<td>ឆ្នាំសិក្សា/Academic Year</td>
-							<td> : &nbsp;<label id='lb_academic_year' class='one'>&nbsp;</label></td>
+							<td>: <label id='lb_academic_year' class='one'>&nbsp;</label></td>
 							<td rowspan='5' valign='top'>
 								<div style='float:right;border:1px solid #000;width:70px;height:85px;text-align:right; $showPic '>
 									<label id='lb_photo'></label>
@@ -999,14 +991,14 @@ class Application_Form_FrmGlobal{
 							<td>Family Name-Name</td>
 							<td> : &nbsp;<label id='lb_namelatin' class='one bold' style='display: inline-block; vertical-align: top;'></label></td>
 							<td>ថ្នាក់/Class</td>
-							<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
+							<td style='white-space: nowrap;'>: <label id='lb_grade' class='one'>&nbsp;</label>
 							</td>
 						</tr>
 						<tr>
 							<td>ភេទ/Gender </td>
 							<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
 							<td>ថ្នាកទី/Grade/Level​​​</td>
-							<td rowspan='2' valign='top'> : &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
+							<td rowspan='2' valign='top'>: &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
 						</tr>
 						<tr>
 							<td>លេខទូរសព្ទ/Tel</td>
@@ -1016,13 +1008,13 @@ class Application_Form_FrmGlobal{
 						<td colspan='5'><div id='t_amountmoneytype'></div></td>
 					</tr>
 					<tr>
-						<td rowspan='3' valign='top' style='font-size:10px;'>Note
+						<td rowspan='3' valign='top' style='font-size:10px;'>សម្គាល់/Note
 							<div style='width:99%;float: left;'>
 								<div style='font-size:10px;min-height:40px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
 							</div>
 						</td>
 						<td rowspan='3' colspan='2' valign='top' style='font-size:10px;' >
-							Say in US Dollars
+							ទឹកប្រាក់ជាអក្សរ/Say in US Dollars
 							<div style='font-size:10px;min-height:40px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
 						</td>
 						<td>ត្រូវបង់/Total Payment</td>
@@ -1033,11 +1025,11 @@ class Application_Form_FrmGlobal{
 						<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
 					</tr>
 					<tr>
-						<td><div style='font-weight: bold;font-size:11px;'><strong>បានបង់ Paid Amount</strong>: $</div></td>
+						<td><div style='font-weight: bold;font-size:11px;'><strong>បានបង់/Paid Amount</strong>: $</div></td>
 						<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:12px;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
 					</tr>
 					<tr>
-						<td align='center'>បេឡាករ/Cashier</td>
+						<td align='center'><strong>បេឡាករ/Cashier</strong></td>
 						<td align='center'>ប្រធានបេឡា/Head of Cashier</td>
 						<td align='center'>អតិថិជន/Customer</td>
 						<td><div>ជំពាក់/Balance</div></td>

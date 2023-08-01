@@ -733,14 +733,15 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="SELECT
 					dc.comment_id AS id,
-					c.comment AS name
+					c.comment AS name,
+					(SELECT CONCAT(name_kh,' ',name_en) FROM `rms_view` WHERE key_code=c.commentType AND type=36 LIMIT 1) AS commentType
 				FROM
 					rms_degree_comment as dc,
 					rms_comment as c
 				WHERE
 					dc.comment_id = c.id
 					and dc.degree_id = $degree
-			";
+			ORDER BY commentType DESC , c.id ASC ";
 		return $db->fetchAll($sql);
 	}
 	function getClassAssessmentById($assessmentID){

@@ -104,8 +104,6 @@
 				font-size: 11px !important;
 			}
 			table.content-data {
-				page-break-inside: avoid;
-				page-break-after: auto;
 				border-collapse: collapse;
 				border: 1px solid #000;
 				font-size: 8px;
@@ -145,22 +143,20 @@
 			}
 			
 			@media print {
-					.hide {
-						visibility: visible;
-						height: <?php echo $classHideHeight;?>;
-					}
-					@page {
-						page: A4;
-						size: landscape;
-						margin: 0.8cm;
-					}
-					.bgRow {
-						background: #d6e2ff !important;
-						font-size: 11px;
-						}
+				.hide {
+					visibility: visible;
+					height: <?php echo $classHideHeight;?>;
 				}
+				@page {
+					page: A4;
+					margin: 0.8cm;
+				}
+				.bgRow {
+					background: #d6e2ff !important;
+					font-size: 11px;
+					}
+			}
 </style>
-
 		<table style="width:100%;">
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>

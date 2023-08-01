@@ -372,7 +372,7 @@ function filterStudentBygroup(){
 												str+='<th scope="col"><?php echo $tr->translate('N_O');?></th>';
 												str+='<th scope="col"><?php echo $tr->translate('COMMENT');?></th>';
 												str+='<th scope="col"><?php echo $tr->translate('RATING');?></th>';
-											str+='</th></tr>';
+											str+='</tr>';
 										str+='</thead>';
 										str+='<tbody  class="accordion-toggle" id="table_cmt_row_'+column+'" >';
 										str+='</tbody>';
@@ -436,7 +436,7 @@ var issetIdentComment=0;
 						col1++;no1++;rowcmtId++;
 						label_comment = data[i]['comment'];
 						template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+col1+'</td>';
-						 template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+recordId+'_' +col1 + '" name="comment_id_'+recordId+'_' + col1 +'" value="'+data[i]['id']+'" /></td>';
+						template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" align="left">&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_id_'+recordId+'_' +col1 + '" name="comment_id_'+recordId+'_' + col1 +'" value="'+data[i]['id']+'" /></td>';
 						
 						template1+='<td data-label="<?php echo $tr->translate("RATING");?>">';
 							template1+='<select queryExpr="*${0}*" autoComplete="false" name="rating_id_'+recordId+'_' + col1 +'" class="fullside" id="rating_id_'+recordId+'_' + col1 +'" dojoType="dijit.form.FilteringSelect" >';

@@ -46,8 +46,8 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT v.$view FROM rms_view v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality, 
 				(SELECT v.$view FROM rms_view v WHERE v.type=21 AND v.key_code=g.nation LIMIT 1) AS nation, 
 				(SELECT v.$view FROM rms_view v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree,
-				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.group_code FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) as teachingGroup
-				
+				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.group_code FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) as teachingGroup,
+				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.degree FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) AS degreeTye 
 			FROM rms_teacher AS g 
 				WHERE  1 ";
 		if(!empty($data['id'])){
@@ -56,9 +56,18 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if(!empty($data['token'])){
 			$sql.=" AND g.teacher_code='".addslashes($data['token'])."'";
 		}
-		$sql.=" LIMIT 1";
-		$row=$db->fetchRow($sql);
-		return $row;
+		if(!empty($data['id_select'])){
+			$sql.=" AND g.id IN (".$data['id_select'].")";
+			$row=$db->fetchAll($sql);
+			return $row;
+		}else{
+			$sql.=" LIMIT 1";
+			$row=$db->fetchRow($sql);
+			return $row;
+
+		}
+	
+		
 	}
 	
 	function getAllStaffBybranch($branch_id){//use

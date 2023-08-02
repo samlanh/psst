@@ -14,7 +14,11 @@
 	$dayp   = date('d',$time);
 	$month = date('m',$time);
 	$year  = date('Y',$time);
-	// print_r($this->appointment_date);
+
+	$yearId = $this->yearId;
+
+	$yearValue = $this->yearValue;
+	list($fromYear, $toYear) = explode("-", $yearValue);
 
 ?>	
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
@@ -182,11 +186,16 @@ dojo.ready(function(){
 							white-space:normal;
 							
 						}
+						.headerLabel{
+							font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Muol Light';
+							
+						}
+						
 						tr.rowValue td {
 							padding:2px;
 						}
 						tr.rowValue td, tr.rowValue td span {
-							line-height: 12px;
+							line-height: 16px;
 						}
 						tr.rowValue td {
 							padding: 5px 0;
@@ -201,7 +210,7 @@ dojo.ready(function(){
 							font-weight: 600;
 						}
 						span.valueLabel.khmerLabel {
-							font-size: 12px;
+							font-size: 13px;
 							font-weight: normal !important;
 							line-height: 18px;
 							font-family: 'Times New Roman','Khmer OS Muol Light';
@@ -209,17 +218,20 @@ dojo.ready(function(){
 						}
 
 						span.className {
-							font-size: 12px;
-							line-height: 12px;
+							font-size: 13px;
+							line-height: 16px;
 							margin: 5px 0;
 							font-family:Tahoma,'Khmer OS Battambang';
 						}
 						span.ValueLabelTeacher{
 							display: inline-block;
 							font-size:14px;
-							font-weight: bold;
+							font-weight: initial;
 							font-family:'Khmer OS Battambang';
 							color:#f00;
+						}
+						label.LabelTeacher{
+							font-size:14px; line-height: 26px; font-weight: initial; font-family:'Khmer OS Battambang';
 						}
 						span.empty {
 							color: #8e834e;
@@ -229,6 +241,9 @@ dojo.ready(function(){
 						}
 						span.blue {
 							color: #0053ff;
+						}
+						span.bold{
+							font-weight: bold;
 						}
 						@media print{
 							@page {
@@ -240,6 +255,16 @@ dojo.ready(function(){
 						.pages-break{
                			 page-break-inside:always; page-break-before: always;
              			 }
+						.principalStamp{
+							position: relative;
+						}
+						.principalStamp .signature{
+							left: 40%;
+						    top: 40%;
+						    height: 100px;
+						    width: 200px;
+						    position: absolute;
+						}
 	  		 </style>
 			 <?php 	if(!empty($this->rs)) foreach($this->rs AS $key => $rs){ 
 
@@ -250,8 +275,19 @@ dojo.ready(function(){
 					
 					if($lang_id==1){
 						$schoolName = $branchInfo['school_namekh'];
+
+						if($rs['sex']=='ប្រុស'){
+							$NameTitle = 'លោក';
+						}elseif($rs['sex']=='ស្រី'){
+							$NameTitle = 'លោកស្រី';
+						}
 					}elseif($lang_id==2){
 						$schoolName = $branchInfo['school_nameen'];
+						if($rs['sex']=='Male'){
+							$NameTitle = 'Mr.';
+						}elseif($rs['sex']=='Female'){
+							$NameTitle = 'Mrs.';
+						}
 					}
 
 					$signature="";
@@ -274,11 +310,7 @@ dojo.ready(function(){
 						}
 					}
 
-					if($rs['sex']=='ប្រុស'){
-						$NameTitle = 'លោក';
-					}elseif($rs['sex']=='ស្រី'){
-						$NameTitle = 'លោកស្រី';
-					}
+					
 
 					$break_page="pages-break";
 
@@ -292,14 +324,14 @@ dojo.ready(function(){
 					</tr>
 					<tr class="head">
 						<td colspan="2" valign="bottom" >
-							<h2 style="font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Muol Light';" >  &nbsp;</h2>
-					   		<h2 style="font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Muol Light';">មន្ទីរអប់រំ យុវជន និងកីឡា</h2>
-							<h2 style="font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Muol Light';"><?php echo $schoolName; ?></h2>
-							<h2 style="font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Battambang';">លេខ................. <?php echo $branchInfo['branch_code']; ?></h2>
+							<h2 class="headerLabel" >  &nbsp;</h2>
+					   		<h2 class="headerLabel" >មន្ទីរអប់រំ យុវជន និងកីឡា</h2>
+							<h2 class="headerLabel" ><?php echo $schoolName; ?></h2>
+							<label class="LabelTeacher">លេខ................. <?php echo $branchInfo['abbreviations']; ?></label>
 					   </td>
 					   <td align="center" valign="top">
-					   		<h2 style="font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Muol Light';" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
-					   		<h2 style="font-size:14px;line-height: 12px; font-weight: initial; font-family:'Khmer OS Muol Light';">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+					   		<h2 class="headerLabel" >ព្រះរាជាណាចក្រកម្ពុជា</h2>
+					   		<h2 class="headerLabel">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
 					   		<img alt="" src="<?php echo $this->baseUrl()."/images/sign.PNG"?>" style=" width: 120px;">
 					   </td>
 					</tr>
@@ -310,13 +342,13 @@ dojo.ready(function(){
 					</tr>
 					<tr >
 					   <td colspan="3" align="center">
-					   		<h1 style="font-size:14px;font-weight: initial;font-family:'Khmer OS Muol Light';" >លិខិតចាត់តាំង</h1>
+					   		<h2 class="headerLabel" >លិខិតចាត់តាំង</h1>
 					   </td>
 					</tr>
 
 					<tr >
 					   <td colspan="3" align="left">
-					 	  <label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Muol Light';" >យោង ៖ </label> &nbsp;<label style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';" >លិខិតបើកសាលា និងកិច្ចសន្យាការងារ </label>
+					 	  <label class="headerLabel" >យោង ៖ </label> &nbsp;<label class="LabelTeacher" >លិខិតបើកសាលា និងកិច្ចសន្យាការងារ </label>
 					   </td>
 					</tr>
 					<tr >
@@ -326,12 +358,17 @@ dojo.ready(function(){
 					</tr>
 					<tr >
 					   <td colspan="3" align="left">
-					  	 <label style="font-size:14px; line-height: 25px; font-weight: initial;font-family:'Khmer OS Battambang';" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <?php echo $NameTitle;?> <span class="ValueLabelTeacher red"><?php echo $rs['teacher_name_kh'];?></span> ភេទ <span class="ValueLabelTeacher red"><?php echo $rs['sex'];?></span><?php if($rs['degreeTye']==2){ ?>  បង្រៀនផ្នែក<?php echo $rs['department'];?> កម្រិតបឋម <?php }else{ ?> ឯកទេស <span class="ValueLabelTeacher red"><?php echo $rs['skill'];?></span> <?php } ?>  ជាបុគ្គលិកនៃ<?php echo $schoolName; ?> ត្រូវបានចាត់តាំងអោយបង្រៀនថ្នាក់ទី <span class="ValueLabelTeacher red"> <?php echo $rs['teachingGroup'];?> </span> ដូចមានភ្ជាប់ជូនក្នុងកាលវិភាគខាងក្រោម ចាប់ពី <span class="ValueLabelTeacher red"> ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date($dayp));?> ខែ <?php echo $dbgb->getMonthInkhmer(date($month));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year));?> </span> នេះតទៅ ។</label>
+					  	 <label class="LabelTeacher" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <?php echo $NameTitle;?> <span class="ValueLabelTeacher red bold"><?php echo $rs['teacher_name_kh'];?></span> ភេទ <span class="ValueLabelTeacher red bold"><?php echo $rs['sex'];?></span><?php if($rs['degreeTye']==2){ ?>  បង្រៀនផ្នែក<?php echo $rs['department'];?> កម្រិតបឋម <?php }else{ ?> ឯកទេស <span class="ValueLabelTeacher red bold"><?php echo $rs['skill'];?></span> <?php } ?>  ជាបុគ្គលិកនៃ<?php echo $schoolName; ?> ត្រូវបានចាត់តាំងអោយបង្រៀនថ្នាក់ទី <span class="ValueLabelTeacher red bold"> <?php echo $rs['teachingGroup'];?> </span> ដូចមានភ្ជាប់ជូនក្នុងកាលវិភាគខាងក្រោម ចាប់តាំងពី <span class="ValueLabelTeacher red bold">ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date($dayp));?> ខែ <?php echo $dbgb->getMonthInkhmer(date($month));?> ឆ្នាំ​ <?php echo $dbgb->getNumberInkhmer(date($year));?> </span> នេះតទៅ ។</label>
+					   </td>
+					</tr>
+					<tr >
+					   <td align="center" colspan="3" valign="top">
+						   &nbsp;
 					   </td>
 					</tr>
 					<tr >
 					   <td colspan="3" align="center">
-					   		<h1 style="font-size:14px;font-weight: initial;font-family:'Tahoma Bold', 'Khmer OS Muol Light';" >កាលវិភាគបង្រៀនវគ្គសិក្សាពេលវិស្សមកាលឆ្នាំសិក្សា <?php echo $dbgb->getNumberInkhmer(date($rs['from_year']));?>-<?php echo $dbgb->getNumberInkhmer(date($rs['to_year']));?></h1>
+					   		<h2 class="headerLabel" >កាលវិភាគបង្រៀនវគ្គសិក្សាពេលវិស្សមកាលឆ្នាំសិក្សា <?php echo $dbgb->getNumberInkhmer(date($fromYear));?>-<?php echo $dbgb->getNumberInkhmer(date($toYear));?></h1>
 					   </td>
 					</tr>
 					<tr class="head">
@@ -341,13 +378,13 @@ dojo.ready(function(){
 					</tr>
 					<tr >
 					   <td align="left">
-					   		<label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ឈ្មោះ ៖</label> &nbsp;<label style="font-size:14px;font-weight: bold;font-family:'Khmer OS Battambang';" ><?php echo $rs['teacher_name_kh'];?> </label>
+					   		<label class="headerLabel" >ឈ្មោះ ៖</label> &nbsp;<label class="LabelTeacher"><?php echo $rs['teacher_name_kh'];?> </label>
 					   </td>
 					   <td  align="center">
-					   		<label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Muol Light';" >ថ្នាក់ទី ៖</label> &nbsp;<label style="font-size:14px;font-weight: bold;font-family:'Khmer OS Battambang';" ><?php echo $rs['teachingGroup'];?></label>
+					   		<label class="headerLabel" >ថ្នាក់ទី ៖</label> &nbsp;<label class="LabelTeacher"><?php echo $rs['teachingGroup'];?></label>
 					   </td>
 					   <td align="right">
-					   		<label style="font-size:14px;font-weight: initial;font-family:'Khmer OS Muol Light';" >លេខទូរស័ព្ទ ៖</label> &nbsp;<label style="font-size:14px;font-weight: bold;font-family:'Khmer OS Battambang';" > <?php echo $rs['tel'];?> </label>
+					   		<label class="headerLabel" >លេខទូរស័ព្ទ ៖</label> &nbsp;<label class="LabelTeacher"> <?php echo $rs['tel'];?> </label>
 					   </td>
 					</tr>
 					<tr >
@@ -379,6 +416,7 @@ dojo.ready(function(){
 										
 									<?php 
 									    $param['id']=$rs['id'];
+										$param['yearId']=$yearId;
 										$timeTeaching = $dbExternal->getTimeTeachingByTeacher($param);
 
 										$i=0; 
@@ -406,7 +444,7 @@ dojo.ready(function(){
 													$fromHour = $time['from_hour'];
 													$toHour = $time['to_hour'];
 												?>
-												<span class="valueLabel timeLabel"><?php echo $time['fromHourTitle'];?> - <?php echo $time['toHourTitle'];?></span>
+												<span class="valueLabel timeLabel"><?php echo str_replace("AM","", $time['fromHourTitle']);?>-<?php echo str_replace("AM","", $time['toHourTitle']);?></span>
 											</td>
 											
 											<?php 
@@ -418,6 +456,7 @@ dojo.ready(function(){
 														,'toHour'	=>$toHour
 														,'dayID'	=>$dayID
 														,'teacherId'=>$teacherId
+														,'yearId'   =>$yearId
 													);
 													
 													$row = $dbExternal->getScheduleInfoDetail($arrCondiction);
@@ -431,9 +470,8 @@ dojo.ready(function(){
 													$gradeTitle = $row['gradeTitle'];
 													if(empty($gradeTitle)){ $gradeTitle = $row['gradeTitleEng']; }else{ if(!empty($row['gradeTitleEng'])){$gradeTitle = $gradeTitle."/".$row['gradeTitleEng'];}}
 													?>
-													<span class="className valueLabel blue"><?php echo $row['groupCode'];?></span>
-													<span class="className valueLabel red"><?php echo $row['subjectTitleKh']?></span>
-													<span class="className valueLabel red">(<?php if(!empty($row['subjecLang'])){ if($row['subjecLang']==1){ echo "ខ្មែរ"; }else{  echo "English"; }}?>) </span>
+													<span class="className valueLabel blue bold"><?php echo $row['groupCode'];?></span>
+													<span class="className valueLabel red"><?php echo $row['subjectTitleKh']?>(<?php if(!empty($row['subjecLang'])){ if($row['subjecLang']==1){ echo "ខ្មែរ"; }else{  echo "English"; }}?>) </span>
 												
 												<?php }?>
 											</td>
@@ -454,11 +492,10 @@ dojo.ready(function(){
 										<tr  class="rowValue">
 											<td data-label="ម៉ោងបង្រៀន/Teaching Time" align="center" style="white-space:nowrap;">
 												<?php 
-													
 													$fromHour = $time['from_hour'];
-													$toHour = $time['to_hour'];
+													$toHour   = $time['to_hour'];
 												?>
-												<span class="valueLabel timeLabel"><?php echo $time['fromHourTitle'];?> - <?php echo $time['toHourTitle'];?></span>
+												<span class="valueLabel timeLabel"><?php echo str_replace("PM","", $time['fromHourTitle']);?>-<?php echo str_replace("PM","", $time['toHourTitle']);?></span>
 											</td>
 											
 											<?php 
@@ -468,7 +505,8 @@ dojo.ready(function(){
 														'fromHour'	=>$fromHour
 														,'toHour'	=>$toHour
 														,'dayID'	=>$dayID
-														,'teacherId'	=>$teacherId 
+														,'teacherId'=>$teacherId 
+														,'yearId'   =>$yearId
 													);
 													$row = $dbExternal->getScheduleInfoDetail($arrCondiction);
 												?>
@@ -481,9 +519,8 @@ dojo.ready(function(){
 													$gradeTitle = $row['gradeTitle'];
 													if(empty($gradeTitle)){ $gradeTitle = $row['gradeTitleEng']; }else{ if(!empty($row['gradeTitleEng'])){$gradeTitle = $gradeTitle."/".$row['gradeTitleEng'];}}
 													?>
-													<span class="className valueLabel blue"><?php echo $row['groupCode'];?></span>
-													<span class="className valueLabel red"><?php echo $row['subjectTitleKh']?></span>
-													<span class="className valueLabel red">(<?php if(!empty($row['subjecLang'])){ if($row['subjecLang']==1){ echo "ខ្មែរ"; }else{  echo "English"; }}?>) </span>
+													<span class="className valueLabel blue bold"><?php echo $row['groupCode'];?></span>
+													<span class="className valueLabel red "><?php echo $row['subjectTitleKh']?>(<?php if(!empty($row['subjecLang'])){ if($row['subjecLang']==1){ echo "ខ្មែរ"; }else{  echo "English"; }}?>) </span>
 												
 												<?php }?>
 											</td>
@@ -507,27 +544,33 @@ dojo.ready(function(){
 									<td align="left" colspan="2" >
 									</td>
 									<td colspan="2" align="center" >
-										<h1 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Battambang';"><?php echo $branchInfo['workat'];?> ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d"));?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m"));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y"));?></h1>
-										<h1 style="font-size:12px;font-weight: initial;font-family:'Khmer OS Muol Light';">នាយកស្តីទី</h1>
+										<?php 
+											$moment=date("Y-m-d");
+											$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
+										?>
+										<label class="LabelTeacher" ><?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa ព.ស. b');?></label><br>
+										<label class="LabelTeacher" ><?php echo $branchInfo['workat']; ?> ថ្ងៃទី <?php echo $dbgb->getNumberInkhmer(date("d"));?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m"));?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y"));?></label>
+										<h2 class="headerLabel" >នាយកស្តីទី</h2>
 									</td>
 								</tr>
 								<tr class="head">
 									<td  align="left" colspan="2" >
-											<h1 style="font-size:12px; line-height: 12px; font-weight: initial;font-family:'Khmer OS Battambang';">ចម្លងជូន ៖</h1>
-											<h1 style="font-size:12px; line-height: 12px; font-weight: initial;font-family:'Khmer OS Battambang';"> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ "ដើម្បីជ្រាបជាព័ត៌មា​ន​​"</h1>
-											<h1 style="font-size:12px; line-height: 12px; font-weight: initial;font-family:'Khmer OS Battambang';"> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</h1>
-											<h1 style="font-size:12px; line-height: 12px; font-weight: initial;font-family:'Khmer OS Battambang';"> - ឯកសា - កាលប្បវត្តិ សបអហ</h1>
+											<span class="khmerLabel valueLabel " style="margin-bottom: 10px;">ចម្លងជូន ៖</span>
+											<span class="className valueLabel "> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ "ដើម្បីជ្រាបជាព័ត៌មា​ន​​"</span>
+											<span class="className valueLabel "> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</span>
+											<span class="className valueLabel "> - ឯកសា - កាលប្បវត្តិ <?php echo $branchInfo['abbreviations']; ?></span>
 										
 										</td>
 										<td colspan="2" align="center">
-											<div>
-												<?php if(!empty($stamp)){?>
-													<img src="<?php echo $stamp;?>" style="max-height:100px;position:relative;" />
-												<?php } ?>
+											<div class="principalStamp">
+												<div class="stamp" style="margin-bottom: 20px;">
+													<img src="<?php echo $stamp;?>" style="height:120px;position:relative;" />
+												</div>
+												<div class="signature">
+													<img src="<?php echo $signature;?>" />
+												</div>
 											</div>
-											<?php if(!empty($signature)){?>
-												<img src="<?php echo $signature;?>" style="left:50px;width:150px;position:relative;" />
-											<?php } ?>
+											<h2 style="left:70px; top:10px width:150px;position:relative; color:#f00;" class="headerLabel red" ><?php echo  $branchInfo['principal']; ?></h2>
 									</td>
 								</tr>
 						  </table>
@@ -563,3 +606,6 @@ function exportExcel(){
 	$('#exportExcel').tableExport({type:'excel',escape:'false'});
 }
 </script>
+
+
+

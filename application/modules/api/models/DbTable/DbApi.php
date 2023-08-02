@@ -4835,7 +4835,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql =" SELECT
 				s.*
 			FROM
-				rms_student_bus AS s
+				rms_school_bus AS s
 			WHERE s.status = 1 ";
 			$sql.= " AND ".$db->quoteInto('s.busCode=?', $_data['userName']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
@@ -4872,7 +4872,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				'modifyDate' 		=> date("Y-m-d H:i:s"),
 			);
 			
-    		$this->_name='rms_student_bus';
+    		$this->_name='rms_school_bus';
 			$where="id=".$busId;
     		$this->update($arr, $where);
     			
@@ -4940,8 +4940,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				SELECT
 					bus.*
 					,b.$branch AS branchName
+					,'Driver Name' AS driverName
+					,'012988781' AS driverPhone
 				FROM
-					rms_student_bus AS bus
+					rms_school_bus AS bus
 						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
 				WHERE bus.status = 1 ";
 				

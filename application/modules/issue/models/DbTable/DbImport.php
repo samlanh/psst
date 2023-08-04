@@ -24,10 +24,6 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
             $fromHourValue = $this->getTimeValue($from_hour_title);
 			$toHourValue = $this->getTimeValue($to_hour_title);
 
-			echo  $fromHourValue ;
-			echo  $toHourValue ;
-			exit();
-
 			$sql1=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh = '".$sheetData[$i]['A']." ' ";
 			$teacherId =  $db->fetchOne($sql1);
 			if(empty($teacherId)){
@@ -102,7 +98,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 						//'subject_id'		=>$data['academic_year'],
     					//'schedule_setting_id'	=>$_data['settingdetail_'.$i],
     					'from_hour'			=>$fromHourValue,
-    					'to_hour'			=>	$toHourValue,	
+    					'to_hour'			=>$toHourValue,	
     					'create_date'		=>date("Y-m-d H:i:s"),
     					'status'			=>1,
     					'user_id'			=>$this->getUserId(),
@@ -117,6 +113,30 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 		echo "Success";
 		exit();
     }
+
+	public function getSubjectId($title){
+		$db = $this->getAdapter();
+		$sql=" SELECT id FROM `rms_subject` WHERE subject_titlekh LIKE '%".$title."%' ";
+		$subject_id =  $db->fetchOne($sql);
+        
+		// if(empty($timeValue)){
+			
+		// 	$arr = array(
+		// 		'title'	        =>$title,
+		// 		'title_en'		=>$title,
+			
+		// 		'note'		    =>"From Import",
+		// 		'create_date'	=>date("Y-m-d H:i:s"),
+		// 		'modify_date'	=>date("Y-m-d H:i:s"),
+		// 		'status'		=>1,
+		// 		'user_id'		=>$this->getUserId(),
+		// 	);
+		// 	$this->_name='rms_timeseting';
+		// 	$subject_id = $this->insert($arr); 
+		// }
+		return $subject_id;
+	}
+  
 
 	public function getTimeValue($title){
 		$db = $this->getAdapter();

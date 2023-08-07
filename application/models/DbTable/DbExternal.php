@@ -846,6 +846,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}else{
 			$sql.=' AND schDetail.techer_id ='.$this->getUserExternalId();
 		}
+		if(!empty($data['yearId'])){
+			$sql.=' AND schDetail.year_id ='.$data['yearId'];
+		}
 		$sql.=" GROUP BY CONCAT (schDetail.from_hour,schDetail.to_hour) ";
 		$sql.=" ORDER BY schDetail.from_hour ASC ";
 		return $db->fetchAll($sql);
@@ -903,6 +906,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					AND schDetail.from_hour ='$fromHour'
 					AND schDetail.to_hour ='$toHour' ";
 		$sql.=' AND schDetail.techer_id ='.$teacherId;
+		if(!empty($data['yearId'])){
+			$sql.=' AND schDetail.year_id ='.$data['yearId'];
+		}
 		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}

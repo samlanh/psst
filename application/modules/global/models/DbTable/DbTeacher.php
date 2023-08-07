@@ -79,6 +79,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							
 		 					'schoolOption' 		 => $_data['schoolOption'],
 							'position_add' 		 => $_data['position_add'],
+							'skill' 			 => $_data['skill'],
 		 					'passport_no' 		 => $_data['passport_no'],
 		 					'email' 			 => $_data['email'],
 		  					'degree' 			 => $_data['degree'],
@@ -173,6 +174,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						
 						'schoolOption' 		 => $_data['schoolOption'],
 	 					'position_add' 		 => $_data['position_add'],
+						'skill' 			 => $_data['skill'],
 	 					'passport_no' 		 => $_data['passport_no'],
 	 					'email' 			 => $_data['email'],
 	  					'degree' 			 => $_data['degree'],

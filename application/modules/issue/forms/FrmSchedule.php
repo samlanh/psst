@@ -119,6 +119,23 @@ class Issue_Form_FrmSchedule extends Zend_Dojo_Form
     		}
     	}
     	$_branch_search->setValue($request->getParam("branch_search"));
+
+		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
+		$_academic->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+				'class'=>'fullside',
+				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		
+		$_academic->setValue($request->getParam("academic_year"));
+		$rows =  $_dbgb->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$_academic->setMultiOptions($opt);
+
     	
     	if(!empty($data)){
     		$_branch_id->setValue($data["branch_id"]);
@@ -135,7 +152,8 @@ class Issue_Form_FrmSchedule extends Zend_Dojo_Form
 				$_status_search,
     			$start_date,
     			$end_date,
-    			$_branch_search
+    			$_branch_search,
+				$_academic
     			));
     	return $this;
     }

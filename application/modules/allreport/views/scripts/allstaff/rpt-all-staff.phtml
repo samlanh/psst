@@ -78,19 +78,28 @@ table.tb-footer tr.style-head {
 									<div class="col-md-3 col-sm-3 col-xs-12 text-center ">
 										<p class="tx-20 font-weight-semibold "><i class="glyphicon glyphicon-ok-sign" aria-hidden="true">&nbsp;</i><?php echo $tr->translate("SELECT_TEACHER");?> </p>
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-12">
+									<div class="col-md-2 col-sm-2 col-xs-12">
 										<select name="optionSelect" id="optionSelect" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="getBlogStaff();">
 											<option value="1"><?php echo $tr->translate("NORMAL_OPTION");?></option>
 											<option value="2"><?php echo $tr->translate("SELECTED_STAFF_OPTION");?></option>
 										</select>
 									</div>
-									<div class="col-md-5 col-sm-5 col-xs-12">
+									<div class="col-md-2 col-sm-2 col-xs-12">
 										<select name="staffID" id="staffID" dojoType="dijit.form.FilteringSelect" class="fullside" onchange="addRow();">
 											<option value="0"><?php echo $tr->translate("SELECT_TEACHER");?></option>
 											<?php if(!empty($this->rs)){ foreach ($this->rs AS $row) { ?>
 											<option value="<?php echo $row['id']; ?>"><?php echo $row['teacher_code']." ".$row['teacher_name_kh'];?></option>
 											<?php }} ?>
 										</select>
+									</div>
+									<div class="col-md-1 col-sm-1 col-xs-12">
+										
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+										<input type="date" id="appointment_date" name="appointment_date" constraints="{datePattern:'dd-MM-yyyy'}" dojoType="dijit.form.DateTextBox" class="fullside" placeholder="<?php echo $tr->translate("APPOINTMENT_DATE");?>"> 
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+										<?php echo $frm->getElement("academic_year");?>
 									</div>
 								</div>
 
@@ -608,16 +617,35 @@ function getKHMonthByNumber(m){
     		$url_print =$this->url(array('module'=>'allreport','controller'=>'allstaff','action'=>'appointment-letter'));
     	?>
 
+       
     	 id_selected = dijit.byId('id_selected').get('value');
-		 if(id_selected!=''){
+		 appt_date = dijit.byId('appointment_date').attr('displayedValue');
+		 year_id = dijit.byId('academic_year').get('value');
+		 year_value = dijit.byId('academic_year').attr('displayedValue');
+		 if(id_selected!='' &&  appt_date!='' && year_id!=''){
+			if(appt_date!=''){
+				var urlDate="?appointment_date="+appt_date;
+			}
+			if(year_id!=''){
+				var urlYear="&year_id="+year_id+"&year_value="+year_value;
+			}
 			window.open(
-					'<?php echo $url_print;?>'+'/id/'+id_selected,
+					'<?php echo $url_print;?>'+'/id/'+id_selected+urlDate+urlYear,
 					  '_blank' // <- This is what makes it open in a new window.
 					);
-		 }else{
+		 }else if(id_selected ==''){
 			alert('Please select record you want to print');
 			return false;
+		 }else if(appt_date ==''){
+			alert('Please Select appointment Date!');
+			appt_date = dijit.byId('appointment_date').focus();
+			return false;
+		 }else if(year_id ==''){
+			alert('Please Select academic year !');
+			year_id = dijit.byId('academic_year').focus();
+			return false;
 		 }
+		 
 	}
 	function print(){
 		window.frames["print_frame"].document.body.innerHTML=dojo.byId('divPrint1').innerHTML;

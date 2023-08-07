@@ -226,6 +226,13 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				0=>$this->tr->translate("ACTIVING"),
 				1=>$this->tr->translate("STOP"));
 		$_active_type->setMultiOptions($_active_type_opt);
+
+		$_skill = new Zend_Dojo_Form_Element_TextBox('skill');
+		$_skill->setAttribs(array(
+			'dojoType'=>$this->text,
+			'class'=>'fullside',
+			'placeholder'=>$this->tr->translate("SKILL"),
+		));
 		
 		if(!empty($_data)){
  			$id->setValue($_data['id']);
@@ -261,10 +268,11 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 			$_user->setValue($_data['user_name']);
 			
 			$_active_type->setValue($_data['active_type']);
+			$_skill->setValue($_data['skill']);
 		}
 		$this->addElements(array($id,$_enname,$home_num,$_staff,$_note,$street_num,$_province_id,$_branch_id,$_nation,$end_date,$_teacher,$_khname,$code,$phone,$_user,$_card,$_passport,$_nationality,$_experiences,$_agreement,$_position,$sex,$dob,
 				$pob,$_email,$start_date,$_degree,$_status,$_submit,$_schoolOption,
-				$_active_type
+				$_active_type,$_skill
 				
 				));
 		

@@ -95,25 +95,24 @@ public function init()
 	public function appointmentLetterAction(){
 		$id=$this->getRequest()->getParam("id");
 		$this->view->teacherId = $id;
+
+		$date=$this->getRequest()->getParam("appointment_date");
+		$this->view->appointment_date = $date;
+
+		$yearId=$this->getRequest()->getParam("year_id");
+		$this->view->yearId = $yearId;
+
+		$yearValue=$this->getRequest()->getParam("year_value");
+		$this->view->yearValue = $yearValue;
+
 		$db= new Foundation_Model_DbTable_DbTeacher();
 		$param['id_select']=$id;
 		$this->view->rs = $rs = $db->getTeacherinfoById($param);
 		$frm = new Application_Form_FrmGlobal();
 		
-
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getDays();
 		$this->view->days = $row;
-		//  $row = $dbExternal->getTimeTeachingByTeacher($param);
-		//  $this->view->timeTeaching = $row;
 		
-		
-		// $frm = new Application_Form_FrmGlobal();
-    	// $branch_id = empty($row['branchId'])?1:$row['branchId'];
-    	// $this->view->header = $frm->getHeaderReceipt($branch_id);
-    	// $this->view->headerScore = $frm->getHeaderReportScore($branch_id);
-    	
-    	// $db = new Application_Model_DbTable_DbGlobal();
-    	// $this->view->branchInfo = $db->getBranchInfo($branch_id);
 	}
 }

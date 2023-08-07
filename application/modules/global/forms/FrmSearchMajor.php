@@ -104,6 +104,22 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 			$_date = date("Y-m-d");
 		}
 		$end_date->setValue($_date);
+
+		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
+		$_academic->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+				'class'=>'fullside',
+				'required'=>'false',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		
+		$_academic->setValue($request->getParam("academic_year"));
+		$rows =  $db->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$_academic->setMultiOptions($opt);
 		
 		
 		$_arr_opt_nation = array(""=>$this->tr->translate("SELECT_NATION"),);
@@ -198,7 +214,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 			$_teacher->setValue($_data['teacher_type']);
 			$_nationality->setValue($_data['nationality']);
 		}
-		$this->addElements(array($_id,$_title,$_degree,$_teacher,$_staff,$_branch_id,$end_date,$_nationality,$_status,$_department,$_active_type));
+		$this->addElements(array($_id,$_title,$_degree,$_teacher,$_staff,$_branch_id,$end_date,$_nationality,$_status,$_department,$_active_type,$_academic ));
 		
 		return $this;
 	}

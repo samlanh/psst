@@ -581,7 +581,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName
 					,(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName
 					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-				
+					,(SELECT teacherComment FROM `rms_studentassessment_detail` WHERE teacherComment!='' AND studentId=sgh.`stu_id` ORDER BY id DESC LIMIT 1) AS teacherComment
+					
 				 "; 
 					
 		$sql.="";
@@ -621,7 +622,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['forScoreSubject'])){
 			$order=" ORDER BY gradingTotal.totalAverage DESC";
 		}
-		//echo $sql.$order;exit();
 		return $db->fetchAll($sql.$order);
 	}
 	
@@ -782,7 +782,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameKh
 				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameEng
 				
-				
 				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
 				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
 				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
@@ -846,6 +845,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}else{
 			$sql.=' AND schDetail.techer_id ='.$this->getUserExternalId();
 		}
+		if(!empty($data['yearId'])){
+			$sql.=' AND schDetail.year_id ='.$data['yearId'];
+		}
 		$sql.=" GROUP BY CONCAT (schDetail.from_hour,schDetail.to_hour) ";
 		$sql.=" ORDER BY schDetail.from_hour ASC ";
 		return $db->fetchAll($sql);
@@ -903,6 +905,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					AND schDetail.from_hour ='$fromHour'
 					AND schDetail.to_hour ='$toHour' ";
 		$sql.=' AND schDetail.techer_id ='.$teacherId;
+		if(!empty($data['yearId'])){
+			$sql.=' AND schDetail.year_id ='.$data['yearId'];
+		}
 		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}

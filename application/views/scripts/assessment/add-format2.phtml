@@ -15,6 +15,31 @@
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
+<style>
+.table-striped tr td{font-size:12px;}
+.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+    padding: 1px 2px;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    line-height: 30px;
+}
+.pointer{cursor: pointer;}
+.noted{
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	word-break: break-all;
+	white-space: pre;
+	font:12px 'Khmer OS Battambang';
+	border: 1px solid #ccc;
+	
+	line-height:15px;
+	font-weight: normal !important;
+	padding:2px;
+	white-space: normal;
+	width:95%;
+	min-height: 50px;border-radius:2px;}
+	.teacherComment{min-height: 50px;}
+</style>
 <div class="row"> 
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="card mb-1 ">
@@ -61,7 +86,6 @@
 													<p class="tx-20 font-weight-semibold d-flex ">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</p>
 												</div> 
 											</div>
-											 
 											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ការវាយតម្លៃសម្រាប់ / Assement For</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
@@ -95,7 +119,6 @@
 													<input dojoType="dijit.form.DateTextBox"  class="fullside" id="issueDate" name="issueDate" value="now" constraints="{datePattern:'dd/MM/yyyy'}" >
 												</div>
 											</div>
-											 
 											<div class="form-group">
 												<label class="control-label col-md-5 col-sm-5 col-xs-12">ថ្ងៃប្រគល់ត្រឡប់ /Return Date</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
@@ -119,16 +142,10 @@
 													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="" type="text" style=" height: 120px !important;"  >
 												</div>
 											 </div>
-											 
-											 
-								
 										 </div>
 									 </div>
 								 </div>
 							 </div>
-							
-								
-								  
 						  </div>
 						  <div class="col-md-6 col-sm-6 col-xs-12">
 								<div id="duplicateMessage" class="hidden alert round alert-secondary alert-icon-left alert-dismissible mb-3 " role="alert">
@@ -162,12 +179,8 @@
 										</div>
 									</div>
 								</div>
-											
 								<div id="assessmentInfo">
 								</div>
-								
-							 
-								 
 						  </div>
 					 </div>
 					 <div class="card-box">
@@ -176,8 +189,8 @@
 							</div>
 							<input type="hidden" name="identity" id="identity"  value="" >
 							<input type="hidden" name="identityComment" id="identityComment"  value="" >
+							
 							<div class="form-group">
-								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 								</table>
 							</div>
@@ -274,6 +287,7 @@ function filterStudent(){
 				$("#identity").val(data.identity);
 				$("#identityComment").val(data.identityComment);
 				
+				
 				dojo.html.set(dojo.byId("studentList"),data.contentHtml , {
 					parseContent: true,
 				});
@@ -304,7 +318,9 @@ function checkExamType(){
 		dijit.byId('forMonth').set("readOnly",true);
 	}
 }
-
+function copyPreviousData(row,column,ratingId){
+	dijit.byId("rating_id_"+row+'_'+column).attr("value",ratingId);
+}
 
 var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'assessment','action'=>'checking-duplicate')); ?>';
 function duplicationRecord(){
@@ -349,6 +365,7 @@ function duplicationRecord(){
 	});
 	
 }
+
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

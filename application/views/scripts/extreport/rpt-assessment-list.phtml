@@ -327,7 +327,9 @@
 														);
 													$rowDetail = $dbAsse->getAssessmentDetail($parameter);
 													$ratingTitle = empty($rowDetail['ratingTitle'])?"":$rowDetail['ratingTitle'];
-													$teacherComment = empty($rowDetail['teacherComment'])?"":$rowDetail['teacherComment'];
+													if($key==0){
+														$teacherComment = empty($rowDetail['teacherComment'])?"":$rowDetail['teacherComment'];
+													}
 													
 													$splitRatingTitle = explode('/', $ratingTitle);
 													$ratingTitleKh="";

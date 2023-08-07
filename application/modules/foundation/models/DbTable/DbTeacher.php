@@ -18,6 +18,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$prov = 'province_en_name';
 		$view = 'name_en';
 		$brannch = 'branch_nameen';
+		$department = 'depart_nameen';
 		if ($currentLang==1){
 			$colunmname='title';
 			$vill = 'village_namekh';
@@ -26,6 +27,7 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 			$prov = 'province_kh_name';
 			$view = 'name_kh';
 			$brannch = 'branch_namekh';
+			$department = 'depart_namekh';
 		}
 		
 		$db = $this->getAdapter();
@@ -46,8 +48,9 @@ class Foundation_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 				(SELECT v.$view FROM rms_view v WHERE v.type=21 AND v.key_code=g.nationality LIMIT 1) AS nationality, 
 				(SELECT v.$view FROM rms_view v WHERE v.type=21 AND v.key_code=g.nation LIMIT 1) AS nation, 
 				(SELECT v.$view FROM rms_view v WHERE v.type=3  AND v.key_code=g.degree LIMIT 1) AS degree,
+				(SELECT d.$department FROM `rms_department`  AS d WHERE d.depart_id=g.department LIMIT 1) AS department,
 				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.group_code FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) as teachingGroup,
-				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.degree FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) AS degreeTye 
+				(SELECT GROUP_CONCAT( DISTINCT (SELECT p.degree FROM `rms_group` AS p WHERE p.id = b.group_id ) ) AS fgh FROM `rms_group_reschedule` AS b WHERE b.techer_id= g.id  LIMIT 1) AS degreeTye
 			FROM rms_teacher AS g 
 				WHERE  1 ";
 		if(!empty($data['id'])){

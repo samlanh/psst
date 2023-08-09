@@ -52,8 +52,6 @@
 														<div class="col-md-12 col-sm-12 col-xs-12">
 																&nbsp; 
 														</div>
-
-
 														<div class="form-group">
 															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 															<div class="col-md-7 col-sm-7 col-xs-12">
@@ -69,6 +67,12 @@
 															<div class="col-md-7 col-sm-7 col-xs-12">
 																<input id="academic_year" />
 																<input type="hidden" id="id" name="id" value="<?php echo $this->row['id'];?>" />
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<input id="degree" />
 															</div>
 														</div>
 														<div class="form-group">
@@ -141,6 +145,8 @@
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ObjectStore");
 
+	var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+
 	dojo.ready(function(){ 
 		//Initialize();
 		new dijit.form.FilteringSelect({
@@ -155,6 +161,20 @@
 				academic_year = dijit.byId('academic_year').get('value');
 			}
 		}, "academic_year");
+		new dijit.form.FilteringSelect({
+			store: dept_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,
+			id: "degree",
+			name: "degree",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+			onChange: function() {  
+				
+			}
+		}, "degree");	
+
 		getAllAcademicByBranch("<?php echo $this->row['academic_year']?>");
 	});
 

@@ -234,7 +234,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     					$sql.=" AND branch_id = ".$data['branch_id'];
     				}
     				$sql.=" LIMIT 1";
-    				return $db->fetchRow($sql);
+    				$resultFee =  $db->fetchRow($sql);
     	}elseif ($item_type==3){//product
     			if($is_set==1){//for set
     				$sql="SELECT
@@ -273,7 +273,26 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     								pro_id=$item_id
     								AND branch_id = ".$data['branch_id']." LIMIT 1 ";
     				}
-    				return $db->fetchRow($sql);
+    				$resultFee =  $db->fetchRow($sql);
     		}
+    		
+    		
+    		$option = empty($data['option'])?null:$data['option'];
+    		$feeId = empty($data['year'])?null:$data['year'];
+    			
+    		$param = array(
+    				'branch_id'=>$data['branch_id'],
+    				'feeId'=>$feeId,
+    				'grade'	=>$data['service'],//grade
+    				'serviceType'=>$data['serviceType'],
+    				'periodId'=>$data['term'],
+    				'option'=>$option,
+    		);
+    		
+    		$resultPeriod = $dbg->getAllStudyPeriod($param);
+    		return array(
+    				'resultFee'=>$resultFee,
+    				'resultPeriod'=>$resultPeriod,
+    				);
     	}
 }

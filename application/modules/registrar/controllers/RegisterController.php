@@ -61,10 +61,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 //     			'isCurrent'=>1,
 //     			'stopType'=>0,
 //     			'grade'=>'',
-//     			'isAutopayment'=>''
+//     			'isAutopayment'=>'',
+//     			'isInititilize'=>1
 //     			);
 //     	$db = new Application_Model_DbTable_DbGlobal();
 //     	$data=$db->getServiceForPaymentRecord($data);
+//     	print_r($data);exit();
     }
     public function addAction(){
       if($this->getRequest()->isPost()){
@@ -104,7 +106,19 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $dbclass = new Application_Model_GlobalClass();
 	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
-
+	   
+	  $data =  array(
+	   		'branch_id'=>1,
+	  		'studentId'=>3,
+	  		'grade'=>'',
+	  		'studentType'=>1,
+	  		'isCurrent'=>1,
+	  		'stopType'=>0,
+	  		'isAutopayment'=>3,
+	   		'isInititilize'=>1);
+// 	   $db = new Application_Model_DbTable_DbGlobal();
+// 	   $result=$db->getServiceForPaymentRecord($data);
+// 	print_r($result);exit();
     }
     public function addregistraAction(){
     	if($this->getRequest()->isPost()){

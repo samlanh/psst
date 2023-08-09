@@ -1577,13 +1577,33 @@ function getAllgroupStudyNotPass($action=null){
   function getAllStudyPeriod($data){
 
   	$db = $this->getAdapter();
-  	$sql=" SELECT id,CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name from rms_startdate_enddate WHERE status=1 ";
+  	$sql=" SELECT id,
+  		CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name 
+  		FROM rms_startdate_enddate WHERE status=1 ";
   	if(!empty($data['branch_id'])){
   		$sql.=" AND branch_id = ".$data['branch_id'];
   	}
-  	if(!empty($data['academic_year'])){
+  	if(!empty($data['academic_year'])){//correct
   		$sql.=" AND academic_year = ".$data['academic_year'];
   	}
+  	if(!empty($data['feeId'])){//correct
+  		$result=$this->getFeeStudyinfoByIdGloable($data['feeId']);
+  		$academicYear = $result['academicYearId'];
+  		if(!empty($academicYear)){
+  			$sql.=" AND academic_year = ".$academicYear;
+  		}
+  	}
+  	
+  	if(!empty($data['periodId'])){//correct
+  		$sql.=" AND periodId = ".$data['periodId'];
+  	}
+  	if(!empty($data['grade'])){//correct
+  		if(!empty($data['serviceType']) AND $data['serviceType']==1){// SCHOOL FEE ONLY 
+  			$sql.=" AND  degreeId IN (SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." )";
+  		}
+  	}
+  	
+	// return $sql;
   	$rows = $db->fetchAll($sql);
   	if(empty($data['option'])){
   		return $rows;
@@ -2588,12 +2608,13 @@ function getAllgroupStudyNotPass($action=null){
   function getFeeStudyinfoByIdGloable($fee_id){
   	$db  = $this->getAdapter();
   	$sql = " SELECT
-  	t.academic_year AS id ,
-  	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academic_year,
-  	(SELECT title_kh FROM `rms_studytype` WHERE id=t.term_study LIMIT 1) AS session_type
+	  	t.id,
+	  	t.academic_year AS academicYearId,
+	  	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academic_year,
+	  	(SELECT title_kh FROM `rms_studytype` WHERE id=t.term_study LIMIT 1) AS session_type
   	FROM
-  	`rms_tuitionfee` as t
-  	WHERE t.id=$fee_id LIMIT  1";
+	  	`rms_tuitionfee` as t
+	  	WHERE t.id=$fee_id LIMIT  1";
   	return $db->fetchRow($sql);
   }
   function getAllYearServiceFeeByBranch($branch_id){
@@ -3454,7 +3475,7 @@ function getAllgroupStudyNotPass($action=null){
   
   	$items=array();
   	
-  	if($data['studentType']==1){//tested
+  	if($data['studentType']==1){//old student
   		
   		$resultItems = array();
   		if($data['isInititilize']==1){
@@ -3465,10 +3486,9 @@ function getAllgroupStudyNotPass($action=null){
   			unset($data['isAutopayment']);
   		}
   		$resultItem2 =$this->getItemAllDetail($data);
-  		
   		$resultItems = array_merge($resultItems,$resultItem2);
   		
-  	}elseif($data['studentType']==2){  	
+  	}elseif($data['studentType']==2){  	//tested
   		$resultItems = array();
   		if($data['isInititilize']==1){
   			$resultItems = $this->getItemForPayment($data);
@@ -3508,7 +3528,7 @@ function getAllgroupStudyNotPass($action=null){
   				'academicYear'=>$item['feeId'],
 	  		);
 	  		 
-	  		$items[$key]['termTypeList']=$this->getAllTermbyItemdetail($param);
+	  		$items[$key]['termTypeList']=$this->getAllTermbyItemdetail($param);//month,semester,year...
 	  		 
 	  		$param = array(
   				'branch_id'=>$data['branch_id'],
@@ -3520,10 +3540,10 @@ function getAllgroupStudyNotPass($action=null){
 	  		$param = array(
   				'branch_id'=>$data['branch_id'],
   				'academic_year'=>$item['academic_year'],
-  				'option'=>1,
+// 	  			'periodId'=>$item['feeId'],
 	  		);
 	  		 
-	  		$termStudy  = $this->getAllStudyPeriod($param);
+	  		$termStudy  = $this->getAllStudyPeriod($param);//វគ្គចូលរៀន
 	  		$items[$key]['studyPeriodList']=$termStudy;
 	  	}
 	  	
@@ -3679,7 +3699,9 @@ function getAllgroupStudyNotPass($action=null){
   		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
   	}
   	if(isset($data['isAutopayment']) AND $data['isInititilize']==1){
-  		$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
+  		if($data['isAutopayment']!=''){
+  			$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
+  		}
   	}
   	$sql.=" ORDER BY i.items_type ASC ";
   	return $this->getAdapter()->fetchAll($sql);//fetch all but got only 1 row only .
@@ -3789,7 +3811,7 @@ function getAllgroupStudyNotPass($action=null){
 	   			$academicYear='';
 		   			if(!empty($data['feeId'])){
 			   			$result = $this->getFeeStudyinfoByIdGloable($data['feeId']);
-			   			$academicYear = empty($result)?'':$result['id'];
+			   			$academicYear = empty($result)?'':$result['academicYearId'];
 		   			}
 	   			
 	   			if(empty($data['schoolOption'])){

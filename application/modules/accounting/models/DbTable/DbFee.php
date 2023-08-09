@@ -88,16 +88,16 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
     	try{
     		
 	    		$_arr = array(
-	    			'academic_year'=>$_data['from_academic'],
- 	    			'term_study'=>$_data['type_study'],
+	    			'academic_year'	=>$_data['from_academic'],
+ 	    			'term_study'	=>$_data['type_study'],
  	    			'is_multi_study'=>$_data['ismulty_study'],
-	    			'generation'=>$_data['generation'],
-	    			'school_option'=>$_data['school_option'],
-	    			'note'=>$_data['note'],
-	    			'type'=>1,//Tuition Fee
-	    			'branch_id'=>$_data['branch_id'],
-	    			'create_date'=>date("Y-m-d"),
-	    			'user_id'=>$this->getUserId()
+	    			'generation'	=>$_data['generation'],
+	    			'school_option'	=>$_data['school_option'],
+	    			'note'			=>$_data['note'],
+	    			'type'			=>1,//Tuition Fee
+	    			'branch_id'		=>$_data['branch_id'],
+	    			'create_date'	=>date("Y-m-d"),
+	    			'user_id'		=>$this->getUserId()
 	    		);
 	    		$fee_id = $this->insert($_arr);
     		
@@ -107,11 +107,11 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    		foreach ($ids as $i){
 	    			foreach ($id_term as $j){
 	    				$_arr = array(
-	    						'fee_id'=>$fee_id,
-	    						'class_id'=>$_data['class_'.$i],
-	    						'payment_term'=>$j,
-	    						'tuition_fee'=>$_data['fee'.$i.'_'.$j],
-	    						'remark'=>$_data['remark'.$i]
+	    						'fee_id'		=>$fee_id,
+	    						'class_id'		=>$_data['class_'.$i],
+	    						'payment_term'	=>$j,
+	    						'tuition_fee'	=>$_data['fee'.$i.'_'.$j],
+	    						'remark'		=>$_data['remark'.$i]
 	    				);
 	    				$this->insert($_arr);
 	    			}
@@ -121,7 +121,9 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 						$arr = array(
 								'branch_id'		=>$_data['branch_id'],
 								'academic_year'	=>$_data['from_academic'],
+								'degreeId'		=>$_data['degree'],
 								'title'			=>$_data['title_'.$t],
+								'periodId'		=>$_data['term_'.$t],
 								'start_date'	=>$_data['startdate_'.$t],
 								'end_date'		=>$_data['enddate_'.$t],
 								'note'			=>$_data['remark_'.$t],

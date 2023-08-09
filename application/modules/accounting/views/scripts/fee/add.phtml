@@ -214,12 +214,20 @@
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												&nbsp; 
 											</div>
+											<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+												<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+												<div class="col-md-5 col-sm-5 col-xs-12">
+													<input id="degree" name="degree" />
+												</div>
+												<div class="clearfix"></div>
+											</div>
 											<table class="collape tablesorter" id="table_term_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
 												<thead>
 													<tr id="head-title1" class="head-td" align="center" style="width: 100%;">
 														<td><?php echo $tr->translate("DEL");?></td>
 														<td><?php echo $tr->translate("N_O");?></td>
 														<td><?php echo $tr->translate("TITLE");?></td>
+														<td><?php echo $tr->translate("PERIOD");?></td>
 														<td><?php echo $tr->translate("START_DATE");?></td>
 														<td><?php echo $tr->translate("END_DATE");?></td>
 														<td><?php echo $tr->translate("NOTE");?></td>
@@ -287,6 +295,7 @@
 	dojo.require("dojo.NodeList-manipulate");
 	
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+var dept_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: grade_store,
@@ -306,13 +315,58 @@ dojo.ready(function(){
 			}
 		}
 	}, "grade");
+	new dijit.form.FilteringSelect({
+			store: dept_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,
+			id: "degree",
+			name: "degree",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+			onChange: function() {  
+				
+			}
+	}, "degree");
 
 	 var school_option = dijit.byId('school_option');
 	 school_option.on('change', function(evt) {
 		 getAllGradeBySchoolOption();
 	});
+
+	var branch_id = dijit.byId('branch_id');
+	branch_id.on('change', function(evt) {
+		 getAllDegreeByBranch();
+	});
 	 getAllGradeBySchoolOption();
+	 getAllDegreeByBranch();
 });
+
+url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
+	function getAllDegreeByBranch(){
+		dijit.byId('degree').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('degree').set('store',dept_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getdegree,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				dept_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('degree').set('store',dept_store);   
+			},
+			error: function(err) {
+			}
+		});
+	}
+
 url_getgrade = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getgrade'));?>';
 function getAllGradeBySchoolOption(){
 	dojo.query("#table_row").append("");
@@ -534,9 +588,20 @@ function addRow(){
 	dojo.query("#row"+index).remove();
 }
 
+function getTermOption(){
+	term_option ='<option value=""></option>';
+		<?php 
+			if(!empty($this->term_option))foreach($this->term_option as $key=>$rs){?>
+				 term_option+='<option value="<?php echo $key;?>"><?php echo addslashes($rs);?></option>';
+		<?php }?>
+		
+	return term_option;
+}
+
 var col1= 0; var no1=0;
 	var title1 = 0;
 	function addTermRow() {
+		getTermOption();
 		col1++;no1++;
 		template='';
 		temp = "";
@@ -555,6 +620,7 @@ var col1= 0; var no1=0;
 		template+='<td width="2%" align="center"><img onclick="deleteTermRecord('+col1+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no1+'</td>';
 		template+='<td width="10%"><input required="1" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col1+'" name="title_'+col1+'" placeholder="'+'<?php echo $tr->translate("TERM")." ";?> " value="" type="text"  ></td>';	
+		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('PERIOD');?>" class="fullside"  required="true" dojoType="dijit.form.FilteringSelect" name="term_'+col1+'" id="term_'+col1+'" >'+term_option+'</select></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col1+'" name="startdate_'+col1+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col1+'" name="enddate_'+col1+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col1+'" name="remark_'+col1+'" value="" type="text"  ></td>';	

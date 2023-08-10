@@ -1,8 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	echo $this->headTitle($tr->translate('IMPORT_SCHEDULE')); 
-	$url_save = $this->url(array('module'=>'issue','controller'=>'importsch','action'=>'index'));
+	echo $this->headTitle($tr->translate('Import Schedule')); 
+	$url_save = $this->url(array('module'=>'issue','controller'=>'importschedule','action'=>'index'));
 	$frm = $this->frm_items; 
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>

@@ -29,10 +29,17 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			$sql2=" SELECT id FROM `rms_group` WHERE group_code = '".$sheetData[$i]['C']." ' ";
 			$groupId =  $db->fetchOne($sql2);
 			if(empty($groupId)){
+
+					$teacher_id = 0;
+					if(!empty($sheetData[$i]['A'])){
+						$teacher_id = $this->getTeacherId($sheetData[$i]['A'], $data);
+					}
+
 					$_arr=array(
 						'branch_id'   	 => $data['branch_id'],
 						'group_code'  	 => $sheetData[$i]['C'],
 						'academic_year'  => $data['academic_year'],
+						'teacher_id'  	 => $teacher_id,
 						'is_use'     	 => 0,
 						'is_pass'     	 => 0,
 						'status'     	 => 1,

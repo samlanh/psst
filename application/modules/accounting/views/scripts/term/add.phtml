@@ -240,7 +240,6 @@
 		});
 	}
 
-
 	function getTermOption(){
 			term_option ='<option value=""></option></option>';
 		<?php 
@@ -262,7 +261,7 @@
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
 			temp+='<td><?php echo $tr->translate("TITLE");?></td>';
-			temp+='<td><?php echo $tr->translate("TERM");?></td>';
+			temp+='<td><?php echo $tr->translate("PERIOD");?></td>';
 			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
@@ -272,8 +271,8 @@
 			
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
-		template+='<td width="10%"><input required="1" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col+'" name="title_'+col+'" placeholder="'+'<?php echo $tr->translate("TITLE")." ";?> " value="" type="text"  ></td>';
-		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM');?>" class="fullside"  required="false" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></td>';	
+		template+='<td width="10%"><input required="ture" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col+'" name="title_'+col+'" placeholder="'+'<?php echo $tr->translate("TITLE")." ";?> " value="" type="text"  ></td>';
+		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('PERIOD');?>" class="fullside"  required="true" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	

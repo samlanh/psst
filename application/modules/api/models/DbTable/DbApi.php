@@ -2303,9 +2303,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				";
 			$sql.="
 				WHERE 
-					 gds.is_maingrade=1
-					AND gds.is_current=1
+					 1
 			";
+			//gds.is_maingrade=1
+					//AND gds.is_current=1
 			$sql.=" AND gds.stu_id=".$studentId;
 			return $db->fetchOne($sql);
 		}
@@ -4924,6 +4925,46 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	function getSchoolBusProfile($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId		= empty($_data['userId'])?0:$_data['userId'];
+			
+			$branch = "branch_nameen";
+			if ($currentLang==1){
+				$branch = "branch_namekh";
+			}		
+			$sql =" 
+				SELECT
+					bus.*
+					,b.$branch AS branchName
+					,'Driver Name' AS driverName
+					,'012988781' AS driverPhone
+				FROM
+					rms_school_bus AS bus
+						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
+				WHERE bus.status = 1 and bus.id = $userId ";
+		
+			$sql.=" LIMIT 1 ";
+			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+	
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 	
 	function getSchoolBusForStudent($_data){
 		$db = $this->getAdapter();
@@ -4961,6 +5002,43 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$result = array(
 					'status' =>false,
 					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+
+	public function getInstructionArticle($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$keyName = empty($_data['keyName'])?"frontRegister":$_data['keyName'];
+			
+			$sql =" 
+				SELECT
+					ins.*
+					,insD.title AS title
+					,insD.description AS description
+				FROM
+					moble_instruction AS ins
+					JOIN `moble_instruction_detail` AS insD ON ins.id = insD.instruction_id
+				WHERE ins.status = 1 
+					AND ins.keyName='".$keyName."' ";
+				
+			$sql.=" AND insd.lang = ".$currentLang;
+			$sql.=" LIMIT 1 ";
+			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
 			);
 			return $result;
 		}

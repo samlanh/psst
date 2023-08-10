@@ -69,6 +69,9 @@ class Accounting_FeeController extends Zend_Controller_Action {
     	$this->view->frm_fee = $frm;
     	$model = new Application_Model_DbTable_DbGlobal();
     	$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+		
+		$rows = $model->getAllPaymentTerm($id=null,$hidemonth=1);
+		$this->view->term_option =	$rows ;
     }
  	
     public function editAction()

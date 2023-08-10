@@ -9,6 +9,7 @@ class AssessmentController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');  
+    	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     }
 	public function indexAction()
 	{
@@ -78,12 +79,12 @@ class AssessmentController extends Zend_Controller_Action
 		}
 		$this->view-> month = $dbExternal->getAllMonth();
 		
-		$data = array(
-				'groupId'=>'6',
-				'sortStundent'=>'0',
-				'degree'=>'3',
-				'keyIndex'=>1);
-		$rs =$db->getSecondFormatStudentForAssessment($data); // format 2
+// 		$data = array(
+// 				'groupId'=>'6',
+// 				'sortStundent'=>'0',
+// 				'degree'=>'3',
+// 				'keyIndex'=>1);
+// 		$rs =$db->getSecondFormatStudentForAssessment($data); // format 2
 		
 // 		print_r($rs);exit();
 	}

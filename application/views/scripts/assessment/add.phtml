@@ -23,6 +23,22 @@
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     line-height: 30px;
 }
+.pointer{cursor: pointer;}
+.noted{
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	word-break: break-all;
+	white-space: pre;
+	font:12px 'Khmer OS Battambang';
+	border: 1px solid #ccc;
+	
+	line-height:15px;
+	font-weight: normal !important;
+	padding:2px;
+	white-space: normal;
+	width:95%;
+	min-height: 50px;border-radius:2px;}
+	.teacherComment{min-height: 50px;}
 </style>
 <div class="row"> 
 	<div class="col-md-12 col-sm-12 col-xs-12">
@@ -171,8 +187,8 @@
 						<div class="col-md-12 col-sm-12 col-xs-12">
 							<div id="studentList">
 							</div>
-							<input type="text" name="identity" id="identity"  value="" >
-							<input type="text" name="identityComment" id="identityComment"  value="" >
+							<input type="hidden" name="identity" id="identity"  value="" >
+							<input type="hidden" name="identityComment" id="identityComment"  value="" >
 							
 							<div class="form-group">
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
@@ -193,6 +209,16 @@
 	</div>
 </div>
 <style>
+body.externalTemplate tr.odd{
+	background: #b9bbdd7a;
+}
+body.externalTemplate tr.regurlar{
+	background: #337ab74d;
+}
+
+.commentType{
+	background:#b9bbdd !important;
+}
 ul.optListRow.gradingInfo li {
     font-size: 11px;
     padding: 0;
@@ -302,7 +328,9 @@ function checkExamType(){
 		dijit.byId('forMonth').set("readOnly",true);
 	}
 }
-
+function copyPreviousData(row,column,ratingId){
+	dijit.byId("rating_id_"+row+'_'+column).attr("value",ratingId);
+}
 
 var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'assessment','action'=>'checking-duplicate')); ?>';
 function duplicationRecord(){
@@ -347,6 +375,7 @@ function duplicationRecord(){
 	});
 	
 }
+
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

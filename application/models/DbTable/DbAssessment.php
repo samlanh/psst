@@ -184,7 +184,6 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			$this->_name='rms_studentassessment';		
 			$assessmentId=$this->insert($_arr);
 			
-// 			$comments = $dbExternal->getCommentByDegree($degreeId);
 			$comments = explode(',', $_data['identityComment']);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
@@ -200,8 +199,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 								'commentId'			=> $commentId,
 								'ratingId'			=> $_data['rating_id_'.$i.'_'.$commentId],
 								'teacherComment'	=> $teacherComment,
-								
 								);
+							$teacherComment='';
 							$this->_name='rms_studentassessment_detail';
 							$this->insert($arr);
 					}
@@ -363,6 +362,21 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	   
 	   return $arrContent;
    }
+   function getPreviousRating($data){
+   		$sql="SELECT 
+   				ratingId,
+   				(SELECT rating FROM `rms_rating` r WHERE r.id=ratingId LIMIT 1) AS previousRating 
+   			FROM `rms_studentassessment_detail` 
+   				WHERE 1 ";
+   		if(!empty($data['studentId'])){
+   			$sql.=" AND studentId=".$data['studentId'];
+   		}
+   		if(!empty($data['commentId'])){
+   			$sql.=" AND commentId=".$data['commentId'];
+   		}
+   		$sql.=" ORDER BY id DESC LIMIT 1 ";
+   		return $this->getAdapter()->fetchRow($sql);
+   }
    function getSecondFormatStudentForAssessment($data){
 		   	$dbExternal = new Application_Model_DbTable_DbExternal();
 		   	$students = $dbExternal->getStudentByGroup($data);
@@ -374,8 +388,6 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		   	
 		   	$rating = $this->getAllRating();
 		   	
-		   
-		   	
 		   	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		   	$db=$this->getAdapter();
 		   	
@@ -384,11 +396,6 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		   	
 		   	$identity="";
 		   	$identityComment = '';
-		   	$arrClassCol = array(
-		   			2=>"col-md-6 col-sm-6 col-xs-12"
-		   			,3=>"col-md-4 col-sm-4 col-xs-12"
-		   			,4=>"col-md-3 col-sm-3 col-xs-12"
-		   	);
 		   	$commentContentInfo="";
 		   	$commentContentInfo='';
 		   	$commentContentInfo.='<div class="card-info bg-gradient-directional-notice">';
@@ -402,10 +409,11 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		   	$string='';
 		   	$string.='<table class="collape responsiveTable" id="table" >';
 		   	$string.='<thead>';
-		   	$string.='<tr class="head-td" align="center">';
-		   	$string.='<th scope="col" width="10px"  >ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
-		   	$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
-		   	$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
+			   	$string.='<tr class="head-td" align="center">';
+			   	$string.='<th scope="col" width="10px"  >ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+			   	$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
+			   	$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
+			   	$string.='<th scope="col" >ភេទ<small class="lableEng" >Comment</small></td>';
 		   		
 // 		   	if(!empty($comments)) foreach($comments AS $key => $rComment){
 // 		   		$string.='<th scope="col">ចំនុចទី '.($key+1).'<small class="lableEng" >Section '.($key+1).'</small></th>';
@@ -424,7 +432,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		   	$commentContentInfo.='</div>';
 		   	$commentContentInfo.='</div>';
 		   	$commentContentInfo.='</div>';
-		   	
+		   	$imgtick=BASE_URL.'/images/icon/tick.png';
 		   
 		   	if(!empty($students)) foreach($students AS $key => $stu){
 		   		$key++;
@@ -444,78 +452,99 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		   		if($stu['sex']==2){
 		   			$gender = $tr->translate('FEMALE');
 		   		}
+		   		$exspan="false";
+		   		$showRow=" ";
+		   		if($keyIndex==1){
+		   			$exspan="true";
+		   			$showRow="in";
+		   		}
 		   			
-		   		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="true" class="rowData '.$rowClasss.' accordion-toggle bg-secondary text-primary text-center" id="row'.$keyIndex.'">';
+		   		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="'.$exspan.'" class="rowData '.$rowClasss.' accordion-toggle bg-secondary text-primary text-center" id="row'.$keyIndex.'">';
 			   		$string.='<td rowspan="2" data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
 			   		$string.='<td rowspan="2" data-label="'.$tr->translate("STUDENT").'"  align="left">';
-			   		$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
-			   		$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
-			   		$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
-			   			$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
+				   		$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
+				   		$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
+				   		$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
+				   		$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
 		   			$string.='</td>';
-		   		$string.='<td  rowspan="2" data-label="'.$tr->translate("SEX").'" >'.$gender.'';
-		   		$string.='<input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-comment" label="ចូលវាយតម្លៃសិស្ស" dojoType="dijit.form.Button"/>';
-		   		 
-		   		$string.='</td>';
+			   		$string.='<td rowspan="2" data-label="'.$tr->translate("SEX").'" >'.$gender.'';
+			   		
+			   		$string.='</td>';
+		   			$string.='<td align="right" data-label="'.$tr->translate("COMMENT").'" >';
+		   				$string.='<input type="button" class="button-class button-warning" iconClass="glyphicon glyphicon-comment" label="ចូលវាយតម្លៃសិស្ស" dojoType="dijit.form.Button"/>';
+		   			$string.='</td>';
 		   		$string.='</tr>';
 		   		$stringOption='';
 		   		if(!empty($rating)){
 		   			foreach($rating as $rate){
-		   				// 		   					$selected="";
-		   				// 		   					if($rate['id']==2){
-		   				$selected="selected='selected'";
-		   				// 		   					}
+		   				$selected="";
+		   				if($rate['id']==2){
+		   					$selected="selected='selected'";
+		   				}
 		   				$stringOption.='<option '.$selected.' value="'.$rate['id'].'">'.$rate['id'].'-'.$rate['name'].'</option>';
 		   			}
 		   		}
-		   		$string.='<tr >';
+		   		$string.='<tr>';
 // 			   		$string.='<td colspan="'.$countComment.'" ><div >មតិយោបល់របស់គ្រូ/Teacher Comment</div>';
-		   		$string.='<td colspan="'.$countComment.'"><div  class="accordian-body collapse" aria-expanded="true"  id="demo_'.$keyIndex.'" >';
-		   		$string.='<table class="table table-striped">'; 
-		   					$string.='<thead><tr class="bg-primary">';
-							   		$string.='<td>'.$tr->translate('N_O').'</td>';
-							   		$string.='<td>'.$tr->translate('COMMENT').'</td>';
-							   		$string.='<td>'.$tr->translate('PREVIUSE_RATING').'</td>';
-							   		$string.='<td>'.$tr->translate('RATING').'</td>';
-			   				$string.='</tr></thead>';
-					   		$string.='<tbody  class="accordion-toggle" id="table_cmt_row_" >';
-					   		$commentType='';
-					   		if(!empty($comments)) foreach($comments AS $keyComment => $rComment){
-					   		if($commentType!=$rComment['commentType']){
-					   			$string.='<tr>';
-					   				$string.='<td colspan="4" align="center">'.$rComment['commentType'].'</td>';
-					   			$string.='</tr>';
-					   		}
-					   		$commentType=$rComment['commentType'];
-					   		$number = $keyComment+1;
-					   		$string.='<tr>';
-						   		$string.='<td align="center">'.($number).'</td>';
-						   		$string.='<td>'.$rComment['name'].'</td>';
-						   		$string.='<td>Previuse Rating</td>';
-						   		$string.='<td><select queryExpr="*${0}*" autoComplete="false" name="rating_id_'.$keyIndex.'_'.$number.'" class="fullside"  dojoType="dijit.form.FilteringSelect" >'.$stringOption.'</select></td>';
-					   		$string.='</tr>';
-					   		
-					   			if($key==1){//for first student
-							   		if (empty($identityComment)){
-							   			$identityComment=$number;
-							   		}else{
-							   			$identityComment=$identityComment.",".$number;
-							   		}
-					   		
-					   			}
-					   		}
-					   		$string.='</tbody>';
-		   		
-		   			$string.='</table></div>';
-			   		$string.='<textarea dojoType="dijit.form.Textarea" class="fullside" name="teacherComment'.$keyIndex.'"  value="" ></textarea></td>';
-		   		$string.='</td></tr>';
-		   			
-		   	}
-		   	
-		   	$string.='';
-		   	$string.='</table>';
-		   	
-		   	
+		   		$string.='<td ><div  class="accordian-body collapse '.$showRow.'" id="demo_'.$keyIndex.'" aria-expanded="'.$exspan.'">';
+			   		$string.='<table class="table table-striped">'; 
+			   					$string.='<thead><tr class="bg-primary">';
+								   		$string.='<td>'.$tr->translate('N_O').'</td>';
+								   		$string.='<td>'.$tr->translate('COMMENT').'</td>';
+								   		$string.='<td>'.$tr->translate('PREVIOUSE_RATING').'</td>';
+								   		$string.='<td>'.$tr->translate('Action').'</td>';
+								   		$string.='<td>'.$tr->translate('RATING').'</td>';
+				   				$string.='</tr></thead>';
+						   		$string.='<tbody  class="accordion-toggle" id="table_cmt_row_" >';
+						   		$commentType='';
+						   		if(!empty($comments)) foreach($comments AS $keyComment => $rComment){
+						   			$param = array(
+						   					'studentId'=>$stu['stu_id'],
+						   					'commentId'=>$rComment['id']
+						   					);
+						   			$rsComment = $this->getPreviousRating($param);
+						   			
+						   		if($commentType!=$rComment['commentType']){
+						   			$string.='<tr class="commentType">';
+						   				$string.='<td></td>';
+						   				$string.='<td align="center">'.$rComment['commentType'].'</td>';
+						   				$string.='<td></td>';
+						   				$string.='<td></td>';
+						   				$string.='<td></td>';
+						   			$string.='</tr>';
+						   		}
+						   		$commentType=$rComment['commentType'];
+						   		$number = $keyComment+1;
+						   		$string.='<tr>';
+							   		$string.='<td align="center">'.($number).'</td>';
+							   		$string.='<td>'.$rComment['name'].'</td>';
+							   		$string.='<td>'.$rsComment['previousRating'].'</td>';
+							   		///camappgit/psis/public/images/icon/apply2.png
+							   		$string.='<td><img title="click to copy" class="pointer" src='.$imgtick.'  onclick="copyPreviousData('.$keyIndex.','.$number.','.$rsComment['ratingId'].');" /></td>';
+							   		$string.='<td><select queryExpr="*${0}*" autoComplete="false" id="rating_id_'.$keyIndex.'_'.$number.'"  name="rating_id_'.$keyIndex.'_'.$number.'" class="fullside"  dojoType="dijit.form.FilteringSelect" >'.$stringOption.'</select></td>';
+						   		$string.='</tr>';
+						   		
+						   			if($key==1){//for first student
+								   		if (empty($identityComment)){
+								   			$identityComment=$number;
+								   		}else{
+								   			$identityComment=$identityComment.",".$number;
+								   		}
+						   		
+						   			}
+						   			
+						   		}
+						   		$string.='</tbody>';
+			   		
+			   			$string.='</table></div>';
+			   			$string.='<div class="col-md-6 col-sm-6 col-xs-12"><div class="noted">'.$stu['teacherComment'].'</div></div>';
+				   		$string.='<div class="col-md-6 col-sm-6 col-xs-12"><textarea class="teacherComment" dojoType="dijit.form.Textarea" class="fullside" name="teacherComment'.$keyIndex.'"  value="" ></textarea></div></td>';
+			   		$string.='</td></tr>';
+			   			
+			   	}
+			   	
+			   	$string.='';
+			   	$string.='</table>';
 		   	$arrContent = array(
 		   			'contentHtml'=>$string
 		   			,'identity'=>$identity
@@ -533,12 +562,12 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$commentId = empty($data['commentId'])?0:$data['commentId'];
 	  
 	  	$sql="  SELECT assDetail.*  ";
-	  	$sql.="  ,(SELECT rt.rating FROM rms_rating AS rt WHERE rt.id=assDetail.ratingId LIMIT 1) AS ratingTitle ";
-	  	$sql.="  FROM rms_studentassessment_detail AS assDetail ";
+	  		$sql.="  ,(SELECT rt.rating FROM rms_rating AS rt WHERE rt.id=assDetail.ratingId LIMIT 1) AS ratingTitle ";
+	  	$sql.=" FROM rms_studentassessment_detail AS assDetail ";
 	  	$sql.="  WHERE assDetail.assessmentId= ".$assessmentId;
-			$sql.="  AND assDetail.studentId= ".$studentId;
-			$sql.="  AND assDetail.commentId= ".$commentId;
-	  	$sql.="  LIMIT 1 ";
+				$sql.="  AND assDetail.studentId= ".$studentId;
+				$sql.="  AND assDetail.commentId= ".$commentId;
+	  	$sql.="  ORDER BY assDetail.id DESC LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
    

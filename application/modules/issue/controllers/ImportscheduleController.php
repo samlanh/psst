@@ -19,8 +19,6 @@ class Issue_importscheduleController extends Zend_Controller_Action {
 				$data=$this->getRequest()->getPost();
 
 				$adapter = new Zend_File_Transfer_Adapter_Http();
-				$part= PUBLIC_PATH.'/images';
-				$adapter->setDestination($part);
 				$adapter->receive();
 				$file = $adapter->getFileInfo();
 				$inputFileName = $file['file_excel']['tmp_name'];

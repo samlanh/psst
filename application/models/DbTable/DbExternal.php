@@ -581,7 +581,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName
 					,(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName
 					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-				
+					,(SELECT teacherComment FROM `rms_studentassessment_detail` WHERE teacherComment!='' AND studentId=sgh.`stu_id` ORDER BY id DESC LIMIT 1) AS teacherComment
+					
 				 "; 
 					
 		$sql.="";
@@ -621,7 +622,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['forScoreSubject'])){
 			$order=" ORDER BY gradingTotal.totalAverage DESC";
 		}
-		//echo $sql.$order;exit();
 		return $db->fetchAll($sql.$order);
 	}
 	
@@ -781,7 +781,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT te.signature from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teacherSigature
 				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameKh
 				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameEng
-				
 				
 				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
 				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle

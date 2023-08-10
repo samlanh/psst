@@ -57,7 +57,9 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 					$arr = array(
 							'branch_id'		=>$data['branch_id'],
 							'academic_year'	=>$data['academic_year'],
+							'degreeId'		=>$data['degree'],
 							'title'			=>$data['title_'.$i],
+							'periodId'		=>$data['term_'.$i],
 							'start_date'	=>$data['startdate_'.$i],
 							'end_date'		=>$data['enddate_'.$i],
 							'note'			=>$data['remark_'.$i],
@@ -77,14 +79,16 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$db= $this->getAdapter();
 		try{
 			$arr = array(
-					'branch_id'=>$data['branch_id'],
-					'academic_year'=>$data['academic_year'],
-					'title'=>$data['title'],
-					'start_date'=>$data['start_date'],
-					'end_date'=>$data['end_date'],
-					'note'=>$data['note'],
-					'status'=>$data['status'],
-					'user_id'=>$this->getUserId(),
+					'branch_id'		=>$data['branch_id'],
+					'academic_year'	=>$data['academic_year'],
+					'degreeId'		=>$data['degree'],
+					'periodId'		=>$data['term'],
+					'title'			=>$data['title'],
+					'start_date'	=>$data['start_date'],
+					'end_date'		=>$data['end_date'],
+					'note'			=>$data['note'],
+					'status'		=>$data['status'],
+					'user_id'		=>$this->getUserId(),
 				);
 			$this->_name='rms_startdate_enddate';	
 			$where=" id = ".$data['id'];

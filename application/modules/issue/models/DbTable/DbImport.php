@@ -9,7 +9,6 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
 
-	
     public function ScheduleByImport($sheetData,$data){
     	$db = $this->getAdapter();
     	$count = count($sheetData);
@@ -30,10 +29,17 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			$sql2=" SELECT id FROM `rms_group` WHERE group_code = '".$sheetData[$i]['C']." ' ";
 			$groupId =  $db->fetchOne($sql2);
 			if(empty($groupId)){
+
+					$teacher_id = 0;
+					if(!empty($sheetData[$i]['A'])){
+						$teacher_id = $this->getTeacherId($sheetData[$i]['A'], $data);
+					}
+
 					$_arr=array(
 						'branch_id'   	 => $data['branch_id'],
 						'group_code'  	 => $sheetData[$i]['C'],
 						'academic_year'  => $data['academic_year'],
+						'teacher_id'  	 => $teacher_id,
 						'is_use'     	 => 0,
 						'is_pass'     	 => 0,
 						'status'     	 => 1,
@@ -70,6 +76,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$sheetData[$i]['M'],
 				$sheetData[$i]['O'],
 			);
+			
 			$teacherData = array( 
 				$sheetData[$i]['F'],
 				$sheetData[$i]['H'],
@@ -78,13 +85,20 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$sheetData[$i]['N'],
 				$sheetData[$i]['P'],
 			);
+			
 
 			$dayId=1;
 			for($j=0; $j<count($dayData); $j++){
 
-				$subject_id = $this->getSubjectId($dayData[$j]);
-				$teacherId = $this->getTeacherId($teacherData[$j], $data);
-
+					$subject_id='';
+					if(!empty($dayData[$j])){
+						$subject_id = $this->getSubjectId($dayData[$j]);
+					}
+					$teacherId = 0;
+					if(!empty($teacherData[$j])){
+						$teacherId = $this->getTeacherId($teacherData[$j], $data);
+					}
+					
 					$arr = array(
     					'main_schedule_id'		=>$scheduleId,
     					'branch_id'				=>$data['branch_id'],
@@ -106,28 +120,43 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$dayId++;
 			}
     	}
+		
     }
 
 	public function getSubjectId($title){
+		$subject_type=1;
+		$subject_lang=1;
+		if($title=="ម៉ោងសម្រាក"){
+			$subject_type=2;
+			$subject_lang='';
+		}
+
 		$db = $this->getAdapter();
 		$sql=" SELECT id FROM `rms_subject` WHERE subject_titlekh LIKE '%".$title."%' ";
+		if($subject_type==1){
+			$sql.="  AND subject_lang=1 AND type_subject=1 ";
+		}elseif($subject_type==2){
+			$sql.=" AND type_subject=2 ";
+		}
 		$subject_id =  $db->fetchOne($sql);
         
-		// if(empty($timeValue)){
-			
-		// 	$arr = array(
-		// 		'title'	        =>$title,
-		// 		'title_en'		=>$title,
-			
-		// 		'note'		    =>"From Import",
-		// 		'create_date'	=>date("Y-m-d H:i:s"),
-		// 		'modify_date'	=>date("Y-m-d H:i:s"),
-		// 		'status'		=>1,
-		// 		'user_id'		=>$this->getUserId(),
-		// 	);
-		// 	$this->_name='rms_timeseting';
-		// 	$subject_id = $this->insert($arr); 
-		// }
+		if(empty($subject_id)){
+			$arr = array(
+				'title'	        =>$title,
+				'title_en'		=>$title,
+				'schoolOption'	=>1,
+				'is_parent'		=>0,
+				'subject_lang'	=>$subject_lang,
+				'type_subject'	=>$subject_type,
+				'note'		    =>"From Import",
+				'create_date'	=>date("Y-m-d H:i:s"),
+				'modify_date'	=>date("Y-m-d H:i:s"),
+				'status'		=>1,
+				'user_id'		=>$this->getUserId(),
+			);
+			$this->_name='rms_subject';
+			$subject_id = $this->insert($arr); 
+		}
 		return $subject_id;
 	}
 	
@@ -150,7 +179,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			}
 			
 		}else{
-			$teacherId='';
+			$teacherId=0;
 		}
 		return $teacherId;
 	}

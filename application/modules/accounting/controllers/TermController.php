@@ -58,8 +58,12 @@ class Accounting_TermController extends Zend_Controller_Action {
     	}
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rsbranch = $db->getAllBranch();
+    	$dbg = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rsbranch = $dbg->getAllBranch();
+		
+		$rows = $dbg->getAllPaymentTerm($id=null,$hidemonth=1);
+		$this->view->term_option =	$rows ;
+
     }
 	public function editAction(){
 		$db = new Global_Model_DbTable_DbTerm();
@@ -85,8 +89,11 @@ class Accounting_TermController extends Zend_Controller_Action {
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();
     	
-    	$db = new Application_Model_DbTable_DbGlobal();
-    	$this->view->rsbranch = $db->getAllBranch();
+    	$dbg = new Application_Model_DbTable_DbGlobal();
+    	$this->view->rsbranch = $dbg->getAllBranch();
+
+		$rows = $dbg->getAllPaymentTerm($id=null,$hidemonth=1);
+		$this->view->term_option =	$rows ;
 	}
 	function gettermstudyAction(){
 		if($this->getRequest()->isPost()){

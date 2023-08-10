@@ -1,8 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
-	echo $this->headTitle($tr->translate('IMPORT_SCHEDULE')); 
-	$url_save = $this->url(array('module'=>'issue','controller'=>'importsch','action'=>'index'));
+	echo $this->headTitle($tr->translate('Import Schedule')); 
+	$url_save = $this->url(array('module'=>'issue','controller'=>'importschedule','action'=>'index'));
 	$frm = $this->frm_items; 
 ?>
 <script src="<?php echo $baseurl;?>/js/help.js"></script>
@@ -35,6 +35,13 @@
                 if(year==-1 || year==""){
 					alert("<?php echo $tr->translate("PLEASE_SELECT_STUDY_YEAR");?>!!!");
 					dijit.byId("academic_year").focus();
+                    return false;
+				}
+
+				schedule_setting=dijit.byId("schedule_setting").get("value");
+                if(schedule_setting==-1 || schedule_setting==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_SCHEDULE_SETTING");?>!!!");
+					dijit.byId("schedule_setting").focus();
                     return false;
 				}
     			
@@ -83,7 +90,7 @@
 								<div class="col-md-6"></div>
 								<div class="col-md-6" align="left">
 								<input type="submit" value="SAVE_CLOSE" label="<?php echo $tr->translate('IMPORT_FILE')?>" id="import_file" dojoType="dijit.form.Button" name="import_file"
-								iconClass="dijitEditorIcon dijitEditorIconSave" /> 
+								class="button-class button-primary" iconClass="glyphicon glyphicon-download-alt" /> 
 								</div>
 							</div>
     					</div>

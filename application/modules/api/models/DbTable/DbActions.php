@@ -1686,4 +1686,31 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			exit();
 		}
 	}
+	
+	public function getSchoolBusProfileAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getSchoolBusProfile($_data);
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
 }

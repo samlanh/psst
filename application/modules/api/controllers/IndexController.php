@@ -135,6 +135,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->getStudentRequestPermissionAction($GetData);
 			}else if ($GetData['url']=="schoolBusForStudent"){
     			$_dbAction->getSchoolBusForStudentAction($GetData);
+			}else if ($GetData['url']=="schoolBusProfile"){
+    			$_dbAction->getSchoolBusProfileAction($GetData);
 			}else if ($GetData['url']=="checkCurrentTokenAccount"){
     			$_dbAction->checkCurrentTokenAccountAction($GetData);
 				

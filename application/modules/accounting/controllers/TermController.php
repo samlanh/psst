@@ -28,7 +28,7 @@ class Accounting_TermController extends Zend_Controller_Action {
     		$link=array(
     				'module'=>'accounting','controller'=>'term','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('academic_year'=>$link,'degree'=>$link ));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch_name'=>$link,'academic_year'=>$link,'degree'=>$link ));
     		
     		$form=new Application_Form_FrmSearchGlobal();
     		$forms=$form->FrmSearch();
@@ -85,6 +85,9 @@ class Accounting_TermController extends Zend_Controller_Action {
     		exit();
     	}
     	$this->view->row = $row;
+
+		$termDetail = $db->getTermDetail($row);
+		$this->view->termDetail = $termDetail;
     	
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();

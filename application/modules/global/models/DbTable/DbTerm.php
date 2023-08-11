@@ -11,7 +11,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	public function getAllTerm($search){
 		$db= $this->getAdapter();
 		$sql="SELECT 
-			degreeId,
+			id,
 			(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = academic_year LIMIT 1) AS academic_year,
 			(SELECT title FROM `rms_items` WHERE TYPE=1 AND id = degreeId LIMIT 1) AS degree ,
@@ -62,21 +62,69 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	public function editTermbyID($data){
 		$db= $this->getAdapter();
 		try{
-			$arr = array(
-					'branch_id'		=>$data['branch_id'],
-					'academic_year'	=>$data['academic_year'],
-					'degreeId'		=>$data['degree'],
-					'periodId'		=>$data['term'],
-					'title'			=>$data['title'],
-					'start_date'	=>$data['start_date'],
-					'end_date'		=>$data['end_date'],
-					'note'			=>$data['note'],
-					'status'		=>$data['status'],
-					'user_id'		=>$this->getUserId(),
-				);
-			$this->_name='rms_startdate_enddate';	
-			$where=" id = ".$data['id'];
-			$this->update($arr, $where);
+				$identitys = explode(',',$data['identity']);
+				$detailId="";
+				if (!empty($identitys)){
+					foreach ($identitys as $i){
+						if (empty($detailId)){
+							if (!empty($data['detailId'.$i])){
+								$detailId = $data['detailId'.$i];
+							}
+						}else{
+							if (!empty($data['detailId'.$i])){
+								$detailId= $detailId.",".$data['detailId'.$i];
+							}
+						}
+					}
+				}
+				
+				$this->_name='rms_startdate_enddate';
+				$whereDl=" degreeId = ".$data['degree']." AND academic_year=".$data['academic_year'];
+				if (!empty($detailId)){
+					$whereDl.=" AND id NOT IN ($detailId)";
+				}
+				$this->delete($whereDl);
+
+				if(!empty($data['identity'])){
+					$ids = explode(',', $data['identity']);
+					foreach ($ids as $i){
+						
+						if (!empty($data['detailId'.$i])){
+							$arr = array(
+								'branch_id'		=>$data['branch_id'],
+								'academic_year'	=>$data['academic_year'],
+								'degreeId'		=>$data['degree'],
+								'title'			=>$data['title_'.$i],
+								'periodId'		=>$data['term_'.$i],
+								'start_date'	=>$data['startdate_'.$i],
+								'end_date'		=>$data['enddate_'.$i],
+								'note'			=>$data['remark_'.$i],
+								'create_date'	=>date("Y-m-d"),
+								'user_id'		=>$this->getUserId(),
+							);
+							$this->_name='rms_startdate_enddate';
+							$where =" id =".$data['detailId'.$i];
+							$this->update($arr, $where);
+						}else{
+
+							$arr = array(
+								'branch_id'		=>$data['branch_id'],
+								'academic_year'	=>$data['academic_year'],
+								'degreeId'		=>$data['degree'],
+								'title'			=>$data['title_'.$i],
+								'periodId'		=>$data['term_'.$i],
+								'start_date'	=>$data['startdate_'.$i],
+								'end_date'		=>$data['enddate_'.$i],
+								'note'			=>$data['remark_'.$i],
+								'create_date'	=>date("Y-m-d"),
+								'user_id'		=>$this->getUserId(),
+							);
+							$this->_name='rms_startdate_enddate';	
+							$this->insert($arr);
+						}
+					}
+				}
+
     	}catch(Exception $e){
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
@@ -88,6 +136,12 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getAccessPermission('branch_id');
 		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
+	}
+	public function getTermDetail($data=null){
+		$db= $this->getAdapter();
+		$sql="SELECT * FROM rms_startdate_enddate WHERE academic_year=".$data['academic_year']." AND degreeId=".$data['degreeId']."";
+	
+		return $db->fetchAll($sql);
 	}
 	function getTermStudyInterm($branch,$year=null,$option=1){
 		$dbp = new Application_Model_DbTable_DbGlobal();

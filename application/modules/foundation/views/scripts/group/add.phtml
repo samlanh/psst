@@ -652,6 +652,8 @@ function getSubject(col){
 }
 
 function newoption(subject, col){
+	// periodStore  = getDataStorefromJSON('id','name', data.resultPeriod);
+	// dijit.byId("term_study"+key).set('store',periodStore);  
 	
     option='<select   name="group_subject_study_'+col+'"  placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>"  dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
     dojo.html.set(dojo.byId("subject_option"+col),option , {

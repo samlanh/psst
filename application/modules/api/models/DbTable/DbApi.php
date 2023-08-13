@@ -79,9 +79,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return false;
 		}
 	}
-	function getStudentInformation($stu_id=0,$currentLang=1){
+	function getStudentInformation($_data){
 		$_db = $this->getAdapter();
 		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$stu_id = empty($_data['stu_id'])?1:$_data['stu_id'];
+			$_data['groupId'] = empty($_data['groupId'])?0:$_data['groupId'];
 			$colunmname='title_en';
 			$lbView="name_en";
 			$branch = "branch_nameen";
@@ -160,9 +164,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				LEFT JOIN rms_group AS g ON g.id = gds.group_id
 			WHERE
 				gds.itemType=1 
-				AND gds.is_maingrade =1
-				AND gds.is_current =1
 				AND s.stu_id=$stu_id ";
+			
+			if(!empty($_data['groupId'])){ // profileByFilterGroup
+				$sql.=" AND gds.group_id = ".$_data['groupId'];
+			}else{ // currentProfile
+				$sql.=" AND gds.is_maingrade =1
+						AND gds.is_current =1 ";
+			}
+			$sql.=" LIMIT 1";
 			$row = $_db->fetchAll($sql);
 			$result = array(
 					'status' =>true,
@@ -360,25 +370,18 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return $result;
 	    }
     }
-    function getSchedule($stu_id, $search = array()){
+    function getSchedule($search = array()){
     	$db = $this->getAdapter();
     	try{
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$search['stu_id'] = empty($search['stu_id'])?1:$search['stu_id'];
     		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
     		$dayId = empty($search['dayId'])?1:$search['dayId'];
-    		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
+    		$stuInfo = $this->getStudentInformation($search);
     		
     		$arrStudyValue = array();
     		$dayIndex="";
     		$arrStudyValue = $this->getSubjectTeacherByScheduleAndGroup($stuInfo,$dayId ,$currentLang);
-//     		if (!empty($dayStudy)){
-//     			foreach ($dayStudy as $key => $days){
-//     				if (!empty($timeStudy)){
-//     					foreach($timeStudy As $keyIndex => $time){
-//     						$arrStudyValue[$days['name']][$keyIndex] = $this->getSubjectTeacherByScheduleAndGroup($stuInfo,$time['times'], $days['id'],$currentLang);
-// 	    				}
-// 	    			}
-// 	    		}
-//     		}
     		$arrQuery = array(
     				'arrStudyValue' => $arrStudyValue
     				);
@@ -541,9 +544,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$dbgb = new Application_Model_DbTable_DbGlobal();
-    		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-    		$stu_id = empty($search['stu_id'])?1:$search['stu_id'];
-    		$stuInfo = $this->getStudentInformation($stu_id,$currentLang);
+			
+    		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+    		$currentLang = $search['currentLang'];
+			
+    		$search['stu_id'] = empty($search['stu_id'])?1:$search['stu_id'];
+    		$stu_id = $search['stu_id'];
+    		$stuInfo = $this->getStudentInformation($search);
+			
     		$score_id = empty($search['score_id'])?1:$search['score_id'];
     		$examRow = $this->getExamRow($stuInfo,$search);
     		$rowDetail = $this->getExamRowDetail($examRow, $stu_id, $currentLang);
@@ -723,7 +731,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		$stuId = $search['stu_id'];
     		$LangId = $search['currentLang'];
     		
-    		$stuInfo = $this->getStudentInformation($stuId,$LangId);
+    		$stuInfo = $this->getStudentInformation($search);
 	    	$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
 	    	$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
 	    	
@@ -850,9 +858,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     function getDisciplineBydate($search = array()){
     	$db = $this->getAdapter();
     	try{
-    		$stuId = $search['stu_id'];
+    		
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$search['stu_id'] = empty($search['stu_id'])?1:$search['stu_id'];
+			$stuId = $search['stu_id'];
     		$LangId = $search['currentLang'];
-    		$stuInfo = $this->getStudentInformation($stuId,$LangId);
+			
+    		$stuInfo = $this->getStudentInformation($search);
     		$groupId = empty($stuInfo['value'][0]['group_id'])?0:$stuInfo['value'][0]['group_id'];
     		$groupId = empty($search['group_id'])?$groupId:$search['group_id'];
     
@@ -2619,6 +2631,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 			$teacherName= "teacher_name_en";
+			$mentionGradeTitle= "mention_in_english";
 			if($currentLang==1){// khmer
 				$teacherName = "teacher_name_kh";
 				$label = "name_kh";
@@ -2626,6 +2639,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$degree = "rms_items.title";
 				$branch = "b.branch_namekh";
 				$month = "month_kh";
+				$mentionGradeTitle= "metion_in_khmer";
 			}
 			$sql="SELECT
 					s.*
@@ -2645,6 +2659,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle
 			   
 					,`g`.`semester` AS `semester`
+					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
 					,(SELECT $label	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`
 					,(SELECT t.$teacherName FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherName
 					,(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherNameKh
@@ -2665,6 +2680,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,'studyScore' AS recordType
 					,sm.isRead AS recordIsread
 					
+					,sm.totalMaxScore AS totalMaxScore
 					,sm.total_score AS totalScore
 					,sm.total_avg AS totalAvg
 					,g.max_average/2 AS passAvrage
@@ -2682,6 +2698,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						)
 					) AS rank
 					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+					,(SELECT 
+						mstd.$mentionGradeTitle
+						FROM `rms_metionscore_setting_detail` AS mstd,
+							`rms_metionscore_setting` AS mst 
+						WHERE mst.id = mstd.metion_score_id
+							AND mst.academic_year=g.academic_year
+							AND mst.degree = g.degree 
+							AND mst.status = 1 
+							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+						ORDER BY mstd.max_score DESC LIMIT 1
+					) AS mentionGradeTitle
+					,sm.totalMaxScore
+					,(SELECT 
+						mstd.metion_grade
+						FROM `rms_metionscore_setting_detail` AS mstd,
+							`rms_metionscore_setting` AS mst 
+						WHERE mst.id = mstd.metion_score_id
+							AND mst.academic_year=g.academic_year
+							AND mst.degree = g.degree 
+							AND mst.status = 1 
+							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+						ORDER BY mstd.max_score DESC LIMIT 1
+					) AS mentionGradeTitleLabel
 			FROM
 				`rms_score` AS s,
 				`rms_score_monthly` AS sm,
@@ -2694,6 +2733,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				AND s.status = 1 ";
 			
 			$sql.=" AND st.stu_id=".$studentId;
+			
 			$where='';
 			if(!empty($search['searchBox'])){
 				$s_where=array();
@@ -4723,14 +4763,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$toDate = new DateTime($toDateString);
 			$toDate = $toDate->format($format);
 			
-			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
+			$_data['currentLang'] = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$currentLang 	= $_data['currentLang'];
 			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
 			$branchId		= empty($_data['branchId'])?0:$_data['branchId'];		
 			$groupId		= empty($_data['groupId'])?0:$_data['groupId'];
 			$_data['amountDay']		= empty($_data['amountDay'])?0:$_data['amountDay'];
 			$_data['phoneNumber']	= empty($_data['phoneNumber'])?0:$_data['phoneNumber'];
+			$_data['stu_id'] = $studentId;
 			
-			$studentInfo = $this->getStudentInformation($studentId,$currentLang);
+			$studentInfo = $this->getStudentInformation($_data);
 			if(!empty($studentInfo['value'][0])){
 				$groupId  = empty($studentInfo['value'][0]['group_id'])?0:$studentInfo['value'][0]['group_id'];
 				$branchId  = empty($studentInfo['value'][0]['branchId'])?0:$studentInfo['value'][0]['branchId'];

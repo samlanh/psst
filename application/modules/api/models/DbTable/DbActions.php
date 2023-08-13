@@ -116,13 +116,11 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	}
 	public function profileAction($search){
 		try{
-			$stu_id = empty($search['stu_id'])?46:$search['stu_id'];
-			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 			$db = new Api_Model_DbTable_DbApi();
-			$row = $db->getStudentInformation($stu_id,$currentLang,$action='profile');
-// 			print_r($row);
-// 			print(Zend_Json::encode($row));exit();
-		
+			$row = $db->getStudentInformation($search);
+	
 			if ($row['status']){
 				$arrResult = array(
 					"result" => $row['value'],
@@ -204,10 +202,10 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		}
 	}
 	public function scheduleAction($search){
-		$stu_id = empty($search['stu_id'])?46:$search['stu_id'];
-		$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+		$search['stu_id'] = empty($search['stu_id'])?46:$search['stu_id'];
+		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$db = new Api_Model_DbTable_DbApi();
-		$row = $db->getSchedule($stu_id,$search);
+		$row = $db->getSchedule($search);
 		if ($row['status']){
 			$arrResult = array(
 				"result" => $row['value'],

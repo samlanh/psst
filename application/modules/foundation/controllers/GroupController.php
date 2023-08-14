@@ -128,7 +128,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
-			$this->view->teacher_option = $model->getAllTeacherOption($schoolOption,$row['branch_id']);
+			$this->view->teacher_option = $model->getAllTeacherOption($schoolOption,$row['branch_id'],$addNew=1);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
@@ -181,7 +181,7 @@ class Foundation_GroupController extends Zend_Controller_Action {
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
-			$this->view->teacher_option = $model->getAllTeacherOption($schoolOption,$row['branch_id']);
+			$this->view->teacher_option = $model->getAllTeacherOption($schoolOption,$row['branch_id'],$addNew=1);
 			$this->view->subject = $_dggroup->getAllSubjectStudy(null,$schoolOption);
 		}
 		

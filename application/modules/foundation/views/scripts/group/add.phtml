@@ -559,9 +559,13 @@ function getRefreshItems(){
 }
 var teacher_option = '';
 var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
-function getRefreshTeacher(){
-	dijit.byId('teacher_id').reset();
-	dijit.byId('teacher_ass').reset();
+function getRefreshTeacher(col = null){
+	
+	if(col == null){
+		dijit.byId('teacher_id').reset();
+		dijit.byId('teacher_ass').reset();
+	}
+	
 	teacher_option = '';
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -575,21 +579,25 @@ function getRefreshTeacher(){
 	dojo.xhrPost({
 		url:url_gettecher,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,
 			},
 		handleAs:"json",
 		load: function(data) {
+			
 			teacher_storeass  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('teacher_ass').set('store',teacher_storeass);
 		    dijit.byId('teacher_id').set('store',teacher_storeass);  
 		    for(var i = 0; i < data.length; i++) {
-			    if(data[i].id==-1){
-			    }else{
-		    		teacher_option+='<option value='+data[i].id+'>'+data[i].name+'</option>';
-			    }
+				teacher_option+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 		    }
-		   
+
+             if(col != null){
+				teacherOptionStore  = getDataStorefromJSON('id','name', data);
+				dijit.byId("teacher_"+col).set('store',teacherOptionStore);  
+			 }
+			
 		    HideloadingBlock();
+			
 		},
 		error: function(err){
 			 HideloadingBlock();
@@ -622,7 +630,7 @@ function getRefreshRoom(){
 }
 var subject = '';
 var url_getsubject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"getsubjectbybranch"));?>';										
-function getSubject(col){
+function getSubject(col = null){
 	subject = '';
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
@@ -642,24 +650,20 @@ function getSubject(col){
 			    	subject+='<option value='+data[i].id+'>'+data[i].name+'</option>';
 			    }
 		    }
+			if(col != null){
+				 subjectStore  = getDataStorefromJSON('id','name', data);
+				 dijit.byId("group_subject_study_"+col).set('store',subjectStore);  
+			}
+			
 		    HideloadingBlock();
-			newoption(subject, col);
+			
+			//newoption(subject, col);
 		},
 		error: function(err) {
 			 HideloadingBlock();
 		}
 	});
 }
-
-function newoption(subject, col){
-	// periodStore  = getDataStorefromJSON('id','name', data.resultPeriod);
-	// dijit.byId("term_study"+key).set('store',periodStore);  
-	
-    option='<select   name="group_subject_study_'+col+'"  placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>"  dojoType="dijit.form.FilteringSelect" >'+subject+'</select>';
-    dojo.html.set(dojo.byId("subject_option"+col),option , {
-         parseContent: true,
-    });
-  }
 
 var col = 0;
 var no = 0;
@@ -676,10 +680,10 @@ function addRow(){
 
 	col++;no++;
 	template='';
-		template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
+		template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+'), getRefreshTeacher('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
 		template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 		template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
-		template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+		template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select placeholder="<?php echo $tr->translate('SELECT_TEACHER');?>" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 		template+=teacher_option;  
 		template+='</select></td>';
 
@@ -741,6 +745,13 @@ function checkSubject(index){
 	}
 	
 }
+function checkTeacher(index){
+	current_teacher = dijit.byId('teacher_'+index).get('value');
+	if(current_teacher== -1){
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/lecturer/add?rightclick=true";?>','_blank');
+		dijit.byId('teacher_'+index).attr('value', 0);
+	}
+}
 var url_dept_subject = '<?php echo $this->url(array('module'=>'global','controller'=>'subject','action'=>'getsubjectbygrade')); ?>';
 function getSubjectByGrade(){
 		grade_id = dijit.byId('grade').get('value');
@@ -783,10 +794,10 @@ function getSubjectByGrade(){
 							dojo.query("#head-title").append(temp);
 							title=1;
 						}
-						template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
+						template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+'),getRefreshTeacher('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
 						template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
 						template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select placeholder="<?php echo $tr->translate('PLEASE_SELECT');?>" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
-						template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="popupTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
+						template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select placeholder="<?php echo $tr->translate('SELECT_TEACHER');?>" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 						template+=teacher_option;  
 						template+='</select></td>';
 

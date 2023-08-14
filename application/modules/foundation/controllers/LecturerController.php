@@ -273,9 +273,8 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	
 			$db = new Application_Model_DbTable_DbGlobal();
 			$teacher = $db->getAllTeahcerName($data['branch_id'],$schoolOption);
-			if (empty($data['has_addnew'])){
-				array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
-			}
+		
+			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("SELECT_TEACHER")));
 			print_r(Zend_Json::encode($teacher));
 			exit();

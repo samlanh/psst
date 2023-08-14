@@ -167,7 +167,7 @@ function initailize() {
 		template+='<td style="text-align: center;">';
 			template+='<input type="hidden" id="old_phoyto'+col+'" name="old_photo'+col+'" value="<?php echo $rs['images'];?>">';
 			template+='<img class="image_view" id="image_view'+col+'" src="<?php echo $this->baseUrl().'/images/slide/'.$rs['images'];?>" alt=""  />';
-		template+='></td>';
+		template+='</td>';
 		template+='<td><div class="button_browse"><span>Upload <span><i class="fa fa-camera" aria-hidden="true"></i></span></span><input class="btn_borwse_image" type="file" id="photo'+col+'" name="photo'+col+'" onchange="loadImage('+col+')"></div></td>';
 	tmp='<tr id="row'+col+'" style="background: #fff; border: solid 1px #bac;"">';
 	tmp+="</tr>";

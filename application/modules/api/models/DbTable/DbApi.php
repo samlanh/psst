@@ -4711,6 +4711,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($_data['academicYear'])){
 				$sql.=" AND g.academic_year = ".$_data['academicYear'];	
 			}
+			if(!empty($_data['groupId'])){
+				$sql.=" AND g.id = ".$_data['groupId'];	
+			}
 			if(!empty($_data['degreeId'])){
 				$sql.=" AND g.degree = ".$_data['degreeId'];	
 			}
@@ -5061,6 +5064,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					ins.*
 					,insD.title AS title
 					,insD.description AS description
+					,ins.video_id AS videoId
 				FROM
 					moble_instruction AS ins
 					JOIN `moble_instruction_detail` AS insD ON ins.id = insD.instruction_id

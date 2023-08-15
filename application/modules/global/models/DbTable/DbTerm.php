@@ -139,7 +139,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	}
 	public function getTermDetail($data=null){
 		$db= $this->getAdapter();
-		$sql="SELECT * FROM rms_startdate_enddate WHERE academic_year=".$data['academic_year']." AND degreeId=".$data['degreeId']."";
+		$sql="SELECT * FROM rms_startdate_enddate WHERE academic_year=".$data['academic_year']." AND degreeId=".$data['degreeId']." ORDER BY periodId ASC ";
 	
 		return $db->fetchAll($sql);
 	}

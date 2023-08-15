@@ -29,7 +29,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('branch_id');
-		$order=" GROUP BY degreeId,academic_year ORDER BY degreeId DESC";
+		$order=" GROUP BY degreeId,academic_year ORDER BY academic_year DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function addTermStudy($data){

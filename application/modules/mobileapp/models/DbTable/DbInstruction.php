@@ -43,21 +43,21 @@ class Mobileapp_Model_DbTable_DbInstruction extends Zend_Db_Table_Abstract
 	}
 
 
-	function  add($data){
+	function  editInstruction($data){
       	$db = $this->getAdapter();
         $db->beginTransaction();
         try{
 			
 			$arr=array(
-            		
-                  	'create_date'=>$data['create_date'],
-					'modify_date'=>date("Y-m-d H:i:s"),
-					'user_id'=>$this->getUserId(),
+					'video_id'		=>$data['video_id'],
+                  	'create_date'	=>$data['create_date'],
+					'modify_date'	=>date("Y-m-d H:i:s"),
+					'user_id'		=>$this->getUserId(),
             );
             $dbglobal = new Application_Model_DbTable_DbGlobal();
             $lang = $dbglobal->getLaguage();
         	 if (!empty($data['id'])){
-				//$notificationId = $data['id'];
+
         	 	$arr['status']= $data['status'];
         	 	$where=" id=".$data['id'];
         	 	$this->_name="moble_instruction";
@@ -91,9 +91,9 @@ class Mobileapp_Model_DbTable_DbInstruction extends Zend_Db_Table_Abstract
         	 			if (!empty($data['iddetail'.$title])){
         	 				$arr_article = array(
         	 						'instruction_id'=>$article_id,
-        	 						'title'=>$data['title'.$title],
-        	 						'description'=>$data['description'.$title],
-        	 						'lang'=>$row['id'],
+        	 						'title'			=>$data['title'.$title],
+        	 						'description'	=>$data['description'.$title],
+        	 						'lang'			=>$row['id'],
         	 				);
         	 				$this->_name="moble_instruction_detail";
         	 				$wheredetail=" instruction_id=".$data['id']." AND id=".$data['iddetail'.$title];
@@ -101,9 +101,9 @@ class Mobileapp_Model_DbTable_DbInstruction extends Zend_Db_Table_Abstract
         	 			}else{
         	 				$arr_article = array(
         	 						'instruction_id'=>$article_id,
-        	 						'title'=>$data['title'.$title],
-        	 						'description'=>$data['description'.$title],
-        	 						'lang'=>$row['id'],
+        	 						'title'			=>$data['title'.$title],
+        	 						'description'	=>$data['description'.$title],
+        	 						'lang'			=>$row['id'],
         	 				);
         	 				$this->_name="moble_instruction_detail";
         	 				$this->insert($arr_article);

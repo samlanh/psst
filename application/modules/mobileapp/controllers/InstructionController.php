@@ -59,7 +59,7 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
 	    if($this->getRequest()->isPost()){
 	      $_data = $this->getRequest()->getPost();
 	      try{
-	        $db->add($_data);
+	        $db->editInstruction($_data);
 	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	      }catch(Exception $e){
 	        $err =$e->getMessage();
@@ -67,7 +67,6 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
 	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
 	      }
 	    }
-	
 	    $id = $this->getRequest()->getParam("id");
 	    $row = $db->getById($id);
 	    $this->view->row = $row;
@@ -76,34 +75,25 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
 	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
 	   		exit();
 	   	}
-	    
-	    // $dbstudent = new Foundation_Model_DbTable_DbStudent();
-	    // $group = $dbstudent->getAllgroup();
-	    // $this->view->group = $group;
-	    
 	    $dbglobal = new Application_Model_DbTable_DbGlobal();
-	    $this->view->all_student = $dbglobal->getAllStuCode();
-	    
 	    $this->view->lang = $dbglobal->getLaguage();
-	    $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
-
    }
-   function deleteAction(){
-	   	try{
-	   		$id = $this->getRequest()->getParam("id");
-	   		$db = new Mobileapp_Model_DbTable_DbInstruction();
-	   		if (!empty($id)) {
-	   			$db->deleteData($id);
-	   			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
-	   			echo "<script>window.close();</script>";
-	   		}
-	   	}catch(Exception $e){
-	   		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
-	   		$err =$e->getMessage();
-	   		Application_Model_DbTable_DbUserLog::writeMessageError($err);
-	   		echo "<script>window.close();</script>";
-	   	}
-   }
+//    function deleteAction(){
+// 	   	try{
+// 	   		$id = $this->getRequest()->getParam("id");
+// 	   		$db = new Mobileapp_Model_DbTable_DbInstruction();
+// 	   		if (!empty($id)) {
+// 	   			$db->deleteData($id);
+// 	   			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
+// 	   			echo "<script>window.close();</script>";
+// 	   		}
+// 	   	}catch(Exception $e){
+// 	   		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
+// 	   		$err =$e->getMessage();
+// 	   		Application_Model_DbTable_DbUserLog::writeMessageError($err);
+// 	   		echo "<script>window.close();</script>";
+// 	   	}
+//    }
 
 }
 

@@ -30,6 +30,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'score_option'=>$_data['score_option'],
 			);
 			$id=$this->insert($_arr);
+			$scoreId = $id;
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 			$dbpush->pushNotification(null,$_data['group'],2,4);
 			
@@ -170,6 +171,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				}
 			}
 		  $db->commit();
+		  return $scoreId;
 		}catch (Exception $e){
 			echo $e->getMessage();exit();
 			$db->rollBack();

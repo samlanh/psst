@@ -809,61 +809,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
-	public function scoreInformationAction($search){
-		$db = new Api_Model_DbTable_DbApi();
-		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
-		$row = $db->getScoreInformation($search);
-		if ($row['status']){
-			$arrResult = array(
-				"result" => $row['value'],
-				"code" => "SUCCESS",
-			);
-		}else{
-			$arrResult = array(
-				"code" => "ERR_",
-				"message" => $row['value'],
-			);
-		}
-		print_r(Zend_Json::encode($arrResult));
-		exit();
-	}
-	public function subjectByGroupAction($search){
-		$db = new Api_Model_DbTable_DbApi();
-		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
-		$row = $db->getSubjectExamedByGroup($search);
-		if ($row['status']){
-			$arrResult = array(
-				"result" => $row['value'],
-				"code" => "SUCCESS",
-			);
-		}else{
-			$arrResult = array(
-				"code" => "ERR_",
-				"message" => $row['value'],
-			);
-		}
-		print_r(Zend_Json::encode($arrResult));
-		exit();
-	}
 	
-	public function studentScoreBySubjectAction($search){
-		$db = new Api_Model_DbTable_DbApi();
-		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
-		$row = $db->getStudentScoreBySubject($search);
-		if ($row['status']){
-			$arrResult = array(
-				"result" => $row['value'],
-				"code" => "SUCCESS",
-			);
-		}else{
-			$arrResult = array(
-				"code" => "ERR_",
-				"message" => $row['value'],
-			);
-		}
-		print_r(Zend_Json::encode($arrResult));
-		exit();
-	}
 	public function studentPaymentAction($search){
 		$db = new Api_Model_DbTable_DbApi();
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
@@ -1143,7 +1089,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	//2023-03-18
+
 	public function mobileNotifyAction($search){
 		$db = new Api_Model_DbTable_DbApi();
 		$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];

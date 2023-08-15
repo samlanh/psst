@@ -2709,7 +2709,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
 						ORDER BY mstd.max_score DESC LIMIT 1
 					) AS mentionGradeTitle
-					,sm.totalMaxScore
 					,(SELECT 
 						mstd.metion_grade
 						FROM `rms_metionscore_setting_detail` AS mstd,
@@ -2805,6 +2804,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 			$teacherName= "teacher_name_en";
+			$mentionGradeTitle= "mention_in_english";
 			if($currentLang==1){// khmer
 				$teacherName = "teacher_name_kh";
 				$label = "name_kh";
@@ -2812,6 +2812,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$degree = "rms_items.title";
 				$branch = "b.branch_namekh";
 				$month = "month_kh";
+				$mentionGradeTitle= "metion_in_khmer";
 			}
 			$sql="SELECT
 				s.*
@@ -2842,6 +2843,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
 				END AS forMonthTitle
 				
+				,sm.totalMaxScore
 				,sm.total_score AS totalScore
 				,sm.total_avg AS totalAvg
 				,g.max_average/2 AS passAvrage
@@ -2859,6 +2861,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					)
 				) AS rank
 				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+				,(SELECT 
+						mstd.$mentionGradeTitle
+						FROM `rms_metionscore_setting_detail` AS mstd,
+							`rms_metionscore_setting` AS mst 
+						WHERE mst.id = mstd.metion_score_id
+							AND mst.academic_year=g.academic_year
+							AND mst.degree = g.degree 
+							AND mst.status = 1 
+							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+						ORDER BY mstd.max_score DESC LIMIT 1
+					) AS mentionGradeTitle
+					
+					,(SELECT 
+						mstd.metion_grade
+						FROM `rms_metionscore_setting_detail` AS mstd,
+							`rms_metionscore_setting` AS mst 
+						WHERE mst.id = mstd.metion_score_id
+							AND mst.academic_year=g.academic_year
+							AND mst.degree = g.degree 
+							AND mst.status = 1 
+							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+						ORDER BY mstd.max_score DESC LIMIT 1
+					) AS mentionGradeTitleLabel
 			FROM
 				`rms_score` AS s,
 				`rms_score_monthly` AS sm,
@@ -2871,90 +2896,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$scoreId = empty($search['id'])?0:$search['id'];
 			$sql.=" AND sm.student_id = ".$studentId;
 			$sql.=" AND s.id = ".$scoreId;
-			 
-			$row = $db->fetchRow($sql);
-			$result = array(
-				'status' =>true,
-				'value' =>$row,
-			);
-			return $result;
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$result = array(
-				'status' =>false,
-				'value' =>$e->getMessage(),
-			);
-			return $result;
-		}
-	}
-	
-	public function getSubjectExamedByGroup($search){
-		$db = $this->getAdapter();
-		try{
-			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-			$studentId = empty($search['studentId'])?0:$search['studentId'];
-			$scoreId = empty($search['id'])?0:$search['id'];
-			
-			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-			$subjectTitle = "subject_titleen";
-			if($currentLang==1){// khmer
-				$subjectTitle = "subject_titlekh";
-				
-			}
-			$sql="
-				SELECT 
-					s.*
-					,gsjd.subject_id AS subjectId
-					,sd.`score` AS subjectScore
-					,sd.score_cut
-					,sd.`subject_id`
-					,sd.amount_subject
-					,(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitle
-					FROM `rms_score` AS s 
-						JOIN `rms_score_detail` AS sd ON s.id = sd.score_id AND sd.student_id = $studentId
-						LEFT JOIN rms_group_subject_detail AS gsjd ON s.group_id =gsjd.group_id AND sd.subject_id =gsjd.subject_id 
-						
-					WHERE 
-					s.id =$scoreId
-				";
-			if($search['exam_type']==1){
-				$sql.=" AND gsjd.amount_subject > 0 ";
-			}else{
-				$sql.=" AND gsjd.amount_subject_sem > 0 ";
-			}
-			 
-			$row = $db->fetchAll($sql);
-			$result = array(
-				'status' =>true,
-				'value' =>$row,
-			);
-			return $result;
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$result = array(
-				'status' =>false,
-				'value' =>$e->getMessage(),
-			);
-			return $result;
-		}
-	}
-	public function getStudentScoreBySubject($search){
-		$db = $this->getAdapter();
-		try{
-			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-			$studentId = empty($search['studentId'])?0:$search['studentId'];
-			$scoreId = empty($search['id'])?0:$search['id'];
-			$subjectId = empty($search['subjectId'])?0:$search['subjectId'];
-			
-			$sql="SELECT
-					sd.`score`,
-					sd.score_cut,
-					sd.`subject_id`
-					,sd.amount_subject
-				FROM  `rms_score_detail` AS sd
-				WHERE sd.`score_id`=$scoreId AND sd.`subject_id`=$subjectId ";
-			$sql.=" AND sd.`student_id`=".$studentId;
-		
 			 
 			$row = $db->fetchRow($sql);
 			$result = array(
@@ -3647,7 +3588,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	//2023-03-18
 	public function getAllMobileNotification($search){
     		$db = $this->getAdapter();
     		try{
@@ -4043,6 +3983,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" LIMIT 1 ";
 
 			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -4109,9 +4050,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			
 			$row = empty($row) ? null : $row;
-			
-			
-
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -4455,6 +4393,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$studentId = empty($_data['studentId'])?0:$_data['studentId'];
 			$scoreId = empty($_data['id'])?0:$_data['id'];
+			$_data['scoreId'] = $scoreId;
 			
 			$dbTrancript = new Allreport_Model_DbTable_DbScoreTranscript();
 			$arrStudent = array(
@@ -4510,6 +4449,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			
+			
 			$arreValue= array(
 				'studentId'=>$studentId,
 				'groupId'=>$scoreInfo['group_id'],
@@ -4519,9 +4460,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				);
 			$resultEvalueAtion = $dbTrancript->getStudentAssessmentEvaluation($arreValue);
 		
+			$scoreInfoFromAPI =  $this->getScoreInformation($_data);
+			$scoreInfoApi = empty($scoreInfoFromAPI["value"]) ? null : $scoreInfoFromAPI["value"];
 			$result= array(
 				'studentInfo'=>$studentInfo,
-				'scoreInfo'=>$scoreInfo,
+				'scoreInfo'=>$scoreInfoApi,
 				'scoreSubjectInfo'=>$scoreResultList,
 				'evaluationList'=>$resultEvalueAtion,
 			);

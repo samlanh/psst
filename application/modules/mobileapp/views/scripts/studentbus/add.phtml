@@ -1,0 +1,110 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('STUDENT_BUS'));
+$frm = $this->frm;
+?>
+<style>
+body, #dijitEditorBody {
+    height: 100%;
+    width: 102%;
+    overflow: auto;
+    background: #fff !important;
+    border: 1px solid #bcf;
+}
+.dijitEditor {
+    border: solid 1px #ccd9ff;
+}
+</style>
+<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
+<div class="card">
+	<div class="card-content collapse show">
+		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+                loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+			</script>
+			<div class="card-box">
+	        	<div class="col-sm-12 border-botom">
+			    	<div class="col-sm-8 pd-0">
+			    		<h4 class="m-b-0"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_BUS_SCHEDULE');?></h4>
+		    		</div>
+		    		<div class="col-sm-4 text-right">
+		    		</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box mb-10">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-hand-right"></i>
+										</div> 
+										<div class="col-md-8 col-sm-8 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INSTRUCTION_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										&nbsp;
+									</div> 
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BRANCH");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                           <?php echo $frm->getElement("branch_id");?>
+										</div>
+									</div> 
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BUS_CODE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                            <?php echo $frm->getElement("busCode");?>
+										</div>
+									</div>
+                                    <div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BUS_TYPE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                            <?php echo $frm->getElement("busType");?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	               
+	            </div>
+	        	<div class="col-md-8 col-sm-8 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	         </div>
+	         <div class="card-box">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+               		<input class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" />
+               	</div>
+             </div>
+		</form>
+	</div>
+</div>
+<script>
+dojo.require("dijit.form.DateTextBox");
+
+</script>

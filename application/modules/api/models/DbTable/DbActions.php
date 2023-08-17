@@ -9,19 +9,41 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$row = $db->getStudentLogin($_data);
 			if ($row['status']){
 				if(!empty($row['value'])){
+					$disableAccount=0;
+					if($row['value']["isDisbleAccount"]==1){
+						$date = new DateTime($row['value']["disableValidDate"]);
+						$disableValidDate =  $date->format("Y-m-d H:i:s");
+						if($disableValidDate < date("Y-m-d H:i:s") ){
+							$disableAccount=1;
+						}
+					}
 					
-					$condictionArray = array();
-					$condictionArray['id'] = empty($row['value']["id"])?0:$row['value']["id"];
-					$condictionArray['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
-					$condictionArray['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
-					$condictionArray['currentStudentId'] = empty($_data['currentStudentId'])?0:$_data['currentStudentId'];
-					$condictionArray['tokenType'] = empty($_data['tokenType'])?0:$_data['tokenType'];
-					$token = $db->generateToken($condictionArray);
+					if($disableAccount==1){
+						$arrResult = array(
+							"result" => $row['value'],
+							"code" => "FAIL",
+						);
+					}else{
+						$condictionArray = array();
+						$condictionArray['id'] = empty($row['value']["id"])?0:$row['value']["id"];
+						$condictionArray['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
+						$condictionArray['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
+						$condictionArray['currentStudentId'] = empty($_data['currentStudentId'])?0:$_data['currentStudentId'];
+						$condictionArray['tokenType'] = empty($_data['tokenType'])?0:$_data['tokenType'];
+						$token = $db->generateToken($condictionArray);
+						if($row['value']["isDisbleAccount"]==1){
+							$condictionArray['studentId'] = empty($row['value']["id"])?0:$row['value']["id"];
+							$db->enableMyAccount($condictionArray);
+						}
+						
+						$arrResult = array(
+							"result" => $row['value'],
+							"code" => "SUCCESS",
+						);
+					}
 					
-					$arrResult = array(
-						"result" => $row['value'],
-						"code" => "SUCCESS",
-					);
+					
+					
 				}else{
 					$arrResult = array(
 						"result" => $row['value'],
@@ -1673,6 +1695,38 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function disableMyAccountAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			
+			$db = new Api_Model_DbTable_DbApi();
+			$rs = $db->disableMyAccount($search);
+			if($rs){
+				$arrResult = array(
+					"code" => "SUCCESS",
+					"result" =>$rs,
+				);		
+				
+			}else{
+				$arrResult = array(
+					"code" => "FAIL",
+					"message" => "FAIL_TO_SUBMIT",
+				);
+			}
+			
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){

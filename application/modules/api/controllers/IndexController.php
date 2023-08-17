@@ -170,6 +170,8 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->setReadNotificationAction($postData);
 				}else if ($GetData['url']=="removeTokenApp"){
     				$_dbAction->removeTokenAction($postData);
+				}else if ($GetData['url']=="disableStudentAcc"){
+					$_dbAction->disableMyAccountAction($postData);
 				
 				}else if ($GetData['url']=="checkExistingStudent"){
     				$_dbAction->checkExistingStudentAction($postData);

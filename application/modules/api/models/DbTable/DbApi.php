@@ -9,6 +9,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$_data['password']=trim($_data['password']);
 		try{
 			$sql =" SELECT
+				s.*,
 				s.stu_id AS id,
 				s.stu_code AS stuCode,
 				s.stu_khname AS stuNameKH,
@@ -5030,6 +5031,45 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				'value' =>$e->getMessage(),
 			);
 			return $result;
+		}
+	}
+	
+	function disableMyAccount($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?"0":$_data['studentId'];
+		try{
+			
+			$arr = array(
+				'isDisbleAccount'  => 1,
+				'disableDate' 		 => date("Y-m-d H:i:s"),
+				'disableValidDate' 		 => date("Y-m-d H:i:s",strtotime("+30 day")),
+			);
+			$where = 'stu_id = '. $studentId;
+			$this->_name='rms_student';
+			$this->update($arr, $where);
+			return true;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
+	function enableMyAccount($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?"0":$_data['studentId'];
+		try{
+			
+			$arr = array(
+				'isDisbleAccount'  => 0,
+			);
+			$where = 'stu_id = '. $studentId;
+			$this->_name='rms_student';
+			$this->update($arr, $where);
+			return true;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate('STUDENT_BUS'));
+echo $this->headTitle($tr->translate('STUDENT_BUS_SCHEDULE'));
 $frm = $this->frm;
 ?>
 <style>
@@ -44,14 +44,14 @@ body, #dijitEditorBody {
 			<div class="card-box">
 	        	<div class="col-sm-12 border-botom">
 			    	<div class="col-sm-8 pd-0">
-			    		<h4 class="m-b-0"><i class="fa fa-bus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_BUS');?></h4>
+			    		<h4 class="m-b-0"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;<i class="fa fa-bus" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('STUDENT_BUS_SCHEDULE');?></h4>
 		    		</div>
 		    		<div class="col-sm-4 text-right">
 		    		</div>
 	    		</div>
 	    	</div>
 	    	<div class="card-box mb-10">
-				<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-6 col-sm-6 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -77,41 +77,10 @@ body, #dijitEditorBody {
 									</div> 
 									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("BUS_CODE");?>
+											<?php echo $tr->translate("STUDENT_BUS");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-                                            <?php echo $frm->getElement("busCode");?>
-										</div>
-									</div>
-                                    <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("BUS_TYPE");?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-                                            <?php echo $frm->getElement("busType");?>
-										</div>
-									</div>  <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("DRIVER");?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-                                            <?php echo $frm->getElement("driverId");?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("BUS_PLATE_NO");?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-                                            <?php echo $frm->getElement("busPlateNo");?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("NOTE");?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-                                            <?php echo $frm->getElement("note");?>
+											<input type="text" id="studentBus" name ="studentBus" >
 										</div>
 									</div>
 								</div>
@@ -120,36 +89,60 @@ body, #dijitEditorBody {
 					</div>
 	               
 	            </div>
-	        	<div class="col-md-4 col-sm-4 col-xs-12">
+	        	<div class="col-md-6 col-sm-6 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
 								<div class="col-md-12 col-sm-12 col-xs-12"> 
 									<div class="d-flex"> 
 										<div class="settings-main-icon ">
-											<i class="fa fa-key"></i>
+											<i class="fa fa-calendar"></i>
 										</div> 
 										<div class="col-md-8 col-sm-8 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PASSWORD");?></p>
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCHEDULE");?></p>
 										</div> 
 									</div>
 									<div class="form-group">
 										&nbsp;
 									</div> 
 									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GO_TO_SCHOOL");?>
 										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("password");?>
-											<!-- <input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
-											class="fullside" id="password" name="password" value="" type="password"> -->
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<div class="custom-control custom-checkbox ">
+												<input type="checkbox" class=" custom-control-input"  id="morning" name="morning" onChange="Checkchange();"  >
+												<label class="custom-control-label custom-right-side" for="morning">
+													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ព្រឹក");?></p>
+												</label>
+											</div>
+										</div>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<div class="custom-control custom-checkbox ">
+												<input type="checkbox" class=" custom-control-input"  id="mitday" name="mitday" onChange="Checkchange();"  >
+												<label class="custom-control-label custom-right-side" for="mitday">
+													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
+												</label>
+											</div>
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?>
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BACK_FROM_SCHOOL");?>
 										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("confirm_password");?>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<div class="custom-control custom-checkbox ">
+												<input type="checkbox" class=" custom-control-input"  id="afternoon" name="afternoon" onChange="Checkchange();"  >
+												<label class="custom-control-label custom-right-side" for="afternoon">
+													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
+												</label>
+											</div>
+										</div>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<div class="custom-control custom-checkbox ">
+												<input type="checkbox" class=" custom-control-input"  id="evening" name="evening" onChange="Checkchange();"  >
+												<label class="custom-control-label custom-right-side" for="evening">
+													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ពេលល្ងាច");?></p>
+												</label>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -178,7 +171,58 @@ body, #dijitEditorBody {
 		</form>
 	</div>
 </div>
+
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script>
-dojo.require("dijit.form.DateTextBox");
+
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ObjectStore");
+
+	var bus_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+	dojo.ready(function(){ 
+		new dijit.form.FilteringSelect({
+			store: bus_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,
+			id: "studentBus",
+			name: "studentBus",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate("SELECT_BUS");?>",          
+			onChange: function() {  
+				
+			}
+		}, "studentBus");	
+		getAllStudenBus();
+	});
+
+	url_getstudentBus= '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'studentbus','action'=>'getbusbybranch'));?>';
+	function getAllStudenBus(){
+		dijit.byId('studentBus').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+	
+		if(branch_id=='' || branch_id==-1){
+			var bus_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('studentBus').set('store',bus_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getstudentBus,
+			content:{
+				'branch_id':branch_id
+				},
+			handleAs:"json",
+			load: function(data) {
+				bus_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('studentBus').set('store',bus_store);   
+			},
+			error: function(err) {
+			}
+		});
+	}
 
 </script>

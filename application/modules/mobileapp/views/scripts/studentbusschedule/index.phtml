@@ -1,6 +1,6 @@
 <?php 
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate("STUDENT_BUS"));
+echo $this->headTitle($tr->translate("STUDENT_BUS_SCHEDULE"));
 $frm = $this->frm;
 
 $urlEdit= $this->baseUrl()."/mobileapp/studentbus/edit/id/";
@@ -10,7 +10,7 @@ $urlEdit= $this->baseUrl()."/mobileapp/studentbus/edit/id/";
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-bus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_BUS');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-bus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_BUS_SCHEDULE');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>

@@ -1,8 +1,8 @@
 <?php
 
-class Mobileapp_StudentbusController extends Zend_Controller_Action
+class Mobileapp_StudentbusscheduleController extends Zend_Controller_Action
 {
-	const REDIRECT_URL='/mobileapp/studentbus';
+	const REDIRECT_URL='/mobileapp/studentbusschedule';
 	protected $tr;
     public function init()
     {    	
@@ -63,7 +63,7 @@ class Mobileapp_StudentbusController extends Zend_Controller_Action
 	      }
 	    }
 		$frm = new Mobileapp_Form_FrmSchoolBus();
-		$frm = $frm->FrmAddSchoolBus();
+		$frm = $frm->FrmSchoolBusSchedule();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
     }
@@ -99,15 +99,6 @@ class Mobileapp_StudentbusController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
    }
-   function getbusbybranchAction(){
-	if($this->getRequest()->isPost()){
-		$data = $this->getRequest()->getPost();
-		$db = new Mobileapp_Model_DbTable_DbStudentBus();
-		$rows = $db->getStudentBus($data);
-		print_r(Zend_Json::encode($rows));
-		exit();
-	}
-}
 
 
 }

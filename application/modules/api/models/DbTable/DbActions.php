@@ -1738,4 +1738,58 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			exit();
 		}
 	}
+	
+	public function getSchoolBusScheduleAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getSchoolBusSchedule($_data);
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function getAllStudentListForSchoolBusAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getAllStudentListForSchoolBus($_data);
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
 }

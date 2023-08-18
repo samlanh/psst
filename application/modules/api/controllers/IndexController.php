@@ -137,6 +137,11 @@ class Api_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="instructionArticle"){
     			$_dbAction->getInstructionArticleAction($GetData);
 				
+			}else if ($GetData['url']=="busStudentList"){
+    			$_dbAction->getAllStudentListForSchoolBusAction($GetData);
+			}else if ($GetData['url']=="busSchedule"){
+    			$_dbAction->getSchoolBusScheduleAction($GetData);
+				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";
     			$_dbAction->getFormOptionSelectAction($GetData);

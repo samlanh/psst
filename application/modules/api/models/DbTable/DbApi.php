@@ -4961,23 +4961,32 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
 			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
+			$studentId		= empty($studentId)? empty($_data['stu_id'])?0:$_data['stu_id'] :$studentId;
+			
 			
 			$branch = "branch_nameen";
 			if ($currentLang==1){
 				$branch = "branch_namekh";
 			}		
 			$sql =" 
+			
 				SELECT
 					bus.*
 					,b.$branch AS branchName
 					,'Driver Name' AS driverName
 					,'012988781' AS driverPhone
 				FROM
-					rms_school_bus AS bus
-						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
-				WHERE bus.status = 1 ";
+					rms_student_schoo_bus AS sBus
+					JOIN rms_student_schoo_bus_detail AS sBusd ON sBusd.busListId=sBus.id
+						LEFT JOIN rms_school_bus AS bus ON bus.id = sBus.busId
+						LEFT JOIN `rms_branch` AS b ON b.br_id = sBus.branchId
+				WHERE sBus.status = 1 
+					AND sBusd.studentId = $studentId
+				";
 				
-			$sql.=" LIMIT 1 ";
+			$sql.=" GROUP BY sBus.busId ";
+			$sql.=" ORDER BY sBus.forSession ASC ";
+			$sql.="  LIMIT 1 ";
 			$row = $db->fetchRow($sql);
 			$row = empty($row) ? null : $row;
 			$result = array(
@@ -5070,6 +5079,141 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			return false;
+		}
+	}
+	
+	function getSchoolBusSchedule($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			
+			$valueSessionI='Morning (Take Student to school)';
+			$valueSessionII='Afternoon 16:00 (Take Student come back home)';
+			$zoneName='Zone A';
+			$colunmName='title_en';
+			$label = 'name_en';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+				
+				$valueSessionI='ព្រឹក (ទៅយកសិស្សពីផ្ទះទៅសាលា)';
+				$valueSessionII='រសៀលម៉ោង ១៦:០០ (ជូនសិស្សចេញពីសាលាទៅផ្ទះ)';
+				$zoneName='តំបន់ A';
+			}
+				
+			$sql="
+				SELECT 
+					sbus.*
+					,CASE
+								WHEN sbus.forSession = 1 THEN '$valueSessionI'
+								WHEN sbus.forSession = 2 THEN '$valueSessionII'
+								ELSE 'N/A'
+						END AS forSessionTitle
+					,'$zoneName' AS zoneName
+					,(SELECT COUNT(sBusd.studentId) FROM rms_student_schoo_bus_detail AS sBusd WHERE sBusd.busListId =sBus.id LIMIT 1 ) AS amountStudent
+					
+				FROM
+					rms_student_schoo_bus AS sBus
+					
+				WHERE sBus.status = 1 
+					AND sBus.busId=$userId
+			";
+			
+			$sql.=" ORDER BY sbus.forSession ASC ";	
+			
+			$row = $db->fetchAll($sql);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function getAllStudentListForSchoolBus($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			
+			
+			$valueSessionI='Morning';
+			$valueSessionII='Afternoon';
+			$valueSessionIII='Evening';
+			$typeITitle='Take Student to school';
+			$typeIITitle='ទៅយកសិស្សពីផ្ទះទៅសាលា';
+			
+			$colunmName='title_en';
+			$label = 'name_en';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+				
+				$valueSessionI='ព្រឹក';
+				$valueSessionII='រសៀល';
+				$valueSessionIII='ល្ងាច';
+				
+				$typeITitle='Take Student come back home';
+				$typeIITitle='ជូនសិស្សចេញពីសាលាទៅផ្ទះ';
+			}
+			$sql="
+				SELECT 
+					busSch.*
+					,busSch.branch_id AS branchId
+					,CASE
+								WHEN busSch.time = 1 THEN '$valueSessionI'
+								WHEN busSch.time = 2 THEN '$valueSessionII'
+								WHEN busSch.time = 3 THEN '$valueSessionIII'
+								ELSE 'N/A'
+						END as forSessionTitle
+					,CASE
+							WHEN busSch.type = 1 THEN '$typeITitle'
+							WHEN busSch.type = 2 THEN '$typeIITitle'
+							ELSE 'N/A'
+					END AS transportTypeTitle
+					,busSch.student_id AS studentId
+					,s.stu_code AS  studentCode
+					,s.stu_khname AS  studentKhName
+					,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentLatinName
+					,(SELECT v.$label FROM rms_view AS v where v.type=2 and v.key_code=s.sex LIMIT 1) AS genderTitle
+					,g.group_code AS  groupCode
+					,busSch.bus_id AS busId
+					,busSch.time AS forSession
+			";
+			$sql.=" FROM `rms_student_bus_schedule` AS busSch 
+						LEFT JOIN `rms_school_bus` AS bus ON bus.id =busSch.bus_id 
+						LEFT JOIN (`rms_student` AS s JOIN `rms_group_detail_student` AS gds ON  gds.itemType=1 AND gds.stu_id = s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ) ON s.stu_id =busSch.student_id
+						LEFT JOIN `rms_group` AS g ON g.id =gds.group_id 
+					";	
+			$sql.=" WHERE busSch.status=1 
+					AND busSch.bus_id  =$userId ";	
+			$sql.=" ORDER BY busSch.time ASC,busSch.type ASC ";	
+
+			$row = $db->fetchAll($sql);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
 		}
 	}
 }

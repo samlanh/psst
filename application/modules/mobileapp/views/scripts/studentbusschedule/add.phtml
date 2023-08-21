@@ -118,7 +118,7 @@ body, #dijitEditorBody {
 										</label>
 										<div class="col-md-3 col-sm-3 col-xs-12">
 											<div class="custom-control custom-checkbox ">
-												<input type="checkbox" class=" custom-control-input"  id="morning" name="morning" onChange="Checkchange();"  >
+												<input type="checkbox" class=" custom-control-input"  id="morning" name="morning"  >
 												<label class="custom-control-label custom-right-side" for="morning">
 													<p class="font-weight-semibold"><?php echo $tr->translate("ព្រឹក");?></p>
 												</label>
@@ -126,7 +126,7 @@ body, #dijitEditorBody {
 										</div>
 										<div class="col-md-3 col-sm-3 col-xs-12">
 											<div class="custom-control custom-checkbox ">
-												<input type="checkbox" class=" custom-control-input"  id="mitday" name="mitday" onChange="Checkchange();"  >
+												<input type="checkbox" class=" custom-control-input"  id="mitday" name="mitday" >
 												<label class="custom-control-label custom-right-side" for="mitday">
 													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
 												</label>
@@ -134,25 +134,26 @@ body, #dijitEditorBody {
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BACK_FROM_SCHOOL");?>
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_SCHOOL");?>
 										</label>
 										<div class="col-md-3 col-sm-3 col-xs-12">
 											<div class="custom-control custom-checkbox ">
-												<input type="checkbox" class=" custom-control-input"  id="afternoon" name="afternoon" onChange="Checkchange();"  >
+												<input type="checkbox" class=" custom-control-input"  id="afternoon" name="afternoon" >
 												<label class="custom-control-label custom-right-side" for="afternoon">
-													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("រសៀល");?></p>
 												</label>
 											</div>
 										</div>
 										<div class="col-md-3 col-sm-3 col-xs-12">
 											<div class="custom-control custom-checkbox ">
-												<input type="checkbox" class=" custom-control-input"  id="evening" name="evening" onChange="Checkchange();"  >
+												<input type="checkbox" class=" custom-control-input"  id="evening" name="evening"   >
 												<label class="custom-control-label custom-right-side" for="evening">
 													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលល្ងាច");?></p>
 												</label>
 											</div>
 										</div>
 									</div>
+									
 								</div>
 							</div>
 						</div>
@@ -175,7 +176,7 @@ body, #dijitEditorBody {
 											</div> 
 											<div class="col-md-3 col-sm- col-xs-12">
 													<input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
-													class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="addRow(); checkSession();" />
+													class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="addRow();" />
 											</div>
 										</div>
 									</div>
@@ -300,8 +301,38 @@ body, #dijitEditorBody {
 		});
 	}
 
-	function checkSession(){
-         
+	function addRow(){
+	
+		var morning = document.getElementById("morning").checked;
+		var mitday = document.getElementById("mitday").checked;
+		
+        if(morning==true){
+			let type = 1;
+			let time = 1;
+			addSchedule(type, time);
+		}
+		if(mitday==true){
+			let type = 1;
+			let time = 2;
+			addSchedule(type, time);
+		}
+
+		var afternoon = document.getElementById("afternoon").checked;
+		var evening = document.getElementById("evening").checked;
+
+		if(afternoon==true){
+			let type = 2;
+			let time = 2;
+			addSchedule(type, time);
+		}
+		if(evening==true){
+			let type = 2;
+			let time = 3;
+			addSchedule(type, time);
+		}
+		if(morning==false && mitday==false && afternoon==false && evening==false){
+			alert("Please Check Seesion !");
+		}
 	}
 
 	var col = 0;
@@ -309,7 +340,22 @@ body, #dijitEditorBody {
 	var title = 0;
 	tmp = '';
 	temp='';
-	function addRow() {
+	typeLabel='';
+	timeLabel='';
+	function addSchedule(type, time) {
+		if(type==1){
+			typeLabel="ជូនសិស្សទៅសាលា";
+		}else if(type==2){
+			typeLabel="ជូនសិស្សមកវិញ";
+		}
+		if(time==1){
+			timeLabel="ពេលព្រឹក";
+		}else if(time==2){
+			timeLabel="ពេលរសៀល";
+		}else if(time==3){
+			timeLabel="ពេលល្ងាច";
+		}
+
 		branch_id = dijit.byId('branch_id').get('value');
 
 		schoolBus = dijit.byId('schoolBus').get('value');
@@ -325,10 +371,6 @@ body, #dijitEditorBody {
 			dijit.byId('student_id').focus();
 			return false;
 		}
-		timeLabel="ពេលព្រឹក";
-		typeLabel="ទៅសាលា";
-		type=1;
-		time=1;
 
 		col++;no++;
 		template='';
@@ -362,13 +404,6 @@ body, #dijitEditorBody {
 		dojo.html.set(dojo.byId("row"+col),template , {
 			parseContent: true,
 		});
-		// kh_name_stu = dijit.byId('kh_name_stu').set('value','');
-		// first_name_stu = dijit.byId('first_name_stu').set('value','');
-		// last_name_stu = dijit.byId('last_name_stu').set('value','');
-		// sex_stu = dijit.byId('sex_stu').set('value',1);
-		// age_stu = dijit.byId('age_stu').set('value','');
-		// age_stu = dijit.byId('tel_stu').set('value','');
-		// grade = dijit.byId('grade').set('value','');
 	}
 	function deleteRecord(index) {
 		var identity = $('#identity').val();

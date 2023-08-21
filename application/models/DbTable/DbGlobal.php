@@ -1421,7 +1421,6 @@ function getAllgroupStudyNotPass($action=null){
    
    //function for push all device
    
-   
    function resizeImase($image,$part,$new_imagename=null){
     $photo = $image;
     $temp = explode(".", $photo["name"]);

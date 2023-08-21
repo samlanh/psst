@@ -1,8 +1,8 @@
 <?php
 
-class Mobileapp_StudentbusController extends Zend_Controller_Action
+class Mobileapp_SchoolbusController extends Zend_Controller_Action
 {
-	const REDIRECT_URL='/mobileapp/studentbus';
+	const REDIRECT_URL='/mobileapp/schoolbus';
 	protected $tr;
     public function init()
     {    	
@@ -34,7 +34,7 @@ class Mobileapp_StudentbusController extends Zend_Controller_Action
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","BUS_CODE","BUS_PLATE_NO","BUS_TYPE","DATE","STATUS");
 			$link=array(
-					'module'=>'mobileapp','controller'=>'studentbus','action'=>'edit',
+					'module'=>'mobileapp','controller'=>'schoolbus','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'busCode'=>$link));
 		}catch (Exception $e){

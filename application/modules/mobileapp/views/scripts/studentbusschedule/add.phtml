@@ -51,7 +51,7 @@ body, #dijitEditorBody {
 	    		</div>
 	    	</div>
 	    	<div class="card-box mb-10">
-				<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -80,7 +80,15 @@ body, #dijitEditorBody {
 											<?php echo $tr->translate("STUDENT_BUS");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="text" id="studentBus" name ="studentBus" >
+											<input type="text" id="schoolBus" name ="schoolBus" >
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+											<?php echo $tr->translate("STUDENT");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" id="student_id" name ="student_id" >
 										</div>
 									</div>
 								</div>
@@ -89,7 +97,7 @@ body, #dijitEditorBody {
 					</div>
 	               
 	            </div>
-	        	<div class="col-md-6 col-sm-6 col-xs-12">
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -99,7 +107,7 @@ body, #dijitEditorBody {
 											<i class="fa fa-calendar"></i>
 										</div> 
 										<div class="col-md-8 col-sm-8 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCHEDULE");?></p>
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("វេន");?></p>
 										</div> 
 									</div>
 									<div class="form-group">
@@ -112,7 +120,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="morning" name="morning" onChange="Checkchange();"  >
 												<label class="custom-control-label custom-right-side" for="morning">
-													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ព្រឹក");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("ព្រឹក");?></p>
 												</label>
 											</div>
 										</div>
@@ -120,7 +128,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="mitday" name="mitday" onChange="Checkchange();"  >
 												<label class="custom-control-label custom-right-side" for="mitday">
-													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
 												</label>
 											</div>
 										</div>
@@ -132,7 +140,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="afternoon" name="afternoon" onChange="Checkchange();"  >
 												<label class="custom-control-label custom-right-side" for="afternoon">
-													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
 												</label>
 											</div>
 										</div>
@@ -140,7 +148,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="evening" name="evening" onChange="Checkchange();"  >
 												<label class="custom-control-label custom-right-side" for="evening">
-													<p class="tx-20 font-weight-semibold"><?php echo $tr->translate("ពេលល្ងាច");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលល្ងាច");?></p>
 												</label>
 											</div>
 										</div>
@@ -151,19 +159,40 @@ body, #dijitEditorBody {
 					</div>
 	            </div>
 				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									
+				</div>
+	         </div>
+			 <div class="card-box mb-10">
+				<div class="col-md-8 col-sm-8 col-xs-12">
+						<div class="card-blogform">
+								<div class="card-body">
+									<div class="form-group" style="background: #d8e0e2; padding: 5px 10px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-7 col-sm-7 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BUS_SCEDULE");?></p>
+											</div> 
+											<div class="col-md-3 col-sm- col-xs-12">
+													<input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
+													class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="addRow(); checkSession();" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+											<tr id="head-title" class="head-td" align="right" style="white-space:nowrap;"></tr>
+										</table>
+										<input type="hidden" name="identity" id="identity"  />
+									</div>
 								</div>
-							</div>
 						</div>
 					</div>
-	            </div>
-	         </div>
+					<div class="col-md-4 col-sm-4 col-xs-12">
+					</div>
+			 </div>
 	         <div class="card-box">
-               	<div class="col-md-8 col-sm-8 col-xs-8 border-top mt-20 ptb-10 text-center">
+               	<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" />
                	</div>
@@ -171,7 +200,6 @@ body, #dijitEditorBody {
 		</form>
 	</div>
 </div>
-
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script>
@@ -182,47 +210,175 @@ body, #dijitEditorBody {
 	dojo.require("dojo.data.ObjectStore");
 
 	var bus_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+	var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){ 
+		
 		new dijit.form.FilteringSelect({
 			store: bus_store,
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: true,
-			id: "studentBus",
-			name: "studentBus",           
+			id: "schoolBus",
+			name: "schoolBus",           
 			class: "fullside", 
 			placeHolder:"<?php echo $tr->translate("SELECT_BUS");?>",          
 			onChange: function() {  
 				
 			}
-		}, "studentBus");	
+		}, "schoolBus");	
+		new dijit.form.FilteringSelect({
+			store: student_store,
+		    queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                      
+		    id: "student_id",
+		    name: "student_id",  
+		    class: 'fullside', 
+		    readonly:false,
+		    required:false,
+		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT");?>",          
+		    onChange: function() {  
+		    	getStudentInfo();
+		    }
+		}, "student_id");
+
 		getAllStudenBus();
 	});
 
-	url_getstudentBus= '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'studentbus','action'=>'getbusbybranch'));?>';
+
+	url_getschoolBus= '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'schoolbus','action'=>'getbusbybranch'));?>';
 	function getAllStudenBus(){
-		dijit.byId('studentBus').reset();
+		dijit.byId('schoolBus').reset();
 		branch_id = dijit.byId('branch_id').get('value');
 	
 		if(branch_id=='' || branch_id==-1){
 			var bus_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('studentBus').set('store',bus_store);  
+			dijit.byId('schoolBus').set('store',bus_store);  
 			dijit.byId('branch_id').focus();
 			return false;
 		}
 		dojo.xhrPost({
-			url: url_getstudentBus,
+			url: url_getschoolBus,
 			content:{
 				'branch_id':branch_id
 				},
 			handleAs:"json",
 			load: function(data) {
 				bus_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('studentBus').set('store',bus_store);   
+				dijit.byId('schoolBus').set('store',bus_store);   
 			},
 			error: function(err) {
 			}
 		});
+		getallstudentname();
+	}
+
+	function getallstudentname(){//
+		var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudentdata')); ?>';
+		dijit.byId('student_id').reset();
+		branch_id = dijit.byId("branch_id").attr("value");
+		if(branch_id=='' || branch_id==-1){
+			var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('student_id').set('store',student_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		loadingBlock();
+		dojo.xhrPost({
+			url:url_data,
+			content:{
+				'branch_id':branch_id,'is_maingrade':1
+			},
+			handleAs:"json",
+			load: function(data) {
+				student_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('student_id').set('store',student_store);  
+			    HideloadingBlock();
+			},
+			error: function(err) {
+			}
+		});
+	}
+
+	function checkSession(){
+         
+	}
+
+	var col = 0;
+	var no = 0;
+	var title = 0;
+	tmp = '';
+	temp='';
+	function addRow() {
+		branch_id = dijit.byId('branch_id').get('value');
+
+		schoolBus = dijit.byId('schoolBus').get('value');
+		BusCode = dijit.byId("schoolBus").attr('displayedValue');
+
+		student_id = dijit.byId('student_id').get('value');
+		studentName = dijit.byId("student_id").attr('displayedValue');
+
+		if(branch_id==''){
+			dijit.byId('branch_id').focus();
+			return false;
+		}else if(schoolBus==''){
+			dijit.byId('student_id').focus();
+			return false;
+		}
+		timeLabel="ពេលព្រឹក";
+		typeLabel="ទៅសាលា";
+		type=1;
+		time=1;
+
+		col++;no++;
+		template='';
+		if(title!=1){
+			temp+='<th><?php echo $tr->translate("DEL");?></th>';
+			temp+='<th><?php echo $tr->translate("N_O");?></th>';
+			temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAME");?></th>';
+			temp+='<th ><?php echo $tr->translate("STUDENT_BUS");?></th>';
+			temp+='<th ><?php echo $tr->translate("TIME");?></th>';
+			temp+='<th ><?php echo $tr->translate("TYPE");?></th>';
+			
+			dojo.query("#head-title").append(temp);
+			title=1;
+		}
+			template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+			template+='<td width="4%" align="center">'+no+'</td>';
+			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAME");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="student_id_'+col+'" id="student_id_'+col+'" value="'+student_id+'" type="hidden">'+studentName+'&nbsp;</td>';	
+		
+			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_BUS");?>" dojoType="dijit.form.TextBox" class="fullside" name="bus_id_'+col+'" id="bus_id_'+col+'" value="'+schoolBus+'" type="hidden">'+BusCode+'&nbsp;</td>';
+			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("TIME");?>" dojoType="dijit.form.TextBox" class="fullside" name="time_'+col+'" id="time_'+col+'" value="'+time+'" type="hidden">'+timeLabel+'&nbsp;</td>';
+			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("TYPE");?>" dojoType="dijit.form.TextBox" class="fullside" name="type_'+col+'" id="type_'+col+'" value="'+type+'" type="hidden">'+typeLabel+'&nbsp;</td>';
+		
+		tmp='<tr id="row'+col+'" class="rowData" >';
+		tmp+="</tr>";
+		dojo.query("#table_row").append(tmp);
+
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+col);
+		} else {$("#identity").val(col);}
+		dojo.html.set(dojo.byId("row"+col),template , {
+			parseContent: true,
+		});
+		// kh_name_stu = dijit.byId('kh_name_stu').set('value','');
+		// first_name_stu = dijit.byId('first_name_stu').set('value','');
+		// last_name_stu = dijit.byId('last_name_stu').set('value','');
+		// sex_stu = dijit.byId('sex_stu').set('value',1);
+		// age_stu = dijit.byId('age_stu').set('value','');
+		// age_stu = dijit.byId('tel_stu').set('value','');
+		// grade = dijit.byId('grade').set('value','');
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
 	}
 
 </script>

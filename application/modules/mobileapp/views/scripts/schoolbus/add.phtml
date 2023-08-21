@@ -1,6 +1,7 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 echo $this->headTitle($tr->translate('STUDENT_BUS'));
+$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 $frm = $this->frm;
 ?>
 <style>
@@ -15,6 +16,7 @@ body, #dijitEditorBody {
     border: solid 1px #ccd9ff;
 }
 </style>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <div class="card">
 	<div class="card-content collapse show">
@@ -95,7 +97,8 @@ body, #dijitEditorBody {
 												<?php echo $tr->translate("DRIVER");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-                                            <?php echo $frm->getElement("driverId");?>
+											<input  id="driverId" >
+                                            <!-- <?php //echo $frm->getElement("driverId");?> -->
 										</div>
 									</div>
 									<div class="form-group">
@@ -179,6 +182,59 @@ body, #dijitEditorBody {
 	</div>
 </div>
 <script>
+
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.NodeList-manipulate");
+dojo.require('dijit.form.NumberTextBox');
+dojo.require('dijit.form.Textarea');	
 dojo.require("dijit.form.DateTextBox");
 
+var driver_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: driver_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,
+		id: "driverId",
+		name: "driverId",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DRIVER");?>",          
+		onChange: function() {  
+		}
+	}, "driverId");
+
+});
+
+function getAllAcademicByBranch(){
+	getDriverBybranch();
+}
+
+var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
+function getDriverBybranch(){
+	
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var driver_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('driverId').set('store',driver_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_gettecher,
+		content:{
+			'branch_id':branch_id,
+			},
+		handleAs:"json",
+		load: function(data) {
+			
+			driver_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('driverId').set('store',driver_store);  
+			
+		    HideloadingBlock();
+		},
+		error: function(err){
+			 HideloadingBlock();
+		}
+	});
+}
 </script>

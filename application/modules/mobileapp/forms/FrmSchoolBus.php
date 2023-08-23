@@ -191,16 +191,13 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		}
 		$create_date->setValue($_date);
 		
-		// if($data!=null){
-		// 	$_branch_id		->setValue($data['branchId']);
-		// 	$id				->setValue($data['id']);
-		// 	$create_date	->setValue($data['createDate']);
-		// 	$_busCode		->setValue($data['busCode']);
-		// 	$_busPlateNo	->setValue($data['busPlateNo']);
-		// 	$_busType		->setValue($data['busType']);
-		// 	$_driverId		->setValue($data['driverId']);
-		// 	$_note			->setValue($data['note']);
-		// }
+		if($data!=null){
+		
+			if(!empty($data['branch_id'])){
+				$_branch_id	->setValue($data['branch_id']);
+				$_branch_id->setAttribs(array('readonly'=>'readonly'));
+			}
+		}
 		
 		$this->addElements(array(
 		$id,

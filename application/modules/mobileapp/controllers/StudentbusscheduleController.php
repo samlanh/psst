@@ -73,7 +73,7 @@ class Mobileapp_StudentbusscheduleController extends Zend_Controller_Action
 	    if($this->getRequest()->isPost()){
 	      $_data = $this->getRequest()->getPost();
 	      try{
-	        $db->editStudentBus($_data);
+	        $db->editBusSchedule($_data);
 	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	      }catch(Exception $e){
 	        $err =$e->getMessage();
@@ -85,20 +85,49 @@ class Mobileapp_StudentbusscheduleController extends Zend_Controller_Action
 	    $row = $db->getById($id);
 	    $this->view->row = $row;
 	  
-    	// if (empty($row)){
-	   	// 	Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
-	   	// 	exit();
-	   	// }
+    	if (empty($row)){
+	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
+	   		exit();
+	   	}
 
 		$rowDetail = $db->getBusScheduleDetail($row);
 		$this->view->rowDetail = $rowDetail;
 
 		$frm = new Mobileapp_Form_FrmSchoolBus();
-		$frm = $frm->FrmSchoolBusSchedule();
+		$frm = $frm->FrmSchoolBusSchedule($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
-   }
 
+
+		$time = $db->getAllSession($id=null);
+		$this->view->time_option =	$time ;
+
+		$type = $db->getType($id=null);
+		$this->view->type_option =	$type ;
+   }
+   function getallstudentdataAction(){
+	if($this->getRequest()->isPost()){
+		$data = $this->getRequest()->getPost();
+		$db = new Application_Model_DbTable_DbGlobal();
+	//	$data['branch_id'] = !empty($data['branch_id'])?$data['branch_id']:null;
+		$rows = $db->getAllStudentStudy(null,$data);
+		print_r(Zend_Json::encode($rows));
+		exit();
+		}
+	}
+	function checkstudentduplicateAction(){
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			$db = new Mobileapp_Model_DbTable_DbBusSchedule();
+			$id_existing = $db->checkStudent($_data);
+			$return = 0;
+			if (!empty($id_existing)){
+				$return = 1;
+			}
+			print_r(Zend_Json::encode($return));
+			exit();
+		}
+	}
 
 }
 

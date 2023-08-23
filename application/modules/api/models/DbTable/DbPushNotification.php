@@ -14,14 +14,57 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		return $db->fetchRow($sql);
 	}
 	
+	function getListStudentId($_data){
+		$db = $this->getAdapter();
+		$sql = "
+			SELECT 
+				GROUP_CONCAT(gsd.stu_id) 
+			FROM `rms_group_detail_student` AS gsd  
+			WHERE 1 
+				AND gsd.stop_type=0 
+				AND gsd.itemType=1
+			";
+		if(!empty($_data['degreeId'])){
+			$sql.=" AND gsd.degree = ".$_data['degreeId'];
+		}
+		if(!empty($_data['gradeId'])){
+			$sql.=" AND gsd.grade = ".$_data['gradeId'];
+		}
+		if(!empty($_data['groupId'])){
+			$sql.=" AND gsd.group_id = ".$_data['groupId'];
+		}
+		return  $db->fetchOne($sql);
+	}
 	function getMobileToken($_data)
 	{
 
 		$_data['branchId'] = empty($_data['branchId']) ? 0 : $_data['branchId'];
+		$_data['groupId'] = empty($_data['groupId']) ? 0 : $_data['groupId'];
 		$db = $this->getAdapter();
 		$sql = "SELECT mb.`token`
 				FROM `mobile_mobile_token` AS mb
 				WHERE mb.stu_id != 0 ";
+		if(!empty($_data['studentId'])){ //specific student
+			$sql.=" AND mb.stu_id IN (".$_data['studentId'].")";
+		}
+		if(!empty($_data['groupId'])){ //By study's class of student
+			$listStudentId = $this->getListStudentId($_data);
+			if(!empty($listStudentId)){
+				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
+			}
+		}
+		if(!empty($_data['degreeId'])){ //By Degree of student
+			$listStudentId = $this->getListStudentId($_data);
+			if(!empty($listStudentId)){
+				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
+			}
+		}
+		if(!empty($_data['gradeId'])){ //By Degree of student
+			$listStudentId = $this->getListStudentId($_data);
+			if(!empty($listStudentId)){
+				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
+			}
+		}
 		return  $db->fetchCol($sql);
 	}
 	function pushNotificationAPI($_data)
@@ -29,8 +72,6 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		try{
 		
 			$_data['branchId'] = empty($_data['branchId']) ? 0 : $_data['branchId'];
-			
-	
 			$notificationId = empty($_data['notificationId']) ? 0 : $_data['notificationId'];
 			$notificationTitle = "Notification Title";
 			$notificationSubTitle = "Notification Sub Title";
@@ -51,6 +92,28 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				$notificationSubTitle = "ការស្នើសុំចុះឈ្មោះធ្វើតេស្ដសិក្សាបានដោយជោគជ័យ ការចុះឈ្មោះត្រូវបានដាក់បញ្ជូនដើម្បីធ្វើការត្រួតពិនិត្យ";
 				$notificationDescription = "សួស្ដី $fullKhName ការស្នើសុំចុះឈ្មោះធ្វើតេស្ដសិក្សាបានដោយជោគជ័យ សូមធ្វើការរង់ចាំការទំនាក់ទំនងត្រឡប់ទៅវិញ បន្ទាប់ពីក្រុមការងារត្រួតពិនិត្យរួចរាល់។";
 				$recordDetail = array($info);
+			}else if($typeNotify == "studentScoreTranscript"){
+				$_data['scoreId'] = $notificationId;
+				
+				
+				$info = $this->getTranscriptInfo($_data);
+				$groupCode = empty($info["groupCode"]) ? "" : $info["groupCode"];
+				$forTypeTitleKh = empty($info["forTypeTitleKh"]) ? "" : $info["forTypeTitleKh"];
+				$forMonthTitleKh = empty($info["forMonthTitleKh"]) ? "" : $info["forMonthTitleKh"];
+				
+				$forTypeTitle = empty($info["forTypeTitle"]) ? "" : $info["forTypeTitle"];
+				$forMonthTitle = empty($info["forMonthTitle"]) ? "" : $info["forMonthTitle"];
+				$examType = empty($info["exam_type"]) ? "1" : $info["exam_type"];
+				
+				$notificationTitle = "លទ្ធផលសិក្សាប្រចាំខែ / Monthly Score's Result";
+				if($examType==2){
+					$notificationTitle = "លទ្ធផលសិក្សាប្រចាំឆមាស / Semester Score's Result";
+				}
+				$notificationSubTitle = "លទ្ធផលសិក្សា  $forTypeTitleKh $forMonthTitleKh $groupCode";
+				$notificationSubTitle.= " / Score's result for $forTypeTitle $forMonthTitle $groupCode";
+				
+				$notificationDescription = $notificationSubTitle;
+			}else if($typeNotify == "schoolBusOnline"){
 			}
 	
 	
@@ -100,6 +163,64 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			$response = curl_exec($ch);
 			
 			curl_close($ch);
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
+	
+	function getTranscriptInfo($_data){
+		try{
+			$db = $this->getAdapter();
+			
+			$sql="SELECT
+				s.*
+				,g.`branch_id`
+				,(SELECT b.branch_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchName
+				,(SELECT b.branch_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchNameKh
+				,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchLogo
+				,(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh
+				,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameEng
+		   	
+				,g.`group_code` AS groupCode
+				,`g`.`degree` as degreeId
+			
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYearTitle
+				
+				,(SELECT rms_items.title_en FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitle
+				,(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degreeTitleKh
+				,(SELECT rms_itemsdetail.title_en FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitle
+				,(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS gradeTitleKH
+		   
+				,(SELECT name_en FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `sessionEn`
+				,(SELECT name_kh FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `sessionTitleKh`
+			
+				,(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherNameKh
+				,(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teaccherNameEng
+				,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherTel
+				,(SELECT name_en FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as forTypeTitle
+				,(SELECT name_kh FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as forTypeTitleKh
+				,CASE
+					WHEN s.exam_type = 2 THEN s.for_semester
+				ELSE (SELECT month_en FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+				END AS forMonthTitle
+				,CASE
+					WHEN s.exam_type = 2 THEN s.for_semester
+				ELSE (SELECT month_kh FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+				END AS forMonthTitleKh
+				
+				
+			FROM
+				`rms_score` AS s
+				JOIN  `rms_group` AS g ON g.`id` = s.`group_id`
+			WHERE s.status = 1 ";
+				
+			$scoreId = empty($_data['scoreId'])?0:$_data['scoreId'];
+			$sql.=" AND s.id = ".$scoreId;
+			$sql.=" LIMIT 1 ";
+			 
+			$row = $db->fetchRow($sql);
+			return $row;
+			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}

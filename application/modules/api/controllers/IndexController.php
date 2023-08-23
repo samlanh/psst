@@ -103,12 +103,6 @@ class Api_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="mentionScoreSetting"){
     			$_dbAction->metionScoreSettingAction($GetData);
 				
-			}else if ($GetData['url']=="scoreInformation"){//remove in future
-    			$_dbAction->scoreInformationAction($GetData);
-			}else if ($GetData['url']=="subjectByGroup"){//remove in future
-    			$_dbAction->subjectByGroupAction($GetData);
-			}else if ($GetData['url']=="studentScoreBySubject"){//remove in future
-    			$_dbAction->studentScoreBySubjectAction($GetData);
 				
 			}else if ($GetData['url']=="studentPayment"){
     			$_dbAction->studentPaymentAction($GetData);
@@ -143,6 +137,11 @@ class Api_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="instructionArticle"){
     			$_dbAction->getInstructionArticleAction($GetData);
 				
+			}else if ($GetData['url']=="busStudentList"){
+    			$_dbAction->getAllStudentListForSchoolBusAction($GetData);
+			}else if ($GetData['url']=="busSchedule"){
+    			$_dbAction->getSchoolBusScheduleAction($GetData);
+				
 			}else if ($GetData['url']=="optionDegreeStudy"){
 				$GetData['getControlType'] = "studyDegree";
     			$_dbAction->getFormOptionSelectAction($GetData);
@@ -176,6 +175,8 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->setReadNotificationAction($postData);
 				}else if ($GetData['url']=="removeTokenApp"){
     				$_dbAction->removeTokenAction($postData);
+				}else if ($GetData['url']=="disableStudentAcc"){
+					$_dbAction->disableMyAccountAction($postData);
 				
 				}else if ($GetData['url']=="checkExistingStudent"){
     				$_dbAction->checkExistingStudentAction($postData);

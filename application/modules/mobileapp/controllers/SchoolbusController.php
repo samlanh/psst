@@ -1,8 +1,8 @@
 <?php
 
-class Mobileapp_InstructionController extends Zend_Controller_Action
+class Mobileapp_SchoolbusController extends Zend_Controller_Action
 {
-	const REDIRECT_URL='/mobileapp/instruction';
+	const REDIRECT_URL='/mobileapp/schoolbus';
 	protected $tr;
     public function init()
     {    	
@@ -15,7 +15,7 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
     public function indexAction()
     {
         try{
-			$db = new Mobileapp_Model_DbTable_DbInstruction();
+			$db = new Mobileapp_Model_DbTable_DbStudentBus();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}
@@ -24,17 +24,19 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
 						'adv_search' => '',
 						'search_status' => -1,
 						'start_date'=> date('Y-m-01'),
-						'end_date'=>date('Y-m-d'));
+						'end_date'=>date('Y-m-d')
+				);
 			}
-			$rs_rows= $db->getAllInstruction($search);
+		
+			$rs_rows= $db->getAllStudentBus($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","DATE","STATUS");
+			$collumns = array("BRANCH","BUS_CODE","BUS_PLATE_NO","BUS_TYPE","DATE","STATUS");
 			$link=array(
-					'module'=>'mobileapp','controller'=>'instruction','action'=>'edit',
+					'module'=>'mobileapp','controller'=>'schoolbus','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'busCode'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -48,18 +50,32 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
   
     public function addAction()
     {
-		$this->_redirect('/mobileapp/instruction');
-		
+		$db = new Mobileapp_Model_DbTable_DbStudentBus();
+	    if($this->getRequest()->isPost()){
+	      $_data = $this->getRequest()->getPost();
+	      try{
+	        $db->addStudentBus($_data);
+	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
+	      }catch(Exception $e){
+	        $err =$e->getMessage();
+	        Application_Model_DbTable_DbUserLog::writeMessageError($err);
+	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
+	      }
+	    }
+		$frm = new Mobileapp_Form_FrmSchoolBus();
+		$frm = $frm->FrmAddSchoolBus();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
     }
 
     public function editAction()
     {
        
-	    $db = new Mobileapp_Model_DbTable_DbInstruction();
+	    $db = new Mobileapp_Model_DbTable_DbStudentBus();
 	    if($this->getRequest()->isPost()){
 	      $_data = $this->getRequest()->getPost();
 	      try{
-	        $db->editInstruction($_data);
+	        $db->editStudentBus($_data);
 	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	      }catch(Exception $e){
 	        $err =$e->getMessage();
@@ -75,25 +91,24 @@ class Mobileapp_InstructionController extends Zend_Controller_Action
 	   		Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
 	   		exit();
 	   	}
-	    $dbglobal = new Application_Model_DbTable_DbGlobal();
-	    $this->view->lang = $dbglobal->getLaguage();
+	    // $dbglobal = new Application_Model_DbTable_DbGlobal();
+	    // $this->view->lang = $dbglobal->getLaguage();
+
+		$frm = new Mobileapp_Form_FrmSchoolBus();
+		$frm = $frm->FrmAddSchoolBus($row);
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm = $frm;
    }
-//    function deleteAction(){
-// 	   	try{
-// 	   		$id = $this->getRequest()->getParam("id");
-// 	   		$db = new Mobileapp_Model_DbTable_DbInstruction();
-// 	   		if (!empty($id)) {
-// 	   			$db->deleteData($id);
-// 	   			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
-// 	   			echo "<script>window.close();</script>";
-// 	   		}
-// 	   	}catch(Exception $e){
-// 	   		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));
-// 	   		$err =$e->getMessage();
-// 	   		Application_Model_DbTable_DbUserLog::writeMessageError($err);
-// 	   		echo "<script>window.close();</script>";
-// 	   	}
-//    }
+   function getbusbybranchAction(){
+	if($this->getRequest()->isPost()){
+		$data = $this->getRequest()->getPost();
+		$db = new Mobileapp_Model_DbTable_DbStudentBus();
+		$rows = $db->getStudentBus($data);
+		print_r(Zend_Json::encode($rows));
+		exit();
+	}
+}
+
 
 }
 

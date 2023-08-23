@@ -57,13 +57,18 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbScore();//by subject
-			
+			$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
 			try {
+				$rs =  $db->addStudentScore($_data);
+				$notify = array(
+						"notificationId" => $rs,
+						"groupId" => $_data["group"],
+						"typeNotify" => "studentScoreTranscript",
+					);
+				$dbPushNoti->pushNotificationAPI($notify);
 				if(isset($_data['save_new'])){
-					$rs =  $db->addStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/score/add");
 				}else {
-					$rs =  $db->addStudentScore($_data);
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/score");
 				}
 			}catch(Exception $e){
@@ -79,10 +84,17 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				
+				$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
 				$dbs = new Issue_Model_DbTable_DbScore();//by subject
 				if(isset($_data['save_close'])){
 					$rs =  $dbs->updateStudentScore($_data);
+					$notify = array(
+						"notificationId" => $_data["score_id"],
+						"groupId" => $_data["group"],
+						"typeNotify" => "studentScoreTranscript",
+					);
+					$dbPushNoti->pushNotificationAPI($notify);
+		
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/score");
 				}
 			}catch(Exception $e){
@@ -106,7 +118,6 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			exit();
 		}
 		$this->view->score = $row;
-		
 		
 		$this->view->student= $_model->getStudentSccoreforEdit($id);
 		$this->view->row_g=$_model->getGroupStudent($id);

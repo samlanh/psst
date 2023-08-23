@@ -9,6 +9,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$_data['password']=trim($_data['password']);
 		try{
 			$sql =" SELECT
+				s.*,
 				s.stu_id AS id,
 				s.stu_code AS stuCode,
 				s.stu_khname AS stuNameKH,
@@ -2709,7 +2710,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
 						ORDER BY mstd.max_score DESC LIMIT 1
 					) AS mentionGradeTitle
-					,sm.totalMaxScore
 					,(SELECT 
 						mstd.metion_grade
 						FROM `rms_metionscore_setting_detail` AS mstd,
@@ -2805,6 +2805,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 			$teacherName= "teacher_name_en";
+			$mentionGradeTitle= "mention_in_english";
 			if($currentLang==1){// khmer
 				$teacherName = "teacher_name_kh";
 				$label = "name_kh";
@@ -2812,6 +2813,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$degree = "rms_items.title";
 				$branch = "b.branch_namekh";
 				$month = "month_kh";
+				$mentionGradeTitle= "metion_in_khmer";
 			}
 			$sql="SELECT
 				s.*
@@ -2842,6 +2844,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
 				END AS forMonthTitle
 				
+				,sm.totalMaxScore
 				,sm.total_score AS totalScore
 				,sm.total_avg AS totalAvg
 				,g.max_average/2 AS passAvrage
@@ -2859,6 +2862,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					)
 				) AS rank
 				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+				,(SELECT 
+						mstd.$mentionGradeTitle
+						FROM `rms_metionscore_setting_detail` AS mstd,
+							`rms_metionscore_setting` AS mst 
+						WHERE mst.id = mstd.metion_score_id
+							AND mst.academic_year=g.academic_year
+							AND mst.degree = g.degree 
+							AND mst.status = 1 
+							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+						ORDER BY mstd.max_score DESC LIMIT 1
+					) AS mentionGradeTitle
+					
+					,(SELECT 
+						mstd.metion_grade
+						FROM `rms_metionscore_setting_detail` AS mstd,
+							`rms_metionscore_setting` AS mst 
+						WHERE mst.id = mstd.metion_score_id
+							AND mst.academic_year=g.academic_year
+							AND mst.degree = g.degree 
+							AND mst.status = 1 
+							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+						ORDER BY mstd.max_score DESC LIMIT 1
+					) AS mentionGradeTitleLabel
 			FROM
 				`rms_score` AS s,
 				`rms_score_monthly` AS sm,
@@ -2871,90 +2897,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$scoreId = empty($search['id'])?0:$search['id'];
 			$sql.=" AND sm.student_id = ".$studentId;
 			$sql.=" AND s.id = ".$scoreId;
-			 
-			$row = $db->fetchRow($sql);
-			$result = array(
-				'status' =>true,
-				'value' =>$row,
-			);
-			return $result;
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$result = array(
-				'status' =>false,
-				'value' =>$e->getMessage(),
-			);
-			return $result;
-		}
-	}
-	
-	public function getSubjectExamedByGroup($search){
-		$db = $this->getAdapter();
-		try{
-			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-			$studentId = empty($search['studentId'])?0:$search['studentId'];
-			$scoreId = empty($search['id'])?0:$search['id'];
-			
-			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-			$subjectTitle = "subject_titleen";
-			if($currentLang==1){// khmer
-				$subjectTitle = "subject_titlekh";
-				
-			}
-			$sql="
-				SELECT 
-					s.*
-					,gsjd.subject_id AS subjectId
-					,sd.`score` AS subjectScore
-					,sd.score_cut
-					,sd.`subject_id`
-					,sd.amount_subject
-					,(SELECT CONCAT(sj.$subjectTitle) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subjectTitle
-					FROM `rms_score` AS s 
-						JOIN `rms_score_detail` AS sd ON s.id = sd.score_id AND sd.student_id = $studentId
-						LEFT JOIN rms_group_subject_detail AS gsjd ON s.group_id =gsjd.group_id AND sd.subject_id =gsjd.subject_id 
-						
-					WHERE 
-					s.id =$scoreId
-				";
-			if($search['exam_type']==1){
-				$sql.=" AND gsjd.amount_subject > 0 ";
-			}else{
-				$sql.=" AND gsjd.amount_subject_sem > 0 ";
-			}
-			 
-			$row = $db->fetchAll($sql);
-			$result = array(
-				'status' =>true,
-				'value' =>$row,
-			);
-			return $result;
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$result = array(
-				'status' =>false,
-				'value' =>$e->getMessage(),
-			);
-			return $result;
-		}
-	}
-	public function getStudentScoreBySubject($search){
-		$db = $this->getAdapter();
-		try{
-			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
-			$studentId = empty($search['studentId'])?0:$search['studentId'];
-			$scoreId = empty($search['id'])?0:$search['id'];
-			$subjectId = empty($search['subjectId'])?0:$search['subjectId'];
-			
-			$sql="SELECT
-					sd.`score`,
-					sd.score_cut,
-					sd.`subject_id`
-					,sd.amount_subject
-				FROM  `rms_score_detail` AS sd
-				WHERE sd.`score_id`=$scoreId AND sd.`subject_id`=$subjectId ";
-			$sql.=" AND sd.`student_id`=".$studentId;
-		
 			 
 			$row = $db->fetchRow($sql);
 			$result = array(
@@ -3647,7 +3589,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	//2023-03-18
 	public function getAllMobileNotification($search){
     		$db = $this->getAdapter();
     		try{
@@ -4043,6 +3984,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" LIMIT 1 ";
 
 			$row = $db->fetchRow($sql);
+			$row = empty($row) ? null : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -4109,9 +4051,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			
 			$row = empty($row) ? null : $row;
-			
-			
-
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -4455,6 +4394,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$studentId = empty($_data['studentId'])?0:$_data['studentId'];
 			$scoreId = empty($_data['id'])?0:$_data['id'];
+			$_data['scoreId'] = $scoreId;
 			
 			$dbTrancript = new Allreport_Model_DbTable_DbScoreTranscript();
 			$arrStudent = array(
@@ -4510,6 +4450,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			
+			
 			$arreValue= array(
 				'studentId'=>$studentId,
 				'groupId'=>$scoreInfo['group_id'],
@@ -4519,9 +4461,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				);
 			$resultEvalueAtion = $dbTrancript->getStudentAssessmentEvaluation($arreValue);
 		
+			$scoreInfoFromAPI =  $this->getScoreInformation($_data);
+			$scoreInfoApi = empty($scoreInfoFromAPI["value"]) ? null : $scoreInfoFromAPI["value"];
 			$result= array(
 				'studentInfo'=>$studentInfo,
-				'scoreInfo'=>$scoreInfo,
+				'scoreInfo'=>$scoreInfoApi,
 				'scoreSubjectInfo'=>$scoreResultList,
 				'evaluationList'=>$resultEvalueAtion,
 			);
@@ -4710,6 +4654,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			if(!empty($_data['academicYear'])){
 				$sql.=" AND g.academic_year = ".$_data['academicYear'];	
+			}
+			if(!empty($_data['groupId'])){
+				$sql.=" AND g.id = ".$_data['groupId'];	
 			}
 			if(!empty($_data['degreeId'])){
 				$sql.=" AND g.degree = ".$_data['degreeId'];	
@@ -5014,23 +4961,32 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$currentLang 	= empty($_data['currentLang'])?1:$_data['currentLang'];
 			$studentId		= empty($_data['studentId'])?0:$_data['studentId'];
+			$studentId		= empty($studentId)? empty($_data['stu_id'])?0:$_data['stu_id'] :$studentId;
+			
 			
 			$branch = "branch_nameen";
 			if ($currentLang==1){
 				$branch = "branch_namekh";
 			}		
 			$sql =" 
+			
 				SELECT
 					bus.*
 					,b.$branch AS branchName
 					,'Driver Name' AS driverName
 					,'012988781' AS driverPhone
 				FROM
-					rms_school_bus AS bus
-						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
-				WHERE bus.status = 1 ";
+					rms_student_schoo_bus AS sBus
+					JOIN rms_student_schoo_bus_detail AS sBusd ON sBusd.busListId=sBus.id
+						LEFT JOIN rms_school_bus AS bus ON bus.id = sBus.busId
+						LEFT JOIN `rms_branch` AS b ON b.br_id = sBus.branchId
+				WHERE sBus.status = 1 
+					AND sBusd.studentId = $studentId
+				";
 				
-			$sql.=" LIMIT 1 ";
+			$sql.=" GROUP BY sBus.busId ";
+			$sql.=" ORDER BY sBus.forSession ASC ";
+			$sql.="  LIMIT 1 ";
 			$row = $db->fetchRow($sql);
 			$row = empty($row) ? null : $row;
 			$result = array(
@@ -5061,6 +5017,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					ins.*
 					,insD.title AS title
 					,insD.description AS description
+					,ins.video_id AS videoId
 				FROM
 					moble_instruction AS ins
 					JOIN `moble_instruction_detail` AS insD ON ins.id = insD.instruction_id
@@ -5071,6 +5028,180 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" LIMIT 1 ";
 			$row = $db->fetchRow($sql);
 			$row = empty($row) ? null : $row;
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function disableMyAccount($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?"0":$_data['studentId'];
+		try{
+			
+			$arr = array(
+				'isDisbleAccount'  => 1,
+				'disableDate' 		 => date("Y-m-d H:i:s"),
+				'disableValidDate' 		 => date("Y-m-d H:i:s",strtotime("+30 day")),
+			);
+			$where = 'stu_id = '. $studentId;
+			$this->_name='rms_student';
+			$this->update($arr, $where);
+			return true;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
+	function enableMyAccount($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?"0":$_data['studentId'];
+		try{
+			
+			$arr = array(
+				'isDisbleAccount'  => 0,
+			);
+			$where = 'stu_id = '. $studentId;
+			$this->_name='rms_student';
+			$this->update($arr, $where);
+			return true;
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
+	
+	function getSchoolBusSchedule($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			
+			$valueSessionI='Morning (Take Student to school)';
+			$valueSessionII='Afternoon 16:00 (Take Student come back home)';
+			$zoneName='Zone A';
+			$colunmName='title_en';
+			$label = 'name_en';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+				
+				$valueSessionI='ព្រឹក (ទៅយកសិស្សពីផ្ទះទៅសាលា)';
+				$valueSessionII='រសៀលម៉ោង ១៦:០០ (ជូនសិស្សចេញពីសាលាទៅផ្ទះ)';
+				$zoneName='តំបន់ A';
+			}
+				
+			$sql="
+				SELECT 
+					sbus.*
+					,CASE
+								WHEN sbus.forSession = 1 THEN '$valueSessionI'
+								WHEN sbus.forSession = 2 THEN '$valueSessionII'
+								ELSE 'N/A'
+						END AS forSessionTitle
+					,'$zoneName' AS zoneName
+					,(SELECT COUNT(sBusd.studentId) FROM rms_student_schoo_bus_detail AS sBusd WHERE sBusd.busListId =sBus.id LIMIT 1 ) AS amountStudent
+					
+				FROM
+					rms_student_schoo_bus AS sBus
+					
+				WHERE sBus.status = 1 
+					AND sBus.busId=$userId
+			";
+			
+			$sql.=" ORDER BY sbus.forSession ASC ";	
+			
+			$row = $db->fetchAll($sql);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function getAllStudentListForSchoolBus($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			
+			
+			$valueSessionI='Morning';
+			$valueSessionII='Afternoon';
+			$valueSessionIII='Evening';
+			$typeITitle='Take Student to school';
+			$typeIITitle='ទៅយកសិស្សពីផ្ទះទៅសាលា';
+			
+			$colunmName='title_en';
+			$label = 'name_en';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+				
+				$valueSessionI='ព្រឹក';
+				$valueSessionII='រសៀល';
+				$valueSessionIII='ល្ងាច';
+				
+				$typeITitle='Take Student come back home';
+				$typeIITitle='ជូនសិស្សចេញពីសាលាទៅផ្ទះ';
+			}
+			$sql="
+				SELECT 
+					busSch.*
+					,busSch.branch_id AS branchId
+					,CASE
+								WHEN busSch.time = 1 THEN '$valueSessionI'
+								WHEN busSch.time = 2 THEN '$valueSessionII'
+								WHEN busSch.time = 3 THEN '$valueSessionIII'
+								ELSE 'N/A'
+						END as forSessionTitle
+					,CASE
+							WHEN busSch.type = 1 THEN '$typeITitle'
+							WHEN busSch.type = 2 THEN '$typeIITitle'
+							ELSE 'N/A'
+					END AS transportTypeTitle
+					,busSch.student_id AS studentId
+					,s.stu_code AS  studentCode
+					,s.stu_khname AS  studentKhName
+					,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentLatinName
+					,(SELECT v.$label FROM rms_view AS v where v.type=2 and v.key_code=s.sex LIMIT 1) AS genderTitle
+					,g.group_code AS  groupCode
+					,busSch.bus_id AS busId
+					,busSch.time AS forSession
+			";
+			$sql.=" FROM `rms_student_bus_schedule` AS busSch 
+						LEFT JOIN `rms_school_bus` AS bus ON bus.id =busSch.bus_id 
+						LEFT JOIN (`rms_student` AS s JOIN `rms_group_detail_student` AS gds ON  gds.itemType=1 AND gds.stu_id = s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ) ON s.stu_id =busSch.student_id
+						LEFT JOIN `rms_group` AS g ON g.id =gds.group_id 
+					";	
+			$sql.=" WHERE busSch.status=1 
+					AND busSch.bus_id  =$userId ";	
+			$sql.=" ORDER BY busSch.time ASC,busSch.type ASC ";	
+
+			$row = $db->fetchAll($sql);
+			
 			$result = array(
 				'status' =>true,
 				'value' =>$row,

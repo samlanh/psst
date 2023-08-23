@@ -1,0 +1,240 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('STUDENT_BUS'));
+$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$frm = $this->frm;
+?>
+<style>
+body, #dijitEditorBody {
+    height: 100%;
+    width: 102%;
+    overflow: auto;
+    background: #fff !important;
+    border: 1px solid #bcf;
+}
+.dijitEditor {
+    border: solid 1px #ccd9ff;
+}
+</style>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
+<div class="card">
+	<div class="card-content collapse show">
+		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+
+				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
+					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+					dojo.byId('password').value = '';
+					dojo.byId('confirm_password').value = '';
+					dijit.byId('password').focus();
+					return false;
+				}
+				branch=dijit.byId('branch_id').get('value');
+				if(branch=='' || branch==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
+					dijit.byId('branch_id').focus(); 
+					return false;
+				}
+                loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+			</script>
+			<div class="card-box">
+	        	<div class="col-sm-12 border-botom">
+			    	<div class="col-sm-8 pd-0">
+			    		<h4 class="m-b-0"><i class="fa fa-bus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_BUS');?></h4>
+		    		</div>
+		    		<div class="col-sm-4 text-right">
+		    		</div>
+	    		</div>
+	    	</div>
+	    	<div class="card-box mb-10">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-bus"></i>
+										</div> 
+										<div class="col-md-8 col-sm-8 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BUS_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										&nbsp;
+									</div> 
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BRANCH");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                           <?php echo $frm->getElement("branch_id");?>
+										</div>
+									</div> 
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BUS_CODE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                            <?php echo $frm->getElement("busCode");?>
+										</div>
+									</div>
+                                    <div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BUS_TYPE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                            <?php echo $frm->getElement("busType");?>
+										</div>
+									</div>  <div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("DRIVER");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input  id="driverId" >
+                                            <!-- <?php //echo $frm->getElement("driverId");?> -->
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("BUS_PLATE_NO");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                            <?php echo $frm->getElement("busPlateNo");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+												<?php echo $tr->translate("NOTE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+                                            <?php echo $frm->getElement("note");?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	               
+	            </div>
+	        	<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="fa fa-key"></i>
+										</div> 
+										<div class="col-md-8 col-sm-8 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PASSWORD");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+										&nbsp;
+									</div> 
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("password");?>
+											<!-- <input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+											class="fullside" id="password" name="password" value="" type="password"> -->
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("confirm_password");?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	         </div>
+	         <div class="card-box">
+               	<div class="col-md-8 col-sm-8 col-xs-8 border-top mt-20 ptb-10 text-center">
+               		<input class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" />
+               	</div>
+             </div>
+		</form>
+	</div>
+</div>
+<script>
+
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.NodeList-manipulate");
+dojo.require('dijit.form.NumberTextBox');
+dojo.require('dijit.form.Textarea');	
+dojo.require("dijit.form.DateTextBox");
+
+var driver_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: driver_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,
+		id: "driverId",
+		name: "driverId",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DRIVER");?>",          
+		onChange: function() {  
+		}
+	}, "driverId");
+
+});
+
+function getAllAcademicByBranch(){
+	getDriverBybranch();
+}
+
+var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
+function getDriverBybranch(){
+	
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var driver_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('driverId').set('store',driver_store);  
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_gettecher,
+		content:{
+			'branch_id':branch_id,
+			},
+		handleAs:"json",
+		load: function(data) {
+			
+			driver_store  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('driverId').set('store',driver_store);  
+			
+		    HideloadingBlock();
+		},
+		error: function(err){
+			 HideloadingBlock();
+		}
+	});
+}
+</script>

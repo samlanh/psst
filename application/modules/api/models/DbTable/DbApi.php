@@ -4977,15 +4977,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,'012988781' AS driverPhone
 				FROM
 					rms_student_schoo_bus AS sBus
-					JOIN rms_student_schoo_bus_detail AS sBusd ON sBusd.busListId=sBus.id
+					JOIN `rms_student_bus_schedule` AS busSch ON busSch.bus_id=sBus.busId
 						LEFT JOIN rms_school_bus AS bus ON bus.id = sBus.busId
 						LEFT JOIN `rms_branch` AS b ON b.br_id = sBus.branchId
 				WHERE sBus.status = 1 
-					AND sBusd.studentId = $studentId
+					AND busSch.student_id = $studentId
 				";
 				
 			$sql.=" GROUP BY sBus.busId ";
-			$sql.=" ORDER BY sBus.forSession ASC ";
+			$sql.=" ORDER BY busSch.time ASC,busSch.type ASC ";
 			$sql.="  LIMIT 1 ";
 			$row = $db->fetchRow($sql);
 			$row = empty($row) ? null : $row;
@@ -5089,8 +5089,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$userId = empty($_data['userId'])?0:$_data['userId'];
 			
-			$valueSessionI='Morning (Take Student to school)';
-			$valueSessionII='Afternoon 16:00 (Take Student come back home)';
+			$valueSessionI='Morning';
+			$valueSessionII='Afternoon';
+			$valueSessionIII='Evening';
+			$typeITitle='Take Student to school';
+			$typeIITitle='Take Student come back home';
+			
 			$zoneName='Zone A';
 			$colunmName='title_en';
 			$label = 'name_en';
@@ -5098,8 +5102,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$colunmName='title';
 				$label = 'name_kh';
 				
-				$valueSessionI='ព្រឹក (ទៅយកសិស្សពីផ្ទះទៅសាលា)';
-				$valueSessionII='រសៀលម៉ោង ១៦:០០ (ជូនសិស្សចេញពីសាលាទៅផ្ទះ)';
+				$valueSessionI='ព្រឹក';
+				$valueSessionII='រសៀល';
+				$valueSessionIII='ល្ងាច';
+				
+				$typeITitle='ទៅយកសិស្សពីផ្ទះទៅសាលា';
+				$typeIITitle='ជូនសិស្សចេញពីសាលាទៅផ្ទះ';
+				
 				$zoneName='តំបន់ A';
 			}
 				
@@ -5107,21 +5116,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				SELECT 
 					sbus.*
 					,CASE
-								WHEN sbus.forSession = 1 THEN '$valueSessionI'
-								WHEN sbus.forSession = 2 THEN '$valueSessionII'
+								WHEN sBus.time = 1 THEN '$valueSessionI'
+								WHEN sBus.time = 2 THEN '$valueSessionII'
+								WHEN sBus.time = 3 THEN '$valueSessionIII'
 								ELSE 'N/A'
-						END AS forSessionTitle
+						END as forSessionTitle
+					,CASE
+							WHEN sBus.type = 1 THEN '$typeITitle'
+							WHEN sBus.type = 2 THEN '$typeIITitle'
+							ELSE 'N/A'
+					END AS transportTypeTitle
+					
 					,'$zoneName' AS zoneName
-					,(SELECT COUNT(sBusd.studentId) FROM rms_student_schoo_bus_detail AS sBusd WHERE sBusd.busListId =sBus.id LIMIT 1 ) AS amountStudent
+					,COUNT(sBus.student_id) AS amountStudent
 					
 				FROM
-					rms_student_schoo_bus AS sBus
+					rms_student_bus_schedule AS sBus
 					
 				WHERE sBus.status = 1 
-					AND sBus.busId=$userId
+					AND sBus.bus_id=$userId
 			";
 			
-			$sql.=" ORDER BY sbus.forSession ASC ";	
+			$sql.=" Group BY sbus.time,sbus.type";	
+			$sql.=" ORDER BY sbus.time ASC,sbus.type ASC";	
 			
 			$row = $db->fetchAll($sql);
 			
@@ -5152,7 +5169,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$valueSessionII='Afternoon';
 			$valueSessionIII='Evening';
 			$typeITitle='Take Student to school';
-			$typeIITitle='ទៅយកសិស្សពីផ្ទះទៅសាលា';
+			$typeIITitle='Take Student come back home';
 			
 			$colunmName='title_en';
 			$label = 'name_en';
@@ -5164,7 +5181,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$valueSessionII='រសៀល';
 				$valueSessionIII='ល្ងាច';
 				
-				$typeITitle='Take Student come back home';
+				$typeITitle='ទៅយកសិស្សពីផ្ទះទៅសាលា';
 				$typeIITitle='ជូនសិស្សចេញពីសាលាទៅផ្ទះ';
 			}
 			$sql="

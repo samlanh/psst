@@ -89,51 +89,28 @@ class Home_StudentpermissionController extends Zend_Controller_Action
 
     public function editAction()
     {
-    // 	$db = new Home_Model_DbTable_DbCRM();
-    // 	$id = $this->getRequest()->getParam("id");
-    // 	if($this->getRequest()->isPost()){
-    // 		$_data = $this->getRequest()->getPost();
-    // 		try{
-    // 			$row = $db->updateCrm($_data);
-    // 			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
-    // 		}catch(Exception $e){
-    // 			Application_Form_FrmMessage::message("INSERT_FAIL");
-    // 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    // 		}
-    // 	}
+    	$db = new Home_Model_DbTable_DbStudentRequestPermission();
+    	$id = $this->getRequest()->getParam("id");
+    	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+    		// try{
+    		// 	$row = $db->updateCrm($_data);
+    		// 	Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+    		// }catch(Exception $e){
+    		// 	Application_Form_FrmMessage::message("INSERT_FAIL");
+    		// 	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		// }
+    	}
     	 
-    // 	$row = $db->getCRMById($id);
-    // 	if (empty($row)){
-    // 		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
-    // 	}
-    	
-    // 	$rowdetail = $db->getCRMDetailById($id);
-    // 	$this->view->rowdetail = $rowdetail;
-    	
-    // 	$allContact = $db->AllHistoryContact($id);
-    // 	$this->view->history = $allContact;
-    	
-    // 	$_dbgb = new Application_Model_DbTable_DbGlobal();
-    // 	$pevconcer = $_dbgb->getViewByType(22);
-    // 	$this->view->prev_concern = $pevconcer;
-    	
-    // 	$pre = explode(",", $row['prev_concern']);
-    // 	$prevCon="";
-    // 	if (!empty($row['prev_concern'])) foreach ($pre as $a){
-    // 		$title = $db->getPrevTilteByKeyCode($a);
-    // 		if(empty($prevCon)){ 
-    // 			$prevCon = $title;
-    // 		}else{
-    // 			if(!empty($title)){
-    // 				$prevCon = $prevCon.",".$title;
-    // 			}
-    // 		}
-    // 	}
-    // 	$this->view->prevconcern = $prevCon;
-    // 	$frm = new Home_Form_FrmCrm();
-    // 	$frm->FrmAddCRM($row);
-    // 	Application_Model_Decorator::removeAllDecorator($frm);
-    // 	$this->view->frm_crm = $frm;
+    	$row = $db->getRequestById($id);
+    	if (empty($row)){
+    		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
+    	}
+    	$this->view->row = $row;
+		$frm = new Home_Form_FrmStudentRequest();
+    	$frm->FrmStudentRequest(null);
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->frm_crm = $frm;
      }
 
 }

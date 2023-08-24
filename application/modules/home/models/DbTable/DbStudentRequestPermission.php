@@ -1,0 +1,512 @@
+<?php class Home_Model_DbTable_DbStudentRequestPermission extends Zend_Db_Table_Abstract{
+
+    public function getUserId(){
+    	$_dbgb = new Application_Model_DbTable_DbGlobal();
+    	return $_dbgb->getUserId();
+    }
+    function getAllStudentRequest($search = ''){
+    	$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$sql="SELECT id,
+		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
+		(SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentName,
+		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
+		amountDay, 
+		CASE    
+			WHEN  sessionType = 1 THEN '".$tr->translate("FULL_DAY")."'
+			WHEN  sessionType = 2 THEN '".$tr->translate("MORNING")."'
+			WHEN  sessionType = 3 THEN '".$tr->translate("AFTERNOON")."'
+		END AS sessionType,
+		phoneNumber, fromDate, toDate, reason, 
+		CASE    
+			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
+			WHEN  requestStatus = 2 THEN '".$tr->translate("APPOROVED")."'
+			WHEN  requestStatus = 3 THEN '".$tr->translate("REJECTED")."'
+		END AS requestStatus
+
+		FROM `rms_student_request_permission` 
+		 WHERE 1
+    	";
+    	$where = ' ';
+    	$from_date =(empty($search['start_date']))? '1': " createDate >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " createDate <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
+    	$where.= " AND  ".$from_date." AND ".$to_date;
+    	if(!empty($search['advance_search'])){
+    		$s_where = array();
+    		$s_search = str_replace(' ', '', addslashes(trim($search['advance_search'])));
+			$s_where[] = " REPLACE((SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1),' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1),' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(phoneNumber,' ','')  LIKE '%{$s_search}%'";
+    		$where .=' AND ( '.implode(' OR ',$s_where).')';
+    	}
+    	if(!empty($search['branch_search'])){
+    		$where.= " AND branchId = ".$db->quote($search['branch_search']);
+    	}
+    	if(!empty($search['session_type'])){
+    		$where.= " AND sessionType = ".$db->quote($search['session_type']);
+    	}
+    	if(!empty($search['request_status'])){
+    		$where.= " AND requestStatus = ".$db->quote($search['request_status']);
+    	}
+    
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+		$where.=$dbp->getAccessPermission('branchId');
+		$where.=" ORDER BY id DESC";
+		$row = $db->fetchAll($sql.$where);
+		return $row;
+    }
+    function checkPrevConcern($value){
+    	$db = $this->getAdapter();
+    	$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=22  LIMIT 1";
+    	return $db->fetchOne($sql);
+    }
+    function getPrevTilteByKeyCode($value){
+    	$db = $this->getAdapter();
+    	$sql="SELECT v.name_kh  FROM `rms_view` AS v WHERE v.key_code = $value AND v.type=22  LIMIT 1";
+    	return $db->fetchOne($sql);
+    }
+	public function AddCRM($_data){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$prev = "";
+			if (!empty($_data['prev_concern'])){
+				$epl = explode(",", $_data['prev_concern']);
+				foreach ($epl as $ss){
+					$key_code = $this->checkPrevConcern($ss);
+					if (empty($key_code)){
+						$key_code = $_dbgb->getLastKeycodeByType(22);
+						$_arrview=array(
+								'name_en'	  => $ss,
+								'name_kh' => $ss,
+								'key_code'=> $key_code,
+								'type'=>22,
+								'status'=> 1,
+						);
+						$this->_name="rms_view";
+						$key = $this->insert($_arrview);
+					}
+					if (empty($prev)){$prev=$key_code;}else{$prev=$prev.",".$key_code;}
+				}
+			}
+			
+			$_arr=array(
+					'branch_id'	  => $_data['branch_id'],
+					'kh_name' => $_data['kh_name'],
+					'first_name'=> $_data['first_name'],
+					'last_name'=> $_data['last_name'],
+					'sex'=> $_data['sex'],
+					'ask_for'=> $_data['ask_for'],
+					'prev_concern'=> $prev,
+					'know_by'=> $_data['know_by'],
+					'tel'=> $_data['tel'],
+					'current_address'=> $_data['current_address'],
+					'old_school'=> $_data['old_school'],
+					'reason'=> $_data['reason'],
+					'note'=> $_data['note'],
+					'crm_status'=> $_data['crm_status'],
+					'create_date' => date("Y-m-d H:i:s"),
+					'modify_date' => date("Y-m-d H:i:s"),
+					'user_id'	  => $this->getUserId()
+			);
+			$this->_name="rms_crm";
+			$id =  $this->insert($_arr);
+			
+			if (!empty($_data['identity'])){
+				$ids = explode(",", $_data['identity']);
+				foreach ($ids as $i){
+					$stuToken = $_dbgb->getStudentToken();
+					$array = array(
+							'branch_id'	  => $_data['branch_id'],
+							'crm_id'	  => $id,
+							'customer_type'=>3,
+							'stu_khname'=> $_data['kh_name_'.$i],
+							'stu_enname'=> $_data['first_name_'.$i],
+							'last_name'=> $_data['last_name_'.$i],
+							'sex'=> $_data['gender_'.$i],
+							'tel'=> $_data['tel_'.$i],
+							'crm_degree'=> $_data['degree_'.$i],
+							'crm_grade'=> $_data['grade_'.$i],
+							'age'=> $_data['age_'.$i],
+							'user_id'	  => $this->getUserId(),
+							'from_school'=> $_data['old_school'],
+							'know_by'=> $_data['know_by'],
+							'studentToken'=>$stuToken
+							);
+					$this->_name="rms_student";
+					$student_i = $this->insert($array);
+					
+					$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
+					$_arr = array(
+							'branch_id'			=>$_data['branch_id'],
+							'stu_id'			=>$student_i,
+							'is_newstudent'		=>1,
+							'status'			=>1,
+							'group_id'			=>0,
+							'degree'			=>$_data['degree_'.$i],
+							'grade'				=>$_data['grade_'.$i],
+							'school_option'		=>$school_option,
+							'is_current'		=>1,
+							'is_setgroup'		=>0,
+							'is_maingrade'		=>1,
+							'create_date'		=>date("Y-m-d H:i:s"),
+							'modify_date'		=>date("Y-m-d H:i:s"),
+							'user_id'			=>$this->getUserId(),
+							'itemType'			=>1,
+							'entryFrom'			=>1,
+					);
+					$this->_name="rms_group_detail_student";
+					$this->insert($_arr);
+				}
+			}
+			$_db->commit();
+			return $id;	
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			Application_Form_FrmMessage::message("Application Error!");
+		}
+	}
+	
+	public function updateCrm($_data){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$prev = "";
+			if (!empty($_data['prev_concern'])){
+				$epl = explode(",", $_data['prev_concern']);
+				foreach ($epl as $ss){
+					$key_code = $this->checkPrevConcern($ss);
+					if (empty($key_code)){
+						$key_code = $_dbgb->getLastKeycodeByType(22);
+						$_arrview=array(
+								'name_en'	  => $ss,
+								'name_kh' => $ss,
+								'key_code'=> $key_code,
+								'type'=>22,
+								'status'=> 1,
+						);
+						$this->_name="rms_view";
+						$key = $this->insert($_arrview);
+					}
+					if (empty($prev)){$prev=$key_code;}else{$prev=$prev.",".$key_code;}
+				}
+			}
+			
+			$_arr=array(
+					'branch_id'	  => $_data['branch_id'],
+					'kh_name' => $_data['kh_name'],
+					'first_name'=> $_data['first_name'],
+					'last_name'=> $_data['last_name'],
+					'sex'=> $_data['sex'],
+					'ask_for'=> $_data['ask_for'],
+					'prev_concern'=> $prev,
+					'know_by'=> $_data['know_by'],
+					'tel'=> $_data['tel'],
+					'current_address'=> $_data['current_address'],
+					'old_school'=> $_data['old_school'],
+					'reason'=> $_data['reason'],
+					'note'=> $_data['note'],
+					'crm_status'=> $_data['crm_status'],
+					'modify_date' => date("Y-m-d H:i:s"),
+					'user_id'	  => $this->getUserId()
+			);
+			$id = $_data['id'];
+			$where="id=$id";
+			$this->_name="rms_crm";
+			$this->update($_arr, $where);
+			
+			$detailId="";
+			$ids = explode(",", $_data['identity']);
+			if (!empty($_data['identity'])){
+				foreach ($ids as $k){
+					if (empty($detailId)){
+						if (!empty($_data['detailid'.$k])){
+							$detailId = $_data['detailid'.$k];
+						}
+					}else{
+						if (!empty($_data['detailid'.$k])){
+							$detailId= $detailId.",".$_data['detailid'.$k];
+						}
+					}
+				}
+			}
+			
+			if (!empty($detailId)){
+				$sql ="SELECT GROUP_CONCAT(stu_id) FROM rms_student WHERE stu_id NOT IN ($detailId) AND crm_id=".$id;
+				$stu_id = $_db->fetchOne($sql);
+				if(!empty($stu_id)){
+					$this->_name="rms_group_detail_student";
+					$where=" stu_id IN ($stu_id) ";
+					$this->delete($where);
+				}
+				
+				$this->_name="rms_student";
+				$where=" crm_id = ".$id;
+				$where.=" AND stu_id NOT IN ($detailId) ";
+				$this->delete($where);
+			}
+			
+			if (!empty($_data['identity'])){
+				$ids = explode(",", $_data['identity']);
+				foreach ($ids as $i){
+					if (!empty($_data['detailid'.$i])){
+						$array = array(
+							'branch_id'	  => $_data['branch_id'],
+							'crm_id'	  => $id,
+							'stu_khname'=> $_data['kh_name_'.$i],
+							'stu_enname'=> $_data['first_name_'.$i],
+							'last_name'=> $_data['last_name_'.$i],
+							'sex'=> $_data['gender_'.$i],
+							'tel'=> $_data['tel_'.$i],
+							'crm_degree'=> $_data['degree_'.$i],
+							'crm_grade'=> $_data['grade_'.$i],
+							'age'=> $_data['age_'.$i],
+							'user_id'	  => $this->getUserId(),
+							'from_school'=> $_data['old_school'],
+							'know_by'=> $_data['know_by'],
+							);
+						$this->_name="rms_student";
+						$where = " stu_id =".$_data['detailid'.$i];
+						$this->update($array, $where);
+						
+						$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
+						$_arr = array(
+								'branch_id'			=>$_data['branch_id'],
+								'is_newstudent'		=>1,
+								'status'			=>1,
+								'group_id'			=>0,
+								'school_option'		=>$school_option,
+								'degree'			=>$_data['degree_'.$i],
+								'grade'				=>$_data['grade_'.$i],
+								'is_current'		=>1,
+								'is_setgroup'		=>0,
+								'is_maingrade'		=>1,
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$this->getUserId(),
+								'itemType'			=>1,
+								'entryFrom'			=>1,
+						);
+						$this->_name="rms_group_detail_student";
+						$where = " stu_id =".$_data['detailid'.$i];
+						$this->update($_arr, $where);
+						
+					}else{
+						
+						$stuToken = $_dbgb->getStudentToken();
+						$array = array(
+							'branch_id'	  => $_data['branch_id'],
+							'crm_id'	  => $id,
+							'customer_type'=>3,
+							'stu_khname'=> $_data['kh_name_'.$i],
+							'stu_enname'=> $_data['first_name_'.$i],
+							'last_name'=> $_data['last_name_'.$i],
+							'sex'=> $_data['gender_'.$i],
+							'tel'=> $_data['tel_'.$i],
+							'crm_degree'=> $_data['degree_'.$i],
+							'crm_grade'=> $_data['grade_'.$i],
+							'age'=> $_data['age_'.$i],
+							'user_id'	  => $this->getUserId(),
+							'from_school'=> $_data['old_school'],
+							'know_by'=> $_data['know_by'],
+							'studentToken'=>$stuToken,
+						);
+						$this->_name="rms_student";
+						$student_i = $this->insert($array);
+						
+						$school_option = $_dbgb->getSchoolOptionbyDegree($_data['degree_'.$i]);
+						
+						$_arr = array(
+								'branch_id'			=>$_data['branch_id'],
+								'stu_id'			=>$student_i,
+								'is_newstudent'		=>1,
+								'status'			=>1,
+								'group_id'			=>0,
+								'school_option'		=>$school_option,
+								'degree'			=>$_data['degree_'.$i],
+								'grade'				=>$_data['grade_'.$i],
+								'is_current'		=>1,
+								'is_setgroup'		=>0,
+								'is_maingrade'		=>1,
+								'create_date'		=>date("Y-m-d H:i:s"),
+								'modify_date'		=>date("Y-m-d H:i:s"),
+								'user_id'			=>$this->getUserId(),
+								'itemType'			=>1,
+								'entryFrom'			=>1,
+						);
+						$this->_name="rms_group_detail_student";
+						$this->insert($_arr);
+					}
+				}
+			}
+			$_db->commit();
+			return $id;
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			Application_Form_FrmMessage::message("Application Error!");
+		}
+	}
+	public function getCRMById($id){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="SELECT st.*,
+				CASE
+					WHEN  st.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN  st.sex = 2 THEN '".$tr->translate("FEMALE")."'
+					END AS sexTitle,
+				CASE
+					WHEN  st.crm_status = 0 THEN '".$tr->translate("DROPPED")."'
+					WHEN  st.crm_status = 1 THEN '".$tr->translate("PROCCESSING")."'
+					WHEN  st.crm_status = 2 THEN '".$tr->translate("WAITING_TEST")."'
+					WHEN  st.crm_status = 3 THEN '".$tr->translate("COMPLETED")."'
+				END AS crm_status_title,
+				CASE    
+					WHEN  st.ask_for = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
+					WHEN  st.ask_for = 2 THEN '".$tr->translate("ENGLISH")."'
+					WHEN  st.ask_for = 3 THEN '".$tr->translate("UNIVERSITY")."'
+					WHEN  st.ask_for = 4 THEN '".$tr->translate("OTHER")."'
+				END AS ask_for_title,
+				followup_status AS followup_statusId,
+				CASE
+					WHEN  st.followup_status = 1 THEN '".$tr->translate("FOLLOW_UP")."'
+					WHEN  st.followup_status = 0 THEN '".$tr->translate("STOP_FOLLOW_UP")."'
+					END AS followup_status,
+				
+				(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = st.know_by LIMIT 1 ) AS know_by_title
+		FROM `rms_crm` AS st WHERE st.id = $id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('st.branch_id');
+		return $db->fetchRow($sql);
+	}
+	
+	public function getCRMDetailById($id){
+		$db = $this->getAdapter();
+		
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="SELECT st.*,CASE    
+				WHEN  st.sex = 1 THEN '".$tr->translate("MALE")."'
+				WHEN  st.sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS sextitle,
+				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = st.crm_degree AND i.type=1 LIMIT 1) AS degree_title,
+				(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = st.crm_grade AND idd.items_type=1 LIMIT 1) AS grade_title
+		FROM `rms_student` AS st WHERE st.crm_id = $id  ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('st.branch_id');
+		return $db->fetchAll($sql);
+	}
+	
+	public function AllHistoryContact($crm_id){
+		$db = $this->getAdapter();
+		$sql="SELECT c.*,
+			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE c.user_contact=id LIMIT 1 ) AS user_contact_name
+		FROM `rms_crm_history_contact` AS c WHERE crm_id = $crm_id ORDER BY c.id DESC";
+		return $db->fetchAll($sql);
+	}
+	
+	function checkFeedBackConcer($value){
+		$db = $this->getAdapter();
+		$sql="SELECT v.key_code FROM `rms_view` AS v WHERE v.name_kh = '$value' AND v.type=34  LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	public function addCrmContactHistory($_data){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$prev = "";
+			if (!empty($_data['feedback_type'])){
+				$epl = explode(",", $_data['feedback_type']);
+				foreach ($epl as $ss){
+					$key_code = $this->checkFeedBackConcer($ss);
+					if (empty($key_code)){
+						$key_code = $_dbgb->getLastKeycodeByType(34);
+						$_arrview=array(
+								'name_en'	  => $ss,
+								'name_kh' => $ss,
+								'key_code'=> $key_code,
+								'type'=>34,
+								'note'=>"For Contact FeedBack Option",
+								'status'=> 1,
+						);
+						$this->_name="rms_view";
+						$key = $this->insert($_arrview);
+					}
+					if (empty($prev)){
+						$prev=$key_code;
+					}else{$prev=$prev.",".$key_code;
+					}
+				}
+			}
+			
+			$_arr=array(
+					'crm_id'	  => $_data['id'],
+					'contact_date' => $_data['contact_date'],
+					'feedback'=> $_data['feedback'],
+					'proccess'=> $_data['proccess'],
+					'feedback_type'=> $prev,
+					'next_contact'=> $_data['next_contact'],
+					'user_contact'=> $_data['user_contact'],
+					'create_date' => date("Y-m-d H:i:s"),
+					'modify_date' => date("Y-m-d H:i:s"),
+					'user_id'	  => $this->getUserId()
+			);
+			$this->_name = "rms_crm_history_contact";
+			$id = $this->insert($_arr);
+
+			//update CRM
+			$_arr=array(
+					'crm_status'=> $_data['proccess'],
+					'followup_status'=>$_data['followup_status'],
+			);
+			$this->_name = "rms_crm";
+			$where="id=".$_data['id'];
+			$this->update($_arr, $where);
+			$_db->commit();
+			return $id;
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			Application_Form_FrmMessage::message("Application Error!");
+		}
+	}
+	
+	function getAllCompleteCRM(){
+		$db = $this->getAdapter();
+		$sql="SELECT st.*,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = st.branch_id LIMIT 1) AS branch_name 
+		FROM `rms_student` AS st WHERE st.customer_type = 3 ";
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllCrmFilter($branch_id=null){
+		$db = $this->getAdapter();
+		$sql="SELECT c.id,CONCAT(c.kh_name,'/',c.first_name,' ',c.last_name) AS name 
+		FROM `rms_crm` AS c 
+		WHERE (c.kh_name !='' OR c.first_name!= '' OR c.last_name!='')";
+		if (!empty($branch_id)){
+			$sql.=" AND c.branch_id=$branch_id";
+		}
+		return $db->fetchAll($sql);
+	}
+	
+	function getTitleViewKeyCode($value,$type){
+		$db = $this->getAdapter();
+		$sql="SELECT v.name_kh  FROM `rms_view` AS v WHERE v.key_code = $value AND v.type=$type  LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+
+	public function CheckStudent($data){
+		$db =$this->getAdapter();
+		$sql = "SELECT * FROM `rms_student` WHERE stu_khname = '".$data['kh_name_stu']."' AND branch_id = ".$data['branch_id'];
+		return $db->fetchRow($sql);
+	}
+}

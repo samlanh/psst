@@ -1,7 +1,7 @@
 <?php
 class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'rms_school_bus_schedule';
+	protected $_name = 'rms_student_bus_schedule';
 
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -23,7 +23,7 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 		(SELECT t.teacher_name_kh FROM `rms_teacher` AS t  WHERE t.id = (SELECT d.driverId FROM `rms_school_bus` AS d  WHERE d.id = bus_id) LIMIT 1) AS Driver,
 		(SELECT b.busPlateNo FROM `rms_school_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS PlateNo,
 		create_date, status
-		 FROM `rms_school_bus_schedule`   WHERE 1";
+		 FROM `rms_student_bus_schedule`   WHERE 1";
 
 		//  if(!empty($search['adv_search'])){
 		// 	$s_where=array();
@@ -66,7 +66,7 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 							'modify_date'	=>date('Y-m-d H:i:s'),
 							'user_id'		=>$this->getUserId(),
 						);
-					$this->_name="rms_school_bus_schedule";
+					$this->_name="rms_student_bus_schedule";
 					$this->insert($arr);
 				}
     		}
@@ -95,7 +95,7 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 						}
 					}
 				}
-				$this->_name='rms_school_bus_schedule';
+				$this->_name='rms_student_bus_schedule';
 				$whereDl=" bus_id = ".$data['schoolBus'];
 				if (!empty($detailId)){
 					$whereDl.=" AND id NOT IN ($detailId)";
@@ -116,7 +116,7 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 								'modify_date'	=>date('Y-m-d H:i:s'),
 								'user_id'		=>$this->getUserId(),
 							);
-							$this->_name='rms_school_bus_schedule';
+							$this->_name='rms_student_bus_schedule';
 							$where =" id =".$data['detailId'.$i];
 							$this->update($arr, $where);
 						}else{
@@ -131,7 +131,7 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 								'modify_date'	=>date('Y-m-d H:i:s'),
 								'user_id'		=>$this->getUserId(),
 							);
-							$this->_name='rms_school_bus_schedule';	
+							$this->_name='rms_student_bus_schedule';	
 							$this->insert($arr);
 						}
 					}
@@ -156,7 +156,7 @@ public function getBusScheduleDetail($data=null){
 	$sql="SELECT *,
 	(SELECT CONCAT($stuName) FROM `rms_student` AS s  WHERE s.stu_id = student_id LIMIT 1) AS StudentName,
 	(SELECT b.busCode FROM `rms_school_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS SchoolBus
-	FROM rms_school_bus_schedule WHERE bus_id=".$data['bus_id']."  ORDER BY student_id ASC ";
+	FROM rms_student_bus_schedule WHERE bus_id=".$data['bus_id']."  ORDER BY student_id ASC ";
 	return $db->fetchAll($sql);
 }
 	public function getAllSession($id=null){

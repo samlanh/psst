@@ -98,7 +98,7 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 			}
 			
 			$dbpush = new  Application_Model_DbTable_DbGlobal();
-			$dbpush->getTokenUser($_data['stu_code'],null, 3);
+		//	$dbpush->getTokenUser($_data['stu_code'],null, 3);
 			$arr = array(
 					'attendence_id'	=>$id,
 					'stu_id'		=>$_data['stu_code'],

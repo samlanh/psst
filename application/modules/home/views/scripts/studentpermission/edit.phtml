@@ -2,7 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_REQUEST"));
 	$frm_items = $this->frm_crm;
-	print_r($this->row);
 	$rs=$this->row;
 ?>
 <style>
@@ -62,6 +61,12 @@
 											<div class="col-md-4 col-sm-4 col-xs-12 "> 
 												<?php echo $tr->translate('BRANCH');?> 
 												<input type="hidden" id="id" name="id" value="<?php echo $rs['id'];?>">
+												<input type="hidden" id="branchId" name="branchId" value="<?php echo $rs['branchId'];?>">
+												<input type="hidden" id="groupId" name="groupId" value="<?php echo $rs['groupId'];?>">
+												<input type="hidden" id="studentId" name="studentId" value="<?php echo $rs['studentId'];?>">
+												<input type="hidden" id="sessionType" name="sessionType" value="<?php echo $rs['sessionType'];?>">
+												<input type="hidden" id="reason" name="reason" value="<?php echo $rs['reason'];?>">
+												<input type="hidden" id="fromDate" name="fromDate" value="<?php echo $rs['fromDate'];?>">
 											</div> 
 											<div class="col-md-2 col-sm-2 col-xs-12 "> 
 												:
@@ -135,7 +140,7 @@
 												:
 											</div> 
 											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['sessionType'];?>
+												<?php echo $rs['SeesionLabel'];?>
 											</div> 
 										</div>
 										<div class="form-group ">

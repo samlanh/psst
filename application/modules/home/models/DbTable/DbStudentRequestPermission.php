@@ -56,7 +56,6 @@
 		return $row;
     }
 
-	
 	public function updatePermission($_data){
 		$_db= $this->getAdapter();
 		$_db->beginTransaction();
@@ -68,10 +67,51 @@
 			$where="id=$id";
 			$this->_name="rms_student_request_permission";
 			$this->update($_arr, $where);
+
+            // Add to Attendance 
+            if($_data['request_status']==1){
+				$branch = $_data['branchId'];
+				$group = $_data['groupId'];
+				$date = $_data['fromDate'];
+			//	$for_semester = $_data['for_semester'];
+				$session = $_data['sessionType'];
+				$sql="select id from rms_student_attendence where branch_id = $branch and group_id = $group  and for_session = $session and date_attendence = '$date' and type=1 limit 1";
+				$attendence_id = $_db->fetchOne($sql);
+
+				if(empty($attendence_id )){
+					$_arr = array(
+						'branch_id'		=>$_data['branchId'],
+						'group_id'		=>$_data['groupId'],
+						'date_attendence'=>date("Y-m-d",strtotime($_data['fromDate'])),
+						'date_create'	=>date("Y-m-d"),
+						'modify_date'	=>date("Y-m-d"),
+						'subject_id'	=> 0,
+						'for_semester'	=> 0,
+						'note'			=>$_data['reason'],
+						'status'		=>1,
+						'user_id'		=>$this->getUserId(),
+						'for_session'	=>$_data['sessionType'],
+						'type'			=>1, //for attendence
+					);
+					$this->_name ='rms_student_attendence';
+					$attendence_id=$this->insert($_arr);
+				}
+					
+				$arr = array(
+					'attendence_id'		=>$attendence_id,
+					'stu_id'			=>$_data['studentId'],
+					'attendence_status'	=>3,
+					'description'		=>$_data['reason'],
+					'type'				=>2, //from one student 
+				);
+				$this->_name ='rms_student_attendence_detail';
+				$this->insert($arr);
+			}
 			$_db->commit();
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
+			echo $e->getMessage();
 			Application_Form_FrmMessage::message("Application Error!");
 		}
 	}
@@ -85,10 +125,10 @@
 		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
 		amountDay, 
 		CASE    
-			WHEN  sessionType = 1 THEN '".$tr->translate("FULL_DAY")."'
-			WHEN  sessionType = 2 THEN '".$tr->translate("MORNING")."'
-			WHEN  sessionType = 3 THEN '".$tr->translate("AFTERNOON")."'
-		END AS sessionType,
+			WHEN  sessionType = 1 THEN '".$tr->translate("MORNING")."'
+			WHEN  sessionType = 2 THEN '".$tr->translate("AFTERNOON")."'
+			WHEN  sessionType = 3 THEN '".$tr->translate("FULL_DAY")."'
+		END AS SeesionLabel,
 		CASE    
 			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
 			WHEN  requestStatus = 1 THEN '".$tr->translate("APPROVED")."'

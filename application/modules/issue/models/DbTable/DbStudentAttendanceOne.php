@@ -97,12 +97,12 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 			}
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 			if ($_data['attedence']!=1){
-				if($_data['attedence']!=1){//ក្រៅពីមក sent all
-					$dbpush->getTokenUser($_data['stu_code'],null, 2);
-				}
+				// if($_data['attedence']!=1){//ក្រៅពីមក sent all
+				// 	$dbpush->getTokenUser($_data['stu_code'],null, 2);
+				// }
 				$arr = array(
 					'attendence_id'	=>$id,
-					'stu_id'		=>$_data['stu_code'],
+					'stu_id'		=>$_data['stu_name'],
 					'attendence_status'=>$_data['attedence'],
 					'description'	=>$_data['comment'],
 					'type'			=>2, //from one student 
@@ -141,7 +141,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
    			if ($_data['status']==1){
    				$arr = array(
    					'attendence_id'	=>$_data['att_id'],
-   					'stu_id'		=>$_data['stu_code'],
+   					'stu_id'		=>$_data['stu_name'],
    					'attendence_status'=>$_data['attedence'],
    					'description'	=>$_data['comment'],
    				);

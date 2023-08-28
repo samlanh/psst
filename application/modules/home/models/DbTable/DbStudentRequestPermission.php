@@ -20,8 +20,8 @@
 		phoneNumber, fromDate, toDate, reason, 
 		CASE    
 			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
-			WHEN  requestStatus = 2 THEN '".$tr->translate("APPOROVED")."'
-			WHEN  requestStatus = 3 THEN '".$tr->translate("REJECTED")."'
+			WHEN  requestStatus = 1 THEN '".$tr->translate("APPROVED")."'
+			WHEN  requestStatus = 2 THEN '".$tr->translate("REJECTED")."'
 		END AS requestStatus
 
 		FROM `rms_student_request_permission` 
@@ -56,6 +56,26 @@
 		return $row;
     }
 
+	
+	public function updatePermission($_data){
+		$_db= $this->getAdapter();
+		$_db->beginTransaction();
+		try{
+			$_arr=array(
+					'requestStatus'	  => $_data['request_status'],
+			);
+			$id = $_data['id'];
+			$where="id=$id";
+			$this->_name="rms_student_request_permission";
+			$this->update($_arr, $where);
+			$_db->commit();
+		}catch(exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			Application_Form_FrmMessage::message("Application Error!");
+		}
+	}
+
 	public function getRequestById($id){
 		$db = $this->getAdapter();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -71,9 +91,9 @@
 		END AS sessionType,
 		CASE    
 			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
-			WHEN  requestStatus = 2 THEN '".$tr->translate("APPOROVED")."'
-			WHEN  requestStatus = 3 THEN '".$tr->translate("REJECTED")."'
-		END AS requestStatus
+			WHEN  requestStatus = 1 THEN '".$tr->translate("APPROVED")."'
+			WHEN  requestStatus = 2 THEN '".$tr->translate("REJECTED")."'
+		END AS StatusLbel
 		FROM `rms_student_request_permission` WHERE id= ".$id;
 	
 		$row = $db->fetchRow($sql);

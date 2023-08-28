@@ -61,6 +61,7 @@
 										<div class="form-group ">
 											<div class="col-md-4 col-sm-4 col-xs-12 "> 
 												<?php echo $tr->translate('BRANCH');?> 
+												<input type="hidden" id="id" name="id" value="<?php echo $rs['id'];?>">
 											</div> 
 											<div class="col-md-2 col-sm-2 col-xs-12 "> 
 												:
@@ -176,11 +177,23 @@
 							</div> 
 						</div>
 						<div class="form-group">
-							<label class="control-label custom-switch float-end "> 
-								<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
-								<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($rs["status"])){ echo "checked";} ?> > 
-								<span class="custom-switch-indicator custom-radius switch-status"></span> 
-							</label>
+							<div class="col-md-3 col-sm-3 col-xs-12 text-center ">
+								<p class="tx-20 font-weight-semibold"><?php echo $tr->translate('REQUEST_STATUS');?></p>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-danger" >
+								<input class="form-check-input" type="radio" name="request_status" id="reject" <?php if($rs['requestStatus']==2){ echo "checked"; } ?>  value="2" >
+								<label class="form-check-label" for="reject">
+									<?php echo $tr->translate('REJECTED');?>&nbsp; <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+								</label>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-primary" >
+								<input class="form-check-input" type="radio" name="request_status" id="approve" <?php if($rs['requestStatus']==1){ echo "checked"; } ?> value="1">
+								<label class="form-check-label" for="approve">
+									<?php echo $tr->translate('APPROVED');?>&nbsp; <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
+								</label>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-12">
+							</div>
 						</div>
 						
 						<!-- <div class="form-group ">
@@ -197,27 +210,8 @@
 					</div>
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-12">
-					<!-- <div class="card-blogform">
-						<div class="card-body">
-							<div class="form-group ">
-								<div class="introduction">
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-										<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate('REQUEST_PERMISSION_INFO');?></p>
-										</div> 
-									</div>
-									<label class="control-label bold col-md-12 col-sm-12 col-xs-12">1.ពិន្ទុទាញពី</label>
-									<ul>
-										<li>ទាញពីការដាក់ពិន្ទុរបស់គ្រូ : ដើម្បីទាញពិន្ទុពីការបញ្ចូលរបស់គ្រូ</li>
-										<li>យោងលើការបញ្ចូល : ដើម្បីបញ្ចូលពិន្ទុដោយខ្លួនឯង</li>
-									</ul>
-							    </div>
-							</div>
-						</div>
-					</div> -->
+
+				
 		        </div>
 				<div class="clearfix"></div>
 					<div class="card-box mt-20">

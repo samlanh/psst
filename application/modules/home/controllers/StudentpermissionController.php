@@ -2,7 +2,7 @@
 
 class Home_StudentpermissionController extends Zend_Controller_Action
 {
-	const REDIRECT_URL = '/home/crm';
+	const REDIRECT_URL = '/home/studentpermission';
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -93,13 +93,13 @@ class Home_StudentpermissionController extends Zend_Controller_Action
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
-    		// try{
-    		// 	$row = $db->updateCrm($_data);
-    		// 	Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
-    		// }catch(Exception $e){
-    		// 	Application_Form_FrmMessage::message("INSERT_FAIL");
-    		// 	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		// }
+    		try{
+    			$row = $db->updatePermission($_data);
+    			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+    		}catch(Exception $e){
+    			Application_Form_FrmMessage::message("INSERT_FAIL");
+    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		}
     	}
     	 
     	$row = $db->getRequestById($id);

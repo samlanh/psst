@@ -60,7 +60,7 @@ class Home_Form_FrmStudentRequest extends Zend_Dojo_Form
     	 
     	$_arr =array(
     			''=>$this->tr->translate("SELECT_TYPE"),
-    			1=>$this->tr->translate("FULLDAY"),
+    			1=>$this->tr->translate("FULL_DAY"),
     			2=>$this->tr->translate("MORNING"),
 				3=>$this->tr->translate("AFTERNOON"),
     	);

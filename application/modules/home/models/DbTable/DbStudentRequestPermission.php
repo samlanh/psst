@@ -6,6 +6,7 @@
     }
     function getAllStudentRequest($search = ''){
     	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql="SELECT id,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
@@ -13,18 +14,18 @@
 		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
 		amountDay, 
 		CASE    
-			WHEN  sessionType = 1 THEN '".$tr->translate("FULL_DAY")."'
-			WHEN  sessionType = 2 THEN '".$tr->translate("MORNING")."'
-			WHEN  sessionType = 3 THEN '".$tr->translate("AFTERNOON")."'
+			WHEN  sessionType = 1 THEN '".$tr->translate("MORNING")."'
+			WHEN  sessionType = 2 THEN '".$tr->translate("AFTERNOON")."'
+			WHEN  sessionType = 3 THEN '".$tr->translate("FULL_DAY")."'
 		END AS sessionType,
 		phoneNumber, fromDate, toDate, reason, 
 		CASE    
 			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
 			WHEN  requestStatus = 1 THEN '".$tr->translate("APPROVED")."'
 			WHEN  requestStatus = 2 THEN '".$tr->translate("REJECTED")."'
-		END AS requestStatus
-
-		FROM `rms_student_request_permission` 
+		END AS requestStatus ";
+		// $sql.=$dbp->caseStatusShowImage("requestStatus");
+		$sql.="	FROM `rms_student_request_permission` 
 		 WHERE 1
     	";
     	$where = ' ';

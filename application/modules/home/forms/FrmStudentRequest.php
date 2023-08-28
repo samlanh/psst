@@ -59,10 +59,10 @@ class Home_Form_FrmStudentRequest extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	 
     	$_arr =array(
-    			''=>$this->tr->translate("SELECT_TYPE"),
-    			1=>$this->tr->translate("FULL_DAY"),
-    			2=>$this->tr->translate("MORNING"),
-				3=>$this->tr->translate("AFTERNOON"),
+    			''=>$this->tr->translate("SESSION_TYPE"),
+    			1=>$this->tr->translate("MORNING"),
+				2=>$this->tr->translate("AFTERNOON"),
+				3=>$this->tr->translate("FULL_DAY")
     	);
     	$session_type->setMultiOptions($_arr);
  	
@@ -101,9 +101,9 @@ class Home_Form_FrmStudentRequest extends Zend_Dojo_Form
     	 
     	$_arr =array(
     			''=>$this->tr->translate("REQUEST_STATUS"),
-    			0=>$this->tr->translate("Pending"),
-    			1=>$this->tr->translate("Appoved"),
-				2=>$this->tr->translate("Rejected"),
+    			0=>$this->tr->translate("PENDING"),
+    			1=>$this->tr->translate("APPROVED"),
+				2=>$this->tr->translate("REJECTED"),
     	);
     	$request_status->setMultiOptions($_arr);
 

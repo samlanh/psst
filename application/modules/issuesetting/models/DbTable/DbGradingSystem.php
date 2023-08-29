@@ -290,11 +290,10 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 	   $db = $this->getAdapter();
 	   $sql="SELECT grd.* ";
 	   $sql.="
-			FROM `rms_grading` AS grd ,
-				`rms_group` AS g
+			FROM `rms_grading` AS grd
 	   ";
-	   $sql.=" WHERE grd.groupId = g.id ";
-	   $sql.=" AND g.gradingId = $gradingIdSettingID ";
+	   $sql.=" WHERE 1 ";
+	   $sql.=" AND grd.gradingSettingId = $gradingIdSettingID ";
 	   $sql.=" ORDER BY grd.id DESC ";
 	   $sql.=" LIMIT 1 ";
 	   return $db->fetchRow($sql);

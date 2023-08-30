@@ -19,9 +19,9 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 		$where = " AND ".$from_date." AND ".$to_date;	
 		$sql="SELECT id,
 		(SELECT p.branch_nameen FROM `rms_branch` AS p  WHERE p.br_id = branch_id LIMIT 1) AS BranchName,
-		(SELECT b.busCode FROM `rms_student_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS SchoolBus,
-		(SELECT t.teacher_name_kh FROM `rms_teacher` AS t  WHERE t.id = (SELECT d.driverId FROM `rms_student_bus` AS d  WHERE d.id = bus_id) LIMIT 1) AS Driver,
-		(SELECT b.busPlateNo FROM `rms_student_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS PlateNo,
+		(SELECT b.busCode FROM `rms_school_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS SchoolBus,
+		(SELECT t.teacher_name_kh FROM `rms_teacher` AS t  WHERE t.id = (SELECT d.driverId FROM `rms_school_bus` AS d  WHERE d.id = bus_id) LIMIT 1) AS Driver,
+		(SELECT b.busPlateNo FROM `rms_school_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS PlateNo,
 		create_date, status
 		 FROM `rms_student_bus_schedule`   WHERE 1";
 
@@ -39,7 +39,7 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
 	}
 	function getStudentBus($data=null){
 		$db=$this->getAdapter();
-		$sql="SELECT id, busCode as name  FROM `rms_student_bus`  WHERE status= 1 ";
+		$sql="SELECT id, busCode as name  FROM `rms_school_bus`  WHERE status= 1 ";
 		if(!empty($data['branch_id'])){
 			$sql.=" AND branchId=".$data['branch_id'];
 		}
@@ -77,42 +77,70 @@ class Mobileapp_Model_DbTable_DbBusSchedule extends Zend_Db_Table_Abstract
             $db->rollBack();
         }
  	}
-// 	function  EditStudentBus($_data){
-// 		$db = $this->getAdapter();
-// 	  $db->beginTransaction();
-// 	  try{
-// 		  $status = empty($_data['status'])?0:1;
-// 		  $_arr=array(
-// 			  'branchId' 	=> $_data['branch_id'],
-// 			  'busCode' 	=> $_data['busCode'],
-// 			  'busType' 	=> $_data['busType'],
-// 			  'driverId'	=> $_data['driverId'],
-// 			  'busPlateNo' 	=> $_data['busPlateNo'],
+	public function editBusSchedule($data){
+		$db= $this->getAdapter();
+		try{
+				$identitys = explode(',',$data['identity']);
+				$detailId="";
+				if (!empty($identitys)){
+					foreach ($identitys as $i){
+						if (empty($detailId)){
+							if (!empty($data['detailId'.$i])){
+								$detailId = $data['detailId'.$i];
+							}
+						}else{
+							if (!empty($data['detailId'.$i])){
+								$detailId= $detailId.",".$data['detailId'.$i];
+							}
+						}
+					}
+				}
+				$this->_name='rms_student_bus_schedule';
+				$whereDl=" bus_id = ".$data['schoolBus'];
+				if (!empty($detailId)){
+					$whereDl.=" AND id NOT IN ($detailId)";
+				}
+				$this->delete($whereDl);
 
-// 			  'password' 	=>md5($_data['password']),
+				if(!empty($data['identity'])){
+					$ids = explode(',', $data['identity']);
+					foreach ($ids as $i){
+						
+						if (!empty($data['detailId'.$i])){
+							$arr = array(
+								// 'branch_id'		=>$data['branch_id'],
+								// 'bus_id'		=>$data['bus_id_'.$i],
+								// 'student_id'	=>$data['student_id_'.$i],
+								'time'			=>$data['time_'.$i],
+								'type'			=>$data['type_'.$i],
+								'modify_date'	=>date('Y-m-d H:i:s'),
+								'user_id'		=>$this->getUserId(),
+							);
+							$this->_name='rms_student_bus_schedule';
+							$where =" id =".$data['detailId'.$i];
+							$this->update($arr, $where);
+						}else{
 
-// 			  'note'   		=> $_data['note'],
-// 			  'createDate' 	=> date("Y-m-d"),
-// 			  'modifyDate' 	=> date("Y-m-d"),
-// 			  'status'   	=>  $status,
-// 			  'userId'	 	=> $this->getUserId(),
-// 		  );
-		
-// 		  if (!empty($data['check_change'])){
-// 			$_arr['password']= md5($_data['password']);
-// 			}
-// 			$this->_name="rms_student_bus";
-// 			$where=$this->getAdapter()->quoteInto('id=?', $_data['id']); 
-// 			$this->update($_arr,$where);
-		
-// 		  $db->commit();
-// 	  }catch(exception $e){
-// 		  Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-// 		  echo $e->getMessage();
-// 		  $db->rollBack();
-// 	  }
-//    }
+							$arr = array(
+								'branch_id'		=>$data['branch_id'],
+								'bus_id'		=>$data['bus_id_'.$i],
+								'student_id'	=>$data['student_id_'.$i],
+								'time'			=>$data['time_'.$i],
+								'type'			=>$data['type_'.$i],
+								'create_date'	=>date('Y-m-d H:i:s'),
+								'modify_date'	=>date('Y-m-d H:i:s'),
+								'user_id'		=>$this->getUserId(),
+							);
+							$this->_name='rms_student_bus_schedule';	
+							$this->insert($arr);
+						}
+					}
+				}
 
+    	}catch(Exception $e){
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+	}
 
 public function getById($id)
 {
@@ -124,9 +152,43 @@ public function getById($id)
 }
 public function getBusScheduleDetail($data=null){
 	$db= $this->getAdapter();
-	$sql="SELECT * FROM rms_student_bus_schedule WHERE bus_id=".$data['bus_id']."  ORDER BY time ASC ";
-
+	$stuName = "COALESCE(s.stu_code,''),' - ',COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')";
+	$sql="SELECT *,
+	(SELECT CONCAT($stuName) FROM `rms_student` AS s  WHERE s.stu_id = student_id LIMIT 1) AS StudentName,
+	(SELECT b.busCode FROM `rms_school_bus` AS b  WHERE b.id = bus_id LIMIT 1) AS SchoolBus
+	FROM rms_student_bus_schedule WHERE bus_id=".$data['bus_id']."  ORDER BY student_id ASC ";
 	return $db->fetchAll($sql);
 }
+	public function getAllSession($id=null){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$opt_time = array(
+				1=>$tr->translate('MORNING'),
+				2=>$tr->translate('AFTERNOON'),
+				3=>$tr->translate('EVENING'),
+		);
+		if($id==null){return $opt_time;}
+		else {
+			return $opt_time[$id]; 
+		}
+	}
+	public function getType($id=null){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$opt_type = array(
+				1=>$tr->translate('GO_TO_SCHOOL'),
+				2=>$tr->translate('FROM_SCHOOL'),
+		);
+		if($id==null){return $opt_type;}
+		else {
+			return $opt_type[$id]; 
+		}
+	}
+	public function checkStudent($data)
+	{
+		$db=$this->getAdapter();
+		$sql="SELECT student_id FROM ".$this->_name." WHERE bus_id = ".$data['bus_id']." AND student_id=".$data['student_id']." AND time= ".$data['time']." AND  type=".$data['type'];
+		$sql.=" LIMIT 1 ";
+		$row=$db->fetchRow($sql);
+		return $row;
+	}
 
 }

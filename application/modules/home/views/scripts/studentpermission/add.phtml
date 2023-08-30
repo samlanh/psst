@@ -1,0 +1,605 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("CREATE_CRM"));
+	$frm_items= $this->frm_crm;
+?>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('CREATE_CRM');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()){
+					branch_id = dijit.byId('branch_id').get('value');
+					if(branch_id=="" || branch_id==-1){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+						return false;
+					}
+ 					identity = $("#identity").val();
+					if(identity==''){
+						dijit.byId('kh_name_stu').focus();
+						return false;
+					}
+					loadingBlock();
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+								<div class="form-group">
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CUSTOMER_INFO");?></p>
+										</div> 
+									</div>
+								</div>
+								<div class="form-group">
+					                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
+					                <div class="col-md-7 col-sm-7 col-xs-12">
+					                	<?php echo $frm_items->getElement("branch_id");?>
+					                </div>
+					             </div>
+								<div class="form-group">
+					                <label class="control-label bold  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER").$tr->translate("IN_KHMER");?><span class="required">*</span></label>
+					                <div class="col-md-7 col-sm-7 col-xs-12">
+					                	<?php echo $frm_items->getElement("kh_name");?>
+					                </div>
+					             </div>
+								<div class="form-group">
+				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Last Name");?>
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("last_name");?>
+				                   </div>
+				                   <div class="clearfix"></div>
+				                </div>
+								<div class="form-group">
+				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("First Name");?>
+				                   </label>
+				                  <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("first_name");?>
+				                   </div>
+				                </div>
+				                 <div class="form-group">
+					               <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GENDER");?> </label>
+					               <div class="col-md-7 col-sm-7 col-xs-12">
+					                	<?php echo $frm_items->getElement("sex");?>
+					                </div>
+					             </div>
+					             <div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> <span class="required">*</span>
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("tel");?>
+				                   </div>
+				                </div>
+								<div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CURRENT_ADDRESS");?>
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("current_address");?>
+				                   </div>
+				                </div>
+			               	</div>
+			            </div>
+			              <div class="card-blogform">
+								<div class="card-body"> 
+									<div class="form-group">
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("COLLECTION_INFORMATION");?></p>
+											</div> 
+										</div>
+									</div>
+						             <div class="form-group">
+						               <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ASK_FOR");?></label>
+						               <div class="col-md-7 col-sm-7 col-xs-12">
+						                	<?php echo $frm_items->getElement("ask_for");?>
+						                </div>
+						             </div>
+						             <div class="form-group">
+						               <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Previous Concern");?> </label>
+						               <div class="col-md-7 col-sm-7 col-xs-12">
+						                	<input value="" type="text" id="e15" name="prev_concern" style="width: 100%">
+						                </div>
+						             </div>
+						             <div class="form-group">
+						               <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("KNOW_BY");?> </label>
+						               <div class="col-md-7 col-sm-7 col-xs-12">
+						                	<?php echo $frm_items->getElement("know_by");?>
+						                </div>
+						             </div>
+					                <div class="form-group">
+						                <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FROM_SCHOOL");?> </label>
+						                <div class="col-md-7 col-sm-7 col-xs-12">
+						                	<?php echo $frm_items->getElement("old_school");?>
+						                </div>
+						             </div>
+						             <div class="form-group">
+					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REASON");?>
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $frm_items->getElement("reason");?>
+					                   </div>
+					                </div>
+					                <div class="form-group">
+					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STATUS");?>
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<?php echo $frm_items->getElement("crm_status");?>
+					                   </div>
+					                </div>
+				         	</div>
+		         		</div>
+		        </div>
+				<div class="col-md-8 col-sm-8 col-xs-12">
+					 <div class="card-blogform">
+						<div class="card-body"> 
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFORMATION");?></p>
+									</div> 
+								</div>
+							</div>
+			                <div class="col-md-6 col-sm-6 col-xs-12">
+		                	  <div class="form-group">
+			                		 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAMEKHMER").$tr->translate("IN_KHMER");?>
+				                     </label>
+			                		<div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("kh_name_stu");?>
+										<span id="message" style="color: red; display: block;"></span>
+			                   		</div>
+			                   </div>
+			                   <div class="form-group">
+				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Last Name");?>
+				                     </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("last_name_stu");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("First Name");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("first_name_stu");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GENDER");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("sex_stu");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                    	<input type="button" label="<?php echo $tr->translate('PAST_FROM_CUSTOMER');?>" dojoType="dijit.form.Button" 
+										class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="copyfromcustomer();" />
+				                   </div>
+				                </div>
+			                </div>
+			                <div class="col-md-6 col-sm-6 col-xs-12">
+		                		<div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AGE");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("age_stu");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("tel_stu");?>
+				                   </div>
+				                </div>
+		                		<div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm_items->getElement("degree");?>
+				                   </div>
+				                </div>
+				                <div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GRADE");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="grade" />
+				                   </div>
+				                </div>
+				                
+			                </div>
+			               </div>
+			        </div>
+			        <div class="card-blogform">
+						<div class="card-body">
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-7 col-sm-7 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
+									</div> 
+									<div class="col-md-3 col-sm- col-xs-12">
+										 	<input type="button" label="<?php echo $tr->translate('SAVE_TEMP');?>" dojoType="dijit.form.Button" 
+											class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="checkStudent();// addRow();" />
+									</div>
+								</div>
+							</div>
+			                 <div class="form-group">
+				         	 	<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+									<tr id="head-title" class="head-td" align="right" style="white-space:nowrap;"></tr>
+								</table>
+								<input type="hidden" name="identity" id="identity"  />
+				         	 </div>
+							<div class="form-group">
+			                   <label class="control-label  col-md-12 col-sm-12 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+			                   </label>
+			                </div>
+			                <div class="form-group">
+			                   <div class="col-md-12 col-sm-12 col-xs-12">
+			                   		<?php echo $frm_items->getElement("note");?>
+			                   </div>
+			                </div>
+	                	</div>
+		         </div>
+		         <div class="clearfix"></div>
+			         <div class="card-box mt-20">
+		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+		               		<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
+							class="button-class button-primary"  iconClass="glyphicon glyphicon-floppy-remove" />
+							<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
+							class="button-class button-primary"  iconClass="glyphicon glyphicon-floppy-disk" />
+		               	</div>
+		             </div>
+				</div>
+			</div>
+		</form>
+    </div>
+</div>
+<style>
+.bd-bg {
+    background: #f7f7f7;
+    padding: 5px 10px;
+    border: solid 1px #062b61;
+    margin-bottom: 10px;
+}
+.bd-bg .form-group {
+    margin-bottom: 0;
+}
+table#table_row tr td {
+    padding: 5px 2px;
+    background: #f7f7f7;
+}
+</style>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_know_by" >
+		<form style="background-color: buttonface;" id='frm_know_by' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<table cellspacing="10" width="100%" style="margin: 0 auto;">
+			<tr>
+				<td>
+					<fieldset style="background-color: buttonface;">
+					<legend align="center" ><?php echo $tr->translate('KNOW_BY');?></legend>
+						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
+							<tr>
+								<td><?php echo $tr->translate('TITLE');?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="title_know_by" name="title_know_by" value="" type="text"></td>
+							</tr>
+							<tr>
+								<td colspan="4" align="center">
+									<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate("CLOSE");?>" id="hide_know_by" name="hide_know_by" dojoType="dijit.form.Button" 
+									​ ​​iconClass="dijitIconUndo" onclick="hideDialog2();"/>
+									<input type="button" value="save" label="<?php echo $tr->translate("SAVE");?>" id="save_know_by" name="save_know_by" dojoType="dijit.form.Button" 
+									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addKnowBy();"/>
+								</td>
+							</tr>
+						</table>
+				</fieldset>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>
+ <link href="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.css" /> 
+ <script src="<?php echo $this->baseUrl()."/admin/"?>/3.5.0/select2.min.js"></script>
+  <?php 
+ $tags="";
+ if (!empty($this->prev_concern)) foreach ($this->prev_concern as $rs){
+ 	if (empty($tags)){
+ 		$tags = '"'.$rs['name'].'"';
+ 	}else{
+ 		if (!empty($rs['name'])){
+ 		$tags=$tags.',"'.$rs['name'].'"';
+ 		}
+ 	}
+ }
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require('dijit.form.NumberTextBox');
+dojo.require("dijit.form.Textarea");
+dojo.require("dojo.data.ObjectStore");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dojo.NodeList-manipulate");
+
+var knowby_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->know_by));?> );
+require(["dojo/ready"], function(ready){
+	ready(function(){
+		 $("#e15").select2({tags:[<?php echo $tags;?>],placeholder: "<?php echo $tr->translate("Previous Concern");?>",allowClear: true});
+	});
+	new dijit.form.FilteringSelect({
+		store: knowby_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+	    id: "know_by",
+	    name: "know_by",  
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("KNOW_BY");?>", 
+	    onChange: function() {          
+	    	know_by = dijit.byId('know_by').get('value');
+		    if(know_by==-1){
+				dijit.byId("popup_know_by").show();
+		    }
+	   } 
+	}, "know_by");
+});
+	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+	var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: grade_store,
+		autoComplete: false,
+		queryExpr:'*${0}*',                        
+		required: false,
+		id: "grade",
+		name: "grade",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('SELECT_GRADE');?>",          
+		onChange: function() {  
+		}
+	}, "grade");
+	getAllGrade();	
+});
+var url_get_grade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getAllGrade(){
+	dijit.byId('grade').set('value',''); 
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_get_grade,
+		content:{
+			'dept_id':dept_id,
+			'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store);  
+		},
+		error: function(err) {
+		}
+	});
+}
+var url_add_know_by = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-knowby")); ?>';
+function addKnowBy(){
+	if(dijit.byId('frm_know_by').validate()){
+		dijit.byId('save_know_by').set('disabled',true);
+		dojo.xhrPost({
+			url:url_add_know_by,
+			form: dojo.byId("frm_know_by"),
+			handleAs:"json",
+			load: function(data) {
+				if(data.addNew == 1){
+					var Itemmake = { 
+						id: data.id,
+						name: dijit.byId('title_know_by').get('value')
+				    };
+					addDataToSelectbox(dijit.byId('know_by'), knowby_store, Itemmake, data.id);
+				}else{
+					
+					dijit.byId('know_by').attr("value", data.id);
+				}
+		   dijit.byId('frm_know_by').reset();
+		   dijit.byId("popup_know_by").hide();
+		   dijit.byId('save_know_by').set('disabled',false);
+			},
+			error: function(err) {
+				dijit.byId('save_know_by').set('disabled',false);
+			}
+		});
+	}	
+}
+function hideDialog2() {		
+	dijit.byId("popup_know_by").hide();
+}
+function copyfromcustomer(){
+	dijit.byId('kh_name_stu').attr("value",dijit.byId('kh_name').get('value'));
+	dijit.byId('last_name_stu').attr("value",dijit.byId('last_name').get('value'));
+	dijit.byId('first_name_stu').attr("value",dijit.byId('first_name').get('value'));
+	dijit.byId('sex_stu').attr("value",dijit.byId('sex').get('value'));
+	dijit.byId('tel_stu').attr("value",dijit.byId('tel').get('value'));
+}
+
+check_student=0;
+url_CheckStudent = '<?php echo $this->url(array('module'=>'home','controller'=>'crm','action'=>'check-student'));?>';
+function checkStudent(){
+	kh_name_stu = dijit.byId('kh_name_stu').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
+	
+	if(branch_id=='' || branch_id==-1){ 
+		dijit.byId('branch_id').focus();
+		return false;}
+	
+	dojo.xhrPost({
+		url:url_CheckStudent,	
+		content:{ 
+			'branch_id': branch_id ,
+			'kh_name_stu': kh_name_stu
+		},
+		handleAs:"json",
+		load: function(data) {	
+			if(data !== false ){
+		   		document.getElementById('message').innerHTML ='<?php echo $tr->translate('STUDENT_ALRADY_EXIST')?>';
+		   		dijit.byId('kh_name_stu').focus();
+				check_student=1;
+			}else{
+				check_student=0;
+				document.getElementById('message').innerHTML ='';
+				addRow();
+			}
+		},
+		error: function(err) {
+			alert(err);
+		}
+	});
+}
+
+
+var col = 0;
+var no = 0;
+var title = 0;
+tmp = '';
+temp='';
+function addRow() {
+	/*
+	
+	if(check_student==1){
+		dijit.byId('kh_name_stu').focus();
+		return false;
+	}
+	*/
+	
+	kh_name_stu = dijit.byId('kh_name_stu').get('value');
+	first_name_stu = dijit.byId('first_name_stu').get('value');
+	last_name_stu = dijit.byId('last_name_stu').get('value');
+	sex_stu = dijit.byId('sex_stu').get('value');
+	age_stu = dijit.byId('age_stu').get('value');
+	tel_stu = dijit.byId('tel_stu').get('value');
+	degree = dijit.byId('degree').get('value');
+	if(degree==''){
+		dijit.byId('degree').focus();
+		return false;
+	}
+	grade = dijit.byId('grade').get('value');
+	if(grade==''){
+		//dijit.byId('grade').focus();
+		//return false;
+	}
+	degreelabel = dijit.byId("degree").attr('displayedValue');
+	gradelabel = dijit.byId("grade").attr('displayedValue');
+	sex_stulabel = dijit.byId("sex_stu").attr('displayedValue');
+	if(kh_name_stu==""){
+		alert("<?php echo $tr->translate("Please Enter Name Kh");?>");
+		dijit.byId('kh_name_stu').focus();
+		return false;
+	}
+	if(degree==""){ degreelabel = ""}
+	 if (isNaN(age_stu)) { age_stu = ""}
+	col++;no++;
+	template='';
+	if(title!=1){
+		temp+='<th><?php echo $tr->translate("DEL");?></th>';
+		temp+='<th><?php echo $tr->translate("N_O");?></th>';
+		temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAMEKHMER");?></th>';
+		temp+='<th ><?php echo $tr->translate("Last Name");?></th>';
+		temp+='<th ><?php echo $tr->translate("First Name");?></th>';
+		temp+='<th ><?php echo $tr->translate("SEX");?></th>';
+		temp+='<th ><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></th>';
+		temp+='<th ><?php echo $tr->translate("PHONE");?></th>';
+		temp+='<th ><?php echo $tr->translate("DEGREE");?></th>';
+		temp+='<th ><?php echo $tr->translate("GRADE");?></th>';
+		temp+='<th ><?php echo $tr->translate("EDIT");?></th>';
+		dojo.query("#head-title").append(temp);
+		title=1;
+	}
+		template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
+		template+='<td width="4%" align="center">'+no+'</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="kh_name_'+col+'" id="kh_name_'+col+'" value="'+kh_name_stu+'" type="hidden">'+kh_name_stu+'&nbsp;</td>';	
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("Last Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="last_name_'+col+'" id="last_name_'+col+'" value="'+last_name_stu+'" type="hidden">'+last_name_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("First Name");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="first_name_'+col+'" id="first_name_'+col+'" value="'+first_name_stu+'" type="hidden">'+first_name_stu+'&nbsp;</td>';	
+		template+='<td>&nbsp;<input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="gender_'+col+'" id="gender_'+col+'" value="'+sex_stu+'" type="hidden">'+sex_stulabel+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="'+age_stu+'" type="hidden">'+age_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+tel_stu+'" type="hidden">'+tel_stu+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
+		template+='<td width="4%"align="center"><img style="width:15px;" onclick="editStudent('+col+');deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/edit.jpg"></td>';
+	tmp='<tr id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+	kh_name_stu = dijit.byId('kh_name_stu').set('value','');
+	first_name_stu = dijit.byId('first_name_stu').set('value','');
+	last_name_stu = dijit.byId('last_name_stu').set('value','');
+	sex_stu = dijit.byId('sex_stu').set('value',1);
+	age_stu = dijit.byId('age_stu').set('value','');
+	age_stu = dijit.byId('tel_stu').set('value','');
+	grade = dijit.byId('grade').set('value','');
+}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+	if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	dojo.query("#row"+index).remove();
+}
+function editStudent(index) {
+	kh_name = dijit.byId('kh_name_'+index).get("value");
+	last_name = dijit.byId('last_name_'+index).get("value");
+	first_name = dijit.byId('first_name_'+index).get("value");
+	gender = dijit.byId('gender_'+index).get("value");
+	age = dijit.byId('age_'+index).get("value");
+	tel = dijit.byId('tel_'+index).get("value");
+	degree = dijit.byId('degree_'+index).get("value");
+	grade = dijit.byId('grade_'+index).get("value");
+	
+	dijit.byId("kh_name_stu").attr("value",kh_name);
+	dijit.byId("last_name_stu").attr("value",last_name);
+	dijit.byId("first_name_stu").attr("value",first_name);
+	dijit.byId("sex_stu").attr("value",gender);
+	dijit.byId("age_stu").attr("value",age);
+	dijit.byId("tel_stu").attr("value",tel);
+	dijit.byId("degree").attr("value",degree);
+	dijit.byId("grade").attr("value",grade);
+}
+
+
+
+</script>

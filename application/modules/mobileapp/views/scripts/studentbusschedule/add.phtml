@@ -107,7 +107,7 @@ body, #dijitEditorBody {
 											<i class="fa fa-calendar"></i>
 										</div> 
 										<div class="col-md-8 col-sm-8 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("វេន");?></p>
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SESSION");?></p>
 										</div> 
 									</div>
 									<div class="form-group">
@@ -120,7 +120,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="morning" name="morning"  >
 												<label class="custom-control-label custom-right-side" for="morning">
-													<p class="font-weight-semibold"><?php echo $tr->translate("ព្រឹក");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("MORNING");?></p>
 												</label>
 											</div>
 										</div>
@@ -128,7 +128,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="mitday" name="mitday" >
 												<label class="custom-control-label custom-right-side" for="mitday">
-													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលរសៀល");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("AFTERNOON");?></p>
 												</label>
 											</div>
 										</div>
@@ -148,7 +148,7 @@ body, #dijitEditorBody {
 											<div class="custom-control custom-checkbox ">
 												<input type="checkbox" class=" custom-control-input"  id="evening" name="evening"   >
 												<label class="custom-control-label custom-right-side" for="evening">
-													<p class="font-weight-semibold"><?php echo $tr->translate("ពេលល្ងាច");?></p>
+													<p class="font-weight-semibold"><?php echo $tr->translate("EVENING");?></p>
 												</label>
 											</div>
 										</div>
@@ -239,13 +239,12 @@ body, #dijitEditorBody {
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT");?>",          
 		    onChange: function() {  
-		    	getStudentInfo();
+				student_id = dijit.byId('student_id').get('value');
 		    }
 		}, "student_id");
 
 		getAllStudenBus();
 	});
-
 
 	url_getschoolBus= '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'schoolbus','action'=>'getbusbybranch'));?>';
 	function getAllStudenBus(){
@@ -275,7 +274,7 @@ body, #dijitEditorBody {
 	}
 
 	function getallstudentname(){//
-		var url_data = '<?php echo $this->url(array('module'=>'foundation','controller'=>'register','action'=>'getallstudentdata')); ?>';
+		var url_data = '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'studentbusschedule','action'=>'getallstudentdata')); ?>';
 		dijit.byId('student_id').reset();
 		branch_id = dijit.byId("branch_id").attr("value");
 		if(branch_id=='' || branch_id==-1){
@@ -288,7 +287,9 @@ body, #dijitEditorBody {
 		dojo.xhrPost({
 			url:url_data,
 			content:{
-				'branch_id':branch_id,'is_maingrade':1
+				'branch_id':branch_id,
+				'is_maingrade':1,
+				'typeQuery':1,
 			},
 			handleAs:"json",
 			load: function(data) {
@@ -302,39 +303,36 @@ body, #dijitEditorBody {
 	}
 
 	function addRow(){
-	
 		var morning = document.getElementById("morning").checked;
 		var mitday = document.getElementById("mitday").checked;
 		
         if(morning==true){
 			let type = 1;
 			let time = 1;
-			addSchedule(type, time);
+			checkDuplicateStudent(type, time);
 		}
 		if(mitday==true){
 			let type = 1;
 			let time = 2;
-			addSchedule(type, time);
+			checkDuplicateStudent(type, time);
 		}
-
 		var afternoon = document.getElementById("afternoon").checked;
 		var evening = document.getElementById("evening").checked;
 
 		if(afternoon==true){
 			let type = 2;
 			let time = 2;
-			addSchedule(type, time);
+			checkDuplicateStudent(type, time);
 		}
 		if(evening==true){
 			let type = 2;
 			let time = 3;
-			addSchedule(type, time);
+			checkDuplicateStudent(type, time);
 		}
 		if(morning==false && mitday==false && afternoon==false && evening==false){
 			alert("Please Check Seesion !");
 		}
 	}
-
 	var col = 0;
 	var no = 0;
 	var title = 0;
@@ -343,17 +341,19 @@ body, #dijitEditorBody {
 	typeLabel='';
 	timeLabel='';
 	function addSchedule(type, time) {
+
 		if(type==1){
-			typeLabel="ជូនសិស្សទៅសាលា";
+			typeLabel="<?php echo $tr->translate("GO_TO_SCHOOL");?>";
 		}else if(type==2){
-			typeLabel="ជូនសិស្សមកវិញ";
+			typeLabel="<?php echo $tr->translate("FROM_SCHOOL");?>";
 		}
+
 		if(time==1){
-			timeLabel="ពេលព្រឹក";
+			timeLabel="<?php echo $tr->translate("MORNING");?>";
 		}else if(time==2){
-			timeLabel="ពេលរសៀល";
+			timeLabel="<?php echo $tr->translate("AFTERNOON");?>";
 		}else if(time==3){
-			timeLabel="ពេលល្ងាច";
+			timeLabel="<?php echo $tr->translate("EVENING");?>";
 		}
 
 		branch_id = dijit.byId('branch_id').get('value');
@@ -371,6 +371,22 @@ body, #dijitEditorBody {
 			dijit.byId('student_id').focus();
 			return false;
 		}
+		
+		var rowId = $('#identity').val();
+		if(rowId!=''){ 
+			var rowIDArray = rowId.split(',');
+				for(var n = 0; n < rowIDArray.length; n++){
+
+			var student = dijit.byId('student_id_'+rowIDArray[n]).get('value');
+			var bus = dijit.byId('bus_id_'+rowIDArray[n]).get('value');
+			var timeloop = dijit.byId('time_'+rowIDArray[n]).get('value');
+			var typeloop = dijit.byId('type_'+rowIDArray[n]).get('value');
+				if(bus == schoolBus && student==student_id && timeloop==time && typeloop==type){
+                    alert("Exist");
+					return false;
+				}
+			}
+		}
 
 		col++;no++;
 		template='';
@@ -379,8 +395,8 @@ body, #dijitEditorBody {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th style="white-space: nowrap;" ><?php echo $tr->translate("STUDENT_NAME");?></th>';
 			temp+='<th ><?php echo $tr->translate("STUDENT_BUS");?></th>';
-			temp+='<th ><?php echo $tr->translate("TIME");?></th>';
 			temp+='<th ><?php echo $tr->translate("TYPE");?></th>';
+			temp+='<th ><?php echo $tr->translate("SESSION");?></th>';
 			
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -390,8 +406,9 @@ body, #dijitEditorBody {
 			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAME");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="student_id_'+col+'" id="student_id_'+col+'" value="'+student_id+'" type="hidden">'+studentName+'&nbsp;</td>';	
 		
 			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_BUS");?>" dojoType="dijit.form.TextBox" class="fullside" name="bus_id_'+col+'" id="bus_id_'+col+'" value="'+schoolBus+'" type="hidden">'+BusCode+'&nbsp;</td>';
-			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("TIME");?>" dojoType="dijit.form.TextBox" class="fullside" name="time_'+col+'" id="time_'+col+'" value="'+time+'" type="hidden">'+timeLabel+'&nbsp;</td>';
 			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("TYPE");?>" dojoType="dijit.form.TextBox" class="fullside" name="type_'+col+'" id="type_'+col+'" value="'+type+'" type="hidden">'+typeLabel+'&nbsp;</td>';
+			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("SESSION");?>" dojoType="dijit.form.TextBox" class="fullside" name="time_'+col+'" id="time_'+col+'" value="'+time+'" type="hidden">'+timeLabel+'&nbsp;</td>';
+			
 		
 		tmp='<tr id="row'+col+'" class="rowData" >';
 		tmp+="</tr>";
@@ -414,6 +431,35 @@ body, #dijitEditorBody {
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
+	}
+	var duplicateStudent =0;
+	var url_duplicateRl = '<?php echo $this->url(array("module"=>"mobileapp","controller"=>"studentbusschedule","action"=>"checkstudentduplicate"));?>';										
+	function checkDuplicateStudent(type,time){
+
+		branch_id = dijit.byId('branch_id').get('value');
+		bus_id = dijit.byId('schoolBus').get('value');
+		student_id = dijit.byId('student_id').get('value');
+
+		dojo.xhrPost({
+			url: url_duplicateRl,
+			content:{
+				'bus_id':bus_id,
+				'student_id':student_id,
+				'type':type,
+				'time':time,
+			},
+			handleAs:"json",
+			load: function(data) {
+				if(data==1){
+					alert("Already Exist!");
+					duplicateStudent = 1;
+				}else{
+					addSchedule(type, time) 
+				}
+			},
+			error: function(err) {
+			}
+		});
 	}
 
 </script>

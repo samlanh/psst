@@ -96,7 +96,7 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 		
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
-		$this->view->group = $db->getAllGroupName();
+		$this->view->group = $db_global->getAllGroupName();
 		
 		$this->view->branch_id=$db_global->getAllBranch();
 		$this->view->branch_name = $db_global->getAllBranch();

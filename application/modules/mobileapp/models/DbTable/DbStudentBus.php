@@ -1,7 +1,7 @@
 <?php
 class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'rms_student_bus';
+	protected $_name = 'rms_school_bus';
 
 	public function getUserId(){
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -20,7 +20,7 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 		$sql="SELECT id,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
 		busCode, busPlateNo, busType, createDate, status
-		 FROM `rms_student_bus`   WHERE 1";
+		 FROM `rms_school_bus`   WHERE 1";
 
 		 if(!empty($search['adv_search'])){
 			$s_where=array();
@@ -36,7 +36,7 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 	}
 	function getStudentBus($data=null){
 		$db=$this->getAdapter();
-		$sql="SELECT id, busCode as name  FROM `rms_student_bus`  WHERE status= 1 ";
+		$sql="SELECT id, busCode as name  FROM `rms_school_bus`  WHERE status= 1 ";
 		if(!empty($data['branch_id'])){
 			$sql.=" AND branchId=".$data['branch_id'];
 		}
@@ -72,7 +72,7 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 				'status'   		=> 1,
 				'userId'	 	=> $this->getUserId(),
 			);
-			$this->_name="rms_student_bus";
+			$this->_name="rms_school_bus";
 			$this->insert($_arr);
             $db->commit();
         }catch(exception $e){
@@ -105,7 +105,7 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 		  if (!empty($data['check_change'])){
 			$_arr['password']= md5($_data['password']);
 			}
-			$this->_name="rms_student_bus";
+			$this->_name="rms_school_bus";
 			$where=$this->getAdapter()->quoteInto('id=?', $_data['id']); 
 			$this->update($_arr,$where);
 		

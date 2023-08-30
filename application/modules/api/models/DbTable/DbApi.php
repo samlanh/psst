@@ -2946,8 +2946,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sp.isRead AS recordIsread
 					
 	    			,(CASE WHEN sp.data_from=3 THEN s.serial ELSE s.stu_code END) AS stuCode
+					,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
+					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.grade=sp.grade AND ds.degree=sp.degree ORDER BY ds.gd_id DESC LIMIT 1) LIMIT 1) AS groupCode
+					
 	    			,(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stuName
-					,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sp.group_id LIMIT 1) AS groupCode
+					
 	    			,(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS academicYear
 					,(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=sp.payment_method LIMIT 1) AS paymentMethod
 					,sp.number AS methodSerialNumber
@@ -2959,6 +2962,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					rms_student_payment AS sp
 				WHERE 
 					s.stu_id=sp.student_id 
+					AND sp.is_void = 0
 					";
     	
 	    	$from_date =(empty($search['startDate']))? '1': " sp.create_date >= '".date("Y-m-d",strtotime($search['startDate']))." 00:00:00'";
@@ -4823,12 +4827,18 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$_data['password']=trim($_data['password']);
 		try{
 			$sql =" SELECT
-				s.*
-			FROM
-				rms_school_bus AS s
-			WHERE s.status = 1 ";
-			$sql.= " AND ".$db->quoteInto('s.busCode=?', $_data['userName']);
-			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
+					s.*
+					,dri.teacher_name_en AS driverNameEng
+					,dri.teacher_name_kh AS driverNameKh
+					,dri.tel AS driverPhone
+					,dri.user_name
+					,dri.password
+				FROM
+					rms_school_bus AS s
+					JOIN `rms_teacher` AS dri ON dri.id = s.driverId
+				WHERE s.status = 1 ";
+			$sql.= " AND ".$db->quoteInto('dri.user_name=?', $_data['userName']);
+			$sql.= " AND ".$db->quoteInto('dri.password=?', md5($_data['password']));
 			$row = $db->fetchRow($sql);
 			$row = empty($row) ? null : $row;
 			$result = array(
@@ -4929,10 +4939,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				SELECT
 					bus.*
 					,b.$branch AS branchName
-					,'Driver Name' AS driverName
-					,'012988781' AS driverPhone
+					
+					,dri.teacher_name_en AS driverNameEng
+					,dri.teacher_name_kh AS driverNameKh
+					,dri.teacher_name_kh AS driverName
+					,dri.tel AS driverPhone
+	
 				FROM
 					rms_school_bus AS bus
+					JOIN `rms_teacher` AS dri ON dri.id = bus.driverId
 						LEFT JOIN `rms_branch` AS b ON b.br_id = bus.branchId
 				WHERE bus.status = 1 and bus.id = $userId ";
 		
@@ -4973,18 +4988,23 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				SELECT
 					bus.*
 					,b.$branch AS branchName
-					,'Driver Name' AS driverName
-					,'012988781' AS driverPhone
+					
+					,dri.teacher_name_en AS driverNameEng
+					,dri.teacher_name_kh AS driverNameKh
+					,dri.teacher_name_kh AS driverName
+					,dri.tel AS driverPhone
+					
 				FROM
-					rms_student_schoo_bus AS sBus
-					JOIN `rms_student_bus_schedule` AS busSch ON busSch.bus_id=sBus.busId
-						LEFT JOIN rms_school_bus AS bus ON bus.id = sBus.busId
-						LEFT JOIN `rms_branch` AS b ON b.br_id = sBus.branchId
-				WHERE sBus.status = 1 
+					`rms_student_bus_schedule` AS busSch 
+					
+					
+						LEFT JOIN (rms_school_bus AS bus JOIN `rms_teacher` AS dri ON dri.id = bus.driverId) ON bus.id = busSch.bus_id
+						LEFT JOIN `rms_branch` AS b ON b.br_id = busSch.branch_id
+				WHERE busSch.status = 1 
 					AND busSch.student_id = $studentId
 				";
 				
-			$sql.=" GROUP BY sBus.busId ";
+			$sql.=" GROUP BY busSch.bus_id ";
 			$sql.=" ORDER BY busSch.time ASC,busSch.type ASC ";
 			$sql.="  LIMIT 1 ";
 			$row = $db->fetchRow($sql);

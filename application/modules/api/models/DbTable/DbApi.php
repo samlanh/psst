@@ -4225,6 +4225,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					array("id"=>2,"name"=>$currentLang==1 ? "បានយល់ព្រម" : "Approved"),
 					array("id"=>3,"name"=>$currentLang==1 ? "បានបដិសេធ" : "Rejected"),
 				);
+			}else if($getControlType=="sessionAttendance"){
+				$row = array(
+					array("id"=>1,"name"=>$currentLang==1 ? "ព្រឹក" : "Morning"),
+					array("id"=>2,"name"=>$currentLang==1 ? "ពេលល្ងាច" : "Evening"),
+					array("id"=>3,"name"=>$currentLang==1 ? "ពេញមួយថ្ងៃ" : "Full Day"),
+				);
+			
 			}
 			
 			$result = array(

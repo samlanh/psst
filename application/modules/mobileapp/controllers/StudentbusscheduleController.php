@@ -105,16 +105,6 @@ class Mobileapp_StudentbusscheduleController extends Zend_Controller_Action
 		$type = $db->getType($id=null);
 		$this->view->type_option =	$type ;
    }
-   function getallstudentdataAction(){
-	if($this->getRequest()->isPost()){
-		$data = $this->getRequest()->getPost();
-		$db = new Application_Model_DbTable_DbGlobal();
-	//	$data['branch_id'] = !empty($data['branch_id'])?$data['branch_id']:null;
-		$rows = $db->getAllStudentStudy(null,$data);
-		print_r(Zend_Json::encode($rows));
-		exit();
-		}
-	}
 	function checkstudentduplicateAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();

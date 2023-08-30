@@ -36,7 +36,9 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 	}
 	function getStudentBus($data=null){
 		$db=$this->getAdapter();
-		$sql="SELECT id, busCode as name  FROM `rms_school_bus`  WHERE status= 1 ";
+		$sql="SELECT id,
+		CONCAT( COALESCE(busCode,''),'-',COALESCE((SELECT teacher_name_kh FROM `rms_teacher` WHERE id=driverId LIMIT 1),'') ) AS name
+		 FROM `rms_school_bus`  WHERE STATUS= 1";
 		if(!empty($data['branch_id'])){
 			$sql.=" AND branchId=".$data['branch_id'];
 		}
@@ -105,28 +107,46 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
  	}
 	function  EditStudentBus($_data){
 		$db = $this->getAdapter();
-	  $db->beginTransaction();
-	  try{
+		$db->beginTransaction();
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$code = $dbg->getTeacherCode($_data['branch_id']);
+		try{
+			$_arr = array(
+				'branch_id' 		 => $_data['branch_id'],
+				'teacher_code'		 => $code,
+				'teacher_name_kh'	 => $_data['driver_name'],
+				'teacher_name_en'	 => $_data['driver_name_en'],
+				'sex'				 => $_data['sex'],
+				'staff_type'  	 	 => 2,
+				'user_name' 		 => $_data['user_name'],
+				'password' 			 => md5($_data['password']),
+				'tel'  				 => $_data['phone'],
+				'email' 			 => $_data['email'],
+				'address' 			 => $_data['address'],
+				'create_date' 		 => date("Y-m-d"),
+				'user_id'	  		 => $this->getUserId(),
+		
+			);
+			$this->_name='rms_teacher';
+			if(!empty($_data['is_new_driver'])){
+				$driver_id=$_data['driverId'];
+			}else{
+				$driver_id = $this->insert($_arr);
+			}
+
 		  $status = empty($_data['status'])?0:1;
 		  $_arr=array(
 			  'branchId' 	=> $_data['branch_id'],
 			  'busCode' 	=> $_data['busCode'],
 			  'busType' 	=> $_data['busType'],
-			  'driverId'	=> $_data['driverId'],
+			  'driverId'	=> $driver_id,
 			  'busPlateNo' 	=> $_data['busPlateNo'],
-
-			  'password' 	=>md5($_data['password']),
-
 			  'note'   		=> $_data['note'],
 			  'createDate' 	=> date("Y-m-d"),
 			  'modifyDate' 	=> date("Y-m-d"),
 			  'status'   	=>  $status,
 			  'userId'	 	=> $this->getUserId(),
 		  );
-		
-		  if (!empty($data['check_change'])){
-			$_arr['password']= md5($_data['password']);
-			}
 			$this->_name="rms_school_bus";
 			$where=$this->getAdapter()->quoteInto('id=?', $_data['id']); 
 			$this->update($_arr,$where);

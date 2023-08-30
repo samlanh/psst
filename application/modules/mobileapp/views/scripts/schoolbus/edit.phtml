@@ -24,12 +24,18 @@ body, #dijitEditorBody {
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 
-				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
-					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
-					dojo.byId('password').value = '';
-					dojo.byId('confirm_password').value = '';
-					dijit.byId('password').focus();
-					return false;
+				if($('#is_new_driver').is(':checked')){
+
+				}else{
+
+					if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
+						alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+						dojo.byId('password').value = '';
+						dojo.byId('confirm_password').value = '';
+						dijit.byId('password').focus();
+						return false;
+					}
+					
 				}
 				branch=dijit.byId('branch_id').get('value');
 				if(branch=='' || branch==0){
@@ -93,15 +99,7 @@ body, #dijitEditorBody {
 										<div class="col-md-7 col-sm-7 col-xs-12">
                                             <?php echo $frm->getElement("busType");?>
 										</div>
-									</div>  <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("DRIVER");?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="driverId">
-                                            <!-- <?php echo $frm->getElement("driverId");?> -->
-										</div>
-									</div>
+									</div> 
 									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
 												<?php echo $tr->translate("BUS_PLATE_NO");?>
@@ -131,7 +129,79 @@ body, #dijitEditorBody {
 					</div>
 	               
 	            </div>
-	        	<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-user"></i>
+											</div> 
+											<div class="col-md-4 col-sm-4 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DRIVER");?></p>
+											</div> 
+											<span class=" col-md-6 col-sm-6 col-xs-12 text-danger">
+												<p class="tx-20 font-weight-semibold " style="color:red;">
+													<?php echo $tr->translate("OLD_DRIVER");?> 
+													<input type="checkbox" name="is_new_driver" id="is_new_driver" value="1" onClick="isNewDriver()" checked>
+												</p>
+											</span>
+										</div>
+										<div class="form-group">
+											&nbsp;
+										</div> 
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DRIVER_NAME");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<span id="new_driver">
+													<?php echo $frm->getElement("driver_name");?>
+												</span>
+												<span id="old_driver">
+													<input type="text" id="driverId" name="driverId">
+												</span>
+											</div>
+										</div>
+										<div class="form-group" id="new_driver_en">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DRIVER_NAME_EN");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("driver_name_en");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?></label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("sex");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Tel");?></label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("phone");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("email");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ADDRESS");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("address");?>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	        	<div class="col-md-4 col-sm-4 col-xs-12" id="password_acc" >
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -140,28 +210,25 @@ body, #dijitEditorBody {
 										<div class="settings-main-icon ">
 											<i class="fa fa-key"></i>
 										</div> 
-											<div class="col-md-8 col-sm-8 col-xs-12"> 
-											<div class="custom-control custom-checkbox ">
-												<input type="checkbox" class=" custom-control-input"  id="check_change" name="check_change" onChange="Checkchange();"  >
-												<label class="custom-control-label custom-right-side" for="check_change">
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CHANGE_PASSWORD");?></p>
-												</label>
-											</div>
-											<!-- <p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CHANGE_PASSWORD");?></p> -->
+										<div class="col-md-8 col-sm-8 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PASSWORD");?></p>
 										</div> 
 									</div>
 									<div class="form-group">
 										&nbsp;
 									</div> 
 									<div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
-											<?php echo $tr->translate('PASSWORD');?>
-											
-									   </label>
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_NAME");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("user_name");?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
+										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm->getElement("password");?>
-											<!-- <input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
-											class="fullside" id="password" name="password" value="" type="password"> -->
 										</div>
 									</div>
 									<div class="form-group">
@@ -176,17 +243,7 @@ body, #dijitEditorBody {
 						</div>
 					</div>
 	            </div>
-				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									
-								</div>
-							</div>
-						</div>
-					</div>
-	            </div>
+				
 	         </div>
 	         <div class="card-box">
                	<div class="col-md-8 col-sm-8 col-xs-8 border-top mt-20 ptb-10 text-center">
@@ -222,26 +279,15 @@ dojo.ready(function(){
 		}
 	}, "driverId");
 
-	try{
-		Checkchange();
-	}catch(e){
-		alert(e);
-	}
-	$(window).keydown(function(event){
-		if(event.keyCode == 13) {
-		  event.preventDefault();
-		  return false;
-		}
-	  });
-
 	  getDriverBybranch();
+	  isNewDriver();
 });
 
 function getAllAcademicByBranch(){
 	getDriverBybranch();
 }
 
-var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';	
+var url_gettecher = '<?php echo $this->url(array("module"=>"mobileapp","controller"=>"schoolbus","action"=>"getdriver"));?>';	
 var oldBranch = '<?php echo $this->row['branchId'];?>';									
 function getDriverBybranch(){
 	dijit.byId('driverId').reset();
@@ -255,6 +301,7 @@ function getDriverBybranch(){
 		url:url_gettecher,
 		content:{
 			'branch_id':branch_id,
+			'staff_type':2,
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -272,20 +319,69 @@ function getDriverBybranch(){
 	});
 }
 
-function Checkchange(){
-	  if (dojo.byId("check_change").checked){
-		  dijit.byId('password').set('required',true); 
-		  dijit.byId('password').set('readOnly',false); 
-		  dijit.byId('confirm_password').set('required',true); 
-		  dijit.byId('confirm_password').set('readOnly',false); 
-		 
-	  }else{
-		  $('#password').val('');
-		  dijit.byId('password').set('required',false); 
-		  dijit.byId('password').set('readOnly',true); 
-		  dijit.byId('confirm_password').set('required',false); 
-		  dijit.byId('confirm_password').set('readOnly',true); 
-	  }
+	function Isold(){
+				dijit.byId('driver_name').attr('required', false);
+				dijit.byId('driver_name_en').attr('required', false);
+
+				dijit.byId("sex").set('readOnly',true);
+				dijit.byId('sex').attr('value', '');
+				dijit.byId('sex').attr('required', false);
+
+				dijit.byId('phone').set('readOnly', true);
+				dijit.byId('phone').attr('required', false);
+
+				dijit.byId('email').set('readOnly', true);
+				dijit.byId('email').attr('required', false);
+
+				dijit.byId('address').set('readOnly', true);
+				dijit.byId('address').attr('required', false);
+
+				dijit.byId('user_name').attr('required', false);
+				dijit.byId('password').attr('required', false);
+				dijit.byId('confirm_password').attr('required', false);
+
+				dijit.byId('user_name').attr('value', '');
+				dijit.byId('password').attr('value', '');
+				dijit.byId('confirm_password').attr('value','');
+		}
+		function IsNew(){
+				dijit.byId('driver_name').attr('required', true);
+				dijit.byId('driver_name_en').attr('required', true);
+
+				dijit.byId("sex").set('readOnly',false);
+				dijit.byId('sex').attr('value', '');
+				dijit.byId('sex').attr('required', true);
+
+				dijit.byId('phone').set('readOnly', false);
+				dijit.byId('phone').attr('required', false);
+
+				dijit.byId('email').set('readOnly', false);
+				dijit.byId('email').attr('required', false);
+
+				dijit.byId('address').set('readOnly', false);
+				dijit.byId('address').attr('required', false);
+
+				dijit.byId('user_name').attr('required', true);
+				dijit.byId('password').attr('required', true);
+				dijit.byId('confirm_password').attr('required', true);
+		}
+
+function isNewDriver(){
+	is_new = $('#is_new_driver').val();
+	if($('#is_new_driver').is(':checked')){
+		$('#old_driver').show();
+		$('#new_driver').hide();
+		$('#new_driver_en').hide();
+		$('#password_acc').hide();
+		Isold();
+	}else{
+		$('#old_driver').hide();
+		$('#new_driver').show();
+		$('#new_driver_en').show();
+		$('#password_acc').show();
+		IsNew();
+	}
 }
+
 
 </script>

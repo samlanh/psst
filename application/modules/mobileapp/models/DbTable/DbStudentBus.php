@@ -56,16 +56,38 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 	function  addStudentBus($_data){
       	$db = $this->getAdapter();
         $db->beginTransaction();
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$code = $dbg->getTeacherCode($_data['branch_id']);
         try{
+			$_arr = array(
+				'branch_id' 		 => $_data['branch_id'],
+				'teacher_code'		 => $code,
+				'teacher_name_kh'	 => $_data['driver_name'],
+				'teacher_name_en'	 => $_data['driver_name_en'],
+				'sex'				 => $_data['sex'],
+				'staff_type'  	 	 => 2,
+				'user_name' 		 => $_data['user_name'],
+				'password' 			 => md5($_data['password']),
+				'tel'  				 => $_data['phone'],
+				'email' 			 => $_data['email'],
+				'address' 			 => $_data['address'],
+				'create_date' 		 => date("Y-m-d"),
+				'user_id'	  		 => $this->getUserId(),
+			
+				);
+			$this->_name='rms_teacher';
+			if(!empty($_data['is_new_driver'])){
+				$driver_id=$_data['driverId'];
+			}else{
+				$driver_id = $this->insert($_arr);
+			}
+
 			$_arr=array(
 				'branchId' 		=> $_data['branch_id'],
 				'busCode' 		=> $_data['busCode'],
 				'busType' 		=> $_data['busType'],
-				'driverId'		=> $_data['driverId'],
+				'driverId'		=> $driver_id,
 				'busPlateNo' 	=> $_data['busPlateNo'],
-
-				'password' 		=>md5($_data['password']),
-
 				'note'   		=> $_data['note'],
 				'createDate' 	=> date("Y-m-d"),
 				'modifyDate' 	=> date("Y-m-d"),

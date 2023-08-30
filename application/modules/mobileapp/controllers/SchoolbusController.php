@@ -55,11 +55,11 @@ class Mobileapp_SchoolbusController extends Zend_Controller_Action
 	      $_data = $this->getRequest()->getPost();
 	      try{
 	        $db->addStudentBus($_data);
-	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
+	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL);
 	      }catch(Exception $e){
 	        $err =$e->getMessage();
 	        Application_Model_DbTable_DbUserLog::writeMessageError($err);
-	        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
+	        Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));
 	      }
 	    }
 		$frm = new Mobileapp_Form_FrmSchoolBus();
@@ -100,14 +100,29 @@ class Mobileapp_SchoolbusController extends Zend_Controller_Action
 		$this->view->frm = $frm;
    }
    function getbusbybranchAction(){
-	if($this->getRequest()->isPost()){
-		$data = $this->getRequest()->getPost();
-		$db = new Mobileapp_Model_DbTable_DbStudentBus();
-		$rows = $db->getStudentBus($data);
-		print_r(Zend_Json::encode($rows));
-		exit();
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Mobileapp_Model_DbTable_DbStudentBus();
+			$rows = $db->getStudentBus($data);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
 	}
-}
+	function getdriverAction(){ 
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+	
+			$_db = new RsvAcl_Model_DbTable_DbBranch();
+    		$row = $_db->getBranchById($data['branch_id']);//get branch info
+    		$schoolOption = $row['schooloptionlist'];
+	
+			$db = new Application_Model_DbTable_DbGlobal();
+			$teacher = $db->getAllTeahcerName($data['branch_id'],$schoolOption,$data['staff_type']);
+			array_unshift($teacher, array ('id' => '', 'name' => $this->tr->translate("SELECT_DRIVER")));
+			print_r(Zend_Json::encode($teacher));
+			exit();
+		}
+	}
 
 
 }

@@ -10,6 +10,7 @@
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql="SELECT id,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
+		(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS studentCode,
 		(SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentName,
 		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
 		amountDay, 

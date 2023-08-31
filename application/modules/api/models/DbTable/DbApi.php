@@ -4632,11 +4632,19 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$label = 'name_en';
 			$teacherName = "teacher_name_en";
 			$branch = "branch_nameen";
+			
+			$sessionTypeI = "Morning";
+			$sessionTypeII = "Evening";
+			$sessionTypeIII = "Full Day";
 			if ($currentLang==1){
 				$teacherName='teacher_name_kh';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
+				
+				$sessionTypeI = "ព្រឹក";
+				$sessionTypeII = "ពេលល្ងាច";
+				$sessionTypeIII = "ពេញមួយថ្ងៃ";
 			}
 				
 			$sql="
@@ -4654,6 +4662,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT rms_itemsdetail.$colunmName FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 					,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
 					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+					,CASE
+								WHEN srq.sessionType = 1 THEN '$sessionTypeI'
+								WHEN srq.sessionType = 2 THEN '$sessionTypeII'
+								WHEN srq.sessionType = 3 THEN '$sessionTypeIII'
+								ELSE 'N/A'
+						END as attendanceTypeTitle
 					
 					
 				FROM `rms_student_request_permission` AS srq
@@ -4728,6 +4742,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$groupId		= empty($_data['groupId'])?0:$_data['groupId'];
 			$_data['amountDay']		= empty($_data['amountDay'])?0:$_data['amountDay'];
 			$_data['phoneNumber']	= empty($_data['phoneNumber'])?0:$_data['phoneNumber'];
+			$_data['sessionType']	= empty($_data['sessionType'])?3:$_data['sessionType'];
 			$_data['stu_id'] = $studentId;
 			
 			$studentInfo = $this->getStudentInformation($_data);
@@ -4746,6 +4761,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				'toDate' 			=> $toDate,
 				'reason' 			=> $_data['reason'],
 				'phoneNumber' 		=> $_data['phoneNumber'],
+				'sessionType' 		=> $_data['sessionType'],
 				'requestStatus' 	=> 0,
 				
 				'createDate' 		=> date("Y-m-d H:i:s"),
@@ -4793,6 +4809,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$_data['amountDay']		= empty($_data['amountDay'])?0:$_data['amountDay'];
 			$_data['phoneNumber']	= empty($_data['phoneNumber'])?0:$_data['phoneNumber'];
 			$requestId	= empty($_data['recordId'])?0:$_data['recordId'];
+			$_data['sessionType']	= empty($_data['sessionType'])?3:$_data['sessionType'];
 			
 			$arr = array(
 				'studentId' 		=> $studentId,
@@ -4801,6 +4818,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				'toDate' 			=> $toDate,
 				'reason' 			=> $_data['reason'],
 				'phoneNumber' 		=> $_data['phoneNumber'],
+				'sessionType' 		=> $_data['sessionType'],
 				
 				'modifyDate' 		=> date("Y-m-d H:i:s"),
 				'status' 			=> $_data['status'],

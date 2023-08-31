@@ -173,8 +173,11 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];
+			$gradingSettingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
+				
 			$_arr = array(
 					'branchId'			=>$_data['branch_id'],
+					'gradingSettingId'	=>$gradingSettingId,
 					'groupId'			=>$_data['group'],
 					'dateInput'			=>date("Y-m-d"),
 			        'examType'			=>$_data['examType'],
@@ -196,9 +199,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$this->_name='rms_grading';		
 			$id=$this->insert($_arr);
 			
-			$gradingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
 			$arrSearch  = array(
-				'gradingId'=>$gradingId
+				'gradingId'=>$gradingSettingId
 				,'subjectId'=>$subjectId
 				,'examType'=>$_data['examType']
 			);
@@ -419,8 +421,12 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
 			$subjectId = $_data['subjectId'];
 			$maxSubjectScore = $_data['maxSubjectScore'];
+			
+			$gradingSettingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
+			
 			$_arr = array(
 					'branchId'			=>$_data['branch_id'],
+					'gradingSettingId'	=>$gradingSettingId,
 					'groupId'			=>$_data['group'],
 					'dateInput'			=>date("Y-m-d"),
 			        'examType'			=>$_data['examType'],
@@ -452,9 +458,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$this->_name='rms_grading_total';
 			$this->delete("gradingId=".$id);
 			
-			$gradingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
 			$arrSearch  = array(
-				'gradingId'=>$gradingId
+				'gradingId'=>$gradingSettingId
 				,'subjectId'=>$subjectId
 				,'examType'=>$_data['examType']
 			);

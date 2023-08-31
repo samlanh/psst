@@ -255,7 +255,6 @@ dojo.require('dijit.form.Textarea');
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.ValidationTextBox");
 
-
 var driver_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
@@ -342,18 +341,12 @@ function isNewDriver(){
 		$('#new_driver').hide();
 		$('#new_driver_en').hide();
 		$('#password_acc').hide();
-		// dijit.byId('driver_name').attr('required', false);
-		// dijit.byId('new_driver_en').attr('required', false);
-		
 		
 	}else{
 		$('#old_driver').hide();
 		$('#new_driver').show();
 		$('#new_driver_en').show();
 		$('#password_acc').show();
-		// dijit.byId('driver_name').attr('required', true);
-		// dijit.byId('new_driver_en').attr('required', false);
-	
 	}
 }
 

@@ -88,7 +88,7 @@ body, #dijitEditorBody {
 											<?php echo $tr->translate("STUDENT");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="text" id="student_id" name ="student_id" >
+											<input type="text" id="studentId" name ="studentId" >
 										</div>
 									</div>
 								</div>
@@ -232,16 +232,16 @@ body, #dijitEditorBody {
 		    queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: true,                      
-		    id: "student_id",
-		    name: "student_id",  
+		    id: "studentId",
+		    name: "studentId",  
 		    class: 'fullside', 
 		    readonly:false,
 		    required:false,
 		    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT");?>",          
 		    onChange: function() {  
-				student_id = dijit.byId('student_id').get('value');
+				studentId = dijit.byId('studentId').get('value');
 		    }
-		}, "student_id");
+		}, "studentId");
 
 		getAllStudenBus();
 	});
@@ -270,36 +270,24 @@ body, #dijitEditorBody {
 			error: function(err) {
 			}
 		});
-		getallstudentname();
+		getStudentByBranch();
 	}
 
-	function getallstudentname(){//
-		var url_data = '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'studentbusschedule','action'=>'getallstudentdata')); ?>';
-		dijit.byId('student_id').reset();
-		branch_id = dijit.byId("branch_id").attr("value");
-		if(branch_id=='' || branch_id==-1){
-			var student_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('student_id').set('store',student_store);  
-			dijit.byId('branch_id').focus();
-			return false;
+	function getStudentByBranch(){
+		dijit.byId("studentId").reset();
+		
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			 dijit.byId('branch_id').focus();
+			 return false;
 		}
-		loadingBlock();
-		dojo.xhrPost({
-			url:url_data,
-			content:{
-				'branch_id':branch_id,
-				'is_maingrade':1,
-				'typeQuery':1,
-			},
-			handleAs:"json",
-			load: function(data) {
-				student_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('student_id').set('store',student_store);  
-			    HideloadingBlock();
-			},
-			error: function(err) {
+		let urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+		
+		contentData = {
+				'branchId':branchId,
+				'customerType':1
 			}
-		});
+		getAllStudentByBranch(urlGet,contentData);
 	}
 
 	function addRow(){
@@ -361,14 +349,14 @@ body, #dijitEditorBody {
 		schoolBus = dijit.byId('schoolBus').get('value');
 		BusCode = dijit.byId("schoolBus").attr('displayedValue');
 
-		student_id = dijit.byId('student_id').get('value');
-		studentName = dijit.byId("student_id").attr('displayedValue');
+		studentId = dijit.byId('studentId').get('value');
+		studentName = dijit.byId("studentId").attr('displayedValue');
 
 		if(branch_id==''){
 			dijit.byId('branch_id').focus();
 			return false;
 		}else if(schoolBus==''){
-			dijit.byId('student_id').focus();
+			dijit.byId('studentId').focus();
 			return false;
 		}
 		
@@ -381,7 +369,7 @@ body, #dijitEditorBody {
 			var bus = dijit.byId('bus_id_'+rowIDArray[n]).get('value');
 			var timeloop = dijit.byId('time_'+rowIDArray[n]).get('value');
 			var typeloop = dijit.byId('type_'+rowIDArray[n]).get('value');
-				if(bus == schoolBus && student==student_id && timeloop==time && typeloop==type){
+				if(bus == schoolBus && student==studentId && timeloop==time && typeloop==type){
                     alert("Exist");
 					return false;
 				}
@@ -403,7 +391,7 @@ body, #dijitEditorBody {
 		}
 			template+='<td width="4%"align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			template+='<td width="4%" align="center">'+no+'</td>';
-			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAME");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="student_id_'+col+'" id="student_id_'+col+'" value="'+student_id+'" type="hidden">'+studentName+'&nbsp;</td>';	
+			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_NAME");?>" required="1" dojoType="dijit.form.TextBox" class="fullside" name="student_id_'+col+'" id="student_id_'+col+'" value="'+studentId+'" type="hidden">'+studentName+'&nbsp;</td>';	
 		
 			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("STUDENT_BUS");?>" dojoType="dijit.form.TextBox" class="fullside" name="bus_id_'+col+'" id="bus_id_'+col+'" value="'+schoolBus+'" type="hidden">'+BusCode+'&nbsp;</td>';
 			template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("TYPE");?>" dojoType="dijit.form.TextBox" class="fullside" name="type_'+col+'" id="type_'+col+'" value="'+type+'" type="hidden">'+typeLabel+'&nbsp;</td>';
@@ -438,13 +426,13 @@ body, #dijitEditorBody {
 
 		branch_id = dijit.byId('branch_id').get('value');
 		bus_id = dijit.byId('schoolBus').get('value');
-		student_id = dijit.byId('student_id').get('value');
+		studentId = dijit.byId('studentId').get('value');
 
 		dojo.xhrPost({
 			url: url_duplicateRl,
 			content:{
 				'bus_id':bus_id,
-				'student_id':student_id,
+				'student_id':studentId,
 				'type':type,
 				'time':time,
 			},

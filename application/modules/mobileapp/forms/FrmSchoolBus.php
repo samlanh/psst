@@ -43,7 +43,69 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		}
 
 		$_busCode= new Zend_Dojo_Form_Element_TextBox('busCode');
-		$_busCode->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+		$_busCode->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("BUS_CODE"),
+		));
+
+		$_driver_name= new Zend_Dojo_Form_Element_TextBox('driver_name');
+		$_driver_name->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("DRIVER_NAME"),
+		));
+
+		$_driver_name_en= new Zend_Dojo_Form_Element_TextBox('driver_name_en');
+		$_driver_name_en->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("DRIVER_NAME_EN"),
+		));
+
+		$_sex= new Zend_Dojo_Form_Element_FilteringSelect('sex');
+		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_sex_pot = array(
+				1=>$this->tr->translate("MALE"),
+				2=>$this->tr->translate("FEMALE"),
+			);
+		$_sex->setMultiOptions($_sex_pot);
+
+
+		$_phone= new Zend_Dojo_Form_Element_TextBox('phone');
+		$_phone->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("Tel"),
+		));
+
+		$_email= new Zend_Dojo_Form_Element_TextBox('email');
+		$_email->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("EMAIL"),
+		));
+
+		$_address= new Zend_Dojo_Form_Element_TextBox('address');
+		$_address->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("ADDRESS"),
+		));
+		
+		$_user_name= new Zend_Dojo_Form_Element_TextBox('user_name');
+		$_user_name->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("USER_NAME"),
+		));
 
 		$_password= new Zend_Dojo_Form_Element_PasswordTextBox('password');
 		$_password->setAttribs(array(
@@ -71,24 +133,22 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 			);
 		$_busType->setMultiOptions($_busType_pot);
 
-		$_driverId=  new Zend_Dojo_Form_Element_FilteringSelect('driverId');
-		$_driverId->setAttribs(array(
-			'dojoType'=>$this->filter,
-			'class'=>'fullside',
-		));
-		$_driver_pot = array(
-				1=>$this->tr->translate("Sokha"),
-				2=>$this->tr->translate("DaWin"));
-		$_driverId->setMultiOptions($_driver_pot);
+		
 
 		$_busPlateNo= new Zend_Dojo_Form_Element_TextBox('busPlateNo');
-		$_busPlateNo->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
+		$_busPlateNo->setAttribs(array(
+			'dojoType'=>$this->tvalidate,
+			'required'=>'true',
+			'class'=>'fullside',
+			'placeholder'=>$tr->translate("BUS_PLATE_NO"),
+		));
 
 		$_note= new Zend_Dojo_Form_Element_TextBox('note');
 		$_note->setAttribs(array(
 			'dojoType'=>$this->tvalidate,
 			'required'=>'false',
 			'class'=>'fullside',
+			'placeholder'=>$tr->translate("NOTE"),
 		));
 
 		$id = new Zend_Form_Element_Hidden("id");
@@ -112,7 +172,6 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 			$_busCode		->setValue($data['busCode']);
 			$_busPlateNo	->setValue($data['busPlateNo']);
 			$_busType		->setValue($data['busType']);
-			$_driverId		->setValue($data['driverId']);
 			$_note			->setValue($data['note']);
 		}
 		
@@ -121,10 +180,17 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		$_branch_id,
 		$create_date,
 		$_busPlateNo,
-		$_driverId,
+		$_sex,
 		$_busType,
 		$_busCode,
 		$_note,
+		$_phone,
+		$_email,
+		$_phone,
+		$_address,
+		$_driver_name,
+		$_driver_name_en,
+		$_user_name,
 		$_password,
 		$_confirm_password
 		));

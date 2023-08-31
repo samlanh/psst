@@ -20,17 +20,24 @@ body, #dijitEditorBody {
 <script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <div class="card">
 	<div class="card-content collapse show">
-		<form  id='add_room' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'mobileapp','controller'=>'schoolbus','action'=>'add')); ?>" 
+			dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				if($('#is_new_driver').is(':checked')){
 
-				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
-					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
-					dojo.byId('password').value = '';
-					dojo.byId('confirm_password').value = '';
-					dijit.byId('password').focus();
-					return false;
+				}else{
+
+					if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
+						alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+						dojo.byId('password').value = '';
+						dojo.byId('confirm_password').value = '';
+						dijit.byId('password').focus();
+						return false;
+					}
+					
 				}
+
 				branch=dijit.byId('branch_id').get('value');
 				if(branch=='' || branch==0){
 					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
@@ -92,15 +99,8 @@ body, #dijitEditorBody {
 										<div class="col-md-7 col-sm-7 col-xs-12">
                                             <?php echo $frm->getElement("busType");?>
 										</div>
-									</div>  <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
-												<?php echo $tr->translate("DRIVER");?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input  id="driverId" >
-                                            <!-- <?php //echo $frm->getElement("driverId");?> -->
-										</div>
-									</div>
+									</div>  
+								
 									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
 												<?php echo $tr->translate("BUS_PLATE_NO");?>
@@ -121,9 +121,80 @@ body, #dijitEditorBody {
 							</div>
 						</div>
 					</div>
-	               
 	            </div>
-	        	<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-user"></i>
+											</div> 
+											<div class="col-md-4 col-sm-4 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DRIVER");?></p>
+											</div> 
+											<span class=" col-md-6 col-sm-6 col-xs-12 text-danger">
+												<p class="tx-20 font-weight-semibold " style="color:red;">
+													<?php echo $tr->translate("OLD_DRIVER");?> 
+													<input type="checkbox" name="is_new_driver" id="is_new_driver" value="1" onClick="isNewDriver()" >
+												</p>
+											</span>
+										</div>
+										<div class="form-group">
+											&nbsp;
+										</div> 
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DRIVER_NAME");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<span id="new_driver">
+													<?php echo $frm->getElement("driver_name");?>
+												</span>
+												<span id="old_driver">
+													<input type="text" id="driverId" name="driverId">
+												</span>
+											</div>
+										</div>
+										<div class="form-group" id="new_driver_en">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DRIVER_NAME_EN");?> <span class="required">*</span>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("driver_name_en");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEX");?></label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("sex");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Tel");?></label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("phone");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EMAIL");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("email");?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ADDRESS");?> 
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("address");?>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	        	<div class="col-md-4 col-sm-4 col-xs-12" id="password_acc" >
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -140,12 +211,17 @@ body, #dijitEditorBody {
 										&nbsp;
 									</div> 
 									<div class="form-group">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_NAME");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("user_name");?>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm->getElement("password");?>
-											<!-- <input dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
-											class="fullside" id="password" name="password" value="" type="password"> -->
 										</div>
 									</div>
 									<div class="form-group">
@@ -160,20 +236,9 @@ body, #dijitEditorBody {
 						</div>
 					</div>
 	            </div>
-				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									
-								</div>
-							</div>
-						</div>
-					</div>
-	            </div>
 	         </div>
 	         <div class="card-box">
-               	<div class="col-md-8 col-sm-8 col-xs-8 border-top mt-20 ptb-10 text-center">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" />
                	</div>
@@ -181,13 +246,15 @@ body, #dijitEditorBody {
 		</form>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script>
-
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dojo.NodeList-manipulate");
 dojo.require('dijit.form.NumberTextBox');
 dojo.require('dijit.form.Textarea');	
 dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.ValidationTextBox");
+
 
 var driver_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
@@ -201,16 +268,46 @@ dojo.ready(function(){
 		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate("SELECT_DRIVER");?>",          
 		onChange: function() {  
+			branch_id = dijit.byId('branch_id').get('value');
+			if(branch_id==''){
+				alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
+				dijit.byId('branch_id').focus();
+				return false;
+			}
+
+			driverId = dijit.byId('driverId').get('value');
+			if(driverId!=0){
+				
+				dijit.byId('driver_name').attr('required', false);
+				dijit.byId('driver_name_en').attr('required', false);
+
+				dijit.byId("sex").set('readOnly',true);
+				dijit.byId('sex').attr('value', '');
+				dijit.byId('sex').attr('required', false);
+
+				dijit.byId('phone').set('readOnly', true);
+				dijit.byId('phone').attr('required', false);
+
+				dijit.byId('email').set('readOnly', true);
+				dijit.byId('email').attr('required', false);
+
+				dijit.byId('address').set('readOnly', true);
+				dijit.byId('address').attr('required', false);
+
+				dijit.byId('user_name').attr('required', false);
+				dijit.byId('password').attr('required', false);
+				dijit.byId('confirm_password').attr('required', false);
+			}
 		}
 	}, "driverId");
-
+	isNewDriver();
 });
 
 function getAllAcademicByBranch(){
 	getDriverBybranch();
 }
 
-var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
+var url_gettecher = '<?php echo $this->url(array("module"=>"mobileapp","controller"=>"schoolbus","action"=>"getdriver"));?>';										
 function getDriverBybranch(){
 	
 	branch_id = dijit.byId('branch_id').get('value');
@@ -223,6 +320,7 @@ function getDriverBybranch(){
 		url:url_gettecher,
 		content:{
 			'branch_id':branch_id,
+			'staff_type':2,
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -237,4 +335,26 @@ function getDriverBybranch(){
 		}
 	});
 }
+function isNewDriver(){
+	is_new = $('#is_new_driver').val();
+	if($('#is_new_driver').is(':checked')){
+		$('#old_driver').show();
+		$('#new_driver').hide();
+		$('#new_driver_en').hide();
+		$('#password_acc').hide();
+		// dijit.byId('driver_name').attr('required', false);
+		// dijit.byId('new_driver_en').attr('required', false);
+		
+		
+	}else{
+		$('#old_driver').hide();
+		$('#new_driver').show();
+		$('#new_driver_en').show();
+		$('#password_acc').show();
+		// dijit.byId('driver_name').attr('required', true);
+		// dijit.byId('new_driver_en').attr('required', false);
+	
+	}
+}
+
 </script>

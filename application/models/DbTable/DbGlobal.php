@@ -1518,13 +1518,15 @@ function getAllgroupStudyNotPass($action=null){
   public function getAllSubjectStudy($schoolOption=null){
   	return $this->getAllSubjectName($schoolOption,1);
   } 
-  public function getAllTeahcerName($branch_id=null,$schooloption=null){
+  public function getAllTeahcerName($branch_id=null,$schooloption=null,$stuff_type=null){
   	$db = $this->getAdapter();
   	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' AND active_type=0 ";
   	if (!empty($branch_id)){
   		$sql.=" AND branch_id = $branch_id";
   	}
-  	
+  	if (!empty($stuff_type)){
+		$sql.=" AND staff_type = $stuff_type";
+	}
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){

@@ -557,6 +557,91 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	function getSumStatusAttendence($stu_id,$group){
 		$db = $this->getAdapter();
+		
+		$sql="
+			SELECT	
+				satd.id
+				,sat.`group_id`
+				,satd.`attendence_status`
+				,sat.for_semester
+				,sat.`date_attendence`
+				,satd.description
+			FROM
+				`rms_student_attendence` AS sat,
+				`rms_student_attendence_detail` AS satd
+			WHERE
+				sat.`id`= satd.`attendence_id`
+				AND sat.type=1
+				AND satd.type=1
+				AND satd.`stu_id`= $stu_id
+				AND sat.`group_id`= $group
+				AND sat.`status`=1 
+				
+			GROUP BY satd.`stu_id`,sat.`id`
+			ORDER BY satd.`attendence_status` DESC
+		";
+		$result = $db->fetchAll($sql);
+		$array = array(
+			"id"=>0,
+			"group_id"=>$group,
+			"attendence_status"=>0,
+			"for_semester"=>0,
+			"date_attendence"=>"",
+			"description"=>"",
+		);
+		$totalComeSemester1=0;
+		$totalASemester1=0;
+		$totalPSemester1=0;
+		$totalLSemester1=0;
+		$totalELSemester1=0;
+		
+		$totalComeSemester2=0;
+		$totalASemester2=0;
+		$totalPSemester2=0;
+		$totalLSemester2=0;
+		$totalELSemester2=0;
+		if(!empty($result)){
+			
+			foreach($result AS $rs){
+				if($rs["attendence_status"] == '1' AND $rs["for_semester"] == '1'){
+					$totalComeSemester1=$totalComeSemester1+1;
+				}else if($rs["attendence_status"] == '2' AND $rs["for_semester"] == '1'){
+					$totalASemester1=$totalASemester1+1;
+				}else if($rs["attendence_status"] == '3' AND $rs["for_semester"] == '1'){
+					$totalPSemester1=$totalPSemester1+1;
+				}else if($rs["attendence_status"] == '4' AND $rs["for_semester"] == '1'){
+					$totalLSemester1=$totalLSemester1+1;
+				}else if($rs["attendence_status"] == '5' AND $rs["for_semester"] == '1'){
+					$totalELSemester1=$totalELSemester1+1;
+					
+				}else if($rs["attendence_status"] == '1' AND $rs["for_semester"] == '2'){
+					$totalComeSemester2=$totalComeSemester2+1;
+				}else if($rs["attendence_status"] == '2' AND $rs["for_semester"] == '2'){
+					$totalASemester2=$totalASemester2+1;
+				}else if($rs["attendence_status"] == '3' AND $rs["for_semester"] == '2'){
+					$totalPSemester2=$totalPSemester2+1;
+				}else if($rs["attendence_status"] == '4' AND $rs["for_semester"] == '2'){
+					$totalLSemester2=$totalLSemester2+1;
+				}else if($rs["attendence_status"] == '5' AND $rs["for_semester"] == '2'){
+					$totalELSemester2=$totalELSemester2+1;
+				}
+			}
+		}
+		$array["totalComeSemester1"] = $totalComeSemester1;
+		$array["totalASemester1"] = $totalASemester1;
+		$array["totalPSemester1"] = $totalPSemester1;
+		$array["totalLSemester1"] = $totalLSemester1;
+		$array["totalELSemester1"] = $totalELSemester1;
+		
+		$array["totalComeSemester2"] = $totalComeSemester2;
+		$array["totalASemester2"] = $totalASemester2;
+		$array["totalPSemester2"] = $totalPSemester2;
+		$array["totalLSemester2"] = $totalLSemester2;
+		$array["totalELSemester2"] = $totalELSemester2;
+		
+		return $array;
+		/*
+		
 		$sql="SELECT
 			sat.`group_id`,
 			satd.`attendence_status`,
@@ -583,6 +668,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			AND satd.`stu_id`=$stu_id
 			AND sat.`group_id`=$group GROUP BY satd.`stu_id` ";
 		return $db->fetchRow($sql);
+		
+		*/
 	}
 	
 	function addReadNews($id){

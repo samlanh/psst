@@ -210,9 +210,19 @@ body, #dijitEditorBody {
 										<div class="settings-main-icon ">
 											<i class="fa fa-key"></i>
 										</div> 
-										<div class="col-md-8 col-sm-8 col-xs-12"> 
+										<div class="col-md-4 col-sm-4 col-xs-12"> 
 											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PASSWORD");?></p>
 										</div> 
+										<!-- <div class="col-md-4 col-sm-4 col-xs-12"> 
+											<input type="checkbox" class=" custom-control-input"  id="check_change" name="check_change" onChange="Checkchange();"  >
+										</div>  -->
+										<span class=" col-md-6 col-sm-6 col-xs-12 text-danger">
+											<p class="tx-20 font-weight-semibold " style="color:red;">
+												<?php echo $tr->translate("CHANGE_PASSWORD");?> 
+												<input type="checkbox" name="check_change" id="check_change" value="1" onClick="Checkchange()" >
+											</p>
+										</span>
+										
 									</div>
 									<div class="form-group">
 										&nbsp;
@@ -279,9 +289,37 @@ dojo.ready(function(){
 		}
 	}, "driverId");
 
+	  try{
+		Checkchange();
+	}catch(e){
+		alert(e);
+	}
+	$(window).keydown(function(event){
+		if(event.keyCode == 13) {
+		  event.preventDefault();
+		  return false;
+		}
+	  });
+
 	  getDriverBybranch();
 	  isNewDriver();
 });
+
+function Checkchange(){
+	  if (dojo.byId("check_change").checked){
+		  dijit.byId('password').set('required',true); 
+		  dijit.byId('password').set('readOnly',false); 
+		  dijit.byId('confirm_password').set('required',true); 
+		  dijit.byId('confirm_password').set('readOnly',false); 
+		 
+	  }else{
+		  $('#password').val('');
+		  dijit.byId('password').set('required',false); 
+		  dijit.byId('password').set('readOnly',true); 
+		  dijit.byId('confirm_password').set('required',false); 
+		  dijit.byId('confirm_password').set('readOnly',true); 
+	  }
+}
 
 function getAllAcademicByBranch(){
 	getDriverBybranch();
@@ -363,7 +401,9 @@ function getDriverBybranch(){
 
 				dijit.byId('user_name').attr('required', true);
 				dijit.byId('password').attr('required', true);
+				dijit.byId('password').set('readOnly', false);
 				dijit.byId('confirm_password').attr('required', true);
+				dijit.byId('confirm_password').set('readOnly', false);
 		}
 
 function isNewDriver(){
@@ -372,13 +412,11 @@ function isNewDriver(){
 		$('#old_driver').show();
 		$('#new_driver').hide();
 		$('#new_driver_en').hide();
-		$('#password_acc').hide();
 		Isold();
 	}else{
 		$('#old_driver').hide();
 		$('#new_driver').show();
 		$('#new_driver_en').show();
-		$('#password_acc').show();
 		IsNew();
 	}
 }

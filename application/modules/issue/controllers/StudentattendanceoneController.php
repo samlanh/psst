@@ -24,13 +24,14 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 						'grade'=> '',
 						'session'=> '',
 						'start_date'=> date('Y-m-d'),
-						'end_date'=>date('Y-m-d'));
+						'end_date'=>date('Y-m-d')
+					);
 			}
 			
 			$this->view->search=$search;
 			$rs_rows = $db->getAllAttendence($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDENT_ID","NAME","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","ROOM","SESSION","ATTENDANCE_DATE","STATUS");
+			$collumns = array("BRANCH","STUDENT_ID","NAME","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","ROOM","SESSION","ATTENDANCE_DATE","IS_COMPLETED","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'studentattendanceone','action'=>'edit',
 			);

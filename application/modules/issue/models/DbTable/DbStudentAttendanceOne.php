@@ -27,21 +27,25 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
 			(SELECT rms_items.$colunmname FROM `rms_items` WHERE `rms_items`.`id`=`g`.`degree` AND `rms_items`.`type`=1 LIMIT 1) AS degree,
 			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE `rms_itemsdetail`.`id`=`g`.`grade` AND `rms_itemsdetail`.`items_type`=1 LIMIT 1) AS grade,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1) AS room,
-			(SELECT`rms_view`.$label FROM `rms_view` WHERE `rms_view`.`type` = 4 AND `rms_view`.`key_code` = `g`.`session`) AS SESSION,
+			CASE    
+				WHEN  sad.forSemester = 1 THEN '".$tr->translate("Semester 1")."'
+				WHEN  sad.forSemester = 2 THEN '".$tr->translate("Semester 2")."'
+			END AS forSemester ,
+			CASE    
+				WHEN  sad.forSession = 1 THEN '".$tr->translate("MORNING")."'
+				WHEN  sad.forSession = 2 THEN '".$tr->translate("AFTERNOON")."'
+				WHEN  sad.forSession = 3 THEN '".$tr->translate("FULL_DAY")."'
+			END AS forSession ,
 			sad.`attendanceDate`,
 			CASE    
-			WHEN  isCompleted = 0 THEN '".$tr->translate("PENDING")."'
-			WHEN  isCompleted = 1 THEN '".$tr->translate("COMPLETED")."'
+			WHEN  sad.isCompleted = 0 THEN '".$tr->translate("PENDING")."'
+			WHEN  sad.isCompleted = 1 THEN '".$tr->translate("COMPLETED")."'
 			END AS isCompleted 
 			";
 	$sql.=$dbp->caseStatusShowImage("sad.`status`");
-	$sql.="	FROM 
-			rms_student_attendence_detail AS sad,
-			rms_group AS g
-		WHERE 
-			g.id=sad.groupId
-			AND sad.type = 2 ";
+	$sql.="	 FROM rms_student_attendence_detail AS sad 
+			LEFT JOIN `rms_group` AS g ON sad.`groupId`=g.`id` 
+			WHERE sad.`type`=2 ";
     	$where = ' ';
     	$from_date =(empty($search['start_date']))? '1': " sad.`attendanceDate` >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sad.`attendanceDate` <= '".$search['end_date']." 23:59:59'";
@@ -58,11 +62,11 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
     	if(!empty($search['grade'])){
     		$where.=" AND  g.grade =".$search['grade'];
     	}
-    	if(!empty($search['session'])){
-    		$where.=" AND `g`.`session` =".$search['session'];
+    	if(!empty($search['session_type'])){
+    		$where.=" AND sad.forSession =".$search['session_type'];
     	}
-   		if(!empty($search['room'])){
-			$where.=" AND `g`.`room_id` =".$search['room'];
+   		if(!empty($search['for_semester'])){
+			$where.=" AND sad.forSemester =".$search['for_semester'];
 		}
     	$order=" ORDER BY sad.id DESC ";
     	$where.=$dbp->getAccessPermission('sad.branchId');
@@ -98,40 +102,27 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
    	}
-   	public function editStudentAttendeceOne($_data,$id){
+   	public function editStudentAttendeceOne($_data){
    		$db = $this->getAdapter();
    		$db->beginTransaction();
    		try{
    			$_arr = array(
-   					'branch_id'		=>$_data['branch_id'],
-   					'group_id'		=>$_data['group'],
-   					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
-   					'modify_date'	=>date("Y-m-d"),
-   					'subject_id'	=>$_data['subject'],
-   					'for_semester'	=> $_data['for_semester'],
-   					'note'			=>$_data['note'],
-   					'user_id'		=>$this->getUserId(),
-   					'for_session'	=>$_data['session_type'],
-   					'type'			=>1, //for attendence
+			
+				'stu_id'		=>$_data['stu_name'],
+				'attendence_status'=>$_data['attedence'],
+				'description'	=>$_data['comment'],
+				'type'			=>2, //from one student 
+				'branchId'		=>$_data['branch_id'],
+				'groupId'		=>$_data['group'],
+				'forSemester'	=>$_data['for_semester'],
+				'forSession'	=>$_data['session_type'],
+				'attendanceDate'=>date("Y-m-d",strtotime($_data['attendence_date'])),
+				'modifyDate'	=>date("Y-m-d"),
+				'status'		=>$_data['status'],
    			);
-   			$this->_name = "rms_student_attendence";
-   			$where = " id = ".$_data['att_id'];
+   			$this->_name = "rms_student_attendence_detail";
+   			$where = " id = ".$_data['id'];
    			$this->update($_arr,$where);
-   			
-   			$this->_name ='rms_student_attendence_detail';
-   			if ($_data['status']==1){
-   				$arr = array(
-   					'attendence_id'	=>$_data['att_id'],
-   					'stu_id'		=>$_data['stu_name'],
-   					'attendence_status'=>$_data['attedence'],
-   					'description'	=>$_data['comment'],
-   				);
-   				$where = " id = $id ";
-   				$this->update($arr,$where);
-   			}else{
-   				$where = " id = $id ";
-   				$this->delete($where);
-   			}
    			$db->commit();
    		}catch (Exception $e){
    			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -176,6 +167,13 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 			";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('sa.branch_id');
+		return $db->fetchRow($sql);
+	}
+	function getAttendenceDetailByID($id){
+		$db=$this->getAdapter();
+		$sql="SELECT sad.* FROM rms_student_attendence_detail as sad WHERE sad.type=2 and sad.`id` = $id";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('sad.branchId');
 		return $db->fetchRow($sql);
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){

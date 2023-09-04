@@ -22,20 +22,20 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 						'group' => '',
 						'study_year'=> '',
 						'grade'=> '',
-						'session'=> '',
+						'session_type'=> '',
+						'for_semester'=> 0,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d')
 					);
 			}
-			
 			$this->view->search=$search;
 			$rs_rows = $db->getAllAttendence($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDENT_ID","NAME","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","ROOM","SESSION","ATTENDANCE_DATE","IS_COMPLETED","STATUS");
+			$collumns = array("BRANCH","STUDENT_ID","NAME","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","FOR_SEMESTER","SESSION_TYPE","ATTENDANCE_DATE","IS_COMPLETED","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'studentattendanceone','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'stu_name'=>$link,'group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,'stu_name'=>$link,'group_name'=>$link,'academy'=>$link,));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -86,16 +86,19 @@ class Issue_StudentattendanceoneController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				$rs = $db->editStudentAttendeceOne($_data,$id);
+				$rs = $db->editStudentAttendeceOne($_data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/studentattendanceone/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$this->view->row = $db->getAttendencetByID($id);
-		
-		
+
+		$row= $db->getAttendenceDetailByID($id);
+		$this->view->row = 	$row;
+		if ($row['isCompleted']!=0){
+    		Application_Form_FrmMessage::Sucessfull("Already Completed! ","/issue/studentattendanceone/index");
+    	}
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$this->view->group = $db_global->getAllGroupName();
 		

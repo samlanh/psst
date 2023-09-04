@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_ATTENDENCE"));
-	$row_sub=$this->rows_sub;
+print_r($this->row);
 ?>	
 <head>
   <meta charset="utf-8">
@@ -121,7 +121,7 @@ span.red {
 											<select class="fullside" tabindex="15" name="branch_id" queryExpr="*${0}*" autoComplete="false" id="branch_id" dojoType="dijit.form.FilteringSelect"  >
 												<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
 												<?php if(!empty($this->branch_id))foreach ($this->branch_id as $row){?>
-												<option value="<?php echo $row['id']?>" <?php if($row['id']==$this->row['branch_id']){echo "selected";}?>><?php echo $row['name']?></option>
+												<option value="<?php echo $row['id']?>" <?php if($row['id']==$this->row['branchId']){echo "selected";}?>><?php echo $row['name']?></option>
 												<?php }?>
 											</select>
 										</div>
@@ -162,7 +162,7 @@ span.red {
 									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ATTENDANCE_DATE");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="attendence_date" name="attendence_date" type="text" value="<?php echo $this->row['date_attendence'];?>">
+											<input dojoType="dijit.form.DateTextBox" required="true" constraints="{datePattern:'dd/MM/yyyy'}" class="fullside" id="attendence_date" name="attendence_date" type="text" value="<?php echo $this->row['attendanceDate'];?>">
 										</div>
 									</div>
 									
@@ -170,8 +170,8 @@ span.red {
 										<label class="control-label bold  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-												<option value="1" <?php if($this->row['for_semester']==1){echo "selected";}?>><?php echo $tr->translate("SEMESTER1");?></option>
-												<option value="2" <?php if($this->row['for_semester']==2){echo "selected";}?>><?php echo $tr->translate("SEMESTER2");?></option>
+												<option value="1" <?php if($this->row['forSemester']==1){echo "selected";}?>><?php echo $tr->translate("SEMESTER1");?></option>
+												<option value="2" <?php if($this->row['forSemester']==2){echo "selected";}?>><?php echo $tr->translate("SEMESTER2");?></option>
 											</select>
 										</div>
 									</div>
@@ -179,9 +179,9 @@ span.red {
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION_TYPE");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="session_type" name="session_type" type="text">								
-												<option value="1" <?php if($this->row['for_session']==1){echo "selected";}?>><?php echo $tr->translate("MORNING");?></option>
-												<option value="2" <?php if($this->row['for_session']==2){echo "selected";}?>><?php echo $tr->translate("EVENING");?></option>
-												<option value="3" <?php if($this->row['for_session']==3){echo "selected";}?>><?php echo $tr->translate("FULL_DAY");?></option>
+												<option value="1" <?php if($this->row['forSession']==1){echo "selected";}?>><?php echo $tr->translate("MORNING");?></option>
+												<option value="2" <?php if($this->row['forSession']==2){echo "selected";}?>><?php echo $tr->translate("EVENING");?></option>
+												<option value="3" <?php if($this->row['forSession']==3){echo "selected";}?>><?php echo $tr->translate("FULL_DAY");?></option>
 											</select>
 										</div>
 									</div>
@@ -207,16 +207,11 @@ span.red {
 										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("COMMENT");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input class="fullside" dojoType="dijit.form.TextBox"  id="comment" name="comment" value="<?php echo $this->row['description']?>" />
-											<input class="fullside" type="hidden" dojoType="dijit.form.TextBox"  id="att_id" name="att_id" value="<?php echo $this->row['attendence_id']?>" />
+											<input type="hidden" class="fullside" dojoType="dijit.form.TextBox"  id="id" name="id" value="<?php echo $this->row['id']?>" />
 										</div>
 									</div>
 									
-									<div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->row['note']?>" type="text" style=" height: 60px !important;"  >
-										</div>
-									</div>
+									
 									<div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -297,7 +292,7 @@ span.red {
 			 getStudentByGroup(<?php echo $this->row['stu_id']?>);
 			}
 		}, "group");
-		getallgroupby(<?php echo $this->row['group_id']?>);
+		getallgroupby(<?php echo $this->row['groupId']?>);
 		
 		var branch_id = dijit.byId('branch_id');
 	 	branch_id.on('change', function(evt) {

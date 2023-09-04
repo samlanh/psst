@@ -65,66 +65,91 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			$branch = $_data['branch_id'];
 			$group = $_data['group'];
 			$date = $_data['attendence_date'];
+			
+			$dateObj = new DateTime($date);
+			$attendenceDate =  $dateObj->format("Y-m-d");
+		
 			$for_semester = $_data['for_semester'];
 			$session = $_data['session_type'];
 			$sql="select id from rms_student_attendence where branch_id = $branch and group_id = $group and for_semester = $for_semester and for_session = $session and date_attendence = '$date' and type=1 limit 1";
 			$id = $db->fetchOne($sql);
+			$checking = $id;
 			
 			if(empty($id)){
 				$_arr = array(
-					'branch_id'		=>$_data['branch_id'],
-					'group_id'		=>$_data['group'],
-					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
-					'date_create'	=>date("Y-m-d"),
-					'modify_date'	=>date("Y-m-d"),
-					'subject_id'	=>$_data['subject'],
-					'for_semester'	=> $_data['for_semester'],
-					'note'			=>$_data['note'],
-					'status'		=>1,
-					'user_id'		=>$this->getUserId(),
-					'for_session'	=>$_data['session_type'],
-					'type'			=>1, //for attendence
+					'branch_id'			=>$_data['branch_id'],
+					'group_id'			=>$_data['group'],
+					'date_attendence'	=>$attendenceDate,
+					
+					'for_semester'		=> $_data['for_semester'],
+					'note'				=>$_data['note'],
+					'status'			=>1,
+					'date_create'		=>date("Y-m-d H:i:s"),
+					'modify_date'		=>date("Y-m-d H:i:s"),
+					'user_id'			=>$this->getUserId(),
+					'for_session'		=>$_data['session_type'],
+					'type'				=>1, //for attendence
 				);
 				$id=$this->insert($_arr);
 			}
-			$stu_come='';$stu_absent='';
+			
+			if(!empty($checking)){
+				$this->_name='rms_student_attendence_detail';
+				$this->delete("attendence_id=".$id);
+			}
+			
+			$_data['attendenceDate'] = $date;
+			$scheduleTime =$this->getScheduleTimeStudty($_data);
 			$dbpush = new Application_Model_DbTable_DbGlobal();
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					if($_data['attendence'.$i]!=1){//ក្រៅពីមក sent all
-						if(empty($stu_absent)){
-							$stu_absent=$_data['student_id'.$i];
-						}else{
-							$stu_absent=$stu_absent.','.$_data['student_id'.$i];
-						}
-						
-						$arr = array(
-							'attendence_id'	=>$id,
-							'stu_id'		=>$_data['student_id'.$i],
-							'attendence_status'=>$_data['attendence'.$i],
-							'description'	=>$_data['comment'.$i],
+					
+					if(!empty($_data['permissionRecordId'.$i])){
+						$_arr = array(
+							'isCompleted'		=>1,
 						);
 						$this->_name ='rms_student_attendence_detail';
-						$this->insert($arr);
+						$where="id=".$_data['permissionRecordId'.$i];
+						$this->update($_arr, $where);
 					}
-					else{
-						if(empty($stu_come)){
-							$stu_come=$_data['student_id'.$i];
-						}else{
-							$stu_come=$stu_come.','.$_data['student_id'.$i];
+					
+					if(!empty($scheduleTime)) {
+						foreach($scheduleTime as $keyTime => $rowTime){
+							$indexKeyTime = $keyTime+1;
+							if($_data['attendenceStatus'.$i.'_'.$indexKeyTime]!=1){
+								$arr = array(
+									'attendence_id'		=>$id,
+									'stu_id'			=>$_data['student_id'.$i],
+									'attendence_status'	=>$_data['attendenceStatus'.$i.'_'.$indexKeyTime],
+									'description'		=>$_data['comment'.$i.'_'.$indexKeyTime],
+									'subjectId'			=>$_data['subjectId'.$i.'_'.$indexKeyTime],
+									'fromHour'			=>$_data['fromHour'.$i.'_'.$indexKeyTime],
+									'toHour'			=>$_data['toHour'.$i.'_'.$indexKeyTime],
+								);
+								$this->_name ='rms_student_attendence_detail';
+								$this->insert($arr);
+							}
+						}
+					}else{
+						if($_data['attendenceStatus'.$i]!=1){
+							$arr = array(
+								'attendence_id'		=>$id,
+								'stu_id'			=>$_data['student_id'.$i],
+								'attendence_status'	=>$_data['attendenceStatus'.$i],
+								'description'		=>$_data['comment'.$i],
+							);
+							$this->_name ='rms_student_attendence_detail';
+							$this->insert($arr);
 						}
 						
 					}
 				}
-				
-				$dbpush->pushNotification($stu_absent,null,3,2);//absent
-				$dbpush->pushNotification($stu_come,null,3,2);//come
 			}
 		  $db->commit();
+		  return $id;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			Application_Form_FrmMessage::message("INSERT_FAIL");
 			$db->rollBack();
 		}
    }
@@ -132,41 +157,70 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$_arr = array(
-					'branch_id'=>$_data['branch_id'],
-					'group_id'=>$_data['group'],
-					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
-					'modify_date'=>date("Y-m-d"),
-					'subject_id'=> $_data['subject'],
-					'status'=>$_data['status'],
-					'for_semester'=> $_data['for_semester'],
-					'note'=>$_data['note'],
-					'user_id'=>$this->getUserId(),
-					'for_session'=>$_data['session_type'],
-					'type'=>1, //for attendence
-			);
-			$where="id=".$_data['id'];
-			$id=$this->update($_arr, $where);
 			
-		   $this->_name='rms_student_attendence_detail';
-		   $this->delete("attendence_id=".$_data['id']);
+			$date = $_data['attendence_date'];
+			$dateObj = new DateTime($date);
+			$attendenceDate =  $dateObj->format("Y-m-d");
+			
+			$status = empty($_data['status'])?0:1;
+			$_arr = array(
+					'branch_id'			=>$_data['branch_id'],
+					'group_id'			=>$_data['group'],
+					'date_attendence'	=>$attendenceDate,
+					'modify_date'		=>date("Y-m-d H:i:s"),
+					'status'			=>$status,
+					'for_semester'		=>$_data['for_semester'],
+					'note'				=>$_data['note'],
+					'user_id'			=>$this->getUserId(),
+					'for_session'		=>$_data['session_type'],
+					'type'				=>1, //for attendence
+			);
+			$id = $_data['id'];
+			$where="id=".$id;
+			$this->update($_arr, $where);
+			
+			$this->_name='rms_student_attendence_detail';
+			$this->delete("attendence_id=".$_data['id']);
 		  
+			$_data['attendenceDate'] = $date;
+			$scheduleTime =$this->getScheduleTimeStudty($_data);
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					if ($_data['attedence'.$i]!=1){
-						$arr = array(
-							'attendence_id'=>$_data['id'],
-							'stu_id'=>$_data['student_id'.$i],
-							'attendence_status'=>$_data['attedence'.$i],
-							'description'=>$_data['comment'.$i],
-						);
-						$this->_name ='rms_student_attendence_detail';
-						$this->insert($arr);
+					if(!empty($scheduleTime)) {
+						foreach($scheduleTime as $keyTime => $rowTime){
+							$indexKeyTime = $keyTime+1;
+							if($_data['attendenceStatus'.$i.'_'.$indexKeyTime] !=1){
+								$arr = array(
+									'attendence_id'		=>$id,
+									'stu_id'			=>$_data['student_id'.$i],
+									'attendence_status'	=>$_data['attendenceStatus'.$i.'_'.$indexKeyTime],
+									'description'		=>$_data['comment'.$i.'_'.$indexKeyTime],
+									'subjectId'			=>$_data['subjectId'.$i.'_'.$indexKeyTime],
+									'fromHour'			=>$_data['fromHour'.$i.'_'.$indexKeyTime],
+									'toHour'			=>$_data['toHour'.$i.'_'.$indexKeyTime],
+								);
+								$this->_name ='rms_student_attendence_detail';
+								$this->insert($arr);
+							}
+						}
+					}else{
+						if($_data['attendenceStatus'.$i]!=1){
+							$arr = array(
+								'attendence_id'		=>$id,
+								'stu_id'			=>$_data['student_id'.$i],
+								'attendence_status'	=>$_data['attendenceStatus'.$i],
+								'description'		=>$_data['comment'.$i],
+							);
+							$this->_name ='rms_student_attendence_detail';
+							$this->insert($arr);
+						}
+						
 					}
 				}
 			}
 		  $db->commit();
+		  return $id;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
@@ -218,6 +272,8 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			$sql="SELECT
 					sgh.`stu_id`,
 					s.stu_code AS stu_code,
+					s.stu_khname AS stuNameKH,
+					CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin,
 					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
 					s.sex AS sex,
 					(SELECT name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS gender,
@@ -240,6 +296,8 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			$sql="SELECT 
 					sgh.`stu_id`,
 					 s.stu_code AS stu_code,
+					 s.stu_khname AS stuNameKH,
+					 CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin,
 					CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name,
 					s.sex AS sex,
 					(SELECT name_kh from rms_view where rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) AS gender";
@@ -311,5 +369,424 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 					and sa.id = $att_id
 					and sad.stu_id = $stu_id ";
 		return $db->fetchRow($sql);
+	}
+	
+	function getStudentByGroupHTML($data=array()){
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$textareastyle=" font-family: 'Khmer OS Battambang' ";
+		
+		$groupId = empty($data['group']) ? 0 : $data['group'];
+		date("Y-m-d",strtotime($data['attendenceDate']));
+		$scheduleTime =$this->getScheduleTimeStudty($data);
+		
+		$index = empty($data['keyrow'])?0:$data['keyrow'];
+		$strHeadRow = "";
+		$strStudent = "";
+		$identity="";
+		
+		$strHeadRow.='<tr class="head-td" align="center">';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("NUM").'</th>';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("STUDENT_ID").'</th>';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("STUDEN_NAME").'</th>';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("GENDER").'</th>';
+			if(!empty($scheduleTime)) {
+				foreach($scheduleTime as $key => $rowTime){
+					$strHeadRow.='<th scope="col" >';
+					$strHeadRow.=$rowTime["subjectSortcut"].'</br>';
+					$strHeadRow.=$rowTime["timeTitle"];
+					$strHeadRow.='</th>';
+				}
+			}else{
+				$strHeadRow.='<th scope="col" >'.$tr->translate("ATTENDANCE").'</th>';
+			}
+		$strHeadRow.='</tr>';
+		
+		
+		if(!empty($data['attendanceId'])){
+			$attendanceDateOld = "";
+			$attendanceRow = $this->getAttendencetByID($data['attendanceId']);
+			if(!empty($attendanceRow)){
+				$attendanceRowDate = new DateTime($attendanceRow["date_attendence"]);
+				$attendanceDateOld =  $attendanceRowDate->format("Y-m-d");
+			}
+			
+			$date = new DateTime($data['attendenceDate']);
+			$currentAttendenceDate =  $date->format("Y-m-d");
+			if($attendanceDateOld==$currentAttendenceDate){
+				$template = $this->getTemplateStudentAttendanceEdit($data);
+				$strStudent = $template["rowStudentHTML"];
+				$index = $template["keyrow"];
+				$identity = $template["identity"];
+			}else{
+				$template = $this->getTemplateStudentAttendance($data);
+				$strStudent = $template["rowStudentHTML"];
+				$index = $template["keyrow"];
+				$identity = $template["identity"];
+			}
+			
+		}else{
+			$template = $this->getTemplateStudentAttendance($data);
+			$strStudent = $template["rowStudentHTML"];
+			$index = $template["keyrow"];
+			$identity = $template["identity"];
+		}
+		
+		$arr = array(
+   			'tableHeadHTML' => $strHeadRow,
+   			'rowStudentHTML' => $strStudent,
+   			'identity' => $identity,
+   			'keyrow' =>$index,
+   			'scheduleTime' =>$scheduleTime,
+		);
+		return $arr;
+	
+	}
+	
+	function getTemplateStudentAttendance($data){
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$textareastyle=" font-family: 'Khmer OS Battambang' ";
+		
+		$attendanceType = array(
+				array("id"=>1,"name"=>$tr->translate("PRESENT")),
+				array("id"=>2,"name"=>$tr->translate("ABSENT")),
+				array("id"=>3,"name"=>$tr->translate("PERMISSION")),
+				array("id"=>4,"name"=>$tr->translate("LATE")),
+				array("id"=>5,"name"=>$tr->translate("EARLY_LEAVE")),
+		);
+		
+		
+		$groupId = empty($data['group']) ? 0 : $data['group'];
+		date("Y-m-d",strtotime($data['attendenceDate']));
+		$rowStudent = $this->getStudentByGroup($groupId,$data);
+		$scheduleTime =$this->getScheduleTimeStudty($data);
+		
+		$index = empty($data['keyrow'])?0:$data['keyrow'];
+		
+		$strStudent = "";
+		$identity="";
+		if(!empty($rowStudent)) {
+			foreach($rowStudent as $key => $row){
+				$index = $index+1;
+				if (empty($identity)){
+					$identity = $index;
+				}else{ 
+					$identity = $identity.",".$index;
+				}
+		
+				$num = $key+1;
+				$gender=$tr->translate("FEMALE");
+				if($row["sex"]==1){
+					$gender=$tr->translate("MALE");
+				}
+				
+				$data["studentId"] = $row["stu_id"];
+				$attendanceTypeValue=0;
+				$permissionRecordId=0;
+				$reason="";
+				$checkStuP = $this->getCheckStudentPermission($data);
+				if(!empty($checkStuP)){
+					$attendanceTypeValue= $checkStuP["attendence_status"];
+					$permissionRecordId= $checkStuP["id"];
+					$reason= $checkStuP["description"];
+				}
+				
+				$strStudent.='<tr class="rowData" >';
+					$strStudent.='<td data-label="'.$tr->translate("NUM").'">'.$num.'</td>';
+					$strStudent.='<td data-label="'.$tr->translate("STUDENT_ID").'">'.$row["stu_code"].'</td>';
+					$strStudent.='<td data-label="'.$tr->translate("STUDEN_NAME").'">';
+						$strStudent.=$row["stuNameKH"].'<br />';
+						$strStudent.=$row["stuNameLatin"];
+						$strStudent.='
+						<input type="hidden" name="student_id'.$index.'" id="student_id'.$index.'"  value="'.$row["stu_id"].'" >
+						<input type="hidden" name="permissionRecordId'.$index.'" id="permissionRecordId'.$index.'"  value="'.$permissionRecordId.'" >
+						';
+					$strStudent.='</td>';
+					$strStudent.='<td data-label="'.$tr->translate("GENDER").'">'.$gender.'</td>';
+					if(!empty($scheduleTime)) {
+						foreach($scheduleTime as $keyTime => $rowTime){
+							
+							$indexKeyTime = $keyTime+1;
+							$strStudent.='<td data-label="'.$rowTime["subjectSortcut"].' '.$rowTime["timeTitle"].'">';
+								$strStudent.='
+									<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="_changeSetNextTimeValue('.$index.','.$indexKeyTime.');" name="attendenceStatus'.$index.'_'.$indexKeyTime.'" placeHolder="'.$tr->translate("attendanceType").'" id="attendenceStatus'.$index.'_'.$indexKeyTime.'" autoComplete="false" queryExpr="*${0}*">
+									';
+									
+									if (!empty($attendanceType)) foreach ($attendanceType as $attRow){
+										$selected="";
+										if($attendanceTypeValue==$attRow['id']){
+											$selected = "selected";
+										}
+										$strStudent.='<option '.$selected.' value="'.$attRow['id'].'">'.$attRow['name'].'</option>';
+									}
+								$strStudent.='</select>
+								</br>';
+								$strStudent.='
+								<input dojoType="dijit.form.Textarea"  class="fullside" onKeyup="_setNextTimeReason('.$index.','.$indexKeyTime.');" id="comment'.$index.'_'.$indexKeyTime.'"  name="comment'.$index.'_'.$indexKeyTime.'" value="'.$reason.'" type="text" style="'.$textareastyle.'">
+								<input type="hidden" name="subjectId'.$index.'_'.$indexKeyTime.'" id="subjectId'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["subject_id"].'" >
+								<input type="hidden" name="scheduleDetailId'.$index.'_'.$indexKeyTime.'" id="scheduleDetailId'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["id"].'" >
+								<input type="hidden" name="fromHour'.$index.'_'.$indexKeyTime.'" id="fromHour'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["from_hour"].'" >
+								<input type="hidden" name="toHour'.$index.'_'.$indexKeyTime.'" id="toHour'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["to_hour"].'" >
+								';
+							$strStudent.='</td>';
+						}
+					}else{
+						$strStudent.='<td data-label="'.$tr->translate("ATTENDANCE").'">';
+							$strStudent.='
+									<select dojoType="dijit.form.FilteringSelect" class="fullside" name="attendenceStatus'.$index.'" placeHolder="'.$tr->translate("attendanceType").'" id="attendenceStatus'.$index.'" autoComplete="false" queryExpr="*${0}*">
+									';
+									if (!empty($attendanceType)) foreach ($attendanceType as $attRow){
+										$selected="";
+										if($attendanceTypeValue==$attRow['id']){
+											$selected = "selected";
+										}
+										$strStudent.='<option '.$selected.' value="'.$attRow['id'].'">'.$attRow['name'].'</option>';
+									}
+								$strStudent.='</select>
+								</br>';
+								$strStudent.='
+								<input dojoType="dijit.form.Textarea"  class="fullside" name="comment'.$index.'" type="text" value="'.$reason.'" style="'.$textareastyle.'">
+								';
+						$strStudent.='</td>';
+					}
+			
+				$strStudent.='</tr>';
+			}
+		}
+		$arr = array(
+   			'rowStudentHTML' => $strStudent,
+   			'identity' => $identity,
+   			'keyrow' =>$index,
+		);
+		return $arr;
+	}
+	
+	function getTemplateStudentAttendanceEdit($data){
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$textareastyle=" font-family: 'Khmer OS Battambang' ";
+		
+		$attendanceType = array(
+				array("id"=>1,"name"=>$tr->translate("PRESENT")),
+				array("id"=>2,"name"=>$tr->translate("ABSENT")),
+				array("id"=>3,"name"=>$tr->translate("PERMISSION")),
+				array("id"=>4,"name"=>$tr->translate("LATE")),
+				array("id"=>5,"name"=>$tr->translate("EARLY_LEAVE")),
+		);
+		
+		
+		$groupId = empty($data['group']) ? 0 : $data['group'];
+		date("Y-m-d",strtotime($data['attendenceDate']));
+		$rowStudent = $this->getStudentByGroup($groupId,$data);
+		$scheduleTime =$this->getScheduleTimeStudty($data);
+		
+		$index = empty($data['keyrow'])?0:$data['keyrow'];
+		
+		$strStudent = "";
+		$identity="";
+		if(!empty($rowStudent)) {
+			foreach($rowStudent as $key => $row){
+				$index = $index+1;
+				if (empty($identity)){
+					$identity = $index;
+				}else{ 
+					$identity = $identity.",".$index;
+				}
+		
+				$num = $key+1;
+				$gender=$tr->translate("FEMALE");
+				if($row["sex"]==1){
+					$gender=$tr->translate("MALE");
+				}
+				
+				$data["studentId"] = $row["stu_id"];
+				
+				$strStudent.='<tr class="rowData" >';
+					$strStudent.='<td data-label="'.$tr->translate("NUM").'">'.$num.'</td>';
+					$strStudent.='<td data-label="'.$tr->translate("STUDENT_ID").'">'.$row["stu_code"].'</td>';
+					$strStudent.='<td data-label="'.$tr->translate("STUDEN_NAME").'">';
+						$strStudent.=$row["stuNameKH"].'<br />';
+						$strStudent.=$row["stuNameLatin"];
+						$strStudent.='
+							<input type="hidden" name="student_id'.$index.'" id="student_id'.$index.'"  value="'.$row["stu_id"].'" >
+						';
+					$strStudent.='</td>';
+					$strStudent.='<td data-label="'.$tr->translate("GENDER").'">'.$gender.'</td>';
+					if(!empty($scheduleTime)) {
+						foreach($scheduleTime as $keyTime => $rowTime){
+							
+							$data["fromHour"] = $rowTime["from_hour"];
+							$data["toHour"] = $rowTime["to_hour"];
+							$data["subjectId"] = $rowTime["subject_id"];
+							$attendanceTypeValue=0;
+							$detailId=0;
+							$reason="";
+							$checkStuP = $this->getCheckAttendaceDetailForEditAction($data);
+							if(!empty($checkStuP)){
+								$attendanceTypeValue= $checkStuP["attendence_status"];
+								$reason= $checkStuP["description"];
+								$detailId= $checkStuP["id"];
+							}
+							
+							$indexKeyTime = $keyTime+1;
+							$strStudent.='<td data-label="'.$rowTime["subjectSortcut"].' '.$rowTime["timeTitle"].'">';
+								$strStudent.='
+									<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="_changeSetNextTimeValue('.$index.','.$indexKeyTime.');" name="attendenceStatus'.$index.'_'.$indexKeyTime.'" placeHolder="'.$tr->translate("attendanceType").'" id="attendenceStatus'.$index.'_'.$indexKeyTime.'" autoComplete="false" queryExpr="*${0}*">
+									';
+									
+									if (!empty($attendanceType)) foreach ($attendanceType as $attRow){
+										$selected="";
+										if($attendanceTypeValue==$attRow['id']){
+											$selected = "selected";
+										}
+										$strStudent.='<option '.$selected.' value="'.$attRow['id'].'">'.$attRow['name'].'</option>';
+									}
+								$strStudent.='</select>
+								</br>';
+								$strStudent.='
+								<input dojoType="dijit.form.Textarea"  class="fullside" onKeyup="_setNextTimeReason('.$index.','.$indexKeyTime.');" id="comment'.$index.'_'.$indexKeyTime.'" name="comment'.$index.'_'.$indexKeyTime.'" value="'.$reason.'" type="text" style="'.$textareastyle.'">
+								<input type="hidden" name="subjectId'.$index.'_'.$indexKeyTime.'" id="subjectId'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["subject_id"].'" >
+								
+								<input type="hidden" name="detailId'.$index.'_'.$indexKeyTime.'" id="detailId'.$index.'_'.$indexKeyTime.'"  value="'.$detailId.'" >
+								<input type="hidden" name="fromHour'.$index.'_'.$indexKeyTime.'" id="fromHour'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["from_hour"].'" >
+								<input type="hidden" name="toHour'.$index.'_'.$indexKeyTime.'" id="toHour'.$index.'_'.$indexKeyTime.'"  value="'.$rowTime["to_hour"].'" >
+								';
+							$strStudent.='</td>';
+						}
+					}else{
+						$attendanceTypeValue=0;
+						$detailId=0;
+						$reason="";
+						
+						$data["noSetSchdeule"] ="1";
+						$checkStuP = $this->getCheckAttendaceDetailForEditAction($data);
+						if(!empty($checkStuP)){
+							$attendanceTypeValue= $checkStuP["attendence_status"];
+							$reason= $checkStuP["description"];
+							$detailId= $checkStuP["id"];
+						}
+						$strStudent.='<td data-label="'.$tr->translate("ATTENDANCE").'">';
+							$strStudent.='
+									<select dojoType="dijit.form.FilteringSelect" class="fullside" name="attendenceStatus'.$index.'" placeHolder="'.$tr->translate("attendanceType").'" id="attendenceStatus'.$index.'" autoComplete="false" queryExpr="*${0}*">
+									';
+									if (!empty($attendanceType)) foreach ($attendanceType as $attRow){
+										$selected="";
+										if($attendanceTypeValue==$attRow['id']){
+											$selected = "selected";
+										}
+										$strStudent.='<option '.$selected.' value="'.$attRow['id'].'">'.$attRow['name'].'</option>';
+									}
+								$strStudent.='</select>
+								</br>';
+								$strStudent.='
+								<input type="hidden" name="detailId'.$index.'" id="detailId'.$index.'"  value="'.$detailId.'" >
+								<input dojoType="dijit.form.Textarea"  class="fullside" name="comment'.$index.'" type="text" value="'.$reason.'" style="'.$textareastyle.'">
+								';
+						$strStudent.='</td>';
+					}
+			
+				$strStudent.='</tr>';
+			}
+		}
+		$arr = array(
+   			'rowStudentHTML' => $strStudent,
+   			'identity' => $identity,
+   			'keyrow' =>$index,
+		);
+		return $arr;
+	}
+	
+	function getCheckAttendaceDetailForEditAction($data){
+		$db = $this->getAdapter();
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$attendanceId = empty($data["attendanceId"]) ? 0 : $data["attendanceId"];
+		$subjectId = empty($data["subjectId"]) ? 0 : $data["subjectId"];
+		$fromHour = empty($data["fromHour"]) ? 0 : $data["fromHour"];
+		$toHour = empty($data["toHour"]) ? 0 : $data["toHour"];
+		$sql = "
+			SELECT 
+				attd.*
+		";
+		$sql.= "
+			FROM `rms_student_attendence_detail` AS attd 
+			WHERE attd.type=1 
+				AND attd.attendence_id=$attendanceId 
+				AND attd.stu_id =$studentId
+				
+		";
+		if(!empty($data["noSetSchdeule"])){
+		}else{
+			$sql.= " 
+				AND attd.subjectId =$subjectId
+				AND attd.fromHour =$fromHour
+				AND attd.toHour =$toHour 
+			";
+		}
+    	$sql.= " LIMIT 1 ";
+    	return $db->fetchRow($sql);
+	}
+	
+	function getScheduleTimeStudty($data){
+		$db = $this->getAdapter();
+		
+		$date = new DateTime($data['attendenceDate']);
+		$dayValue =  $date->format("w");
+		if($dayValue==0){
+			$dayValue = 7;
+		}
+		$groupId = empty($data['group']) ? 0 : $data['group'];
+
+		$sql = "
+			SELECT 
+				subj.subject_titleen,
+				subj.subject_titlekh,
+				subj.shortcut AS subjectSortcut,
+				gSchD.id AS id,
+				CONCAT(COALESCE(subj.shortcut,''),' ',COALESCE(frTime.title,''),'-',COALESCE(toTime.title,'')) AS `name`,
+				CONCAT(COALESCE(frTime.title,''),'-',COALESCE(toTime.title,'')) AS `timeTitle`,
+				gSchD.*
+		";
+		$sql.= "
+		FROM 
+			`rms_group_reschedule` AS gSchD 
+			JOIN `rms_group_schedule` AS gSch ON gSchD.main_schedule_id = gSch.id 
+			LEFT JOIN `rms_subject` AS subj ON subj.id = gSchD.subject_id
+			LEFT JOIN `rms_timeseting` AS frTime ON frTime.value = gSchD.from_hour
+			LEFT JOIN `rms_timeseting` AS toTime ON toTime.value = gSchD.to_hour
+		";
+		$sql.= "
+			WHERE 1 
+				AND gSch.group_id = $groupId 
+				AND gSchD.day_id = $dayValue
+		";
+		$sql.= "
+			GROUP BY 
+				gSchD.day_id,
+				gSchD.from_hour,
+				gSchD.to_hour
+		";
+    	return $db->fetchAll($sql);
+	}
+	
+	function getCheckStudentPermission($data){
+		$db = $this->getAdapter();
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$sql = "
+			SELECT 
+				attD.*
+		";
+		$sql.= "
+			FROM `rms_student_attendence_detail` AS attD
+			WHERE attD.type=2
+		";
+		
+		$date = new DateTime($data['attendenceDate']);
+		$attendenceDate =  $date->format("Y-m-d");
+									
+    	$sql.= " AND attD.stu_id = ".$studentId;
+    	$sql.= " AND attD.attendanceDate = '".$attendenceDate."' ";
+    	$sql.= " LIMIT 1 ";
+    	return $db->fetchRow($sql);
 	}
 }

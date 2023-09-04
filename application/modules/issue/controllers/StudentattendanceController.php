@@ -74,7 +74,6 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$_model = new Issue_Model_DbTable_DbStudentAttendance();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			$_data['id']=$id;
 			try {
 				$rs =  $_model->updateStudentAttendence($_data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/studentattendance");
@@ -93,6 +92,8 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$this->view->branch_id=$db_global->getAllBranch();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->allstudentBygroup = $db->getAllStudentByGroupForEdit($result['group_id']);
+		
+			
 	}
 	function getSubjectAction(){
 		if($this->getRequest()->isPost()){
@@ -130,6 +131,16 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			$db = new Issue_Model_DbTable_DbStudentAttendance();
 			$result =$db->getSubjectBygroup($data['group']);
 			print_r(Zend_Json::encode($result));
+			exit();
+		}
+	}
+	
+	function getstudentbygrouphtmlAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$data=$db->getStudentByGroupHTML($data);
+			print_r(Zend_Json::encode($data));
 			exit();
 		}
 	}

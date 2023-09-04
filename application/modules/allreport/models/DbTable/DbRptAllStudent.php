@@ -316,9 +316,11 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 						rms_student AS s,
 					   `rms_group_detail_student` AS sg 
 					WHERE 
-						sg.itemType=1 
+						 sg.is_maingrade=1
+						AND sg.itemType=1 
 						AND s.status=1 
 						AND sg.stop_type=0
+						AND sg.is_pass=0
 						AND s.customer_type=1 
 						AND s.stu_id =sg.`stu_id` ";
     	$where='';
@@ -326,7 +328,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$where.=" AND sg.academic_year = ".$acadmic_year;
     	}
     	if($isCurrent==1){
-    		$where.=" AND sg.is_current=1 ";
+    		$where.=" AND sg.is_current=1  ";
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');

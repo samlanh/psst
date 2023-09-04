@@ -22,7 +22,7 @@ class Home_IndexController extends Zend_Controller_Action
     		print_r($post);exit();
     	}
       $db = new Allreport_Model_DbTable_DbRptAllStudent();
-      $this->view->rsamountstudent = $db->getAmountStudent();
+      $this->view->rsamountstudent =$db->getAmountStudent();
       $this->view->rsnewstudent = $db->getAmountNewStudent();
       $this->view->rsdropstudent = $db->getAmountDropStudent();
       $this->view->rsteststudent = $db->getAmountStudentTest();
@@ -30,8 +30,8 @@ class Home_IndexController extends Zend_Controller_Action
       $this->view->rsupdateresult = $db->getAmountStudentUpdateresult();
       
       $_db = new Allreport_Model_DbTable_DbRptIncomeExpense();
-      $this->view->totalExpense = $_db->getAmountExpest();
-      $this->view->totalIncome = $_db->getTotalIncome();
+      $this->view->totalExpense = 0;//$_db->getAmountExpest();
+      $this->view->totalIncome = 0;//$_db->getTotalIncome();
       
       $_db = new Home_Model_DbTable_DbDashboard();
       $this->view->studropnew = $_db->getStudentDropNew();

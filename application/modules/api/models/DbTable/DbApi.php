@@ -5023,7 +5023,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					`rms_student_bus_schedule` AS busSch 
 					
 					
-						LEFT JOIN (rms_school_bus AS bus JOIN `rms_teacher` AS dri ON dri.id = bus.driverId) ON bus.id = busSch.bus_id
+						LEFT JOIN (rms_school_bus AS bus LEFT JOIN `rms_teacher` AS dri ON dri.id = bus.driverId) ON bus.id = busSch.bus_id
 						LEFT JOIN `rms_branch` AS b ON b.br_id = busSch.branch_id
 				WHERE busSch.status = 1 
 					AND busSch.student_id = $studentId

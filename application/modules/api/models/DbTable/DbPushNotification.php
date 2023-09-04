@@ -44,27 +44,35 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		$sql = "SELECT mb.`token`
 				FROM `mobile_mobile_token` AS mb
 				WHERE mb.stu_id != 0 ";
-		if(!empty($_data['studentId'])){ //specific student
+		if( $_data['optNotification']==1 ){
+		}else if( $_data['optNotification']==2 ){ //By study's class of student
+			$_data['groupId'] = empty($_data['groupId']) ? 0 : $_data['groupId'];
+			$_data['degreeId'] = 0;
+			$_data['gradeId'] = 0;
+			$listStudentId = $this->getListStudentId($_data);
+			if(!empty($listStudentId)){
+				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
+			}
+		}else if( $_data['optNotification']==3 ){ //specific student
 			$sql.=" AND mb.stu_id IN (".$_data['studentId'].")";
-		}
-		if(!empty($_data['groupId'])){ //By study's class of student
+		}else if( $_data['optNotification']==4 ){ //By Degree
+			$_data['groupId'] = 0;
+			$_data['degreeId'] = empty($_data['degreeId']) ? 0 : $_data['degreeId'];
+			$_data['gradeId'] = 0;
+			$listStudentId = $this->getListStudentId($_data);
+			if(!empty($listStudentId)){
+				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
+			}
+		}else if( $_data['optNotification']==5 ){ //By grade
+			$_data['groupId'] = 0;
+			$_data['degreeId'] = 0;
+			$_data['gradeId'] = empty($_data['gradeId']) ? 0 : $_data['gradeId'];
 			$listStudentId = $this->getListStudentId($_data);
 			if(!empty($listStudentId)){
 				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
 			}
 		}
-		if(!empty($_data['degreeId'])){ //By Degree of student
-			$listStudentId = $this->getListStudentId($_data);
-			if(!empty($listStudentId)){
-				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
-			}
-		}
-		if(!empty($_data['gradeId'])){ //By Degree of student
-			$listStudentId = $this->getListStudentId($_data);
-			if(!empty($listStudentId)){
-				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
-			}
-		}
+		
 		return  $db->fetchCol($sql);
 	}
 	function pushNotificationAPI($_data)
@@ -73,6 +81,8 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		
 			$_data['branchId'] = empty($_data['branchId']) ? 0 : $_data['branchId'];
 			$notificationId = empty($_data['notificationId']) ? 0 : $_data['notificationId'];
+			
+			$_data['optNotification'] = empty($_data['optNotification']) ? 1 : $_data['optNotification'];
 			$notificationTitle = "Notification Title";
 			$notificationSubTitle = "Notification Sub Title";
 			$notificationDescription = "";
@@ -95,7 +105,6 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			}else if($typeNotify == "studentScoreTranscript"){
 				$_data['scoreId'] = $notificationId;
 				
-				
 				$info = $this->getTranscriptInfo($_data);
 				$groupCode = empty($info["groupCode"]) ? "" : $info["groupCode"];
 				$forTypeTitleKh = empty($info["forTypeTitleKh"]) ? "" : $info["forTypeTitleKh"];
@@ -113,6 +122,18 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				$notificationSubTitle.= " / Score's result for $forTypeTitle $forMonthTitle $groupCode";
 				
 				$notificationDescription = $notificationSubTitle;
+				
+			}else if($typeNotify == "notificationArticle"){
+				$info = $this->getNotificationArticle($_data);
+				$title = empty($info["title"]) ? "" : $info["title"];
+				$description = empty($info["description"]) ? "" : $info["description"];
+				$description = strip_tags($description);
+				$description = substr($description, 0, strrpos(substr($description, 0, 400), ' ')). '...';
+				
+				$notificationTitle = $title;
+				$notificationSubTitle = $description;
+				$notificationDescription = $description;
+				
 			}else if($typeNotify == "schoolBusOnline"){
 			}
 	
@@ -224,6 +245,31 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+	}
+	
+	function getNotificationArticle($_data){
+		try{
+			$db = $this->getAdapter();
+			$sql="SELECT 
+						acd.id,
+						acd.`title`,
+						acd.`lang`,
+						acd.description 
+				FROM 
+					`mobile_notice_detail` AS acd 
+				WHERE  acd.`lang`=1";
+				
+			$notificationId = empty($_data['notificationId'])?0:$_data['notificationId'];
+			$sql.=" AND acd.`notification_id`= ".$notificationId;
+			$sql.=" LIMIT 1 ";
+			
+			$row = $db->fetchRow($sql);
+			return $row;
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+			
+		
 	}
 	
 	

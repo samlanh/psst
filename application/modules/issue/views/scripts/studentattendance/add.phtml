@@ -9,7 +9,9 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="material-icons-outlined">menu_book</i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_STUDENT_ATTENDENCE');?></h4>
+		    			<h4 class="m-b-0"><i class="material-icons-outlined">menu_book</i>&nbsp;&nbsp;&nbsp;
+						<?php echo $tr->translate('ADD_STUDENT_ATTENDENCE');?>
+						</h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -136,12 +138,6 @@
 										</div>
 									 </div>
 									 <div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT");?> </label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="subject">
-										</div>
-									 </div>
-									 <div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="" type="text" style=" height: 120px !important;"  >
@@ -163,29 +159,37 @@
 									<div class="settings-main-icon ">
 										<i class="glyphicon glyphicon-education"></i>
 									</div> 
-									<div class="col-md-10 col-sm-10 col-xs-12"> 
+									<div class="col-md-4 col-sm-4 col-xs-12"> 
 										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
 									</div> 
+									<div class="col-md-8 col-sm-8 col-xs-12" style="text-align: right;background: #062b61;padding: 5px;color: #ffffff;border-top-left-radius: 100%;"> 
+										<div class="form-group">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<div class="custom-control custom-checkbox ">
+													<input type="checkbox" class="checkboxAttendance custom-control-input" onchange="CheckAll();"  name="check_all" id="check_all" value="1" >
+													<label class="custom-control-label" for="check_all">
+														<?php echo $tr->translate('CHECK_ALL_BY');?>
+													</label>
+												</div>
+											</div>
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<input type="radio" onchange="CheckAll();" checked="checked"  name="attendence_opt" id="attendence_opt" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>
+												<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>
+												<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>
+												<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>
+												<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>
+											 </div>
+										</div> 
+									</div> 
 								</div>
-								<br />
 								<div class="form-group">
+									
 									<div class="col-md-12 col-sm-12 col-xs-12">
-										<div class="custom-control custom-checkbox ">
-											<input type="checkbox" class="checkboxAttendance custom-control-input" onchange="CheckAll();"  name="check_all" id="check_all" value="1" >
-											<label class="custom-control-label" for="check_all">
-												<?php echo $tr->translate('CHECK_ALL_BY');?>
-											</label>
-										</div>
-									</div>
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<input type="radio" onchange="CheckAll();" checked="checked"  name="attendence_opt" id="attendence_opt" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>
-										<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>
-										<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>
-										<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>
-										<input type="radio" onchange="CheckAll();" name="attendence_opt" id="attendence_opt" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>
-									 </div>
-									<div class="col-md-12 col-sm-12 col-xs-12">
-										<table id="table_row" class="collape responsiveTable">
+										<table  class="collape responsiveTable">
+											<thead id="tableHeadInfo">
+											</thead>
+											<tbody id="table_row">
+											</tbody>
 										</table>
 										<label id="liststudent"></label>
 									</div>
@@ -199,13 +203,18 @@
 	    	<div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-              		 <input type="hidden" name="identity" id="identity"  value="" >
+              		 <input type="hidden" name="identity" id="identity"  value="" dojoType="dijit.form.TextBox" >
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button"  />
             	 </div>
             </div>
 		</form>
     </div>
  </div>
+ <style>
+	 tr.rowData {
+		vertical-align: top;
+	}
+ </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
@@ -213,19 +222,7 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.Textarea");
-	var subject_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	dojo.ready(function(){
-		new dijit.form.FilteringSelect({
-		    queryExpr: "*${0}*",
-			autoComplete: false,                
-		    required: false,
-		    id: "subject",
-		    name: "subject",   
-		    class: 'fullside',  
-		    placeHolder:"<?php echo $tr->translate("SELECT_SUBJECT");?>",          
-		    onChange: function() {  
-		    }
-		}, "subject");
 
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
@@ -252,7 +249,6 @@
 			placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>",
 			onChange: function() {  
 			 getInfoBygroup();
-			 getSubjectByGroup();    
 			}
 		}, "group");
 		
@@ -262,6 +258,13 @@
 	 		getAllGroup();
 	 		getStudyYear();
 	    });
+		
+		var attendenceDateChoose = dijit.byId('attendence_date');
+	 	attendenceDateChoose.on('change', function(evt) {
+	 		filterStudentBygroup();
+	    });
+		
+		
 	});
 
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
@@ -408,25 +411,9 @@ function getInfoBygroup(){
 		}
 	});
 }
-var url_getSubject= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'getsubjectbygroup')); ?>';
-function getSubjectByGroup(){
-	group = dijit.byId('group').get('value');
-	dojo.xhrPost({
-	    url: url_getSubject,
-	    content : { 
-		    'group':group,
-		},				    
-	   handleAs:"json", 
-	   load: function(data){
-		   subject_store  = getDataStorefromJSON('id','name', data);
-		   dijit.byId('subject').set('store',subject_store);  
-	   },		
-	   error: function(err) {
-	   }
-	});
-}
+
 var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
-function filterStudentBygroup(){
+function filterStudentBygroupOLD(){
 	 $('#identity').val('');
 	  document.getElementById("table_row").innerHTML = '';
 	  inx=0;
@@ -531,13 +518,106 @@ function CheckAll(){
 		return false;
 	}else{
 		if(arrays!=""){
-	    	 for(var i=1;i<= arrays.length;i++) {
-	    		 if($("#check_all").is(':checked')){
-	    			 $('input[value="'+check_type+'"]').attr("checked",true);
-	    		 }else{
-	    			 $('input[value="'+check_type+'"]').attr("checked",false);
-	    		 }
+	    	 for(var i=0; i< arrays.length;i++) {
+				 if(timeAttendanceArray.length > 0){
+					 for(var k=1; k<= timeAttendanceArray.length;k++) {
+						  if($("#check_all").is(':checked')){
+							 dijit.byId('attendenceStatus'+arrays[i]+'_'+k).set('value',check_type); 
+						 }else{
+							 dijit.byId('attendenceStatus'+arrays[i]+'_'+k).set('value',1); 
+						 }
+				 
+					 }
+				 }else{
+					if($("#check_all").is(':checked')){
+						 dijit.byId('attendenceStatus'+arrays[i]).set('value',check_type); 
+					 }else{
+						 dijit.byId('attendenceStatus'+arrays[i]).set('value',1); 
+					 }
+				 }
+	    		
 	    	}
+		}
+	}
+}
+
+
+var timeAttendanceArray = [];
+var keyrow=0;
+var urlGetStudentByGroupHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'getstudentbygrouphtml')); ?>';
+function filterStudentBygroup(){
+	 $('#identity').val('');
+	  document.getElementById("table_row").innerHTML = '';
+	  inx=0;
+	var textareastyle=" font-family: 'Khmer OS Battambang'";
+	group = dijit.byId('group').get('value');
+	if(group==''){
+		return false;
+	}
+	sortStundent = dijit.byId('sortStundent').get('value');
+	
+	var attendenceDate = dijit.byId('attendence_date').get('value');	
+	var day = attendenceDate.getDate();
+	if(day <= 9) {day = "0" +day;}
+	var m = attendenceDate.getMonth()+1;
+	if(m <= 9) {m = "0" +m;}
+	var year = attendenceDate.getFullYear();
+	attendenceDateValue = year+"-"+m+"-"+day;
+	
+	timeAttendanceArray = [];
+	loadingBlock();
+	dojo.xhrPost({
+	    url: urlGetStudentByGroupHTML,
+	    content : { 
+		    'group':group,
+			'isCurrent':1,
+			'itemType':1,
+			'sortStundent': sortStundent,
+			'keyrow':keyrow,
+			'attendenceDate':attendenceDateValue
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		   
+	       if(data!=""){
+				
+				dijit.byId('identity').set('value',data.identity); 
+			    dojo.html.set(dojo.byId("tableHeadInfo"),data.tableHeadHTML , {
+					 parseContent: true,
+				});
+				dojo.html.set(dojo.byId("table_row"),data.rowStudentHTML , {
+					 parseContent: true,
+				});
+				keyrow = data.keyrow;
+				timeAttendanceArray = data.scheduleTime;
+				HideloadingBlock();
+	       }else{
+			   dijit.byId('identity').set('value',""); 
+	    	   document.getElementById("table_row").innerHTML = '';
+			   HideloadingBlock();
+	       }
+	   },		
+	    error: function(err) {
+	    }
+	});
+}
+function _changeSetNextTimeValue(rowIndex,timeIndex){
+	if(timeAttendanceArray.length > 0){
+		var currentValue = dijit.byId('attendenceStatus'+rowIndex+'_'+timeIndex).get('value');
+		for(var k=1; k<= timeAttendanceArray.length;k++) {
+			if(k > timeIndex){
+				dijit.byId('attendenceStatus'+rowIndex+'_'+k).set('value',currentValue); 
+			}
+		}
+	}
+}
+function _setNextTimeReason(rowIndex,timeIndex){
+	if(timeAttendanceArray.length > 0){
+		var currentValue = dijit.byId('comment'+rowIndex+'_'+timeIndex).get('value');
+		for(var k=1; k<= timeAttendanceArray.length;k++) {
+			if(k > timeIndex){
+				dijit.byId('comment'+rowIndex+'_'+k).set('value',currentValue); 
+			}
 		}
 	}
 }

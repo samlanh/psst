@@ -17,6 +17,7 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 						'branch_id' => '',
 						'academic_year' => '',
 						'group' => '',
+						'status' => '-1',
 						'start_date'=>date("Y-m-d"),
 						'end_date' => date("Y-m-d")
 						);
@@ -24,7 +25,7 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 			$db = new Issue_Model_DbTable_DbSchedule();
 			$rs_rows= $db->getAllScheduleGroup($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDY_YEAR","GROUP","SCHEDULE_SETTING","DATE","USER");
+			$collumns = array("BRANCH","STUDY_YEAR","GROUP","SCHEDULE_SETTING","DATE","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'schedule','action'=>'edit',
 			);

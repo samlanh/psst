@@ -17,10 +17,18 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$from_date =(empty($search['start_date']))? '1': "mba.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "mba.date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;	
-		$sql="SELECT mba.id,
-		(SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1) AS title,
-		(SELECT name_kh FROM `rms_view` WHERE type=34 AND key_code=mba.opt_notification LIMIT 1) AS option_type,
-		mba.date,mba.status as status FROM $this->_name AS mba WHERE 1";
+		$sql="
+			SELECT 
+				mba.id
+				,(SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1) AS title
+				,(SELECT name_kh FROM `rms_view` WHERE type=34 AND key_code=mba.opt_notification LIMIT 1) AS option_type
+				,mba.date
+				,mba.status as status 
+			FROM 
+				$this->_name AS mba 
+			WHERE 1 
+				AND mba.fromDepartment=1
+		";
 		if($search['search_status']>-1){
 			$where.= " AND mba.status = ".$search['search_status'];
 		}
@@ -60,6 +68,7 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
             );
             $dbglobal = new Application_Model_DbTable_DbGlobal();
             $lang = $dbglobal->getLaguage();
+			$article_id = "0";
         	 if (!empty($data['id'])){
 				$notificationId = $data['id'];
         	 	$arr['status']= $data['status'];
@@ -134,7 +143,9 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
         	 	}
         	 }
 			 
-        	$content = array(
+        	/*
+			
+			$content = array(
         		"en" =>$data['titleKhmer'],
         	);
         	
@@ -224,7 +235,10 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
         	
         	$response = curl_exec($ch);
         	curl_close($ch);
+			
+			*/
             $db->commit();
+			return $article_id;
             
         }catch(exception $e){
             Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -111,26 +111,33 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$code = $dbg->getTeacherCode($_data['branch_id']);
 		try{
-			$_arr = array(
-				'branch_id' 		 => $_data['branch_id'],
-				'teacher_code'		 => $code,
-				'teacher_name_kh'	 => $_data['driver_name'],
-				'teacher_name_en'	 => $_data['driver_name_en'],
-				'sex'				 => $_data['sex'],
-				'staff_type'  	 	 => 2,
-				'user_name' 		 => $_data['user_name'],
-				'password' 			 => md5($_data['password']),
-				'tel'  				 => $_data['phone'],
-				'email' 			 => $_data['email'],
-				'address' 			 => $_data['address'],
-				'create_date' 		 => date("Y-m-d"),
-				'user_id'	  		 => $this->getUserId(),
-		
-			);
-			$this->_name='rms_teacher';
+			
 			if(!empty($_data['is_new_driver'])){
+				if (!empty($_data['check_change'])){
+					$_arr['password']= md5($_data['password']);
+					$this->_name='rms_teacher';
+					$where=$this->getAdapter()->quoteInto('id=?', $_data['driverId']); 
+					$this->update($_arr,$where);
+				}
 				$driver_id=$_data['driverId'];
 			}else{
+				$_arr = array(
+					'branch_id' 		 => $_data['branch_id'],
+					'teacher_code'		 => $code,
+					'teacher_name_kh'	 => $_data['driver_name'],
+					'teacher_name_en'	 => $_data['driver_name_en'],
+					'sex'				 => $_data['sex'],
+					'staff_type'  	 	 => 2,
+					'user_name' 		 => $_data['user_name'],
+					'password' 			 => md5($_data['password']),
+					'tel'  				 => $_data['phone'],
+					'email' 			 => $_data['email'],
+					'address' 			 => $_data['address'],
+					'create_date' 		 => date("Y-m-d"),
+					'user_id'	  		 => $this->getUserId(),
+			
+				);
+				$this->_name='rms_teacher';
 				$driver_id = $this->insert($_arr);
 			}
 
@@ -150,7 +157,6 @@ class Mobileapp_Model_DbTable_DbStudentBus extends Zend_Db_Table_Abstract
 			$this->_name="rms_school_bus";
 			$where=$this->getAdapter()->quoteInto('id=?', $_data['id']); 
 			$this->update($_arr,$where);
-		
 		  $db->commit();
 	  }catch(exception $e){
 		  Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

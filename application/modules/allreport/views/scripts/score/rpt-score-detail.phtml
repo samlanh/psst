@@ -297,7 +297,7 @@
 								</td>
 								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
 								<td align="center" <?php if($total_score<($rs['totalMaxScore']/2)){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php if($total_score>=($rs['totalMaxScore'])){
+									<?php if($total_score>=($rs['totalMaxScore']/2)){
 										echo $tr->translate("STUDENT_PASS");
 										$count_pass++;
 										if($rs['sex']==2){$pass_female=$pass_female+1;}//femail

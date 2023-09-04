@@ -13,17 +13,25 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		$dbp = new Application_Model_DbTable_DbGlobal();
     		
     		$sql="
-    		SELECT gsch.id,
-			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) AS branch_name,	
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsch.academic_year LIMIT 1) AS years,
-			 (SELECT group_code FROM rms_group WHERE rms_group.id= gsch.group_id LIMIT 1) AS group_code,
-			 (SELECT st.title FROM `rms_schedulesetting` AS st WHERE st.id = gsch.schedule_setting LIMIT 1) AS sch_setting,
-			 DATE_FORMAT(gsch.create_date,'%d-%m-%Y') AS create_date, (SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id) AS user_name
-			FROM 
-				`rms_group_schedule` AS gsch WHERE 1
+    		SELECT 
+				gsch.id,
+				(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) AS branch_name,	
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsch.academic_year LIMIT 1) AS years,
+				(SELECT group_code FROM rms_group WHERE rms_group.id= gsch.group_id LIMIT 1) AS group_code,
+				(SELECT st.title FROM `rms_schedulesetting` AS st WHERE st.id = gsch.schedule_setting LIMIT 1) AS sch_setting,
+				DATE_FORMAT(gsch.create_date,'%d-%m-%Y') AS create_date,
+				(SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id) AS user_name
+			
     		";
-    		
+    		$sql.=$dbp->caseStatusShowImage("gsch.status");
+			$sql.=" 
+				FROM 
+					`rms_group_schedule` AS gsch WHERE 1 ";
     		$where =' ';
+			$from_date =(empty($search['start_date']))? '1': "gsch.create_date >= '".$search['start_date']." 00:00:00'";
+			$to_date = (empty($search['end_date']))? '1': "gsch.create_date <= '".$search['end_date']." 23:59:59'";
+			$where.= " AND ".$from_date." AND ".$to_date;
+		
     		$order =  ' ORDER BY `gsch`.`id` DESC ' ;
     		if(!empty($search['adv_search'])){
     			$s_where = array();
@@ -42,6 +50,9 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		if(!empty($search['group'])){
     			$where.=' AND gsch.group_id='.$search['group'];
     		}
+			if($search['status']>-1 ){
+				$where.= " AND gsch.status = ".$db->quote($search['status']);
+			}
     		$where.=$dbp->getAccessPermission('gsch.branch_id');
     		return $db->fetchAll($sql.$where.$order);
     		
@@ -67,6 +78,7 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     				'create_date'=>date("Y-m-d H:i:s"),
     				'modify_date'=>date("Y-m-d H:i:s"),
     				'user_id'=>$this->getUserId(),
+					'settingScoreAttId'	=>$_data['settingScoreAttId'],
     		);
     		$this->_name='rms_group_schedule';
     		
@@ -121,16 +133,17 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     
     		$model = new Application_Model_DbTable_DbGlobal();
     		$allDay = $model->getAllDay(1);
-    
+			$status = empty($_data['status'])?0:1;
     		$_arr = array(
-    				'branch_id'=>$_data['branch_id'],
-    				'academic_year'=>$_data['academic_year'],
-    				'group_id'=>$_data['group_code'],
-    				'schedule_setting'=>$_data['schedule_setting'],
-    				'note'=>$_data['note'],
-    				'status'=>1,
-    				'modify_date'=>date("Y-m-d H:i:s"),
-    				'user_id'=>$this->getUserId(),
+    				'branch_id'			=>$_data['branch_id'],
+    				'academic_year'		=>$_data['academic_year'],
+    				'group_id'			=>$_data['group_code'],
+    				'schedule_setting'	=>$_data['schedule_setting'],
+    				'note'				=>$_data['note'],
+    				'status'			=>$status,
+    				'modify_date'		=>date("Y-m-d H:i:s"),
+    				'user_id'			=>$this->getUserId(),
+					'settingScoreAttId'	=>$_data['settingScoreAttId'],
     		);
     		$this->_name='rms_group_schedule';
     		$id = $_data['id'];

@@ -71,41 +71,21 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
-			$branch = $_data['branch_id'];
-			$group = $_data['group'];
-			$date = $_data['attendence_date'];
-			$for_semester = $_data['for_semester'];
-			$session = $_data['session_type'];
-			$sql="select id from rms_student_attendence where branch_id = $branch and group_id = $group and for_semester = $for_semester and for_session = $session and date_attendence = '$date' and type=1 limit 1";
-			$id = $db->fetchOne($sql);
-			if(empty($id)){
-				$_arr = array(
-					'branch_id'		=>$_data['branch_id'],
-					'group_id'		=>$_data['group'],
-					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
-					'date_create'	=>date("Y-m-d"),
-					'modify_date'	=>date("Y-m-d"),
-					'subject_id'	=>$_data['subject'],
-					'for_semester'	=> $_data['for_semester'],
-					'note'			=>$_data['note'],
-					'status'		=>1,
-					'user_id'		=>$this->getUserId(),
-					'for_session'	=>$_data['session_type'],
-					'type'			=>1, //for attendence
-				);
-				$id=$this->insert($_arr);
-			}
-			$dbpush = new Application_Model_DbTable_DbGlobal();
+		
 			if ($_data['attedence']!=1){
-				// if($_data['attedence']!=1){//ក្រៅពីមក sent all
-				// 	$dbpush->getTokenUser($_data['stu_code'],null, 2);
-				// }
 				$arr = array(
-					'attendence_id'	=>$id,
+					'attendence_id'	=>0,
 					'stu_id'		=>$_data['stu_name'],
 					'attendence_status'=>$_data['attedence'],
 					'description'	=>$_data['comment'],
 					'type'			=>2, //from one student 
+					'branch_id'		=>$_data['branch_id'],
+					'group_id'		=>$_data['group'],
+					'for_semester'	=>$_data['for_semester'],
+					'for_session'	=>$_data['session_type'],
+					'date_attendence'=>date("Y-m-d",strtotime($_data['attendence_date'])),
+					'date_create'	=>date("Y-m-d"),
+					'modify_date'	=>date("Y-m-d"),
 				);
 				$this->_name ='rms_student_attendence_detail';
 				$this->insert($arr);

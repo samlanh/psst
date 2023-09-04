@@ -193,6 +193,7 @@
 		});
 	}
 	function getAllUser(){
+		
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
 			dijit.byId('branch_id').focus();
@@ -206,6 +207,7 @@
 			if('<?php echo $this->adv_search['branch_id']?>'==branch_id){
 				selectedId = '<?php echo $this->adv_search['userId']?>';
 			}
+			
 			getAllUserByBranch(url_user,contentData,selectedId);
 	}
 	function copyRecord(url){

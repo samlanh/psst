@@ -144,6 +144,11 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
 			}elseif($payment_tran['payment_term']==5){
 				$rs_rows[$key_old]['onepayment'] = $payment_tran['tuition_fee'];
 			}
+			
+			if(empty($rs_rows[$key_old]['onepayment'])){
+				$rs_rows[$key_old]['onepayment']=0;
+			}
+			
 		}
 		$this->view->rows =$rs_rows;	
 	}

@@ -931,18 +931,21 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStatusAttendence($stu_id,$date_att,$group,$subject=null){
     	$db = $this->getAdapter();
-    	$sql='SELECT
-		sat.`group_id`,satd.`attendence_status`,sat.`date_attendence`
+    	$sql='
+		SELECT
+			sat.`group_id`,satd.`attendence_status`,sat.`date_attendence`
 		FROM `rms_student_attendence` AS sat,
-		`rms_student_attendence_detail` AS satd 
+			`rms_student_attendence_detail` AS satd 
 		WHERE sat.`id`= satd.`attendence_id`
-		AND sat.type=1
-		AND satd.`stu_id`='.$stu_id.' AND sat.`date_attendence`="'.$date_att.'" AND sat.`group_id`='.$group;
+			AND sat.type=1
+			AND satd.`stu_id`='.$stu_id.' AND sat.`date_attendence`="'.$date_att.'" AND sat.`group_id`='.$group;
     	$where='';
     	if (!empty($subject)){ // high school student
     		$where.=" AND sat.`subject_id`=".$subject;
     	}
-		return $db->fetchRow($sql.$where.' LIMIT 1');
+		$where.=" ORDER BY satd.`attendence_status` DESC ";
+		$where.=" LIMIT 1 ";
+		return $db->fetchRow($sql.$where);
     }
     function checkDateAttendence($date_att,$group,$subject=null){
     	$db = $this->getAdapter();

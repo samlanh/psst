@@ -128,6 +128,23 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
 		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
 		$_session->setMultiOptions($opt_session);
+
+		$_session_type = new Zend_Dojo_Form_Element_FilteringSelect('session_type');
+		$_session_type->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SESSION_TYPE"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+				));
+		$_session_type->setValue($request->getParam("time"));
+		$opt_session_type = array(''=>$this->tr->translate("SESSION_TYPE"),
+				''=>$this->tr->translate("SESSION_TYPE"),
+				 1=>$this->tr->translate("MORNING"),
+				 2=>$this->tr->translate("FULL_TIME"),
+				 3=>$this->tr->translate("FULL_TIME"),
+				);
+		$_session_type->setMultiOptions($opt_session_type);
 		
 		$_time = new Zend_Dojo_Form_Element_FilteringSelect('time');
 		$_time->setAttribs(array('dojoType'=>$this->filter,
@@ -574,7 +591,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$_for_semester,
 				$_for_month,
 				$_test_type,
-				$_cut_stock_type
+				$_cut_stock_type,
+				$_session_type
 				));
 		return $this;
 	} 

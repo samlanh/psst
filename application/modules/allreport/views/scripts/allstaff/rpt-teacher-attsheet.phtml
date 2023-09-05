@@ -1,0 +1,190 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('REPORT_TEACHER_DOCUMENT_ALERT')); 
+	echo $this->headTitle(''); 
+	$classHideHeight=classHideHeight;
+	?>	
+<style>
+.hover:hover{ background:#ccc;}
+table.content-data tr.style-head,
+table.tb-footer tr.style-head {
+   font-weight: bold !important;
+}
+</style>
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+	<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REPORT_TEACHER_DOCUMENT_ALERT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+	
+	<div id="divPrint">
+		<style>
+			.style{
+						line-height: 20px;font-size: 12px !important;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					.hideblog{display: none;}
+					.hiddenblog{display: block !important;}
+					.style1:hover{ background: #ccc; }
+					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+					table.content-data { page-break-inside:auto }
+					tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
+					#header {
+					  display: table-header-group;
+					  page-break-inside:avoid; page-break-after:auto;
+					  margin-top: 100px;
+					}
+					.hide{visibility: hidden;}
+					@media print {
+					 div.divFooter {
+					    position: fixed;
+					    top: 0;
+					  	width: 100%;
+					  	height: 100px;
+					  	bottom:0px;
+						margin:0;
+					  }
+						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+						
+					}
+					.center{text-align: center !important;}
+					table.content-data{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:8px;
+						width:100%;
+				
+					}
+					table.content-data thead tr.style {
+					   line-height: 25px; font-size:12px !important; padding:2px 0px; white-space: nowrap;height: 22px; 
+						background: #c1d0f3;
+						font-weight:600;
+					}
+					table.content-data  tr.style {
+					 white-space: nowrap;
+					
+					}
+					
+					
+					table.tb-footer{
+						border-collapse:collapse;
+						border:1px solid #000; 
+						font-size:11px;
+						font-family: 'Times New Roman','Khmer OS Battambang';
+					}
+					table.tb-footer tr{
+					 line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
+					}
+					table tr td{
+						padding:0 2px;
+					}
+					tr.voidclass {
+						background: #fff7f7;
+					}
+					td.centerText{
+						text-align: center;
+					}
+					.redBold {
+						font-weight: 600;
+						color: #f80000;
+					}
+					table.content-data tr td{
+						padding: 2px;
+						
+					}
+					table.content-data tr th{
+						padding: 2px;
+						text-align:center;
+						
+					}
+					@media print{
+								@page{
+									margin:0.3cm 0.7cm 0cm 0.7cm;
+									page-break-before: avoid;
+									-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+									-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+									-ms-transform: scale(0.5);   /* IE 9 */
+									-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+									transform: scale(0.5);
+									page: A4;
+									size: landscape;
+								}
+					}
+		</style>
+		<table  style="background:#fff; margin: 0 auto; width: 100%; ">
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr class="line"><td colspan="3"></td></tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			
+			<tr>
+				<td colspan="3" id="exportExcel">
+					<?php if(!empty($this->rs)) {?>
+					<?php  
+						$i=0;
+						$male=0;$femle=0;
+						
+						$group="";
+						foreach ($this->rs as $key => $row){ $i++;
+					?>
+						<?php if($group!=$row['group_id']) {?>
+						<table class="content-data" cellpadding="5" style="font-size:12px; margin:0 auto;width:100%; border-collapse: collapse;border:1px solid #000; white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang';"  border="1" >
+							<thead>									
+								<tr>
+									<td colspan="<?php echo 5;//+$total_day;?>">
+										<table width="100%" border="0" style=" font-size:12px; border-collapse: collapse;font-family: 'Times New Roman','Khmer OS Battambang';font-size: 14px;font-weight: bold;line-height: 25px;">
+											<tr>
+												<td width="50%" style="border-right: 1px solid #000;">
+													<?php echo $tr->translate("INSTRUCTOR");?> : <label id="teacher_name"> </label>
+												</td>
+												<td width="50%">
+													<?php echo $tr->translate("SUBJECT").$row['group_id'];?> : <label id="subject_name"> </label>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr class="cheader" align="center" style="background: #ccd9ff;">
+									<td colspan="5"><?php echo $tr->translate("MONTH");?></td>
+									
+								</tr>
+							</thead>
+						<?php } $group=$row['group_id'];?>
+								
+							<tr style="font-size:12px;height: 23px;" align="left">
+								<td><?php echo $i;?></td>
+								<td><?php echo $row['stu_code'];?></td>
+								<td align="left"><?php echo $row['stu_code']." ".$row['group_id'];?></td>
+								<td><?php 
+									echo $row['sex'];
+									if($row['sex']==1){
+										$male=$male+1;
+									}else{
+										$femle=$femle+1;
+									}?>
+								</td>
+							</tr>
+						<?php if($key>0 AND $group!=$row['group_id'])  {?>
+						</table>
+						<?php }?>	
+					<?php }?>	
+					</table>
+					<?php }?>	
+				</td>
+			</tr>
+			<tr >
+				<td colspan="3" width="100%">
+					<?php echo $this->rsfooteracc;?>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

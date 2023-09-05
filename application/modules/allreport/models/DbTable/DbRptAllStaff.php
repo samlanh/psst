@@ -275,6 +275,57 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
     	return $db->fetchAll($sql.$where.$order);
     }
+	
+	
+	function getTeacherScheduleGroupAndStudent($search){
+    	$db = $this->getAdapter();
+		
+		$teacherId = empty($search["teacherId"]) ? 0 : $search["teacherId"];
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+    	$label="name_en";
+		$colunmName='depart_nameen';
+    	if($currentlang==1){
+    		$label="name_kh";
+			$colunmName='depart_namekh';
+    	}
+		
+    	$sql =" SELECT 
+				gsd.stu_id,
+				sch.group_id,
+				g.group_code,
+				s.stu_code,
+				s.sex,
+				schDetail.*
+			FROM rms_group_reschedule AS schDetail
+				JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
+				JOIN `rms_group_detail_student` AS gsd ON gsd.group_id = sch.group_id
+				LEFT JOIN `rms_student` AS s ON s.stu_id = gsd.stu_id
+				LEFT JOIN `rms_group` AS g ON g.id  = sch.group_id
+			WHERE 
+				schDetail.techer_id =$teacherId 
+				AND g.status =1
+				AND g.is_use =1
+				AND g.is_pass =2
+			 ";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission("g.branch_id");
+    
+    	if(!empty($search['branch_id'])){
+    		$sql.=' AND g.branch_id='.$search['branch_id'];
+    	}
+		if(!empty($search['degree'])){
+    		$where.=' AND g.degree='.$search['degree'];
+    	}
+		if(!empty($search['group'])){
+    		$sql.=' AND sch.group_id='.$search['group'];
+    	}
+    	$order=" 
+				GROUP BY sch.group_id,gsd.stu_id ORDER BY sch.group_id ASC
+			";
+    	return $db->fetchAll($sql.$order);
+    } 
 }
 
 

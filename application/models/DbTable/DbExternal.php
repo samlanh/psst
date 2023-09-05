@@ -902,8 +902,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					AND g.is_use =1
 					AND g.is_pass =2
 					AND schDetail.day_id =$dayID
-					AND schDetail.from_hour ='$fromHour'
-					AND schDetail.to_hour ='$toHour' ";
+					AND schDetail.from_hour =$fromHour
+					AND schDetail.to_hour =$toHour ";
 		$sql.=' AND schDetail.techer_id ='.$teacherId;
 		if(!empty($data['yearId'])){
 			$sql.=' AND schDetail.year_id ='.$data['yearId'];

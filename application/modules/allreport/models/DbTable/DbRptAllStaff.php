@@ -275,6 +275,120 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
     	return $db->fetchAll($sql.$where.$order);
     }
+	
+	
+	function getTeacherScheduleGroupAndStudent($search){
+    	$db = $this->getAdapter();
+		
+		$teacherId = empty($search["teacherId"]) ? 0 : $search["teacherId"];
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+    	$label="name_en";
+		$colunmName='depart_nameen';
+    	if($currentlang==1){
+    		$label="name_kh";
+			$colunmName='depart_namekh';
+    	}
+		
+    	$sql =" SELECT 
+				gsd.stu_id
+				,sch.group_id
+				
+				,t.teacher_name_en AS teacherNameEng
+				,t.teacher_name_kh AS teacherNameKh
+				
+				,subj.subject_titlekh AS subjectNameKh
+				,subj.subject_titleen AS subjectNameEng
+				
+				,s.sex
+				,`s`.`stu_code` AS `stu_code`
+				,`s`.`stu_khname` AS `kh_name`
+				,`s`.`stu_enname` AS `en_name`
+				,`s`.`last_name` AS `last_name`
+				, CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullName
+				
+				,g.group_code
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYearTitle
+				,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName	 
+					  
+				,schDetail.*
+			FROM rms_group_reschedule AS schDetail
+				JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
+				JOIN `rms_group_detail_student` AS gsd ON gsd.group_id = sch.group_id
+				LEFT JOIN `rms_student` AS s ON s.stu_id = gsd.stu_id
+				LEFT JOIN `rms_group` AS g ON g.id  = sch.group_id
+				LEFT JOIN `rms_teacher` AS t ON t.id  = schDetail.techer_id
+				LEFT JOIN rms_subject AS subj ON subj.id  = schDetail.subject_id
+			WHERE 
+				schDetail.techer_id =$teacherId 
+				AND g.status =1
+				AND g.is_use =1
+				AND g.is_pass =2
+			 ";
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission("g.branch_id");
+    
+    	if(!empty($search['branch_id'])){
+    		$sql.=' AND g.branch_id='.$search['branch_id'];
+    	}
+		if(!empty($search['degree'])){
+    		$where.=' AND g.degree='.$search['degree'];
+    	}
+		if(!empty($search['group'])){
+    		$sql.=' AND sch.group_id='.$search['group'];
+    	}
+    	$order=" 
+				GROUP BY schDetail.subject_id,sch.group_id,gsd.stu_id ORDER BY schDetail.subject_id ASC,sch.group_id ASC
+			";
+			
+		$stuOrderBy = empty($search['stuOrderBy'])?0:$search['stuOrderBy'];
+		$orderCondiction= ' ,s.stu_khname ASC ';
+		if ($stuOrderBy==1){
+			$orderCondiction= " ,`s`.`stu_code` ASC ";
+		}elseif($stuOrderBy==2){
+			$orderCondiction= ' ,s.stu_khname ASC ';
+		}elseif($stuOrderBy==3){
+			$orderCondiction= " ,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ASC ";
+		}
+		$order.=$orderCondiction;
+			
+    	return $db->fetchAll($sql.$order);
+    } 
+	
+	function getTeachingTimeByGroupAndSubject($search){
+		$db = $this->getAdapter();
+		
+		$teacherId = empty($search["teacherId"]) ? 0 : $search["teacherId"];
+		$groupId = empty($search["groupId"]) ? 0 : $search["groupId"];
+		$subjectId = empty($search["subjectId"]) ? 0 : $search["subjectId"];
+		$dbg = new Application_Model_DbTable_DbGlobal();
+    	$currentlang = $dbg->currentlang();
+    	$label="name_en";
+		$colunmName='depart_nameen';
+    	if($currentlang==1){
+    		$label="name_kh";
+			$colunmName='depart_namekh';
+    	}
+		$sql="
+			SELECT 
+				frTime.title AS fromHourTitle
+				,toTime.title AS toHourTitle
+				,CONCAT(COALESCE(frTime.title,''),'-',COALESCE(toTime.title,'')) timeTitle
+				,schDetail.*
+			FROM rms_group_reschedule AS schDetail
+				JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
+				LEFT JOIN `rms_timeseting` AS frTime ON frTime.value=schDetail.from_hour
+				LEFT JOIN `rms_timeseting` AS toTime ON toTime.value=schDetail.to_hour
+			WHERE 
+				schDetail.techer_id =$teacherId 
+				AND sch.group_id =$groupId
+				AND schDetail.subject_id = $subjectId
+		";
+		$order=" ORDER BY schDetail.day_id ASC ";
+		
+		return $db->fetchAll($sql.$order);
+	}
 }
 
 

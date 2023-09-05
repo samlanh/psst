@@ -386,12 +386,17 @@ function getAllSchoreSettingDetail(){
 		dijit.byId('academic_year').focus();
 		return false;
 	}
+	groupId = dijit.byId('group_code').get('value');
+	if(groupId=='' || groupId==-1){
+		groupId=0;
+	}
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
 			'branch_id':branch_id,
 			'schedule_setting':schedule_setting,
 			'academic_year':academic_year,
+			'groupId':groupId,
 			'keyrow':keyrow
 			},
 		handleAs:"json",

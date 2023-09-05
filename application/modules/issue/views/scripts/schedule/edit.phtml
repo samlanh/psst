@@ -417,10 +417,19 @@ function getAllSchoreSettingDetail(){
 		loadingBlock();
 		url_getgroup = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'schedulesetting','action'=>'getschedulesettingdetailedit'));?>';
 	}
+	groupId = dijit.byId('group_code').get('value');
+	if(groupId=='' || groupId==-1){
+		groupId=0;
+	}
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'schedule_setting':schedule_setting,'academic_year':academic_year,'keyrow':keyrow,'id':'<?php echo $this->row['id'];?>'
+			'branch_id':branch_id,
+			'schedule_setting':schedule_setting,
+			'academic_year':academic_year,
+			'keyrow':keyrow,
+			'groupId':groupId,
+			'id':'<?php echo $this->row['id'];?>'
 			},
 		handleAs:"json",
 		load: function(data) {

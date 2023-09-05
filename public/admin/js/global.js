@@ -135,5 +135,22 @@
 			}
 		});
 	}
+	function getAllUserByBranch(urlGet,contentData,SelectedId=null){//done
+		dijit.byId('userId').reset();
+		dojo.xhrPost({
+			url: urlGet,
+			content:contentData,
+			handleAs:"json",
+			load: function(data){
+				academic_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('userId').set('store',academic_store);  
+			    if(SelectedId!=null){
+			    	 dijit.byId('userId').attr('value',SelectedId);
+			    }
+			},
+			error: function(err) {
+			}
+		});
+	}
 	
 

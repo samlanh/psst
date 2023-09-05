@@ -265,8 +265,6 @@
 			dijit.byId("branch_id").focus();
 			return false;
 		}
-		
-		loadingBlock();
 		dojo.xhrPost({
 			url:url_data,
 			content:{
@@ -276,7 +274,6 @@
 			load: function(data) {
 				group_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('group').set('store',group_store);
-			    document.getElementsByClassName("overlay")[0].style.display="none";	
 				dijit.byId('group').set('value','<?php echo $this->row['group_id'];?>');
 			},
 			error: function(err) {
@@ -485,6 +482,7 @@ function filterStudentBygroup(){
 		   
 	   },		
 	    error: function(err) {
+			HideloadingBlock();
 	    }
 	});
 }

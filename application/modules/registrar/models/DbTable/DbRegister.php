@@ -238,8 +238,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	function addRegister($data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		$paid_date = date("Y-m-d H:i:s",strtotime($data['paid_date']));
-		//$paid_date = date("Y-m-d H:i:s");
+		
+		$paid_date = date("Y-m-d ",strtotime($data['paid_date'])).date("H:i:s");
+
 		$gdb = new  Application_Model_DbTable_DbGlobal();
 		$stu_id = $data['old_stu'];//$this->getnewStudentId($data['dept']);
 		

@@ -2141,6 +2141,12 @@ function getAllgroupStudyNotPass($action=null){
   }
   function getnewStudentId($branch_id,$degree){//used global
 	  	$db = $this->getAdapter();
+	  	
+	  	$canEntry = Setting_Model_DbTable_DbGeneral::geValueByKeyName('entry_stuid');
+	  	if($canEntry==1){//entry by self not need generate for user
+	  		return ;
+	  	}
+	  	
 	  	$prefixOpt = Setting_Model_DbTable_DbGeneral::geValueByKeyName('studentPrefixOpt');
 	  	if($prefixOpt==1){//branch
 	  		$pre = $this->getPrefixCode($branch_id);//by branch

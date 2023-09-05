@@ -962,8 +962,8 @@ class Application_Form_FrmGlobal{
 							<td width='15%'><strong style='font-size:12px;'><label id='lb_receipt_no'></label></strong></td>
 						</tr>
 						<tr>
-							<td><span class='spanBlog'>Print Date:".date('d-m-Y g:iA')."</span></td>
-							<td><span class='spanBlog'>&nbsp;Print By : ".$username."</span></td>
+							<td></td>
+							<td></td>
 							<td align='center' valign='bottom'>
 								<div style='font-family:Times New Roman;font-size:11px;font-weight:bold'>Official Receipt</div>
 							</td>
@@ -973,36 +973,38 @@ class Application_Form_FrmGlobal{
 						<tr>
 							<td>អត្តលេខ,Student ID/Test ID</td>
 							<td> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+							<td></td>
+							<td><span class='spanBlog'>&nbsp;Print By : ".$username."</span></td>
+							<td><span class='spanBlog'>Print Date:".date('d-m-Y g:iA')."</span></td>
+						</tr>
+						<tr>
+							<td style='vertical-align: top;'>គោត្តនាម-នាម</td>
+							<td> : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top;' ></label></td>
 							<td>ឆ្នាំសិក្សា/Academic Year</td>
 							<td>: <label id='lb_academic_year' class='one'>&nbsp;</label></td>
-							<td rowspan='5' valign='top'>
+							<td rowspan='4' valign='top'>
 								<div style='float:right;border:1px solid #000;width:70px;height:85px;text-align:right; $showPic '>
 									<label id='lb_photo'></label>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<td style='vertical-align: top;'>គោត្តនាម-នាម</td>
-							<td > : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top;' ></label></td>
-							<td>ប្រភេទ/Type </td>
-							<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
-						</tr>
-						<tr>
 							<td>Family Name-Name</td>
 							<td> : &nbsp;<label id='lb_namelatin' class='one bold' style='display: inline-block; vertical-align: top;'></label></td>
 							<td>ថ្នាក់/Class</td>
-							<td style='white-space: nowrap;'>: <label id='lb_grade' class='one'>&nbsp;</label>
-							</td>
+							<td style='white-space: nowrap;'>: <label id='lb_grade' class='one'>&nbsp;</label></td>
 						</tr>
 						<tr>
 							<td>ភេទ/Gender </td>
 							<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
 							<td>ថ្នាកទី/Grade/Level​​​</td>
-							<td rowspan='2' valign='top'>: &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
+							<td valign='top'>: &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
 						</tr>
 						<tr>
 							<td>លេខទូរសព្ទ/Tel</td>
 							<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
+							<td>ប្រភេទ/Type </td>
+							<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
 						</tr>
 					<tr>
 						<td colspan='5'><div id='t_amountmoneytype'></div></td>

@@ -1003,27 +1003,7 @@ function getExistingService(){//get existing server and default server
 			}
 		});
 	}
-/*var term_study_option = '';
-url_term = '<?php echo $this->url(array('module'=>'accounting','controller'=>'term','action'=>'gettermstudy'));?>';
-function getAllTermStudy(){
-	branch_id = dijit.byId('branch_id').get('value');
-	dojo.xhrPost({
-		url: url_term,
-		content:{
-			'branch_id':branch_id,
-			'study_year':study_year,
-			'option':1,
-		},
-		handleAs:"json",
-		load: function(data){
-			if(data){
-				term_study_option = data;
-			}
-		},
-		error: function(err) {
-		}
-	});
-}*/
+
 	
 var template = '';
 var col = 0;
@@ -1173,6 +1153,9 @@ function getValidate(key){
 	if(start_date!=null){
 		amount= dijit.byId('qty_'+key).get('value');
 		term = dijit.byId('term_'+key).get('value');
+		if(term!=1){
+			return ;
+		}
 		
 		if(term==1){
 			var a = new Date(start_date);
@@ -1236,6 +1219,7 @@ function getTermStudy(key){
 				if(data){
 					dijit.byId("date_start_"+key).attr("value",data.start_date);
 					dijit.byId("validate_"+key).attr("value",data.end_date);
+					return false;
 				}
 			},
 			error: function(err) {
@@ -1481,7 +1465,7 @@ function printSave(){
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បញ្ចុះតម្លៃ<small>Discount</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Fee</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></strong></td>';
-								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid($)</small></strong></td>';
+								  //temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid($)</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
 								  temp+='<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
 							  temp+='</tr>';
@@ -1502,7 +1486,7 @@ function printSave(){
 									  item_label='School Fee '+item_label;
 								  }
 								  temp+='<td align="left" style="border:1px solid #000;line-height:10px" class="notedDescription"><label class="notedDescription">&nbsp;'+item_label+'<label></td>'; 
-								  temp+='<td align="center" style="border:1px solid #000;">'+term_label+'</td>';
+								  temp+='<td align="center" style="border:1px solid #000;white-space:nowrap;">'+term_label+'</td>';
 								  temp+='<td style="border:1px solid #000;">'+dijit.byId("qty_"+rowIDArray[n]).get('value')+' x '+dojo.number.format(dijit.byId('price_'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 
 								  discountLable='';
@@ -1522,7 +1506,7 @@ function printSave(){
 								  temp+='<td style="border:1px solid #000;"><span class="spanBlog">'+dijit.byId("discount_type"+rowIDArray[n]).attr('displayedValue')+'</span><span class="spanBlog">'+discountLable+'</span></td>';
 								  temp+='<td align="center" style="border:1px solid #000;">'+dojo.number.format(dijit.byId('extra_fee'+rowIDArray[n]).get('value'),{places:2})+'</td>';
 								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("total_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
-								  temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
+								  //temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 								  onepaymentType = dijit.byId("term_"+rowIDArray[n]).get('value');
 								  if(onepaymentType==5){//one payment only
 									  start_date = '';

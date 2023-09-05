@@ -140,7 +140,7 @@ function setDatatoReceipt(){
 						  temp+='<td style="border:1px solid #000;">បញ្ចុះតម្លៃ<small>Discount</small></td>';
 						  temp+='<td style="border:1px solid #000;">សេវាផ្សេងៗ<small>Other Fee</small></td>';
 						  temp+='<td style="border:1px solid #000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></td>';
-						  temp+='<td style="border:1px solid #000;">បានបង់<small>Paid($)</small></td>';
+						  //temp+='<td style="border:1px solid #000;">បានបង់<small>Paid($)</small></td>';
 						  temp+='<td style="border:1px solid #000;">សុពលភាព<small>Valid Date</small></td>';
 						  temp+='<td style="border:1px solid #000;">សម្គាល់<small>Note</small></td>';
 					  temp+='</tr>';
@@ -155,13 +155,13 @@ function setDatatoReceipt(){
 						var items_type ='<?php echo $rs['service_type']; ?>';
 						var term_label = "-";
 						if(items_type!=3){
-							term_label = '';//dijit.byId("term_"+rowIDArray[n]).attr('displayedValue');
+							term_label = '';
 						}
 					  temp+='<tr style="font-size:11px;line-height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
 					 
 					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;"><label class="notedDescription">&nbsp;'+item_label+'</label></td>'; 
-					  term = '<?php if ($rs['is_onepayment']!=1) { echo $rs['payment_term']; }else{ echo "-";}?>';
+					  term = '<?php echo $rs['payment_term'];?>';
 					  temp+='<td align="center" style="border:1px solid #000;line-height:10px;">'+term+'</td>';
 					  fee='<?php echo number_format($rs['fee'],2);?>';
 					  temp+='<td style="border:1px solid #000;">'+<?php echo number_format($rs['qty'],2);?>+'x'+fee+'</td>';
@@ -177,14 +177,14 @@ function setDatatoReceipt(){
 						  temp+='<td align="center" style="border:1px solid #000;">'+totalpayment+'</td>';
 					
 						paid='<?php echo number_format($rs['paidamount'],2);?>';
-					  temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
+					 	//temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
 					  
 					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo '<span class="spanBlog">'.$rs['start_date'].'</span>'; echo empty($rs['validate'])?"":'<span class="spanBlog">'.$rs['validate'].'</span>';}else{echo'&nbsp;';}?>';	
 							  				  
 					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</span></td>';
 					  note = '<?php echo addslashes($rs['note']);?>';
 					  var div = document.getElementById('noteContent');
-					var htmlString = $( '#noteContent'+'<?php echo $key;?>').html();
+					  var htmlString = $( '#noteContent'+'<?php echo $key;?>').html();
  
   
 					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+htmlString+'</td>';

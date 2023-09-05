@@ -115,4 +115,26 @@ public function init()
 		$this->view->days = $row;
 		
 	}
+	
+	public function rptTeacherAttsheetAction(){
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id) ? 0: $id;
+
+		$db = new Allreport_Model_DbTable_DbRptAllStaff();
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}else{
+			$search = array(
+						'branch_id' => '',
+						'degree' => '',
+						'group' => '',
+					);
+		}
+		$search["teacherId"] = $id;
+		$row = $db->getTeacherScheduleGroupAndStudent($search);
+		$this->view->rs = $row;
+		
+		
+		
+	}
 }

@@ -2337,6 +2337,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$label = "name_kh";
 					
 				}
+				$groupList = $this->getGroupOfStudent($studentId);
+				$groupList = empty($groupList)?0:$groupList;
+				
 				$sql="
 					SELECT
 						sat.`group_id`
@@ -2357,11 +2360,57 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				";
 				if($type==1){//attendance
 					$sql.="
+						,(SELECT 
+								COUNT(*) AS attendence_status
+							FROM 
+								`rms_student_attendence` AS sat2 
+							WHERE					
+								sat2.type=1
+								AND sat2.`status`=1
+								AND sat2.group_id IN (".$groupList.")
+								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
+								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) AS countNoPermission
+						,(SELECT 
+								COUNT(*) AS attendence_status
+							FROM 
+								`rms_student_attendence` AS sat2 
+							WHERE					
+								sat2.type=1
+								AND sat2.`status`=1
+								AND sat2.group_id IN (".$groupList.")
+								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
+								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) AS countPermission
+						,(SELECT 
+								COUNT(*) AS attendence_status
+							FROM 
+								`rms_student_attendence` AS sat2 
+							WHERE					
+								sat2.type=1
+								AND sat2.`status`=1
+								AND sat2.group_id IN (".$groupList.")
+								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
+								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) AS countLate
+						,(SELECT 
+								COUNT(*) AS attendence_status
+							FROM 
+								`rms_student_attendence` AS sat2 
+							WHERE					
+								sat2.type=1
+								AND sat2.`status`=1
+								AND sat2.group_id IN (".$groupList.")
+								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
+								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) AS countEalyLeave
+			
+					";
+					
+					/*
+					$sql.="
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=2 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countNoPermission
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=3 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countPermission
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=4 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countLate
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=5 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countEalyLeave
 					";
+					*/
 				}else{//Mistake
 					$sql.="
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=1 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countSmallMistake
@@ -2385,8 +2434,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				";
 		
 				
-				$groupList = $this->getGroupOfStudent($studentId);
-				$groupList = empty($groupList)?0:$groupList;
+				
 				$sql.=" AND sat.group_id IN (".$groupList.")";
 				
 				if(!empty($search['month'])){
@@ -2505,9 +2553,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$sql.=" AND DATE_FORMAT(sat.`date_attendence`,'%Y%m') = ".$yearMonth;
 				}
 				
-				$sql.=" GROUP BY sat.`group_id`
-						,sat.`date_attendence`
-					ORDER BY sat.`date_attendence` DESC";
+				$sql.=" GROUP BY sat.`group_id`,sat.`date_attendence`";
+				$sql.=" ORDER BY sat.`date_attendence` DESC ";
+				if($type==1){
+					$sql.=",satd.`attendence_status` DESC";
+				}
     			 
 				$row = $db->fetchAll($sql);
 				$result = array(

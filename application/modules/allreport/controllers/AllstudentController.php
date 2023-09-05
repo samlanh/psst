@@ -538,7 +538,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$row = $db->getStudentGroup($id,$search,0);
 		$this->view->rs = $row;
-	
+		if(!empty($row)){
+			$search["branch_id"] = empty($row[0]["branch_id"]) ? $search["branch_id"] : $row[0]["branch_id"];
+			$search["group"] = empty($row[0]["group_id"]) ? $search["group"] : $row[0]["group_id"];
+			$search["academic_year"] = empty($row[0]["academic_year"]) ? 0 : $row[0]["academic_year"];
+		}
+		
 		$this->view->rr = $result;
 		$this->view->datasearch = $search;
 		$this->view->search = $search;

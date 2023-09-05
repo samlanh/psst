@@ -376,6 +376,13 @@
 		});
 		getAllGroupByBranch();
 		
+		<?php if(!empty($this->search['branch_id'])){ ?>
+		dijit.byId('branch_id').set('value','<?php echo $this->search['branch_id']?>');
+		<?php } ?>
+		<?php if(!empty($this->search['academic_year'])){ ?>
+		dijit.byId('academic_year').set('value','<?php echo $this->search['academic_year']?>');
+		<?php } ?>
+		
 	});
 
 	var oldBranch = "<?php echo $this->search['branch_id']?>";

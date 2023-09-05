@@ -185,7 +185,7 @@ class Test_IndexController extends Zend_Controller_Action
 
 		if(!empty($result_date)){
 			if($month_amount < $setting_period){
-				Application_Form_FrmMessage::Sucessfull("THIS TIME CAN NOT TEST AGAIN",self::REDIRECT_URL);
+				Application_Form_FrmMessage::Sucessfull("can not edit",self::REDIRECT_URL);
 			}
 		}
 		

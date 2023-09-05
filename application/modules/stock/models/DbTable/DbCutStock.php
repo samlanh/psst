@@ -248,7 +248,7 @@ if(!empty($type)){
     			
     			$arrs = array(
     					'cutstock_id'=>$cut_id,
-    					'paymentId'=>$_data['payment_id'.$i],
+//     					'paymentId'=>$_data['payment_id'.$i],
     					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
     					'product_id'=>$_data['itemdetail_id'.$i],
     					'due_amount'=>$_data['qty_balance'.$i],
@@ -665,7 +665,6 @@ if(!empty($type)){
     			}else{
 	    			$arrs = array(
 	    					'cutstock_id'=>$cut_id,
-	    					//     					'payment_id'=>$_data['payment_id'.$i],
 	    					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
 	    					'product_id'=>$_data['itemdetail_id'.$i],
 	    					'due_amount'=>$_data['qty_balance'.$i],

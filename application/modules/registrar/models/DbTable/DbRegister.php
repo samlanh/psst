@@ -163,7 +163,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				if ($condictionSale!=1){
     					$arrs = array(
     							'cutstock_id'=>$data['cutStockId'],
-								'paymentId'=>$data['paymentId'],
     							'student_paymentdetail_id'=>$sale_detailid,
     							'product_id'=>$row['pro_id'],
     							'due_amount'=>0,
@@ -221,7 +220,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			
     		if ($condictionSale!=1){
     			$arrs = array(
-						'paymentId'		=>$data['paymentId'],
     					'cutstock_id'=>$data['cutStockId'],
     					'student_paymentdetail_id'=>$sale_detailid,
     					'product_id'=>$data['item_id'.$i],
@@ -260,11 +258,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					if(!empty($data['auto_test'])){
 						$newSerial = $_dbgb->getTestStudentId($data['branch_id']);
 						$arr = array(
-								'customer_type' =>4,
-								'is_studenttest' =>1,
-								'serial' => $newSerial,
-								'create_date'=>date("Y-m-d H:i:s"),
-								'create_date_stu_test'=>date("Y-m-d H:i:s"),
+							'customer_type' =>4,
+							'is_studenttest' =>1,
+							'serial' => $newSerial,
+							'create_date'=>date("Y-m-d H:i:s"),
+							'create_date_stu_test'=>date("Y-m-d H:i:s"),
 						);
 						$this->_name='rms_student';
 						$where="stu_id = ".$stu_id;
@@ -627,7 +625,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$income_no = $db->fetchOne($sql1);
     	
     	$new_acc_no= (int)$payment_no + (int)$income_no +  1;
-    	//$new_acc_no = $new_acc_no-506;//for psis
+    	$new_acc_no = $new_acc_no-506;//for psis
     	
     	$acc_length = strlen((int)$new_acc_no+1);
     	$pre=0;

@@ -130,7 +130,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 					$sql3="SELECT id FROM `rms_group_subject_detail` WHERE group_id = ".$groupId." AND  subject_id=".$subject_id." AND teacher= ".$teacherId;
 					$subjectDetailId =  $db->fetchOne($sql3);
                     if(empty($subjectDetailId)){
-						if($dayData[$j]!="ចេញលេង" || $dayData[$j]!="ម៉ោងសម្រាក"){
+						if($dayData[$j]!="ចេញលេង"){
 							$arr = array(
 								'group_id'		=> $groupId,
 								'subject_id'	=> $subject_id,

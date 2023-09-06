@@ -226,18 +226,14 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 				font-family: 'Khmer OS Muol Light';
 			}
 
-			tr.rowValue td {
-				padding: 2px;
-			}
+		
 
 			tr.rowValue td,
 			tr.rowValue td span {
 				line-height: 16px;
 			}
 
-			tr.rowValue td {
-				padding: 5px 0;
-			}
+			
 
 			span.valueLabel {
 				display: block;
@@ -273,7 +269,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 			}
 
 			label.LabelTeacher {
-				line-height: 30px;
+				line-height: 25px;
 				font-weight: initial;
 				font-family: 'Khmer OS Battambang';
 			}
@@ -305,10 +301,11 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 			@media print {
 				@page {
 					page: A4;
-					margin: 0.8cm;
+					margin:0.5cm 0.5cm 0cm 0.5cm;
+					size:portrait;
 				}
 			}
-
+		
 			.pages-break {
 				page-break-inside: always;
 				page-break-before: always;
@@ -326,6 +323,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 				position: absolute;
 			}
 		</style>
+		
 		<?php if (!empty($this->rs))
 			foreach ($this->rs as $key => $rs) {
 
@@ -400,11 +398,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 							<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
 						</td>
 					</tr>
-					<tr>
-						<td align="center" colspan="3" valign="top">
-							&nbsp;
-						</td>
-					</tr>
+					
 					<tr>
 						<td colspan="3" align="center">
 							<h2 class="headerKhmer">លិខិតចាត់តាំង</h1>
@@ -431,7 +425,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 								</span> ភេទ <span class="ValueLabelTeacher red ">
 									<?php echo $rs['sex']; ?>
 								</span>
-								<?php if ($rs['degreeTye'] == 2) { ?> បង្រៀនផ្នែក
+								<?php if ($rs['degreeTye'] == 1) { ?> បង្រៀនផ្នែក
 									<?php echo $rs['department']; ?> កម្រិតបឋម
 								<?php } else { ?> ឯកទេស <span class="ValueLabelTeacher red ">
 										<?php echo $rs['skill']; ?>
@@ -468,15 +462,21 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 						</td>
 					</tr>
 					<tr>
+					
+						<td align="center" colspan="3">
+							<label class="headerLabel">ថ្នាក់ទី ៖</label> &nbsp;<label class="LabelTeacher smalFont">
+								<?php echo $rs['teachingGroup']; ?>
+							</label>
+						</td>
+						
+					</tr>
+					<tr>
 						<td align="left">
 							<label class="headerLabel">ឈ្មោះ ៖</label> &nbsp;<label class="LabelTeacher smalFont">
 								<?php echo $rs['teacher_name_kh']; ?>
 							</label>
 						</td>
 						<td align="center">
-							<label class="headerLabel">ថ្នាក់ទី ៖</label> &nbsp;<label class="LabelTeacher smalFont">
-								<?php echo $rs['teachingGroup']; ?>
-							</label>
 						</td>
 						<td align="right">
 							<label class="headerLabel">លេខទូរស័ព្ទ ៖</label> &nbsp;<label class="LabelTeacher smalFont">
@@ -691,18 +691,20 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 							</table>
 						</td>
 					</tr>
-					<tr>
-						<td align="center" colspan="3" valign="top">
-							&nbsp;
-						</td>
-					</tr>
 					<tr class="footer">
 						<td colspan="3" valign="top">
-							<table width="100%">
+							<table width="100%" >
 								<tr class="head">
-									<td align="left" colspan="2">
+									<td align="left" rowspan="2">
+										<span class="khmerLabel valueLabel " style="margin-top: 10px;">ចម្លងជូន ៖</span>
+											<span class="className valueLabel "> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ
+												"ដើម្បីជ្រាបជាព័ត៌មា​ន​​"</span>
+											<span class="className valueLabel "> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</span>
+											<span class="className valueLabel "> - ឯកសា - កាលប្បវត្តិ
+											<?php echo $branchInfo['prefix']; ?>
+										</span>
 									</td>
-									<td colspan="2" align="center">
+									<td  align="center">
 										<?php
 										$moment = date("Y-m-d");
 										$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
@@ -720,17 +722,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 									</td>
 								</tr>
 								<tr class="head">
-									<td align="left" colspan="2">
-										<span class="khmerLabel valueLabel " style="margin-bottom: 10px;">ចម្លងជូន ៖</span>
-										<span class="className valueLabel "> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ
-											"ដើម្បីជ្រាបជាព័ត៌មា​ន​​"</span>
-										<span class="className valueLabel "> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</span>
-										<span class="className valueLabel "> - ឯកសា - កាលប្បវត្តិ
-											<?php echo $branchInfo['prefix']; ?>
-										</span>
-
-									</td>
-									<td colspan="2" align="center">
+									
+									<td  align="center">
 										<div class="principalStamp">
 											<div class="stamp" style="margin-bottom: 20px;">
 												<img src="<?php echo $stamp; ?>" style="height:120px;position:relative;" />

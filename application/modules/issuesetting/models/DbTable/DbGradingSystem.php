@@ -55,6 +55,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 				'modify_date'			=>date("Y-m-d H:i:s"),
 				'user_id'				=>$this->getUserId(),
 				'schoolOption'			=>$_data['schoolOption'],
+				'settingScoreAttId'			=>$_data['settingScoreAttId'],
 			);
 			$this->_name='rms_scoreengsetting';
 			$id = $this->insert($_arr);
@@ -205,6 +206,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    				'modify_date'			=>date("Y-m-d H:i:s"),
    				'user_id'				=>$this->getUserId(),
 				'schoolOption'			=>$_data['schoolOption'],
+				'settingScoreAttId'		=>$_data['settingScoreAttId'],
    		);
    		$this->_name='rms_scoreengsetting';
    		$where=' id='.$_data['id'];

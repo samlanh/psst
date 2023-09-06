@@ -71,6 +71,12 @@
 											<?php echo $frm_items->getElement("degreeId");?>
 										</div>
 									 </div>
+									 <div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("scoreAttPolicy");?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="settingScoreAttId" />
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -161,11 +167,45 @@ tr.rowData {
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 	 
 	var branch_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->branchopt));?> );
-	dojo.ready(function(){ 
-		$("#title").keyup(function(){
+	
+	var schedulue_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?>);
+	require(["dojo/ready"], function(ready){
+		new dijit.form.FilteringSelect({
+				store: schedulue_store,
+				queryExpr: "*${0}*",
+				autoComplete: false,                      
+				required: false,               
+				id: "settingScoreAttId",
+				name: "settingScoreAttId",   
+				class: 'fullside', 
+				placeHolder:"<?php echo $tr->translate("scoreAttPolicy");?>",
+				onChange: function() {  
+					
+				}
+			}, "settingScoreAttId");
+			
+		ready(function(){
+		
+			
+			var branch_id = dijit.byId('branch_id');
+			branch_id.on('change', function(evt) {
+				getSettingScoreAttendance();
+			});
+			
+			var degreeId = dijit.byId('degreeId');
+			degreeId.on('change', function(evt) {
+				getSettingScoreAttendance();
+			});
+			getSettingScoreAttendance();
+			
+			
+			$("#title").keyup(function(){
+			});
+			
+			getSubjectOpt();
 		});
-		getSubjectOpt();
-	});	
+		
+	});
 	
 	var subject = '';
 	var urlGetSubject = '<?php echo $this->url(array("module"=>"global","controller"=>"subject","action"=>"getsubject"));?>';										
@@ -432,5 +472,37 @@ tr.rowData {
 			dojo.query("#row"+index).remove();
 
 			totalPercent();
+	}
+	
+	var urlGetSettingScoreAttendance = '<?php echo $this->url(array("module"=>"issuesetting","controller"=>"settingscoreatt","action"=>"getsettingscore"));?>';										
+	function getSettingScoreAttendance(){
+		dijit.byId('settingScoreAttId').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		degreeId = dijit.byId('degreeId').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var settingScoreAttStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('settingScoreAttId').set('store',settingScoreAttStore);  
+			return false;
+		}
+		settingId = '<?php echo empty($this->row['settingScoreAttId']) ? 0 : $this->row['settingScoreAttId'];?>';
+		dojo.xhrPost({
+			url:urlGetSettingScoreAttendance,
+			content:{
+				'branchId':branch_id,
+				'degreeId':degreeId,
+				'settingId':settingId,
+			},
+			handleAs:"json",
+			load: function(data) {
+				settingScoreAttStore  = getDataStorefromJSON('id','name', data);
+				dijit.byId('settingScoreAttId').set('store',settingScoreAttStore);  
+				<?php if(!empty($this->row['settingScoreAttId'])){?>
+				dijit.byId('settingScoreAttId').set('value','<?php echo $this->row['settingScoreAttId'];?>');
+				<?php } ?>
+			},
+			error: function(err){
+
+			}
+		});
 	}
 </script>

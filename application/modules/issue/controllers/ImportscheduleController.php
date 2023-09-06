@@ -30,7 +30,7 @@ class Issue_importscheduleController extends Zend_Controller_Action {
 				}
 				$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 				$db->ScheduleByImport($sheetData,$data);
-				//Application_Form_FrmMessage::Sucessfull("Import Successfully", "/issue/importschedule");
+				Application_Form_FrmMessage::Sucessfull("Import Successfully", "/issue/importschedule");
 			}
 			else{
 			

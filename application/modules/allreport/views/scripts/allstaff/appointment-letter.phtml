@@ -332,7 +332,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 
 				$branch_id = empty($rs['branch_id']) ? 1 : $rs['branch_id'];
 				$branchInfo = $dbgb->getBranchInfo($branch_id);
-
+				$NameTitle = 'លោក/លោកស្រី';
 
 				if ($lang_id == 1) {
 					$schoolName = $branchInfo['school_namekh'];
@@ -390,8 +390,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 							<h2 class="headerKhmer">
 								<?php echo $schoolName; ?>
 							</h2>
-							<label class="LabelTeacher bigFont">លេខ.................
-								<?php echo $branchInfo['abbreviations']; ?>
+							<label class="LabelTeacher bigFont">លេខ...............
+								<?php echo $branchInfo['prefix']; ?>
 							</label>
 						</td>
 						<td align="center" valign="top">
@@ -726,7 +726,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 											"ដើម្បីជ្រាបជាព័ត៌មា​ន​​"</span>
 										<span class="className valueLabel "> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</span>
 										<span class="className valueLabel "> - ឯកសា - កាលប្បវត្តិ
-											<?php echo $branchInfo['abbreviations']; ?>
+											<?php echo $branchInfo['prefix']; ?>
 										</span>
 
 									</td>

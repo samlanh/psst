@@ -28,9 +28,19 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			$scheduleid_detail=$this->getScheduleSettingDetail($data['schedule_setting'],$fromHourValue,$toHourValue);
 
 			$groupName=$sheetData[$i]['C'];
+			$numbers = preg_replace('/[^0-9]/', '', $groupName);
 
+			if($groupName[0]=='K'){
+				$degree= 1;
+			}else if($numbers<=6){
+              $degree= 2;
+			}else if($numbers > 6 AND $numbers< 10){
+				$degree= 3;
+			}else{
+				$degree= 4;
+			}
 			if(!empty($groupName)){
-				$sql2=" SELECT id FROM `rms_group` WHERE group_code = '".$groupName." ' AND academic_year= ".$data['branch_id']." ";
+				$sql2=" SELECT id FROM `rms_group` WHERE group_code like '%".$groupName."%' AND academic_year= ".$data['academic_year']." ";
 				$groupId =  $db->fetchOne($sql2);
 				if(empty($groupId)){
 
@@ -43,6 +53,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 							'group_code'  	 => $groupName,
 							'academic_year'  => $data['academic_year'],
 							'teacher_id'  	 => $teacher_id,
+							'degree'  		 => $degree,
 							'is_use'     	 => 1,
 							'school_option'  => 1,
 							'is_pass'     	 => 0,
@@ -53,7 +64,6 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 					$this->_name = "rms_group";
 					$groupId =  $this->insert($_arr);
 				}
-
 			}
 			
 			$sql2="SELECT id FROM `rms_group_schedule` WHERE group_id = ".$groupId." AND  academic_year=".$data['academic_year']." ";
@@ -75,6 +85,8 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$this->_name='rms_group_schedule';
 				$scheduleId = $this->insert($_arr);
 			}
+
+			
 		
 			$dayData = array( 
 				$sheetData[$i]['E'],
@@ -114,7 +126,27 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 					if(!empty($teacherData[$j])){
 						$teacherId = $this->getTeacherId($teacherData[$j],$teacherPhone=null, $data);
 					}
-					
+
+					$sql3="SELECT id FROM `rms_group_subject_detail` WHERE group_id = ".$groupId." AND  subject_id=".$subject_id." AND teacher= ".$teacherId;
+					$subjectDetailId =  $db->fetchOne($sql3);
+                    if(empty($subjectDetailId)){
+						$arr = array(
+							'group_id'		=> $groupId,
+							'subject_id'	=> $subject_id,
+							'teacher'   	=> $teacherId,
+							'date' 			=> date("Y-m-d"),
+							'user_id'		=> $this->getUserId(),
+							// 'max_score'		=> 0,
+							// 'score_short'	=> 0,
+							// 'amount_subject'=> 0,
+							// 'semester_max_score' => 0,
+							// 'amount_subject_sem'=> 0,
+						);
+						$this->_name='rms_group_subject_detail';
+						$this->insert($arr);
+						
+					}
+	
 					$arr = array(
     					'main_schedule_id'		=>$scheduleId,
     					'branch_id'				=>$data['branch_id'],
@@ -142,21 +174,20 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 
 	public function getSubjectId($title,$subLang){
 		if(!empty($subLang)){
-			if($subLang=='k'){
+			if($subLang=='k' || $subLang=='K'){
 				$subject_lang=1;
-			}elseif($subLang=='e'){
+			}elseif($subLang=='e'|| $subLang=='E'){
 				$subject_lang=2;
 			}
 		}
-
 		//list($kh_name, $eng_name) = explode(",",$title);
 		$titleSub=explode(",",$title);
 		if(count($titleSub)==1){
-			$kh_name=$titleSub[0];
-			$eng_name=$titleSub[0];
+			$kh_name=trim($titleSub[0]);
+			$eng_name=trim($titleSub[0]);
 		}else{
-			$kh_name=$titleSub[0];
-			$eng_name=$titleSub[1];
+			$kh_name=trim($titleSub[0]);
+			$eng_name=trim($titleSub[1]);
 		}
 		
 		$subject_type=1;
@@ -179,6 +210,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			$arr = array(
 				'subject_titlekh'=>$kh_name,
 				'subject_titleen'=>$eng_name,
+				'shortcut'		=>$eng_name,
 				'schoolOption'	=>1,
 				'is_parent'		=>0,
 				'subject_lang'	=>$subject_lang,
@@ -197,6 +229,15 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 	
 	public function getTeacherId($title,$phone=null,$data){
 		$db = $this->getAdapter();
+		$titleSub=explode(",",$title);
+		if(count($titleSub)==1){
+			$kh_name=trim($titleSub[0]);
+			$eng_name=trim($titleSub[0]);
+		}else{
+			$kh_name=trim($titleSub[0]);
+			$eng_name=trim($titleSub[1]);
+		}
+		
 		$tel='';
 		if(!empty($phone)){
 			$tel=$phone;
@@ -204,15 +245,15 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			$tel='';
 		}
 		if(!empty(($title))){
-			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh LIKE '%".$title."%' ";
+			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh LIKE '%".$kh_name."%' ";
 			$teacherId =  $db->fetchOne($sql);
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			$code = $dbg->getTeacherCode($data['branch_id']);
 			if(empty($teacherId)){
 					$_arr=array(
 						'branch_id' 		 => $data['branch_id'],
-						'teacher_name_en'	 => $title,
-						'teacher_name_kh'	 => $title,
+						'teacher_name_en'	 => $eng_name,
+						'teacher_name_kh'	 => $kh_name,
 						'teacher_code'		 => $code,
 						'tel'				 => $tel,
 						'nation' 			 => 1,

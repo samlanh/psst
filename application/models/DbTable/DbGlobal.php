@@ -1462,7 +1462,7 @@ function getAllgroupStudyNotPass($action=null){
     return $new_name;
   }
   
-  public function getAllSubjectName($data)
+  public function getAllSubjectName($data=array())
   {
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();

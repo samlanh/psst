@@ -128,11 +128,20 @@ public function init()
 						'branch_id' => '',
 						'degree' => '',
 						'group' => '',
+						'start_date'	=> date('Y-m-d'),
+						'end_date'		=> date('Y-m-d',strtotime('+1 month')),
 					);
+			$search["teacherId"] = $id;
 		}
-		$search["teacherId"] = $id;
+		
 		$row = $db->getTeacherScheduleGroupAndStudent($search);
 		$this->view->rs = $row;
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
 		
 		
 		

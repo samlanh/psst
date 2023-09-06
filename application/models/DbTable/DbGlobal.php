@@ -1462,7 +1462,8 @@ function getAllgroupStudyNotPass($action=null){
     return $new_name;
   }
   
-  public function getAllSubjectName($schooloption=null,$typesubject=0){
+  public function getAllSubjectName($data=array())
+  {
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
   	$field = 'subject_titleen';
@@ -1470,12 +1471,29 @@ function getAllgroupStudyNotPass($action=null){
   		$field = 'subject_titlekh';
   	}
   	
-  	$sql=" SELECT id ,CONCAT($field,CASE WHEN subject_lang =1 THEN '(ខ្មែរ)' WHEN subject_lang =2 THEN '(English)' ELSE '' END) AS name,
-  			shortcut 
-  		FROM `rms_subject` WHERE status=1 AND subject_titlekh != '' ";
+	$schooloption = empty($data["schooloption"]) ? null : $data["schooloption"];
+	$typesubject = empty($data["typesubject"]) ? 0 : $data["typesubject"];
+	  
+  	$sql=" SELECT subj.id ,
+			CONCAT(subj.$field,CASE WHEN subj.subject_lang =1 THEN '(ខ្មែរ)' WHEN subj.subject_lang =2 THEN '(English)' ELSE '' END) AS name,
+  			subj.shortcut 
+  		  ";
+	
+	$sql .=" FROM `rms_subject` AS subj  ";	
+	
+	$where="";	
+	$groupBY="";	
+	if(!empty($data["groupId"])){
+		$sql.=" JOIN rms_group_subject_detail AS gsd ON gsd.subject_id = subj.id ";
+		$where.=" AND gsd.group_id =".$data["groupId"];
+		$groupBY=" GROUP BY gsd.subject_id ";
+	}	
+	
+	$sql .=" WHERE subj.status=1 AND subj.subject_titlekh != '' ";	
+	
   	
   	if ($typesubject==1){
-  		$sql .=' AND type_subject=1 ';
+  		$sql .=' AND subj.type_subject=1 ';
   	}
   	
   	$user = $this->getUserInfo();
@@ -1486,7 +1504,7 @@ function getAllgroupStudyNotPass($action=null){
   		if (!empty($SchoolOptionarr)){
   			$s_where = array();
   			foreach ($SchoolOptionarr as $i){
-  				$s_where[] = $i['id']." IN (schoolOption)";
+  				$s_where[] = $i['id']." IN (subj.schoolOption)";
   			}
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
@@ -1495,7 +1513,7 @@ function getAllgroupStudyNotPass($action=null){
   			$userSchO = explode(",", $user['schoolOption']);
   			$s_wheres = array();
   			foreach ($userSchO as $schooloptionId){
-  				$s_wheres[] = $schooloptionId." IN (schoolOption)";
+  				$s_wheres[] = $schooloptionId." IN (subj.schoolOption)";
   			}
   			$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
   		}
@@ -1509,24 +1527,46 @@ function getAllgroupStudyNotPass($action=null){
   		}
   		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
   	}
-  	
-  	
-  	$sql.=" ORDER BY subject_lang ASC, $field ASC ";
+  	$sql.=$where;
+  	$sql.=$groupBY;
+  	$sql.=" ORDER BY subj.subject_lang ASC, subj.$field ASC ";
   	return $db->fetchAll($sql);
   }
   
   public function getAllSubjectStudy($schoolOption=null){
-  	return $this->getAllSubjectName($schoolOption,1);
+	  $arrayFilter = array(
+			"typesubject"=>1,
+			"schoolOption"=>$schoolOption,
+		);
+  	return $this->getAllSubjectName($arrayFilter);
   } 
-  public function getAllTeahcerName($branch_id=null,$schooloption=null,$stuff_type=null){
+  public function getAllTeahcerName($data=array()){
+	  
+	  $branch_id=empty($data["branch_id"]) ? null : $data["branch_id"];
+	  $schooloption=empty($data["schooloption"]) ? null : $data["schooloption"];
+	  $stuff_type=empty($data["stuff_type"]) ? null : $data["stuff_type"];
+	 
   	$db = $this->getAdapter();
-  	$sql=" SELECT id ,teacher_name_kh AS name FROM `rms_teacher` WHERE STATUS=1 AND teacher_name_kh != '' AND active_type=0 ";
+  	$sql=" SELECT 
+			t.id ,
+			t.teacher_name_kh AS name 
+		FROM `rms_teacher` AS t ";
+	$where="";	
+	$groupBY="";	
+	if(!empty($data["groupId"])){
+		$sql.=" JOIN rms_group_subject_detail AS gsd ON gsd.teacher = t.id ";
+		$where.=" AND gsd.group_id =".$data["groupId"];
+		$groupBY=" GROUP BY gsd.teacher ";
+	}	
+	$sql.="	WHERE t.status=1 AND t.teacher_name_kh != '' AND t.active_type=0 ";
   	if (!empty($branch_id)){
-  		$sql.=" AND branch_id = $branch_id";
+  		$sql.=" AND t.branch_id = $branch_id";
   	}
   	if (!empty($stuff_type)){
-		$sql.=" AND staff_type = $stuff_type";
+		$sql.=" AND t.staff_type = $stuff_type";
 	}
+	$sql.=$where;
+	
   	$user = $this->getUserInfo();
   	$level = $user['level'];
   	if ($level!=1){
@@ -1534,7 +1574,7 @@ function getAllgroupStudyNotPass($action=null){
   			$userSchO = explode(",", $user['schoolOption']);
   			$s_wheres = array();
   			foreach ($userSchO as $schooloptionId){
-  				$s_wheres[] = $schooloptionId." IN (schoolOption)";
+  				$s_wheres[] = $schooloptionId." IN (t.schoolOption)";
   			}
   			$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
   		}
@@ -1543,17 +1583,22 @@ function getAllgroupStudyNotPass($action=null){
   		$schooloptionParam = explode(",", $schooloption);
   		$s_whereee = array();
   		foreach ($schooloptionParam as $schooloptionId){
-  			$s_whereee[] = $schooloptionId." IN (schoolOption)";
+  			$s_whereee[] = $schooloptionId." IN (t.schoolOption)";
   		}
   		$sql .=' AND ( '.implode(' OR ',$s_whereee).')';
   	}
-  	$sql.= $this->getAccessPermission();
-  	$sql.=" ORDER BY id DESC";
+  	$sql.= $this->getAccessPermission("t.branch_id");
+  	$sql.=$groupBY;
+  	$sql.=" ORDER BY t.id DESC";
   	return $db->fetchAll($sql);
   }
   public function getAllTeacherOption($schoolOption=null,$branch_id=null,$addNew=null){
   	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-  	$teacher = $this->getAllTeahcerName($branch_id,$schoolOption);
+	$arrayFilter = array(
+			"branch_id"=>$branch_id,
+			"schoolOption"=>$schoolOption
+	);
+  	$teacher = $this->getAllTeahcerName($arrayFilter);
   	if (!empty($addNew)){
   	array_unshift($teacher,array('id' => -1,"name"=>$tr->translate("ADD_NEW")));
   	}

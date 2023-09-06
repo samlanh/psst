@@ -117,7 +117,12 @@ class Mobileapp_SchoolbusController extends Zend_Controller_Action
     		$schoolOption = $row['schooloptionlist'];
 	
 			$db = new Application_Model_DbTable_DbGlobal();
-			$teacher = $db->getAllTeahcerName($data['branch_id'],$schoolOption,$data['staff_type']);
+			$arrayFilter = array(
+				"branch_id"=>$data['branch_id'],
+				"stuff_type"=>$data['staff_type'],
+				"schoolOption"=>$schoolOption
+			);
+			$teacher = $db->getAllTeahcerName($arrayFilter);
 			array_unshift($teacher, array ('id' => '', 'name' => $this->tr->translate("SELECT_DRIVER")));
 			print_r(Zend_Json::encode($teacher));
 			exit();

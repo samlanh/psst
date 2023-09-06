@@ -66,6 +66,8 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 		$_db = new Issue_Model_DbTable_DbSchedule();
 		$teacher = $_db->getAllTeacher();
 		$this->view->teacher = $teacher;
+		
+		
 	}
 	
 	function editAction(){

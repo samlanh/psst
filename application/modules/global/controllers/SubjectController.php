@@ -162,7 +162,11 @@ class Global_SubjectController extends Zend_Controller_Action {
 			}else if (!empty($data['branch_id'])){
 				$data['schoolOption'] = $db->getSchoolOptionListByBranch($data['branch_id']);
 			}
-			$subject = $db->getAllSubjectName($data['schoolOption'],1); // 1=select only study subject
+			$arrayFilter = array(
+					"schoolOption"=>$data['schoolOption'],
+					"typesubject"=>1,
+				);
+			$subject = $db->getAllSubjectName($arrayFilter); // 1=select only study subject
 			
 			$blankTitle=$this->tr->translate("PLEASE_SELECT");
 			if(!empty($data['blankTitle'])){
@@ -185,7 +189,11 @@ class Global_SubjectController extends Zend_Controller_Action {
 	
 			if (!empty($schoolOption)){
 				$db = new Application_Model_DbTable_DbGlobal();
-				$subject = $db->getAllSubjectName($schoolOption,1);
+				$arrayFilter = array(
+					"schoolOption"=>$schoolOption,
+					"typesubject"=>1,
+				);
+				$subject = $db->getAllSubjectName($arrayFilter);
 				array_unshift($subject, array ('id' => '', 'name' => $this->tr->translate("ADD_NEW")));
 				array_unshift($subject, array ('id' => 0, 'name' => ''));
 				print_r(Zend_Json::encode($subject));

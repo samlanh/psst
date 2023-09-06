@@ -751,7 +751,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		FROM 
 			`rms_group_reschedule` AS gSchD 
 			JOIN `rms_group_schedule` AS gSch ON gSchD.main_schedule_id = gSch.id 
-			LEFT JOIN `rms_subject` AS subj ON subj.id = gSchD.subject_id
+			LEFT JOIN `rms_subject` AS subj ON subj.id = gSchD.subject_id 
 			LEFT JOIN `rms_timeseting` AS frTime ON frTime.value = gSchD.from_hour
 			LEFT JOIN `rms_timeseting` AS toTime ON toTime.value = gSchD.to_hour
 		";
@@ -759,6 +759,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			WHERE 1 
 				AND gSch.group_id = $groupId 
 				AND gSchD.day_id = $dayValue
+				AND subj.type_subject = 1
 		";
 		$sql.= "
 			GROUP BY 

@@ -114,13 +114,6 @@
 									</div>	
 								 </div>
 								<div class="form-group">
-									<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("scoreAttPolicy");?> <span class="required">*</span></label>
-									<div class="col-md-7 col-sm-7 col-xs-12">
-										<input id="settingScoreAttId" />
-										<input type="hidden" name="degreeId" id="degreeId" value="0" dojoType="dijit.form.TextBox"  />
-									</div>
-								</div>
-								<div class="form-group">
 									<label class="control-label custom-switch float-end "> 
 										<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
 										<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($this->row['status'])){ echo "checked";} ?> > 
@@ -247,19 +240,6 @@ dojo.ready(function(){
 		}
 	}, "schedule_setting");
 	
-	new dijit.form.FilteringSelect({
-		store: schedulue_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                      
-		required: false,               
-		id: "settingScoreAttId",
-		name: "settingScoreAttId",   
-		class: 'fullside', 
-		placeHolder:"<?php echo $tr->translate("scoreAttPolicy");?>",
-		onChange: function() {  
-			
-		}
-	}, "settingScoreAttId");
 	
 	var branch_id = dijit.byId('branch_id');
 	branch_id.on('change', function(evt) {
@@ -331,7 +311,6 @@ function getAllGroupByBranch(){
 
 			if(oldBranchId==branch_id){
 				dijit.byId('group_code').set('value','<?php echo $this->row['group_id'];?>'); 
-				getGroupInfomation();
 			}
 		},
 		error: function(err) {
@@ -417,10 +396,19 @@ function getAllSchoreSettingDetail(){
 		loadingBlock();
 		url_getgroup = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'schedulesetting','action'=>'getschedulesettingdetailedit'));?>';
 	}
+	groupId = dijit.byId('group_code').get('value');
+	if(groupId=='' || groupId==-1){
+		groupId=0;
+	}
 	dojo.xhrPost({
 		url: url_getgroup,
 		content:{
-			'branch_id':branch_id,'schedule_setting':schedule_setting,'academic_year':academic_year,'keyrow':keyrow,'id':'<?php echo $this->row['id'];?>'
+			'branch_id':branch_id,
+			'schedule_setting':schedule_setting,
+			'academic_year':academic_year,
+			'keyrow':keyrow,
+			'groupId':groupId,
+			'id':'<?php echo $this->row['id'];?>'
 			},
 		handleAs:"json",
 		load: function(data) {
@@ -450,65 +438,6 @@ function disableColume(keyIndex){
 		dijit.byId("subject_"+keyIndex).set('disabled',true);
 		dijit.byId("teacher_"+keyIndex).set('disabled',true);
 	}
-}
-
-var urlGetSettingScoreAttendance = '<?php echo $this->url(array("module"=>"issuesetting","controller"=>"settingscoreatt","action"=>"getsettingscore"));?>';										
-function getSettingScoreAttendance(){
-	dijit.byId('settingScoreAttId').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	degreeId = dijit.byId('degreeId').get('value');
-	settingId = '<?php echo empty($this->row['settingScoreAttId']) ? 0 : $this->row['settingScoreAttId'];?>';
-	if(branch_id=='' || branch_id==-1){
-		var settingScoreAttStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('settingScoreAttId').set('store',settingScoreAttStore);  
-		return false;
-	}
-	dojo.xhrPost({
-		url:urlGetSettingScoreAttendance,
-		content:{
-			'branchId':branch_id,
-			'degreeId':degreeId,
-			'settingId':settingId,
-		},
-		handleAs:"json",
-		load: function(data) {
-			settingScoreAttStore  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('settingScoreAttId').set('store',settingScoreAttStore); 
-
-			groupId = dijit.byId('group_code').get('value');	
-			if(groupId=='' || groupId==-1){
-				groupId = 0;
-			}
-			if(oldGroupId==groupId){
-				dijit.byId('settingScoreAttId').set('value','<?php echo $this->row['settingScoreAttId'];?>'); 
-			}
-		},
-		error: function(err){
-
-		}
-	});
-}
-
-var urlGetGroupInfo = '<?php echo $this->url(array('module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'get-to-group')); ?>';
-function getGroupInfomation(){
-	groupId = dijit.byId('group_code').get('value');
-	if(groupId=='' || groupId==-1){
-		dijit.byId('degreeId').set('value',0); 
-		return false;
-	}
-	dojo.xhrPost({
-		url: urlGetGroupInfo,
-		content:{
-			'to_group':groupId,
-			},
-		handleAs:"json",
-		load: function(data){
-			dijit.byId('degreeId').set('value',data.degree_id);  
-			getSettingScoreAttendance();
-		},
-		error: function(err) {
-		}
-	});
 }
 
 </script>

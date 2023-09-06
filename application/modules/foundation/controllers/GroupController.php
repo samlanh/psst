@@ -124,7 +124,11 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		
 		$_dggroup = new Foundation_Model_DbTable_DbGroup();
 		if (!empty($schoolOption)){
-			$teacher = $model->getAllTeahcerName($row['branch_id'],$schoolOption);
+			$arrayFilter = array(
+				"branch_id"=>$row['branch_id'],
+				"schoolOption"=>$schoolOption
+			);
+			$teacher = $model->getAllTeahcerName($arrayFilter);
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;
@@ -177,7 +181,11 @@ class Foundation_GroupController extends Zend_Controller_Action {
 		
 		$_dggroup = new Foundation_Model_DbTable_DbGroup();
 		if (!empty($schoolOption)){
-			$teacher = $model->getAllTeahcerName($row['branch_id'],$schoolOption);
+			$arrayFilter = array(
+				"branch_id"=>$row['branch_id'],
+				"schoolOption"=>$schoolOption
+			);
+			$teacher = $model->getAllTeahcerName($arrayFilter);
 			array_unshift($teacher, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 			array_unshift($teacher, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
 			$this->view->teacher =$teacher;

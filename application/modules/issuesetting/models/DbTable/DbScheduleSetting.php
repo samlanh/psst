@@ -175,6 +175,7 @@ class Issuesetting_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstrac
    	$branch_id = empty($_data['branch_id'])?0:$_data['branch_id'];
    	$academic_year = empty($_data['academic_year'])?0:$_data['academic_year'];
    	$index = empty($_data['keyrow'])?1:$_data['keyrow'];
+   	$groupId = empty($_data['groupId'])?0:$_data['groupId'];
    	
    	$_db = new Accounting_Model_DbTable_DbFee();
    	//$row = $_db->getFeeById($academic_year);
@@ -183,8 +184,16 @@ class Issuesetting_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstrac
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$model = new Application_Model_DbTable_DbGlobal();
    	$allDay = $model->getAllDay(1);
-   	$allSubject = $model->getAllSubjectName($schoolOption);
-   	$allTeacher = $model->getAllTeahcerName($branch_id);
+	$arraySubject = array(
+			"schoolOption"=>$schoolOption,
+			"groupId"=>$groupId,
+		);
+   	$allSubject = $model->getAllSubjectName($arraySubject);
+	$arrayFilter = array(
+		"branch_id"=>$branch_id,
+		"groupId"=>$groupId,
+	);
+   	$allTeacher = $model->getAllTeahcerName($arrayFilter);
    	 
    	 
    	$scheduleSetting = $this->getScheduleSettingDetail($setting_id);
@@ -293,6 +302,7 @@ class Issuesetting_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstrac
    	$academic_year = empty($_data['academic_year'])?0:$_data['academic_year'];
    	$index = empty($_data['keyrow'])?1:$_data['keyrow'];
    	$mainId = empty($_data['id'])?1:$_data['id'];
+	$groupId = empty($_data['groupId'])?0:$_data['groupId'];
    
    	$_db = new Accounting_Model_DbTable_DbFee();
    	$schoolOption = '1,2,3';
@@ -300,8 +310,16 @@ class Issuesetting_Model_DbTable_DbScheduleSetting extends Zend_Db_Table_Abstrac
    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
    	$model = new Application_Model_DbTable_DbGlobal();
    	$allDay = $model->getAllDay(1);
-   	$allSubject = $model->getAllSubjectName($schoolOption);
-   	$allTeacher = $model->getAllTeahcerName($branch_id);
+	$arraySubject = array(
+			"schoolOption"=>$schoolOption,
+			"groupId"=>$groupId,
+		);
+   	$allSubject = $model->getAllSubjectName($arraySubject);
+	$arrayFilter = array(
+				"branch_id"=>$branch_id,
+				"groupId"=>$groupId,
+			);
+   	$allTeacher = $model->getAllTeahcerName($arrayFilter);
    	 
    	 
    	$scheduleSetting = $this->getScheduleSettingDetail($setting_id);

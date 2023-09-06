@@ -78,7 +78,6 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     				'create_date'=>date("Y-m-d H:i:s"),
     				'modify_date'=>date("Y-m-d H:i:s"),
     				'user_id'=>$this->getUserId(),
-					'settingScoreAttId'	=>$_data['settingScoreAttId'],
     		);
     		$this->_name='rms_group_schedule';
     		
@@ -143,7 +142,6 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     				'status'			=>$status,
     				'modify_date'		=>date("Y-m-d H:i:s"),
     				'user_id'			=>$this->getUserId(),
-					'settingScoreAttId'	=>$_data['settingScoreAttId'],
     		);
     		$this->_name='rms_group_schedule';
     		$id = $_data['id'];

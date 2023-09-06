@@ -552,6 +552,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND sat.type=1
 					AND satd.`stu_id`=$stu_id
 					AND sat.`group_id`=$group
+					GROUP BY sat.`date_attendence` 
+					ORDER BY satd.`attendence_status` DESC
 			";
 		return $db->fetchAll($sql);
 	}

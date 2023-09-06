@@ -43,7 +43,8 @@
             	<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
             	<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
 					<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
-					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+					<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+					<option value="3" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
 				</select>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">

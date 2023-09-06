@@ -189,7 +189,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$result = $db->getStudentGroup($id,$search,0);
+		$result = $db->getStudentGroupReport($id,$search,0);
 		if(empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
 		}
@@ -211,7 +211,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			// 			$db->submitDateList($search);
-			$row = $db->getStudentGroup(null,$search,1);
+			$row = $db->getStudentGroupReport(null,$search,1);
 			$result=array();
 			if(!empty($row[0]['group_id'])){
 				$result = $db->getGroupDetailByID($row[0]['group_id']);
@@ -234,7 +234,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$this->view->search = $search;
 		
-		$row = $db->getStudentGroup($id,$search,1);
+		$row = $db->getStudentGroupReport($id,$search,1);
 		$this->view->rs = $row;
 		$this->view->rr = $result;
 	
@@ -536,7 +536,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
 		}
 		
-		$row = $db->getStudentGroup($id,$search,0);
+		$row = $db->getStudentGroupReport($id,$search,0);
 		$this->view->rs = $row;
 		if(!empty($row)){
 			$search["branch_id"] = empty($row[0]["branch_id"]) ? $search["branch_id"] : $row[0]["branch_id"];
@@ -865,7 +865,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
-		$row = $db->getStudentGroup($id,$search,0);
+		$row = $db->getStudentGroupReport($id,$search,0);
 		$this->view->rs = $row;
 		$rs = $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;

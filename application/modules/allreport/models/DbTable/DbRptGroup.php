@@ -57,7 +57,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$order);
     	 
     }
-   public function getStudentGroup($id,$search,$type){
+   public function getStudentGroupReport($id,$search,$type){
 	   	$session_lang=new Zend_Session_Namespace('lang');
 		$lang_id=$session_lang->lang_id;
 			$gender_str = 'name_en';

@@ -834,7 +834,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	$this->view->search = $search;
     	
     	$db = new Allreport_Model_DbTable_DbRptGroup();
-    	$row = $db->getStudentGroup($id,$search,1);
+    	$row = $db->getStudentGroupReport($id,$search,1);
     	
     	if(empty($row)){
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
@@ -926,7 +926,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     	}
     	$this->view->search = $search;
     	$db = new Allreport_Model_DbTable_DbRptGroup();
-    	$row = $db->getStudentGroup($id,$search,1);
+    	$row = $db->getStudentGroupReport($id,$search,1);
     	print_r($row);
     	$this->view->rs = $row;
     	$rs = $db->getGroupDetailByID($id);

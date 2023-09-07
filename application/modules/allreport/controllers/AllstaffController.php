@@ -113,6 +113,8 @@ public function init()
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getDays();
 		$this->view->days = $row;
+		// $dbgb= new Application_Model_DbTable_DbGlobal();
+		// $this->view->day = $dbgb->getAllDay();
 		
 	}
 	

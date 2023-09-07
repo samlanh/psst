@@ -803,6 +803,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	
 	function getDays($type=1){
+		defined('STUDY_DAY_SETTING') || define('STUDY_DAY_SETTING', Setting_Model_DbTable_DbGeneral::geValueByKeyName('studyday_schedule'));
 		$db = $this->getAdapter();
 		$sql="SELECT 
 			v.key_code AS id 
@@ -814,11 +815,11 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				1 
 				AND v.type=18
 			";
-		if($type==1){//Weekly
+		if(STUDY_DAY_SETTING==1){//Weekly
 			$sql.=' AND v.key_code NOT IN (7) ';
-		}else if($type==2){//Full Weekly
+		}else if(STUDY_DAY_SETTING==2){//Full Weekly
 			$sql.=' AND v.key_code NOT IN (6,7) ';
-		}else if($type==3){//Weekend
+		}else if(STUDY_DAY_SETTING==3){//Weekend
 			$sql.=' AND v.key_code IN (6,7) ';
 		}
 		return $db->fetchAll($sql);

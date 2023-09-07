@@ -384,7 +384,11 @@ function getInfoBygroup(){
 					string+='</div>';
 				string+='</div>';
 			dojo.byId("gr-info").innerHTML = string;
-			filterStudentBygroup();
+				
+			setTimeout(() => {
+			  filterStudentBygroup();
+			}, "100");
+			
 		},
 		error: function(err) {
 		}

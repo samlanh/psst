@@ -137,6 +137,9 @@ public function init()
 		}
 		
 		$row = $db->getTeacherScheduleGroupAndStudent($search);
+		if(empty($search["teacherId"])){
+			$row= array();
+		}
 		$this->view->rs = $row;
 		
 		$form=new Application_Form_FrmSearchGlobal();

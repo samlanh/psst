@@ -977,16 +977,14 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					 st.`stu_khname`,
 					 st.`sex` 
 				FROM 
-					 `rms_group` AS g,
-					 `rms_student` AS st, 
-					  rms_student_attendence AS sd, 
-					 `rms_student_attendence_detail` AS sdd 
+					 rms_student_attendence AS sd 
+					 JOIN `rms_student_attendence_detail` AS sdd ON sd.`id` = sdd.`attendence_id` 
+						LEFT JOIN `rms_group` AS g ON sd.group_id = g.id 
+						LEFT JOIN `rms_student` AS st ON st.`stu_id` = sdd.`stu_id`
 				WHERE 
 					 (sd.type=2 OR sdd.`attendence_status` IN (4,5)) 
-					 AND sd.`id` = sdd.`attendence_id` 
 					 AND sd.group_id = g.id 
 					 AND sd.status=1 
-					 AND st.`stu_id` = sdd.`stu_id` 
     		";
     	
     	$from_date =(empty($search['start_date']))? '1': "sd.`date_attendence` >= '".$search['start_date']." 00:00:00'";
@@ -1021,8 +1019,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("g.branch_id");
-    	
-    	$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC";
+    	$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC ";
+		
     	return $db->fetchAll($sql.$where.$order);
     }
     
@@ -1078,16 +1076,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     function getStatusMistakeByStudent($stu_id,$group,$start_date,$end_date){
     	$db = $this->getAdapter();
-    	$sql="SELECT
-    	sd.`group_id`,
-    	sd.`type`,
-    	sdd.`attendence_status` as mistake_type,
-    	sdd.description,
-    	sd.`date_attendence` as mistake_date,
-    	sd.for_session
+    	$sql="
+		SELECT
+			sd.`group_id`,
+			sd.`type`,
+			sdd.`attendence_status` as mistake_type,
+			sdd.description,
+			sd.`date_attendence` as mistake_date,
+			sd.for_session
     	FROM
-    	`rms_student_attendence` AS sd,
-    	`rms_student_attendence_detail` AS sdd
+			`rms_student_attendence` AS sd,
+			`rms_student_attendence_detail` AS sdd
     	WHERE
     	(sd.type=2 OR (sd.type=1 AND sdd.`attendence_status` IN (4,5)))
     	AND sd.`id` = sdd.`attendence_id`
@@ -1096,6 +1095,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$from_date =(empty($start_date))? '1': " sd.`date_attendence` >= '".$start_date." 00:00:00'";
     	$to_date = (empty($end_date))? '1': " sd.`date_attendence` <= '".$end_date." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
+		$where.=" GROUP BY sd.id ORDER BY sd.`date_attendence` ASC,sdd.attendence_status DESC ";
     	return $db->fetchAll($sql.$where);
     }
     function getTotalStatusMistake($stu_id,$date_att,$group){

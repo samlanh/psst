@@ -94,7 +94,7 @@
 														</select>
 													</div>
 													<div class="col-md-6 col-sm-6 col-xs-12">
-														<select onChange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
+														<select readonly onChange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 																<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['name'];?></option>
 															<?php }}?>

@@ -86,6 +86,13 @@ class IssuescoreController extends Zend_Controller_Action
 	
 		$this->view-> month = $dbExternal->getAllMonth();
 		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$degreeId = $row['degree_id'];
+		$result = $dbg->checkEntryScoreSetting($degreeId);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/issuescore/index");
+		}
+		
 	}
 
 	public function editAction()

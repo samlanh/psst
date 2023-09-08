@@ -71,15 +71,18 @@ class Allreport_Model_DbTable_DbMistakeCertificate extends Zend_Db_Table_Abstrac
 
     function getAttendenceBydate($semester,$group_id,$stu_id){
     	$db = $this->getAdapter();
-    	$sql="SELECT sade.*,
-    				sta.`date_attendence`,sta.`group_id`,
+    	$sql="SELECT 
+					sade.*,
+    				sta.`date_attendence`,
+					sta.`group_id`,
 					(SELECT st.`type` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `type`,
 					(SELECT st.`for_session` FROM `rms_student_attendence` AS st WHERE st.id = sade.`attendence_id` LIMIT 1) AS `for_session`
 				FROM rms_student_attendence_detail AS sade,
 				`rms_student_attendence` AS sta
 					WHERE sta.`id` = sade.`attendence_id` ";
     	$where = " AND sta.for_semester=".$semester;
-    	$where.=" AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id ORDER BY sta.`date_attendence` ASC";
+    	$where.=" AND sade.`stu_id`=$stu_id AND sta.`group_id`=$group_id ";
+		$where.=" GROUP BY sta.id ORDER BY sta.`date_attendence` ASC,sade.attendence_status DESC ";
     	return $db->fetchAll($sql.$where);
     }
 }

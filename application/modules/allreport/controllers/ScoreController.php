@@ -614,6 +614,11 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     public function rptTotalStudentMistakeAction(){
     	if($this->getRequest()->isPost()){
     		$search=$this->getRequest()->getPost();
+			
+			$group= new Allreport_Model_DbTable_DbRptAllStudent();
+			$this->view->student = $rs_rows = $group->getStudentMistake($search);
+			$this->view->search=$search;
+			$this->view->datasearch = $search;
     	}
     	else{
     		$search=array(
@@ -627,10 +632,7 @@ class Allreport_ScoreController extends Zend_Controller_Action {
     		);
     	}
     
-    	$group= new Allreport_Model_DbTable_DbRptAllStudent();
-    	$this->view->student = $rs_rows = $group->getStudentMistake($search);
-    	$this->view->search=$search;
-    	$this->view->datasearch = $search;
+    	
     
     	$form=new Application_Form_FrmSearchGlobal();
     	$forms=$form->FrmSearch();

@@ -456,10 +456,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 					sdd.`stu_id`, st.`stu_code`, st.`stu_enname`, st.`stu_khname`, st.`sex`
 				FROM
-					`rms_group` AS g, 
-					`rms_student` AS st,
-					rms_student_attendence AS sd,
-					`rms_student_attendence_detail` AS sdd
+					rms_student_attendence AS sd 
+					 JOIN `rms_student_attendence_detail` AS sdd ON sd.`id` = sdd.`attendence_id` 
+						LEFT JOIN `rms_group` AS g ON sd.group_id = g.id 
+						LEFT JOIN `rms_student` AS st ON st.`stu_id` = sdd.`stu_id`
+						
 				WHERE
 					(sd.type=2 OR sdd.`attendence_status` IN (4,5))
 					AND sd.`id` = sdd.`attendence_id`
@@ -491,6 +492,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND sdd.`stu_id` = $stu_id
 					AND sd.`group_id` = $group 
 			";
+		$sql.=" GROUP BY sd.id ORDER BY sd.`date_attendence` ASC,sdd.attendence_status DESC ";
 		return $db->fetchAll($sql);
 	}
 	

@@ -58,11 +58,7 @@
          </div>
 	</form>
 	<div id="divPrint">
-		<table style="background:#fff; margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
-			<tr>
-				<td colspan="3"><?php echo $this->rsheader;?></td>
-			</tr>
-		</table>	
+	
 	<style>
 		table.main_table tr td{line-height:18px !important;
 		border: 1px solid #000;
@@ -101,6 +97,10 @@
 							margin: 0.8cm;
 						}
 					}
+					.pages-break {
+						page-break-inside: always;
+						page-break-before: always;
+					}
 			</style>
 				<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
 					foreach ($this->rs As $rs){
@@ -108,9 +108,11 @@
 						$timestudy = $db_sub->getTimeSchelduleByYGS($rs['year_id'],$rs['group_id']);
 						$day = $db_global->getDaySchedule($rs['branch_id'],$rs['year_id'],$rs['group_id']);
 						$amt_day = count($day);
+						$break_page = "pages-break";
 				?>
-				<tr>
+				<tr class="<?php echo $break_page; ?> ">
 					<td colspan="3" align="center">
+						<?php echo $this->rsheader;?>
 						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
 					</td>
 				</tr>

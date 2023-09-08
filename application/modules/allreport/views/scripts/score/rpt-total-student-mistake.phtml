@@ -19,13 +19,27 @@ table.tb-footer tr.style-head {
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_TOTAL_STUDENT_MISTAKE');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file-text " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_TOTAL_STUDENT_MISTAKE');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
     	</div>
     </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<script type="dojo/method" event="onSubmit">   
+			 if(this.validate()) {
+				academic_year = dijit.byId('academic_year').get('value');
+				if(academic_year=="" || academic_year==-1){
+					alert("<?php echo $tr->translate('FILTER_SEARCH_ATLEAST_SELECT_ACADEMIC_YEAR');?>");
+					dijit.byId("academic_year").focus();
+					return false;
+				}
+				loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+		</script>
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("adv_search");?>

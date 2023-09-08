@@ -3753,6 +3753,7 @@ function getAllgroupStudyNotPass($action=null){
   	if(isset($data['isAutopayment']) AND $data['isInititilize']==1){
   		if($data['isAutopayment']!=''){
   			$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
+  			$sql.=" AND FIND_IN_SET((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),degreeOption) ";
   		}
   	}
   	$sql.=" ORDER BY i.items_type ASC ";

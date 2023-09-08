@@ -29,9 +29,12 @@ class Registrar_Model_DbTable_Dbcashcount extends Zend_Db_Table_Abstract
 		if($search['branch_id']>0){
 			$where.= " AND user_id = ".$search['branch_id'];
 		}
-		if($search['user']>0){
-			$where.= " AND user_id = ".$search['user'];
+		if(!empty($search['user'])){
+			if($search['user']>0){
+				$where.= " AND user_id = ".$search['user'];
+			}
 		}
+		
 		$order=" order by id desc ";
 		return $db->fetchAll($sql.$where.$order);
 	}

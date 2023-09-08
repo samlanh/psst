@@ -48,6 +48,9 @@ class Accounting_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		if($search['status']>-1){
 			$where.= " AND mba.status = ".$search['status'];
 		}
+		if(!empty($search['branch_id'])){
+			$where.= " AND mba.branchId = ".$search['branch_id'];
+		}
 		if(!empty($search['group'])){
 			$where.= " AND mba.group = ".$search['group'];
 		}

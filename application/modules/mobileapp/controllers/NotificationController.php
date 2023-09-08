@@ -22,7 +22,10 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 			else{
 				$search = array(
 						'adv_search' => '',
-						'search_status' => -1,
+						'branch_id' => '',
+						'degree' => '',
+						'group' => '',
+						'status' => -1,
 						'start_date'=> date('Y-m-01'),
 						'end_date'=>date('Y-m-d'));
 			}
@@ -30,7 +33,7 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","NORTIFICATION_OPT","DATE","STATUS");
+			$collumns = array("BRANCH_NAME","TITLE","NORTIFICATION_OPT","DEGREE","GROUP_CODE","STUDENT","DATE","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'notification','action'=>'edit',
 			);
@@ -40,10 +43,10 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	
-		$frm = new Application_Form_FrmSearch();
-		$frm = $frm->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm = $frm;
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->frm=$form;
     }
   
     public function addAction()
@@ -69,12 +72,9 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	                Application_Form_FrmMessage::Sucessfull($this->tr->translate('INSERT_SUCCESS'), self::REDIRECT_URL."/add");
 	            }
 	        }
-	        $dbstudent = new Foundation_Model_DbTable_DbStudent();
-	        $group = $dbstudent->getAllgroup();
-	        $this->view->group = $group;
+	       
 	        $dbglobal = new Application_Model_DbTable_DbGlobal();
-	        $this->view->all_student = $dbglobal->getAllStuCode();
-	        
+			$this->view->rsbranch = $dbglobal->getAllBranch();
 	        $this->view->lang = $dbglobal->getLaguage();
 	        
 	        $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
@@ -110,12 +110,8 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	   		exit();
 	   	}
 	    
-	    $dbstudent = new Foundation_Model_DbTable_DbStudent();
-	    $group = $dbstudent->getAllgroup();
-	    $this->view->group = $group;
-	    
 	    $dbglobal = new Application_Model_DbTable_DbGlobal();
-	    $this->view->all_student = $dbglobal->getAllStuCode();
+		$this->view->rsbranch = $dbglobal->getAllBranch();
 	    
 	    $this->view->lang = $dbglobal->getLaguage();
 	    $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
@@ -126,9 +122,17 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	   		$id = $this->getRequest()->getParam("id");
 	   		$db = new Mobileapp_Model_DbTable_DbNotification();
 	   		if (!empty($id)) {
-	   			$db->deleteData($id);
-	   			Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
-	   			echo "<script>window.close();</script>";
+				$row = $db->getById($id);
+				$this->view->row = $row;
+				if (empty($row)){
+					Application_Form_FrmMessage::Sucessfull($this->tr->translate('NO_RECORD'), self::REDIRECT_URL);
+					exit();
+				}else{
+					$db->deleteData($id);
+					Application_Form_FrmMessage::message($this->tr->translate('DELETE_SUCCESS'));
+					echo "<script>window.close();</script>";
+				}
+	   			
 	   		}
 	   	}catch(Exception $e){
 	   		Application_Form_FrmMessage::message($this->tr->translate('DELETE_FAIL'));

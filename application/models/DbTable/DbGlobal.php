@@ -861,6 +861,9 @@ function getAllgroupStudyNotPass($action=null){
 		if(!empty($data['groupId'])){
 			$where.=" AND gds.group_id=".$data['groupId'];
 		}
+		if(!empty($data['degree'])){
+			$where.=" AND gds.degree=".$data['degree'];
+		}
    	}else{
    		$where=" WHERE 1";
    	}
@@ -3756,6 +3759,7 @@ function getAllgroupStudyNotPass($action=null){
   	if(isset($data['isAutopayment']) AND $data['isInititilize']==1){
   		if($data['isAutopayment']!=''){
   			$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
+  			$sql.=" AND FIND_IN_SET((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),degreeOption) ";
   		}
   	}
   	$sql.=" ORDER BY i.items_type ASC ";

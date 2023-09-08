@@ -1,0 +1,158 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("notification"));
+$frm = $this->frm;
+
+$urlDelete = $this->baseUrl()."/accounting/notification/delete/id/";
+?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('notification');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+	            	<div class="col-md-4 col-sm-4 col-xs-12">
+	            		<?php echo $frm->getElement("adv_search");?>
+	            	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement("branch_id");?>
+	            	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="group" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement('status');?>
+	            	</div>
+				</div>
+				<div class="form-group">
+	            	<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement("start_date");?>
+	            	</div>
+	            	<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement("end_date");?>
+	            	</div>
+	            	
+	            	<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+	            	</div>
+	            </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list;?>
+		</div>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script>
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+
+dojo.require("dojo.html");
+
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		store: group_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		id: "group",
+		name: "group",  
+		class: 'fullside', 
+		readonly:false,
+		required:false,
+		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+		onChange: function() {  
+		}
+	}, "group");
+
+	var branch_id = dijit.byId('branch_id');
+	branch_id.on('change', function(evt) {
+		getAllGroupByBranch();
+		
+	});
+	getAllGroupByBranch();
+	
+	<?php if(!empty($this->search['branch_id'])){ ?>
+	dijit.byId('branch_id').set('value','<?php echo $this->search['branch_id']?>');
+	<?php } ?>
+	
+});
+
+var oldBranch = "<?php echo $this->search['branch_id']?>";
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,
+			'academic_year':"",
+			'noaddnew':1,
+			'forfilter':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('group').set('store',group_store);   
+			if(oldBranch==branch_id){
+				dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
+			}
+		},
+		error: function(err) {
+		}
+	});
+}
+	
+var row=0;
+var url="";
+var indexkey="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+		
+			var m = "clicked: " + key;
+			if(key=="delete"){
+				url='<?php echo $urlDelete;?>';
+			}
+			gotoAction();
+		},
+		items: {
+			"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete", accesskey: "e"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	if(indexkey=='delete'){
+	    if (confirm("<?php echo $tr->translate("Do you want to delete this record ?");?>")) {
+	    	window.location.href = url+row;
+	    } else {
+	    	 return false;
+	    }
+	}else{
+	 	window.open(url+row, '_blank');
+	}
+}
+</script>

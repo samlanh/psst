@@ -19,18 +19,30 @@ $urlDelete = $this->baseUrl()."/mobileapp/notification/delete/id/";
 		<div class="card-box">
 			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
 				<div class="form-group">
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
+	            	<div class="col-md-4 col-sm-4 col-xs-12">
 	            		<?php echo $frm->getElement("adv_search");?>
 	            	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement("branch_id");?>
+	            	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement("degree");?>
+	            	</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="group" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+	            		<?php echo $frm->getElement('status');?>
+	            	</div>
+				</div>
+				<div class="form-group">
 	            	<div class="col-md-2 col-sm-2 col-xs-12">
 	            		<?php echo $frm->getElement("start_date");?>
 	            	</div>
 	            	<div class="col-md-2 col-sm-2 col-xs-12">
 	            		<?php echo $frm->getElement("end_date");?>
 	            	</div>
-	            	<div class="col-md-2 col-sm-2 col-xs-12">
-	            		<?php echo $frm->getElement('search_status');?>
-	            	</div>
+	            	
 	            	<div class="col-md-2 col-sm-2 col-xs-12">
 	            		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 	            	</div>
@@ -42,8 +54,88 @@ $urlDelete = $this->baseUrl()."/mobileapp/notification/delete/id/";
 		</div>
 	</div>
 </div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script>
 dojo.require("dijit.form.DateTextBox");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+
+dojo.require("dojo.html");
+
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		store: group_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		id: "group",
+		name: "group",  
+		class: 'fullside', 
+		readonly:false,
+		required:false,
+		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+		onChange: function() {  
+		}
+	}, "group");
+
+	var branch_id = dijit.byId('branch_id');
+	branch_id.on('change', function(evt) {
+		getAllGroupByBranch();
+		
+	});
+	var degree = dijit.byId('degree');
+	degree.on('change', function(evt) {
+		getAllGroupByBranch();
+		
+	});
+	getAllGroupByBranch();
+	
+	<?php if(!empty($this->search['branch_id'])){ ?>
+	dijit.byId('branch_id').set('value','<?php echo $this->search['branch_id']?>');
+	<?php } ?>
+	
+});
+function getallGrade(){
+}
+
+var oldBranch = "<?php echo $this->search['branch_id']?>";
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	degree = dijit.byId("degree").get("value");
+	if(degree=='' || degree=="-1"){
+		degree=0;	
+	}
+	
+	dojo.xhrPost({
+		url: url_getgroup,
+		content:{
+			'branch_id':branch_id,
+			'degree':degree,
+			'academic_year':"",
+			'noaddnew':1,
+			'forfilter':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			group_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('group').set('store',group_store);   
+			if(oldBranch==branch_id){
+				dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
+			}
+		},
+		error: function(err) {
+		}
+	});
+}
+
 var row=0;
 var url="";
 var indexkey="";

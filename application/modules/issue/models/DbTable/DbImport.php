@@ -86,15 +86,13 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$scheduleId = $this->insert($_arr);
 			}
 
-			
-		
 			$dayData = array( 
 				$sheetData[$i]['E'],
 				$sheetData[$i]['H'],
 				$sheetData[$i]['K'],
 				$sheetData[$i]['N'],
 				$sheetData[$i]['Q'],
-				//$sheetData[$i]['T'],
+			//	$sheetData[$i]['T'],
 			);
 			
 			$teacherData = array( 
@@ -103,7 +101,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$sheetData[$i]['L'],
 				$sheetData[$i]['O'],
 				$sheetData[$i]['R'],
-				//$sheetData[$i]['U'],
+			//	$sheetData[$i]['U'],
 			);
 			$subLang = array( 
 				$sheetData[$i]['G'],
@@ -114,7 +112,6 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			//	$sheetData[$i]['V'],
 			);
 			
-
 			$dayId=1;
 			for($j=0; $j<count($dayData); $j++){
 
@@ -125,6 +122,27 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 					$teacherId = 0;
 					if(!empty($teacherData[$j])){
 						$teacherId = $this->getTeacherId($teacherData[$j],$teacherPhone=null, $data);
+					}
+					
+					if(!empty($dayData[$j])){
+						$arr = array(
+							'main_schedule_id'		=>$scheduleId,
+							'branch_id'				=>$data['branch_id'],
+							'group_id'				=>$groupId,
+							'year_id'				=>$data['academic_year'],
+							'day_id'				=>$dayId,
+							'techer_id'				=>$teacherId ,
+							'subject_id'			=>$subject_id,
+							'schedule_setting_id'	=>$scheduleid_detail['id'],
+							'from_hour'				=>$scheduleid_detail['from_hour'],
+							'to_hour'				=>$scheduleid_detail['to_hour'],	
+							'create_date'			=>date("Y-m-d H:i:s"),
+							'study_type'			=>1,
+							'status'				=>1,
+							'user_id'				=>$this->getUserId(),
+						);
+						$this->_name='rms_group_reschedule';
+						$this->insert($arr); 
 					}
 
 					$sql3="SELECT id FROM `rms_group_subject_detail` WHERE group_id = ".$groupId." AND  subject_id=".$subject_id." AND teacher= ".$teacherId;
@@ -147,25 +165,6 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 							$this->insert($arr);
 						}
 					}
-	
-					$arr = array(
-    					'main_schedule_id'		=>$scheduleId,
-    					'branch_id'				=>$data['branch_id'],
-    					'group_id'				=>$groupId,
-    					'year_id'				=>$data['academic_year'],
-						'day_id'				=>$dayId,
-						'techer_id'				=>$teacherId ,
-						'subject_id'			=>$subject_id,
-    					'schedule_setting_id'	=>$scheduleid_detail['id'],
-    					'from_hour'				=>$scheduleid_detail['from_hour'],
-    					'to_hour'				=>$scheduleid_detail['to_hour'],	
-    					'create_date'			=>date("Y-m-d H:i:s"),
-    					'study_type'			=>1,
-						'status'				=>1,
-    					'user_id'				=>$this->getUserId(),
-    				);
-					$this->_name='rms_group_reschedule';
-					$this->insert($arr); 
 				$dayId++;
 				
 			}
@@ -199,7 +198,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 		}
 
 		$db = $this->getAdapter();
-		$sql=" SELECT id FROM `rms_subject` WHERE subject_titlekh LIKE '%".$kh_name."%' ";
+		$sql=" SELECT id FROM `rms_subject` WHERE subject_titlekh = '".$kh_name."' ";
 		if($subject_type==1){
 			$sql.="  AND subject_lang= $subject_lang AND type_subject=1 ";
 		}elseif($subject_type==2){
@@ -246,7 +245,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			$tel='';
 		}
 		if(!empty(($title))){
-			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh LIKE '%".$kh_name."%' ";
+			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh = '".$kh_name."' ";
 			$teacherId =  $db->fetchOne($sql);
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			$code = $dbg->getTeacherCode($data['branch_id']);

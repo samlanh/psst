@@ -14,28 +14,61 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$lang = $dbp->currentlang();
 		
+		$colunmname='title_en';
+		$label="name_en";
+		$branch = "branch_nameen";
+		if ($lang==1){
+			$colunmname='title';
+			$label="name_kh";
+			$branch = "branch_namekh";
+		}
+		
 		$from_date =(empty($search['start_date']))? '1': "mba.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "mba.date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;	
 		$sql="
 			SELECT 
 				mba.id
+				,b.$branch AS branch_name
 				,(SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1) AS title
 				,(SELECT name_kh FROM `rms_view` WHERE type=34 AND key_code=mba.opt_notification LIMIT 1) AS option_type
+				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = mba.degree LIMIT 1) AS degree
+				,CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS `group_code`
+				,CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentName
+				
 				,mba.date
 				,mba.status as status 
 			FROM 
-				$this->_name AS mba 
+				mobile_notice AS mba 
+				LEFT JOIN `rms_branch` AS b ON b.br_id = mba.branchId
+				LEFT JOIN rms_student AS s  ON s.stu_id = mba.student
+				LEFT JOIN rms_group AS g  ON g.id = mba.group
 			WHERE 1 
 				AND mba.fromDepartment=1
 		";
-		if($search['search_status']>-1){
-			$where.= " AND mba.status = ".$search['search_status'];
+		if($search['status']>-1){
+			$where.= " AND mba.status = ".$search['status'];
+		}
+		if(!empty($search['branch_id'])){
+			$where.= " AND mba.branchId = ".$search['branch_id'];
+		}
+		if(!empty($search['degree'])){
+			$where.= " AND mba.degree = ".$search['degree'];
+		}
+		if(!empty($search['group'])){
+			$where.= " AND mba.group = ".$search['group'];
 		}
 		if(!empty($search['adv_search'])){
 			$s_where=array();
-			$s_search=$search['adv_search'];
-			$s_where[]= " (SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1) LIKE '%{$s_search}%'";
+			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(CONCAT(s.last_name,s.stu_enname),' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(CONCAT(s.stu_enname,s.last_name),' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE((SELECT ad.title FROM `mobile_notice_detail` AS ad WHERE ad.notification_id = mba.`id` AND ad.lang=$lang LIMIT 1),' ','')  	LIKE '%{$s_search}%'";
+			
 			$where.=' AND ('.implode(' OR ', $s_where).')';
 		}
 		$order = " ORDER BY mba.id DESC";
@@ -45,7 +78,7 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 	public function getById($id)
 	{
 		$db=$this->getAdapter();
-        $sql="SELECT *  FROM ".$this->_name." WHERE id = ".$db->quote($id);
+        $sql="SELECT *  FROM mobile_notice WHERE fromDepartment=1 AND  id = ".$db->quote($id);
         $sql.=" LIMIT 1 ";
         $row=$db->fetchRow($sql);
         return $row;
@@ -58,13 +91,14 @@ class Mobileapp_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
         try{
 			
 			$arr=array(
-            		'opt_notification' => $data['opt_notification'],
-            		'degree' => empty($data['degree'])?"":$data['degree'],
-            		'group' => empty($data['group'])?"":$data['group'],
-            		'student' => empty($data['student'])?"":$data['student'],
-                  	'date'=>$data['public_date'],
-					'modify_date'=>date("Y-m-d H:i:s"),
-					'user_id'=>$this->getUserId(),
+            		'opt_notification' 	=> $data['opt_notification'],
+            		'branchId' 			=> empty($data['branchId'])?0:$data['branchId'],
+            		'degree' 			=> empty($data['degree'])?"":$data['degree'],
+            		'group'				=> empty($data['groupId'])?"":$data['groupId'],
+            		'student' 			=> empty($data['studentId'])?"":$data['studentId'],
+                  	'date'				=> $data['public_date'],
+					'modify_date'		=> date("Y-m-d H:i:s"),
+					'user_id'			=> $this->getUserId(),
             );
             $dbglobal = new Application_Model_DbTable_DbGlobal();
             $lang = $dbglobal->getLaguage();

@@ -256,7 +256,7 @@ body, #dijitEditorBody {
 				
 	         </div>
 	         <div class="card-box">
-               	<div class="col-md-8 col-sm-8 col-xs-8 border-top mt-20 ptb-10 text-center">
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
                		<input class="button-class button-danger" iconClass="glyphicon glyphicon-repeat" type="reset" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button"/>
 					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" />
                	</div>
@@ -286,6 +286,7 @@ dojo.ready(function(){
 		class: "fullside", 
 		placeHolder:"<?php echo $tr->translate("SELECT_DRIVER");?>",          
 		onChange: function() {  
+			getDriverInfo();
 		}
 	}, "driverId");
 
@@ -302,7 +303,9 @@ dojo.ready(function(){
 	  });
 
 	  getDriverBybranch();
+	  getDriverInfo();
 	  isNewDriver();
+	 
 });
 
 function Checkchange(){
@@ -323,6 +326,7 @@ function Checkchange(){
 
 function getAllAcademicByBranch(){
 	getDriverBybranch();
+	getDriverInfo();
 }
 
 var url_gettecher = '<?php echo $this->url(array("module"=>"mobileapp","controller"=>"schoolbus","action"=>"getdriver"));?>';	
@@ -356,49 +360,74 @@ function getDriverBybranch(){
 		}
 	});
 }
-
-	function Isold(){
-				dijit.byId('driver_name').attr('required', false);
-				dijit.byId('driver_name_en').attr('required', false);
-
-				dijit.byId("sex").set('readOnly',true);
-				dijit.byId('sex').attr('value', '');
+var url_getdriver_info = '<?php echo $this->url(array("module"=>"mobileapp","controller"=>"schoolbus","action"=>"getdriverinfo"));?>';										
+function getDriverInfo(){
+		
+	driverId = dijit.byId('driverId').get('value');
+	if(driverId=='' || driverId==-1){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getdriver_info,
+		content:{
+			'id':driverId,
+			},
+		handleAs:"json",
+		load: function(data) {
+				dijit.byId('sex').attr('value', 1);
 				dijit.byId('sex').attr('required', false);
 
-				dijit.byId('phone').set('readOnly', true);
+				dijit.byId('driver_name').attr('value', data.teacher_name_en);
+				dijit.byId('driver_name').attr('required', false);
+
+				dijit.byId('driver_name_en').attr('value', data.teacher_name_en);
+				dijit.byId('driver_name_en').attr('required', false);
+
+				dijit.byId('phone').attr('value', data.tel);
 				dijit.byId('phone').attr('required', false);
 
-				dijit.byId('email').set('readOnly', true);
+				dijit.byId('email').attr('value', data.email);
 				dijit.byId('email').attr('required', false);
 
-				dijit.byId('address').set('readOnly', true);
+				dijit.byId('address').attr('value', data.address);
 				dijit.byId('address').attr('required', false);
 
+				dijit.byId('user_name').attr('value', data.user_name);
 				dijit.byId('user_name').attr('required', false);
 				dijit.byId('password').attr('required', false);
 				dijit.byId('confirm_password').attr('required', false);
-
-				dijit.byId('user_name').attr('value', '');
-				dijit.byId('password').attr('value', '');
-				dijit.byId('confirm_password').attr('value','');
+			
+		    HideloadingBlock();
+		},
+		error: function(err){
+			 HideloadingBlock();
 		}
+	});
+}
+
 		function IsNew(){
+				dijit.byId('driver_name').attr('value', '');
 				dijit.byId('driver_name').attr('required', true);
+				dijit.byId('driver_name_en').attr('value', '');
 				dijit.byId('driver_name_en').attr('required', true);
 
 				dijit.byId("sex").set('readOnly',false);
-				dijit.byId('sex').attr('value', '');
+				dijit.byId('sex').attr('value', 1);
 				dijit.byId('sex').attr('required', true);
 
+				dijit.byId('phone').attr('value', '');
 				dijit.byId('phone').set('readOnly', false);
 				dijit.byId('phone').attr('required', false);
 
+				dijit.byId('email').attr('value', '');
 				dijit.byId('email').set('readOnly', false);
 				dijit.byId('email').attr('required', false);
 
+				dijit.byId('address').attr('value', '');
 				dijit.byId('address').set('readOnly', false);
 				dijit.byId('address').attr('required', false);
 
+				dijit.byId('user_name').attr('value', '');
 				dijit.byId('user_name').attr('required', true);
 				dijit.byId('password').attr('required', true);
 				dijit.byId('password').set('readOnly', false);
@@ -412,7 +441,7 @@ function isNewDriver(){
 		$('#old_driver').show();
 		$('#new_driver').hide();
 		$('#new_driver_en').hide();
-		Isold();
+		getDriverInfo();
 	}else{
 		$('#old_driver').hide();
 		$('#new_driver').show();

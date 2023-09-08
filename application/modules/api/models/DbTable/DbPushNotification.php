@@ -133,6 +133,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				$notificationTitle = $title;
 				$notificationSubTitle = $description;
 				$notificationDescription = $description;
+				$recordDetail = array($info);
 				
 			}else if($typeNotify == "schoolBusOnline"){
 			}

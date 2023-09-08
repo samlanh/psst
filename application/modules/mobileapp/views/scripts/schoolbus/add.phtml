@@ -273,30 +273,31 @@ dojo.ready(function(){
 				dijit.byId('branch_id').focus();
 				return false;
 			}
+			getDriverInfo();
 
-			driverId = dijit.byId('driverId').get('value');
-			if(driverId!=0){
+			// driverId = dijit.byId('driverId').get('value');
+			// if(driverId!=0){
 				
-				dijit.byId('driver_name').attr('required', false);
-				dijit.byId('driver_name_en').attr('required', false);
+			// 	dijit.byId('driver_name').attr('required', false);
+			// 	dijit.byId('driver_name_en').attr('required', false);
 
-				dijit.byId("sex").set('readOnly',true);
-				dijit.byId('sex').attr('value', '');
-				dijit.byId('sex').attr('required', false);
+			// 	dijit.byId("sex").set('readOnly',true);
+			// 	dijit.byId('sex').attr('value', '');
+			// 	dijit.byId('sex').attr('required', false);
 
-				dijit.byId('phone').set('readOnly', true);
-				dijit.byId('phone').attr('required', false);
+			// 	dijit.byId('phone').set('readOnly', true);
+			// 	dijit.byId('phone').attr('required', false);
 
-				dijit.byId('email').set('readOnly', true);
-				dijit.byId('email').attr('required', false);
+			// 	dijit.byId('email').set('readOnly', true);
+			// 	dijit.byId('email').attr('required', false);
 
-				dijit.byId('address').set('readOnly', true);
-				dijit.byId('address').attr('required', false);
+			// 	dijit.byId('address').set('readOnly', true);
+			// 	dijit.byId('address').attr('required', false);
 
-				dijit.byId('user_name').attr('required', false);
-				dijit.byId('password').attr('required', false);
-				dijit.byId('confirm_password').attr('required', false);
-			}
+			// 	dijit.byId('user_name').attr('required', false);
+			// 	dijit.byId('password').attr('required', false);
+			// 	dijit.byId('confirm_password').attr('required', false);
+			// }
 		}
 	}, "driverId");
 	isNewDriver();
@@ -326,6 +327,46 @@ function getDriverBybranch(){
 			
 			driver_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('driverId').set('store',driver_store);  
+			
+		    HideloadingBlock();
+		},
+		error: function(err){
+			 HideloadingBlock();
+		}
+	});
+}
+var url_getdriver_info = '<?php echo $this->url(array("module"=>"mobileapp","controller"=>"schoolbus","action"=>"getdriverinfo"));?>';										
+function getDriverInfo(){
+		
+	driverId = dijit.byId('driverId').get('value');
+	if(driverId=='' || driverId==-1){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_getdriver_info,
+		content:{
+			'id':driverId,
+			},
+		handleAs:"json",
+		load: function(data) {
+				dijit.byId('driver_name').attr('value', data.teacher_name_en);
+				dijit.byId('driver_name').attr('required', false);
+
+				dijit.byId('driver_name_en').attr('value', data.teacher_name_en);
+				dijit.byId('driver_name_en').attr('required', false);
+
+				dijit.byId('phone').attr('value', data.tel);
+				dijit.byId('phone').attr('required', false);
+
+				dijit.byId('email').attr('value', data.email);
+				dijit.byId('email').attr('required', false);
+
+				dijit.byId('address').attr('value', data.address);
+				dijit.byId('address').attr('required', false);
+
+				dijit.byId('user_name').attr('required', false);
+				dijit.byId('password').attr('required', false);
+				dijit.byId('confirm_password').attr('required', false);
 			
 		    HideloadingBlock();
 		},

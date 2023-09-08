@@ -51,6 +51,7 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			AND s.stu_id = gds.stu_id
     		AND s.status=1 
     		AND gds.is_maingrade =1
+    		AND gds.is_current =1
     		AND s.customer_type=1
 		";
 		
@@ -290,6 +291,26 @@ class Mobileapp_Model_DbTable_Dbuseraccount extends Zend_Db_Table_Abstract
 			);
 			$where=$this->getAdapter()->quoteInto("keyName=?", "lbl_schoolphone");
 			$this->update($_arr, $where);
+			
+			$rows = $this->geLabelByKeyNamesetting('amountRequestPermission');
+			if (empty($rows)){
+				$data['amountRequestPermission'] = empty($data['amountRequestPermission']) ? 1 : $data['amountRequestPermission'];
+				$arr = array(
+						'keyName'=>'amountRequestPermission',
+						'keyValue'=>$data['amountRequestPermission'],
+						'user_id'=>$this->getUserId(),
+				);
+				$this->_name='rms_setting';
+				$this->insert($arr);
+			}else{
+				$data['amountRequestPermission'] = empty($data['amountRequestPermission']) ? 1 : $data['amountRequestPermission'];
+				$arr = array(
+						'keyValue'=>$data['amountRequestPermission'],
+				);
+				$where=" keyName= 'amountRequestPermission'";
+				$this->_name='rms_setting';
+				$this->update($arr, $where);
+			}
 
 
 			$valid_formats = array("jpg", "png", "gif", "bmp","jpeg","ico");

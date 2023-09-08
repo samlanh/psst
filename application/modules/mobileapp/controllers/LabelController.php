@@ -27,6 +27,8 @@ class Mobileapp_LabelController extends Zend_Controller_Action {
 			$row['lbl_schoolphone']= $db->getMobileLabel("lbl_schoolphone");
 			$row['mockupAppImage']= $db->geLabelByKeyNamesetting("mockupAppImage");
 			$row['qrcodeAppLink']= $db->geLabelByKeyNamesetting("qrcodeAppLink");
+			
+			$row['amountRequestPermission']= $db->geLabelByKeyNamesetting("amountRequestPermission");
 			$this->view->row =$row;
 			
 		}catch (Exception $e){

@@ -116,6 +116,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    }
    function getAllUserGlobal($branchId=null){
 	   	$db = $this->getAdapter();
+		
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+	   	$branch_list = $session_user->branch_list;
+	   	$level = $session_user->level;
+		
 	   	$sql="SELECT
 			u.id,
 			CONCAT(u.last_name,' ',u.first_name) AS name,
@@ -123,57 +128,77 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			u.branch_list
 			 FROM `rms_users` AS u WHERE u.active=1
 			AND u.is_system =0 ";
-	   	
-	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-	   	$branch_list = $session_user->branch_list;
-	   	$level = $session_user->level;
-	   $row = $db->fetchAll($sql);
-	   
-	   	$result =array();
-	   	if ($level!=1){
+		
+		if ($level!=1){
 		   	$bra = explode(",", $branch_list);
 			if (!empty($bra)){
-				$array = array();
-				foreach ($bra as $ss) {
-					$array[$ss] = $ss;
+				$s_where = array();
+				foreach ($bra as $ss){
+					$s_where[] = "(FIND_IN_SET('".$ss."', u.branch_list) ) ";
 				}
-				if (!empty($row)) foreach ($row as $key => $rs){
-					$exp = explode(",", $rs['branch_list']);
-					foreach ($exp as $ss){
-						if (in_array($ss, $array)) {
-							$result[$key] = $rs;
-							break;
-						}
-					}
-				}
+				$sql.=' AND ( '.implode(' OR ',$s_where).')';
 			}
 	   	}
-	   	if (!empty($result)){
-	   		$row = $result;
-	   	}
-	   	
-	   	$result =array();
-	   	if (!empty($branchId)){
+		
+		if (!empty($branchId)){
 	   		$bra = explode(",", $branchId);
 			if (!empty($bra)){
-				$array = array();
-				foreach ($bra as $ss) {
-					$array[$ss] = $ss;
+				$s_where = array();
+				foreach ($bra as $ss){
+					$s_where[] = "(FIND_IN_SET('".$ss."', u.branch_list) ) ";
 				}
-				if (!empty($row)) foreach ($row as $key => $rs){
-					$exp = explode(",", $rs['branch_list']);
-					foreach ($exp as $ss){
-						if (in_array($ss, $array)) {
-							$result[$key] = $rs;
-							break;
+				$sql.=' AND ( '.implode(' OR ',$s_where).')';
+			}
+	   	}
+		
+		$row = $db->fetchAll($sql);
+	   
+	   	/*
+			$result =array();
+			if ($level!=1){
+				$bra = explode(",", $branch_list);
+				if (!empty($bra)){
+					$array = array();
+					foreach ($bra as $ss) {
+						$array[$ss] = $ss;
+					}
+					if (!empty($row)) foreach ($row as $key => $rs){
+						$exp = explode(",", $rs['branch_list']);
+						foreach ($exp as $ss){
+							if (in_array($ss, $array)) {
+								$result[$key] = $rs;
+								break;
+							}
 						}
 					}
 				}
 			}
-	   	}
-	   	if (!empty($result)){
-	   		$row = $result;
-	   	}
+			if (!empty($result)){
+				$row = $result;
+			}
+			$result =array();
+			if (!empty($branchId)){
+				$bra = explode(",", $branchId);
+				if (!empty($bra)){
+					$array = array();
+					foreach ($bra as $ss) {
+						$array[$ss] = $ss;
+					}
+					if (!empty($row)) foreach ($row as $key => $rs){
+						$exp = explode(",", $rs['branch_list']);
+						foreach ($exp as $ss){
+							if (in_array($ss, $array)) {
+								$result[$key] = $rs;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (!empty($result)){
+				$row = $result;
+			}
+		*/
 	   	return $row;
    }
    function getUserListbyBranch($data){
@@ -679,7 +704,8 @@ function getAllgroupStudyNotPass($action=null){
 	   	$s_where = array();
 	   	foreach ($slist as $option_id){
 // 	   		$s_where[] = " $schooloption_coloum IN ($option)";
-	   		$s_where[] = " $option_id IN ($schooloption_coloum)";
+	   		//$s_where[] = " $option_id IN ($schooloption_coloum)";
+	   		$s_where[] = "(FIND_IN_SET('".$option_id."', ".$schooloption_coloum.") )";
 	   	}
 	   	$sql .=' AND ( '.implode(' OR ',$s_where).')';
 	   	return $sql;
@@ -860,6 +886,9 @@ function getAllgroupStudyNotPass($action=null){
    		$where=" WHERE gds.stu_id = s.stu_id";
 		if(!empty($data['groupId'])){
 			$where.=" AND gds.group_id=".$data['groupId'];
+		}
+		if(!empty($data['degree'])){
+			$where.=" AND gds.degree=".$data['degree'];
 		}
    	}else{
    		$where=" WHERE 1";
@@ -3667,6 +3696,8 @@ function getAllgroupStudyNotPass($action=null){
   		}
 	  	
 	  	$sql.= $this->getAccessPermission('g.branch_id');
+		$sql.= $this->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = g.degree LIMIT 1)');
+		
   		$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
   		return $db->fetchAll($sql);
   }
@@ -3756,6 +3787,7 @@ function getAllgroupStudyNotPass($action=null){
   	if(isset($data['isAutopayment']) AND $data['isInititilize']==1){
   		if($data['isAutopayment']!=''){
   			$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
+  			$sql.=" AND FIND_IN_SET((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),degreeOption) ";
   		}
   	}
   	$sql.=" ORDER BY i.items_type ASC ";

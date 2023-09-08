@@ -74,7 +74,10 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	        }
 	       
 	        $dbglobal = new Application_Model_DbTable_DbGlobal();
-			$this->view->rsbranch = $dbglobal->getAllBranch();
+			$rsbranch = $dbglobal->getAllBranch();
+			array_unshift($rsbranch, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+			$this->view->rsbranch = $rsbranch; 
+			
 	        $this->view->lang = $dbglobal->getLaguage();
 	        
 	        $this->view->rsDegree = $dbglobal->getAllItems(1);//degree
@@ -111,7 +114,9 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	   	}
 	    
 	    $dbglobal = new Application_Model_DbTable_DbGlobal();
-		$this->view->rsbranch = $dbglobal->getAllBranch();
+		$rsbranch = $dbglobal->getAllBranch();
+		array_unshift($rsbranch, array ('id' => 0, 'name' => $this->tr->translate("PLEASE_SELECT")));
+		$this->view->rsbranch = $rsbranch; 
 	    
 	    $this->view->lang = $dbglobal->getLaguage();
 	    $this->view->rsDegree = $dbglobal->getAllItems(1);//degree

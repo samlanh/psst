@@ -66,7 +66,26 @@ table.tb-footer tr.style-head {
     		</div>
     	</div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		
+		<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				branch_id=dijit.byId('branch_id').get('value');
+				if(branch_id=='' || branch_id==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>!');
+					dijit.byId('branch_id').focus(); 
+					return false;
+				}
+				teacherId=dijit.byId('teacherId').get('value');
+				if(teacherId=='' || teacherId==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_TEACHER');?>!');
+					dijit.byId('teacherId').focus(); 
+					return false;
+				}
+                loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+		</script>
 		<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="card-blogform">
 					<div class="card-body"> 

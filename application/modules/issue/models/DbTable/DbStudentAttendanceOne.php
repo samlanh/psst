@@ -88,7 +88,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 					'groupId'		=>$_data['group'],
 					'forSemester'	=>$_data['for_semester'],
 					'forSession'	=>$_data['session_type'],
-					'attendanceDate'=>date("Y-m-d",strtotime($_data['attendence_date'])),
+					'attendanceDate'=>$_data['attendence_date'],
 					'createDate'	=>date("Y-m-d"),
 					'modifyDate'	=>date("Y-m-d"),
 				);
@@ -116,7 +116,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 				'groupId'		=>$_data['group'],
 				'forSemester'	=>$_data['for_semester'],
 				'forSession'	=>$_data['session_type'],
-				'attendanceDate'=>date("Y-m-d",strtotime($_data['attendence_date'])),
+				'attendanceDate'=>$_data['attendence_date'],
 				'modifyDate'	=>date("Y-m-d"),
 				'status'		=>$_data['status'],
    			);

@@ -325,7 +325,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				AND g.is_use =1
 				AND g.is_pass =2
 			 ";
-    	
+    	$where="";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission("g.branch_id");
     

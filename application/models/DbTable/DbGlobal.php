@@ -858,6 +858,9 @@ function getAllgroupStudyNotPass($action=null){
    	if(!empty($data['joinGroup'])){
    		$sql.=', rms_group_detail_student as gds ';
    		$where=" WHERE gds.stu_id = s.stu_id";
+		if(!empty($data['groupId'])){
+			$where.=" AND gds.group_id=".$data['groupId'];
+		}
    	}else{
    		$where=" WHERE 1";
    	}

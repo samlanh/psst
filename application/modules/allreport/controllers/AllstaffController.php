@@ -113,6 +113,8 @@ public function init()
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getDays();
 		$this->view->days = $row;
+		// $dbgb= new Application_Model_DbTable_DbGlobal();
+		// $this->view->day = $dbgb->getAllDay();
 		
 	}
 	
@@ -135,6 +137,9 @@ public function init()
 		}
 		
 		$row = $db->getTeacherScheduleGroupAndStudent($search);
+		if(empty($search["teacherId"])){
+			$row= array();
+		}
 		$this->view->rs = $row;
 		
 		$form=new Application_Form_FrmSearchGlobal();

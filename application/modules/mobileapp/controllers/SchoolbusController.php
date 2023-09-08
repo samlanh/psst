@@ -128,6 +128,15 @@ class Mobileapp_SchoolbusController extends Zend_Controller_Action
 			exit();
 		}
 	}
+	function getdriverinfoAction(){ 
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Foundation_Model_DbTable_DbTeacher();
+			$rows = $db->getTeacherinfoById($data);
+			print_r(Zend_Json::encode($rows));
+			exit();
+		}
+	}
 
 
 }

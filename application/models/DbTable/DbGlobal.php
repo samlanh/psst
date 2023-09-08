@@ -861,6 +861,9 @@ function getAllgroupStudyNotPass($action=null){
 		if(!empty($data['groupId'])){
 			$where.=" AND gds.group_id=".$data['groupId'];
 		}
+		if(!empty($data['degree'])){
+			$where.=" AND gds.degree=".$data['degree'];
+		}
    	}else{
    		$where=" WHERE 1";
    	}

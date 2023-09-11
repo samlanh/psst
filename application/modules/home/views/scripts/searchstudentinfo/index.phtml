@@ -224,7 +224,11 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 	                      </li>
 	                    </ul>
                        	<div class="thumb-xl member-thumb m-b-10 center-block">
-                       		<?php $photo = $this->baseUrl()."/images/no-profile.png";
+                       		<?php 
+								$photo = $this->baseUrl()."/images/no-profile.png";
+								if ($rs['sexcode']==2){
+									$photo = $this->baseUrl()."/images/no-profile-female.png";
+								}
                        			if (!empty($rs['photo'])){
                        				if (file_exists(PUBLIC_PATH."/images/photo/".$rs['photo'])){
                        					$photo = $this->baseUrl().'/images/photo/'.$rs['photo'];

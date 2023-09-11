@@ -183,6 +183,9 @@ table.content-data{
 										    		<td align="center" style="font-size:14px; font-weight: initial; font-family:'Khmer OS Muol Light';">
 										    			<?php 
 									                		$photo = $this->baseUrl().'/images/no-profile.png';
+															if ($this->rs['sex']==2){
+																$photo = $this->baseUrl()."/images/no-profile-female.png";
+															}
 									                		if (!empty($this->rs['photo'])){
 									                			if (file_exists(PUBLIC_PATH."/images/photo/".$this->rs['photo'])){
 									                				$photo = $this->baseUrl().'/images/photo/'.$this->rs['photo'];

@@ -1,6 +1,6 @@
 <?php
 
-class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
+class Issuesetting_Form_FrmAllowTeacherScoreSetting extends Zend_Dojo_Form
 {
 	protected  $tr;
 	protected $filter;
@@ -38,6 +38,22 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 				$_branch_id->setValue($row['id']);
 			}
 		}
+
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$_degree->setAttribs(array(
+			'dojoType' => $this->filter,
+			'placeholder' => $this->tr->translate("DEGREE"),
+			'class' => 'fullside',
+			'autoComplete' => "false",
+			'queryExpr' => '*${0}*',
+			'required' => 'false',
+			//'onchange' => 'getallGrade();'
+		));
+		$_degree->setValue($request->getParam('degree'));
+		$opt_deg = array('' => $this->tr->translate("DEGREE"));
+		$opt_degree = $_dbgb->getAllItems(1); //degree
+		if (!empty($opt_degree)) foreach ($opt_degree as $rows) $opt_deg[$rows['id']] = $rows['name'];
+		$_degree->setMultiOptions($opt_deg);
 
 		$title = new Zend_Dojo_Form_Element_TextBox('title');
 		$title->setAttribs(array(
@@ -149,9 +165,7 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 
 		if (!empty($data)) {
 			$_branch_id->setValue($data["branchId"]);
-			$title->setValue($data["title"]);
-			$description->setValue($data["description"]);
-			$from_date->setValue($data["fromDate"]);
+			$_degree->setValue($data["degree"]);
 			$end_date->setValue($data["endDate"]);
 			$_status->setValue($data["status"]);
 			$id->setValue($data["id"]);
@@ -167,7 +181,8 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$from_date,
 			$start_date,
 			$end_date,
-			$_branch_search
+			$_branch_search,
+			$_degree
 		));
 		return $this;
 	}

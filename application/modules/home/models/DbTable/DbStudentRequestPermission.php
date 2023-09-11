@@ -1,9 +1,9 @@
 <?php class Home_Model_DbTable_DbStudentRequestPermission extends Zend_Db_Table_Abstract{
 
-    public function getUserId(){
-    	$_dbgb = new Application_Model_DbTable_DbGlobal();
-    	return $_dbgb->getUserId();
-    }
+	public function getUserId(){
+		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+		return $session_user->user_id;
+	}
     function getAllStudentRequest($search = ''){
     	$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -59,63 +59,96 @@
     }
 
 	public function updatePermission($_data){
-		$_db= $this->getAdapter();
-		$_db->beginTransaction();
-		try{
-			$_arr=array(
-					'requestStatus'	  => $_data['request_status'],
-			);
-			$id = $_data['id'];
-			$where="id=$id";
-			$this->_name="rms_student_request_permission";
-			$this->update($_arr, $where);
-
-            // Add to Attendance 
-            if($_data['request_status']==1){
-				$branch = $_data['branchId'];
-				$group = $_data['groupId'];
-				$date = $_data['fromDate'];
-			//	$for_semester = $_data['for_semester'];
-				$session = $_data['sessionType'];
-				$sql="select id from rms_student_attendence where branch_id = $branch and group_id = $group  and for_session = $session and date_attendence = '$date' and type=1 limit 1";
-				$attendence_id = $_db->fetchOne($sql);
-
-				if(empty($attendence_id )){
-					$_arr = array(
-						'branch_id'		=>$_data['branchId'],
-						'group_id'		=>$_data['groupId'],
-						'date_attendence'=>date("Y-m-d",strtotime($_data['fromDate'])),
-						'date_create'	=>date("Y-m-d"),
-						'modify_date'	=>date("Y-m-d"),
-						'subject_id'	=> 0,
-						'for_semester'	=> 0,
-						'note'			=>$_data['reason'],
-						'status'		=>1,
-						'user_id'		=>$this->getUserId(),
-						'for_session'	=>$_data['sessionType'],
-						'type'			=>1, //for attendence
+		$_arr=array(
+				'requestStatus'	=> $_data['request_status'],
+		);
+		$id = $_data['id'];
+		$where="id =$id";
+		$this->_name="rms_student_request_permission";
+		$this->update($_arr, $where);
+		//Add to Attendance 
+		if($_data['request_status']==1){
+			$amount_day= $_data['amountDay'];
+			$date = $_data['fromDate'];
+			if(!empty($amount_day)){
+				for($i=0; $i<$amount_day; $i++ ){
+					$att_date = date('Y-m-d', strtotime($date. ' + '.$i.' days'));
+					$arr = array(
+						'studentRequestId'=>$id,
+						'attendence_id'	=>0,
+						'stu_id'		=>$_data['studentId'],
+						'attendence_status'=>3,
+						'description'	=>$_data['reason'],
+						'type'			=>2, //from one student 
+						'branchId'		=>$_data['branchId'],
+						'groupId'		=>$_data['groupId'],
+						'forSemester'	=>1,
+						'forSession'	=>$_data['sessionType'],
+						'attendanceDate'=>$att_date,
+						'createDate'	=>date("Y-m-d"),
+						'modifyDate'	=>date("Y-m-d"),
 					);
-					$this->_name ='rms_student_attendence';
-					$attendence_id=$this->insert($_arr);
+					$this->_name ='rms_student_attendence_detail';
+					$this->insert($arr);
 				}
-					
-				$arr = array(
-					'attendence_id'		=>$attendence_id,
-					'stu_id'			=>$_data['studentId'],
-					'attendence_status'	=>3,
-					'description'		=>$_data['reason'],
-					'type'				=>2, //from one student 
-				);
-				$this->_name ='rms_student_attendence_detail';
-				$this->insert($arr);
 			}
-			$_db->commit();
-		}catch(exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			$_db->rollBack();
-			echo $e->getMessage();
-			Application_Form_FrmMessage::message("Application Error!");
+
+			// $studentRequestId = $this->getAttendacenDetailById($id);
+			// if(empty($studentRequestId)){
+			// 	if(!empty($amount_day)){
+			// 		for($i=0; $i<$amount_day; $i++ ){
+			// 			$att_date = date('Y-m-d', strtotime($date. ' + '.$i.' days'));
+			// 			$arr = array(
+			// 				'studentRequestId'=>$id,
+			// 				'attendence_id'	=>0,
+			// 				'stu_id'		=>$_data['studentId'],
+			// 				'attendence_status'=>3,
+			// 				'description'	=>$_data['reason'],
+			// 				'type'			=>2, //from one student 
+			// 				'branchId'		=>$_data['branchId'],
+			// 				'groupId'		=>$_data['groupId'],
+			// 				'forSemester'	=>1,
+			// 				'forSession'	=>$_data['sessionType'],
+			// 				'attendanceDate'=>$att_date,
+			// 				'createDate'	=>date("Y-m-d"),
+			// 				'modifyDate'	=>date("Y-m-d"),
+	
+			// 			);
+			// 			$this->_name ='rms_student_attendence_detail';
+			// 			$this->insert($arr);
+			// 		}
+			// 	}
+			// }else{
+			
+			// 	if(!empty($amount_day)){
+			// 		for($i=0; $i<$amount_day; $i++ ){
+			// 			$att_date = date('Y-m-d', strtotime($date. ' + '.$i.' days'));
+			// 			$arr = array(
+			// 				'studentRequestId'=>$id,
+			// 				'attendence_id'	=>0,
+			// 				'stu_id'		=>$_data['studentId'],
+			// 				'attendence_status'=>3,
+			// 				'description'	=>$_data['reason'],
+			// 				'type'			=>2, //from one student 
+			// 				'branchId'		=>$_data['branchId'],
+			// 				'groupId'		=>$_data['groupId'],
+			// 				'forSemester'	=>1,
+			// 				'forSession'	=>$_data['sessionType'],
+			// 				'attendanceDate'=>$att_date,
+			// 				'createDate'	=>date("Y-m-d"),
+			// 				'modifyDate'	=>date("Y-m-d"),
+	
+			// 			);
+			// 			$where="id= $id";
+			// 			$where.=" AND attendanceDate = $att_date";
+			// 			$this->_name ='rms_student_attendence_detail';
+			// 			$this->update($_arr, $where);
+			// 		}
+			// 	}
+
+			// }	
 		}
+	
 	}
 
 	public function getRequestById($id){
@@ -123,6 +156,7 @@
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql="SELECT *,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
+		(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentCode,
 		(SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentName,
 		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
 		amountDay, 
@@ -137,7 +171,13 @@
 			WHEN  requestStatus = 2 THEN '".$tr->translate("REJECTED")."'
 		END AS StatusLbel
 		FROM `rms_student_request_permission` WHERE id= ".$id;
-	
+		$row = $db->fetchRow($sql);
+		return $row;
+	}
+	public function getAttendacenDetailById($id){
+		$db = $this->getAdapter();
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql="SELECT * FROM `rms_student_attendence_detail` WHERE studentRequestId= ".$id." ORDER BY isCompleted DESC limit 1";
 		$row = $db->fetchRow($sql);
 		return $row;
 	}

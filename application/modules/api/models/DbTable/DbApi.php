@@ -5328,4 +5328,81 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	
+	
+	function getStudentAchievement($_data){
+		$db = $this->getAdapter();
+		try{
+			
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$studentId = empty($_data['studentId'])?0:$_data['studentId'];
+			
+			
+			$colunmName='title_en';
+			$label = 'name_en';
+			$teacherName = "teacher_name_en";
+			$branch = "branch_nameen";
+			
+			if ($currentLang==1){
+				$teacherName='teacher_name_kh';
+				$colunmName='title';
+				$label = 'name_kh';
+				$branch = "branch_namekh";
+			}
+				
+			$sql="
+				SELECT 
+					ac.*
+					,b.$branch AS branchName
+					,g.group_code AS  groupCode
+					,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+					,(SELECT rms_items.$colunmName FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
+					,(SELECT rms_itemsdetail.$colunmName FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
+					,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
+					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+			
+					
+				FROM 
+					`rms_student_achievement` AS ac
+					LEFT JOIN `rms_group` AS g ON g.id = ac.groupId
+					LEFT JOIN `rms_branch` AS b ON b.br_id = ac.branchId
+				WHERE ac.status = 1
+					AND ac.studentId=$studentId
+			";
+			
+			if(!empty($_data['academicYear'])){
+				$sql.=" AND g.academic_year = ".$_data['academicYear'];	
+			}
+			if(!empty($_data['groupId'])){
+				$sql.=" AND g.id = ".$_data['groupId'];	
+			}
+			if(!empty($_data['degreeId'])){
+				$sql.=" AND g.degree = ".$_data['degreeId'];	
+			}
+			
+			$sql.=" ORDER BY ac.id DESC ";
+			
+			$limit=" ";
+			if(!empty($search['LimitStart'])){
+				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+			}else if(!empty($search['limitRecord'])){
+	    		$limit.=" LIMIT ".$search['limitRecord'];
+	    	}
+			
+			$row = $db->fetchAll($sql.$limit);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 }

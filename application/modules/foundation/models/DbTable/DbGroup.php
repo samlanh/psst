@@ -200,7 +200,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			`g`.`group_code` AS `group_code`,
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS tuitionfee_id,	
 			 `g`.`semester` AS `semester`, 
-			(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree,
+			i.$colunmname AS degree,
 			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
 			(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
 			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
@@ -211,7 +211,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			(select $label from rms_view where type=9 and key_code=is_pass) as group_status ";
 		
 		$sql.=$dbp->caseStatusShowImage("g.status");
-		$sql.=" FROM `rms_group` AS `g` ";
+		$sql.=" FROM `rms_group` AS `g` 
+				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
+		";
 		
 		$where =' WHERE 1 ';
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
@@ -258,7 +260,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$where.=' AND g.is_pass='.$search['is_pass'];
 		}
 		$where.=$dbp->getAccessPermission('g.branch_id');
-		$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
+		$where.= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
 		return $db->fetchAll($sql.$where.$order);
 	}

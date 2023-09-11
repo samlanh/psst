@@ -383,7 +383,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					</tr>
 					<tr class="head">
 						<td colspan="2" valign="bottom">
-							<h2 class="headerKhmer"> &nbsp;</h2>
+							<h2 >&nbsp;</h2>
 							<h2 class="headerKhmer">មន្ទីរអប់រំ យុវជន និងកីឡា</h2>
 							<h2 class="headerKhmer">
 								<?php echo $schoolName; ?>
@@ -726,10 +726,14 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 									<td  align="center">
 										<div class="principalStamp">
 											<div class="stamp" style="margin-bottom: 20px;">
+												<?php if(!empty($stamp)){ ?>
 												<img src="<?php echo $stamp; ?>" style="height:120px;position:relative;" />
+												<?php	} ?>
 											</div>
 											<div class="signature">
-												<img src="<?php echo $signature; ?>" />
+												<?php if(!empty($signature)){ ?>
+													<img src="<?php echo $signature; ?>" />
+												<?php	} ?>
 											</div>
 										</div>
 										<h2 style="left:70px; top:10px; width:150px;position:relative; color:#f00; " class="headerLabel red">

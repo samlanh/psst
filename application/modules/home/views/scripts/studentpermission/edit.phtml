@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_REQUEST"));
 	$frm_items = $this->frm_crm;
 	$rs=$this->row;
+	print_r($this->rowdetail);
 ?>
 <link href="<?php echo $this->baseUrl();?>/css/externalstyle.css" media="screen" rel="stylesheet" type="text/css">
 <div class="card">
@@ -43,7 +44,7 @@
 								<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
 							</div> 
 							<div class="col-md-10 col-sm-10 col-xs-12"> 
-								<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate('REQUEST_PERMISSION_INFO');?></p>
+								<p class="tx-20 font-weight-semibold d-flex "></p><?php echo $tr->translate('REQUEST_PERMISSION_INFO');?></p>
 							</div> 
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 ">
@@ -63,12 +64,24 @@
 												<input type="hidden" id="sessionType" name="sessionType" value="<?php echo $rs['sessionType'];?>">
 												<input type="hidden" id="reason" name="reason" value="<?php echo $rs['reason'];?>">
 												<input type="hidden" id="fromDate" name="fromDate" value="<?php echo $rs['fromDate'];?>">
+												<input type="hidden" id="amountDay" name="amountDay" value="<?php echo $rs['amountDay'];?>">
 											</div> 
 											<div class="col-md-2 col-sm-2 col-xs-12 "> 
 												:
 											</div> 
 											<div class="col-md-6 col-sm-6 col-xs-12"> 
 												<?php echo $rs['branch_name'];?>
+											</div> 
+										</div>
+										<div class="form-group ">
+											<div class="col-md-4 col-sm-4 col-xs-12 "> 
+												<?php echo $tr->translate('STUDENT_CODE');?> 
+											</div> 
+											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+												:
+											</div> 
+											<div class="col-md-6 col-sm-6 col-xs-12 text-danger bold"> 
+												<?php echo $rs['StudentCode'];?>
 											</div> 
 										</div>
 										<div class="form-group ">
@@ -104,16 +117,9 @@
 												<?php echo $rs['phoneNumber'];?>
 											</div> 
 										</div>
-										<div class="form-group ">
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
-												&nbsp;
-											</div> 
-										</div>
-
 									</div>
 								</div>
 							</div> 
-							
 							<div class="col-md-6 col-sm-6 col-xs-12 " style="padding: 5px;">
 								<div class="card-blogform">
 									<div class="card-body"> 
@@ -187,7 +193,7 @@
 								</label>
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-primary" >
-								<input class="form-check-input" type="radio" name="request_status" id="approve" <?php if($rs['requestStatus']==0 OR $rs['requestStatus']==1){ echo "checked"; } ?> value="1">
+								<input class="form-check-input" type="radio" name="request_status" id="approve" <?php if($rs['requestStatus']==0 OR $rs['requestStatus']==1){ echo "checked"; } ?> value="1" checked>
 								<label class="form-check-label" for="approve">
 									<?php echo $tr->translate('APPROVED');?>&nbsp; <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
 								</label>

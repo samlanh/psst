@@ -54,26 +54,28 @@ class Home_StudentpermissionController extends Zend_Controller_Action
     	$db = new Home_Model_DbTable_DbStudentRequestPermission();
     	$id = $this->getRequest()->getParam("id");
     	if($this->getRequest()->isPost()){
-    		$_data = $this->getRequest()->getPost();
     		try{
+				$_data = $this->getRequest()->getPost();
     			$row = $db->updatePermission($_data);
     			Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
     		}catch(Exception $e){
     			Application_Form_FrmMessage::message("INSERT_FAIL");
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				echo $e->getMessage();
     		}
     	}
-    	$row = $db->getRequestById($id);
-    	if ($row['requestStatus']!=0){
+		$rowdetail = $db->getAttendacenDetailById($id);
+		$this->view->rowdetail = $rowdetail;
+    	if($rowdetail['isCompleted']==1){
     		Application_Form_FrmMessage::Sucessfull("Can't edit",self::REDIRECT_URL);
     	}
+		$row = $db->getRequestById($id);
     	$this->view->row = $row;
 		$frm = new Home_Form_FrmStudentRequest();
     	$frm->FrmStudentRequest(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
      }
-
 	 public function addAction()
 	 {
 	 }

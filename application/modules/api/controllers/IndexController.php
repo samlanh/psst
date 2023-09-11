@@ -154,6 +154,9 @@ class Api_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="optionSessionAttendance"){
 				$GetData['getControlType'] = "sessionAttendance";
     			$_dbAction->getFormOptionSelectAction($GetData);
+				
+			}else if ($GetData['url']=="studentAchievement"){
+    			$_dbAction->getStudentAchievementAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

@@ -235,7 +235,11 @@ small.pull-right.showall-ann {
 			                              </ul>
 			                            </div>
 			                            <div class="right col-xs-5 text-center">
-			                            	<?php $photo = $this->baseUrl()."/images/no-profile.png";
+			                            	<?php 
+												$photo = $this->baseUrl()."/images/no-profile.png";
+												if ($drop['sex']==2){
+													$photo = $this->baseUrl()."/images/no-profile-female.png";
+												}
 				                       			if (!empty($drop['photo'])){
 				                       				if (file_exists(PUBLIC_PATH."/images/photo/".$drop['photo'])){
 				                       					$photo = $this->baseUrl().'/images/photo/'.$drop['photo'];

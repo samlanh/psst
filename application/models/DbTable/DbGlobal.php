@@ -2371,6 +2371,9 @@ function getAllgroupStudyNotPass($action=null){
   				<div class="form-group">
   					<div class="thumb-xl member-thumb m-b-10 center-block">';
   			                       		$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/no-profile.png";
+										if ($rs['sex']==2){
+											$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/no-profile-female.png";
+										}
   			                       		if (!empty($rs["photo"])){
   			                       				if (file_exists(PUBLIC_PATH."/images/photo/".$rs["photo"])){
   			                       				$photo = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/photo/".$rs["photo"];

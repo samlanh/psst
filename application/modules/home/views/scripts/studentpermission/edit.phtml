@@ -1,51 +1,50 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("EDIT_STUDENT_REQUEST"));
-	$frm_items = $this->frm_crm;
-	$rs=$this->row;
-	print_r($this->rowdetail);
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("EDIT_STUDENT_REQUEST"));
+$frm_items = $this->frm_crm;
+$rs = $this->row;
 ?>
-<link href="<?php echo $this->baseUrl();?>/css/externalstyle.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo $this->baseUrl(); ?>/css/externalstyle.css" media="screen" rel="stylesheet" type="text/css">
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
-       		<div class="col-sm-12 border-botom">
-		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_REQUEST');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right"></div>
-    		</div>
-    	</div>
-    	<form  id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
-			<script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
+			<div class="col-sm-12 border-botom">
+				<div class="col-sm-8 pd-0">
+					<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_REQUEST'); ?></h4>
+				</div>
+				<div class="col-sm-4 text-right"></div>
+			</div>
+		</div>
+		<form id='edit-major' action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+			<script type="dojo/method" event="onSubmit">
+				if (this.validate()) {
 					branch_id = dijit.byId('branch_id').get('value');
-					if(branch_id=="" || branch_id==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+					if (branch_id == "" || branch_id == -1) {
+						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH"); ?>");
 						return false;
 					}
 					identity = $("#identity").val();
-					if(identity==''){
+					if (identity == '') {
 						dijit.byId('kh_name_stu').focus();
 						return false;
 					}
 					loadingBlock();
 					return true;
-				}else {
+				} else {
 					return false;
 				}
 			</script>
-										
+
 			<div class="card-box">
 				<div class="col-md-8 col-sm-8 col-xs-12">
 					<div id="gr-info" style="min-height:90px; background: #3b7acc2b;padding: 10px;border-radius: 5px;border: 1px solid #3b7accc4;padding:10px;border-radius:5px;">
-						<div class="d-flex"> 
+						<div class="d-flex">
 							<div class="settings-main-icon ">
 								<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
-							</div> 
-							<div class="col-md-10 col-sm-10 col-xs-12"> 
-								<p class="tx-20 font-weight-semibold d-flex "></p><?php echo $tr->translate('REQUEST_PERMISSION_INFO');?></p>
-							</div> 
+							</div>
+							<div class="col-md-10 col-sm-10 col-xs-12">
+								<p class="tx-20 font-weight-semibold d-flex "></p><?php echo $tr->translate('REQUEST_PERMISSION_INFO'); ?></p>
+							</div>
 						</div>
 						<div class="col-md-12 col-sm-12 col-xs-12 ">
 							&nbsp;
@@ -53,149 +52,153 @@
 						<div class="form-group ">
 							<div class="col-md-6 col-sm-6 col-xs-12 " style="padding: 5px;">
 								<div class="card-blogform">
-									<div class="card-body"> 
+									<div class="card-body">
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('BRANCH');?> 
-												<input type="hidden" id="id" name="id" value="<?php echo $rs['id'];?>">
-												<input type="hidden" id="branchId" name="branchId" value="<?php echo $rs['branchId'];?>">
-												<input type="hidden" id="groupId" name="groupId" value="<?php echo $rs['groupId'];?>">
-												<input type="hidden" id="studentId" name="studentId" value="<?php echo $rs['studentId'];?>">
-												<input type="hidden" id="sessionType" name="sessionType" value="<?php echo $rs['sessionType'];?>">
-												<input type="hidden" id="reason" name="reason" value="<?php echo $rs['reason'];?>">
-												<input type="hidden" id="fromDate" name="fromDate" value="<?php echo $rs['fromDate'];?>">
-												<input type="hidden" id="amountDay" name="amountDay" value="<?php echo $rs['amountDay'];?>">
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('BRANCH'); ?>
+												<input type="hidden" id="id" name="id" value="<?php echo $rs['id']; ?>">
+												<input type="hidden" id="branchId" name="branchId" value="<?php echo $rs['branchId']; ?>">
+												<input type="hidden" id="groupId" name="groupId" value="<?php echo $rs['groupId']; ?>">
+												<input type="hidden" id="studentId" name="studentId" value="<?php echo $rs['studentId']; ?>">
+												<input type="hidden" id="sessionType" name="sessionType" value="<?php echo $rs['sessionType']; ?>">
+												<input type="hidden" id="reason" name="reason" value="<?php echo $rs['reason']; ?>">
+												<input type="hidden" id="fromDate" name="fromDate" value="<?php echo $rs['fromDate']; ?>">
+												<input type="hidden" id="amountDay" name="amountDay" value="<?php echo $rs['amountDay']; ?>">
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['branch_name'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['branch_name']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('STUDENT_CODE');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('STUDENT_CODE'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12 text-danger bold"> 
-												<?php echo $rs['StudentCode'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12 text-danger bold">
+												<?php echo $rs['StudentCode']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('STUDENT_NAME');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('STUDENT_NAME'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['StudentName'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['StudentName']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('GROUP');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('GROUP'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['GroupName'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['GroupName']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('CONTACT_NO');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('CONTACT_NO'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['phoneNumber'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['phoneNumber']; ?>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div> 
+							</div>
 							<div class="col-md-6 col-sm-6 col-xs-12 " style="padding: 5px;">
 								<div class="card-blogform">
-									<div class="card-body"> 
+									<div class="card-body">
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('AMOUNT_DAY');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('AMOUNT_DAY'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['amountDay'];?> <?php echo $tr->translate('DAY');?> 
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['amountDay']; ?> <?php echo $tr->translate('DAY'); ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('SESSION_TYPE');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('SESSION_TYPE'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['SeesionLabel'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['SeesionLabel']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('FROM_DATE');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('FROM_DATE'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['fromDate'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['fromDate']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('TO_DATE');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('TO_DATE'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['toDate'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['toDate']; ?>
+											</div>
 										</div>
 										<div class="form-group ">
-											<div class="col-md-4 col-sm-4 col-xs-12 "> 
-												<?php echo $tr->translate('REASON');?> 
-											</div> 
-											<div class="col-md-2 col-sm-2 col-xs-12 "> 
+											<div class="col-md-4 col-sm-4 col-xs-12 ">
+												<?php echo $tr->translate('REASON'); ?>
+											</div>
+											<div class="col-md-2 col-sm-2 col-xs-12 ">
 												:
-											</div> 
-											<div class="col-md-6 col-sm-6 col-xs-12"> 
-												<?php echo $rs['reason'];?>
-											</div> 
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<?php echo $rs['reason']; ?>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div> 
+							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-md-3 col-sm-3 col-xs-12 text-center ">
-								<p class="tx-20 font-weight-semibold"><?php echo $tr->translate('REQUEST_STATUS');?></p>
+								<p class="tx-20 font-weight-semibold"><?php echo $tr->translate('REQUEST_STATUS'); ?></p>
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-danger" >
-								<input class="form-check-input" type="radio" name="request_status" id="reject" <?php if($rs['requestStatus']==2){ echo "checked"; } ?>  value="2" >
+							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-danger">
+								<input class="form-check-input" type="radio" name="request_status" id="reject" <?php if ($rs['requestStatus'] == 2) {
+																													echo "checked";
+																												} ?> value="2">
 								<label class="form-check-label" for="reject">
-									<?php echo $tr->translate('REJECTED');?>&nbsp; <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+									<?php echo $tr->translate('REJECTED'); ?>&nbsp; <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
 								</label>
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-primary" >
-								<input class="form-check-input" type="radio" name="request_status" id="approve" <?php if($rs['requestStatus']==0 OR $rs['requestStatus']==1){ echo "checked"; } ?> value="1" checked>
+							<div class="col-md-3 col-sm-3 col-xs-12 text-center text-primary">
+								<input class="form-check-input" type="radio" name="request_status" id="approve" <?php if ($rs['requestStatus'] == 0 or $rs['requestStatus'] == 1) {
+																													echo "checked";
+																												} ?> value="1">
 								<label class="form-check-label" for="approve">
-									<?php echo $tr->translate('APPROVED');?>&nbsp; <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
+									<?php echo $tr->translate('APPROVED'); ?>&nbsp; <i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
 								</label>
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-12">
@@ -204,15 +207,14 @@
 					</div>
 				</div>
 				<div class="col-md-4 col-sm-4 col-xs-12">
-		        </div>
+				</div>
 				<div class="clearfix"></div>
-					<div class="card-box mt-20">
-						<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
-							<input type="submit"  value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-							class="button-class button-primary"  iconClass="glyphicon glyphicon-floppy-remove" />
-						</div>
+				<div class="card-box mt-20">
+					<div class="col-md-8 col-sm-8 col-xs-12 border-top mt-20 ptb-10 text-center">
+						<input type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE'); ?>" dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" />
 					</div>
-			    </div>  
+				</div>
+			</div>
 		</form>
-    </div>
+	</div>
 </div>

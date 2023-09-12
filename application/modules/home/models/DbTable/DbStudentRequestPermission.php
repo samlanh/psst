@@ -1,185 +1,139 @@
-<?php class Home_Model_DbTable_DbStudentRequestPermission extends Zend_Db_Table_Abstract{
+<?php class Home_Model_DbTable_DbStudentRequestPermission extends Zend_Db_Table_Abstract
+{
 
-	public function getUserId(){
-		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+	public function getUserId()
+	{
+		$session_user = new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
 	}
-    function getAllStudentRequest($search = ''){
-    	$db = $this->getAdapter();
+	function getAllStudentRequest($search = '')
+	{
+		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$sql="SELECT id,
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "SELECT id,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
 		(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS studentCode,
 		(SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentName,
 		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
 		amountDay, 
 		CASE    
-			WHEN  sessionType = 1 THEN '".$tr->translate("MORNING")."'
-			WHEN  sessionType = 2 THEN '".$tr->translate("AFTERNOON")."'
-			WHEN  sessionType = 3 THEN '".$tr->translate("FULL_DAY")."'
+			WHEN  sessionType = 1 THEN '" . $tr->translate("MORNING") . "'
+			WHEN  sessionType = 2 THEN '" . $tr->translate("AFTERNOON") . "'
+			WHEN  sessionType = 3 THEN '" . $tr->translate("FULL_DAY") . "'
 		END AS sessionType,
 		phoneNumber, fromDate, toDate, reason, 
 		CASE    
-			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
-			WHEN  requestStatus = 1 THEN '".$tr->translate("APPROVED")."'
-			WHEN  requestStatus = 2 THEN '".$tr->translate("REJECTED")."'
+			WHEN  requestStatus = 0 THEN '" . $tr->translate("PENDING") . "'
+			WHEN  requestStatus = 1 THEN '" . $tr->translate("APPROVED") . "'
+			WHEN  requestStatus = 2 THEN '" . $tr->translate("REJECTED") . "'
 		END AS requestStatus ";
-		// $sql.=$dbp->caseStatusShowImage("requestStatus");
-		$sql.="	FROM `rms_student_request_permission` 
+		// $sql .= $dbp->caseStatusShowImage("status");
+		$sql .= "	FROM `rms_student_request_permission` 
 		 WHERE 1
     	";
-    	$where = ' ';
-    	$from_date =(empty($search['start_date']))? '1': " createDate >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " createDate <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
-    	$where.= " AND  ".$from_date." AND ".$to_date;
-    	if(!empty($search['advance_search'])){
-    		$s_where = array();
-    		$s_search = str_replace(' ', '', addslashes(trim($search['advance_search'])));
+		$where = ' ';
+		$from_date = (empty($search['start_date'])) ? '1' : " createDate >= '" . date("Y-m-d", strtotime($search['start_date'])) . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : " createDate <= '" . date("Y-m-d", strtotime($search['end_date'])) . " 23:59:59'";
+		$where .= " AND  " . $from_date . " AND " . $to_date;
+		if (!empty($search['advance_search'])) {
+			$s_where = array();
+			$s_search = str_replace(' ', '', addslashes(trim($search['advance_search'])));
+			$s_where[] = " REPLACE((SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1),' ','') LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE((SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1),' ','') LIKE '%{$s_search}%'";
-    		$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1),' ','') LIKE '%{$s_search}%'";
-    		$s_where[] = " REPLACE(phoneNumber,' ','')  LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
-    	if(!empty($search['branch_search'])){
-    		$where.= " AND branchId = ".$db->quote($search['branch_search']);
-    	}
-    	if(!empty($search['session_type'])){
-    		$where.= " AND sessionType = ".$db->quote($search['session_type']);
-    	}
-    	if(!empty($search['request_status'])){
-    		$where.= " AND requestStatus = ".$db->quote($search['request_status']);
-    	}
-    
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission('branchId');
-		$where.=" ORDER BY id DESC";
-		$row = $db->fetchAll($sql.$where);
-		return $row;
-    }
+			$s_where[] = " REPLACE((SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1),' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(phoneNumber,' ','')  LIKE '%{$s_search}%'";
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
+		}
+		if (!empty($search['branch_search'])) {
+			$where .= " AND branchId = " . $db->quote($search['branch_search']);
+		}
+		if (!empty($search['session_type'])) {
+			$where .= " AND sessionType = " . $db->quote($search['session_type']);
+		}
+		if (!empty($search['request_status'])) {
+			$where .= " AND requestStatus = " . $db->quote($search['request_status']);
+		}
 
-	public function updatePermission($_data){
-		$_arr=array(
-				'requestStatus'	=> $_data['request_status'],
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where .= $dbp->getAccessPermission('branchId');
+		$where .= " ORDER BY id DESC";
+		$row = $db->fetchAll($sql . $where);
+		return $row;
+	}
+
+	public function updatePermission($_data)
+	{
+		$_arr = array(
+			'requestStatus'	=> $_data['request_status'],
 		);
 		$id = $_data['id'];
-		$where="id =$id";
-		$this->_name="rms_student_request_permission";
+		$where = "id =$id";
+		$this->_name = "rms_student_request_permission";
 		$this->update($_arr, $where);
+
+		$this->_name = 'rms_student_attendence_detail';
+		$whereDl = " studentRequestId = " . $id;
+		$this->delete($whereDl);
 		//Add to Attendance 
-		if($_data['request_status']==1){
-			$amount_day= $_data['amountDay'];
+		if ($_data['request_status'] == 1) {
+			$amount_day = $_data['amountDay'];
 			$date = $_data['fromDate'];
-			if(!empty($amount_day)){
-				for($i=0; $i<$amount_day; $i++ ){
-					$att_date = date('Y-m-d', strtotime($date. ' + '.$i.' days'));
+			if (!empty($amount_day)) {
+				for ($i = 0; $i < $amount_day; $i++) {
+					$att_date = date('Y-m-d', strtotime($date . ' + ' . $i . ' days'));
 					$arr = array(
-						'studentRequestId'=>$id,
-						'attendence_id'	=>0,
-						'stu_id'		=>$_data['studentId'],
-						'attendence_status'=>3,
-						'description'	=>$_data['reason'],
-						'type'			=>2, //from one student 
-						'branchId'		=>$_data['branchId'],
-						'groupId'		=>$_data['groupId'],
-						'forSemester'	=>1,
-						'forSession'	=>$_data['sessionType'],
-						'attendanceDate'=>$att_date,
-						'createDate'	=>date("Y-m-d"),
-						'modifyDate'	=>date("Y-m-d"),
+						'studentRequestId' => $id,
+						'attendence_id'	=> 0,
+						'stu_id'		=> $_data['studentId'],
+						'attendence_status' => 3,
+						'description'	=> $_data['reason'],
+						'type'			=> 2, //from one student 
+						'branchId'		=> $_data['branchId'],
+						'groupId'		=> $_data['groupId'],
+						'forSemester'	=> 1,
+						'forSession'	=> $_data['sessionType'],
+						'attendanceDate' => $att_date,
+						'createDate'	=> date("Y-m-d"),
+						'modifyDate'	=> date("Y-m-d"),
 					);
-					$this->_name ='rms_student_attendence_detail';
+					$this->_name = 'rms_student_attendence_detail';
 					$this->insert($arr);
 				}
 			}
-
-			// $studentRequestId = $this->getAttendacenDetailById($id);
-			// if(empty($studentRequestId)){
-			// 	if(!empty($amount_day)){
-			// 		for($i=0; $i<$amount_day; $i++ ){
-			// 			$att_date = date('Y-m-d', strtotime($date. ' + '.$i.' days'));
-			// 			$arr = array(
-			// 				'studentRequestId'=>$id,
-			// 				'attendence_id'	=>0,
-			// 				'stu_id'		=>$_data['studentId'],
-			// 				'attendence_status'=>3,
-			// 				'description'	=>$_data['reason'],
-			// 				'type'			=>2, //from one student 
-			// 				'branchId'		=>$_data['branchId'],
-			// 				'groupId'		=>$_data['groupId'],
-			// 				'forSemester'	=>1,
-			// 				'forSession'	=>$_data['sessionType'],
-			// 				'attendanceDate'=>$att_date,
-			// 				'createDate'	=>date("Y-m-d"),
-			// 				'modifyDate'	=>date("Y-m-d"),
-	
-			// 			);
-			// 			$this->_name ='rms_student_attendence_detail';
-			// 			$this->insert($arr);
-			// 		}
-			// 	}
-			// }else{
-			
-			// 	if(!empty($amount_day)){
-			// 		for($i=0; $i<$amount_day; $i++ ){
-			// 			$att_date = date('Y-m-d', strtotime($date. ' + '.$i.' days'));
-			// 			$arr = array(
-			// 				'studentRequestId'=>$id,
-			// 				'attendence_id'	=>0,
-			// 				'stu_id'		=>$_data['studentId'],
-			// 				'attendence_status'=>3,
-			// 				'description'	=>$_data['reason'],
-			// 				'type'			=>2, //from one student 
-			// 				'branchId'		=>$_data['branchId'],
-			// 				'groupId'		=>$_data['groupId'],
-			// 				'forSemester'	=>1,
-			// 				'forSession'	=>$_data['sessionType'],
-			// 				'attendanceDate'=>$att_date,
-			// 				'createDate'	=>date("Y-m-d"),
-			// 				'modifyDate'	=>date("Y-m-d"),
-	
-			// 			);
-			// 			$where="id= $id";
-			// 			$where.=" AND attendanceDate = $att_date";
-			// 			$this->_name ='rms_student_attendence_detail';
-			// 			$this->update($_arr, $where);
-			// 		}
-			// 	}
-
-			// }	
 		}
-	
 	}
 
-	public function getRequestById($id){
+	public function getRequestById($id)
+	{
 		$db = $this->getAdapter();
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$sql="SELECT *,
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "SELECT *,
 		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branchId LIMIT 1) AS branch_name,
 		(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentCode,
 		(SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = studentId LIMIT 1) AS StudentName,
 		(SELECT g.group_code FROM `rms_group` AS g  WHERE g.id = groupId LIMIT 1) AS GroupName,
 		amountDay, 
 		CASE    
-			WHEN  sessionType = 1 THEN '".$tr->translate("MORNING")."'
-			WHEN  sessionType = 2 THEN '".$tr->translate("AFTERNOON")."'
-			WHEN  sessionType = 3 THEN '".$tr->translate("FULL_DAY")."'
+			WHEN  sessionType = 1 THEN '" . $tr->translate("MORNING") . "'
+			WHEN  sessionType = 2 THEN '" . $tr->translate("AFTERNOON") . "'
+			WHEN  sessionType = 3 THEN '" . $tr->translate("FULL_DAY") . "'
 		END AS SeesionLabel,
 		CASE    
-			WHEN  requestStatus = 0 THEN '".$tr->translate("PENDING")."'
-			WHEN  requestStatus = 1 THEN '".$tr->translate("APPROVED")."'
-			WHEN  requestStatus = 2 THEN '".$tr->translate("REJECTED")."'
+			WHEN  requestStatus = 0 THEN '" . $tr->translate("PENDING") . "'
+			WHEN  requestStatus = 1 THEN '" . $tr->translate("APPROVED") . "'
+			WHEN  requestStatus = 2 THEN '" . $tr->translate("REJECTED") . "'
 		END AS StatusLbel
-		FROM `rms_student_request_permission` WHERE id= ".$id;
+		FROM `rms_student_request_permission` WHERE id= " . $id;
 		$row = $db->fetchRow($sql);
 		return $row;
 	}
-	public function getAttendacenDetailById($id){
+	public function getAttendacenDetailById($id)
+	{
 		$db = $this->getAdapter();
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$sql="SELECT * FROM `rms_student_attendence_detail` WHERE studentRequestId= ".$id." ORDER BY isCompleted DESC limit 1";
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "SELECT * FROM `rms_student_attendence_detail` WHERE studentRequestId= " . $id . " ORDER BY isCompleted DESC limit 1";
 		$row = $db->fetchRow($sql);
 		return $row;
 	}
-    
 }

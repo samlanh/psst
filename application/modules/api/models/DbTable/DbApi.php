@@ -4576,23 +4576,171 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
     				,g.group_code as groupCode
 					
-					,COUNT(if(satd.attendence_status = '1' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalComeSemester1
-					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalASemester1
-					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalPSemester1
-					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalLSemester1
-					,COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalELSemester1
-					
-					,COUNT(IF(satd.attendence_status = '1' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalComeSemester2
-					,COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalASemester2
-					,COUNT(IF(satd.attendence_status = '3' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalPSemester2
-					,COUNT(IF(satd.attendence_status = '4' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalLSemester2
-					,COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalELSemester2
-					
-					,COUNT(IF(satd.attendence_status = '1', satd.attendence_status, NULL)) AS gTotalCome
-					,COUNT(IF(satd.attendence_status = '2', satd.attendence_status, NULL)) AS gTotalA
-					,COUNT(IF(satd.attendence_status = '3', satd.attendence_status, NULL)) AS gTotalP
-					,COUNT(IF(satd.attendence_status = '4', satd.attendence_status, NULL)) AS gTotalL
-					,COUNT(IF(satd.attendence_status = '5', satd.attendence_status, NULL)) AS gTotalEL
+					,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=1) 
+			AS totalComeSemester1
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) 
+			AS totalASemester1
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) 
+			AS totalPSemester1
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) 
+			AS totalLSemester1
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) 
+			AS totalELSemester1
+			
+			
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=2
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=1) 
+			AS totalComeSemester2
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=2
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) 
+			AS totalASemester2
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=2
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) 
+			AS totalPSemester2
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=2
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) 
+			AS totalLSemester2
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.for_semester=2
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) 
+			AS totalELSemester2
+			
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=1) 
+			AS gTotalCome
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) 
+			AS gTotalA
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) 
+			AS gTotalP
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) 
+			AS gTotalL
+			,(SELECT 
+				COUNT(*) AS attendence_status
+			FROM 
+				`rms_student_attendence` AS sat2 
+			WHERE					
+				sat2.type=1
+				AND sat2.`status`=1
+				AND sat2.group_id =$groupId
+				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) 
+			AS gTotalEL
+			
+			
 					
 					,sat.`date_attendence`
 					,satd.description

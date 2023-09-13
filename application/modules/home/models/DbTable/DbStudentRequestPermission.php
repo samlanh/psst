@@ -82,23 +82,28 @@
 			if (!empty($amount_day)) {
 				for ($i = 0; $i < $amount_day; $i++) {
 					$att_date = date('Y-m-d', strtotime($date . ' + ' . $i . ' days'));
-					$arr = array(
-						'studentRequestId' => $id,
-						'attendence_id'	=> 0,
-						'stu_id'		=> $_data['studentId'],
-						'attendence_status' => 3,
-						'description'	=> $_data['reason'],
-						'type'			=> 2, //from one student 
-						'branchId'		=> $_data['branchId'],
-						'groupId'		=> $_data['groupId'],
-						'forSemester'	=> 1,
-						'forSession'	=> $_data['sessionType'],
-						'attendanceDate' => $att_date,
-						'createDate'	=> date("Y-m-d"),
-						'modifyDate'	=> date("Y-m-d"),
-					);
-					$this->_name = 'rms_student_attendence_detail';
-					$this->insert($arr);
+
+					$sDate = new DateTime($att_date);
+					$dayNum = $sDate->format('N');
+					if ($dayNum != 7) {
+						$arr = array(
+							'studentRequestId' => $id,
+							'attendence_id'	   => 0,
+							'stu_id'		   => $_data['studentId'],
+							'attendence_status' => 3,
+							'description'	   => $_data['reason'],
+							'type'			   => 2, //from one student 
+							'branchId'		   => $_data['branchId'],
+							'groupId'		   => $_data['groupId'],
+							'forSemester'	   => 1,
+							'forSession'	   => $_data['sessionType'],
+							'attendanceDate'   => $att_date,
+							'createDate'	   => date("Y-m-d"),
+							'modifyDate'	   => date("Y-m-d"),
+						);
+						$this->_name = 'rms_student_attendence_detail';
+						$this->insert($arr);
+					}
 				}
 			}
 		}

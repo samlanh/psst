@@ -951,7 +951,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			}
 					
 			$string.='<tr class="rowData '.$rowClasss.'" id="row'.$keyIndex.'">';
-				$string.='<td data-label="'.$tr->translate("REMOVE_RECORD").'"  align="center"><span title="'.$tr->translate("REMOVE_RECORD").'" class="removeRow" onclick="deleteRecord('.$keyIndex.')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+				$string.='<td data-label="'.$tr->translate("REMOVE_RECORD").'"  align="center"><span title="'.$tr->translate("REMOVE_RECORD").'" class="removeRow" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
 				$string.='<td data-label="'.$tr->translate("STUDENT").'"  align="left">';
 					$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';

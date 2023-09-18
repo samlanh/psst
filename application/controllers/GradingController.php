@@ -1,0 +1,103 @@
+<?php
+
+class GradingController extends Zend_Controller_Action
+{
+
+	const REDIRECT_URL = '/external';
+	
+    public function init()
+    {
+        /* Initialize action controller here */
+    	header('content-type: text/html; charset=utf8');  
+    }
+	public function indexAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$id=0;
+		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$teacherInfo = $dbExternal->getCurrentTeacherInfo();
+		$currentAcademic = empty($teacherInfo['currentAcademic'])?0:$teacherInfo['currentAcademic'];
+		
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+			$search['externalAuth']=1;
+		}
+		else{
+			$search = array(
+						'adv_search'=>'',
+						'externalAuth'=>1,//for teacher access
+						'academic_year'=> $currentAcademic,
+						'exam_type'=>-1,
+						'for_semester'=>-1,
+						'for_month'=>'',
+						'degree'=>0,
+						'grade'=> 0,
+						'start_date'=> '',
+						'end_date'=>date('Y-m-d'));
+		}
+		$this->view->search = $search;
+		$db = new Application_Model_DbTable_DbIssueScore();
+		$row = $db->getAllSubjectScoreByClass($search);
+		$this->view->row = $row;
+
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		
+	}
+    public function addAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$key = new Application_Model_DbTable_DbKeycode();
+		$dbset=$key->getKeyCodeMiniInv(TRUE);
+		$db = new Application_Model_DbTable_DbIssueScore();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			
+			try {
+				$rs = $db->addSubjectScoreByClass($_data);
+				if(isset($_data['save_new'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/add");
+				}else {
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/index");
+				}
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+		
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$row = $dbExternal->getGroupDetailByIDExternal($id);
+		
+		if (empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/dashboard");
+			exit();
+		}
+		
+		$this->view->row = $row;
+		if(empty($row)){
+			$this->_redirect("/external/group");
+		}
+	
+		$this->view-> month = $dbExternal->getAllMonth();
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$degreeId = $row['degree_id'];
+		$gradingId = $row['gradingId'];
+		$result = $dbg->checkEntryScoreSetting($degreeId);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/issuescore/index");
+		}
+		$array = array(
+				'gradingId'=>$gradingId
+				);
+		$result = $dbExternal->getGradingSystemDetail($array);
+		$this->view->criteria = $result;
+	}
+
+}

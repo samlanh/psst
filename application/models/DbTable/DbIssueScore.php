@@ -1199,4 +1199,183 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
    }
+   
+   function getStudentForGradingScore($data){//single entry by criteria
+   	$dbExternal = new Application_Model_DbTable_DbExternal();
+   	$students = $dbExternal->getStudentByGroup($data);
+   
+   	$criterial = $dbExternal->getGradingSystemDetail($data);
+   
+   	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+   	$db=$this->getAdapter();
+   
+   	$keyIndex = $data['keyIndex'];
+   	$maxSubjectScore = $data['maxSubjectScore'];
+   	$invalidesms = "rangeMessage: '"."ពិន្ទុធំបំផុតត្រឹម  ".$maxSubjectScore." / Maximum Score is ".$maxSubjectScore."'";
+   
+   	$identity="";
+   	$arrClassCol = array(
+   			2=>"col-md-6 col-sm-6 col-xs-12"
+   			,3=>"col-md-4 col-sm-4 col-xs-12"
+   			,4=>"col-md-3 col-sm-3 col-xs-12"
+   	);
+   	$string='';
+   	$string.='<table class="collape responsiveTable" id="table" >';
+   	$string.='<thead>';
+   	$string.='<tr class="head-td" align="center">';
+   	$string.='<th scope="col" width="10px">ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+   	$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
+   	$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
+   		
+   	if(!empty($criterial)) foreach($criterial AS $rowCri){
+   		$criterialId=$rowCri['criteriaId'];
+   		$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
+   		$classCol = "col-md-12 col-sm-12 col-xs-12";
+   
+   		if(!empty($rowCri['subjectId'])){//for subject
+   			if(!empty($rowCri['subCriterialTitleKh'])){
+   				$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+   				$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+   				$coutnSubCriterial = 1;//count($subCriterial);
+   				$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
+   				$indexSub=0;
+   
+   				$titleSubCriteria="";
+   				$titleSubCriteriaEng="";
+   				foreach ($subCriterial AS $keyV => $subCriTitle){
+   					$indexSub++;
+   					if($coutnSubCriterial>1){
+   						$titleSubCriterial = $subCriTitle;
+   						$titleSubCriteriaEng = $subCriterialEng[$keyV];
+   					}
+   					$string.='<div class="'.$classCol.'">';
+   					$string.='<strong  >'.$maxSubjectScore.'</strong>';
+   					$string.='<span class="titleSubCriterial">'.$titleSubCriterial.'</span>';
+   					$string.='<small class="lableEng" >'.$titleSubCriteriaEng.'</small>';
+   
+   					$string.='</div>';
+   				}
+   			}
+   		}else{
+   				
+   			//$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
+   			//for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+   			for ($x = 1; $x <= 1; $x++) {
+   				$string.='<div class="'.$classCol.'">';
+   				$string.='<strong  >'.$maxSubjectScore.'</strong>';
+   				$string.='</div>';
+   			}
+   		}
+   
+   		$string.='</th>';
+   	}
+   	$string.='<th scope="col">សម្គាល់<small class="lableEng" >Remark</small></th>';
+   		
+   	$string.='';
+   	$string.='</tr>';
+   	$string.='</thead>';
+   
+   	if(!empty($students)) foreach($students AS $key => $stu){
+   		$key++;
+   		$keyIndex=$keyIndex+1;
+   			
+   		if (empty($identity)){
+   			$identity=$keyIndex;
+   		}else{
+   			$identity=$identity.",".$keyIndex;
+   		}
+   			
+   		$rowClasss="odd";
+   		if(($keyIndex%2)==0){
+   			$rowClasss= "regurlar";
+   		}
+   		$gender = $tr->translate('MALE');
+   		if($stu['sex']==2){
+   			$gender = $tr->translate('FEMALE');
+   		}
+   			
+   		$string.='<tr class="rowData '.$rowClasss.'" id="row'.$keyIndex.'">';
+   		$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
+   		$string.='<td data-label="'.$tr->translate("STUDENT").'"  align="left">';
+   		$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
+   		$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
+   		$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
+   		$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
+   		$string.='</td>';
+   		$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
+   
+   		if(!empty($criterial)) foreach($criterial AS $rowCri){
+   			$criterialId=$rowCri['criteriaId'];
+   				
+   			$classCol = "col-md-12 col-sm-12 col-xs-12";
+   				
+   				
+   			$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
+   			$string.='<div class="form-group">';
+   			if(!empty($rowCri['subjectId'])){
+   				if(!empty($rowCri['subCriterialTitleKh'])){
+   					$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+   					$coutnSubCriterial = count($subCriterial);
+   					$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
+   					$indexSub=0;
+   					foreach ($subCriterial as $subCriTitle){
+   						$indexSub++;
+   						$string.='<div class="'.$classCol.'">';
+   						$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+   						$string.='</div>';
+   					}
+   				}
+   			}else{
+   				//$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
+   				//for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
+   				for ($x = 1; $x <= 1; $x++) {
+   
+   					$string.='<div class="'.$classCol.'">';
+   					$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+   					$string.='</div>';
+   				}
+   			}
+   			$string.='</div>';
+   			$string.='</td>';
+   		}
+   			
+   		$string.='<td data-label="សម្គាល់/Remark"><input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
+   		$string.='';
+   		$string.='</tr>';
+   			
+   	}
+   
+   	$string.='';
+   	$string.='</table>';
+   	$htmlGradingInfo='';
+   	$htmlGradingInfo.='<div class="card-info bg-gradient-directional-notice">';
+   	$htmlGradingInfo.='<div class="card-content">';
+   	$htmlGradingInfo.='<div class="card-body">';
+   	$htmlGradingInfo.='<div class="media d-flex">';
+   	$htmlGradingInfo.='<div class="media-body text-dark text-left align-self-bottom ">';
+   
+   	$htmlGradingInfo.='<ul class="optListRow gradingInfo">';
+   	$htmlGradingInfo.='<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានប្រព័ន្ធដាក់ពិន្ទុ / Grading Info.</h4></li>';
+   	if(!empty($criterial)) foreach($criterial AS $rowCri){
+   		$htmlGradingInfo.='<li class="opt-items two-column"><div class="col-md-8 col-sm-8 col-xs-12">'.$rowCri['criterialTitle'].'<small class="lableEng">'.$rowCri['criterialTitleEng'].'</small></div><div class="col-md-4 col-sm-4 col-xs-12">: <span class="text-value">'.$rowCri['pecentage_score'].' %</span></div></li>';
+   	}
+   	$htmlGradingInfo.='</ul>';
+   	$htmlGradingInfo.='</div>';
+   	$htmlGradingInfo.='<div class="align-self-top">';
+   	$htmlGradingInfo.='<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>';
+   	$htmlGradingInfo.='</div>';
+   	$htmlGradingInfo.='</div>';
+   	$htmlGradingInfo.='</div>';
+   	$htmlGradingInfo.='</div>';
+   	$htmlGradingInfo.='</div>';
+   
+   	$arrContent = array(
+   			'contentHtml'=>$string
+   			,'identity'=>$identity
+   			,'keyIndex'=>$keyIndex
+   			,'htmlGradingInfo'=>$htmlGradingInfo
+   	);
+   
+   	return $arrContent;
+   }
 }

@@ -243,13 +243,11 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	   	}
 	   	$sql = "SELECT
 				   	`g`.*
-				   	
 				   	,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_name
 					,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
 					,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
 				   	,(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS school_nameen
 					,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.branch_id LIMIT 1) AS branch_logo
-				   	
 				   	,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic
 				   	,`g`.`degree` AS degree_id
 				   	,`g`.`grade` AS gradeId
@@ -481,6 +479,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 		if(!empty($data['examType'])){
 			$sql.=" AND s.forExamType =".$data['examType'];
+		}
+		if(!empty($data['criteriaId'])){
+			$sql.=" AND s.criteriaId =".$data['criteriaId'];
 		}
 		$db = $this->getAdapter();
 		$rRow = $db->fetchAll($sql);

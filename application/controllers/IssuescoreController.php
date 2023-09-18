@@ -149,6 +149,20 @@ class IssuescoreController extends Zend_Controller_Action
 			exit();
 		}
 	}
+	function getStudentsingleengryAction(){//single entry by criteria
+	
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbIssueScore();
+			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
+			$rs=$db->getStudentForGradingScore($data);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
+	}
+	
+	
+	
 	
 	function getStudenteditAction(){
 		

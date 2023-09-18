@@ -1,177 +1,180 @@
 <?php
 
-class Application_Form_FrmGlobal{
-	public function getReceiptFooter(){
+class Application_Form_FrmGlobal
+{
+	public function getReceiptFooter()
+	{
 		$_dbmodel = new Application_Model_DbTable_DbKeycode();
-		$keycode=$_dbmodel->getKeyCodeMiniInv(TRUE);
-			$str="";
-			$str.="<tr bgcolor='6D5CDD'>";
-				$str.='<td colspan="4" style="text-align: center; color:#fff;background:#6D5CDD;">';
-				$brachs = explode('/',$keycode['footer_branch']);
-					$str.='<ul style="list-style-type: none;float:left; text-align: left;padding-left:10px;">';
-						foreach ($brachs AS $key =>$branch){
-							$str.="<li> $branch;</li>";
-						}
-					$str.='</ul>';
-					$phones = explode('/',$keycode['foot_phone']);
-					$str.='<ul style="list-style-type: none;float:left;text-align: left;padding-left:10px;">';
-						foreach ($phones AS $key =>$phone)
-							$str.="<li> $phone </li>";
-					$str.='</ul>';
-					$contacts= explode('/',$keycode['f_email_website']);
-					$str.='<ul style="list-style-type: none;float:left;text-align: left;padding-left:10px;">';
-						foreach ($contacts AS $key =>$contact){
-							$str.="<li> $contact </li>";
-						}
-					$str.='</ul>';
-				$str.='</td>';
-			$str.='</tr>';						
-				return $str;
+		$keycode = $_dbmodel->getKeyCodeMiniInv(TRUE);
+		$str = "";
+		$str .= "<tr bgcolor='6D5CDD'>";
+		$str .= '<td colspan="4" style="text-align: center; color:#fff;background:#6D5CDD;">';
+		$brachs = explode('/', $keycode['footer_branch']);
+		$str .= '<ul style="list-style-type: none;float:left; text-align: left;padding-left:10px;">';
+		foreach ($brachs as $key => $branch) {
+			$str .= "<li> $branch;</li>";
+		}
+		$str .= '</ul>';
+		$phones = explode('/', $keycode['foot_phone']);
+		$str .= '<ul style="list-style-type: none;float:left;text-align: left;padding-left:10px;">';
+		foreach ($phones as $key => $phone)
+			$str .= "<li> $phone </li>";
+		$str .= '</ul>';
+		$contacts = explode('/', $keycode['f_email_website']);
+		$str .= '<ul style="list-style-type: none;float:left;text-align: left;padding-left:10px;">';
+		foreach ($contacts as $key => $contact) {
+			$str .= "<li> $contact </li>";
+		}
+		$str .= '</ul>';
+		$str .= '</td>';
+		$str .= '</tr>';
+		return $str;
 	}
-	public function getHeaderReceipt($branch_id=null,$forGenerate=0){
+	public function getHeaderReceipt($branch_id = null, $forGenerate = 0)
+	{
 		$key = new Application_Model_DbTable_DbKeycode();
 		$setting = $key->getKeyCodeMiniInv(TRUE);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$str="";
-		
-		if ($forGenerate==1){
-			$baseUrl =PUBLIC_PATH;
+		$str = "";
+
+		if ($forGenerate == 1) {
+			$baseUrl = PUBLIC_PATH;
 			$styleLogo = "width:120px;";
-		}else{
+		} else {
 			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
 		}
 		$img = 'logo.png';
-		
-		$logo = $baseUrl.'/images/Logo/Logo.png';
-		if(!empty($setting['logo'])){
-			if (file_exists(PUBLIC_PATH."/images/logo/".$setting['logo'])){
-				$logo = $baseUrl.'/images/logo/'.$setting['logo'];
+
+		$logo = $baseUrl . '/images/Logo/Logo.png';
+		if (!empty($setting['logo'])) {
+			if (file_exists(PUBLIC_PATH . "/images/logo/" . $setting['logo'])) {
+				$logo = $baseUrl . '/images/logo/' . $setting['logo'];
 			}
 		}
-		
+
 		$school_khname = $tr->translate('SCHOOL_NAME');
 		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 		$address = $tr->translate('CUSTOMER_ADDRESS');
 		$tel = $tr->translate('CUSTOMER_TEL');
 		$email =  $tr->translate('CUSTOMER_EMAIL');
 		$website = $tr->translate('CUSTOMER_WEBSITE');
-		if($branch_id==null){
-			
+		if ($branch_id == null) {
+
 			$school_khname = $tr->translate('SCHOOL_NAME');
 			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 			$address = $tr->translate('CUSTOMER_ADDRESS');
 			$tel = $tr->translate('CUSTOMER_TEL');
 			$email =  $tr->translate('CUSTOMER_EMAIL');
 			$website = $tr->translate('CUSTOMER_WEBSITE');
-		}else{
+		} else {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$rs = $db->getBranchInfo($branch_id);
-			if(!empty($rs)){
-				
-				 if (!empty($rs['photo'])){
-					if (file_exists(PUBLIC_PATH."/images/logo/".$rs['photo'])){
-						$logo = $baseUrl.'/images/logo/'.$rs['photo'];
+			if (!empty($rs)) {
+
+				if (!empty($rs['photo'])) {
+					if (file_exists(PUBLIC_PATH . "/images/logo/" . $rs['photo'])) {
+						$logo = $baseUrl . '/images/logo/' . $rs['photo'];
 					}
-				}	
+				}
 				$school_khname = $rs['school_namekh'];
 				$school_name = $rs['school_nameen'];
-				
+
 				$address = $rs['br_address'];
 				$tel = $rs['branch_tel'];
 				$email = $rs['email'];
 				$website = $rs['website'];
 			}
 		}
-		
-	    if($setting['show_header_receipt']==1){
-			$str="<table style='width:100%;white-space:nowrap;position: absolute;'>
+
+		if ($setting['show_header_receipt'] == 1) {
+			$str = "<table style='width:100%;white-space:nowrap;position: absolute;'>
 				<tr>
 					<td style='width:22%;' valign='top'>
-						&nbsp;<img style='".$styleLogo."' src=".$logo.">
+						&nbsp;<img style='" . $styleLogo . "' src=" . $logo . ">
 					</td>
 					<td valign='top' style='width:48%;font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;' >
-						<div style='font-size:16px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>".$school_khname."</div>
-						<div style='font-size:14px;font-family:Times New Roman'>".$school_name."</div>
-						<div style='font-size:10px;line-height: 10px;margin-top: 2px;max-width:100%;white-space:pre-line;'>".$address."</div>
+						<div style='font-size:16px;margin-top: 10px;line-height:25px;font-family:Khmer OS Muol Light'>" . $school_khname . "</div>
+						<div style='font-size:14px;font-family:Times New Roman'>" . $school_name . "</div>
+						<div style='font-size:10px;line-height: 10px;margin-top: 2px;max-width:100%;white-space:pre-line;'>" . $address . "</div>
 					</td>
 					<td valign='top' style='width:30%;font-size:10px;line-height: 15px;font-family: Khmer OS Battambang;' >
 						<div style='line-height: 16px;'>&nbsp;</div>
-						<div style='line-height: 16px;'>".$tel."</div>
-						<div style='line-height: 16px;'>".$email."</div>
-						<div style='line-height: 16px;'>".$website."</div>
+						<div style='line-height: 16px;'>" . $tel . "</div>
+						<div style='line-height: 16px;'>" . $email . "</div>
+						<div style='line-height: 16px;'>" . $website . "</div>
 					</td>
 				</tr>
 			</table>";
 		}
 		return $str;
 	}
-	function getLetterHeaderReport($branch_id){
+	function getLetterHeaderReport($branch_id)
+	{
 		$db = new Application_Model_DbTable_DbGlobal();
-		if (empty($branch_id)){
+		if (empty($branch_id)) {
 			$optionBranch = $db->getAllBranch();
-			if (count($optionBranch)==1){
-				if(!empty($optionBranch))foreach($optionBranch AS $row){
+			if (count($optionBranch) == 1) {
+				if (!empty($optionBranch)) foreach ($optionBranch as $row) {
 					$branch_id = $row['id'];
 				}
-			}else {
+			} else {
 				$branch_id = 1;
 			}
-			
 		}
 		$rs = $db->getBranchInfo($branch_id);
-		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
-		$color = empty($rs['color'])?"#000":"#".$rs['color'];
+		$logo = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/' . $rs['photo'];
+		$color = empty($rs['color']) ? "#000" : "#" . $rs['color'];
 		$type_header = HEADER_REPORT_TYPE;
-		$str="";
-		
-		
-		$email_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/email.png';
-		$global_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/global.png';
-		$home_icon = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/icon/home.png';
-		
-		if ($type_header==1){
-		$str="
+		$str = "";
+
+
+		$email_icon = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/icon/email.png';
+		$global_icon = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/icon/global.png';
+		$home_icon = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/icon/home.png';
+
+		if ($type_header == 1) {
+			$str = "
 		<style>
 				table{
-				color:".$color."
+				color:" . $color . "
 				}
 		</style>
 		<table width='100%'>
 				<tr>
 					<td width='20%' align='center'>
-						<img style='max-height:100px;' src=".$logo."><br>
+						<img style='max-height:100px;' src=" . $logo . "><br>
 					</td>
 					<td width='80%' valign='top'>
 						<div class='schoo-headkh' style='text-align: center;'>
-							<h2 style=".'"'."padding: 0;margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';font-size:18px;background: $color;color: #fff;padding: 8px 0px;".'"'.">".$rs['school_namekh']."</h2>
+							<h2 style=" . '"' . "padding: 0;margin: 0; font-family: 'Times New Roman','Khmer OS Muol Light';font-size:18px;background: $color;color: #fff;padding: 8px 0px;" . '"' . ">" . $rs['school_namekh'] . "</h2>
 						</div>
 						<table width='100%' >
 							<tr>
 								<td width='60%' align='center' valign='top'>
-									<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #000;'>".$rs['school_nameen']."</h2>
+									<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #000;'>" . $rs['school_nameen'] . "</h2>
 								</td>
 								<td width='40%' align='left' valign='top' style='white-space:nowrap;font-size: 12px;line-height: 14px;font-family: Times New Roman , Khmer OS Battambang;'>
-									Contacts: ".$rs['branch_tel']."<br />
-									<span style='visibility: hidden;'>Contacts: </span>".$rs['branch_tel1']."
+									Contacts: " . $rs['branch_tel'] . "<br />
+									<span style='visibility: hidden;'>Contacts: </span>" . $rs['branch_tel1'] . "
 								</td>
 							</tr>
 						</table>
 						<div class='schoo-add' style='text-align: center; font-size: 13px;font-family: Times New Roman , Khmer OS Battambang;'>
-							 ".$rs['br_address'];
-							if (!empty($rs['email'])){
-								$str.=", E-mail: ".$rs['email'];
-							}
-							if (!empty($rs['website'])){
-								$str.=", Website: ".$rs['website'];
-							}
-							$str.="
+							 " . $rs['br_address'];
+			if (!empty($rs['email'])) {
+				$str .= ", E-mail: " . $rs['email'];
+			}
+			if (!empty($rs['website'])) {
+				$str .= ", Website: " . $rs['website'];
+			}
+			$str .= "
 						</div>
 					</td>
 				</tr>
 		</table>";
-		}else if ($type_header==2){
-			$str='
+		} else if ($type_header == 2) {
+			$str = '
 				<style>
 					table{
 					color:".$color."
@@ -197,7 +200,7 @@ class Application_Form_FrmGlobal{
 						line-height: 12px;
 						text-align:left; 
 						font-size:10px;
-						font-family:'.'"Times New Roman"'.','.'"Khmer OS Muol Light"'.';
+						font-family:' . '"Times New Roman"' . ',' . '"Khmer OS Muol Light"' . ';
 						
 					}
 					ul.headReport li.small-text,
@@ -205,46 +208,46 @@ class Application_Form_FrmGlobal{
 						line-height: 14px;
 						text-align:center; 
 						font-size:11px;
-						font-family:'.'"Times New Roman"'.','.'"Khmer OS Battambang"'.';
+						font-family:' . '"Times New Roman"' . ',' . '"Khmer OS Battambang"' . ';
 						
 					}
 					</style>
 			';
-			$str.="
+			$str .= "
 			
 				
 			
 			<table class='tableTop' width='100%'>
 					<tr>
 						<td width='20%' align='center'>
-							<img style='max-height:100px;' src=".$logo."><br>
+							<img style='max-height:100px;' src=" . $logo . "><br>
 						</td>
 						<td width='80%' valign='top'>
 							<table width='100%' >
 								<tr>
 									<td width='60%' align='left' valign='top'>
-										<h2 style=".'"'."padding: 0;margin: 0; font-weight:normal; font-family: 'Times New Roman' , 'Khmer OS Muol Light';font-size:18px; color: inherit;padding: 8px 0px;".'"'.">".$rs['school_namekh']."</h2>
-										<h2 style='white-space:nowrap; font-weight:bold; font-size:14px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
+										<h2 style=" . '"' . "padding: 0;margin: 0; font-weight:normal; font-family: 'Times New Roman' , 'Khmer OS Muol Light';font-size:18px; color: inherit;padding: 8px 0px;" . '"' . ">" . $rs['school_namekh'] . "</h2>
+										<h2 style='white-space:nowrap; font-weight:bold; font-size:14px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>" . $rs['school_nameen'] . "</h2>
 									</td>
 									<td width='40%' align='left' valign='top'>
 										<ul class='headReport'>
-											<li><span class='space'>&#9742;</span> ".$rs['branch_tel']."</li>";
-											if (!empty($rs['email'])){
-												$str.="<li><span class='space'>&#128386;</span> ".$rs['email']."</li>";
-											}							
-											if (!empty($rs['website'])){
-												$str.="<li><span class='space'>🌐</span> ".$rs['website']."</li>";
-											}
-											$str.="<li><span class='space'>&#127988;</span> ".$rs['br_address']."</li>
+											<li><span class='space'>&#9742;</span> " . $rs['branch_tel'] . "</li>";
+			if (!empty($rs['email'])) {
+				$str .= "<li><span class='space'>&#128386;</span> " . $rs['email'] . "</li>";
+			}
+			if (!empty($rs['website'])) {
+				$str .= "<li><span class='space'>🌐</span> " . $rs['website'] . "</li>";
+			}
+			$str .= "<li><span class='space'>&#127988;</span> " . $rs['br_address'] . "</li>
 										</ul>
 									</td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-					</table>";	
-		}else if ($type_header==3){	
-			$str="
+					</table>";
+		} else if ($type_header == 3) {
+			$str = "
 			<style>
 				span.space {
 					padding:0;
@@ -253,22 +256,22 @@ class Application_Form_FrmGlobal{
 				        line-height: inherit;
 				}
 				table{
-					color:".$color."
+					color:" . $color . "
 					}
 			</style>
 			<table width='100%' class='tableTop'>
 				<tr>
 					<td width='20%' align='center'>
-						<img style='width:100%' src=".$logo."><br>
+						<img style='width:100%' src=" . $logo . "><br>
 					</td>
 					<td width='80%' valign='top'>
-						<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px; color: inherit;padding: 8px 0px;'>".$rs['school_namekh']."</h2>
-						<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
+						<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:24px; color: inherit;padding: 8px 0px;'>" . $rs['school_namekh'] . "</h2>
+						<h2 style='white-space:nowrap; font-weight:bold; font-size:16px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>" . $rs['school_nameen'] . "</h2>
 					</td>
 				</tr>
-			</table>";	
-		}else if ($type_header==4){	
-		$str='
+			</table>";
+		} else if ($type_header == 4) {
+			$str = '
 		<style>
 			tr.line td {
 				    display: none !important;
@@ -278,11 +281,11 @@ class Application_Form_FrmGlobal{
 			<tbody>
 				<tr>
 					<td width="25%" valign="top">
-						<img style="max-width: 98%;max-height:140px;  margin-top:25px;" src="'.$logo.'">
+						<img style="max-width: 98%;max-height:140px;  margin-top:25px;" src="' . $logo . '">
 					</td>
 					<td width="35%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 					</td>
-					<td width="40%" valign="top" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
+					<td width="40%" valign="top" style="font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
 						
 					</td>
 				</tr>
@@ -292,25 +295,25 @@ class Application_Form_FrmGlobal{
 		}
 		return $str;
 	}
-	
-	function getLeftLogo($branch_id){
-		
+
+	function getLeftLogo($branch_id)
+	{
+
 		$db = new Application_Model_DbTable_DbGlobal();
-		if (empty($branch_id)){
+		if (empty($branch_id)) {
 			$optionBranch = $db->getAllBranch();
-			if (count($optionBranch)==1){
-				if(!empty($optionBranch))foreach($optionBranch AS $row){
+			if (count($optionBranch) == 1) {
+				if (!empty($optionBranch)) foreach ($optionBranch as $row) {
 					$branch_id = $row['id'];
 				}
-			}else {
+			} else {
 				$branch_id = 1;
 			}
-				
 		}
 		$rs = $db->getBranchInfo($branch_id);
-		$logo = Zend_Controller_Front::getInstance()->getBaseUrl().'/images/'.$rs['photo'];
-		$color = empty($rs['color'])?"":"#".$rs['color'];
-		$str="
+		$logo = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/' . $rs['photo'];
+		$color = empty($rs['color']) ? "" : "#" . $rs['color'];
+		$str = "
 			<style>
 				span.space {
 					padding:0;
@@ -322,11 +325,11 @@ class Application_Form_FrmGlobal{
 			<table width='100%' style='white-space:nowrap;'>
 				<tr>
 					<td width='20%' align='left'>
-						<img style='width:80%' src=".$logo."><br>
+						<img style='width:80%' src=" . $logo . "><br>
 					</td>
 					<td width='60%' valign='top'>
-						<h2 style='margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:11px; color: inherit;padding: 5px 0px 5px 0px;'>".$rs['school_namekh']."</h2>
-						<h2 style='white-space:nowrap; font-weight:bold; font-size:10px; margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>".$rs['school_nameen']."</h2>
+						<h2 style='margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:11px; color: inherit;padding: 5px 0px 5px 0px;'>" . $rs['school_namekh'] . "</h2>
+						<h2 style='white-space:nowrap; font-weight:bold; font-size:10px; margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>" . $rs['school_nameen'] . "</h2>
 					</td>
 					<td width='20%' >
 					</td>
@@ -335,51 +338,53 @@ class Application_Form_FrmGlobal{
 		";
 		return $str;
 	}
-	function getFooterAccount($footerType=1,$spacing=1,$font_size="12px",$font_family="Times New Roman,Khmer OS Muol Light;"){
+	function getFooterAccount($footerType = 1, $spacing = 1, $font_size = "12px", $font_family = "Times New Roman,Khmer OS Muol Light;")
+	{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$str="<table width='100%' style='font-size: $font_size;font-family:$font_family'>";
-			for($i=1;$i<=$spacing;$i++){
-				$str.="<tr><td>&nbsp;</td></tr>";
-			}
-			if($footerType==1){ //Account General
-			$str.="	
+		$str = "<table width='100%' style='font-size: $font_size;font-family:$font_family'>";
+		for ($i = 1; $i <= $spacing; $i++) {
+			$str .= "<tr><td>&nbsp;</td></tr>";
+		}
+		if ($footerType == 1) { //Account General
+			$str .= "	
 				<tr>
 					<td width='25%' align='center'>
-						<span>".$tr->translate('APPROVED_BY')."</span>
+						<span>" . $tr->translate('APPROVED_BY') . "</span>
 					</td>
 					<td width='50%' align='center'>
-						<span>".$tr->translate('VERIFIED_BY')."</span>
+						<span>" . $tr->translate('VERIFIED_BY') . "</span>
 					</td>
 					<td width='25%' align='center'>
-						<span>".$tr->translate('PREPARED_BY')."</span>
+						<span>" . $tr->translate('PREPARED_BY') . "</span>
 					</td>
 				</tr>";
-			}else if($footerType==2){ //Foundation General
-				$str.='
+		} else if ($footerType == 2) { //Foundation General
+			$str .= '
 					<tr>
 						<td width="35%" align="center">
-							<span style="font-size: 14px;font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Battambang'."'".';">'.$tr->translate("CHECKANDAPPROVED").'</span><br />
-							<span style="font-size: 14px;font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Muol Light'."'".';">'.$tr->translate("PRINCIPAL").'</span>
+							<span style="font-size: 14px;font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Battambang' . "'" . ';">' . $tr->translate("CHECKANDAPPROVED") . '</span><br />
+							<span style="font-size: 14px;font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Muol Light' . "'" . ';">' . $tr->translate("PRINCIPAL") . '</span>
 						</td>
 						<td width="30%">&nbsp;</td>
 						<td width="35%" align="center">
-							<span style=" font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Battambang'."'".';">'.$tr->translate("CREATE_WORK_DATE").'</span><br />
-							<span style=" font-family:'."'".'Times New Roman'."'".','."'".'Khmer OS Muol Light'."'".';">'.$tr->translate("PREPARE_BY").'</span>
+							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Battambang' . "'" . ';">' . $tr->translate("CREATE_WORK_DATE") . '</span><br />
+							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Muol Light' . "'" . ';">' . $tr->translate("PREPARE_BY") . '</span>
 						</td>
 					</tr>
 				';
-			}
-		$str.="	</table>";
+		}
+		$str .= "	</table>";
 		return $str;
 	}
-	
-	function getFormatReceipt(){
-		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-		$last_name=$session_user->last_name;
+
+	function getFormatReceipt()
+	{
+		$session_user = new Zend_Session_Namespace(SYSTEM_SES);
+		$last_name = $session_user->last_name;
 		$username = $session_user->first_name;
 		$receipt_type = RECEIPT_TYPE;
-		if($receipt_type==1){//elt
-			$str="<style>
+		if ($receipt_type == 1) { //elt
+			$str = "<style>
 				.hearder_table{height:20px !important;}
 				.defaulheight{line-height:10px !important;}
 				.bold{
@@ -479,7 +484,7 @@ class Application_Form_FrmGlobal{
 									<td><div style='font-family: Times New Roman'>Grade	</div></td>
 									<td style='white-space: nowrap;'> : &nbsp;<label id='lb_grade' class='one'>&nbsp;</label>
 									<td>Print Date</td>
-									<td> : &nbsp;".date('d-m-Y g:i A')."</td>
+									<td> : &nbsp;" . date('d-m-Y g:i A') . "</td>
 								</tr>
 								<tr>
 									<td>Tel</td>
@@ -487,7 +492,7 @@ class Application_Form_FrmGlobal{
 									<td>Class</td>
 									<td> : &nbsp;<label id='lb_group' class='one'>&nbsp;</td>
 									<td>Print By :</td>
-									<td> : &nbsp;".$username."</td>
+									<td> : &nbsp;" . $username . "</td>
 								</tr>
 							</table>
 						</td>
@@ -562,8 +567,8 @@ class Application_Form_FrmGlobal{
 											<tr>
 												<td align='center'>
 													<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:40px;'><label id='lb_byuser'></label>";
-													  	
-													$str.="</div>
+
+			$str .= "</div>
 													Signature/Name/Date
 												</td>
 												<td align='center' valign='bottom'>
@@ -605,16 +610,16 @@ class Application_Form_FrmGlobal{
 			</div>
 			";
 			$key = new Application_Model_DbTable_DbKeycode();
-			$result=$key->getKeyCodeMiniInv(TRUE);
-			if($result['receipt_print']>1){
-				$str.="<div id='divPrint1'>
+			$result = $key->getKeyCodeMiniInv(TRUE);
+			if ($result['receipt_print'] > 1) {
+				$str .= "<div id='divPrint1'>
 				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
 				<div id='printblog2'></div>
 				</div>";
 			}
-		return $str;
-		}elseif($receipt_type==2){//newworld
-			$str="<style>
+			return $str;
+		} elseif ($receipt_type == 2) { //newworld
+			$str = "<style>
 			.hearder_table{height:20px !important;}
 			.defaulheight{line-height:10px !important;}
 			.bold{
@@ -703,13 +708,13 @@ class Application_Form_FrmGlobal{
 			<td>Gender </td>
 			<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
 			<td>Print Date</td>
-			<td> : &nbsp;".date('d-m-Y g:i A')."</td>
+			<td> : &nbsp;" . date('d-m-Y g:i A') . "</td>
 			</tr>
 			<tr>
 			<td>Tel</td>
 			<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
 			<td>Print By :</td>
-			<td> : &nbsp;".$username."</td>
+			<td> : &nbsp;" . $username . "</td>
 			</tr>
 			</table>
 			</td>
@@ -795,7 +800,7 @@ class Application_Form_FrmGlobal{
 				<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;'>
 			<tr>
 			<td colspan='5'>";
-			$str.="
+			$str .= "
 					</td>
 					<td valign='top'>
 					</td>
@@ -824,31 +829,31 @@ class Application_Form_FrmGlobal{
 			
 			";
 			$key = new Application_Model_DbTable_DbKeycode();
-			$result=$key->getKeyCodeMiniInv(TRUE);
-			if($result['receipt_print']>1){
-				$str.="<div id='divPrint1'>
+			$result = $key->getKeyCodeMiniInv(TRUE);
+			if ($result['receipt_print'] > 1) {
+				$str .= "<div id='divPrint1'>
 						<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
 						<div id='printblog2'></div>
 					</div>";
 			}
 			return $str;
-		}elseif($receipt_type==3){//psis
-			defined('NEW_STU_ID_FROM_TEST') || define('NEW_STU_ID_FROM_TEST', Setting_Model_DbTable_DbGeneral::geValueByKeyName('new_stuid_test'));//0=default,1=show stu_id register to enter
+		} elseif ($receipt_type == 3) { //psis
+			defined('NEW_STU_ID_FROM_TEST') || define('NEW_STU_ID_FROM_TEST', Setting_Model_DbTable_DbGeneral::geValueByKeyName('new_stuid_test')); //0=default,1=show stu_id register to enter
 			defined('SHOW_GROUP_INPAYMENT') || define('SHOW_GROUP_INPAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_groupin_payment'));
 			defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
 			defined('SHOW_PIC_INRECEIPT') || define('SHOW_PIC_INRECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_pic_receipt'));
 			defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
 			defined('SHOW_HEADER_RECEIPT') || define('SHOW_HEADER_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_header_receipt'));
-			
-			$paddingTop = PADDINGTOP_RECEIPT.'px';
+
+			$paddingTop = PADDINGTOP_RECEIPT . 'px';
 			$showPic = SHOW_PIC_INRECEIPT;
-			$showPic = ($showPic==1)?'display:block;':'display:none;';
+			$showPic = ($showPic == 1) ? 'display:block;' : 'display:none;';
 			$settingAmtReceipt = AMOUNT_RECEIPT;
-			$pageSetup = ($settingAmtReceipt==1)?'page:A5;size:landscape;':'page:A4;size:portrait;';
-			
-			$showReport = (SHOW_HEADER_RECEIPT==1)?'visibility:visible':'visibility:hidden';
-			
-			$str="<style>
+			$pageSetup = ($settingAmtReceipt == 1) ? 'page:A5;size:landscape;' : 'page:A4;size:portrait;';
+
+			$showReport = (SHOW_HEADER_RECEIPT == 1) ? 'visibility:visible' : 'visibility:hidden';
+
+			$str = "<style>
 					.hearder_table{height:20px !important;}
 					.defaulheight{line-height:10px !important;}
 					.bold{
@@ -949,7 +954,7 @@ class Application_Form_FrmGlobal{
 					</style>
 					<table width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
 						<tr style='height:$paddingTop'>
-							<td id='lbl_header' align='center' valign='top' style='".$showReport."' colspan='5'>
+							<td id='lbl_header' align='center' valign='top' style='" . $showReport . "' colspan='5'>
 							</td>
 						</tr>
 						<tr>
@@ -974,8 +979,8 @@ class Application_Form_FrmGlobal{
 							<td>អត្តលេខ,Student ID/Test ID</td>
 							<td> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
 							<td></td>
-							<td><span class='spanBlog'>&nbsp;Print By : ".$username."</span></td>
-							<td><span class='spanBlog'>Print Date:".date('d-m-Y g:iA')."</span></td>
+							<td><span class='spanBlog'>&nbsp;Print By : " . $username . "</span></td>
+							<td><span class='spanBlog'>Print Date:" . date('d-m-Y g:iA') . "</span></td>
 						</tr>
 						<tr>
 							<td style='vertical-align: top;'>គោត្តនាម-នាម</td>
@@ -1045,7 +1050,7 @@ class Application_Form_FrmGlobal{
 					<tr>
 						<td align='center'>
 							<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:15px;'><label id='lb_byuser'></label>";
-							$str.="</div>
+			$str .= "</div>
 							Signature/Name/Date
 						</td>
 						<td align='center' valign='bottom'>
@@ -1085,15 +1090,15 @@ class Application_Form_FrmGlobal{
 					</div>
 				</div>
 			</div>";
-			if($settingAmtReceipt>1){
-				$str.="<div id='divPrint1'>
+			if ($settingAmtReceipt > 1) {
+				$str .= "<div id='divPrint1'>
 				<div style='vertical-align: middle;margin:10px 0px 10px 0px'></div>
 				<div id='printblog2'></div>
 				</div>";
 			}
 			return $str;
-		}elseif($receipt_type==4){//A4 Receipt
-			$str="<style>
+		} elseif ($receipt_type == 4) { //A4 Receipt
+			$str = "<style>
 					.hearder_table{height:20px !important;}
 					.defaulheight{line-height:10px !important;}
 					.bold{
@@ -1289,8 +1294,8 @@ class Application_Form_FrmGlobal{
 										Print Date:
 									</td>
 									<td rowspan='2'>
-									".date('d-m-Y g:i A')."<br />
-									ដោយ / By: <span class='bold'>".$username."</span>
+									" . date('d-m-Y g:i A') . "<br />
+									ដោយ / By: <span class='bold'>" . $username . "</span>
 									</td>
 								</tr>
 								<tr>
@@ -1452,9 +1457,9 @@ class Application_Form_FrmGlobal{
 				</div>
 			</div>";
 			$key = new Application_Model_DbTable_DbKeycode();
-			$result=$key->getKeyCodeMiniInv(TRUE);
-			if($result['receipt_print']>1){
-				$str.="<div id='divPrint1'>
+			$result = $key->getKeyCodeMiniInv(TRUE);
+			if ($result['receipt_print'] > 1) {
+				$str .= "<div id='divPrint1'>
 				<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
 				<div id='printblog2'></div>
 				</div>";
@@ -1462,80 +1467,85 @@ class Application_Form_FrmGlobal{
 			return $str;
 		}
 	}
-	
-	public function getHeaderReportScore($branch_id=null,$forGenerate=0){
+
+	public function getHeaderReportScore($branch_id = null, $forGenerate = 0)
+	{
 		$key = new Application_Model_DbTable_DbKeycode();
 		$setting = $key->getKeyCodeMiniInv(TRUE);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$str="";
-		
-		if ($forGenerate==1){
-			$baseUrl =PUBLIC_PATH;
+		$str = "";
+
+		if ($forGenerate == 1) {
+			$baseUrl = PUBLIC_PATH;
 			$styleLogo = "width:120px;";
-		}else{
+		} else {
 			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
 		}
-		
-		$logo = $baseUrl.'/images/Logo/Logo.png';
-		if(!empty($setting['logo'])){
-			if (file_exists(PUBLIC_PATH."/images/logo/".$setting['logo'])){
-				$logo = $baseUrl.'/images/logo/'.$setting['logo'];
+
+		$logo = $baseUrl . '/images/Logo/Logo.png';
+		if (!empty($setting['logo'])) {
+			if (file_exists(PUBLIC_PATH . "/images/logo/" . $setting['logo'])) {
+				$logo = $baseUrl . '/images/logo/' . $setting['logo'];
 			}
 		}
-		
+
 		$school_khname = $tr->translate('SCHOOL_NAME');
 		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 		$address = $tr->translate('CUSTOMER_ADDRESS');
 		$tel = $tr->translate('CUSTOMER_TEL');
 		$email =  $tr->translate('CUSTOMER_EMAIL');
 		$website = $tr->translate('CUSTOMER_WEBSITE');
-		if($branch_id==null){
-			
+		if ($branch_id == null) {
+
 			$school_khname = $tr->translate('SCHOOL_NAME');
 			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
 			$address = $tr->translate('CUSTOMER_ADDRESS');
 			$tel = $tr->translate('CUSTOMER_TEL');
 			$email =  $tr->translate('CUSTOMER_EMAIL');
 			$website = $tr->translate('CUSTOMER_WEBSITE');
-		}else{
+		} else {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$rs = $db->getBranchInfo($branch_id);
-			if(!empty($rs)){
-				
-				if (!empty($rs['photo'])){
-					if (file_exists(PUBLIC_PATH."/images/logo/".$rs['photo'])){
-						$logo = $baseUrl.'/images/logo/'.$rs['photo'];
+			if (!empty($rs)) {
+
+				if (!empty($rs['photo'])) {
+					if (file_exists(PUBLIC_PATH . "/images/logo/" . $rs['photo'])) {
+						$logo = $baseUrl . '/images/logo/' . $rs['photo'];
 					}
 				}
-				
+
 				$school_khname = $rs['school_namekh'];
 				$school_name = $rs['school_nameen'];
-				
+
 				$address = $rs['br_address'];
 				$tel = $rs['branch_tel'];
 				$email = $rs['email'];
 				$website = $rs['website'];
 			}
 		}
-		
-	    $imgSing="agreementsign.jpg";
-		$str='
+
+		$imgSing = "agreementsign.jpg";
+		$str = '
 		<table width="100%" style="white-space:nowrap;">
 			<tbody>
 				<tr>
-					<td width="35%" valign="top">
-						<img style="'.$styleLogo.'" src="'.$logo.'">
+					<td width="35%" valign="top"  style="text-align: left; font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
+						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px; margin-right: 300px;">
+							<li><img style="' . $styleLogo . '" src="' . $logo . '"></li>
+							<li>' . $school_khname . '</li>
+							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">' . $school_name . '</span></li>
+						</ul>
 					</td>
 					<td width="40%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 					</td>
-					<td width="25%" valign="top" style="font-family: '."'Times New Roman'".','."'Khmer OS Muol Light'".';">
-						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 70px;">
+					<td width="25%" valign="top" style="font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
+						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 200px;">
 							<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
 							<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 10px;">KINGDOM OF CAMBODIA</span></li>
 							<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
 							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RALIGION KING</span></li>
-							<li><img style=" height: 12px; " src="'.$baseUrl.'/images/'.$imgSing.'"></li>
+							<li><img style=" height: 12px; " src="' . $baseUrl . '/images/' . $imgSing . '"></li>
 						</ul>
 					</td>
 				</tr>
@@ -1544,13 +1554,14 @@ class Application_Form_FrmGlobal{
 		';
 		return $str;
 	}
-	function getFooterPrincipalSigned($branch_id,$group_id){
-		
+	function getFooterPrincipalSigned($branch_id, $group_id)
+	{
+
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-		
-		$sql="SELECT
+
+		$sql = "SELECT
 		   	g.`branch_id`,
 		   	b.stamp,
 		   	b.signature,
@@ -1566,45 +1577,45 @@ class Application_Form_FrmGlobal{
    		WHERE
 		   	b.br_id=g.`branch_id`
 		   	AND b.br_id= $branch_id
-		   	AND g.`id` = ".$group_id;
+		   	AND g.`id` = " . $group_id;
 		$rs = $db->getGlobalDbRow($sql);
-		
+
 		$font = 'Khmer OS Muol Light';
 		$fontbtb = 'Khmer os battambang';
-		
-		$str='<table width="100%">
+
+		$str = '<table width="100%">
 				<tr>
-					<td valign="top" width="33%" style="font-family:'.$font.';font-size:14px;text-align: center;">
+					<td valign="top" width="33%" style="font-family:' . $font . ';font-size:14px;text-align: center;">
 						បានឃើញ និងឯកភាព<br />
 					</td>
-					<td width="33%" valign="top" style="font-family:'.$fontbtb.';font-size:14px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
-					<td width="33%" style="white-space: nowrap;font-family:'.$fontbtb.'" valign="top">'.$rs['workat'].$tr->translate("CREATE_WORK_DATE").'</td>
+					<td width="33%" valign="top" style="font-family:' . $fontbtb . ';font-size:14px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
+					<td width="33%" style="white-space: nowrap;font-family:' . $fontbtb . '" valign="top">' . $rs['workat'] . $tr->translate("CREATE_WORK_DATE") . '</td>
 				</tr>
 				<tr>
-					<td valign="top" style="font-family:'.$font.';font-size:14px;text-align: center;">'.$rs["principal"].'</td>
-					<td valign="top" style="font-family:'.$fontbtb.';font-size:14px;text-align: center;">ការិយាល័យសិក្សាធិការ</td>
-					<td valign="top" style=" text-align: center;font-family:'.$fontbtb.'">'.$tr->translate("TEACHER_ROOM").'</td>
+					<td valign="top" style="font-family:' . $font . ';font-size:14px;text-align: center;">' . $rs["principal"] . '</td>
+					<td valign="top" style="font-family:' . $fontbtb . ';font-size:14px;text-align: center;">ការិយាល័យសិក្សាធិការ</td>
+					<td valign="top" style=" text-align: center;font-family:' . $fontbtb . '">' . $tr->translate("TEACHER_ROOM") . '</td>
 				</tr>
 				<tr>
-					<td valign="top"  style="font-family:'.$font.';font-size:14px;text-align: center;">
+					<td valign="top"  style="font-family:' . $font . ';font-size:14px;text-align: center;">
 						<div>
-							<img src="'.$baseUrl.'/images/'.$rs['stamp'].'" style="max-height:100px;position:relative;left:100px;" />
+							<img src="' . $baseUrl . '/images/' . $rs['stamp'] . '" style="max-height:100px;position:relative;left:100px;" />
 						</div>
-							<img src="'.$baseUrl.'/images/'.$rs['signature'].'" style="left:100px;bottom:50px;width:200px;position:relative;margin-left:150px;" />
+							<img src="' . $baseUrl . '/images/' . $rs['signature'] . '" style="left:100px;bottom:50px;width:200px;position:relative;margin-left:150px;" />
 					</td>
 					<td></td>
-					<td valign="top" style="font-family:'.$font.';font-size:14px;text-align: center;">';
-						 if(!empty($rs['teacher_sigature'])){
-						$str.='<div><img src="'.$baseUrl.'/images/photo/'.$rs['teacher_sigature'].'" style="height:40px;position:relative;margin-bottom:20px;" /></div>';
-						}else{
-							$str.='<div style="height: 100px;"></div>';
-						} 
-						$str.='<span style="font-family:'.$font.';font-size:14px;text-align: center;padding-left:20px;">'.$rs['teacher'].'</span>
+					<td valign="top" style="font-family:' . $font . ';font-size:14px;text-align: center;">';
+		if (!empty($rs['teacher_sigature'])) {
+			$str .= '<div><img src="' . $baseUrl . '/images/photo/' . $rs['teacher_sigature'] . '" style="height:40px;position:relative;margin-bottom:20px;" /></div>';
+		} else {
+			$str .= '<div style="height: 100px;"></div>';
+		}
+		$str .= '<span style="font-family:' . $font . ';font-size:14px;text-align: center;padding-left:20px;">' . $rs['teacher'] . '</span>
 					</td>
 				</tr>
 			</table>';
-			return $str;
-	}//
-	
-	
+		return $str;
+	} //
+
+
 }

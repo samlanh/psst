@@ -88,7 +88,6 @@ class Allreport_Model_DbTable_DbRptMobileApp extends Zend_Db_Table_Abstract
 		$from_date = (empty($search['start_date'])) ? '1' : "s.disableDate >= '" . $search['start_date'] . " 00:00:00'";
 		$to_date = (empty($search['end_date'])) ? '1' : "s.disableDate <= '" . $search['end_date'] . " 23:59:59'";
 		$where .= " AND " . $from_date . " AND " . $to_date;
-		$order = " ORDER BY s.stu_id,gds.degree,gds.grade,gds.academic_year DESC";
 
 		$adv_search = empty($search['adv_search']) ? "" : $search['adv_search'];
 		$search['title'] = empty($search['title']) ? $adv_search : $search['title'];
@@ -103,15 +102,6 @@ class Allreport_Model_DbTable_DbRptMobileApp extends Zend_Db_Table_Abstract
 			$s_where[] = " REPLACE(CONCAT(s.last_name,s.stu_enname),' ','')  	LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE(CONCAT(s.stu_enname,s.last_name),' ','')  	LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE(s.tel,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.father_phone,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.mother_phone,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.guardian_tel,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.father_enname,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.mother_enname,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.guardian_enname,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.remark,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.home_num,' ','') LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.street_num,' ','') LIKE '%{$s_search}%'";
 
 			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
@@ -133,14 +123,59 @@ class Allreport_Model_DbTable_DbRptMobileApp extends Zend_Db_Table_Abstract
 		if (!empty($search['session'])) {
 			$where .= ' AND session=' . $search['session'];
 		}
-		$search['stu_type'] = empty($search['stu_type']) ? -1 : $search['stu_type'];
-		if ($search['stu_type'] > -1) {
-			$where .= ' AND gds.is_newstudent = ' . $search['stu_type'];
+		return $db->fetchAll($sql . $where);
+	}
+	public function getAllPreRegister($search)
+	{ //for card list
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
 		}
-		$search['study_type'] = empty($search['study_type']) ? null : $search['study_type'];
-		if ($search['study_type'] != '') {
-			$where .= ' AND gds.stop_type = ' . $search['study_type'];
+		$sql = "SELECT *,
+			CONCAT(COALESCE(p.lastName,''),' ',COALESCE(p.firstName,'')) AS en_name,
+			(SELECT $label FROM rms_view WHERE rms_view.type=2 AND rms_view.key_code=p.gender LIMIT 1) AS sex,
+			(SELECT $degree FROM rms_items WHERE rms_items.id=p.degree AND rms_items.type=1 LIMIT 1) AS degree,
+		 	(SELECT $grade  FROM rms_itemsdetail WHERE rms_itemsdetail.id=p.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
+		
+		   FROM `rms_mobile_pre_register` AS p WHERE 1";
+		$where = ' ';
+		$from_date = (empty($search['start_date'])) ? '1' : "p.createDate >= '" . $search['start_date'] . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : "p.createDate <= '" . $search['end_date'] . " 23:59:59'";
+		$where .= " AND " . $from_date . " AND " . $to_date;
+
+		$adv_search = empty($search['adv_search']) ? "" : $search['adv_search'];
+		$search['title'] = empty($search['title']) ? $adv_search : $search['title'];
+		if (!empty($search['title'])) {
+			$s_where = array();
+			//$s_search = addslashes(trim($search['title']));
+			$s_search = str_replace(' ', '', addslashes(trim($search['title'])));
+
+			$s_where[] = " REPLACE(p.fullKhName,' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(p.firstName,' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(p.lastName,' ','') LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(CONCAT(p.firstName,p.lastName),' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(CONCAT(p.lastName,p.firstName),' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(p.phoneNumber,' ','') LIKE '%{$s_search}%'";
+
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
+
+		if (!empty($search['degree'])) {
+			$where .= ' AND p.degree=' . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= ' AND p.grade=' . $search['grade'];
+		}
+
 		return $db->fetchAll($sql . $where);
 	}
 }

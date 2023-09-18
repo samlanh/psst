@@ -1,335 +1,434 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("STUDENT_SCORE_REPORT")); 
-	$show_subject=1;
-	
-	$session_lang=new Zend_Session_Namespace('lang');
-	$lang_id=$session_lang->lang_id;
-	
-	$frm =  $this->form_search;
-	$db = new Allreport_Model_DbTable_DbRptStudentScore();
-	$dbgb = new Application_Model_DbTable_DbGlobal();
-	$month = array(
-		"01"=>"មករា",
-		"02"=>"កុម្ភៈ",
-		"03"=>"មីនា",
-		"04"=>"មេសា",
-		"05"=>"ឧសភា",
-		"06"=>"មិថុនា",
-		"07"=>"កក្កដា",
-		"08"=>"សីហា",
-		"09"=>"កញ្ញា",
-		"10"=>"តុលា",
-		"11"=>"វិច្ឆិកា",
-		"12"=>"ធ្នូ"
-	);
-	$link = "/allreport/score/rpt-monthlytranscript";
-?>	
-<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
-<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">	
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate("STUDENT_SCORE_REPORT"));
+$show_subject = 1;
+
+$session_lang = new Zend_Session_Namespace('lang');
+$lang_id = $session_lang->lang_id;
+
+$frm =  $this->form_search;
+$db = new Allreport_Model_DbTable_DbRptStudentScore();
+$dbgb = new Application_Model_DbTable_DbGlobal();
+$month = array(
+	"01" => "មករា",
+	"02" => "កុម្ភៈ",
+	"03" => "មីនា",
+	"04" => "មេសា",
+	"05" => "ឧសភា",
+	"06" => "មិថុនា",
+	"07" => "កក្កដា",
+	"08" => "សីហា",
+	"09" => "កញ្ញា",
+	"10" => "តុលា",
+	"11" => "វិច្ឆិកា",
+	"12" => "ធ្នូ"
+);
+$link = "/allreport/score/rpt-monthlytranscript";
+?>
+<script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">
 	<div class="card-box">
-       	<div class="col-sm-12 border-botom">
-		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_SCORE_REPORT');?></h4>
-    		</div>
-    		<div class="col-sm-4 text-right">
-    		</div>
-    	</div>
-    </div>
-	<form  action="" dojoType="dijit.form.Form" method="post">
-		<script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
-					branch_id = dijit.byId("branch_id").get('value');
-					if(branch_id=='' || branch_id==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
-						dijit.byId("branch_id").focus();
-						return false;
-					}
-					study_year = dijit.byId("study_year").get('value');
-					if(study_year=='' || study_year==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
-						dijit.byId("study_year").focus();
-						return false;
-					}
-					group = dijit.byId("group").get('value');
-					if(group=='' || group==-1){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_CLASS");?>");
-						dijit.byId("group").focus();
-						return false;
-					}
-					loadingBlock();
-					return true;
-				}else {
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_SCORE_REPORT'); ?></h4>
+			</div>
+			<div class="col-sm-4 text-right">
+			</div>
+		</div>
+	</div>
+	<form action="" dojoType="dijit.form.Form" method="post">
+		<script type="dojo/method" event="onSubmit">
+			if (this.validate()) {
+				branch_id = dijit.byId("branch_id").get('value');
+				if (branch_id == '' || branch_id == -1) {
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH"); ?>");
+					dijit.byId("branch_id").focus();
 					return false;
 				}
-			</script>
+				study_year = dijit.byId("study_year").get('value');
+				if (study_year == '' || study_year == -1) {
+					alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR"); ?>");
+					dijit.byId("study_year").focus();
+					return false;
+				}
+				group = dijit.byId("group").get('value');
+				if (group == '' || group == -1) {
+					alert("<?php echo $tr->translate("PLEASE_SELECT_CLASS"); ?>");
+					dijit.byId("group").focus();
+					return false;
+				}
+				loadingBlock();
+				return true;
+			} else {
+				return false;
+			}
+		</script>
 		<div class="form-group">
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php echo $frm->getElement("branch_id");?>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<input id="study_year" />
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<input id="group" />
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<select id="exam_type" name="exam_type" class="fullside" onChange="displaymonth();"  dojoType="dijit.form.FilteringSelect" >
-			   		<option value="1" <?php if ($this->search['exam_type']==1){ echo 'selected="selected"';}?>>ប្រចាំខែ</option>
-			   		<option value="2" <?php if ($this->search['exam_type']==2){ echo 'selected="selected"';}?>>ប្រលងឆមាស</option>
-			   	</select>
-        	</div>
-        	<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
-        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
-						<option value="1" <?php if ($this->search['for_semester']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 1 </option>
-						<option value="2" <?php if ($this->search['for_semester']==2){ echo 'selected="selected"';}?>><?php echo $tr->translate("SEMESTER");?> 2</option>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("branch_id"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="study_year" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="group" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<select id="exam_type" name="exam_type" class="fullside" onChange="displaymonth();" dojoType="dijit.form.FilteringSelect">
+					<option value="1" <?php if ($this->search['exam_type'] == 1) {
+											echo 'selected="selected"';
+										} ?>>ប្រចាំខែ</option>
+					<option value="2" <?php if ($this->search['exam_type'] == 2) {
+											echo 'selected="selected"';
+										} ?>>ប្រលងឆមាស</option>
 				</select>
-        	</div>
-        	<div id="month" class="col-md-2 col-sm-2 col-xs-12">
-        		<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">								
-					<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-						<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->search['for_month']){echo "selected='selected'";}?>><?php echo $month['month']?></option>
-					<?php }}?>
+			</div>
+			<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
+				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">
+					<option value="1" <?php if ($this->search['for_semester'] == 1) {
+											echo 'selected="selected"';
+										} ?>><?php echo $tr->translate("SEMESTER"); ?> 1 </option>
+					<option value="2" <?php if ($this->search['for_semester'] == 2) {
+											echo 'selected="selected"';
+										} ?>><?php echo $tr->translate("SEMESTER"); ?> 2</option>
 				</select>
-        	</div>
-        	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-        	</div>
-        </div>
-     </form>
+			</div>
+			<div id="month" class="col-md-2 col-sm-2 col-xs-12">
+				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">
+					<?php if (!empty($this->month)) {
+						foreach ($this->month as $month) { ?>
+							<option value="<?php echo $month['id'] ?>" <?php if ($month['id'] == $this->search['for_month']) {
+																			echo "selected='selected'";
+																		} ?>><?php echo $month['month'] ?></option>
+					<?php }
+					} ?>
+				</select>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
+			</div>
+		</div>
+	</form>
 	<div id="divPrint">
 		<style type="text/css">
-			.style{
-				line-height: 20px; font-size: 12px !important;
-				font-family: 'Times New Roman','Khmer OS Battambang';
-				
+			.style {
+				line-height: 20px;
+				font-size: 12px !important;
+				font-family: 'Times New Roman', 'Khmer OS Battambang';
+
 			}
-			.khmerBold{font-family: 'Times New Roman','Khmer OS Muol Light';}
-			tr.header{ 
-				page-break-inside:auto;
-				font-family:Arial,'Khmer OS Battambang';
-				color: #4839bd;font-weight: bold; 
+
+			.khmerBold {
+				font-family: 'Times New Roman', 'Khmer OS Muol Light';
+			}
+
+			tr.header {
+				page-break-inside: auto;
+				font-family: Arial, 'Khmer OS Battambang';
+				color: #4839bd;
+				font-weight: bold;
 				background: #fffbcb;
-				white-space: nowrap;}
-			table{font-size:12px;}
-			#header {
-			  display: table-header-group;
-			  page-break-inside:avoid; page-break-after:auto;
+				white-space: nowrap;
 			}
-			.hover:hover{background: #ccc;}
-			 td.rotate {
+
+			table {
+				font-size: 12px;
+			}
+
+			#header {
+				display: table-header-group;
+				page-break-inside: avoid;
+				page-break-after: auto;
+			}
+
+			.hover:hover {
+				background: #ccc;
+			}
+
+			td.rotate {
 				height: 130px;
-	    		vertical-align: bottom;
-			}				
-			td.rotate > div {
+				vertical-align: bottom;
+			}
+
+			td.rotate>div {
 				transform: rotate(270deg);
 				width: 30px;
 			}
-			td.rotate span{
+
+			td.rotate span {
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				display: inline-block;
 				padding: 2px;
 			}
+
 			.red {
-			    color: #ff1a02;
+				color: #ff1a02;
 			}
-			.border-right-none{
-    			border-right: #fff solid 1px;
+
+			.border-right-none {
+				border-right: #fff solid 1px;
 			}
-			.border-bottom-none{
-    			border-bottom: #fff solid 1px;
+
+			.border-bottom-none {
+				border-bottom: #fff solid 1px;
 			}
-			table tr td{
+
+			table tr td {
 				color: #4839bd;
 			}
-				@page {
-						page: A4;
-						margin:0.5cm;
-						pading:0.5cm;
-					}
+
+			@page {
+				page: A4;
+				margin: 0.5cm;
+				pading: 0.5cm;
+				size: landscape;
+			}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
-				<?php
-				 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
-				 $duplicate=0;$count_pass=0;
-				 $m=0;$f=0;
-				 $pass_female=0;$fail_female=0;
-				 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ 
-				 if($rs['sex']==1){ $sex = $tr->translate("MALE_SHORT");$m = $m+1;}
-				 else{$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;}
-				 	$subj = $db->getSubjectScoreGroup($rs['group_id'],null,$rs['exam_type']);
-				?>
-				<?php if ($old_groupid!=$rs['group_id']){ $count = count($subj); ?>
-				<?php $i=0; $count_fail=0;?>
-					<tr>
+			<?php
+			$old_groupid = 0;
+			$i = 0;
+			$count_fail = 0;
+			$count = 0;
+			$old_average = 0;
+			$old_rank = 0;
+			$duplicate = 0;
+			$count_pass = 0;
+			$m = 0;
+			$f = 0;
+			$pass_female = 0;
+			$fail_female = 0;
+			if (!empty($this->studentgroup)) {
+				foreach ($this->studentgroup as $key => $rs) {
+					if ($rs['sex'] == 1) {
+						$sex = $tr->translate("MALE_SHORT");
+						$m = $m + 1;
+					} else {
+						$sex = $tr->translate("FEMALE_SHORT");
+						$f = $f + 1;
+					}
+					$subj = $db->getSubjectScoreGroup($rs['group_id'], null, $rs['exam_type']);
+			?>
+					<?php if ($old_groupid != $rs['group_id']) {
+						$count = count($subj); ?>
+						<?php $i = 0;
+						$count_fail = 0; ?>
+						<tr style="border-bottom: 1px solid #000;">
+							<td colspan="4" align="center">
+								<?php echo $this->headerScore; ?>
+							</td>
+						</tr>
+						<!-- <tr>
 						<td align="center" width="32%" rowspan="2" class="khmerBold">
-								<?php echo $tr->translate("MINISTRY_INPHNOMPENH");?><br />
-								<?php echo $tr->translate("OFFICE_MINISTRY");?><br />
-								<?php echo $rs['schoolNameKh'];?>
+								<?php echo $tr->translate("MINISTRY_INPHNOMPENH"); ?><br />
+								<?php echo $tr->translate("OFFICE_MINISTRY"); ?><br />
+								<?php echo $rs['schoolNameKh']; ?>
 						</td>
 						<td align="center" width="36%">
 						</td>
 						<td align="center" width="32%" valign="top" class="khmerBold">
 							<strong​​ style="color:#4839bd;" >
-								<?php echo $tr->translate("NATIONALITY_OFKINGDOM");?><br />
-								<?php echo $tr->translate("NATION_RELIGION_KING");?>
+								<?php echo $tr->translate("NATIONALITY_OFKINGDOM"); ?><br />
+								<?php echo $tr->translate("NATION_RELIGION_KING"); ?>
 							</strong>
 						</td>
-					</tr>
-					<tr>
-						<td align="center" class="khmerBold" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-								<?php echo $tr->translate("STUDENT_SCORE_REPORT");?>: <?php echo $rs['title_score'];?>
-								<?php if($rs['exam_type']!=2){echo $tr->translate("MONTHLY");?> <span><?php echo $rs['for_month'];?></span><?php }?>
-							<br />
-							<strong​​ style="color:#4839bd;">
-								ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code'];?></span> 
+					</tr> -->
+						<tr>
+							<td align="center" class="khmerBold" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+								<?php echo $tr->translate("STUDENT_SCORE_REPORT"); ?>: <?php echo $rs['title_score']; ?>
+								<?php if ($rs['exam_type'] != 2) {
+									echo $tr->translate("MONTHLY"); ?> <span><?php echo $rs['for_month']; ?></span><?php } ?>
 								<br />
-								ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year'];?></span>
-							</strong>
-						</td>
-						<td align="center" valign="top"></td>
-				</tr>
-				<tr>
-				<?php 
-				$colspan=1;
-				if($this->data['scoreresulttye']==1){
-					$colspan=3;
-				}?>
-					<td colspan="3" id="exportExcel" valign="top">
-						<table cellpadding="2"​ style="margin:0 auto;width:100%;border-collapse:collapse;border: 2px solid #5a71b5;"  border="1" >
-							<tr class="header" align="center" >
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("NUM");?></td>
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("STUDENT_ID");?></td>
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD");?></td>
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("SEX");?></td>
-								<?php if($this->data['scoreresulttye']==1){?>
-								<td colspan="<?php echo count($subj); ?>"><?php echo $tr->translate("SUBJECT");?></td>
-								<?php }?>
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("TOTAL_SCORE");?></td>
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("AVERAGE");?></td>
-								<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("MENTION");?> និង មូលវិចារ</td>
-								<td style="width:100px;" rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RANK");?></td>
-								<td rowspan="<?php echo $colspan;?>"><?php echo $tr->translate("RESULT");?></td>
-							</tr>
+								<strong​​ style="color:#4839bd;">
+									ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+									<br />
+									ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
+									</strong>
+							</td>
+							<td align="center" valign="top"></td>
+						</tr>
+						<tr>
 							<?php
-							$langKhmer=0;
-							$langEng=0;
-							if($this->data['scoreresulttye']==1){?>
-								<tr class="header" align="center" >
+							$colspan = 1;
+							if ($this->data['scoreresulttye'] == 1) {
+								$colspan = 3;
+							} ?>
+							<td colspan="3" id="exportExcel" valign="top">
+								<table cellpadding="2" ​ style="margin:0 auto;width:100%;border-collapse:collapse;border: 2px solid #5a71b5;" border="1">
+									<tr class="header" align="center">
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("NUM"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("STUDENT_ID"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("SEX"); ?></td>
+										<?php if ($this->data['scoreresulttye'] == 1) { ?>
+											<td colspan="<?php echo count($subj); ?>"><?php echo $tr->translate("SUBJECT"); ?></td>
+										<?php } ?>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("TOTAL_SCORE"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("AVERAGE"); ?></td>
+										<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MENTION"); ?> និង មូលវិចារ</td>
+										<td style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RANK"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RESULT"); ?></td>
+									</tr>
 									<?php
-									if (!empty($subj)){
-										foreach ($subj as $subject){
-											if($subject['subjectLang']==1){
-												$langKhmer=$langKhmer+1;
-											}else{
-												$langEng=$langEng+1;
-											}
-											
-										 if($this->data['scoreresulttye']==1){
-										 	if($show_subject==1){
-										 ?>
-											<td class="rotate"><div><span><?php echo $subject['sub_name'];?></span></div></td>
-										<?php }elseif($show_subject==0){?>
-											<td><?php echo $subject['shortcut'];?></td>
-									<?php }}}}?>
-								</tr>
-								<tr>
-									<td align="center" colspan="<?php echo $langKhmer;?>">កម្មវិធីភាសាខ្មែរ Khmer Program</td>
-									<td align="center" colspan="<?php echo $langEng;?>">កម្មវិធីភាសាអង់គ្លេស English Program</td>
-								</tr>
-								
-							<?php }?>
-							<?php } $i++;?>
-							<tr class="style hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id'];?>','<?php echo $rs['student_id'];?>','<?php echo $i;?>','<?php echo $rs['group_id'];?>','<?php echo $rs['exam_type'];?>','<?php echo $rs['for_semester'];?>','<?php echo $rs['for_month'];?>');return false;" style=" line-height: 20px;">
-								<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-								<td align="center"><a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl().$link."/scoreid/".$rs['id']."/stuid/".$rs['student_id'];?>">&nbsp;<?php echo $rs['stu_code'];?></a>&nbsp;</td>
-								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id==1)?$rs['stu_khname']:$rs['stu_enname'];?>&nbsp;</td>
-								<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
-								<?php 
-								$total_score=0;
-									if($this->data['scoreresulttye']==1){
-									$total_score = 0; 
-									if (!empty($subj)) foreach ($subj as $subject){
-								?>
-								<td align="center">
-									<?php 
-										$score = $db->getScoreBySubjectTranscript($rs['id'],$rs['student_id'],$subject['subject_id']); 
-										
-										if($score['score_cut']>=$score['score']){
-											$tscore_subject = 0;
-										}else{
-											$tscore_subject = $score['score']-$score['score_cut'];
-										}
-										echo (float) $tscore_subject;
-										$total_score = $total_score + $tscore_subject;
-									?>
-								</td>
-								<?php } ?>
+									$langKhmer = 0;
+									$langEng = 0;
+									if ($this->data['scoreresulttye'] == 1) { ?>
+										<tr class="header" align="center">
+											<?php
+											if (!empty($subj)) {
+												foreach ($subj as $subject) {
+													if ($subject['subjectLang'] == 1) {
+														$langKhmer = $langKhmer + 1;
+													} else {
+														$langEng = $langEng + 1;
+													}
+
+													if ($this->data['scoreresulttye'] == 1) {
+														if ($show_subject == 1) {
+											?>
+															<td class="rotate">
+																<div><span><?php echo $subject['sub_name']; ?></span></div>
+															</td>
+														<?php } elseif ($show_subject == 0) { ?>
+															<td><?php echo $subject['shortcut']; ?></td>
+											<?php }
+													}
+												}
+											} ?>
+										</tr>
+										<tr>
+											<td align="center" colspan="<?php echo $langKhmer; ?>">កម្មវិធីភាសាខ្មែរ Khmer Program</td>
+											<td align="center" colspan="<?php echo $langEng; ?>">កម្មវិធីភាសាអង់គ្លេស English Program</td>
+										</tr>
+
+									<?php } ?>
 								<?php }
-									if($rs['average']==$old_average){
-										$duplicate=$duplicate+1;
-									}else{
-										$old_rank=$old_rank+1+$duplicate;
-										$duplicate=0;
+							$i++; ?>
+								<tr class="style hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id']; ?>','<?php echo $rs['student_id']; ?>','<?php echo $i; ?>','<?php echo $rs['group_id']; ?>','<?php echo $rs['exam_type']; ?>','<?php echo $rs['for_semester']; ?>','<?php echo $rs['for_month']; ?>');return false;" style=" line-height: 20px;">
+									<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
+									<td align="center"><a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>">&nbsp;<?php echo $rs['stu_code']; ?></a>&nbsp;</td>
+									<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id == 1) ? $rs['stu_khname'] : $rs['stu_enname']; ?>&nbsp;</td>
+									<td align="center">&nbsp;<?php echo $sex; ?>&nbsp;</td>
+									<?php
+									$total_score = 0;
+									if ($this->data['scoreresulttye'] == 1) {
+										$total_score = 0;
+										if (!empty($subj)) foreach ($subj as $subject) {
+									?>
+											<td align="center">
+												<?php
+												$score = $db->getScoreBySubjectTranscript($rs['id'], $rs['student_id'], $subject['subject_id']);
+
+												if ($score['score_cut'] >= $score['score']) {
+													$tscore_subject = 0;
+												} else {
+													$tscore_subject = $score['score'] - $score['score_cut'];
+												}
+												echo (float) $tscore_subject;
+												$total_score = $total_score + $tscore_subject;
+												?>
+											</td>
+										<?php } ?>
+									<?php }
+									if ($rs['average'] == $old_average) {
+										$duplicate = $duplicate + 1;
+									} else {
+										$old_rank = $old_rank + 1 + $duplicate;
+										$duplicate = 0;
 									}
 									$total_score = $rs['total_score'];
-								?>
-								<td align="center">
-									<?php
-										echo (float) $total_score;
 									?>
-								</td>
-								<?php 
-									$average=$rs['average'];
-								?>
-								<td align="center"><?php echo number_format($average,2);?></td>
-								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php  echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'],$rs['degree_id'],1,$rs['grade'],$rs['totalMaxScore']);?>
-								&nbsp;</td>
-								<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php  echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'],$rs['degree_id'],2,$rs['grade'],$rs['totalMaxScore']);?>
-								&nbsp;</td>
-								<td class="red" align="center" style="white-space: nowrap;">&nbsp;
-								<?php  echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'],$rs['degree_id'],3,$rs['grade'],$rs['totalMaxScore']);?>
-								&nbsp;
-								</td>
-								<td align="center"><label id="record<?php echo $i;?>"></label><?php echo $old_rank;?></td>
-								<td align="center" <?php if($total_score<($rs['totalMaxScore']/2)){echo 'style=" background: #fdbdbd;"';}?>>
-									<?php if($total_score>=($rs['totalMaxScore']/2)){
-										echo $tr->translate("STUDENT_PASS");
-										$count_pass++;
-										if($rs['sex']==2){$pass_female=$pass_female+1;}//femail
-									}else{
-										$count_fail++;
-										echo $tr->translate("STUDENT_FAIL");
-										if($rs['sex']==2){
-											$fail_female = $fail_female+1;
-										}
-									}?>
-								</td>
-							</tr>
-							<?php 
+									<td align="center">
+										<?php
+										echo (float) $total_score;
+										?>
+									</td>
+									<?php
+									$average = $rs['average'];
+									?>
+									<td align="center"><?php echo number_format($average, 2); ?></td>
+									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
+										<?php echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['totalMaxScore']); ?>
+										&nbsp;</td>
+									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
+										<?php echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['totalMaxScore']); ?>
+										&nbsp;</td>
+									<td class="red" align="center" style="white-space: nowrap;">&nbsp;
+										<?php echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['totalMaxScore']); ?>
+										&nbsp;
+									</td>
+									<td align="center"><label id="record<?php echo $i; ?>"></label><?php echo $old_rank; ?></td>
+									<td align="center" <?php if ($total_score < ($rs['totalMaxScore'] / 2)) {
+															echo 'style=" background: #fdbdbd;"';
+														} ?>>
+										<?php if ($total_score >= ($rs['totalMaxScore'] / 2)) {
+											echo $tr->translate("STUDENT_PASS");
+											$count_pass++;
+											if ($rs['sex'] == 2) {
+												$pass_female = $pass_female + 1;
+											} //femail
+										} else {
+											$count_fail++;
+											echo $tr->translate("STUDENT_FAIL");
+											if ($rs['sex'] == 2) {
+												$fail_female = $fail_female + 1;
+											}
+										} ?>
+									</td>
+								</tr>
+								<?php
 								$old_average = $rs['average'];
-								$old_groupid=$rs['group_id']; ?>
-							<?php }}?>
-							</table>
-							<?php if (!empty($this->studentgroup)){?>
+								$old_groupid = $rs['group_id']; ?>
+						<?php }
+				} ?>
+								</table>
+								<?php if (!empty($this->studentgroup)) { ?>
 									<table cellpadding="0" cellspacing="0" width="100%">
 										<tr>
-											<td valign="top" width="33%" style="text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT");?>  : <?php if ($i>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$i));}else{ echo $dbgb->getNumberInkhmer($i);} echo " ".$tr->translate("STUDENT_UNIT");?></td>
-											<td width="33%" valign="top"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php if ($f>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$f));}else{ echo $dbgb->getNumberInkhmer($f);} echo " ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
+											<td valign="top" width="33%" style="text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT"); ?> : <?php if ($i > 0) {
+																																							echo $dbgb->getNumberInkhmer(sprintf("%02d", $i));
+																																						} else {
+																																							echo $dbgb->getNumberInkhmer($i);
+																																						}
+																																						echo " " . $tr->translate("STUDENT_UNIT"); ?></td>
+											<td width="33%" valign="top"><?php echo $tr->translate("FEMALE"); ?>&nbsp;: <?php if ($f > 0) {
+																															echo $dbgb->getNumberInkhmer(sprintf("%02d", $f));
+																														} else {
+																															echo $dbgb->getNumberInkhmer($f);
+																														}
+																														echo " " . $tr->translate("STUDENT_UNIT"); ?> &nbsp;</td>
 											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="text-align: center;">សិស្សជាប់មធ្យមភាគ  : <?php if ($count_pass>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_pass));}else{ echo $dbgb->getNumberInkhmer($count_pass);} echo " ".$tr->translate("STUDENT_UNIT")?></td>
-											<td valign="top"><?php echo $tr->translate("FEMALE");?>&nbsp;: <?php if ($pass_female){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$pass_female));}else{ echo $dbgb->getNumberInkhmer($pass_female);} echo " ".$tr->translate("STUDENT_UNIT");?> &nbsp;</td>
+											<td valign="top" width="33%" style="text-align: center;">សិស្សជាប់មធ្យមភាគ : <?php if ($count_pass > 0) {
+																																echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass));
+																															} else {
+																																echo $dbgb->getNumberInkhmer($count_pass);
+																															}
+																															echo " " . $tr->translate("STUDENT_UNIT") ?></td>
+											<td valign="top"><?php echo $tr->translate("FEMALE"); ?>&nbsp;: <?php if ($pass_female) {
+																												echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female));
+																											} else {
+																												echo $dbgb->getNumberInkhmer($pass_female);
+																											}
+																											echo " " . $tr->translate("STUDENT_UNIT"); ?> &nbsp;</td>
 											<td align="center" style="color:#1949d6;white-space: nowrap" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="text-align: center;">សិស្សក្រោមមធ្យមភាគ : <?php if ($count_fail>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$count_fail));}else{ echo $dbgb->getNumberInkhmer($count_fail);} echo " ".$tr->translate("STUDENT_UNIT");?></td>
-											<td valign="top"><?php echo $tr->translate("FEMALE");?> : <?php if ($fail_female>0){ echo $dbgb->getNumberInkhmer(sprintf("%02d",$fail_female));}else{ echo $dbgb->getNumberInkhmer($fail_female);} echo " ".$tr->translate("STUDENT_UNIT");?>&nbsp;</td>
+											<td valign="top" width="33%" style="text-align: center;">សិស្សក្រោមមធ្យមភាគ : <?php if ($count_fail > 0) {
+																																echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail));
+																															} else {
+																																echo $dbgb->getNumberInkhmer($count_fail);
+																															}
+																															echo " " . $tr->translate("STUDENT_UNIT"); ?></td>
+											<td valign="top"><?php echo $tr->translate("FEMALE"); ?> : <?php if ($fail_female > 0) {
+																											echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female));
+																										} else {
+																											echo $dbgb->getNumberInkhmer($fail_female);
+																										}
+																										echo " " . $tr->translate("STUDENT_UNIT"); ?>&nbsp;</td>
 											<td valign="top" style="color:#1949d6; text-align: center;">គ្រូទទួលប​ន្ទុកថ្នាក់</td>
 										</tr>
 										<tr>
@@ -338,177 +437,189 @@
 											<td></td>
 										</tr>
 										<tr>
-											<td valign="top" class="khmerBold" style="text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE");?></td>
+											<td valign="top" class="khmerBold" style="text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE"); ?></td>
 											<td>&nbsp;</td>
 											<td></td>
-											
+
 										</tr>
 										<tr class="khmerBold">
-											<td valign="top"  style="text-align: center;">នាយករង</td>
-											<td valign="top" ></td>
-											<td valign="top" style="text-align: center;"><br /><br /><?php echo $rs['teacher']?></td>
+											<td valign="top" style="text-align: center;">នាយករង</td>
+											<td valign="top"></td>
+											<td valign="top" style="text-align: center;"><br /><br /><?php echo $rs['teacher'] ?></td>
 										</tr>
 									</table>
-							<?php }?>
-						<?php
-						if($this->data['scoreresulttye']==1 AND $show_subject==0){
-								$string=",";
-							if (!empty($subj)) foreach ($subj as $key =>$subject){?>
-							<?php 
-							if($key+1==count($subj)){$string="";}
-								echo $subject['shortcut']."=".$subject['subject_titleen'].$string;?>
-							<?php }
-						}	
-						?>
-					</td>
-				</tr>
-			</table>
-		</div>
+								<?php } ?>
+								<?php
+								if ($this->data['scoreresulttye'] == 1 and $show_subject == 0) {
+									$string = ",";
+									if (!empty($subj)) foreach ($subj as $key => $subject) { ?>
+										<?php
+										if ($key + 1 == count($subj)) {
+											$string = "";
+										}
+										echo $subject['shortcut'] . "=" . $subject['subject_titleen'] . $string; ?>
+								<?php }
+								}
+								?>
+							</td>
+						</tr>
+		</table>
+	</div>
 </div>
-<?php 
-	$urlOutStanding = $this->baseUrl()."/allreport/score/certificate-letterofpraisenew/id/";
-	$urlOutStandingNoPhoto = $this->baseUrl().$link;
+<?php
+$urlOutStanding = $this->baseUrl() . "/allreport/score/certificate-letterofpraisenew/id/";
+$urlOutStandingNoPhoto = $this->baseUrl() . $link;
 ?>
-<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");
-	
-	var row=0;
-	var url="";
-	$(function(){
+
+	var row = 0;
+	var url = "";
+	$(function() {
 		$.contextMenu({
-			selector: '.context-menu-one', 
+			selector: '.context-menu-one',
 			callback: function(key, options) {
 				var m = "clicked: " + key;
-				if(key=="letterofprais"){
-					url='<?php echo $urlOutStanding;?>';
+				if (key == "letterofprais") {
+					url = '<?php echo $urlOutStanding; ?>';
 					gotoAction();
-				}else if(key=="transcript"){
-					url='<?php echo $urlOutStandingNoPhoto;?>';
+				} else if (key == "transcript") {
+					url = '<?php echo $urlOutStandingNoPhoto; ?>';
 					gotoAction1();
 				}
-				
+
 			},
 			items: {
-				"transcript": {name: "<?php echo $tr->translate("TRANSCRIPT");?>", icon: "fa-file",},
-				"letterofprais": {name: "<?php echo $tr->translate("HORNOR_CERTIFICATE");?>", icon: "fa-file",},
+				"transcript": {
+					name: "<?php echo $tr->translate("TRANSCRIPT"); ?>",
+					icon: "fa-file",
+				},
+				"letterofprais": {
+					name: "<?php echo $tr->translate("HORNOR_CERTIFICATE"); ?>",
+					icon: "fa-file",
+				},
 			}
 		});
 	});
-	function setrowdata(id,stu_id,index,group,exam_type,for_semester,for_month){
-		rank = dijit.byId('rank'+index).get("value");
+
+	function setrowdata(id, stu_id, index, group, exam_type, for_semester, for_month) {
+		rank = dijit.byId('rank' + index).get("value");
 		row = id;
 		student_id = stu_id;
 	}
 
-	var recordid ='';
-	function gotoAction(){
-		window.open(url+row+'/stu_id/'+student_id+'/rank/'+rank);
+	var recordid = '';
+
+	function gotoAction() {
+		window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
 	}
-	function gotoAction1(){
-		window.open(url+'/scoreid/'+row+'/stuid/'+student_id);
+
+	function gotoAction1() {
+		window.open(url + '/scoreid/' + row + '/stuid/' + student_id);
 	}
-	
-	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	dojo.ready(function(){
+
+	var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	dojo.ready(function() {
 		new dijit.form.FilteringSelect({
 			store: academic_store,
 			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,                     
+			autoComplete: false,
+			required: true,
 			id: "study_year",
 			name: "study_year",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
-			onChange: function() {  
+			class: "fullside",
+			placeHolder: "<?php echo $tr->translate("SELECT_ACADEMIC_YEAR"); ?>",
+			onChange: function() {
 				academic_year = dijit.byId('study_year').get('value');
 			}
 		}, "study_year");
 		new dijit.form.FilteringSelect({
 			store: group_store,
-		    queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,                      
-		    id: "group",
-		    name: "group",  
-		    class: 'fullside', 
-		    readonly:false,
-		    required:false,
-		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function(){  
-		    }
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			required: true,
+			id: "group",
+			name: "group",
+			class: 'fullside',
+			readonly: false,
+			required: false,
+			placeHolder: "<?php echo $tr->translate("SELECT_GROUP"); ?>",
+			onChange: function() {}
 		}, "group");
-		
-		 var branch_id = dijit.byId('branch_id');
-		 branch_id.on('change', function(evt) {
-			 getAllAcademicByBranch();
-			 getAllGroupByBranch();
-	    });
-		 getAllAcademicByBranch();
-		 getAllGroupByBranch();
-		 <?php if (!empty($this->search['branch_id'])){?>
-		 dijit.byId('branch_id').set('value','<?php echo $this->search['branch_id']?>'); 
-		 <?php }?>
-		 displaymonth();
+
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function(evt) {
+			getAllAcademicByBranch();
+			getAllGroupByBranch();
+		});
+		getAllAcademicByBranch();
+		getAllGroupByBranch();
+		<?php if (!empty($this->search['branch_id'])) { ?>
+			dijit.byId('branch_id').set('value', '<?php echo $this->search['branch_id'] ?>');
+		<?php } ?>
+		displaymonth();
 	});
-	url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
-	var oldBranch = "<?php echo $this->search['branch_id']?>";
-	function getAllAcademicByBranch(){
+	url_getacademic = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'get-academicyear')); ?>';
+	var oldBranch = "<?php echo $this->search['branch_id'] ?>";
+
+	function getAllAcademicByBranch() {
 		dijit.byId('study_year').reset();
 		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('study_year').set('store',academic_store);  
+		if (branch_id == '' || branch_id == -1) {
+			var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('study_year').set('store', academic_store);
 			dijit.byId('branch_id').focus();
 			return false;
 		}
-		
+
 		contentData = {
-			'branch_id':branch_id
+			'branch_id': branch_id
 		}
 		selectedId = '';
-		if(oldBranch==branch_id){
-			selectedId = '<?php echo $this->search['study_year']?>';
+		if (oldBranch == branch_id) {
+			selectedId = '<?php echo $this->search['study_year'] ?>';
 		}
-		getAllYear(url_getacademic,contentData,selectedId,'study_year');
+		getAllYear(url_getacademic, contentData, selectedId, 'study_year');
 
 	}
-	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
-	function getAllGroupByBranch(){
+	url_getgroup = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'getallgroup')); ?>';
+
+	function getAllGroupByBranch() {
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
+		if (branch_id == '' || branch_id == -1) {
+			var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('group').set('store', group_store);
 			dijit.byId('branch_id').focus();
 			return false;
 		}
 		dojo.xhrPost({
 			url: url_getgroup,
-			content:{
-				'branch_id':branch_id,
-				'noaddnew':1,
-				'forfilter':1
-				},
-			handleAs:"json",
-			load: function(data) {
-			    group_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('group').set('store',group_store);   
-			    if(oldBranch==branch_id){
-			    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-			    }
+			content: {
+				'branch_id': branch_id,
+				'noaddnew': 1,
+				'forfilter': 1
 			},
-			error: function(err) {
-			}
+			handleAs: "json",
+			load: function(data) {
+				group_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('group').set('store', group_store);
+				if (oldBranch == branch_id) {
+					dijit.byId('group').set('value', '<?php echo $this->search['group'] ?>');
+				}
+			},
+			error: function(err) {}
 		});
 	}
-	function displaymonth(){
+
+	function displaymonth() {
 		exam_type = dijit.byId('exam_type').get('value');
-		if(exam_type==1){
+		if (exam_type == 1) {
 			$("#semester").css("display", "none");
 			$("#month").css("display", "block");
-		}else{
+		} else {
 			$("#semester").css("display", "block");
 			$("#month").css("display", "none");
 		}

@@ -41,10 +41,11 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		$_data['branchId'] = empty($_data['branchId']) ? 0 : $_data['branchId'];
 		$_data['groupId'] = empty($_data['groupId']) ? 0 : $_data['groupId'];
 		$db = $this->getAdapter();
-		$sql = "SELECT mb.`token`
+		$sql = "SELECT DISTINCT mb.`token`
 				FROM `mobile_mobile_token` AS mb
 				WHERE mb.stu_id != 0 ";
 		if( $_data['optNotification']==1 ){
+			$sql.=" OR mb.stu_id = 0 ";
 		}else if( $_data['optNotification']==2 ){ //By study's class of student
 			$_data['groupId'] = empty($_data['groupId']) ? 0 : $_data['groupId'];
 			$_data['degreeId'] = 0;
@@ -72,7 +73,6 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				$sql.=" AND mb.stu_id IN (".$listStudentId.")";
 			}
 		}
-		
 		return  $db->fetchCol($sql);
 	}
 	function pushNotificationAPI($_data)
@@ -90,6 +90,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			
 			
 			$androidToken = $this->getMobileToken($_data);
+			
 			$recordDetail = array();
 			if($typeNotify == "successfulRegister"){
 				$info = $this->getPreRegisterByID($_data['notificationId']);
@@ -127,8 +128,9 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				$info = $this->getNotificationArticle($_data);
 				$title = empty($info["title"]) ? "" : $info["title"];
 				$description = empty($info["description"]) ? "" : $info["description"];
+				
 				$description = strip_tags($description);
-				$description = substr($description, 0, strrpos(substr($description, 0, 400), ' ')). '...';
+				$description = substr($description, 0, 400). '...';
 				
 				$notificationTitle = $title;
 				$notificationSubTitle = $description;
@@ -146,6 +148,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				"typeNotify" 		=> $typeNotify,
 				"recordDetail" 		=> $recordDetail,
 			);
+			
 			$headings = array(
 				"en" => $notificationTitle,
 			);
@@ -163,8 +166,6 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				"external_id" => null,
 				"ios_badgeType" => "Increase",
 				"ios_badgeCount" => 1,
-				
-	
 			);
 	
 			$fields = json_encode($fields);
@@ -183,7 +184,6 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	
 			$response = curl_exec($ch);
-			
 			curl_close($ch);
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

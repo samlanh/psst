@@ -43,6 +43,17 @@ $monthENG = array(
 $template = SCORE_RESULT_TEMPLATE;
 $branchInfo = $this->branchInfo;
 ?>
+<style>
+.hover:hover{ background:#ccc;}
+.hidden{visibility: visible !important;
+display: table-cell !important;
+}
+
+tbody#table_row tr {
+    line-height: 24px;
+    color: #000;
+}
+</style>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">
 	<div class="card-box">
@@ -212,6 +223,7 @@ $branchInfo = $this->branchInfo;
 				<tr style="border-bottom: 1px solid #000;">
 					<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
 						<?php echo $this->headerScore; ?>
+						
 					</td>
 				</tr>
 				<?php
@@ -584,6 +596,7 @@ $branchInfo = $this->branchInfo;
 					list-style-type: none !important;
 					list-type: none !important;
 				}
+				.hidden{visibility: hidden; display: none;}
 
 				@media print {
 					@page {
@@ -610,7 +623,7 @@ $branchInfo = $this->branchInfo;
 				<tr style="border-bottom: 1px solid #000;">
 					<td colspan="3" align="center">
 						<?php echo $this->headerScore; ?>
-
+						<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 					</td>
 				</tr>
 				<?php
@@ -685,6 +698,7 @@ $branchInfo = $this->branchInfo;
 								<td colspan="3" id="exportExcel" valign="top">
 									<table class="header" cellpadding="2" ​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1">
 										<tr class="cheader" align="center">
+											<td  class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->studentScoreResult);?>');" name="checkall" id="checkall" /></th>
 											<td>
 												<span class="khmerLabel"><?php echo $tr->translate("NUM"); ?></span>
 												<br />
@@ -729,6 +743,10 @@ $branchInfo = $this->branchInfo;
 									<?php }
 								$i++; ?>
 									<tr class="style style-rowdata hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id']; ?>','<?php echo $rs['stu_id']; ?>','<?php echo $i; ?>','<?php echo $rs['group_id']; ?>','<?php echo $rs['exam_type']; ?>','<?php echo $rs['for_semester']; ?>','<?php echo $rs['for_month_id']; ?>');return false;" style="line-height: 20px;">
+										<td class="hidden" align="center">
+											<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
+											<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $rs['stu_id'];?>" dojoType="dijit.form.TextBox" />
+										</td>
 										<td align="center"><?php echo $i; ?></td>
 										<td align="center" style="white-space:nowrap;">
 											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
@@ -926,15 +944,33 @@ $branchInfo = $this->branchInfo;
 				</table>
 			<?php } ?>
 		<?php } ?>
-
 	</div>
+	<table width="100%">
+			<tr>
+				<td align="right">
+					<button dojoType="dijit.form.Button" id="printall" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+						type="button" onclick="printAllTranscript();"><?php echo $tr->translate('PRINT_ALL_TRANSCRIPT')?></button>
+				</td>
+				<td width="5px">
+				</td>
+				<td align="left">
+					<button dojoType="dijit.form.Button" id="printselected" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+						type="button" onclick="printselected();"><?php echo $tr->translate('PRINT_SELECT_TRANSCRIPT')?></button>
+				</td>
+			</tr>
+	</table>
 </div>
+
 <?php
 $urlOutStanding = $this->baseUrl() . "/allreport/score/certificate-letterofpraisenew/id/";
 $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
 <script type="text/javascript">
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+
 	var row = 0;
 	var url = "";
 	$(function() {
@@ -979,6 +1015,8 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 	function gotoAction1() {
 		window.open(url + '/scoreid/' + row + '/stuid/' + student_id);
 	}
+
+	
 
 	dojo.require("dojo.data.ItemFileWriteStore");
 	var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
@@ -1091,5 +1129,75 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			$("#semester").css("display", "block");
 			$("#month").css("display", "none");
 		}
+	}
+
+	function checkAllStudent(array_length){
+		 dijit.byId('id_selected').attr('value','');
+		
+		if(dojo.byId('checkall').checked){
+			for(var j=1;j<=array_length;j++){
+				$("#check_box"+j).attr('checked', 'checked');
+				checked_id(j);
+			}
+		}else{
+			for(var j=1;j<=array_length;j++){
+				$("#check_box"+j).removeAttr("checked");
+				checked_id(j);
+			}
+		}
+	}
+	function checked_id(index){
+		stu_id = dijit.byId('stu_id'+index).get('value');
+		if(dojo.byId('check_box'+index).checked){
+			if($("#id_selected").val()!="") {
+				var identity = $("#id_selected").val();
+				$("#id_selected").val(identity+','+stu_id);
+			}else{
+				$("#id_selected").val(stu_id);
+			}
+			
+		}else{
+			
+			var identity = $('#id_selected').val();
+			var arrays = identity.split(',');
+			for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == stu_id) arrays.splice(i,1);
+			}
+			var strings = arrays.join(',');
+			$('#id_selected').val(strings);
+		}
+	}
+
+	function printAllTranscript(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript-groupstudent'));
+    	?>
+    	 scoreId = <?php echo $this->scoreId ?> ;
+		 if(scoreId!=''){
+			window.open(
+					'<?php echo $url_all_transcript;?>',
+					  '_blank' // <- This is what makes it open in a new window.
+					);
+		 }
+	}
+	function printselected(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript-groupstudent'));
+    	?>
+    	 id_selected = dijit.byId('id_selected').get('value');
+		 if(id_selected!=''){
+			window.open(
+					'<?php echo $url_transcript;?>'+'/stu_id/'+id_selected,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
+		 }else if(id_selected ==''){
+			alert('Please select record you want to print');
+			return false;
+		 }
+		 
 	}
 </script>

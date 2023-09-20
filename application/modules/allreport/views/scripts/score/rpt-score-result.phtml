@@ -1013,7 +1013,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 	}
 
 	function gotoAction1() {
-		window.open(url + '/scoreid/' + row + '/stuid/' + student_id);
+		window.open(url + '/id/' + row + '/stu_id/' + student_id);
 	}
 
 	
@@ -1172,7 +1172,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript-groupstudent'));
+    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript'));
     	?>
     	 scoreId = <?php echo $this->scoreId ?> ;
 		 if(scoreId!=''){
@@ -1186,7 +1186,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript-groupstudent'));
+    		$url_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript'));
     	?>
     	 id_selected = dijit.byId('id_selected').get('value');
 		 if(id_selected!=''){

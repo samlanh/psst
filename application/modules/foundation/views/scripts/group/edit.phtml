@@ -556,6 +556,7 @@ dojo.ready(function(){
 	 getAllDegreeByBranch();
 	 getRefreshRoom();
 	 getRefreshTeacher();
+	 Initailize();
 	 getSubject();
 	 
 });
@@ -792,7 +793,7 @@ function Initailize() {
 			template='';
 				template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span><span title="<?php echo $tr->translate("REFRESH");?>" class="removeRow" onclick="getSubject('+col+'),getRefreshTeacher('+col+')" ><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i></span></td>';
 				template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
-				template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><div id = "subject_option'+col+'"><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></div></td>';
+				template+='<td data-label="<?php echo $tr->translate("SUBJECT_STUDY");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkSubject('+col+')" class="fullside" id="group_subject_study_'+col+'" name="group_subject_study_'+col+'">'+subject+'</select></td>';
 				template+='<td data-label="<?php echo $tr->translate("TEACHER");?>" ><select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" onchange="checkTeacher('+col+');" class="fullside" id="teacher_'+col+'" name="teacher_'+col+'" >';
 				template+=teacher_optionini;  
 				template+='</select></td>';

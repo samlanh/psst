@@ -18,6 +18,60 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		return $lang;
 	}
+
+	public function getGradingSystem(){
+		$rs = array(
+			array(
+					'criteria'		=>$this->tr->translate("Attendance"),
+					'percent'		=>"5%",
+					'percentage'	=>"90-100%",
+					'grade'			=>"A",
+					'interpretation'=>"ល្អណាស់ Very Good",
+					'achievment'	=>"ប្រសើរជាងគេ Outstanding",
+			),
+			array(
+				'criteria'		=>$this->tr->translate("Discipline"),
+				'percent'		=>"5%",
+				'percentage'	=>"80-89%",
+				'grade'			=>"B",
+				'interpretation'=>"ល្អ Good",
+				'achievment'	=>"គួរជាទីពេញចិត្ត Satisfactory",
+			),
+			array(
+				'criteria'		=>$this->tr->translate("Book Check/Oral Question"),
+				'percent'		=>"5%",
+				'percentage'	=>"70-79%",
+				'grade'			=>"C",
+				'interpretation'=>"ល្អបង្គួរ Fair",
+				'achievment'	=>"ត្រូវខំប្រឹងតទៅទៀត Needs Improvement",
+			),
+			array(
+				'criteria'		=>$this->tr->translate("Homework"),
+				'percent'		=>$this->tr->translate("15%"),
+				'percentage'	=>"60-69%",
+				'grade'			=>"D",
+				'interpretation'=>"មធ្យម Everage",
+				'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
+			),
+			array(
+				'criteria'		=>$this->tr->translate("Quiz"),
+				'percent'		=>"15%",
+				'percentage'	=>"50-59%",
+				'grade'			=>"E",
+				'interpretation'=>"ខ្សោយ Poor",
+				'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+			),
+			array(
+				'criteria'		=>$this->tr->translate("Monthly Exam"),
+				'percent'		=>"50%",
+				'percentage'	=>"0-49%",
+				'grade'			=>"F",
+				'interpretation'=>"ល្លាក់ Failed",
+				'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+			),
+		);
+		return $rs; 
+	}
 	public function getGlobalDb($sql)
   	{
   		$db=$this->getAdapter();

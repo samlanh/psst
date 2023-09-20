@@ -206,6 +206,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
+		$this->view->grading = $db->getGradingSystem();
 
 		// print_r($result);
 		// exit();

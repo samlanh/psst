@@ -5,8 +5,6 @@ $this->headTitle($tr->translate("TRANSCRIPT"));
 echo $this->headTitle();
 $frm =  $this->form_search;
 
-
-
 $dbgb = new Application_Model_DbTable_DbGlobal();
 
 
@@ -487,6 +485,26 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td>និទ្ទេស<br />INTERPRETATION</td>
 					<td><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
 				</tr>
+				<?php
+				
+				if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
+					?>
+					<tr class="blue" align="center">
+						<td align="left">&nbsp;<?php echo $rsgd['criteria']; ?></td>
+						<td><?php echo $rsgd['percent']; ?></td>
+						<td><?php echo $rsgd['percentage']; ?></td>
+						<td><?php echo $rsgd['grade']; ?></td>
+						<td><?php echo $rsgd['interpretation']; ?></td>
+						<td><?php echo $rsgd['achievment']; ?></td>
+					</tr>
+				<?php } ?>
+				<!-- <tr class="khmerBoldFont blue" align="center">
+					<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
+					<td>ភាគរយ<br />PERCENTAGE</td>
+					<td>កម្រិត <br />GRADE</td>
+					<td>និទ្ទេស<br />INTERPRETATION</td>
+					<td><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
+				</tr>
 				<tr class="blue" align="center">
 					<td align="left">&nbsp;Attendance</td>
 					<td>5%</td>
@@ -531,7 +549,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td>0-49%</td>
 					<td>F</td>
 					<td>ធ្លាក់ Failed</td>
-				</tr>
+				</tr> -->
 
 				<?php
 				$teacherComment = '';

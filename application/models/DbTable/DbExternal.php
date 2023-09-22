@@ -463,6 +463,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['examType'])){
 			$sql.=" AND s.forExamType =".$data['examType'];
 		}
+		if(!empty($data['criteriaId'])){
+			$sql.=" AND s.criteriaId =".$data['criteriaId'];
+		}
 		$row = $db->fetchRow($sql);
 		
 		$sql="

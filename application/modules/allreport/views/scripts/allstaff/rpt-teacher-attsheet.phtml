@@ -302,11 +302,13 @@ table.tb-footer tr.style-head {
 					$i=0;
 					$male=0;$femle=0;
 					
+					$groupId="";
 					$subjectId="";
 					$arrStudyDay=array();
-					foreach ($this->rs as $key => $row){ $i++;
+					foreach ($this->rs as $key => $row){ 
 				?>
-						<?php if($subjectId!=$row['subject_id']) { 
+						<?php if($subjectId!=$row['subject_id'] || $groupId!=$row['group_id']) { 
+							$i = 0;
 							$arrTime = array(
 								"teacherId"=>$row['techer_id'],
 								"groupId"=>$row['group_id'],
@@ -487,7 +489,7 @@ table.tb-footer tr.style-head {
 									?>
 								
 								</tr>
-						<?php } $subjectId=$row['subject_id'];?>
+						<?php } $subjectId=$row['subject_id']; $groupId=$row['group_id']; $i=$i+1;?>
 								
 							<tr style="font-size:11px;height: 14px;" align="left">
 								<td class="centerClass" style="width:30px"><?php echo $i;?></td>

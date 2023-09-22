@@ -321,8 +321,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 										'criteriaAmount'	=> $subcriteriaAmount,
 										'totalGrading'		=> $score,
 										'percentage'		=> $pecentageScore,
-										
-										);
+									);
 									
 									$this->_name='rms_grading_detail';
 									$this->insert($arr);
@@ -1224,6 +1223,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    	$string.='<thead>';
    	$string.='<tr class="head-td" align="center">';
    	$string.='<th scope="col" width="10px">ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
+   	$string.='<th scope="col"  style="width:150px;">អត្តលេខសិស្ស<small class="lableEng" >Student ID</small></th>';
    	$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
    	$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
    		
@@ -1236,7 +1236,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    			if(!empty($rowCri['subCriterialTitleKh'])){
    				$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
    				$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
-   				$coutnSubCriterial = 1;//count($subCriterial);
+   				$coutnSubCriterial = count($subCriterial);
    				$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
    				$indexSub=0;
    
@@ -1296,8 +1296,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    			
    		$string.='<tr class="rowData '.$rowClasss.'" id="row'.$keyIndex.'">';
    		$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
+   		$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$stu['stuCode'].'</td>';
    		$string.='<td data-label="'.$tr->translate("STUDENT").'"  align="left">';
-   		$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
    		$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
    		$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
    		$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';

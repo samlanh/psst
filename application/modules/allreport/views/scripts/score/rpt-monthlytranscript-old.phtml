@@ -5,10 +5,17 @@ $this->headTitle($tr->translate("TRANSCRIPT"));
 echo $this->headTitle();
 $frm =  $this->form_search;
 
-
+$studentInfo = $this->resultData['studentInfo'];
+$scoreSubjectList = $this->resultData['scoreSubjectInfo'];
+$evalueationList = $this->resultData['EvalueationList'];
+$scoreInfo = $this->resultData['scoreInfo'];
+$groupId = $scoreInfo['group_id'];
+$forMonthId = $scoreInfo['for_month'];
+$academicId = $scoreInfo['academicYearId'];
+$forSemester = $scoreInfo['for_semester'];
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
-
+$db = new Allreport_Model_DbTable_DbScoreTranscript();
 
 $month = array(
 	"01" => "មករា",
@@ -25,8 +32,6 @@ $month = array(
 	"12" => "ធ្នូ"
 );
 $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" => "មីនា", "04" => "មេសា", "05" => "ឧសភា", "06" => "មិថុនា", "07" => "កក្កដា", "08" => "សីហា", "09" => "កញ្ញា", "10" => "តុលា", "11" => "វិច្ឆិកា", "12" => "ធ្នូ",);
-
-		
 ?>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");
@@ -57,7 +62,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			</div>
 		</div>
 	</div>
-	<!-- <form action="" dojoType="dijit.form.Form" method="post">
+	<form action="" dojoType="dijit.form.Form" method="post">
 		<div class="form-group">
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<select id="group_id" name="group_id" class="fullside" dojoType="dijit.form.FilteringSelect">
@@ -99,8 +104,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																		?>" />
 			</div>
 		</div>
-	</form> -->
-	
+	</form>
 	<div id="divPrint">
 		<style type="text/css">
 			table.header,
@@ -183,10 +187,6 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			table tr {
 				line-height: 19px;
 			}
-			.pages-break {
-				page-break-inside: always;
-				page-break-before: always;
-			}
 
 			@media print {
 				@page {
@@ -197,37 +197,6 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				}
 			}
 		</style>
-		<?php 	if (!empty($this->studentScoreResult)) {
-					foreach ($this->studentScoreResult as $key => $rs) {
-
-						$scoreId = $rs['id'];
-						$stu_id = $rs['stu_id'];
-
-						$data = array(
-							'scoreId' => $scoreId, //use
-							'studentId' => $stu_id, //use and all above not use
-						);
-
-						$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
-						$resultData = $dbscore->getTranscriptExam($data);
-					
-						$db = new Allreport_Model_DbTable_DbRptStudentScore();
-						$group = $db->getAllGroupOfStudent($data['studentId']);
-						//$this->view->group = $group;
-
-						$studentInfo = $resultData['studentInfo'];
-						$scoreSubjectList = $resultData['scoreSubjectInfo'];
-						$evalueationList = $resultData['EvalueationList'];
-						$scoreInfo = $resultData['scoreInfo'];
-						$groupId = $scoreInfo['group_id'];
-						$forMonthId = $scoreInfo['for_month'];
-						$academicId = $scoreInfo['academicYearId'];
-						$forSemester = $scoreInfo['for_semester'];
-
-						$break_page = "pages-break";
-
-				?>
-
 		<?php if (1 == 1) { //$scoreInfo['exam_type']
 		?>
 			<?php
@@ -238,7 +207,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				$sexen = "Female";
 			}
 			?>
-			<table class="<?php echo $break_page; ?>" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
+			<table style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
 				<tr style="height: 130px;">
 					<td align="center" colspan="3"></td>
 				</tr>
@@ -457,20 +426,19 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																			'forMonth' => $forMonthId,
 																			'attStatus' => 3,
 																		);
-																		$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
-																		echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
+																		echo $db->countAttendenceTranscript($data); ?>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days Unxcused absences&nbsp;</td>
 								<td colspan="4" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 2;
-																				echo $dbAttendance->countAttendenceTranscript($data) ?>&nbsp;</td>
+																				echo $db->countAttendenceTranscript($data) ?>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="3" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
 								<td colspan="4" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 4;
-																				echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
+																				echo $db->countAttendenceTranscript($data); ?>&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -597,8 +565,6 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				</tr>
 			</table>
 		<?php } ?>
-
-		<?php	}}?>
 	</div>
 </div>
 <script>
@@ -616,6 +582,4 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			$("#month").css("display", "none");
 		}
 	}
-
-	
 </script>

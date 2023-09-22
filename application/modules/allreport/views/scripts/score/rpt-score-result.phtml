@@ -223,6 +223,7 @@ tbody#table_row tr {
 				<tr style="border-bottom: 1px solid #000;">
 					<td colspan="3" align="center" style="border-bottom: 1px solid #4839bd;">
 						<?php echo $this->headerScore; ?>
+						
 					</td>
 				</tr>
 				<?php
@@ -622,7 +623,7 @@ tbody#table_row tr {
 				<tr style="border-bottom: 1px solid #000;">
 					<td colspan="3" align="center">
 						<?php echo $this->headerScore; ?>
-
+						<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 					</td>
 				</tr>
 				<?php
@@ -697,7 +698,7 @@ tbody#table_row tr {
 								<td colspan="3" id="exportExcel" valign="top">
 									<table class="header" cellpadding="2" ​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1">
 										<tr class="cheader" align="center">
-											<td  class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></th>
+											<td  class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->studentScoreResult);?>');" name="checkall" id="checkall" /></th>
 											<td>
 												<span class="khmerLabel"><?php echo $tr->translate("NUM"); ?></span>
 												<br />
@@ -946,9 +947,15 @@ tbody#table_row tr {
 	</div>
 	<table width="100%">
 			<tr>
-				<td align="center">
+				<td align="right">
+					<button dojoType="dijit.form.Button" id="printall" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+						type="button" onclick="printAllTranscript();"><?php echo $tr->translate('PRINT_ALL_TRANSCRIPT')?></button>
+				</td>
+				<td width="5px">
+				</td>
+				<td align="left">
 					<button dojoType="dijit.form.Button" id="printselected" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
-						type="button" onclick="printAllTranscript();"><?php echo $tr->translate('TRANSCRIPT')?></button>
+						type="button" onclick="printselected();"><?php echo $tr->translate('PRINT_SELECT_TRANSCRIPT')?></button>
 				</td>
 			</tr>
 	</table>
@@ -958,8 +965,12 @@ tbody#table_row tr {
 $urlOutStanding = $this->baseUrl() . "/allreport/score/certificate-letterofpraisenew/id/";
 $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 ?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
 <script type="text/javascript">
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+
 	var row = 0;
 	var url = "";
 	$(function() {
@@ -1002,7 +1013,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 	}
 
 	function gotoAction1() {
-		window.open(url + '/scoreid/' + row + '/stuid/' + student_id);
+		window.open(url + '/id/' + row + '/stu_id/' + student_id);
 	}
 
 	
@@ -1121,7 +1132,8 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 	}
 
 	function checkAllStudent(array_length){
-		dijit.byId('id_selected').attr('value','');
+		 dijit.byId('id_selected').attr('value','');
+		
 		if(dojo.byId('checkall').checked){
 			for(var j=1;j<=array_length;j++){
 				$("#check_box"+j).attr('checked', 'checked');
@@ -1143,7 +1155,9 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			}else{
 				$("#id_selected").val(stu_id);
 			}
+			
 		}else{
+			
 			var identity = $('#id_selected').val();
 			var arrays = identity.split(',');
 			for(var i=0;i<arrays.length;i++) {
@@ -1158,7 +1172,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript-groupstudent'));
+    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript'));
     	?>
     	 scoreId = <?php echo $this->scoreId ?> ;
 		 if(scoreId!=''){
@@ -1167,5 +1181,23 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 					  '_blank' // <- This is what makes it open in a new window.
 					);
 		 }
+	}
+	function printselected(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    		$url_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript'));
+    	?>
+    	 id_selected = dijit.byId('id_selected').get('value');
+		 if(id_selected!=''){
+			window.open(
+					'<?php echo $url_transcript;?>'+'/stu_id/'+id_selected,
+					  '_blank' // <- This is what makes it open in a new window.
+					);
+		 }else if(id_selected ==''){
+			alert('Please select record you want to print');
+			return false;
+		 }
+		 
 	}
 </script>

@@ -402,7 +402,10 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	if(!empty($search['session'])){
    		$where.=" AND `g`.`session` =".$search['session'];
    	}
-   	
+	   if(!empty($search['stu_id'])){
+		$where.=" AND 	st.`stu_id` IN (".$search['stu_id'].")";
+	}
+	   
    	$where.= $_db->getAccessPermission('s.branch_id');
    	
    	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`

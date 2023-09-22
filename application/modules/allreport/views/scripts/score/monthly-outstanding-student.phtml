@@ -408,6 +408,15 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 	</div>
 <?php } else { ?>
 	<div style="width:20cm;margin:0 auto;padding:1cm;">
+		<style>
+			.number {
+				padding: 5px !important;
+			}
+			div.rankborder {
+				height: 35px !important;
+				padding: 5px;
+			}
+		</style>
 		<div id="divPrint">
 			<style type="text/css">
 				<?php $image = $this->baseUrl() . '/images/card/certificate/pis.png'; ?>.backgroundOutStanding {
@@ -463,8 +472,6 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 					font-family: Khmer OS Muol Light;
 					font-size: 16px;
 				}
-				
-
 				@media print {
 					@page {
 						page: A4;
@@ -547,7 +554,7 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 					} ?>
 					<table width="100%" border="0">
 						<tr>
-							<td rowspan="2" width="30%" valign="top" style="text-align: left; font-family: 'Times New Roman'  , 'Khmer OS Muol Light' ; ">
+							<td rowspan="2" width="40%" valign="top" style="text-align: left; font-family: 'Times New Roman'  , 'Khmer OS Muol Light' ; ">
 								<?php $logo = $this->baseUrl() . '/images/logo/logo.png';
 								if (!empty($this->studentgroup[0]['branch_logo'])) {
 									$logo = $this->baseUrl() . '/images/logo/' . $this->studentgroup[0]['branch_logo'];
@@ -566,7 +573,7 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 								</ul>
 							</td>
 							<td colspan="2" width="60%" valign="top" style="font-family: 'Times New Roman','Khmer OS Muol Light'; ">
-								<ul style="list-style: none;padding: 0;text-align: center;line-height: 30px;font-size: 16px; margin-top:50px; margin-left: 220px;">
+								<ul style="list-style: none;padding: 0;text-align: center;line-height: 35px;font-size: 16px; margin-top:35px; margin-left: 150px;">
 									<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
 									<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
 									<li><img style=" height: 12px; " src="<?php echo $this->baseUrl() . '/images/style.png' ?>"></li>

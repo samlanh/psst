@@ -141,7 +141,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$this->view->data = $key->getKeyCodeMiniInv(TRUE);
 	}
 
-	function rptMonthlytranscriptAction()
+	function rptMonthlytranscriptOldAction()
 	{
 		$scoreId = $this->getRequest()->getParam("scoreid");
 		$stu_id = $this->getRequest()->getParam("stuid");
@@ -176,10 +176,11 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
 	}
-	function rptMonthlytranscriptGroupstudentAction()
+	function rptMonthlytranscriptAction()
 	{
 
 		$id = $this->getRequest()->getParam("id");
+		$stu_id = $this->getRequest()->getParam("stu_id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		
 		$row = $db->getScoreExamByID($id);
@@ -193,48 +194,19 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'grade' => '',
 				'degree' => '',
 				'session' => '',
+				
 		);
+		if(!empty($stu_id)){
+			$search=array(
+				'stu_id' => $stu_id,
+			);
+		}
 		$result = $db->getStundetScoreResult($search, $id, 1);
 		$this->view->studentScoreResult = $result;
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
-
-		// print_r($result);
-		// exit();
-		
-
-		// $scoreId = $this->getRequest()->getParam("scoreid");
-		// $stu_id = $this->getRequest()->getParam("stuid");
-		// if ($this->getRequest()->isPost()) {
-		// 	$data = array(
-		// 		'scoreId' => $scoreId, //use
-		// 		'studentId' => $stu_id, //use and all above not use
-		// 	);
-		// } else {
-		// 	if (empty($scoreId)) {
-		// 		Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/score/rpt-score");
-		// 		exit();
-		// 	} elseif (empty($stu_id)) {
-		// 		Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/score/rpt-score");
-		// 		exit();
-		// 	}
-		// 	$data = array(
-		// 		'scoreId' => $scoreId, //use
-		// 		'studentId' => $stu_id, //use and all above not use
-		// 	);
-		// }
-		// $dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
-		// $resultData = $dbscore->getTranscriptExam($data);
-		// $this->view->resultData = $resultData;
-
-		// $this->view->search = $data;
-		// $db = new Allreport_Model_DbTable_DbRptStudentScore();
-
-		// $group = $db->getAllGroupOfStudent($data['studentId']);
-		// $this->view->group = $group;
-
-		
+		$this->view->grading = $db->getGradingSystem();
 	}
 
 	function certificateLetterofpraisenewAction()

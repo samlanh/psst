@@ -5,17 +5,8 @@ $this->headTitle($tr->translate("TRANSCRIPT"));
 echo $this->headTitle();
 $frm =  $this->form_search;
 
-$studentInfo = $this->resultData['studentInfo'];
-$scoreSubjectList = $this->resultData['scoreSubjectInfo'];
-$evalueationList = $this->resultData['EvalueationList'];
-$scoreInfo = $this->resultData['scoreInfo'];
-$groupId = $scoreInfo['group_id'];
-$forMonthId = $scoreInfo['for_month'];
-$academicId = $scoreInfo['academicYearId'];
-$forSemester = $scoreInfo['for_semester'];
-
 $dbgb = new Application_Model_DbTable_DbGlobal();
-$db = new Allreport_Model_DbTable_DbScoreTranscript();
+
 
 $month = array(
 	"01" => "មករា",
@@ -32,6 +23,8 @@ $month = array(
 	"12" => "ធ្នូ"
 );
 $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" => "មីនា", "04" => "មេសា", "05" => "ឧសភា", "06" => "មិថុនា", "07" => "កក្កដា", "08" => "សីហា", "09" => "កញ្ញា", "10" => "តុលា", "11" => "វិច្ឆិកា", "12" => "ធ្នូ",);
+
+		
 ?>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");
@@ -62,7 +55,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			</div>
 		</div>
 	</div>
-	<form action="" dojoType="dijit.form.Form" method="post">
+	<!-- <form action="" dojoType="dijit.form.Form" method="post">
 		<div class="form-group">
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<select id="group_id" name="group_id" class="fullside" dojoType="dijit.form.FilteringSelect">
@@ -104,7 +97,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																		?>" />
 			</div>
 		</div>
-	</form>
+	</form> -->
+	
 	<div id="divPrint">
 		<style type="text/css">
 			table.header,
@@ -187,6 +181,10 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			table tr {
 				line-height: 19px;
 			}
+			.pages-break {
+				page-break-inside: always;
+				page-break-before: always;
+			}
 
 			@media print {
 				@page {
@@ -197,6 +195,37 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				}
 			}
 		</style>
+		<?php 	if (!empty($this->studentScoreResult)) {
+					foreach ($this->studentScoreResult as $key => $rs) {
+
+						$scoreId = $rs['id'];
+						$stu_id = $rs['stu_id'];
+
+						$data = array(
+							'scoreId' => $scoreId, //use
+							'studentId' => $stu_id, //use and all above not use
+						);
+
+						$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
+						$resultData = $dbscore->getTranscriptExam($data);
+					
+						$db = new Allreport_Model_DbTable_DbRptStudentScore();
+						$group = $db->getAllGroupOfStudent($data['studentId']);
+						//$this->view->group = $group;
+
+						$studentInfo = $resultData['studentInfo'];
+						$scoreSubjectList = $resultData['scoreSubjectInfo'];
+						$evalueationList = $resultData['EvalueationList'];
+						$scoreInfo = $resultData['scoreInfo'];
+						$groupId = $scoreInfo['group_id'];
+						$forMonthId = $scoreInfo['for_month'];
+						$academicId = $scoreInfo['academicYearId'];
+						$forSemester = $scoreInfo['for_semester'];
+
+						$break_page = "pages-break";
+
+				?>
+
 		<?php if (1 == 1) { //$scoreInfo['exam_type']
 		?>
 			<?php
@@ -207,7 +236,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				$sexen = "Female";
 			}
 			?>
-			<table style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
+			<table class="<?php echo $break_page; ?>" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
 				<tr style="height: 130px;">
 					<td align="center" colspan="3"></td>
 				</tr>
@@ -426,19 +455,20 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																			'forMonth' => $forMonthId,
 																			'attStatus' => 3,
 																		);
-																		echo $db->countAttendenceTranscript($data); ?>&nbsp;</td>
+																		$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
+																		echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="3" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days Unxcused absences&nbsp;</td>
 								<td colspan="4" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 2;
-																				echo $db->countAttendenceTranscript($data) ?>&nbsp;</td>
+																				echo $dbAttendance->countAttendenceTranscript($data) ?>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="3" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
 								<td colspan="4" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 4;
-																				echo $db->countAttendenceTranscript($data); ?>&nbsp;</td>
+																				echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -455,41 +485,66 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td>និទ្ទេស<br />INTERPRETATION</td>
 					<td><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
 				</tr>
+				<?php
+				
+				if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
+					?>
+					<tr class="blue" align="center">
+						<td align="left">&nbsp;<?php echo $rsgd['criteria']; ?></td>
+						<td><?php echo $rsgd['percent']; ?></td>
+						<td><?php echo $rsgd['percentage']; ?></td>
+						<td><?php echo $rsgd['grade']; ?></td>
+						<td><?php echo $rsgd['interpretation']; ?></td>
+						<td><?php echo $rsgd['achievment']; ?></td>
+					</tr>
+				<?php } ?>
 				<tr class="blue" align="center">
-					<td align="left">&nbsp;CLASS PARTICIPATION</td>
-					<td>15%</td>
+					<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
+					<td >100%</td>
+					<td colspan="3"></td>
+				</tr>
+				<!-- <tr class="khmerBoldFont blue" align="center">
+					<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
+					<td>ភាគរយ<br />PERCENTAGE</td>
+					<td>កម្រិត <br />GRADE</td>
+					<td>និទ្ទេស<br />INTERPRETATION</td>
+					<td><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
+				</tr>
+				<tr class="blue" align="center">
+					<td align="left">&nbsp;Attendance</td>
+					<td>5%</td>
 					<td>90-100%</td>
 					<td>A</td>
 					<td>ល្អណាស់ Very Good</td>
 					<td>ប្រសើរជាងគេ Outstanding</td>
 				</tr>
 				<tr class="blue" align="center">
-					<td align="left" style="white-space:nowrap;">&nbsp;HOMEWORK AND ASSIGNMENT</td>
-					<td>15%</td>
+					<td align="left" style="white-space:nowrap;">&nbsp;Discipline</td>
+					<td>10%</td>
 					<td>80-89%</td>
 					<td>B</td>
 					<td>ល្អ Good</td>
 					<td>គួរជាទីពេញចិត្ត Satisfactory</td>
 				</tr>
 				<tr class="blue" align="center">
-					<td align="left">&nbsp;QUIZZES</td>
-					<td>15%</td>
+					<td align="left">&nbsp;Book Check/Oral Question</td>
+					<td>5%</td>
 					<td>70-79%</td>
 					<td>C</td>
 					<td>ល្អបង្គួរ Fair</td>
 					<td style="white-space:nowrap;">ត្រូវខំប្រឹងតទៅទៀត Needs Improvement</td>
 				</tr>
 				<tr class="blue" align="center">
-					<td align="left">&nbsp;MONTHLY TEST</td>
-					<td>55%</td>
+					<td align="left">&nbsp;Homework AND Quiz</td>
+					<td>15%</td>
 					<td>60-69%</td>
 					<td>D</td>
 					<td>មធ្យម Average</td>
 					<td>មិនទាន់ពេញចិត្ត Unsatisfactory</td>
 				</tr>
 				<tr class="blue" align="center">
-					<td align="left" rowspan="2">&nbsp;TOTAL SCORE</td>
-					<td rowspan="2">100%</td>
+					<td align="left" rowspan="2">&nbsp;Monthly Exam</td>
+					<td rowspan="2">50%</td>
 					<td>50-59%</td>
 					<td>E</td>
 					<td>ខ្សោយ Poor</td>
@@ -499,7 +554,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td>0-49%</td>
 					<td>F</td>
 					<td>ធ្លាក់ Failed</td>
-				</tr>
+				</tr> -->
 
 				<?php
 				$teacherComment = '';
@@ -565,6 +620,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				</tr>
 			</table>
 		<?php } ?>
+
+		<?php	}}?>
 	</div>
 </div>
 <script>
@@ -582,4 +639,6 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			$("#month").css("display", "none");
 		}
 	}
+
+	
 </script>

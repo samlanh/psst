@@ -90,6 +90,13 @@
 				    margin: 0;
 				}
 				tr.line td{ border-bottom: 1px solid #000;}
+
+				.headerKhmer {
+				font-size: 16px;
+				line-height: 12px;
+				font-weight: initial;
+				font-family: 'Times New Roman','Khmer OS Muol Light', serif;
+			}
 				
 				@media print {
 						@page {
@@ -111,9 +118,24 @@
 						$break_page = "pages-break";
 				?>
 				<tr class="<?php echo $break_page; ?> ">
+					<td colspan="2" valign="bottom">
+						<h2 class="headerKhmer "><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
+						<h2 class="headerKhmer ">
+							<?php echo $rs['school_name']?>
+						</h2>
+					</td>
+					<td align="center" valign="top">
+						<h2 class="headerKhmer "><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
+						<h2 class="headerKhmer "><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
+						<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
+					</td>
+				</tr>
+				<tr >
 					<td colspan="3" align="center">
-						<?php echo $this->rsheader;?>
-						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
+						<?php // echo $this->rsheader;?>
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span></br>
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("SCHED_FOR_ACADEMIC_YEAR");?>: <?php echo $rs['academic_year']?></span>
+						
 					</td>
 				</tr>
 				<tr>

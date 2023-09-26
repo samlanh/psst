@@ -162,17 +162,21 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     		$subject = "subject_titlekh";
     		$branch = "branch_namekh";
 			$teacherRoom = "teacher_name_kh";
+			$school_name = "school_namekh";
 			
     	}else{ // English
     		$label = "name_en";
     		$subject = "subject_titleen";
     		$branch = "branch_nameen";
 			$teacherRoom = "teacher_name_en";
+			$school_name = "school_nameen";
     	}
     	$sql="SELECT gr.id,gr.year_id,
     		gr.group_id,
     		gr.branch_id,
-    		(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
+			(SELECT CONCAT(fromYear,'-',toYear) FROM `rms_academicyear` WHERE id=gr.year_id LIMIT 1) AS academic_year,
+    		(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,
+			(SELECT $school_name FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS school_name,
     		(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
 			(SELECT $teacherRoom  FROM `rms_teacher` WHERE  rms_teacher.id=(SELECT teacher_id FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) )AS teacher_room,
 			(SELECT tel  FROM `rms_teacher` WHERE  rms_teacher.id=(SELECT teacher_id FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) )AS teacher_tel,

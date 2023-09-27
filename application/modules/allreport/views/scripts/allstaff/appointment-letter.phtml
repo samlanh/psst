@@ -1,6 +1,6 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$this->headTitle($tr->translate('លិខិតចាត់តាំង'));
+$this->headTitle($tr->translate('APPOINTMENT_LETTER'));
 echo $this->headTitle('');
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
@@ -11,6 +11,8 @@ $lang_id = $session_lang->lang_id;
 
 $appointment_date = $this->appointment_date;
 $time = strtotime($appointment_date);
+$dayName = date('l', $time);
+$monthName = date('F', $time);
 $dayp = date('d', $time);
 $month = date('m', $time);
 $year = date('Y', $time);
@@ -102,7 +104,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 			table.content-data {
 				border-collapse: collapse;
 				border: 1px solid #000;
-				font-size: 10px;
+				font-size: 12px;
 				width: 100%;
 			}
 
@@ -215,7 +217,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 				font-size: 14px;
 				line-height: 12px;
 				font-weight: initial;
-				font-family: 'Khmer OS Muol Light';
+				font-family: 'Times New Roman','Khmer OS Muol Light';
 
 			}
 
@@ -223,7 +225,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 				font-size: 16px;
 				line-height: 12px;
 				font-weight: initial;
-				font-family: 'Khmer OS Muol Light';
+				font-family: 'Times New Roman','Khmer OS Muol Light', serif;
 			}
 
 		
@@ -264,14 +266,14 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 				display: inline-block;
 				font-size: 15px;
 				font-weight: 590;
-				font-family: 'Khmer OS Battambang';
+				font-family: 'Times New Roman','Khmer OS Battambang';
 				color: #f00;
 			}
 
 			label.LabelTeacher {
 				line-height: 25px;
 				font-weight: initial;
-				font-family: 'Khmer OS Battambang';
+				font-family: 'Times New Roman','Khmer OS Battambang';
 			}
 
 			label.smalFont {
@@ -322,6 +324,9 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 				width: 200px;
 				position: absolute;
 			}
+			.bold{
+				font-weight: bold;
+			}
 		</style>
 		
 		<?php if (!empty($this->rs))
@@ -340,6 +345,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					} elseif ($rs['sex'] == 'ស្រី') {
 						$NameTitle = 'លោកស្រី';
 					}
+					$teacherName= $rs['teacher_name_kh'];
+					$bold= "";
 				} elseif ($lang_id == 2) {
 					$schoolName = $branchInfo['school_nameen'];
 					if ($rs['sex'] == 'Male') {
@@ -347,6 +354,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					} elseif ($rs['sex'] == 'Female') {
 						$NameTitle = 'Mrs.';
 					}
+					$teacherName= $rs['teacher_name_en'].",";
+					$bold= "bold";
 				}
 
 				$signature = "";
@@ -384,31 +393,30 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					<tr class="head">
 						<td colspan="2" valign="bottom">
 							<h2 >&nbsp;</h2>
-							<h2 class="headerKhmer">មន្ទីរអប់រំ យុវជន និងកីឡា</h2>
-							<h2 class="headerKhmer">
+							<h2 class="headerKhmer <?php echo $bold; ?>"><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
+							<h2 class="headerKhmer <?php echo $bold; ?>">
 								<?php echo $schoolName; ?>
 							</h2>
-							<label class="LabelTeacher bigFont">លេខ...............
+							<label class="LabelTeacher bigFont"><?php echo $tr->translate('NUM');?>...............
 								<?php echo $branchInfo['prefix']; ?>
 							</label>
 						</td>
 						<td align="center" valign="top">
-							<h2 class="headerKhmer">ព្រះរាជាណាចក្រកម្ពុជា</h2>
-							<h2 class="headerKhmer">ជាតិ សាសនា ព្រះមហាក្សត្រ</h2>
+							<h2 class="headerKhmer <?php echo $bold; ?>"><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
+							<h2 class="headerKhmer <?php echo $bold; ?>"><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
 							<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
 						</td>
 					</tr>
 					
 					<tr>
 						<td colspan="3" align="center">
-							<h2 class="headerKhmer">លិខិតចាត់តាំង</h1>
+							<h2 class="headerKhmer <?php echo $bold; ?>"><?php echo $tr->translate('APPOINTMENT_LETTER');?></h2>
 						</td>
 					</tr>
 
 					<tr>
 						<td colspan="3" align="left">
-							<label class="headerKhmer">យោង ៖ </label> &nbsp;<label class="LabelTeacher bigFont">លិខិតបើកសាលា
-								និងកិច្ចសន្យាការងារ </label>
+							<label class="headerKhmer <?php echo $bold; ?>"><?php echo $tr->translate('RE');?>  </label> &nbsp;<label class="LabelTeacher bigFont"><?php echo $tr->translate('SCHOOL_LICENSE_STAFF_CONTACT');?></label>
 						</td>
 					</tr>
 					<tr>
@@ -419,27 +427,45 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					<tr>
 						<td colspan="3" align="left">
 							<label
-								class="LabelTeacher bigFont">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								class="LabelTeacher bigFont">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<?php echo $NameTitle; ?> <span class="ValueLabelTeacher red ">
-									<?php echo $rs['teacher_name_kh']; ?>
-								</span> ភេទ <span class="ValueLabelTeacher red ">
+									<?php echo $teacherName; ?>
+								</span> <?php echo $tr->translate('SEX');?> <span class="ValueLabelTeacher red ">
 									<?php echo $rs['sex']; ?>
 								</span>
-								<?php if ($rs['degreeTye'] == 1) { ?> បង្រៀនផ្នែក
-									<?php echo $rs['department']; ?> កម្រិតបឋម
-								<?php } else { ?> ឯកទេស <span class="ValueLabelTeacher red ">
-										<?php echo $rs['skill']; ?>
-									</span>
-								<?php } ?> ជាបុគ្គលិកនៃ
-								<?php echo $schoolName; ?> ត្រូវបានចាត់តាំងអោយបង្រៀនថ្នាក់ទី <span
+								<?php if ($lang_id == 1) { ?>
+									<?php if ($rs['degreeTye'] == 1) { ?> បង្រៀនផ្នែក
+										<?php echo $rs['department']; ?> កម្រិតបឋម
+											<?php } else { ?> ឯកទេស <span class="ValueLabelTeacher red ">
+											<?php echo $rs['skill']; ?>
+											</span>
+									<?php } ?>
+									<?php echo $tr->translate('WHO_IS_TEACHER_OF');?>
+								<?php }else{ ?>
+									<?php echo $tr->translate('WHO_IS_TEACHER_OF');?>
+								<?php } ?>
+								
+								
+								<?php echo $schoolName; ?> <?php echo $tr->translate('ASSIGNED_TO_TEACH');?> <span
 									class="ValueLabelTeacher red ">
 									<?php echo $rs['teachingGroup']; ?>
-								</span> ដូចមានភ្ជាប់ជូនក្នុងកាលវិភាគខាងក្រោម ចាប់តាំងពី <span
-									class="ValueLabelTeacher red ">ថ្ងៃទី
-									<?php echo $dbgb->getNumberInkhmer(date($dayp)); ?> ខែ
-									<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ​
-									<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
-								</span> នេះតទៅ ។
+								</span> <?php echo $tr->translate('ATTCH_IN_SCHEDULE');?>
+								<span
+									class="ValueLabelTeacher red ">
+									<?php
+										if ($lang_id == 1) { ?>
+											ថ្ងៃទី
+											<?php echo $dbgb->getNumberInkhmer(date($dayp)); ?> ខែ
+											<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ​
+											<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+										
+										<?php }else{ ?>
+											<?php echo $dayName; ?>,
+											<?php echo $dayp; ?> 
+											<?php echo $monthName; ?> ,
+											<?php echo $year; ?>
+										<?php } ?>
+								</span> <?php echo $tr->translate('ONWARD');?>
 							</label>
 						</td>
 					</tr>
@@ -450,10 +476,17 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					</tr>
 					<tr>
 						<td colspan="3" align="center">
-							<h2 class="headerKhmer">កាលវិភាគបង្រៀនវគ្គសិក្សាពេលវិស្សមកាលឆ្នាំសិក្សា
-								<?php echo $dbgb->getNumberInkhmer(date($fromYear)); ?>-
-								<?php echo $dbgb->getNumberInkhmer(date($toYear)); ?>
-								</h1>
+							<h2 class="headerKhmer <?php echo $bold; ?>"><?php echo $tr->translate('SCHED_FOR_ACADEMIC_YEAR');?>
+								<?php
+								if ($lang_id == 1) { ?>
+									<?php echo $dbgb->getNumberInkhmer(date($fromYear)); ?>-
+									<?php echo $dbgb->getNumberInkhmer(date($toYear)); ?>
+								<?php }else{ ?>
+									<?php echo $fromYear; ?>-
+									<?php echo $toYear; ?>
+								<?php } ?>
+								
+							</h1>
 						</td>
 					</tr>
 					<tr class="head">
@@ -464,7 +497,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					<tr>
 					
 						<td align="center" colspan="3">
-							<label class="headerLabel">ថ្នាក់ទី ៖</label> &nbsp;<label class="LabelTeacher smalFont">
+							<label class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate('GRADE');?> :</label> &nbsp;<label class="LabelTeacher smalFont">
 								<?php echo $rs['teachingGroup']; ?>
 							</label>
 						</td>
@@ -472,14 +505,14 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					</tr>
 					<tr>
 						<td align="left">
-							<label class="headerLabel">ឈ្មោះ ៖</label> &nbsp;<label class="LabelTeacher smalFont">
-								<?php echo $rs['teacher_name_kh']; ?>
+							<label class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate('NAME');?>  :</label> &nbsp;<label class="LabelTeacher smalFont">
+								<?php echo $teacherName; ?>
 							</label>
 						</td>
 						<td align="center">
 						</td>
 						<td align="right">
-							<label class="headerLabel">លេខទូរស័ព្ទ ៖</label> &nbsp;<label class="LabelTeacher smalFont">
+							<label class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate('TEL');?> :</label> &nbsp;<label class="LabelTeacher smalFont">
 								<?php echo $rs['tel']; ?>
 							</label>
 						</td>
@@ -495,8 +528,13 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 								<thead>
 									<tr class="style" align="center">
 										<td scope="col">
-											<span class="valueLabel khmerLabel">ម៉ោងបង្រៀន</span>
-											<span class="valueLabel englishLabel">Teaching Time</span>
+											<?php
+											if ($lang_id == 1) { ?>
+													<span class="valueLabel khmerLabel">ម៉ោងបង្រៀន</span>
+													<span class="valueLabel englishLabel">Teaching Time</span>
+												<?php }else{ ?>
+													<span class="valueLabel englishLabel">Teaching Time</span>
+											<?php } ?>
 										</td>
 										<?php
 										$day = count($this->days);
@@ -505,12 +543,20 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 
 												?>
 												<td scope="col" class="titleComment">
-													<span class="valueLabel khmerLabel">
-														<?php echo $days['daysKh']; ?>
-													</span>
-													<span class="valueLabel englishLabel">
-														<?php echo $days['daysEng']; ?>
-													</span>
+													<?php
+													if ($lang_id == 1) { ?>
+														<span class="valueLabel khmerLabel">
+															<?php echo $days['daysKh']; ?>
+														</span>
+														<span class="valueLabel englishLabel">
+															<?php echo $days['daysEng']; ?>
+														</span>
+														<?php }else{ ?>
+															<span class="valueLabel englishLabel">
+															<?php echo $days['daysEng']; ?>
+														</span>
+													<?php } ?>
+													
 												</td>
 											<?php } ?>
 									</tr>
@@ -536,7 +582,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 												<tr class="rowValue">
 													<td colspan="<?php echo $day + 1; ?>" align="center">
 														<strong><span class="className khmerLabel  blue">
-																<?php echo $tr->translate("ពេលព្រឹក"); ?>
+																<?php echo $tr->translate("MORNING"); ?>
 															</span></strong>
 													</td>
 												</tr>
@@ -595,12 +641,23 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 																	<?php echo $row['groupCode']; ?>
 																</span>
 																<span class="className valueLabel red">
-																	<?php echo $row['subjectTitleKh'] ?>(
+																	<?php
+																		if($lang_id == 1){
+																			$subjectTitle=$row['subjectTitleKh'];
+																			$Khmer="ខ្មែរ";
+																			$ENG="អង់គ្លេស";
+																		}else{
+																			$subjectTitle=$row['subjectTitleEng'];
+																			$Khmer="KH";
+																			$ENG="ENG";
+																		}
+																	 ?>
+																	<?php echo $subjectTitle ?>(
 																	<?php if (!empty($row['subjecLang'])) {
 																		if ($row['subjecLang'] == 1) {
-																			echo "ខ្មែរ";
+																			echo $Khmer;
 																		} else {
-																			echo "English";
+																			echo $ENG;
 																		}
 																	} ?>)
 																</span>
@@ -615,7 +672,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 												<tr class="rowValue">
 													<td colspan="<?php echo $day + 1; ?>" align="center">
 														<strong><span class="className khmerLabel  blue">
-																<?php echo $tr->translate("ពេលរសៀល"); ?>
+																<?php echo $tr->translate("AFTERNOON"); ?>
 															</span></strong>
 													</td>
 												</tr>
@@ -639,6 +696,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 												if (!empty($this->days))
 													foreach ($this->days as $key => $days) {
 														$dayID = $days['id'];
+														$teacherId = $rs['id'];
 														$arrCondiction = array(
 															'fromHour' => $fromHour
 															,
@@ -670,13 +728,24 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 																<span class="className valueLabel blue bold">
 																	<?php echo $row['groupCode']; ?>
 																</span>
-																<span class="className valueLabel red ">
-																	<?php echo $row['subjectTitleKh'] ?>(
+																<span class="className valueLabel red">
+																	<?php
+																		if($lang_id == 1){
+																			$subjectTitle=$row['subjectTitleKh'];
+																			$Khmer="ខ្មែរ";
+																			$ENG="អង់គ្លេស";
+																		}else{
+																			$subjectTitle=$row['subjectTitleEng'];
+																			$Khmer="KH";
+																			$ENG="ENG";
+																		}
+																	 ?>
+																	<?php echo $subjectTitle ?>(
 																	<?php if (!empty($row['subjecLang'])) {
 																		if ($row['subjecLang'] == 1) {
-																			echo "ខ្មែរ";
+																			echo $Khmer;
 																		} else {
-																			echo "English";
+																			echo $ENG;
 																		}
 																	} ?>)
 																</span>
@@ -696,12 +765,17 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 							<table width="100%" >
 								<tr class="head">
 									<td align="left" rowspan="2">
-										<span class="khmerLabel valueLabel " style="margin-top: 10px;">ចម្លងជូន ៖</span>
-											<span class="className valueLabel "> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ
-												"ដើម្បីជ្រាបជាព័ត៌មា​ន​​"</span>
-											<span class="className valueLabel "> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</span>
-											<span class="className valueLabel "> - ឯកសា - កាលប្បវត្តិ
-											<?php echo $branchInfo['prefix']; ?>
+										<span class="khmerLabel valueLabel " style="margin-top: 10px;"><?php echo $tr->translate("CC"); ?></span>
+												<?php
+													if ($lang_id == 1) { ?>
+															<span class="className valueLabel "> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ " ដើម្បីជ្រាបជាព័ត៌មា​ន "</span>
+															<span class="className valueLabel "> - សាម៉ីជន " ដើម្បីអនុវត្ត​​ "</span>
+															<span class="className valueLabel "> - ឯកសា - កាលប្បវត្តិ <?php echo $branchInfo['prefix']; ?>
+														<?php }else{ ?>
+															<span class="className valueLabel "> -	all departments of PSIS</span>
+															<span class="className valueLabel "> -	the addressee for implementation</span>
+															<span class="className valueLabel "> -	office of Administration for archives and records</span>
+													<?php } ?>	
 										</span>
 									</td>
 									<td  align="center">
@@ -709,20 +783,32 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 										$moment = date("Y-m-d");
 										$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
 										?>
-										<label class="LabelTeacher smalFont">
-											<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa ព.ស. b'); ?>
-										</label><br>
-										<label class="LabelTeacher smalFont">
-											<?php echo $branchInfo['workat']; ?> ថ្ងៃទី
-											<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ
-											<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ
-											<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
-										</label>
-										<h2 class="headerLabel">នាយកស្តីទី</h2>
+										<?php
+											if ($lang_id == 1) { ?>
+												<label class="LabelTeacher smalFont">
+													<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa ព.ស. b'); ?>
+												</label><br>
+												<label class="LabelTeacher smalFont">
+													<?php echo $branchInfo['workat']; ?> ថ្ងៃទី
+													<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ
+													<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ
+													<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+												</label>
+											<?php }else{ ?>
+												
+												<label class="LabelTeacher smalFont">
+													Phnom Penh,
+													<?php echo date("l");?>,
+													<?php echo date("d");?> 
+													<?php echo date("F");?>,
+													<?php echo date("Y");?> 
+												</label>
+											<?php } ?>
+										
+										<h2 class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate("PRINCIPAL"); ?></h2>
 									</td>
 								</tr>
 								<tr class="head">
-									
 									<td  align="center">
 										<div class="principalStamp">
 											<div class="stamp" style="margin-bottom: 20px;">
@@ -736,7 +822,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 												<?php	} ?>
 											</div>
 										</div>
-										<h2 style="left:70px; top:10px; width:150px;position:relative; color:#f00; " class="headerLabel red">
+										<h2 style="left:70px; top:10px; width:150px;position:relative; color:#f00; " class="headerLabel red <?php echo $bold; ?>">
 											<?php echo $branchInfo['principal']; ?>
 										</h2>
 									</td>

@@ -4,6 +4,8 @@
 	$frm =  $this->form_search;
 	$db_sub=new Allreport_Model_DbTable_DbRptStudentDrop();
 	$db_global = new Application_Model_DbTable_DbGlobal();
+	$session_lang = new Zend_Session_Namespace('lang');
+	$lang_id = $session_lang->lang_id;
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -60,7 +62,8 @@
 	<div id="divPrint">
 	
 	<style>
-		table.main_table tr td{line-height:18px !important;
+		table.main_table tr td{
+		line-height:16px !important;
 		border: 1px solid #000;
 		border-collapse: collapse;
 		font-size:12px !important;
@@ -90,7 +93,26 @@
 				    margin: 0;
 				}
 				tr.line td{ border-bottom: 1px solid #000;}
-				
+
+				.headerKhmer {
+				font-size: 16px;
+				line-height: 12px;
+				font-weight: initial;
+				font-family: 'Times New Roman','Khmer OS Muol Light', serif;
+				}
+				.headerLabel {
+				font-size: 14px;
+				line-height: 12px;
+				font-weight: initial;
+				font-family: 'Times New Roman','Khmer OS Muol Light';
+				}
+				span.valueLabel.khmerLabel {
+				font-size: 14px;
+				font-weight: normal !important;
+				line-height: 18px;
+				font-family: 'Times New Roman', 'Khmer OS Muol Light';
+				line-height: 12px;
+				}
 				@media print {
 						@page {
 							page:A4;
@@ -111,9 +133,33 @@
 						$break_page = "pages-break";
 				?>
 				<tr class="<?php echo $break_page; ?> ">
+					<td colspan="2" valign="bottom">
+						<h2 class="headerKhmer "><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
+						<h2 class="headerKhmer ">
+							<?php echo $rs['school_name']?>
+						</h2>
+					</td>
+					<td align="center" valign="top">
+						<h2 class="headerKhmer "><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
+						<h2 class="headerKhmer "><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
+						<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
+					</td>
+				</tr>
+				<tr >
 					<td colspan="3" align="center">
-						<?php echo $this->rsheader;?>
-						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
+						<?php // echo $this->rsheader;?>
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span></br>
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("SCHED_FOR_ACADEMIC_YEAR");?>:
+						 <?php
+								if ($lang_id == 1) { ?>
+									<?php echo $db_global->getNumberInkhmer(date($rs['from_year'])); ?>-
+									<?php echo $db_global->getNumberInkhmer(date($rs['to_year'])); ?>
+								<?php }else{ ?>
+									<?php echo $rs['from_year']; ?>-
+									<?php echo $rs['to_year']; ?>
+								<?php } ?>
+						</span>
+						
 					</td>
 				</tr>
 				<tr>
@@ -122,11 +168,24 @@
 							<thead>
 								<tr>
 									<td align="left" colspan="<?php echo $amt_day+1?>" style="font-size:10px;border:1px solid #fff;border-bottom:1px solid #000;">
-										<ul class="subject">
-											<li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li>
-											<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
-											<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
-										</ul>
+									
+										<table width="100%" border="0">
+											<tr>
+												<td align="left" style="font-size:10px;border:1px solid #fff;">
+													<ul class="subject">
+														<!-- <li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li> -->
+														<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
+														<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
+													</ul>
+												</td>
+												<td align="right" style="font-size:10px;border:1px solid #fff;">
+													<ul class="subject">
+														<li><?php echo $tr->translate("TEACHER_ROOM");?>:&nbsp;<?php echo $rs['teacher_room']?></li>
+														<li><?php echo $tr->translate("PHONE");?>:&nbsp;<?php echo $rs['teacher_tel']?></li>	
+													</ul>
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr>
 								<tr class="head_schedule" style="font-size:10px;line-height:16px;" align="center" >
@@ -165,7 +224,13 @@
 									<?php 
 								 	if (!empty($subjecNteacher)){
 								 		if (!empty($subjecNteacher['subject_name'])){
-								 			echo "<strong>".$subjecNteacher['subject_name']."</strong><br />";
+											if(!empty($subjecNteacher['subject_lang'])){
+												if($subjecNteacher['subject_lang']==1){
+													echo "<strong>".$subjecNteacher['subject_name_kh']."</strong><br />";
+												}elseif($subjecNteacher['subject_lang']==2){
+													echo "<strong>".$subjecNteacher['subject_name_en']."</strong><br />";
+												}
+											}
 								 		}
 								 		if (!empty($subjecNteacher['teacher_name'])){echo "".$subjecNteacher['teacher_name'];}
 										if (!empty($subjecNteacher['teacher_phone'])){echo "<br />".$subjecNteacher['teacher_phone']."";}
@@ -175,11 +240,18 @@
 							</tr>
 							<?php }?>	
 							<tr>	
-								<td colspan="<?php echo $amt_day+1?>" >	
+								<td colspan="<?php echo $amt_day+1?>" style=" border:1px solid #fff;">	
 									<ul style="display: inline-table;font-size: 10px;">			 
 									 <?php  
 									 $num=0;
 									 foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
+										if(!empty($rs_list['subject_lang'])){
+											if($rs_list['subject_lang']==1){
+												$SubjectName=$rs_list['subject_name_kh'];
+											}else{
+												$SubjectName=$rs_list['subject_name_en'];
+											}
+										}
 										if($rs_list['total_hour']>1){
 											$h_label='hrs';
 										}else{
@@ -188,8 +260,8 @@
 										if(!empty($rs_list['subject_id'])){
 											$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
 											$num++;
-									 ?>
-										<li style="width: 20%;float: left;list-style-type: none;line-height: 20px;"><?php echo $num;?>.&nbsp;<?php echo $rs_list['subject_name']?>:&nbsp;<?php echo $totalTime;?></li>
+										 ?>
+										<li style="width: 25%;float: left;list-style-type: none;line-height: 20px;"><?php echo $num;?>.&nbsp;<?php echo $SubjectName;?>:&nbsp;<?php echo $totalTime;?></li>
 									 <?php }}?>
 									 </ul>
 							 	</td>
@@ -197,11 +269,75 @@
 						</table>											
 					</td>
 				</tr>
-				<tr>
+				<tr class="footer">
+						<td colspan="3" >
+							<table width="100%" >
+								<tr  >
+									<td   width="5%" style="margin-top: 30px;">
+										&nbsp;
+									</td>
+									<td   align="left" width="45%" style="margin-top: 30px;">
+										&nbsp;
+									</td>
+									<td  align="center"  width="50%"  valign="top">
+										<?php
+										$moment = date("Y-m-d");
+										$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
+										?>
+										<?php
+											if ($lang_id == 1) { ?>
+												<label class="LabelTeacher smalFont">
+													ភ្នំពេញ​ ថ្ងៃទី
+													<?php echo $db_global->getNumberInkhmer(date("d")); ?> ខែ
+													<?php echo $db_global->getMonthInkhmer(date("m")); ?> ឆ្នាំ
+													<?php echo $db_global->getNumberInkhmer(date("Y")); ?>
+												</label>
+											<?php }else{ ?>
+												
+												<label class="LabelTeacher smalFont">
+													Phnom Penh,
+													<?php echo date("l");?>,
+													<?php echo date("d");?> 
+													<?php echo date("F");?>,
+													<?php echo date("Y");?> 
+												</label>
+											<?php } ?>
+										
+										<h2 class="headerLabel "><?php echo $tr->translate("INTERIM_PRINCIPAL"); ?></h2>
+									</td>
+								</tr>
+								<tr  >
+									<td valign="top"  width="5%" >
+											<?php
+												if ($lang_id == 1) { ?>
+											<span class="className valueLabel "><i>Note:</i><span>
+											<?php }else{ ?>
+											<span class="className valueLabel "><i>Note:</i></span>
+										<?php } ?>	
+										
+									</td>
+									<td   align="left" width="45%" style="margin-top: 30px;">
+										
+												<?php
+													if ($lang_id == 1) { ?>
+															<span class="className valueLabel ">The effetive date of this schedule is monday,<?php echo date("l");?>,<?php echo date("d");?> <?php echo date("F");?>,<?php echo date("Y");?>.this schedule is subject to change as deemed nesessary<span>
+														<?php }else{ ?>
+															<span class="className valueLabel ">The effetive date of this schedule is monday,<?php echo date("l");?>,<?php echo date("d");?> <?php echo date("F");?>,<?php echo date("Y");?>.this schedule is subject to change as deemed nesessary<span>
+													<?php } ?>	
+										</span>
+									</td>
+									<td   align="left" width="50%" >
+										&nbsp;
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				<!-- <tr>
 					<td colspan="3" style="border:1px solid #fff;" valign="top">
 						<?php echo $this->rsfooter; ?>
 					</td>
-				</tr>
+				</tr> -->
 				<?php  }?>
 		</table>
 	</div>		

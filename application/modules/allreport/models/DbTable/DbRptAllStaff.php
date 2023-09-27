@@ -314,8 +314,8 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				,schDetail.*
 			FROM rms_group_reschedule AS schDetail
 				JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
-				JOIN `rms_group_detail_student` AS gsd ON gsd.group_id = sch.group_id
-				LEFT JOIN `rms_student` AS s ON s.stu_id = gsd.stu_id
+				JOIN `rms_group_detail_student` AS gsd ON gsd.group_id = sch.group_id AND gsd.stop_type=0
+				LEFT JOIN `rms_student` AS s ON s.stu_id = gsd.stu_id 
 				LEFT JOIN `rms_group` AS g ON g.id  = sch.group_id
 				LEFT JOIN `rms_teacher` AS t ON t.id  = schDetail.techer_id
 				LEFT JOIN rms_subject AS subj ON subj.id  = schDetail.subject_id

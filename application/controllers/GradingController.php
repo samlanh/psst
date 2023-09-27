@@ -52,16 +52,16 @@ class GradingController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
-		$db = new Application_Model_DbTable_DbIssueScore();
+		$db = new Application_Model_DbTable_DbGradingScore();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			
 			try {
-				$rs = $db->addSubjectScoreByClass($_data);
+				$rs = $db->addScoreGradingByClass($_data);
 				if(isset($_data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/add");
 				}else {
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issuescore/index");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -72,9 +72,9 @@ class GradingController extends Zend_Controller_Action
 		$id = empty($id)?0:$id;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getGroupDetailByIDExternal($id);
+		$row = $dbExternal->getGroupDetailByIDExternal($id,1);
 		
-		if (empty($row)){
+		if(empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/dashboard");
 			exit();
 		}
@@ -91,7 +91,7 @@ class GradingController extends Zend_Controller_Action
 		$gradingId = $row['gradingId'];
 		$result = $dbg->checkEntryScoreSetting($degreeId);
 		if(empty($result)){
-			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/issuescore/index");
+			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
 		}
 		$array = array(
 				'gradingId'=>$gradingId

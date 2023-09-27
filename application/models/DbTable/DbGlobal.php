@@ -4019,5 +4019,6 @@ function getAllgroupStudyNotPass($action=null){
    		$sql.=" WHERE '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate";
    		return $this->getAdapter()->fetchRow($sql);
    	}
+   
 }
 ?>

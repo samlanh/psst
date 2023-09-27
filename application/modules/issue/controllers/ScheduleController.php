@@ -30,6 +30,7 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 					'module'=>'issue','controller'=>'schedule','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link,'years'=>$link));
+			$this->view->search = $search;
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -39,6 +40,7 @@ class Issue_ScheduleController extends Zend_Controller_Action {
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+		
 	}
 	
 	function addAction(){

@@ -45,7 +45,7 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     			$where.=' AND gsch.branch_id='.$search['branch_id'];
     		}
     		if(!empty($search['academic_year'])){
-    			$where.=' AND gsch.year_id='.$search['academic_year'];
+    			$where.=' AND gsch.academic_year='.$search['academic_year'];
     		}
     		if(!empty($search['group'])){
     			$where.=' AND gsch.group_id='.$search['group'];

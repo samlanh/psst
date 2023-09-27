@@ -92,6 +92,18 @@ class IssuescoreController extends Zend_Controller_Action
 		if(empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/issuescore/index");
 		}
+// 		$param = array(
+// 				'groupId'=>540
+// 			,'sortStundent'=>0
+// 			,'maxSubjectScore'=>10
+// 			,'examType'=>1
+// 			,'subjectId'=>5
+// 			,'gradingId'=>7
+// 			,'keyIndex'=>1
+			
+// 				);
+// 		$rs = $db->getStudentForIssueScore($param);
+// 		print_r($rs);
 		
 	}
 

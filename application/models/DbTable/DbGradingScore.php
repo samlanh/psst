@@ -93,10 +93,11 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 // 	}
 	
 	
-	public function addSubjectScoreByClass($_data){
+	public function addScoreGradingByClass($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
+			
 			$dbExternal = new Application_Model_DbTable_DbExternal();
 			$group_info = $dbExternal->getGroupDetailByIDExternal($_data['group']);
 			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
@@ -107,16 +108,15 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'branchId'			=>$_data['branch_id'],
 					'gradingSettingId'	=>$gradingSettingId,
+					'academicYear'		=>$academicYear,
 					'groupId'			=>$_data['group'],
 			        'examType'			=>$_data['examType'],
 					
 					'forMonth'			=>$_data['forMonth'],
 					'forSemester'		=>$_data['forSemester'],
-					'academicYear'		=>$academicYear,
 					
 					'subjectId'			=>$subjectId,
 					'criteriaId'		=> $_data['criteriaId'],
-// 					'percentage'			=> $pecentageScore,
 					
 					'inputOption'		=>2, //1 normal,2 teache input
 					
@@ -147,14 +147,14 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 				if(!empty($ids))foreach ($ids as $i){
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
-						$criterialId=$rowCri['criteriaId'];						
-						
+						$criterialId=$rowCri['criteriaId'];			
 						
 						$old_studentid=$_data['student_id'.$i];
 						$pecentageScore = $rowCri['pecentage_score'];
 						
 						if(!empty($rowCri['subjectId'])){
 							if(!empty($rowCri['subCriterialTitleKh'])){
+								
 								$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
 								$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
 								$subcriteriaAmount = count($subCriterial);
@@ -167,7 +167,6 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 								foreach ($subCriterial AS $keyV => $subCriTitle){ 
 									
 									$indexSub++;
-								
 									
 									if($subcriteriaAmount>1){
 										$titleSubCriterial = $subCriTitle;
@@ -184,34 +183,24 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 										'totalGrading'			=> $score,
 										'subCriterialTitleKh'	=> $titleSubCriterial,
 										'subCriterialTitleEng'	=> $titleSubCriteriaEng,
-										);
+									);
 									
 									$this->_name='rms_grading_detail_tmp';
 									$this->insert($arr);
-								
 								}
-								
-								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
-								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-							
-								$totalScoreAverage = $totalScoreAverage+$totalGrading;
 							}
 						}else{
-							$score = $_data['score_'.$i.'_1'.$criterialId];
+							
+							$score = $_data['score_'.$i.'_'.$criterialId];//problem or not ?score_2_11score_1_1
 							$arr=array(
-									'gradingId'			=> $id,
-									'studentId'			=> $old_studentid,
-									'note'				=> $_data['note_'.$i],
-									'totalGrading'		=> $score,
+								'gradingId'			=> $id,
+								'studentId'			=> $old_studentid,
+								'note'				=> $_data['note_'.$i],
+								'totalGrading'		=> $score,
 							);
 								
 							$this->_name='rms_grading_detail_tmp';
 							$this->insert($arr);
-							
-							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
-							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-							
-							$totalScoreAverage = $totalScoreAverage+$totalGrading;
 						}
 					}
 				}

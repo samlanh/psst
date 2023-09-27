@@ -849,8 +849,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    
    function getStudentForIssueScore($data){
 	   $dbExternal = new Application_Model_DbTable_DbExternal();
-	   $students = $dbExternal->getStudentByGroup($data);
-	 
+	   
 	   $criterial = $dbExternal->getGradingSystemDetail($data);
 	   
 	   $tr=Application_Form_FrmLanguages::getCurrentlanguage();
@@ -904,7 +903,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								}
 							}
 						}else{
-							
 							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
 							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
 								$string.='<div class="'.$classCol.'">';
@@ -930,7 +928,15 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$string.='</tr>';
 		$string.='</thead>';
 		
+		
+		$resultScoreAtt = $dbExternal->getAttScoreSetting($data['gradingId']);
+
+		$students = $dbExternal->getStudentByGroup($data);
+		
 		if(!empty($students)) foreach($students AS $key => $stu){
+			
+			$reductPercentage = $dbExternal->calculateScoreByAtt($stu['stu_id'],$data,$resultScoreAtt);
+			
 			$key++;
 			$keyIndex=$keyIndex+1;
 			
@@ -961,12 +967,13 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
 				
 				if(!empty($criterial)) foreach($criterial AS $rowCri){
+					
 					$criterialId=$rowCri['criteriaId'];
 					
 					$classCol = "col-md-12 col-sm-12 col-xs-12";
 					
 					
-					$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
+					$string.='<td data-label="'.$rowCri['criterialTitle'].'">';
 					$string.='<div class="form-group">';
 						if(!empty($rowCri['subjectId'])){
 							if(!empty($rowCri['subCriterialTitleKh'])){
@@ -983,9 +990,12 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 						}else{
 							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
 							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
-								
+								$attScore=0;
+								if($criterialId==1){
+									$attScore = $maxSubjectScore-($maxSubjectScore*$reductPercentage/100);
+								}
 								$string.='<div class="'.$classCol.'">';
-								$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+								$string.='<input value="'.$attScore.'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
 								$string.='</div>';
 							}
 						}
@@ -1309,7 +1319,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    				
    			$classCol = "col-md-12 col-sm-12 col-xs-12";
    				
-   				
    			$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
    			$string.='<div class="form-group">';
    			if(!empty($rowCri['subjectId'])){
@@ -1326,14 +1335,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    					}
    				}
    			}else{
-   				//$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
-   				//for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
-   				for ($x = 1; $x <= 1; $x++) {
-   
    					$string.='<div class="'.$classCol.'">';
-   					$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+   					$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'"  name="score_'.$keyIndex.'_'.$criterialId.'" />';
    					$string.='</div>';
-   				}
    			}
    			$string.='</div>';
    			$string.='</td>';

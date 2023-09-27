@@ -228,7 +228,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	
 	
 	
-	public function getGroupDetailByIDExternal($id){
+	public function getGroupDetailByIDExternal($id,$getTeacherId=null){
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();
 	   	$lang = $_db->currentlang();
@@ -272,11 +272,14 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	   	$controllerName = $request->getControllerName();
 
 	   	if($controllerName=='assessment'){
-	   		$_db->getTeacherUserId();
 	   		$sql.= " AND g.teacher_id =".$dbp->getTeacherUserId();
 	   	}
-	   	$sql.="  LIMIT 1 ";
+	   
+	   	if($getTeacherId!=null){
+	   		$sql.=" AND (SELECT group_id FROM `rms_group_subject_detail` WHERE group_id=$id AND teacher=".$_db->getTeacherUserId().")";
+	   	}
 	   	
+	   	$sql.="  LIMIT 1 ";
 	   	return $db->fetchRow($sql);
 	}
 	
@@ -915,6 +918,70 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
+	}
+	function getAttScoreSetting($gradingId){
+		
+		$db = $this->getAdapter();
+		$sql=" SELECT settingScoreAttId FROM `rms_scoreengsetting` WHERE id=".$gradingId;
+		$attSettingId = $db->fetchOne($sql);
+		
+		if(!empty($attSettingId)){
+			$sql="SELECT
+					attendanceType,scoreDeduct
+				FROM `rms_attendance_score_setting_detail`
+					WHERE settingId=".$attSettingId;
+			return $db->fetchAll($sql);
+		}else{
+			return null;
+		}
+	}
+	function calculateScoreByAtt($stuId , $data,$attSettingResult){
+		
+			$sql="
+			SELECT
+				sad.`stu_id`,
+				sad.attendence_status,
+				COUNT(if(sad.attendence_status = '2' , sad.attendence_status, NULL)) AS totalA,
+				COUNT(if(sad.attendence_status = '3' , sad.attendence_status, NULL)) AS totalP,
+				COUNT(if(sad.attendence_status = '4' , sad.attendence_status, NULL)) AS totalLate,
+				COUNT(if(sad.attendence_status = '5' , sad.attendence_status, NULL)) AS totalLeave
+			FROM
+				`rms_student_attendence` sa,
+				`rms_student_attendence_detail` sad
+			WHERE sa.id=sad.`attendence_id`";
+			
+			if(!empty($data['groupId'])){
+				$sql.=" AND sa.`group_id`= ".$data['groupId'];
+			}
+			if(!empty($data['subjectId'])){
+				$sql.=" AND sad.`subjectId`= ".$data['subjectId'];
+			}
+			if(!empty($stuId)){
+				$sql.=" AND sad.`stu_id`= ".$stuId;
+			}
+			// 	   	if(!empty($data['studentId'])){//date check att
+			// 	   		$sql.=" AND sad.`stu_id`= ".$data['studentId'];
+			// 	   	}
+			
+			$sql.=" GROUP BY attendence_status,sad.stu_id ";
+			$result = $this->getAdapter()->fetchRow($sql);
+
+			$reductPercent = 0;
+			if(!empty($attSettingResult))foreach($attSettingResult as $rs){
+				if($rs['attendanceType']==2){
+					$reductPercent =$reductPercent+($result['totalA']*$rs['scoreDeduct']);
+				}
+				elseif($rs['attendanceType']==3){
+					$reductPercent = $reductPercent+($result['totalP']*$rs['scoreDeduct']);
+				}
+				elseif($rs['attendanceType']==4){
+					$reductPercent = $reductPercent+($result['totalLate']*$rs['scoreDeduct']);
+				}
+				elseif($rs['attendanceType']==5){
+					$reductPercent = $reductPercent+($result['totalLeave']*$rs['scoreDeduct']);
+				}
+			}
+			return $reductPercent;
 	}
 	
 }

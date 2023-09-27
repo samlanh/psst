@@ -63,7 +63,7 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 			'dojoType'=>$this->tvalidate,
 			'required'=>'true',
 			'class'=>'fullside',
-			'placeholder'=>$tr->translate("DRIVER_NAME_EN"),
+			'placeholder'=>$tr->translate("NAME_EN"),
 		));
 
 		$_sex= new Zend_Dojo_Form_Element_FilteringSelect('sex');
@@ -78,7 +78,7 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		$_phone= new Zend_Dojo_Form_Element_TextBox('phone');
 		$_phone->setAttribs(array(
 			'dojoType'=>$this->tvalidate,
-			'required'=>'true',
+			'required'=>'false',
 			'class'=>'fullside',
 			'placeholder'=>$tr->translate("Tel"),
 		));
@@ -86,7 +86,7 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		$_email= new Zend_Dojo_Form_Element_TextBox('email');
 		$_email->setAttribs(array(
 			'dojoType'=>$this->tvalidate,
-			'required'=>'true',
+			'required'=>'false',
 			'class'=>'fullside',
 			'placeholder'=>$tr->translate("EMAIL"),
 		));
@@ -94,7 +94,7 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		$_address= new Zend_Dojo_Form_Element_TextBox('address');
 		$_address->setAttribs(array(
 			'dojoType'=>$this->tvalidate,
-			'required'=>'true',
+			'required'=>'false',
 			'class'=>'fullside',
 			'placeholder'=>$tr->translate("ADDRESS"),
 		));
@@ -138,7 +138,7 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 		$_busPlateNo= new Zend_Dojo_Form_Element_TextBox('busPlateNo');
 		$_busPlateNo->setAttribs(array(
 			'dojoType'=>$this->tvalidate,
-			'required'=>'true',
+			'required'=>'false',
 			'class'=>'fullside',
 			'placeholder'=>$tr->translate("BUS_PLATE_NO"),
 		));
@@ -236,13 +236,6 @@ Class Mobileapp_Form_FrmSchoolBus extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false'));
-		if (count($optBus)==1){
-			$_branch_id->setAttribs(array('readonly'=>'readonly'));
-			if(!empty($optionBranch))foreach($optionBranch AS $row){
-				$_branch_id->setValue($row['id']);
-			}
-		}
-
 		$id = new Zend_Form_Element_Hidden("id");
 
 		$create_date = new Zend_Dojo_Form_Element_DateTextBox('create_date');

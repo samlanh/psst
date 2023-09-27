@@ -10,7 +10,7 @@ $rs = $this->rs;
 		<div class="card-box">
 			<div class="col-sm-12 border-botom">
 				<div class="col-sm-8 pd-0">
-					<h4 class="m-b-0"><i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_ALLOWED_TEACHER_SCORE_SETTING'); ?> <small id="msg_deplicate" class="red italic"></small></h4>
+					<h4 class="m-b-0"><i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_ALLOWED_TEACHER_SCORE_SETTING'); ?> <small id="msg_deplicate" class="red italic"></small></h4>
 				</div>
 				<div class="col-sm-4 text-right">
 				</div>
@@ -54,6 +54,12 @@ $rs = $this->rs;
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR"); ?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("academic_year"); ?>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE"); ?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm_items->getElement("degree"); ?>
@@ -69,6 +75,12 @@ $rs = $this->rs;
 										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TEACHER"); ?></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input id="teacher_id" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SUBJECT"); ?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="subject" />
 										</div>
 									</div>
 									<div class="form-group">
@@ -113,6 +125,7 @@ $rs = $this->rs;
 
 	var teacher_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
 	var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var subject_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
 
 	dojo.ready(function() {
 		new dijit.form.FilteringSelect({
@@ -146,12 +159,33 @@ $rs = $this->rs;
 			placeHolder: "<?php echo $tr->translate("SELECT_GROUP"); ?>",
 			onChange: function() {
 				getRefreshTeacher();
+				getAllSubjectByGroup();
 			}
 		}, "group");
+
+		new dijit.form.FilteringSelect({
+			store: subject_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			id: "subject",
+			name: "subject",
+			class: 'fullside',
+			readonly: false,
+			required: true,
+			placeHolder: "<?php echo $tr->translate("SELECT_SUBJECT"); ?>",
+			onChange: function() {
+				
+			}
+		}, "subject");
+
 
 		var branch_id = dijit.byId('branch_id');
 		branch_id.on('change', function(evt) {
 			getRefreshTeacher();
+			getAllGroupByBranch();
+		});
+		var academic_year = dijit.byId('academic_year');
+		academic_year.on('change', function(evt) {
 			getAllGroupByBranch();
 		});
 		var degree = dijit.byId('degree');
@@ -160,6 +194,7 @@ $rs = $this->rs;
 		});
 		getRefreshTeacher();
 		getAllGroupByBranch();
+		getAllSubjectByGroup();
 	});
 
 	var url_gettecher = '<?php echo $this->url(array("module" => "foundation", "controller" => "lecturer", "action" => "getteacher")); ?>';
@@ -207,6 +242,10 @@ $rs = $this->rs;
 			dijit.byId('branch_id').focus();
 			return false;
 		}
+		academic_year = dijit.byId('academic_year').get('value');
+		if (academic_year == '' || degree == -1) {
+			academic_year = "";
+		}
 		degree = dijit.byId('degree').get('value');
 		if (degree == '' || degree == -1) {
 			degree = "";
@@ -215,6 +254,7 @@ $rs = $this->rs;
 			url: url_getgroup,
 			content: {
 				'branch_id': branch_id,
+				'academic_year': academic_year,
 				'degree': degree,
 				'noaddnew': 1,
 				'forfilter': 1
@@ -225,6 +265,34 @@ $rs = $this->rs;
 				dijit.byId('group').set('store', group_store);
 				<?php if (!empty($rs['group'])) { ?>
 					dijit.byId('group').attr('value', <?php echo $rs['group']; ?>);
+				<?php } ?>
+			},
+			error: function(err) {}
+		});
+	}
+
+	url_getsubject = '<?php echo $this->url(array('module' => 'issuesetting', 'controller' => 'allowteacherscoresetting', 'action' => 'getsubjectbygroup')); ?>';
+	function getAllSubjectByGroup() {
+		dijit.byId('subject').reset();
+		group = dijit.byId('group').get('value');
+		if (group == '' || group == -1) {
+			var subject_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('subject').set('store', subject_store);
+			dijit.byId('group').focus();
+			return false;
+		}
+	
+		dojo.xhrPost({
+			url: url_getsubject,
+			content: {
+				'group': group,
+			},
+			handleAs: "json",
+			load: function(data) {
+				subject_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('subject').set('store', subject_store);
+				<?php if (!empty($rs['subjectId'])) { ?>
+					dijit.byId('subject').attr('value', <?php echo $rs['subjectId']; ?>);
 				<?php } ?>
 			},
 			error: function(err) {}

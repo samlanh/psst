@@ -359,15 +359,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 	    		
 	    		$hour = $hour + ($HourTo - $HourFro);
 	    		$min = $min+($MinTo - $MinFro);
-	    		
-// 	    		if (($MinTo - $MinFro)<0){
-// 	    			$hour = $hour -1;
-// 	    			$min = 60 + $min;
-// 	    		}else if ($min>=60){
-// 	    			$min = $min%60;
-// 	    			$hour = $hour+1;
-// 	    		}
-	    		
+		
 	    		if(($MinTo - $MinFro)<0 && $min<60){
 	    			$hour = $hour -1;
 	    			$min = 60 + $min;
@@ -384,6 +376,10 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 	    		}
 	    	}
     	}
+		if($min>0){
+			$hour=$hour+1;
+			$min =0;
+		}
     	$lblHour="Hr";
     	if ($hour>1){
     		$lblHour="Hrs";

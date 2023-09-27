@@ -12,7 +12,7 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql = " SELECT s.id,
 		(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branch_name,
-		s.title,s.description,s.fromDate,s.`endDate`, s.createDate ";
+		s.title,s.examFromDate,s.`examEndDate`,s.fromDate,s.`endDate`,s.description, s.createDate ";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_score_entry_setting` AS s WHERE 1 ";
     	$orderby = "  ORDER BY s.id DESC";
@@ -54,6 +54,8 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 					'description'=>$_data['description'],
 					'fromDate'	 =>$_data['from_date'],
 					'endDate'	 =>$_data['end_date'],
+					'examFromDate'=>$_data['exam_from_date'],
+					'examEndDate'=>$_data['exam_end_date'],
 					'createDate' =>date("Y-m-d H:i:s"),
 					'modifyDate' =>date("Y-m-d H:i:s"),
 					'status'	 =>1,
@@ -95,6 +97,8 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 			'description'=>$_data['description'],
 			'fromDate'	 =>$_data['from_date'],
 			'endDate'	 =>$_data['end_date'],
+			'examFromDate'=>$_data['exam_from_date'],
+			'examEndDate'=>$_data['exam_end_date'],
 			'createDate' =>date("Y-m-d H:i:s"),
 			'modifyDate' =>date("Y-m-d H:i:s"),
 			'status'	 =>$status,

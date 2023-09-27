@@ -27,7 +27,7 @@ class Issuesetting_ScoreentrysettingController extends Zend_Controller_Action {
 	    	$rs_rows= $db->getAllScoreEntrySetting($search);
 	    	
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","TITLE","DESCRIPTION","FROM_DATE","END_DATE","CREATE_DATE","STATUS",);
+	    	$collumns = array("BRANCH","TITLE","EXAM_FROM_DATE","EXAM_END_DATE","FROM_DATE","END_DATE","DESCRIPTION","CREATE_DATE","STATUS",);
 	    	$link=array(
 	    			'module'=>'issuesetting','controller'=>'scoreentrysetting','action'=>'edit',
 	    	);

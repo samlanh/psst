@@ -527,6 +527,33 @@ table.tb-footer tr.style-head {
 								?>
 							</tr>
 					<?php }?>
+						<?php for($j=1;$j<=5;$j++){ ?>
+							<tr style="font-size:11px;height: 14px;" align="left">
+								<td class="centerClass" style="width:30px"><?php echo $i+$j;?></td>
+								<td style="width:170px"></td>
+								<td class="centerClass" style="width:120px"></td>
+								<td class="centerClass" style="width:50px">
+								</td>
+								<?php if($amount_day>0 ){
+										for($k=0;$k<$amount_day;$k++){
+											if(date('D',strtotime(" $start_date+$k day"))=="Sun"){
+												
+											}else{ 
+												$dOfWeek = date('w',strtotime("$start_date +$k day"));
+												$className="";
+												if(empty($arrStudyDay[$dOfWeek])){
+													$className="notStudy";
+												}
+											?>
+											<td align="center" class="<?php echo $className;?>" >
+											</td>
+									<?php 
+											} 
+										} 
+									}
+								?>
+							</tr>
+							<?php } ?>
 							<tr>
 								<td colspan="<?php echo 4+$amount_day;?>" style="border:1px solid #fff;border-top:1px solid #000;">
 								<span class="noteBottom"><i>Note</i>: Please do not add any student's name without the consent from the enrollment office.</span>

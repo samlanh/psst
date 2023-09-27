@@ -90,6 +90,13 @@
 				    margin: 0;
 				}
 				tr.line td{ border-bottom: 1px solid #000;}
+
+				.headerKhmer {
+				font-size: 16px;
+				line-height: 12px;
+				font-weight: initial;
+				font-family: 'Times New Roman','Khmer OS Muol Light', serif;
+			}
 				
 				@media print {
 						@page {
@@ -111,9 +118,24 @@
 						$break_page = "pages-break";
 				?>
 				<tr class="<?php echo $break_page; ?> ">
+					<td colspan="2" valign="bottom">
+						<h2 class="headerKhmer "><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
+						<h2 class="headerKhmer ">
+							<?php echo $rs['school_name']?>
+						</h2>
+					</td>
+					<td align="center" valign="top">
+						<h2 class="headerKhmer "><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
+						<h2 class="headerKhmer "><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
+						<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
+					</td>
+				</tr>
+				<tr >
 					<td colspan="3" align="center">
-						<?php echo $this->rsheader;?>
-						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span>
+						<?php // echo $this->rsheader;?>
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span></br>
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("SCHED_FOR_ACADEMIC_YEAR");?>: <?php echo $rs['academic_year']?></span>
+						
 					</td>
 				</tr>
 				<tr>
@@ -122,11 +144,24 @@
 							<thead>
 								<tr>
 									<td align="left" colspan="<?php echo $amt_day+1?>" style="font-size:10px;border:1px solid #fff;border-bottom:1px solid #000;">
-										<ul class="subject">
-											<li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li>
-											<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
-											<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
-										</ul>
+									
+										<table width="100%" border="0">
+											<tr>
+												<td align="left" style="font-size:10px;border:1px solid #fff;">
+													<ul class="subject">
+														<!-- <li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li> -->
+														<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
+														<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
+													</ul>
+												</td>
+												<td align="right" style="font-size:10px;border:1px solid #fff;">
+													<ul class="subject">
+														<li><?php echo $tr->translate("TEACHER_ROOM");?>:&nbsp;<?php echo $rs['teacher_room']?></li>
+														<li><?php echo $tr->translate("PHONE");?>:&nbsp;<?php echo $rs['teacher_tel']?></li>	
+													</ul>
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr>
 								<tr class="head_schedule" style="font-size:10px;line-height:16px;" align="center" >
@@ -165,7 +200,13 @@
 									<?php 
 								 	if (!empty($subjecNteacher)){
 								 		if (!empty($subjecNteacher['subject_name'])){
-								 			echo "<strong>".$subjecNteacher['subject_name']."</strong><br />";
+											if(!empty($subjecNteacher['subject_lang'])){
+												if($subjecNteacher['subject_lang']==1){
+													echo "<strong>".$subjecNteacher['subject_name_kh']."</strong><br />";
+												}elseif($subjecNteacher['subject_lang']==2){
+													echo "<strong>".$subjecNteacher['subject_name_en']."</strong><br />";
+												}
+											}
 								 		}
 								 		if (!empty($subjecNteacher['teacher_name'])){echo "".$subjecNteacher['teacher_name'];}
 										if (!empty($subjecNteacher['teacher_phone'])){echo "<br />".$subjecNteacher['teacher_phone']."";}

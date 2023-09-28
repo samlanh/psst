@@ -26,7 +26,7 @@ class Issuesetting_AllowteacherscoresettingController extends Zend_Controller_Ac
 			$rs_rows = $db->getAllTeacherScoreSetting($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH", "GROUP", "TEACHER",  "END_DATE", "STATUS",);
+			$collumns = array("BRANCH", "GROUP", "TEACHER", "SUBJECT",  "END_DATE", "STATUS",);
 			$link = array(
 				'module' => 'issuesetting', 'controller' => 'allowteacherscoresetting', 'action' => 'edit',
 			);
@@ -99,5 +99,15 @@ class Issuesetting_AllowteacherscoresettingController extends Zend_Controller_Ac
 		$frm->FrmAddScoreEntrySetting($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_items = $frm;
+	}
+
+	function getsubjectbygroupAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$result =$db->getSubjectBygroup($data['group']);
+			print_r(Zend_Json::encode($result));
+			exit();
+		}
 	}
 }

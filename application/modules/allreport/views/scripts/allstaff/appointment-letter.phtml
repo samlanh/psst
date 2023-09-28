@@ -497,7 +497,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					<tr>
 					
 						<td align="center" colspan="3">
-							<label class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate('GRADE');?> :</label> &nbsp;<label class="LabelTeacher smalFont">
+							<label class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate('GROUP');?> :</label> &nbsp;<label class="LabelTeacher smalFont">
 								<?php echo $rs['teachingGroup']; ?>
 							</label>
 						</td>
@@ -644,22 +644,11 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 																	<?php
 																		if($lang_id == 1){
 																			$subjectTitle=$row['subjectTitleKh'];
-																			$Khmer="ខ្មែរ";
-																			$ENG="អង់គ្លេស";
 																		}else{
 																			$subjectTitle=$row['subjectTitleEng'];
-																			$Khmer="KH";
-																			$ENG="ENG";
 																		}
 																	 ?>
-																	<?php echo $subjectTitle ?>(
-																	<?php if (!empty($row['subjecLang'])) {
-																		if ($row['subjecLang'] == 1) {
-																			echo $Khmer;
-																		} else {
-																			echo $ENG;
-																		}
-																	} ?>)
+																	<?php echo $subjectTitle ?>
 																</span>
 
 															<?php } ?>
@@ -732,22 +721,11 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 																	<?php
 																		if($lang_id == 1){
 																			$subjectTitle=$row['subjectTitleKh'];
-																			$Khmer="ខ្មែរ";
-																			$ENG="អង់គ្លេស";
 																		}else{
 																			$subjectTitle=$row['subjectTitleEng'];
-																			$Khmer="KH";
-																			$ENG="ENG";
 																		}
 																	 ?>
-																	<?php echo $subjectTitle ?>(
-																	<?php if (!empty($row['subjecLang'])) {
-																		if ($row['subjecLang'] == 1) {
-																			echo $Khmer;
-																		} else {
-																			echo $ENG;
-																		}
-																	} ?>)
+																	<?php echo $subjectTitle ?>
 																</span>
 
 															<?php } ?>
@@ -766,6 +744,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 								<tr class="head">
 									<td align="left" rowspan="2">
 										<span class="khmerLabel valueLabel " style="margin-top: 10px;"><?php echo $tr->translate("CC"); ?></span>
+											
 												<?php
 													if ($lang_id == 1) { ?>
 															<span class="className valueLabel "> - គ្រប់ផ្នែកនៃសាលាបញ្ញាសាស្ត្រ " ដើម្បីជ្រាបជាព័ត៌មា​ន "</span>

@@ -10,40 +10,36 @@
 	<style>
 		tr.hover td.verites-col,
 		td.verites-col{
-		  text-align: center;
-	    white-space: nowrap;
-	    g-origin: 50% 50%;
-	    -webkit-transform: rotate(277deg);
-	    -moz-transform: rotate(277deg);
-	    -ms-transform: rotate(277deg);
-	    -o-transform: rotate(277deg);
-	    transform: rotate(277deg);
-		}
-		tr.hover td.verites-col span.verites,
-		td.verites-col span.verites {
-		    margin: 0 -85%;
-		    display: inline-block;
-			
-			max-width: 130px;
-			text-overflow: ellipsis;
-			overflow: hidden;
-		}
-		tr.hover td.verites-col span.verites:before,
-		td.verites-col span.verites:before {
-		    content: '';
-		    width: 0;
-		    padding-top: 110%;
-		    display: inline-block;
-		    vertical-align: middle;
-		}
-		
-		div#score-info .form-group {
-		    display: block;
-		    font-size: 12px;
-		    background: #fdfbbd;
-		    border: solid 2px #dc0303;
-		    border-radius: 5px;
-		}
+		text-align: center;
+		vertical-align: bottom;
+	}
+	.verites-col span {
+	   -ms-writing-mode: tb-rl;
+	  -webkit-writing-mode: vertical-rl;
+	   writing-mode: vertical-rl;
+	   transform: rotate(180deg);
+  	   white-space: nowrap;
+	}
+.verites-col input {
+	   writing-mode: vertical-rl;
+	   transform: rotate(175deg);
+	}	
+	
+	
+	div#score-info .form-group {
+	    display: block;
+	    font-size: 12px;
+	    background: #fdfbbd;
+	    border: solid 2px #dc0303;
+	    border-radius: 5px;
+	}
+	div#score-info .form-group ul li span.lbl-tt {
+	    color: #02014a;
+	}
+	span.red {
+	    color: #f00;
+	    font-weight: bold;
+	}	
 	</style>
 <link href="<?php echo $this->baseUrl();?>/css/externalstyle.css" media="screen" rel="stylesheet" type="text/css">
 <div class="card">
@@ -276,7 +272,7 @@ function filterStudentOld(){
 	temp='';
 	str='';
 	column = 0;
-	temp='<table class="collape tablesorter" style="font-size:12px;border:1px solid #ccc; text-align: center; table-layout: fixed;" id="table" width="100%">'
+	temp='<table border="1" class="collape tablesorter" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%">'
 		+'<thead><tr style="border:1px solid #000; border-bottom:1px solid #fff; "><td class="tdheader" ><?php echo $tr->translate('DEL');?></td>'
 		+'<td class="tdheader" ><?php echo $tr->translate('NO');?></td>'
 		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'

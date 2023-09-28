@@ -869,9 +869,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';
 				$string.='<tr class="head-td" align="center">';
-					$string.='<th scope="col" width="10px">លុប<small class="lableEng" >Delete</small></th>';
 					$string.='<th scope="col" width="10px">ល.រ<small class="lableEng" >N<sup>o</sup></small></th>';
-					$string.='<th scope="col"  style="width:150px;">សិស្ស<small class="lableEng" >Student</small></th>';
+					$string.='<th scope="col" >អត្តលេខ<small class="lableEng" >Student Id</small></th>';
+					$string.='<th scope="col"  style="width:150px;">ឈ្មោះសិស្ស<small class="lableEng" >Student Name</small></th>';
 					$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
 					
 					if(!empty($criterial)) foreach($criterial AS $rowCri){
@@ -956,14 +956,14 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			}
 					
 			$string.='<tr class="rowData '.$rowClasss.'" id="row'.$keyIndex.'">';
-				$string.='<td data-label="'.$tr->translate("REMOVE_RECORD").'"  align="center"><span title="'.$tr->translate("REMOVE_RECORD").'" class="removeRow" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 				$string.='<td data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
-				$string.='<td data-label="'.$tr->translate("STUDENT").'"  align="left">';
-					$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
+				$string.='<td data-label="'.$tr->translate("STUDENT_id").'" >'.$stu['stuCode'].'</td>';
+				$string.='<td data-label="'.$tr->translate("STUDENT_NAME").'"  align="left">';
 					$string.='<strong class="text-dark">'.$stu['stuKhName'].'</strong><br />';
 					$string.='<strong class="text-dark">'.$stu['stuEnName'].'</strong><br />';
 					$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
 				$string.='</td>';
+				
 				$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
 				
 				if(!empty($criterial)) foreach($criterial AS $rowCri){
@@ -991,11 +991,13 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
 							for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
 								$attScore=0;
+								$readonly="";
 								if($criterialId==1){
 									$attScore = $maxSubjectScore-($maxSubjectScore*$reductPercentage/100);
+									$readonly="readonly";
 								}
 								$string.='<div class="'.$classCol.'">';
-								$string.='<input value="'.$attScore.'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
+								$string.='<input '.$readonly.' value="'.$attScore.'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$x.$criterialId.'"  name="score_'.$keyIndex.'_'.$x.$criterialId.'" />';
 								$string.='</div>';
 							}
 						}

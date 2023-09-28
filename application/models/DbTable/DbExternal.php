@@ -276,7 +276,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	   	}
 	   
 	   	if($getTeacherId!=null){
-	   		$sql.=" AND (SELECT group_id FROM `rms_group_subject_detail` WHERE group_id=$id AND teacher=".$_db->getTeacherUserId().")";
+	   		$sql.=" AND (SELECT group_id FROM `rms_group_subject_detail` WHERE group_id=$id AND teacher=".$_db->getTeacherUserId()." LIMIT 1)";
 	   	}
 	   	
 	   	$sql.="  LIMIT 1 ";

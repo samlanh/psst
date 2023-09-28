@@ -23,6 +23,8 @@ class Foundation_GroupController extends Zend_Controller_Action {
 					'session' 	=>'',
 					'status'	=>-1,
 					'teacher' 	=> '',
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
 				);
 			}
 			$this->view->adv_search = $search;

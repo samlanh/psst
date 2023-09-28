@@ -16,6 +16,7 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branchName,
 		(SELECT group_code FROM `rms_group` WHERE id=s.group LIMIT 1) AS groupName,
 		(SELECT teacher_name_kh FROM `rms_teacher` WHERE id=s.teacherId LIMIT 1) AS TeacherName,
+		(SELECT CONCAT(subject_titlekh,', ',subject_titleen) FROM `rms_subject` WHERE id=s.subjectId LIMIT 1) AS SubjectName,
 		s.endDate ";
 		$sql .= $dbp->caseStatusShowImage("s.status");
 		$sql .= " FROM `rms_allowed_teacher_score_setting` AS s WHERE 1  ";
@@ -47,12 +48,14 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		try {
 
 			$_arr = array(
-				'branchId'	 => $_data['branch_id'],
-				'teacherId'	 => $_data['teacher_id'],
-				'degree' 	 => $_data['degree'],
-				'group'		 => $_data['group'],
-				'endDate'	 => $_data['end_date'],
-				'status'	 => 1,
+				'branchId'		 => $_data['branch_id'],
+				'teacherId'		 => $_data['teacher_id'],
+				'degree' 	 	 => $_data['degree'],
+				'group'		 	 => $_data['group'],
+				'academicYear' 	 => $_data['academic_year'],
+				'subjectId'		 => $_data['subject'],
+				'endDate'		 => $_data['end_date'],
+				'status'	 	 => 1,
 			);
 			$this->_name = 'rms_allowed_teacher_score_setting';
 			$this->insert($_arr);
@@ -80,12 +83,14 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		try {
 			$status = empty($_data['status']) ? 0 : 1;
 			$_arr = array(
-				'branchId'	 => $_data['branch_id'],
-				'teacherId'	 => $_data['teacher_id'],
-				'degree' 	 => $_data['degree'],
-				'group'		 => $_data['group'],
-				'endDate'	 => $_data['end_date'],
-				'status'	 => $status,
+				'branchId'		 => $_data['branch_id'],
+				'teacherId'		 => $_data['teacher_id'],
+				'degree' 		 => $_data['degree'],
+				'group'			 => $_data['group'],
+				'academicYear' 	 => $_data['academic_year'],
+				'subjectId'		 => $_data['subject'],
+				'endDate'		 => $_data['end_date'],
+				'status'	 	 => $status,
 			);
 			$this->_name = 'rms_allowed_teacher_score_setting';
 			$where = ' id=' . $_data['id'];

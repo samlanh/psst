@@ -89,6 +89,28 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 		));
 		$_status_search->setValue($request->getParam("status_search"));
 
+		$exam_from_date = new Zend_Dojo_Form_Element_DateTextBox('exam_from_date');
+		$exam_from_date->setAttribs(array(
+			'placeholder' => $this->tr->translate("FROM_DATE"),
+			'dojoType' => "dijit.form.DateTextBox",
+			'value' => 'now',
+			'constraints' => "{datePattern:'dd/MM/yyyy'}",
+			'class' => 'fullside',
+		));
+		$date = date("Y-m-d");
+		$exam_from_date->setValue($date);
+
+		$exam_end_date = new Zend_Dojo_Form_Element_DateTextBox('exam_end_date');
+		$exam_end_date->setAttribs(array(
+			'placeholder' => $this->tr->translate("END_DATE"),
+			'dojoType' => "dijit.form.DateTextBox",
+			'value' => 'now',
+			'constraints' => "{datePattern:'dd/MM/yyyy'}",
+			'class' => 'fullside',
+		));
+		$date = date("Y-m-d");
+		$exam_end_date->setValue($date);
+
 		$from_date = new Zend_Dojo_Form_Element_DateTextBox('from_date');
 		$from_date->setAttribs(array(
 			'placeholder' => $this->tr->translate("FROM_DATE"),
@@ -153,6 +175,8 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$description->setValue($data["description"]);
 			$from_date->setValue($data["fromDate"]);
 			$end_date->setValue($data["endDate"]);
+			$exam_from_date->setValue($data["examFromDate"]);
+			$exam_end_date->setValue($data["examEndDate"]);
 			$_status->setValue($data["status"]);
 			$id->setValue($data["id"]);
 		}
@@ -167,7 +191,9 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$from_date,
 			$start_date,
 			$end_date,
-			$_branch_search
+			$_branch_search,
+			$exam_from_date,
+			$exam_end_date
 		));
 		return $this;
 	}

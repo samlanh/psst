@@ -39,6 +39,40 @@ class Issuesetting_Form_FrmAllowTeacherScoreSetting extends Zend_Dojo_Form
 			}
 		}
 
+		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
+		$_academic->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+				'class'=>'fullside',
+				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		
+		$_academic->setValue($request->getParam("academic_year"));
+		$rows =  $_dbgb->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$_academic->setMultiOptions($opt);
+
+		$_subject_id = new Zend_Dojo_Form_Element_FilteringSelect('subject_id');
+		$_subject_id->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SUBJECT"),
+				'class'=>'fullside',
+				'required'=>'true',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		
+		$_subject_id->setValue($request->getParam("subject_id"));
+		$rows =  $_dbgb->getAllSubjectName();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_SUBJECT")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$_subject_id->setMultiOptions($opt);
+
 		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
 		$_degree->setAttribs(array(
 			'dojoType' => $this->filter,
@@ -46,7 +80,7 @@ class Issuesetting_Form_FrmAllowTeacherScoreSetting extends Zend_Dojo_Form
 			'class' => 'fullside',
 			'autoComplete' => "false",
 			'queryExpr' => '*${0}*',
-			'required' => 'false',
+			'required' => 'true',
 			//'onchange' => 'getallGrade();'
 		));
 		$_degree->setValue($request->getParam('degree'));
@@ -165,6 +199,7 @@ class Issuesetting_Form_FrmAllowTeacherScoreSetting extends Zend_Dojo_Form
 
 		if (!empty($data)) {
 			$_branch_id->setValue($data["branchId"]);
+			$_academic->setValue($data["academicYear"]);
 			$_degree->setValue($data["degree"]);
 			$end_date->setValue($data["endDate"]);
 			$_status->setValue($data["status"]);
@@ -182,7 +217,9 @@ class Issuesetting_Form_FrmAllowTeacherScoreSetting extends Zend_Dojo_Form
 			$start_date,
 			$end_date,
 			$_branch_search,
-			$_degree
+			$_degree,
+			$_academic,
+			$_subject_id
 		));
 		return $this;
 	}

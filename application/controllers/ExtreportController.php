@@ -30,15 +30,20 @@ class ExtreportController extends Zend_Controller_Action
 				'study_type'=>0
 				);
 		}
+		
+		$db = new Application_Model_DbTable_DbExternal();
+		
+		$rs = $db->getGroupDetailByIDExternal($id,1);
+		if(empty($rs)){
+			$this->_redirect("/external/group");
+		}
+		$this->view->rr = $rs;
+		
 		$search['group_id']=$id;
 		$this->view->search = $search;
 		
-		$db = new Application_Model_DbTable_DbExternal();
 		$row = $db->getStudentListByGroup($search);
 		$this->view->row = $row;
-		
-		$rs = $db->getGroupDetailByIDExternal($id);
-		$this->view->rr = $rs;
 		
 		$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];

@@ -240,7 +240,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    			$ids = explode(',', $_data['identity']);
    			if(!empty($ids))foreach ($ids as $i){
 				$forExamType = empty($_data['forExamType'.$i])?1:2;
-   				if (!empty($_data['detailid'.$i])){
+   				if(!empty($_data['detailid'.$i])){
    					$arr=array(
 							'score_setting_id'		=>$id,
 							'criteriaId'			=>$_data['examtype_name_'.$i],
@@ -253,8 +253,25 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 							'forExamType'			=>$forExamType,
 					);
    					$this->_name='rms_scoreengsettingdetail';
-   					$where = " id =".$_data['detailid'.$i];
-					$this->update($arr, $where);
+					
+					if(!empty($_data['detailid'.$i])){
+						$where = " id =".$_data['detailid'.$i];
+						$this->update($arr, $where);
+					}else{
+						$this->insert($arr);
+					}
+					
+					if(!empty($_data['forMonth'.$i])){// for month
+						$arr['subCriterialTitleKh']=$_data['subCriterialTitleKhMonth'.$i];
+						$arr['subCriterialTitleEng']=$_data['subCriterialTitleEngMonth'.$i];
+						$arr['forExamType']=1;
+						if(!empty($_data['detailid'.$i])){
+							$where = " id =".$_data['detailid'.$i];
+							$this->update($arr, $where);
+						}else{
+							$this->insert($arr);
+						}
+					}
 					
    				}else{
 	   				$arr=array(

@@ -104,8 +104,8 @@ class Issuesetting_AllowteacherscoresettingController extends Zend_Controller_Ac
 	function getsubjectbygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendance();
-			$result =$db->getSubjectBygroup($data['group']);
+			$_db = new Application_Model_DbTable_DbGlobal();
+			$result =$_db->getAllSubjectName($data);
 			print_r(Zend_Json::encode($result));
 			exit();
 		}

@@ -642,7 +642,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 																</span>
 																<span class="className valueLabel red">
 																	<?php
-																		if($lang_id == 1){
+																		if($row['subjecLang'] == 1){
 																			$subjectTitle=$row['subjectTitleKh'];
 																		}else{
 																			$subjectTitle=$row['subjectTitleEng'];
@@ -719,7 +719,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 																</span>
 																<span class="className valueLabel red">
 																	<?php
-																		if($lang_id == 1){
+																		if($row['subjecLang'] == 1){
 																			$subjectTitle=$row['subjectTitleKh'];
 																		}else{
 																			$subjectTitle=$row['subjectTitleEng'];

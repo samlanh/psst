@@ -128,11 +128,12 @@ $frm_items = $this->frm_items;
 			class: "fullside",
 			placeHolder: "<?php echo $tr->translate("SELECT_TEACHER"); ?>",
 			onChange: function() {
-				teacher_id = dijit.byId('teacher_id').get('value');
-				if (teacher_id == -1) {
-					$("#tow_value").val(-2)
-					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl() . "/foundation/lecturer/add?rightclick=true"; ?>', '_blank');
-				}
+					getAllSubjectByGroup();
+					teacher_id = dijit.byId('teacher_id').get('value');
+					if (teacher_id == -1) {
+						$("#tow_value").val(-2)
+						window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl() . "/foundation/lecturer/add?rightclick=true"; ?>', '_blank');
+					}
 			}
 		}, "teacher_id");
 
@@ -260,11 +261,16 @@ $frm_items = $this->frm_items;
 			dijit.byId('group').focus();
 			return false;
 		}
+		teacher_id = dijit.byId('teacher_id').get('value');
+		if (teacher_id == '' || teacher_id == -1) {
+			return false;
+		}
 	
 		dojo.xhrPost({
 			url: url_getsubject,
 			content: {
-				'group': group,
+				'groupId'	: group,
+				'teacherId' : teacher_id,
 			},
 			handleAs: "json",
 			load: function(data) {

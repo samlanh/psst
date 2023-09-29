@@ -138,6 +138,7 @@ $rs = $this->rs;
 			class: "fullside",
 			placeHolder: "<?php echo $tr->translate("SELECT_TEACHER"); ?>",
 			onChange: function() {
+				getAllSubjectByGroup();
 				teacher_id = dijit.byId('teacher_id').get('value');
 				if (teacher_id == -1) {
 					$("#tow_value").val(-2)
@@ -195,6 +196,7 @@ $rs = $this->rs;
 		getRefreshTeacher();
 		getAllGroupByBranch();
 		getAllSubjectByGroup();
+		
 	});
 
 	var url_gettecher = '<?php echo $this->url(array("module" => "foundation", "controller" => "lecturer", "action" => "getteacher")); ?>';
@@ -281,11 +283,15 @@ $rs = $this->rs;
 			dijit.byId('group').focus();
 			return false;
 		}
-	
+		teacher_id = dijit.byId('teacher_id').get('value');
+		if (teacher_id == '' || teacher_id == -1) {
+			return false;
+		}
 		dojo.xhrPost({
 			url: url_getsubject,
 			content: {
-				'group': group,
+				'groupId'	: group,
+				'teacherId' : teacher_id,
 			},
 			handleAs: "json",
 			load: function(data) {

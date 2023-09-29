@@ -1572,6 +1572,9 @@ function getAllgroupStudyNotPass($action=null){
 	if(!empty($data["groupId"])){
 		$sql.=" JOIN rms_group_subject_detail AS gsd ON gsd.subject_id = subj.id ";
 		$where.=" AND gsd.group_id =".$data["groupId"];
+		if(!empty($data["teacherId"])){
+			$where.=" AND gsd.teacher =".$data["teacherId"];
+		}
 		$groupBY=" GROUP BY gsd.subject_id ";
 	}	
 	

@@ -486,12 +486,26 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
 				</tr>
 				<?php
-				
+				$ismergRow=0;
 				if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
 					?>
 					<tr class="blue" align="center">
+						
+					<?php
+					
+					 if(empty($rsgd['criteria']) AND $ismergRow==0){
+						$ismergRow=1;
+						?>
+						<td align="left" colspan="2" rowspan="2" ></td>
+
+					<?php }else if($ismergRow==0){ ?>
+
 						<td align="left">&nbsp;<?php echo $rsgd['criteria']; ?></td>
 						<td><?php echo $rsgd['percent']; ?></td>
+
+					<?php }?>
+						
+
 						<td><?php echo $rsgd['percentage']; ?></td>
 						<td><?php echo $rsgd['grade']; ?></td>
 						<td><?php echo $rsgd['interpretation']; ?></td>
@@ -503,58 +517,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td >100%</td>
 					<td colspan="3"></td>
 				</tr>
-				<!-- <tr class="khmerBoldFont blue" align="center">
-					<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
-					<td>ភាគរយ<br />PERCENTAGE</td>
-					<td>កម្រិត <br />GRADE</td>
-					<td>និទ្ទេស<br />INTERPRETATION</td>
-					<td><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
-				</tr>
-				<tr class="blue" align="center">
-					<td align="left">&nbsp;Attendance</td>
-					<td>5%</td>
-					<td>90-100%</td>
-					<td>A</td>
-					<td>ល្អណាស់ Very Good</td>
-					<td>ប្រសើរជាងគេ Outstanding</td>
-				</tr>
-				<tr class="blue" align="center">
-					<td align="left" style="white-space:nowrap;">&nbsp;Discipline</td>
-					<td>10%</td>
-					<td>80-89%</td>
-					<td>B</td>
-					<td>ល្អ Good</td>
-					<td>គួរជាទីពេញចិត្ត Satisfactory</td>
-				</tr>
-				<tr class="blue" align="center">
-					<td align="left">&nbsp;Book Check/Oral Question</td>
-					<td>5%</td>
-					<td>70-79%</td>
-					<td>C</td>
-					<td>ល្អបង្គួរ Fair</td>
-					<td style="white-space:nowrap;">ត្រូវខំប្រឹងតទៅទៀត Needs Improvement</td>
-				</tr>
-				<tr class="blue" align="center">
-					<td align="left">&nbsp;Homework AND Quiz</td>
-					<td>15%</td>
-					<td>60-69%</td>
-					<td>D</td>
-					<td>មធ្យម Average</td>
-					<td>មិនទាន់ពេញចិត្ត Unsatisfactory</td>
-				</tr>
-				<tr class="blue" align="center">
-					<td align="left" rowspan="2">&nbsp;Monthly Exam</td>
-					<td rowspan="2">50%</td>
-					<td>50-59%</td>
-					<td>E</td>
-					<td>ខ្សោយ Poor</td>
-					<td rowspan="2">មិនអនុវត្តកើត Not Applicable</td>
-				</tr>
-				<tr class="blue" align="center">
-					<td>0-49%</td>
-					<td>F</td>
-					<td>ធ្លាក់ Failed</td>
-				</tr> -->
+				
 
 				<?php
 				$teacherComment = '';

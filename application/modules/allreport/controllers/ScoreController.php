@@ -201,12 +201,13 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'stu_id' => $stu_id,
 			);
 		}
+		
 		$result = $db->getStundetScoreResult($search, $id, 1);
 		$this->view->studentScoreResult = $result;
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
-		$this->view->grading = $db->getGradingSystem();
+		$this->view->grading = $db->getGradingSystem($result[0]['degree_id']);
 	}
 
 	function certificateLetterofpraisenewAction()

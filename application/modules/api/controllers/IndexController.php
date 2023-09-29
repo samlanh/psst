@@ -276,6 +276,9 @@ class Api_IndexController extends Zend_Controller_Action
 	   	$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
 	   	$resultData = $dbscore->getTranscriptExam($data);
 	   	$this->view->resultData = $resultData;
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$degreeId=$resultData['scoreInfo']['degreeId'];
+		$this->view->grading = $dbg->getGradingSystem($degreeId);
    }
    
    function examscorepdfAction(){

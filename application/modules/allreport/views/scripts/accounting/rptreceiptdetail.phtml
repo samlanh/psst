@@ -140,7 +140,7 @@ function setDatatoReceipt(){
 						  temp+='<td style="border:1px solid #000;">បញ្ចុះតម្លៃ<small>Discount</small></td>';
 						  temp+='<td style="border:1px solid #000;">សេវាផ្សេងៗ<small>Other Fee</small></td>';
 						  temp+='<td style="border:1px solid #000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></td>';
-						  temp+='<td style="border:1px solid #000;">បានបង់<small>Paid($)</small></td>';
+						  //temp+='<td style="border:1px solid #000;">បានបង់<small>Paid($)</small></td>';
 						  temp+='<td style="border:1px solid #000;">សុពលភាព<small>Valid Date</small></td>';
 						  temp+='<td style="border:1px solid #000;">សម្គាល់<small>Note</small></td>';
 					  temp+='</tr>';
@@ -176,8 +176,8 @@ function setDatatoReceipt(){
 					  totalpayment='<?php echo number_format($rs['totalpayment'],2);?>';
 						  temp+='<td align="center" style="border:1px solid #000;">'+totalpayment+'</td>';
 					
-						paid='<?php echo number_format($rs['paidamount'],2);?>';
-					 	temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
+						//paid='<?php echo number_format($rs['paidamount'],2);?>';
+					 	//temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
 					  
 					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo '<span class="spanBlog">'.$rs['start_date'].'</span>'; echo empty($rs['validate'])?"":'<span class="spanBlog">'.$rs['validate'].'</span>';}else{echo'&nbsp;';}?>';	
 							  				  

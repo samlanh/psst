@@ -236,8 +236,14 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 		}else{
 			$kh_name=trim($titleSub[0]);
 			$eng_name=trim($titleSub[1]);
+			$gender=trim($titleSub[2]);
+			if($gender=='M'){
+				$sex=1;
+			}else{
+				$sex=2;
+			}
 		}
-		
+
 		$tel='';
 		if(!empty($phone)){
 			$tel=$phone;
@@ -256,6 +262,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 						'teacher_name_kh'	 => $kh_name,
 						'teacher_code'		 => $code,
 						'tel'				 => $tel,
+						'sex'				 => $sex,
 						'nation' 			 => 1,
 						'create_date' 		 => date("Y-m-d"),
 						'user_id'	  		 => $this->getUserId(),

@@ -149,7 +149,7 @@
 					<td colspan="3" align="center">
 						<?php // echo $this->rsheader;?>
 						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span></br>
-						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("SCHED_FOR_ACADEMIC_YEAR");?>:
+						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("ACADEMIC_YEAR");?>:
 						 <?php
 								if ($lang_id == 1) { ?>
 									<?php echo $db_global->getNumberInkhmer(date($rs['from_year'])); ?>-
@@ -245,6 +245,7 @@
 									 <?php  
 									 $num=0;
 									 foreach($db_sub->getSubjectListByYG($rs['year_id'],$rs['group_id'] ) As $key=>$rs_list){
+										$SubjectName='';
 										if(!empty($rs_list['subject_lang'])){
 											if($rs_list['subject_lang']==1){
 												$SubjectName=$rs_list['subject_name_kh'];

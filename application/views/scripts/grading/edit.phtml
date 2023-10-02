@@ -1,13 +1,16 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("EDIT_ISSUE_SCORE");
+	$pageTitle = $tr->translate("ISSUE_SCORE");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
-	$pageTitle = '<i class="glyphicon glyphicon-pencil"></i> '.$pageTitle;
+	$pageTitle = '<i class="glyphicon glyphicon-tasks"></i> '.$pageTitle;
+
 	$current_month = date("m");
-	$row = $this->rs;
+	$msgTitle = "ទិន្នន័យស្ទួន / Duplicated Record";
+	$msgDesc = "ពិន្ទុមុខវិជ្ជានេះបានបញ្ចូលរួចរាល់ហើយ / This subject's score has been entered !";
+	$resultRecord = $this->resultRecord;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -16,13 +19,18 @@
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="card mb-1 ">
 			<div class="card-header pb-1"> 
-				<h3 class="card-title mb-2 "><?php echo $row['branchName'].' "ថ្នាក់ '." ".$row['groupCode'].'"'?></h3> 
-				<h3 class="card-title mb-2 "><?php echo $row['branchNameEn'].' "Class'." ".$row['groupCode'].'"'?></h3> 
+				<h3 class="card-title mb-2 "><?php echo $this->row['branchNameKh'].'/'.$this->row['branchNameEn'].' "ថ្នាក់ '." ".$this->row['group_code'].'"'.' "Class'." ".$this->row['group_code'].'"';?></h3> 
 			</div>
 			<div class="card-content collapse show mt-1">
 				<form id='scoreForm' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">   
 					if(this.validate()){
+						if(isDuplicate==1){
+							var msgTitle = $( '.msgTitle' ).html();
+							var msgDesc = $( '.msgDesc' ).html();
+							infoMessageAlert(msgTitle,msgDesc);
+							return false;
+						}
 						var identity = $('#identity').val();
 						if(identity==''){
 							var msgTitle = "បំពេញព័ត៌មានមិនគ្រប់គ្រាន់ / Incompleted Data To save";
@@ -34,7 +42,6 @@
 						var msgDesc = "សូមធ្វើការត្រួតពិនិត្យព័ត៌មានមុនពេលរក្សាទុក ! / Please checking information before saving !";
 						comfirmingSubmit('scoreForm',msgTitle,msgDesc);
 						return false;
-						
 					}else {
 						return false;
 					}
@@ -51,32 +58,63 @@
 												</div> 
 												<div class="col-md-10 col-sm-10 col-xs-12"> 
 													<p class="tx-20 font-weight-semibold d-flex ">ព័ត៌មានពិន្ទុ / Score Info</p>
+													
 												</div> 
 											</div>
 											<div class="form-group">
+												<div class="card-blogform">		  
+												    <div class="card-body"> 
+														<div class="row">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">
+																ប្រភេទ / Criteria
+															</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<select onchange="getSubjectInfo();"  dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="criteriaId" name="criteriaId" queryExpr="*${0}*" autoComplete="false">								
+																	<?php if(!empty($this->criteria)){foreach ($this->criteria as $rscriteria){?>
+																		<option <?php echo ($rscriteria['criteriaId']==$resultRecord['criteriaId'])?"selected":"";?> value="<?php echo $rscriteria['criteriaId']?>" ><?php echo $rscriteria['criterialTitle'].'/'.$rscriteria['criterialTitleEng'];?></option>
+																	<?php }}?>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="card-blogform">		  
+												    <div class="card-body"> 
+														<div class="row">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">
+																ប្រភេទពិន្ទុ / Score Type
+															</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
+																	<option <?php echo ($resultRecord['examType']==1)?"selected":"";?> value="1">ប្រចាំខែ/Monthly Exam</option>
+																	<option <?php echo ($resultRecord['examType']==2)?"selected":"";?> value="2">ប្រចាំឆមាស/Semester Exam</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+	
+											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ពិន្ទុសម្រាប់/Score For</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select readOnly id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
-															<option value="1" <?php if(1==$this->rs['examType']){echo "selected='selected'";}?>>ប្រចាំខែ/Monthly Exam</option>
-															<option value="2" <?php if(2==$this->rs['examType']){echo "selected='selected'";}?>>ប្រចាំឆមាស/Semester Exam</option>
-														</select>
-														
-														<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $row['branchId']?>" />
-														<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $row['groupId']?>"/>
-														<input type="hidden" name="gradingId" id="gradingId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $row['gradingId']?>"/>
-														<input type="hidden" name="id" id="id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rs['id']?>" />
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branch_id']?>" />
+														<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
+														<input type="hidden" name="gradingId" id="gradingId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['gradingId']?>"/>
 													</div>
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								
-															<option value="1" <?php if(1==$this->rs['forSemester']){echo "selected='selected'";}?>>ឆមាសទី១/Semester I</option>
-															<option value="2" <?php if(1==$this->rs['forSemester']){echo "selected='selected'";}?>>ឆមាសទី២/Semester II</option>
+													<div class="col-md-6 col-sm-6 col-xs-12">
+														<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								
+															<option <?php echo ($resultRecord['forSemester']==1)?"selected":"";?> value="1">ឆមាសទី១/Semester I</option>
+															<option <?php echo ($resultRecord['forSemester']==2)?"selected":"";?> value="2">ឆមាសទី២/Semester II</option>
 														</select>
 													</div>
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select readOnly dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
+													<div class="col-md-6 col-sm-6 col-xs-12">
+														<select readonly onChange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rs['forMonth']){echo "selected='selected'";}?>><?php echo $month['name'];?></option>
+																<option <?php echo ($month['id']==$resultRecord['forMonth'])?"selected":"";?> value="<?php echo $month['id'];?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['name'];?></option>
 															<?php }}?>
 														</select>
 													</div>
@@ -85,7 +123,6 @@
 											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">មុខវិជ្ជា/Subject</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													
 													<input id="subjectId" />
 													<input type="hidden" name="maxSubjectScore" id="maxSubjectScore" class="fullside" dojoType="dijit.form.TextBox" value="0"/>
 												</div>
@@ -104,25 +141,24 @@
 											 <div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">សម្គាល់ / Remark</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->rs['note'];?>" type="text" style=" height: 120px !important;"  >
+													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $resultRecord['note'];?>" type="text" style=" height: 120px !important;"  >
 												</div>
 											 </div>
-											 <div class="form-group">
-													<label class="control-label custom-switch float-end "> 
-														<a href="javascript:void(0);" class="switchButton status">ស្ថានការណ៍/Status</a> 
-														<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($this->rs['status'])){ echo "checked";} ?> > 
-														<span class="custom-switch-indicator custom-radius switch-status"></span> 
-													</label>
-												</div>
 										 </div>
 									 </div>
 								 </div>
 							 </div>
-							
-								
-								  
 						  </div>
 						  <div class="col-md-6 col-sm-6 col-xs-12">
+								<div id="duplicateMessage" class="hidden alert round alert-secondary alert-icon-left alert-dismissible mb-3 " role="alert">
+									<span class="alert-icon">
+										<i class="glyphicon glyphicon-time text-dark"></i>
+									</span>
+									<h4 class="msgTitle"><?php echo $msgTitle;?></h4>
+									<small class="msgDesc">
+										<?php echo $msgDesc;?>
+									</small>
+								</div>
 								<div class="card-info bg-gradient-directional-notice">
 									<div class="card-content">
 										<div class="card-body">
@@ -131,11 +167,10 @@
 													<span class="d-block mb-1 font-medium-1"></span>
 													<ul class="optListRow">
 														<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានថ្នាក់សិក្សា/Class Student Info.</h4></li>
-														<li class="opt-items two-column"><span class="lbl-tt">ឆ្នាំសិក្សា/Academic Year</span>: 	<span class="text-value"><?php echo $row['academicYear'];?></span></li>
-														<li class="opt-items two-column"><span class="lbl-tt">កម្រិត/Degree</span>: 			<span class="text-value"><?php echo $row['degreeTitle'];?></span></li>
-														<li class="opt-items two-column"><span class="lbl-tt">បន្ទប់/Room</span>: 				<span class="text-value"><?php echo $row['roomName'];?></span></li>
-														<li class="opt-items two-column"><span class="lbl-tt">ថ្នាក់/Grade</span>: 				<span class="text-value"><?php echo $row['gradeTitle'];?></span></li>
-														
+														<li class="opt-items two-column"><span class="lbl-tt">ឆ្នាំសិក្សា/Academic Year</span>: 	<span class="text-value"><?php echo $this->row['academic']?></span></li>
+														<li class="opt-items two-column"><span class="lbl-tt">កម្រិត/Degree</span>: 			<span class="text-value"><?php echo $this->row['degree']?></span></li>
+														<li class="opt-items two-column"><span class="lbl-tt">បន្ទប់/Room</span>: 				<span class="text-value"><?php echo $this->row['room_name']?></span></li>
+														<li class="opt-items two-column"><span class="lbl-tt">ថ្នាក់/Grade</span>: 				<span class="text-value"><?php echo $this->row['grade']?></span></li>
 													</ul>
 												</div>
 												<div class="align-self-top">
@@ -147,9 +182,6 @@
 								</div>
 								<div id="gradingInfo">
 								</div>
-								
-							 
-								 
 						  </div>
 					 </div>
 					 <div class="card-box">
@@ -159,7 +191,6 @@
 							<input type="hidden" name="identity" id="identity"  value="" >
 							<input type="hidden" dojoType="dijit.form.TextBox" name="indexKey" id="indexKey"  value="" >
 							<div class="form-group">
-								
 								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
 								</table>
 							</div>
@@ -169,6 +200,7 @@
 					 <div class="card-box mt-20">
 						<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" label="រក្សាទុក/Save" dojoType="dijit.form.Button" />
+							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="រក្សាទុក&បន្ថែមថ្មី/Save New" dojoType="dijit.form.Button"  />
 						</div>
 					 </div>
 				</form>
@@ -206,7 +238,7 @@ span.titleSubCriterial {
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
-
+var isDuplicate=0;
 $( document ).ready(function() {
    setPageTitle('<?php echo $pageTitle; ?>');
 });
@@ -223,7 +255,7 @@ dojo.ready(function(){
 		id: "subjectId",
 		name: "subjectId",           
 		class: 'fullside', 
-		placeHolder:"<?php echo $tr->translate("SELECT_SUBJECT");?>",          
+		placeHolder:"ជ្រើសមុខវិជ្ជា/Select Subject",          
 		onChange: function() {
 			getSubjectInfo();
 		}
@@ -249,9 +281,11 @@ function getAllSubject(){
 		handleAs:"json",
 		load: function(data) {
 		    subjectStore  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('subjectId').set('store',subjectStore);   
-			dijit.byId('subjectId').set('value','<?php echo $this->rs['subjectId'];?>');   
-			dijit.byId('subjectId').set("readOnly",true);
+		    dijit.byId('subjectId').set('store',subjectStore);
+		    subjectId ='<?php echo $resultRecord['subjectId'];?>';
+		    if(subjectId>0){
+		    	dijit.byId('subjectId').attr('value',subjectId);
+			}   
 		},
 		error: function(err) {
 		}
@@ -269,9 +303,7 @@ function getSubjectInfo(){
 		dojo.query("#table_row").append("");
 		return false;
 	}
-	
 	examType = dijit.byId('examType').get('value');
-	
 	dojo.xhrPost({
 	    url: urlGetSubjectInfo,
 	    content : { 
@@ -283,6 +315,7 @@ function getSubjectInfo(){
 	   load: function(data) {
 		   dijit.byId('maxSubjectScore').attr('value',data.maxSubjectscore);
 		   filterStudent();
+		   duplicationRecord();
 	   },		
 	    error: function(err) {
 	    }
@@ -291,7 +324,7 @@ function getSubjectInfo(){
 
 var inx=0;
 
-var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'get-studentedit')); ?>';
+var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'grading','action'=>'get-studentsingleengry')); ?>';
 function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
@@ -300,11 +333,12 @@ function filterStudent(){
 	group = dijit.byId('group').get('value');
 	sortStundent = dijit.byId('sortStundent').get('value');
 	amtsubject = 0;
-	currentID = dijit.byId('id').get('value');
 	examType = dijit.byId('examType').get('value');
 	subjectId = dijit.byId('subjectId').get('value');
 	gradingId = dijit.byId('gradingId').get('value');
 	maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
+
+	criteriaId = dijit.byId('criteriaId').get('value');
 	
 	if(group==''){
 		return false;
@@ -314,22 +348,20 @@ function filterStudent(){
 	    content : { 
 			'groupId':group
 			,'sortStundent':sortStundent
+			,'criteriaId':criteriaId
 			,'maxSubjectScore':maxSubjectScore
 			,'examType':examType
 			,'subjectId':subjectId
 			,'gradingId':gradingId
-			,'keyIndex':inx
-			,'currentID':currentID
+			,'keyIndex':inx,
+			'gradingRowId':'<?php echo $this->gradingRowId;?>'
 			
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		 
 	       if(data!=""){
-				
 				inx=data.keyIndex;
 				$("#identity").val(data.identity);
-				
 				dojo.html.set(dojo.byId("studentList"),data.contentHtml , {
 					parseContent: true,
 				});
@@ -337,8 +369,6 @@ function filterStudent(){
 				dojo.html.set(dojo.byId("gradingInfo"),data.htmlGradingInfo , {
 					parseContent: true,
 				});
-				
-				calculateAverage();
 	       }else{
 		    	$('#identity').val('');
 	       }
@@ -373,8 +403,8 @@ function checkExamType(){
 	if(examType==2){
 		dijit.byId('forMonth').set("readOnly",true);
 	}
+	duplicationRecord();
 }
-
 
 function checkAllCaterial(index){
 	
@@ -389,34 +419,79 @@ function checkAllCaterial(index){
 			dijit.byId('score_'+arrays[i]+'_'+index).set("readOnly",false);
 		}
 	}
-	
 }
-
 var urlCalculateEverage= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'calculate-average')); ?>';
 function calculateAverage(indexKey=null){
 	dijit.byId('indexKey').attr('value',indexKey);
-	//if(dijit.byId('scoreForm').validate()){
-		dojo.xhrPost({
-			url: urlCalculateEverage,
-			form: dojo.byId("scoreForm"),
-		   handleAs:"json", 
-		   load: function(data) {
-			   if(indexKey!=null){
-				   dijit.byId('average'+indexKey).attr('value',data);
-			   }else{
-				   var identity = $('#identity').val();
-					var arrays = identity.split(',');
-					for(var i=0;i<arrays.length;i++) {
-						keyRow = +arrays[i];
-						dijit.byId('average'+keyRow).attr('value',data[keyRow]);
-					}
-			   }
-			   
-		   },		
-			error: function(err) {
-			}
-		});
-	//}	
+	dojo.xhrPost({
+		url: urlCalculateEverage,
+		form: dojo.byId("scoreForm"),
+	   handleAs:"json", 
+	   load: function(data) {
+		   if(indexKey!=null){
+			   dijit.byId('average'+indexKey).attr('value',data);
+		   }else{
+			   var identity = $('#identity').val();
+				var arrays = identity.split(',');
+				for(var i=0;i<arrays.length;i++) {
+					keyRow = +arrays[i];
+					dijit.byId('average'+keyRow).attr('value',data[keyRow]);
+				}
+		   }
+	   },		
+		error: function(err) {
+		}
+	});
+}
+
+
+
+var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'checking-duplicate')); ?>';
+function duplicationRecord(){
+	group = dijit.byId('group').get('value');
+	examType = dijit.byId('examType').get('value');
+	subjectId = dijit.byId('subjectId').get('value');
+	forSemester = dijit.byId('forSemester').get('value');
+	forMonth = dijit.byId('forMonth').get('value');
+	
+	if(group==''){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: urlDuplicationRecord,
+	    content : { 
+			'groupId':group
+			,'subjectId':subjectId
+			,'examType':examType
+			,'forSemester':forSemester
+			,'forMonth':forMonth
+			
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+	       if(data==1){
+	    	   $('#identity').val('');
+				dojo.query("#table_row").append("");
+				loadingBlock();
+				
+				isDuplicate=1;
+				var msgTitle = $( '.msgTitle' ).html();
+				var msgDesc = $( '.msgDesc' ).html();
+				infoMessageAlert(msgTitle,msgDesc);
+				$( "#duplicateMessage" ).removeClass( "hidden" );
+				
+	       }else{
+		    	isDuplicate=0;
+				$( "#duplicateMessage" ).addClass( "hidden" );
+	       }
+		  
+		   HideloadingBlock();	
+	   },		
+	    error: function(err) {
+			HideloadingBlock();
+	    }
+	});
+	
 }
 </script>
 <?php 

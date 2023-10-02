@@ -213,14 +213,14 @@
 							
 							if($rs['examType']==1){
 								$monthChar = empty($monthKH[$rs['forMonth']])?"":$monthKH[$rs['forMonth']];
-								$titleKh='លទ្ធផលប្រឡងប្រចាំខែ'.$monthChar;
+								$titleKh='ប្រព័ន្ធដាក់ពិន្ទុខែ '.$monthChar;
 								$monthCharEn = empty($monthENG[$rs['forMonth']])?"":$monthENG[$rs['forMonth']];
-								$titleENG=$monthCharEn." TEST RESULT";
+								$titleENG=$monthCharEn." GRADING";
 							}else{
 								$arrRomanNum = array(1=>"I",2=>"II");
 								$romanNumber = empty($arrRomanNum[$rs['forSemester']])?"":$arrRomanNum[$rs['forSemester']];
-								$titleKh='លទ្ធផលប្រឡងប្រចាំឆមាសទី'.$dbgb->getNumberInkhmer($rs['forSemester']);
-								$titleENG="SEMESTER ".$romanNumber." TEST RESULT";
+								$titleKh='ប្រព័ន្ធដាក់ពិន្ទុ'.$dbgb->getNumberInkhmer($rs['forSemester']);
+								$titleENG="GRADING SEMESTER ".$romanNumber." RESULT";
 							}
 							?>
 							<tr>
@@ -237,6 +237,9 @@
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
 											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academicYear'];?></span>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											មុខវិជ្ជាសិក្សា / Subject: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['subjectTitleKh'].'/'.$rs['subjectTitleEng'];?></span>
 										</li>
 									</ul>
 								</td>
@@ -335,19 +338,6 @@
 													<?php } ?>
 												</td>
 												<?php } ?>
-												
-												<td scope="col" rowspan="3">
-													<span class="khmerLabel">មធ្យមភាគ	</span>
-													<span class="englishLabel">Average</span>
-												</td>
-												<td scope="col" rowspan="3">
-													<span class="khmerLabel">និទ្ទេស</span>
-													<span class="englishLabel">Grade</span>
-												</td>
-												<td scope="col" rowspan="3">
-													<span class="khmerLabel">ចំណាត់ថ្នាក់</span>
-													<span class="englishLabel">Rank</span>
-												</td>
 												<td scope="col" rowspan="3" width="120px">
 													<span class="khmerLabel">ផ្សេងៗ</span>
 													<span class="englishLabel">Remark</span>
@@ -395,10 +385,9 @@
 											<td data-label="ភេទ/Sex" align="center" class="bg_<?php echo $student['sex'];?>"><?php echo $sex;?></td>
 											<?php 
 												
-											
 											if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
 												$timeInput = $criterial['timeInput'];
-												$rsScore = $dbExternal->getScoreByCriterial($gradingId,$student['studentId'],$criterial['criteriaId']);
+												$rsScore = $dbExternal->getGradingByCriterial($gradingId,$student['studentId'],$criterial['criteriaId']);
 												if(!empty($rsScore)) foreach($rsScore AS $score){
 											?>
 											<td data-label="<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng'];?>" align="center">
@@ -421,42 +410,8 @@
 											} ?>
 											<?php } ?>
 											
-											<?php 
-											$averageRow = $dbExternal->getAverageAndRankBySubjectOfCriterial($gradingId,$student['studentId']); 
-											
-											$remark = empty($averageRow['remark'])?"&nbsp;":$averageRow['remark'];
-											$totalAverage = empty($averageRow['totalAverage'])?0:$averageRow['totalAverage'];
-											$rank = empty($averageRow['rank'])?0:$averageRow['rank'];
-											
-											$passAvrage =0 ;
-											if(!empty($rs['maxSubjectscore'])){
-												$passAvrage = $rs['maxSubjectscore']/2;
-											}
-											
-											if($totalAverage>=$passAvrage){
-												$countPass++;
-												if($student['sex']==2){
-													$passFemale=$passFemale+1;
-												}//Female
-											}else{
-												$countFail++;
-												if($student['sex']==2){
-													$failFemale = $failFemale+1;
-												}
-											}
-											
-											?>
-											<td data-label="មធ្យមភាគ/Average" align="center" ><?php echo $totalAverage;?></td>
-											
-											<td data-label="និទ្ទេស/Grade" align="center" >
-												<strong>
-												<?php  echo $dbgb->getMentionScore($totalAverage, $rs['academicYearId'],$rs['degreeId'],1,$rs['gradeId'],$averageRow['maxScore']);?>
-												</strong>
-											</td>
-											<td data-label="ចំណាត់ថ្នាក់/Rank" align="center" class="red"><strong><?php echo $rank;?></strong></td>
 											<td data-label="ផ្សេងៗ/Remark" >
 												<small>
-												<?php echo $remark;?>
 												</small>
 											</td>
 											

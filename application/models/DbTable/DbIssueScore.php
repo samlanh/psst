@@ -758,10 +758,8 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 					
 					$classCol = "col-md-12 col-sm-12 col-xs-12";
 					
-					
 					$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
 					$string.='<div class="form-group">';
-					
 					
 						$rsScore = $dbExternal->getScoreByCriterial($gradingId,$stu['stu_id'],$criterialId);
 						if(!empty($rowCri['subjectId'])){
@@ -807,8 +805,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 			$string.='</tr>';
 			
 		}
-		
-		
 		
 		$string.='';
 		$string.='</table>';
@@ -1243,7 +1239,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    		$criterialId=$rowCri['criteriaId'];
    		$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
    		$classCol = "col-md-12 col-sm-12 col-xs-12";
-   
+   		
    		if(!empty($rowCri['subjectId'])){//for subject
    			if(!empty($rowCri['subCriterialTitleKh'])){
    				$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
@@ -1315,10 +1311,22 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    		$string.='<input dojoType="dijit.form.TextBox" name="student_id'.$keyIndex.'" value="'.$stu['stu_id'].'" type="hidden" >';
    		$string.='</td>';
    		$string.='<td data-label="'.$tr->translate("SEX").'" >'.$gender.'</td>';
+   		
+   		
    
    		if(!empty($criterial)) foreach($criterial AS $rowCri){
+   			
+   			if(!empty($data['gradingRowId'])){
+	   			$gradingId = $data['gradingId'];
+	   			$param =array(
+	   					'gradingId'=>$data['gradingId'],
+	   					'studentId'=>$stu['stu_id'],
+	   					'gradingRowId'=>$data['gradingRowId'],
+	   				);
+	   			$rsScore = $dbExternal->getGradingByCriterial($param);
+   			}
+   			
    			$criterialId=$rowCri['criteriaId'];
-   				
    			$classCol = "col-md-12 col-sm-12 col-xs-12";
    				
    			$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
@@ -1337,8 +1345,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    					}
    				}
    			}else{
+   					$resultScore = $rsScore[0]['totalGrading'];
    					$string.='<div class="'.$classCol.'">';
-   					$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'"  name="score_'.$keyIndex.'_'.$criterialId.'" />';
+   					$string.='<input value="'.$resultScore.'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'"  name="score_'.$keyIndex.'_'.$criterialId.'" />';
    					$string.='</div>';
    			}
    			$string.='</div>';

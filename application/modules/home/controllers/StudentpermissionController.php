@@ -56,6 +56,7 @@ class Home_StudentpermissionController extends Zend_Controller_Action
 	}
 	public function addAction()
 	{
+		$this->_redirect(self::REDIRECT_URL .'/index');
 	}
 
 	public function editAction()

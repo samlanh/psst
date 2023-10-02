@@ -92,18 +92,18 @@ class IssuescoreController extends Zend_Controller_Action
 		if(empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/issuescore/index");
 		}
-// 		$param = array(
-// 				'groupId'=>540
-// 			,'sortStundent'=>0
-// 			,'maxSubjectScore'=>10
-// 			,'examType'=>1
-// 			,'subjectId'=>5
-// 			,'gradingId'=>7
-// 			,'keyIndex'=>1
+		$param = array(
+			'groupId'=>541
+			,'sortStundent'=>0
+			,'maxSubjectScore'=>100
+			,'examType'=>1
+			,'subjectId'=>13
+			,'gradingId'=>2
+			,'keyIndex'=>1
 			
-// 				);
-// 		$rs = $db->getStudentForIssueScore($param);
-// 		print_r($rs);
+				);
+		$rs = $db->getStudentForIssueScore($param);
+		print_r($rs);
 		
 	}
 
@@ -161,20 +161,6 @@ class IssuescoreController extends Zend_Controller_Action
 			exit();
 		}
 	}
-	function getStudentsingleengryAction(){//single entry by criteria
-	
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbIssueScore();
-			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
-			$rs=$db->getStudentForGradingScore($data);
-			print_r(Zend_Json::encode($rs));
-			exit();
-		}
-	}
-	
-	
-	
 	
 	function getStudenteditAction(){
 		

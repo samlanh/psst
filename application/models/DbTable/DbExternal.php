@@ -489,6 +489,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['criteriaId'])){
 			$sql.=" AND s.criteriaId =".$data['criteriaId'];
 		}
+		
 		$db = $this->getAdapter();
 		$rRow = $db->fetchAll($sql);
    	
@@ -496,6 +497,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			array_unshift($rRow, $row);
 		}
 		asort($rRow);
+		
 		return $rRow;
 	}
 	
@@ -639,12 +641,33 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				grd.*
 			FROM 
 				`rms_grading_detail` AS grd
-			WHERE 
-				grd.gradingId =$gradingId
-				AND grd.studentId =$studentId
-				AND grd.criteriaId =$criteriaId
-		";
-		//$sql.=" LIMIT 1 ";
+			WHERE 1 ";
+		if(!empty($gradingId)){
+			$sql.=" grd.gradingId =".$gradingId;
+		}
+		if(!empty($studentId)){
+			$sql.=" AND grd.studentId=".$studentId;
+		}
+		if(!empty($criteriaId)){
+			$sql.=" AND grd.criteriaId=".$criteriaId;
+		}
+		return $db->fetchAll($sql);
+	}
+	function getGradingByCriterial($data){
+		$db=$this->getAdapter();
+		$sql="
+		SELECT
+			grd.*
+		FROM
+			`rms_grading_detail_tmp` AS grd
+		WHERE 1 ";
+		if(!empty($data['studentId'])){
+			$sql.=" AND grd.studentId=".$data['studentId'];
+		}
+		if(!empty($data['gradingRowId'])){
+			$sql.=" AND grd.gradingId=".$data['gradingRowId'];
+		}
+		
 		return $db->fetchAll($sql);
 	}
 	function getAverageAndRankBySubjectOfCriterial($gradingId,$studentId){
@@ -927,7 +950,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		
 		if(!empty($attSettingId)){
 			$sql="SELECT
-					attendanceType,scoreDeduct
+					attendanceType,
+					scoreDeduct
 				FROM `rms_attendance_score_setting_detail`
 					WHERE settingId=".$attSettingId;
 			return $db->fetchAll($sql);
@@ -968,16 +992,16 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 
 			$reductPercent = 0;
 			if(!empty($attSettingResult))foreach($attSettingResult as $rs){
-				if($rs['attendanceType']==2){
+				if($rs['attendanceType']==2 AND $result['totalA']>0){
 					$reductPercent =$reductPercent+($result['totalA']*$rs['scoreDeduct']);
 				}
-				elseif($rs['attendanceType']==3){
+				elseif($rs['attendanceType']==3 AND $result['totalP']>0){
 					$reductPercent = $reductPercent+($result['totalP']*$rs['scoreDeduct']);
 				}
-				elseif($rs['attendanceType']==4){
+				elseif($rs['attendanceType']==4 AND $result['totalLate']>0){
 					$reductPercent = $reductPercent+($result['totalLate']*$rs['scoreDeduct']);
 				}
-				elseif($rs['attendanceType']==5){
+				elseif($rs['attendanceType']==5 AND $result['totalLeave']>0){
 					$reductPercent = $reductPercent+($result['totalLeave']*$rs['scoreDeduct']);
 				}
 			}

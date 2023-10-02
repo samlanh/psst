@@ -11,86 +11,86 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 		return $userId;
 	}
 	
-// 	function getAllSubjectScoreByClass($search=null){
-// 		$db=$this->getAdapter();
+	function getAllGradingScore($search=null){
+		$db=$this->getAdapter();
 		
-// 		$dbp = new Application_Model_DbTable_DbGlobal();
-// 		$currentLang = $dbp->currentlang();
-// 		$colunmname='title_en';
-// 		$label = 'name_en';
-// 		$branch = "branch_nameen";
-// 		$month = "month_en";
-// 		$subjectTitle='subject_titleen';
-// 		if ($currentLang==1){
-// 			$colunmname='title';
-// 			$label = 'name_kh';
-// 			$branch = "branch_namekh";
-// 			$month = "month_kh";
-// 			$subjectTitle='subject_titlekh';
-// 		}
-// 		$sql="SELECT 
-// 				grd.*
-// 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
-// 				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
-// 				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
-// 				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
-// 				,CASE
-// 					WHEN grd.examType = 2 THEN grd.forSemester
-// 				ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
-// 				END AS forMonthTitle
-// 				,g.group_code AS  groupCode
-// 				,(SELECT sj.$subjectTitle FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitle
-// 				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
-// 				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
-// 				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
-// 				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
-// 				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
-// 		";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
+		$subjectTitle='subject_titleen';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
+			$subjectTitle='subject_titlekh';
+		}
+		$sql="SELECT 
+				grd.*
+				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
+				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
+				,CASE
+					WHEN grd.examType = 2 THEN grd.forSemester
+				ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
+				END AS forMonthTitle
+				,g.group_code AS  groupCode
+				,g.id AS  groupId
+				,(SELECT sj.$subjectTitle FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitle
+				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
+				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
+				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
+				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+		";
 		
-// 		$sql.=" FROM rms_grading AS grd,
-// 					rms_group AS g 
-// 			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
+		$sql.=" FROM rms_grading_tmp AS grd,
+					rms_group AS g 
+			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
 		
-// 		$where ='';
-// 		$from_date =(empty($search['start_date']))? '1': " grd.dateInput >= '".$search['start_date']." 00:00:00'";
-// 		$to_date = (empty($search['end_date']))? '1': " grd.dateInput <= '".$search['end_date']." 23:59:59'";
-// 		$where = " AND ".$from_date." AND ".$to_date;
+		$where ='';
+		$from_date =(empty($search['start_date']))? '1': " grd.dateInput >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " grd.dateInput <= '".$search['end_date']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;
 		
-// 		if(!empty($data['externalAuth'])){
-// 			$where.=' AND grd.teacherId='.$this->getUserExternalId();
-// 		}
-// 		if(!empty($search['adv_search'])){
-// 			$s_where = array();
-// 			$s_search = addslashes(trim($search['adv_search']));
-// 			$s_where[]=" (SELECT br.branch_namekh FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
-// 			$s_where[]=" (SELECT br.branch_nameen FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
-// 			$s_where[]=" grd.note LIKE '%{$s_search}%'";
-// 			$where .=' AND ( '.implode(' OR ',$s_where).')';
-// 		}
-// 		if($search['degree']>0){
-// 			$where.= " AND g.degree =".$search['degree'];
-// 		}
-// 		if(!empty($search['academic_year'])){
-// 			$where.=" AND g.academic_year =".$search['academic_year'];
-// 		}
-// 		if(!empty($search['grade'])){
-// 			$where.=" AND `g`.`grade` =".$search['grade'];
-// 		}
+		if(!empty($search['externalAuth'])){
+			$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		}
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[]=" (SELECT br.branch_namekh FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT br.branch_nameen FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]=" grd.note LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if($search['degree']>0){
+			$where.= " AND g.degree =".$search['degree'];
+		}
+		if(!empty($search['academic_year'])){
+			$where.=" AND g.academic_year =".$search['academic_year'];
+		}
+		if(!empty($search['grade'])){
+			$where.=" AND `g`.`grade` =".$search['grade'];
+		}
 
-// 		if($search['for_month']>0){
-// 			$where.=" AND grd.forMonth =".$search['for_month'];
-// 		}
-// 		if($search['exam_type']>0){
-// 			$where.= " AND grd.examType =".$search['exam_type'];
-// 		}
-// 		if($search['for_semester']>0){
-// 			$where.= " AND grd.forSemester =".$search['for_semester'];
-// 		}
-// 		$where.= " AND grd.teacherId =".$dbp->getTeacherUserId();
-// 		$order=" ORDER BY grd.id DESC ";
-		
-// 		return $db->fetchAll($sql.$where.$order);
-// 	}
+		if($search['for_month']>0){
+			$where.=" AND grd.forMonth =".$search['for_month'];
+		}
+		if($search['exam_type']>0){
+			$where.= " AND grd.examType =".$search['exam_type'];
+		}
+		if($search['for_semester']>0){
+			$where.= " AND grd.forSemester =".$search['for_semester'];
+		}
+		$where.= " AND grd.teacherId =".$dbp->getTeacherUserId();
+		$order=" ORDER BY grd.id DESC ";
+		return $db->fetchAll($sql.$where.$order);
+	}
 	
 	
 	public function addScoreGradingByClass($_data){
@@ -174,7 +174,6 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 									}
 									
 									$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
-									
 									$totalGrading = $totalGrading+$score;
 									
 									$arr=array(
@@ -654,4 +653,74 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 	   
 // 	   return $arrContent;
 //    }
+   function getGradingScoreById($gradingId){
+   	$db=$this->getAdapter();
+   
+   	$dbp = new Application_Model_DbTable_DbGlobal();
+   	$currentLang = $dbp->currentlang();
+   	$colunmname='title_en';
+   	$label = 'name_en';
+   	$branch = "branch_nameen";
+   	$month = "month_en";
+   	$subjectTitle='subject_titleen';
+   	if ($currentLang==1){
+   		$colunmname='title';
+   		$label = 'name_kh';
+   		$branch = "branch_namekh";
+   		$month = "month_kh";
+   		$subjectTitle='subject_titlekh';
+   	}
+   	
+   	
+   	$sql="SELECT
+		   grd.id,
+		   grd.status,
+		   grd.criteriaId,
+		   grd.groupId,
+		   grd.subjectId,
+		   grd.examType,
+		   grd.forMonth,
+		   grd.forSemester,
+		   grd.criteriaId,
+		   grd.note,
+		   	(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
+		   	,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
+		   	,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
+		   	,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
+		   	,CASE
+		   	WHEN grd.examType = 2 THEN grd.forSemester
+		   	ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1)
+		   	END AS forMonthTitle
+		   	,g.group_code AS  groupCode
+		   	,g.gradingId AS  gradingId
+		   	,g.academic_year AS  academicYearId
+		   	,g.grade AS  gradeId
+		   	,g.degree AS  degreeId
+		   	,(SELECT te.signature from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeacherSigature
+		   	,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameKh
+		   	,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameEng
+		   	,(SELECT gsjd.max_score FROM rms_group_subject_detail AS gsjd WHERE g.id = gsjd.group_id AND gsjd.subject_id =grd.subjectId LIMIT 1 ) AS maxSubjectscore
+		   	,(SELECT te.signature from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teacherSigature
+		   	,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameKh
+		   	,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameEng
+		   	,(SELECT sj.$subjectTitle FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitle
+		   	,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitleKh
+		   	,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitleEng
+		   	,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+		   	,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
+		   	,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
+		   	,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
+		   	,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+		   	
+   			";
+   			$sql.=" FROM rms_grading_tmp AS grd,
+   					rms_group AS g
+   			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
+   
+   			$where ='';
+   			$where.=' AND grd.teacherId='.$this->getUserExternalId();
+   			$where.=' AND grd.id='.$gradingId;
+		   	$where.=' LIMIT 1 ';
+		   	return $db->fetchRow($sql.$where);
+   }
 }

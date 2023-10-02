@@ -105,6 +105,59 @@ class ExtreportController extends Zend_Controller_Action
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->branchInfo = $db->getBranchInfo($branch_id);
     }
+    function rptGradingListAction(){
+    	$this->_helper->layout()->disableLayout();
+    	$gradingID=$this->getRequest()->getParam("id");
+    	$gradingID =empty($gradingID)?0:$gradingID;
+    
+    	$dbG = new Application_Model_DbTable_DbGradingScore();
+    	
+    	$row = $dbG->getGradingScoreById($gradingID);
+    	$this->view->rs = $row;
+    	if (empty($row)){
+    		//Application_Form_FrmMessage::Sucessfull("NO_RECORD","/grading/index");
+    		//exit();
+    	}
+    	if ($row['status']==0){
+    		//Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_VIEW","/grading/index");
+    		//exit();
+    	}
+    	$groupId = empty($row['groupId'])?0:$row['groupId'];
+    	$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
+    	$examType = empty($row['examType'])?0:$row['examType'];
+    	$forMonth = empty($row['forMonth'])?0:$row['forMonth'];
+    	$forSemester = empty($row['forSemester'])?0:$row['forSemester'];
+    	$criteriaId = empty($row['criteriaId'])?0:$row['criteriaId'];
+    
+    	$arrFilter = array(
+    			'groupId'=>$groupId,
+    			'subjectId'=>$subjectId,
+    			'examType'=>$examType,
+    			'forMonth'=>$forMonth,
+    	);
+    	
+    	$dbExternal = new Application_Model_DbTable_DbExternal();
+    	$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
+    
+    	$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
+    	$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
+    
+    	$arrSearch  = array(
+    			'gradingId'=>$gradingId
+    			,'subjectId'=>$subjectId
+    			,'examType'=>$examType,
+    			'criteriaId'=>$criteriaId,
+    	);
+    	$this->view->criterial = $dbExternal->getGradingSystemDetail($arrSearch);
+    
+    	$frm = new Application_Form_FrmGlobal();
+    	$branch_id = empty($row['branchId'])?1:$row['branchId'];
+    	$this->view->header = $frm->getHeaderReceipt($branch_id);
+    	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+    	 
+    	$db = new Application_Model_DbTable_DbGlobal();
+    	$this->view->branchInfo = $db->getBranchInfo($branch_id);
+    }
 	
 	function rptAssessmentListAction(){
 		$this->_helper->layout()->disableLayout();

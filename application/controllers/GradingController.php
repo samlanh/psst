@@ -16,6 +16,7 @@ class GradingController extends Zend_Controller_Action
 		$id=0;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
+		
 		$teacherInfo = $dbExternal->getCurrentTeacherInfo();
 		$currentAcademic = empty($teacherInfo['currentAcademic'])?0:$teacherInfo['currentAcademic'];
 		
@@ -25,20 +26,22 @@ class GradingController extends Zend_Controller_Action
 		}
 		else{
 			$search = array(
-						'adv_search'=>'',
-						'externalAuth'=>1,//for teacher access
-						'academic_year'=> $currentAcademic,
-						'exam_type'=>-1,
-						'for_semester'=>-1,
-						'for_month'=>'',
-						'degree'=>0,
-						'grade'=> 0,
-						'start_date'=> '',
-						'end_date'=>date('Y-m-d'));
+				'adv_search'=>'',
+				'externalAuth'=>1,//for teacher access
+				'academic_year'=> $currentAcademic,
+				'exam_type'=>-1,
+				'for_semester'=>-1,
+				'for_month'=>'',
+				'degree'=>0,
+				'grade'=> 0,
+				'start_date'=> '',
+				'end_date'=>date('Y-m-d')
+			);
 		}
 		$this->view->search = $search;
-		$db = new Application_Model_DbTable_DbIssueScore();
-		$row = $db->getAllSubjectScoreByClass($search);
+		
+		$db = new Application_Model_DbTable_DbGradingScore();
+		$row = $db->getAllGradingScore($search);
 		$this->view->row = $row;
 
 		$form=new Application_Form_FrmSearchGlobal();
@@ -98,6 +101,79 @@ class GradingController extends Zend_Controller_Action
 				);
 		$result = $dbExternal->getGradingSystemDetail($array);
 		$this->view->criteria = $result;
+	}
+	public function editAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		$key = new Application_Model_DbTable_DbKeycode();
+		$dbset=$key->getKeyCodeMiniInv(TRUE);
+		$db = new Application_Model_DbTable_DbGradingScore();
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
+			try{
+				$rs = $db->addScoreGradingByClass($_data);
+				if(isset($_data['save_new'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/add");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");
+				}
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+		
+		$gradingRowId=$this->getRequest()->getParam("gradingRowId");
+		$gradingRowId = empty($gradingRowId)?0:$gradingRowId;
+		
+		$resultRecord = $db->getGradingScoreById($gradingRowId);
+		if(empty($resultRecord)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/grading/index");
+		}
+		$this->view->resultRecord = $resultRecord;
+		$this->view->gradingRowId = $gradingRowId;
+		
+		
+		$id=$this->getRequest()->getParam("id");
+		$id = empty($id)?0:$id;
+	
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$row = $dbExternal->getGroupDetailByIDExternal($id,1);
+	
+		if(empty($row)){
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/dashboard");
+			exit();
+		}
+	
+		$this->view->row = $row;
+		if(empty($row)){
+			$this->_redirect("/external/group");
+		}
+		$this->view-> month = $dbExternal->getAllMonth();
+	
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$degreeId = $row['degree_id'];
+		$gradingId = $row['gradingId'];
+		$result = $dbg->checkEntryScoreSetting($degreeId);
+		if(empty($result)){
+			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
+		}
+		$array = array(
+				'gradingId'=>$gradingId
+		);
+		$result = $dbExternal->getGradingSystemDetail($array);
+		$this->view->criteria = $result;
+	}
+	function getStudentsingleengryAction(){//single entry by criteria
+	
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbIssueScore();
+			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
+			$rs=$db->getStudentForGradingScore($data);
+			print_r(Zend_Json::encode($rs));
+			exit();
+		}
 	}
 
 }

@@ -319,7 +319,7 @@ function getSubjectInfo(){
 
 var inx=0;
 
-var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'get-studentsingleengry')); ?>';
+var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'grading','action'=>'get-studentsingleengry')); ?>';
 function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");

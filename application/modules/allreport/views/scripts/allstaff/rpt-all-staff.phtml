@@ -8,6 +8,9 @@
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
+.hidden{visibility: visible !important;
+display: table-cell !important;
+}
 table.content-data tr.style-head,
 table.tb-footer tr.style-head {
    font-weight: bold !important;
@@ -158,7 +161,7 @@ table.tb-footer tr.style-head {
 						margin:0;
 					  }
 						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
-						
+						.hidden{visibility: hidden; display: none;}
 					}
 					.center{text-align: center !important;}
 					table.content-data{
@@ -216,7 +219,7 @@ table.tb-footer tr.style-head {
 						<table class="content-data" cellpadding="5"​ border="1" >
 							<thead>
 								<tr class="style" align="center">
-									<td scope="col"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
+									<td class="hidden" scope="col"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->rs);?>');" name="checkall" id="checkall" /></td>
 									<td scope="col"><?php echo $tr->translate("NUM");?></td>
 									<td scope="col"><?php echo $tr->translate("BRANCH");?></td>
 									<td scope="col"><?php echo $tr->translate("ID_CARD");?></td>
@@ -235,7 +238,7 @@ table.tb-footer tr.style-head {
 							</thead>
 							<?php $i=0;$degree=0; if(!empty($this->rs)){ foreach ($this->rs AS $row) { $i++;?>
 							<tr class="style  hover" >
-								<td  align="center">
+								<td class="hidden" align="center">
 									<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
 									<input type="hidden" name="staff_id<?php echo $i;?>" id="staff_id<?php echo $i;?>" value="<?php echo $row['id'];?>" dojoType="dijit.form.TextBox" />
 								</td>

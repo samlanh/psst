@@ -557,12 +557,12 @@ tbody#table_row tr {
 
 				table.content-data tr.style-rowdata {
 					font-size: 12px;
-					height: 23px;
+					height: 20px;
 				}
 
 				span.khmerName,
 				span.englishName {
-					line-height: 24px;
+					line-height: 23px;
 					margin: 0;
 					padding: 0;
 					white-space: nowrap;
@@ -591,7 +591,7 @@ tbody#table_row tr {
 				}
 
 				ul.scoreTitle li {
-					line-height: 26px;
+					line-height: 20px;
 					color: #002c7b;
 					list-style-type: none !important;
 					list-type: none !important;
@@ -661,8 +661,8 @@ tbody#table_row tr {
 							if ($rs['exam_type'] == 1) {
 								$monthChar = empty($monthKH[$rs['for_month_id']]) ? "" : $monthKH[$rs['for_month_id']];
 								$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ' . $monthChar;
-								$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
-								$titleENG = $monthCharEn . " TEST RESULT";
+								//$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
+								$titleENG = "MONTHLY TEST RESULT";
 							} else {
 								$arrRomanNum = array(1 => "I", 2 => "II");
 								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
@@ -927,7 +927,7 @@ tbody#table_row tr {
 						<td></td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 							<?php if (!empty($rs['teacher_sigature'])) { ?>
-								<div><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;margin-bottom:20px;" /></div>
+								<div><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 							<?php } else { ?>
 								<div style="height: 100px;"></div>
 							<?php } ?>

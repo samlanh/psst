@@ -2989,7 +2989,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				,(SELECT $branch FROM `rms_branch` WHERE br_id=sp.branch_id LIMIT 1) AS branchName
     				,sp.receipt_number AS receiptNo
 					,sp.create_date AS paymentDate
-					
+					,COALESCE(DATE_FORMAT(sp.create_date, '%Y%m'),'') AS paymentDateYearMonth
 					,sp.receipt_number AS recordTitle
 					,sp.create_date AS recordDate
 					,'payment' AS recordType

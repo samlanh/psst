@@ -178,6 +178,8 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$subject_lang=1;
 			}elseif($subLang=='e'|| $subLang=='E'){
 				$subject_lang=2;
+			}elseif($subLang=='c'|| $subLang=='C'){
+				$subject_lang=3;
 			}
 		}
 		//list($kh_name, $eng_name) = explode(",",$title);
@@ -229,10 +231,14 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 	
 	public function getTeacherId($title,$phone=null,$data){
 		$db = $this->getAdapter();
+		$sex=1;
 		$titleSub=explode(",",$title);
 		if(count($titleSub)==1){
 			$kh_name=trim($titleSub[0]);
 			$eng_name=trim($titleSub[0]);
+		}else if(count($titleSub)==2){
+			$kh_name=trim($titleSub[0]);
+			$eng_name=trim($titleSub[1]);
 		}else{
 			$kh_name=trim($titleSub[0]);
 			$eng_name=trim($titleSub[1]);

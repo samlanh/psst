@@ -261,7 +261,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	$order = ' ORDER BY g.branch_id , g.academic_year DESC ,`g`.`degree`,`g`.`grade`,`g`.`is_pass` ASC ,`g`.`group_code` ASC ';
 	   	return $db->fetchAll($sql.$where.$order);
 	}
-   
+
 	public function getGroupDetailByID($id){
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();

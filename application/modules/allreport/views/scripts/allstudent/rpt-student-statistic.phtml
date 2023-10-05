@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate("RPT_STUDENT_STATISTIC")); 
 	$frm =  $this->form_search;
 	$dbst = new Allreport_Model_DbTable_DbRptAllStudent();
+	//print_r($this->rs);
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
@@ -133,9 +134,10 @@ table.tb-footer tr.style-head {
 						$totalStudent = 0;
 						$totalDrop=0;
 						$totalStudying=0;
+						$degree='';
 					if(!empty($this->rs)){
 						foreach($this->rs AS $key=>$row){  
-							
+
 							$newStudent = $row['newStudent'];
 							$oldStudent = $row['oldStudent'];
 							$totalstu = $row['totalStu'];
@@ -149,6 +151,17 @@ table.tb-footer tr.style-head {
 							$totalStudying=$totalStudying+$studyngStudent;
 							
 					?>
+						<?php if($degree!=$row['degree']){?>
+								<?php if ($key>0){?>
+								<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
+									<td colspan="6"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+									<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
+									<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
+									<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+									<td><?php echo $totalDrop." ".$tr->translate("STUDENT_UNIT");?></td>
+									<td><?php echo $totalStudying." ".$tr->translate("STUDENT_UNIT");?></td>
+								</tr>
+							<?php }}?>
 						<tr class="style-rowdata hover" align="center"  >
 							<td><?php echo ++$i;?></td>
 							<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
@@ -162,6 +175,7 @@ table.tb-footer tr.style-head {
 							<td><?php echo $stopStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $studyngStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 						</tr>
+							<?php $degree=$row['degree'];?>
 						<?php }} ?>	
 						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
 							<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>

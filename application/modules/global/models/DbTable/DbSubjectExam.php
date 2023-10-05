@@ -91,6 +91,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sub_khmer=$tr->translate('STUDY_IN_KHMER');
 		$sub_english=$tr->translate('STUDY_IN_ENGLISH');
+		$sub_chinese=$tr->translate('STUDY_IN_CHINESE');
 		$db = $this->getAdapter();
 		$sql = " SELECT 
 					id,
@@ -102,6 +103,7 @@ class Global_Model_DbTable_DbSubjectExam extends Zend_Db_Table_Abstract
 					CASE 
 						WHEN subject_lang=1 THEN   '$sub_khmer'
 						WHEN subject_lang=2 THEN  '$sub_english'
+						WHEN subject_lang=3 THEN  '$sub_chinese'
 					END
 					AS subtitle,
 					(SELECT so.title FROM `rms_schooloption` AS so WHERE so.id = schoolOption LIMIT 1) AS schoolOption,

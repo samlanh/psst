@@ -178,6 +178,8 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$subject_lang=1;
 			}elseif($subLang=='e'|| $subLang=='E'){
 				$subject_lang=2;
+			}elseif($subLang=='c'|| $subLang=='C'){
+				$subject_lang=3;
 			}
 		}
 		//list($kh_name, $eng_name) = explode(",",$title);

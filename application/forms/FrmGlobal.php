@@ -123,7 +123,7 @@ class Application_Form_FrmGlobal
 			}
 		}
 		$rs = $db->getBranchInfo($branch_id);
-		$logo = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/' . $rs['photo'];
+		$logo = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/logo/' . $rs['photo'];
 		$color = empty($rs['color']) ? "#000" : "#" . $rs['color'];
 		$type_header = HEADER_REPORT_TYPE;
 		$str = "";
@@ -311,7 +311,7 @@ class Application_Form_FrmGlobal
 			}
 		}
 		$rs = $db->getBranchInfo($branch_id);
-		$logo = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/' . $rs['photo'];
+		$logo = Zend_Controller_Front::getInstance()->getBaseUrl() . '/images/logo/' . $rs['photo'];
 		$color = empty($rs['color']) ? "" : "#" . $rs['color'];
 		$str = "
 			<style>

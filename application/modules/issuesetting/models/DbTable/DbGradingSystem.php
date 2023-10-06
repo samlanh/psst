@@ -286,7 +286,11 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 							'forExamType'			=>$forExamType,
 					);
 	   				$this->_name='rms_scoreengsettingdetail';
-	   				$this->insert($arr);
+	   				
+	   				if(!empty($_data['forExamType'.$i]) AND $_data['subjectId'.$i]>0){
+	   					$this->insert($arr);
+	   				}
+	   				
 	   				
 	   				if(!empty($_data['forMonth'.$i]) AND $_data['subjectId'.$i]>0){
 	   				

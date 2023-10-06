@@ -1316,6 +1316,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    
    		if(!empty($criterial)) foreach($criterial AS $rowCri){
    			
+   			$rsScore = array();
    			if(!empty($data['gradingRowId'])){
 	   			$gradingId = $data['gradingId'];
 	   			$param =array(
@@ -1332,20 +1333,32 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    			$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
    			$string.='<div class="form-group">';
    			if(!empty($rowCri['subjectId'])){
+   				
    				if(!empty($rowCri['subCriterialTitleKh'])){
    					$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
    					$coutnSubCriterial = count($subCriterial);
    					$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
    					$indexSub=0;
-   					foreach ($subCriterial as $subCriTitle){
-   						$indexSub++;
-   						$string.='<div class="'.$classCol.'">';
-   						$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
-   						$string.='</div>';
+   					
+   						if(!empty($rsScore)){
+   							foreach($rsScore AS $score){
+	   							$indexSub++;
+	   							$string.='<div class="'.$classCol.'">';
+	   							$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+	   							$string.='</div>';
+	   						}
+   						}else{
+   							foreach($subCriterial as $subCriTitle){
+   								$indexSub++;
+   								$string.='<div class="'.$classCol.'">';
+   								$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$indexSub.$criterialId.'"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" />';
+   								$string.='</div>';
+   						}
    					}
    				}
    			}else{
-   					$resultScore = $rsScore[0]['totalGrading'];
+   					$resultScore = empty($rsScore)?0:$rsScore[0]['totalGrading'];
+   					
    					$string.='<div class="'.$classCol.'">';
    					$string.='<input value="'.$resultScore.'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'"  name="score_'.$keyIndex.'_'.$criterialId.'" />';
    					$string.='</div>';

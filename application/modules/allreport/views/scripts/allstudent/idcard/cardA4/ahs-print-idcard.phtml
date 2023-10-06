@@ -1,0 +1,981 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
+	//print_r($this->groupByBranchAndSchool);exit();
+	$type=$this->rs[0]['card_type'];//CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
+?>	
+<script type="text/javascript">
+function getKHMonthByNumber(m){
+	var monthName=[
+		"មករា",
+		"កុម្ភៈ",
+		"មីនា",
+		"មេសា",
+		"ឧសភា",
+		"មិថុនា",
+		"កក្កដា",
+		"សីហា",
+		"កញ្ញា",
+		"តុលា",
+		"វិច្ឆិកា",
+		"ធ្នូ",
+	];
+	return (monthName[m-1]);
+}	
+</script>
+<?php  // class="dijitHidden"		data-dojo-type="dijit.Dialog"			?>
+<div style="width: 22cm !important; height: 11cm ; padding: 0px; margin: 0px;">
+	<div align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_income" >
+		<style>
+			.name-card-block ul.list-data {
+				top: 145.5px !important;
+			}	
+		</style>
+		<div id="divPrint1" >
+
+			<?php if($type==1){// psis old format ?>
+			<style>
+				@page {
+					margin: 0;
+				 }
+				.card-content-student-print{
+					background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+					background-size: 100%;background-repeat: no-repeat;
+					page-break-after:always					
+				}
+			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+				$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+				$color = "000000";
+				$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption'],$dep);
+				if(!empty($bg['background'])){
+					
+					if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+						$image = $this->baseUrl().'/images/card/'.$bg['background'];
+					}
+					
+					if (!empty($bg['colorcode'])){
+						$color = str_replace("#", "", $bg['colorcode']);
+					}
+				}
+			?>
+				
+				.card-content-student-print<?php echo $dep;?>{
+					background-image: url('<?php echo $image;?>');
+					 background-size: 100%;background-repeat: no-repeat;
+					 page-break-after:always;					
+				}
+				
+				.name-card-block ul.list-data li.sdudent-id.color-{
+					color:#<?php echo $color;?>;
+				}
+			<?php }?>
+					
+				.profile-card-block {
+					position: relative;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 70px;
+					left: -0.58px;
+				}
+				.photo img {
+					width: 78px;
+					/* height: 98px; */
+				}
+				.name-card-block {
+					position: relative;
+				}
+		
+				span.stuNameValue {
+					position: absolute;
+					top: 176px;
+					display: block;
+					width: 100%;
+					text-align: center;
+					font-weight: 600;
+					font-size: 14px;
+				}	
+				.name-card-block ul.list-data {
+					list-style-type: none;
+					padding: 0;
+					width: 60%;
+					margin: 0;
+					position: absolute;
+					text-align: left;
+					top: 217px !important;
+					left: 48px;
+					color: #01049f;
+					font-weight: bold;
+					font-size: 12px;
+				}
+				.name-card-block ul.list-data li{
+					line-height: 6px;	    
+				}
+				.name-card-block ul.list-data li.sdudent-id{
+					margin-top:10px;
+					/*color: #01731b;*/
+					color: #01049f;
+				}
+				.foot-left-block {
+					position: relative;
+					width: 100%;
+				}
+				.qrimages {
+					position: absolute;
+					top: 257px;
+					left: -30px;
+					width: 100%;
+					text-align: center;
+				}
+				.qrimages img {
+					width: 29%;
+					text-align: center;
+				}
+					.validdate {
+				    position: relative;
+				}
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 243px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
+				}
+			</style>
+		<?php 
+			
+			$con=4;
+			$i=0; $student= count($this->rs);
+			if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+			$imageProfile = "";
+			$imageProfile = $this->baseUrl().'/images/no-profile.png';
+			if(!empty($row['photo'])){
+				if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+					$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
+				}
+			}
+			$prefix="";
+			$validDate="";
+			$stu_name = $row['last_name']." ".$row['en_name'];
+			$dep = empty($row['degree_id'])?0:$row['degree_id'];
+			$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption'],$dep);
+			$issueDate="";
+			if (!empty($bg)){
+				if ($bg['display_by']==2){
+					$stu_name = $row['stu_khname'];
+				}
+				$prefix = $bg['card_prefix'];
+				$validDate = $bg['valid'];
+				$issueDate = $bg['issue'];
+			}
+			?>
+				
+				<!--
+				===========================
+				===Old Card With Barcode===
+				===========================
+				<style>
+				.profile-card-block {
+					position: relative;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 90px;
+					left: -0.58px;
+				}
+				.photo img {
+					width: 80px;
+					height: 98px;
+				}
+				.name-card-block {
+					position: relative;
+				}
+		
+				.name-card-block ul.list-data {
+					list-style-type: none;
+					padding: 0;
+					width: 100%;
+					position: absolute;
+					text-align: center;
+					top: 182.5px !important;
+					color: #01049f;
+					font-weight: bold;
+					font-size: 12px;
+				}	
+				.name-card-block ul.list-data li{
+					line-height: 16px;	    
+				}
+				.name-card-block ul.list-data li.sdudent-id{
+					margin-top:10px;
+					/*color: #01731b;*/
+					color: #01049f;
+				}
+				.foot-left-block {
+				    position: relative;
+				}
+				.qrimages {
+				    position: absolute;
+				    /*top: 255px;*/
+					 top: 255px;
+				    width: 100%;
+				    text-align: center;
+				}
+				.qrimages img {
+				    width: 80%;
+				    text-align: center;
+				height: 10px;}
+					.validdate {
+				    position: relative;
+				}
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 243px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
+				}
+			</style>
+				<div class="card-content-student-print" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 5.1cm; height:8.3cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang';border:1px solid #e2c7c7db; ">
+					<div class="profile-card-block">
+						<div class="photo">
+							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
+						</div>
+					</div>
+					<div class="name-card-block">
+						<ul class="list-data">
+							<li><span class="title_value">&nbsp;<?php echo $stu_name;?></span></li>
+							<li><span class="title_value">&nbsp;Grade: <?php echo str_replace("Grade","",$row['group_name']);?></span></li>
+							<li class="sdudent-id color-<?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>"><span class="title_value">&nbsp;ID: <?php echo $row['stu_code'];?></span></li>
+						</ul>
+					</div>
+					<div class="validdate">
+                    		<span class="exp_date"><?php echo date("F j, Y",strtotime($validDate))?></span>
+                    	</div>
+				<?php  
+// 				$prefix = $this->data["prefix_barcode_grade_school"];
+// 				$barcode = $prefix."-".$row['stu_code']."-".date("y");
+				$barcode_lable = $prefix."-".$row['stu_code']."-".date("y",strtotime($issueDate));
+				$barcode = $row['stu_code'];
+				$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"barcode","codereader"=>$barcode),null,true);?>
+					<div class="foot-left-block">
+						<div class="qrimages">
+							<img  src="<?php echo $url;?>" alt="profile-image" >
+							<div style="font-size:7px;color:#000;font-weight:bold;"><?php echo $barcode_lable;?></div>
+						</div>
+					</div>
+					<div class="foot-right-block">
+					</div>
+				</div>
+				-->	
+				<div class="card-content-student-print card-content-student-print<?php echo $dep;?>" style=" display:inline-block; margin-right:10px line-height: 16.285px;  width: 209px;height: 329px; color: #3f3f95; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
+					<div class="profile-card-block">
+						<div class="photo">
+							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
+						</div>
+					</div>
+					<div class="name-card-block">
+						<span class="stuNameValue"><?php echo $stu_name;?></span>
+						<ul class="list-data">
+							<li><span class="title_value"><?php echo str_replace("Grade","",$row['group_name']);?></span></li>
+							<li class="sdudent-id color-<?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>"><span class="title_value"><?php echo $row['stu_code'];?></span></li>
+						</ul>
+					</div>
+					<div class="validdate">
+                    		<span class="exp_date"><?php echo date("F j, Y",strtotime($validDate))?></span>
+                    	</div>
+				<?php  
+				$QrCodeValue = $row['studentToken'];
+				$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$QrCodeValue),null,true);?>
+					<div class="foot-left-block">
+						<div class="qrimages">
+							<img  src="<?php echo $url;?>" alt="profile-image" >
+						</div>
+					</div>
+					<div class="foot-right-block">
+					</div>
+				</div>				
+					
+				
+			<?php }}
+			}elseif($type==2){// Good Will format ?>
+					
+					<style>
+						.card-content-student-print{
+							background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+							background-size: 100%;
+							background-repeat: no-repeat;
+							page-break-after:always					
+						}
+								
+						<?php if(!empty($this->groupByBranchAndSchool)){foreach($this->groupByBranchAndSchool as $bck){ 
+							$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+							$color = "000000";
+							$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
+							//print_r($bg);
+							if(!empty($bg['background'])){
+								if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+									$image = $this->baseUrl().'/images/card/'.$bg['background'];
+								}
+								if (!empty($bg['colorcode'])){
+									$color = str_replace("#", "", $bg['colorcode']);
+								}
+							}
+							?>
+									
+							.card-content-student-print{
+								background-image: url('<?php echo $image;?>');
+								background-size: 100%;
+								background-repeat: no-repeat;
+								page-break-after:always;	
+								margin-right:10px;
+								margin-bottom:5px;
+							}
+								
+							.name-card-block ul.list-data li.sdudent-id.color-<?php echo "card".$bck['branch_id']."card".$bck['schoolOption'];?>{
+								color:#<?php echo $color;?>;
+							}
+						<?php }}?>
+							
+						.profile-card-block {
+							position: relative;
+						}
+						.profile-card-block .photo {
+							text-align: center;
+							width: 100%;
+							position: absolute;
+							top: 55.5px;
+							left: -0.49px;
+						}
+						.photo img {
+							width: 69px;
+							height: 71px;
+						}
+						.name-card-block {
+							position: relative;
+						}
+				
+						.name-card-block ul.list-data {
+							list-style-type: none;
+							padding: 0;
+							width: 100%;
+							position: absolute;
+							text-align: left;
+							top: 133px;
+							color: #1557b3;
+							font-size: 13px;
+							left:77px;
+						}	
+						.name-card-block ul.list-data li{
+							line-height: 19.5px;	    
+						}
+						.name-card-block ul.list-data li.sdudent-id{
+							margin-top:10px;
+							color: #01731b;
+						}
+						.foot-left-block {
+							position: relative;
+						}
+						.qrimages {
+						    position: absolute;
+						    top: 255px;
+						    width: 100%;
+						    text-align: center;
+						}
+						.qrimages img {
+						    width: 80%;
+						    text-align: center;
+						    height: 10px;
+							
+						}
+							.validdate {
+							position: relative;
+						}
+						.validdate .exp_date {
+							color: #01049f;
+							position: absolute;
+							top: 250px;
+							right: 5px;
+							font-size: 5px;
+							font-weight: 700 !important;
+						}
+					</style>
+				<?php 
+					//$image = "";//$this->baseUrl().'/images/photo/no-image.png';
+					$con=4;
+					$i=0; $student= count($this->rs);
+					
+				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;$image = "";
+					if(!empty($row['photo'])){
+						if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+							$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+						}
+					}
+					$prefix="";
+					$issueDate="";
+					$validDate="";
+					//$stu_name = $row['last_name']." ".$row['stu_enname'];
+					$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+					//print_r($bg);exit();
+					if (!empty($bg)){
+						if ($bg['display_by']==2){
+							//$stu_name = $row['stu_khname'];
+						}
+						$prefix = $bg['card_prefix'];
+						$validDate = $bg['valid'];
+						$issueDate = $bg['issue'];
+					}
+					?>
+						
+						<div class="card-content-student-print" style=" display:inline-block; margin-right:10px ;line-height: 16.285px;  width: 5.8cm; height:8.5cm;   color: #3f3f95; font-family: Century Gothic,Khmer OS Battambang; ">
+							<div class="profile-card-block">
+								<div class="photo">
+									<img <?php if(!empty($image)){echo 'src="'.$image.'"';}?> >
+								</div>
+							</div>
+							<div class="name-card-block">
+								<ul class="list-data">
+									<li><span class="title_value">&nbsp;<?php echo $row['stu_name'];?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo $row['stu_code'];?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo $row['grade'];?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo $row['tel'];?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo date("d-m-Y",strtotime($issueDate));?></span></li>
+									<li><span class="title_value">&nbsp;<?php echo date("d-m-Y",strtotime($validDate));?></span></li>
+								</ul>
+							</div>
+						</div>				
+				<?php }}?>	
+			<?php }else if($type==3){ // new world format ?>
+				<style>
+					.card-content-student-print{
+						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+						 background-size: 100%;background-repeat: no-repea
+						 page-break-after:always;					
+					}
+					<?php 
+					$month = array("01"=>"មករា","02"=>"កុម្ភៈ","03"=>"មីនា","04"=>"មេសា","05"=>"ឧសភា","06"=>"មិថុនា","07"=>"កក្កដា","08"=>"សីហា","09"=>"កញ្ញា","10"=>"តុលា","11"=>"វិច្ឆិកា","12"=>"ធ្នូ",);
+					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+						$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+						$imagebg_front = $this->baseUrl().'/images/card/default_front_card_bg.jpg';
+						$color = "000000";
+						$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption']);
+						if(!empty($bg['background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+								$image = $this->baseUrl().'/images/card/'.$bg['background'];
+							}
+							if (!empty($bg['colorcode'])){
+								$color = str_replace("#", "", $bg['colorcode']);
+							}
+						}
+						if(!empty($bg['front_background'])){
+							if (file_exists(PUBLIC_PATH."/images/card/".$bg['front_background'])){
+								$imagebg_front = $this->baseUrl().'/images/card/'.$bg['front_background'];
+							}
+						}
+						?>
+						
+					.card-content-student-print{
+						background-image: url('<?php echo $image;?>');
+						background-size: 100%;
+						background-repeat: no-repeat;
+						position: relative;		
+						border:solid 1px #eee;				
+
+					}	
+					.card-content-student-print-front{
+						background-image: url('<?php echo $imagebg_front;?>');
+						background-size: 100%;
+						background-repeat: no-repeat;
+						position: relative;		
+						border:solid 1px #eee;				
+					}
+					<?php }?>
+					.name-card-block ul.list-data {
+					    list-style-type: none;
+					    padding: 0;
+					    width: 100%;
+					    position: absolute;
+					    top: 12px;
+					    color: #000;
+					    font-weight: bold;
+					    font-size: 11px;
+					}	
+					.name-card-block ul.list-data-secondrow {
+						list-style-type: none;
+						padding: 0;
+						width: 100%;
+						position: absolute;
+						top: 126px;
+						color: #000;
+						font-weight: bold;
+						font-size: 11px;
+					}	
+					.name-card-block ul.list-data li,.name-card-block ul.list-data-secondrow li{
+						line-height: 23px;
+						text-align: left;   
+					}
+					span.title_value{
+						display:inline-block;
+					}
+					span.title_value.student-name{
+						margin-left:80px;
+						min-width:160px;
+						text-align: center;										
+					}
+					span.title_value.nationality,
+					span.title_value.gender{
+						margin-left:45px;											
+					}
+					span.title_value.dob{
+						margin-left:80px;
+						min-width:160px;
+						text-align: center;									
+					}
+					span.title_value.pob{
+						padding-left:60px;
+						display: initial;
+						overflow-wrap: break-word;
+					}
+					span.title_value.grade{
+						margin-left:75px;
+						min-width:45px;
+						text-align: center;			
+					}
+					span.title_value.studentcode{
+						margin-left:40px;
+						min-width:90px;
+						text-align: center;			
+					}
+					span.title_value.parent-name{
+						margin-left:80px;
+						min-width:160px;
+						text-align: center;		
+					}
+					span.title_value.parent-job{
+						margin-left:50px;
+					}	
+					span.title_value.home_num{
+						margin-left:113px;	
+						min-width:15px;					
+						text-align: center;	
+						font-size: 10px;									
+					}
+					span.title_value.street_num{
+						margin-left:8px;
+						min-width:25px;
+						text-align: center;	
+						font-size: 9px;									
+					}				
+					span.title_value.commnue{
+						margin-left:25px;
+						min-width:100px;
+						font-size: 10px;
+						overflow-wrap: break-word;												
+					}	
+					span.title_value.district{
+						margin-left:25px;
+						min-width:50px;
+						font-size: 10px;	
+					}	
+					.name-card-block-front ul.list-data {
+						list-style-type: none;
+						padding: 0;
+						width: 100%;
+						position: absolute;
+						top: 93.5px;
+						color: #000000;
+						font-weight: bold;
+						font-size: 11px;
+					}	
+					.name-card-block-front ul.list-data li{
+						line-height: 24px;	
+						text-align: left;												
+					}
+					.name-card-block-front span.title_value.student-name,
+					.name-card-block-front span.title_value.grade{
+						margin-left:60px;
+						min-width:160px;
+						text-align: center;										
+					}
+					.name-card-block-front span.title_value.studentcode,
+					.name-card-block-front span.title_value.acadimicyear{
+						margin-left:70px;
+						min-width:150px;
+						text-align: center;										
+					}
+					.one-row-persone{
+						margin-bottom:5px;
+						margin-top:5px;
+					}
+					.profile-card-block .photo {
+						text-align: center;
+						width: 100%;
+						position: absolute;
+						top: 220px;
+						left:-68px;
+						
+					}
+					.photo img {
+						width: 70.7px;
+						height: 92px;
+					}
+					
+					.validdate .issue_date{
+						position: absolute;
+						top: 240px;
+						color: #000000;
+						font-size:10px;
+					}
+					.validdate .issue_date.day{
+						right:95px;
+					}
+					.validdate .issue_date.month{
+						right:50px;
+						min-width:40px;
+						text-align: center;
+					}	
+					.validdate .issue_date.year{
+						right:20px;
+					}	
+				
+				</style>
+				<div class="main-card-block" style=" padding: 0; margin: 0 auto;">
+					<?php $con=4;$i=0; $student= count($this->rs); $amount=4;
+					if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
+						<?php 
+						$prefix="";
+						$validDate="";
+							$stu_name = $row['stu_enname']." ".$row['last_name'];
+							$image = $this->baseUrl().'/images/no-profile.png';
+							if(!empty($row['photo'])){
+								if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+								$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+								}
+								
+							}
+							$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+							if (!empty($bg)){
+								if ($bg['display_by']==2){
+									$stu_name = $row['stu_khname'];
+								}
+								$prefix = $bg['card_prefix'];
+								$validDate = $bg['valid'];
+							}
+							?>
+							<div class="card-content-student-print" style=" display:inline-block; line-height: 23px;   width: 6.99cm; height:9.98cm;   color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+								<div class="name-card-block">
+									<ul class="list-data">
+										<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+										<li><span class="title_value gender">&nbsp;<?php echo $row['sex'];?></span> <span class="title_value nationality">&nbsp;<?php echo $row['nationality'];?></span></li>
+										<li><span class="title_value dob">&nbsp;<?php echo $_dbgb->getNumberInkhmer(date("d",strtotime($row['dob'])))."-".$month[date("m",strtotime($row['dob']))]."-".$_dbgb->getNumberInkhmer(date("Y",strtotime($row['dob'])));?></span></li>
+										<li style="padding-left: 20px;"><span class="title_value pob">&nbsp;<?php echo $row['pob'];?></span></li>
+									</ul>
+									<ul class="list-data-secondrow">
+										<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span> <span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
+										<li><span class="title_value parent-name">&nbsp;<?php echo $row['father_enname'];?></span></li>
+										<li><span class="title_value parent-job">&nbsp;<?php echo $row['fath_job'];?></span></li>
+										<li><span class="title_value parent-name">&nbsp;<?php echo $row['mother_enname'];?></span></li>
+										<li><span class="title_value parent-job">&nbsp;<?php echo $row['moth_job'];?></span></li>
+										<li style=" line-height: 21px; "><span class="title_value home_num">&nbsp;<?php echo $row['home_num'];?></span> <span class="title_value street_num">&nbsp;<?php echo $row['street_num'];?></span> <span class="title_value commnue">&nbsp;<?php echo $row['commune_name'];?></span>  <span class="title_value district">&nbsp;<?php echo $row['district_name'];?></span></li>
+									</ul>
+								</div>
+							</div>
+					<?php }}?>
+					<div>
+						&nbsp;
+					</div>
+					<?php $con=4;$i=0; $student= count($this->rs);$amount=4;
+						if(!empty($this->rs)){foreach ($this->rs AS $key=> $row){ $i++;?>
+							<?php 
+								$prefix="";
+								$validDate="";
+								$stu_name = $row['stu_enname']." ".$row['last_name'];
+								$image = "";//$this->baseUrl().'/images/no-profile.png';
+								if(!empty($row['photo'])){
+									if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+										$image = $this->baseUrl().'/images/photo/'.$row['photo'];
+									}
+								}
+								$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption']);
+								if (!empty($bg)){
+									if ($bg['display_by']==2){
+										$stu_name = $row['stu_khname'];
+									}
+									$prefix = $bg['card_prefix'];
+									$validDate = $bg['valid'];
+								}
+							?>
+								
+							<div class="card-content-student-print-front" style=" display:inline-block; line-height: 23px; width: 6.99cm; height:9.98cm;color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; margin-top:10px;">
+								<div class="profile-card-block">
+									<div class="photo">
+										<?php if(!empty($image)){?>
+										<img src="<?php echo $image;?>" >
+										<?php }?>
+									</div>
+								</div> 
+								<div class="name-card-block-front">
+									<ul class="list-data">
+										<li><span class="title_value student-name">&nbsp;<?php echo $stu_name;?></span></li>
+										<li><span class="title_value grade">&nbsp;<?php echo str_replace("Grade","",$row['group_name']);?></span></li>
+										<li><span class="title_value studentcode">&nbsp;<?php echo $row['stu_code'];?></span></li>
+										<li><span class="title_value acadimicyear">&nbsp;<?php echo $row['academic_year'];?></span></li>
+									</ul>
+								</div>
+								<div class="validdate">
+									<span class="issue_date day"><?php echo date("d",strtotime($validDate));?></span>
+									<span class="issue_date month"><?php echo $month[date("m",strtotime($validDate))];?></span>
+									<span class="issue_date year"><?php echo date("y",strtotime($validDate))?></span>
+								</div>
+							</div>
+					<?php }}?>
+				</div>
+			<?php }elseif($type==4){// AHS NEW ?>
+				<style>
+				@page {
+					margin: 0;
+				 }
+				.card-content-student-print{
+					background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+					background-size: 100%;background-repeat: no-repeat;
+					page-break-after:always					
+				}
+			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+				$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+				$color = "000000";
+				$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption'],$dep);
+				if(!empty($bg['background'])){
+					
+					if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+						$image = $this->baseUrl().'/images/card/'.$bg['background'];
+					}
+					
+					if (!empty($bg['colorcode'])){
+						$color = str_replace("#", "", $bg['colorcode']);
+					}
+				}
+			?>
+				
+				.card-content-student-print<?php echo $dep;?>{
+					background-image: url('<?php echo $image;?>');
+					 background-size: 100%;background-repeat: no-repeat;
+					 page-break-after:always;					
+				}
+				
+				.name-card-block ul.list-data li.sdudent-id.color-{
+					color:#<?php echo $color;?>;
+				}
+			<?php }?>
+					
+				.profile-card-block {
+					position: relative;
+				}
+				.profile-card-block .photo {
+					text-align: center;
+					width: 100%;
+					position: absolute;
+					top: 100px;
+					left: 0;
+				}
+				.photo img {
+					width: 70px;
+					/* height: 98px; */
+				}
+				.name-card-block {
+					position: relative;
+				}
+		
+				span.stuInfo {
+					position: absolute;
+					top: 195px;
+					display: block;
+					width: 100%;
+					text-align: center;
+					font-weight: 200;
+					font-size: 9px;
+				}	
+				span.stuInfo.stuNameKhValue {
+					top: 195px;
+					font-size: 11px;
+					font-family: Times New Roman,'Khmer OS Muol Light';
+					font-weight: 200;
+				}
+				span.stuInfo.stuNameEngValue {
+					top: 213px;
+					text-transform: uppercase;
+					font-weight: 600;
+				}
+				span.stuInfo.stuDob {
+					top: 225px;
+					font-weight: 600;
+				}
+				span.stuInfo.stuGrade {
+					top: 238px;
+				}
+				span.stuInfo.stuAcademic {
+					top: 298px;
+					color: #fff;
+					font-size: 12px;
+					font-weight: 600;
+				}
+				span.titleKhLb {
+					font-family: Times New Roman,'Khmer OS Muol Light';
+					font-weight: normal;
+				}
+				.foot-left-block {
+					position: relative;
+					width: 100%;
+				}
+				.qrimages {
+					position: absolute;
+					top: 245px;
+					right: -65px;
+					width: 100%;
+					text-align: center;
+				}
+				.qrimages img {
+					width: 20%;
+					text-align: center;
+				}
+				.qrimages span.stuCode {
+					display: block;
+					text-align: center;
+					font-size: 9px;
+					font-weight: 600;
+					line-height: 10px;
+				}
+				.validdate {
+				    position: relative;
+				}
+				.validdate .exp_date {
+					color: #01049f;
+				    position: absolute;
+				    top: 243px;
+				    right: 5px;
+				    font-size: 5px;
+				    font-weight: 700 !important;
+				}
+			</style>
+		<?php 
+			
+			$con=4;
+			$i=0; $student= count($this->rs);
+			if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+			$imageProfile = "";
+			$imageProfile = $this->baseUrl().'/images/no-profile.png';
+			if(!empty($row['photo'])){
+				if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+					$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
+				}
+			}
+			$prefix="";
+			$validDate="";
+			$stu_name = $row['last_name']." ".$row['en_name'];
+			$dep = empty($row['degree_id'])?0:$row['degree_id'];
+			$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption'],$dep);
+			$issueDate="";
+			if (!empty($bg)){
+				if ($bg['display_by']==2){
+					$stu_name = $row['stu_khname'];
+				}
+				$prefix = $bg['card_prefix'];
+				$validDate = $bg['valid'];
+				$issueDate = $bg['issue'];
+			}
+			?>
+			
+				<div class="card-content-student-print card-content-student-print<?php echo $dep;?>" style=" display:inline-block; margin-right:10px; line-height: 16.285px;  width: 202px;height: 317px; color: #000000; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
+					<div class="profile-card-block">
+						<div class="photo">
+							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
+						</div>
+					</div>
+					<div class="name-card-block">
+						<span class="stuInfo stuNameKhValue"><?php echo $row['stu_khname'];?></span>
+						<span class="stuInfo stuNameEngValue"><?php echo $row['last_name']." ".$row['en_name'];?></span>
+						<span class="stuInfo stuDob"><?php echo date("d-M-Y",strtotime($row['dob']));?></span>
+						<span class="stuInfo stuGrade">Grade : <?php echo str_replace("Grade","",$row['group_name']);?></span>
+						<span class="stuInfo stuAcademic"><?php echo $row['academic_year'];?></span>
+					</div>
+					<!--
+					<div class="validdate">
+                    		<span class="exp_date"><?php echo date("F j, Y",strtotime($validDate))?></span>
+					</div>
+					-->
+				<?php  
+				$QrCodeValue = $row['studentToken'];
+				$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$QrCodeValue),null,true);?>
+					<div class="foot-left-block">
+						<div class="qrimages">
+							<img  src="<?php echo $url;?>" alt="profile-image" >
+							<span class=" stuCode">ID: <?php echo $row['stu_code'];?></span>
+						
+						</div>
+					</div>
+					<div class="foot-right-block">
+					</div>
+				</div>				
+				
+				<?php }}?>
+			<?php }?>
+		</div>
+		<table width="100%">
+			<tr>
+				<td align="center">
+					<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+					<button dojoType="dijit.form.Button" id="printall" iconClass="dijitEditorIcon dijitEditorIconPrint"
+						type="button" onclick="print();">Print ID Card</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	dojo.ready(function(){
+		loadingBlock();
+		print();
+	});
+	function print(){
+		loadingBlock();
+	  	 var contents = document.getElementById("divPrint1").innerHTML;
+	 	  var frame1 = document.createElement('iframe');
+	    frame1.name = "frame1";
+	    frame1.style.position = "absolute";
+	    frame1.style.top = "-1000000px";
+	    document.body.appendChild(frame1);
+	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
+	    frameDoc.document.write('<html><head><title>Employee ID</title>');
+	    frameDoc.document.write('</head><body>');
+	    frameDoc.document.write(contents);
+	    frameDoc.document.write('</body></html>');
+	    frameDoc.document.close();
+	    setTimeout(function () {
+			HideloadingBlock();
+	        window.frames["frame1"].focus();
+	        window.frames["frame1"].print();
+	        document.body.removeChild(frame1);
+	        
+			<?php 
+				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
+			?>
+			
+			//window.location.href = '<?php echo $url_copy;?>';
+	    }, 10000);
+		
+	   return false;
+
+	    
+	}
+</script>

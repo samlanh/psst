@@ -1607,6 +1607,7 @@ function getAllgroupStudyNotPass($action=null){
   {
   	$db = $this->getAdapter();
   	$lang = $this->currentlang();
+  	
   	$field = 'subject_titleen';
   	if ($lang==1){
   		$field = 'subject_titlekh';
@@ -1674,7 +1675,19 @@ function getAllgroupStudyNotPass($action=null){
   	$sql.=$where;
   	$sql.=$groupBY;
   	$sql.=" ORDER BY subj.subject_lang ASC, subj.$field ASC ";
-  	return $db->fetchAll($sql);
+  	$result =  $db->fetchAll($sql);
+  	
+  	if(!empty($data['isOption'])){
+  		
+  		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  		$options = '<option value="" >'.$tr->translate("ADD_NEW").'</option>';
+  		$options.= '<option value="0" ></option>';
+  		if(!empty($result))foreach($result as $value){
+  			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name'],ENT_QUOTES).'</option>';
+  		}
+  		return $options;
+  	}
+  	return $result;
   }
   
   public function getAllSubjectStudy($schoolOption=null){

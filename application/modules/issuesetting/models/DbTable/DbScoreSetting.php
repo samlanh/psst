@@ -142,6 +142,7 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    					$where = " id =".$_data['detailid'.$i];
 					$this->update($arr, $where);
    				}else{
+   					
 	   				$arr=array(
 	   						'score_setting_id'=>$id,
 	   						'criteriaId'=>$_data['examtype_name_'.$i],

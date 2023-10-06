@@ -192,10 +192,13 @@ class Global_SubjectController extends Zend_Controller_Action {
 				$arrayFilter = array(
 					"schoolOption"=>$schoolOption,
 					"typesubject"=>1,
+					'isOption'=>empty($data['isOption'])?'':$data['isOption']
 				);
 				$subject = $db->getAllSubjectName($arrayFilter);
-				array_unshift($subject, array ('id' => '', 'name' => $this->tr->translate("ADD_NEW")));
-				array_unshift($subject, array ('id' => 0, 'name' => ''));
+				if(empty($data['isOption'])){
+					array_unshift($subject, array ('id' => '', 'name' => $this->tr->translate("ADD_NEW")));
+					array_unshift($subject, array ('id' => 0, 'name' => ''));
+				}
 				print_r(Zend_Json::encode($subject));
 				exit();
 			}

@@ -1389,7 +1389,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				COUNT(if(gds.is_newstudent = '1', gds.is_newstudent, NULL)) AS newStudent,
 				COUNT(if(gds.is_newstudent = '0', gds.is_newstudent, NULL)) AS oldStudent,
 				COUNT(if(gds.stop_type = '1', gds.stop_type, NULL)) AS stopStudent,
-				COUNT(if(gds.stop_type = '2', gds.stop_type, NULL)) AS suspendStudent
+				COUNT(if(gds.stop_type = '2', gds.stop_type, NULL)) AS suspendStudent,
+				COUNT(if(s.sex = '1' , s.sex, 0)) AS stuMale
 				
 			FROM 
 				`rms_group_detail_student` AS gds,
@@ -1433,7 +1434,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `gds`.`degree` )');
 
     	$group_by = " GROUP BY gds.branch_id,gds.`academic_year`,
-			gds.`degree`,gds.`grade`,gds.`session`";
+			gds.`degree`,gds.`grade`";
     	
     	$order_by = " ORDER BY s.branch_id DESC,gds.`academic_year` ASC, gds.`degree` ASC,gds.`grade` ASC,gds.`session` ASC ";
     	return $db->fetchAll($sql.$where.$group_by.$order_by);

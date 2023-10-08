@@ -1388,8 +1388,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				COUNT(gds.stu_id) AS totalStu,
 				COUNT(if(gds.is_newstudent = '1', gds.is_newstudent, NULL)) AS newStudent,
 				COUNT(if(gds.is_newstudent = '0', gds.is_newstudent, NULL)) AS oldStudent,
-				-- COUNT(if(gds.stop_type = '1', gds.stop_type, NULL)) AS stopStudent,
-				-- COUNT(if(gds.stop_type = '2', gds.stop_type, NULL)) AS suspendStudent,
 				COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) AS stuMale ,
    				COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) AS stuFemale 
 				

@@ -99,7 +99,7 @@ class GradingController extends Zend_Controller_Action
 		$array = array(
 				'gradingId'=>$gradingId
 				);
-		$result = $dbExternal->getGradingSystemDetail($array);
+		$result = $dbExternal->getGradingCriteriaItems($array);
 		$this->view->criteria = $result;
 	}
 	public function editAction()
@@ -161,14 +161,14 @@ class GradingController extends Zend_Controller_Action
 		$array = array(
 				'gradingId'=>$gradingId
 		);
-		$result = $dbExternal->getGradingSystemDetail($array);
+		$result = $dbExternal->getGradingCriteriaItems($array);
 		$this->view->criteria = $result;
 	}
 	function getStudentsingleengryAction(){//single entry by criteria
 	
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbIssueScore();
+			$db = new Application_Model_DbTable_DbGradingScore();
 			$data['sortStundent']=empty($data['sortStundent'])?0:$data['sortStundent'];
 			$rs=$db->getStudentForGradingScore($data);
 			print_r(Zend_Json::encode($rs));

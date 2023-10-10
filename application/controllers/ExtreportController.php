@@ -95,7 +95,7 @@ class ExtreportController extends Zend_Controller_Action
 			,'subjectId'=>$subjectId
 			,'examType'=>$examType,
 		);
-		$this->view->criterial = $dbExternal->getGradingSystemDetail($arrSearch);
+		$this->view->criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
 		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];
@@ -148,7 +148,7 @@ class ExtreportController extends Zend_Controller_Action
     			,'examType'=>$examType,
     			'criteriaId'=>$criteriaId,
     	);
-    	$this->view->criterial = $dbExternal->getGradingSystemDetail($arrSearch);
+    	$this->view->criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
     
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];

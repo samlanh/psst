@@ -120,11 +120,11 @@ table.tb-footer tr.style-head {
 								<td><?php echo $tr->translate("DEGREE");?></td>
 								<td><?php echo $tr->translate("GRADE");?></td>
 								<td><?php echo $tr->translate("SESSION");?></td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-								<td><?php echo $tr->translate("STUDENT_DROP");?></td>
-								<td><?php echo $tr->translate("STUDENT_STUDY");?></td>
+								<td><?php echo $tr->translate("MALE");?></td>
+								<td><?php echo $tr->translate("FEMALE");?></td>
 							</tr>
 						</thead>
 					<?php 
@@ -132,8 +132,15 @@ table.tb-footer tr.style-head {
 						$totalNew = 0;
 						$totalOld=0;
 						$totalStudent = 0;
+						$GrandtotalStudent = 0;
+						$GrandtotalMale=0;
+						$GrandtotalFemale=0;
+						$GrandtotalNew = 0;
+						$GrandtotalOld=0;
 						$totalDrop=0;
 						$totalStudying=0;
+						$totalMale=0;
+						$totalFemale=0;
 						$degree='';
 					if(!empty($this->rs)){
 						foreach($this->rs AS $key=>$row){  
@@ -141,27 +148,29 @@ table.tb-footer tr.style-head {
 							$newStudent = $row['newStudent'];
 							$oldStudent = $row['oldStudent'];
 							$totalstu = $row['totalStu'];
-							$stopStudent = $row['suspendStudent']+$row['stopStudent'];
-							$studyngStudent =$row['totalStu']-$stopStudent;
-							
-							$totalNew=$totalNew+$newStudent;
-							$totalOld = $totalOld+$oldStudent;
-							$totalStudent =$totalStudent+$totalstu;
-							$totalDrop=$totalDrop+$stopStudent;
-							$totalStudying=$totalStudying+$studyngStudent;
+
+							$maleStu = $row['stuMale'];
+							$femaleStu = $row['stuFemale'];
+
+							$GrandtotalStudent =$GrandtotalStudent+$totalstu;
+							$GrandtotalMale =$GrandtotalMale+$maleStu;
+							$GrandtotalFemale =$GrandtotalFemale+$femaleStu;
+							$GrandtotalNew =$GrandtotalNew+$newStudent;
+							$GrandtotalOld =$GrandtotalOld+$oldStudent;
 							
 					?>
+					
 						<?php if($degree!=$row['degree']){?>
-								<?php if ($key>0){?>
-								<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
-									<td colspan="6"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+								<?php if ($key>0){ $i=0;  ?>
+								<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
+									<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
+									<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $totalDrop." ".$tr->translate("STUDENT_UNIT");?></td>
-									<td><?php echo $totalStudying." ".$tr->translate("STUDENT_UNIT");?></td>
+									<td><?php echo $totalMale." ".$tr->translate("STUDENT_UNIT");?></td>
+									<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
 								</tr>
-							<?php }}?>
+						<?php  }} ?>
 						<tr class="style-rowdata hover" align="center"  >
 							<td><?php echo ++$i;?></td>
 							<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
@@ -169,21 +178,49 @@ table.tb-footer tr.style-head {
 							<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
 							<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
 							<td><?php echo $row['session_name'];?></td>
+							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $stopStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $studyngStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							
+							<td><?php echo $maleStu." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $femaleStu." ".$tr->translate("STUDENT_UNIT");?></td>		
 						</tr>
-							<?php $degree=$row['degree'];?>
+							<?php if($degree!=$row['degree']){ 
+								if ($key>0){
+									$totalStudent = 0;
+									$totalMale=0;
+									$totalFemale=0;
+									$totalNew = 0;
+									$totalOld=0;
+								}
+							}
+							$totalstu = $row['totalStu'];
+							$totalStudent =$totalStudent+$totalstu;
+							$totalNew=$totalNew+$newStudent;
+							$totalOld = $totalOld+$oldStudent;
+							$totalMale = $totalMale+$maleStu;
+							$totalFemale = $totalFemale+$femaleStu;
+							
+							?>
+
+						<?php $degree=$row['degree'];?>
+						
 						<?php }} ?>	
-						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
+						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
 							<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
-							<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
-							<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
 							<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $totalDrop." ".$tr->translate("STUDENT_UNIT");?></td>
-							<td><?php echo $totalStudying." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $totalMale." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
+						</tr>
+						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
+							<td colspan="6"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+							<td><?php echo $GrandtotalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+							<td><?php echo $GrandtotalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
+							<td><?php echo $GrandtotalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
+							<td><?php echo $GrandtotalMale." ".$tr->translate("STUDENT_UNIT");?></td>
+							<td><?php echo $GrandtotalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
 						</tr>
 					</table> 
 					<?php }?>

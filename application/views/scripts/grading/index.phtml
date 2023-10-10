@@ -75,7 +75,6 @@ $frm =  $this->form_search;
 												<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php echo $row['roomName']; ?></small>
 											</span>
 										</div>
-										
 									</div>
 									<div class="col-xs-8 pl-0">
 										<ul class="nav navbar-right panel_toolbox stusearch">
@@ -92,7 +91,7 @@ $frm =  $this->form_search;
 										  </li>
 										</ul>
 										<div class="p-1">
-											<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
+											<!-- <p class="mb-0 mt-0"><small class="text-muted float-right"><?php //echo $row['branchName']; ?></small></p> -->
 											<div class="text-left">
 											   <strong><?php echo $row['subjectTitle']; ?></strong> <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
 												<p class="mb-0"><?php echo $row['academicYear']; ?></p>
@@ -100,7 +99,9 @@ $frm =  $this->form_search;
 													<span class="counting-num mr-1"><?php echo $row['gradeTitle']; ?></span>
 													<i class="glyphicon glyphicon-education"></i>  
 												</h3>
-												 <p class="mb-0"><i class="glyphicon glyphicon-calendar"></i> <?php echo date("d-M-Y",strtotime($row['dateInput'])); ?></p>
+												
+												<p class="mb-0"><i class="glyphicon glyphicon glyphicon-ok"></i> <?php echo $row['criterialTitle']; ?></p>
+												<p class="mb-0"><i class="glyphicon glyphicon-calendar"></i> <?php echo date("d-M-Y",strtotime($row['dateInput'])); ?></p>
 												<?php if($row['status']==1){?>
 												<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class=" text-primary glyphicon glyphicon-ok-sign"></i></p>
 												<?php }else{?>

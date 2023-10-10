@@ -102,8 +102,8 @@ class IssuescoreController extends Zend_Controller_Action
 			,'keyIndex'=>1
 			
 				);
-		$rs = $db->getStudentForIssueScore($param);
-		print_r($rs);
+// 		$rs = $db->getStudentForIssueScore($param);
+// 		print_r($rs);
 		
 	}
 

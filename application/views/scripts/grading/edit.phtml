@@ -338,6 +338,9 @@ function filterStudent(){
 	gradingId = dijit.byId('gradingId').get('value');
 	maxSubjectScore = dijit.byId('maxSubjectScore').get('value');
 
+	forSemester = dijit.byId('forSemester').get('value');
+	forMonth = dijit.byId('forMonth').get('value');
+
 	criteriaId = dijit.byId('criteriaId').get('value');
 	
 	if(group==''){
@@ -353,8 +356,10 @@ function filterStudent(){
 			,'examType':examType
 			,'subjectId':subjectId
 			,'gradingId':gradingId
-			,'keyIndex':inx,
-			'gradingRowId':'<?php echo $this->gradingRowId;?>'
+			,'forSemester':forSemester
+			,'forMonth':forMonth
+			,'keyIndex':inx
+			,'gradingRowId':'<?php echo $this->gradingRowId;?>'
 			
 		},				    
 	   handleAs:"json", 
@@ -448,6 +453,10 @@ function calculateAverage(indexKey=null){
 
 var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'issuescore','action'=>'checking-duplicate')); ?>';
 function duplicationRecord(){
+	criteriaId = dijit.byId('criteriaId').get('value');
+	if(criteriaId!=9){
+		return false;
+	}
 	group = dijit.byId('group').get('value');
 	examType = dijit.byId('examType').get('value');
 	subjectId = dijit.byId('subjectId').get('value');

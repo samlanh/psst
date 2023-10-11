@@ -229,7 +229,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	}
    function getStudentForAssessment($data){
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$students = $dbExternal->getStudentByGroup($data);
+		$students = $dbExternal->getStudentByGroupExternal($data);
 	 
 		$degreeId = empty($data['degree'])?0:$data['degree'];
 		$comments = $dbExternal->getCommentByDegree($degreeId);
@@ -379,7 +379,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
    }
    function getSecondFormatStudentForAssessment($data){
 		   	$dbExternal = new Application_Model_DbTable_DbExternal();
-		   	$students = $dbExternal->getStudentByGroup($data);
+		   	$students = $dbExternal->getStudentByGroupExternal($data);
 		   
 		   	$degreeId = empty($data['degree'])?0:$data['degree'];
 		   	$comments = $dbExternal->getCommentByDegree($degreeId);
@@ -573,7 +573,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
    
    function getStudentForAssessmentEdit($data){
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$students = $dbExternal->getStudentByGroup($data);
+		$students = $dbExternal->getStudentByGroupExternal($data);
 	 
 		$currentID = empty($data['currentID'])?0:$data['currentID'];
 		$degreeId = empty($data['degree'])?0:$data['degree'];

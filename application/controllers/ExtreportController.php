@@ -85,7 +85,7 @@ class ExtreportController extends Zend_Controller_Action
 			'forMonth'=>$forMonth,
 			'forSemester'=>$forSemester,
 		);
-		$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
+		$this->view->students = $dbExternal->getStudentByGroupExternal($arrFilter);
 		
     	$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
     	$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
@@ -137,7 +137,7 @@ class ExtreportController extends Zend_Controller_Action
     	);
     	
     	$dbExternal = new Application_Model_DbTable_DbExternal();
-    	$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
+    	$this->view->students = $dbExternal->getStudentByGroupExternal($arrFilter);
     
     	$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
     	$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
@@ -177,7 +177,7 @@ class ExtreportController extends Zend_Controller_Action
 		$arrFilter = array(
 			'groupId'=>$groupId,
 		);
-		$this->view->students = $dbExternal->getStudentByGroup($arrFilter);
+		$this->view->students = $dbExternal->getStudentByGroupExternal($arrFilter);
 		
 		$comments = $dbExternal->getCommentByDegree($degreeId);
 		$this->view->comments =$comments;

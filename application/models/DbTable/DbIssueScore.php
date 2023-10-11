@@ -244,8 +244,9 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$titleSubCriteriaEng="";
 								
 								$totalGrading =0;
-								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
-								
+								foreach ($subCriterial AS $keyV => $subCriTitle){ 
+									
+									$indexSub++;
 									
 									if($subcriteriaAmount>1){
 										$titleSubCriterial = $subCriTitle;
@@ -331,7 +332,6 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 							}
 							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
 							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-							
 							$totalScoreAverage = $totalScoreAverage+$totalGrading;
 						}
 					
@@ -342,12 +342,12 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 				if(!empty($ids)){
 					if($totalScoreAverage>0){
 						$arr=array(
-							'gradingId'		=>$id,
-							'studentId'		=>$_data['student_id'.$i],
+							'gradingId'		=> $id,
+							'studentId'		=> $_data['student_id'.$i],
 							'subjectId'		=> $subjectId,
 							'totalAverage'	=> number_format($totalScoreAverage,2),
-							'remark'		=>$_data['note_'.$i],
-							'maxScore'			=> $_data['maxSubjectScore'],
+							'remark'		=> $_data['note_'.$i],
+							'maxScore'		=> $_data['maxSubjectScore'],
 						);
 						
 						$this->_name='rms_grading_total';
@@ -642,7 +642,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    function getStudentForIssueScoreEdit($data){
 	   $dbExternal = new Application_Model_DbTable_DbExternal();
 	   
-	   $students = $dbExternal->getStudentByGroup($data);
+	   $students = $dbExternal->getStudentByGroupExternal($data);
 	   $criterial = $dbExternal->getGradingCriteriaItems($data);
 	   
 	   $tr=Application_Form_FrmLanguages::getCurrentlanguage();
@@ -657,8 +657,10 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	   $identity="";
 	   $arrClassCol = array(
 			2=>"col-md-6 col-sm-6 col-xs-12"
-			,3=>"col-md-4 col-sm-4 col-xs-12"
-			,4=>"col-md-3 col-sm-3 col-xs-12"
+   			,3=>"col-md-4 col-sm-4 col-xs-12"
+   			,4=>"col-md-3 col-sm-3 col-xs-12"
+   			,5=>"col-md-2 col-sm-2 col-xs-12"
+   			,6=>"col-md-2 col-sm-2 col-xs-12"
 	   );
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
@@ -858,8 +860,10 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	   $identity="";
 	   $arrClassCol = array(
 			2=>"col-md-6 col-sm-6 col-xs-12"
-			,3=>"col-md-4 col-sm-4 col-xs-12"
-			,4=>"col-md-3 col-sm-3 col-xs-12"
+   			,3=>"col-md-4 col-sm-4 col-xs-12"
+   			,4=>"col-md-3 col-sm-3 col-xs-12"
+   			,5=>"col-md-2 col-sm-2 col-xs-12"
+   			,6=>"col-md-2 col-sm-2 col-xs-12"
 	   );
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
@@ -927,7 +931,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		
 		$resultScoreAtt = $dbExternal->getAttScoreSetting($data['gradingId']);
 
-		$students = $dbExternal->getStudentByGroup($data);
+		$students = $dbExternal->getStudentByGroupExternal($data);
 		if(!empty($students)) foreach($students AS $key => $stu){
 			
 			$reductPercentage = $dbExternal->calculateScoreByAtt($stu['stu_id'],$data,$resultScoreAtt);

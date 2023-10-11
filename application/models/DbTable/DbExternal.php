@@ -568,7 +568,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	
 	
-	function getStudentByGroup($data=array()){
+	function getStudentByGroupExternal($data=array()){
 		$db=$this->getAdapter();
 		
 		$groupId = empty($data['groupId'])?0:$data['groupId'];
@@ -617,7 +617,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 		$sql.=" WHERE 
 					sgh.itemType=1 
-					and sgh.`group_id` =".$groupId;//AND sgh.stop_type=0
+					AND sgh.stop_type=0
+					and sgh.`group_id` =".$groupId;//
 		$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
 		if(!empty($data['sortStundent'])){
 			if($data['sortStundent']==1){

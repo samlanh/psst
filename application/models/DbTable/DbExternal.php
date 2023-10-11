@@ -448,7 +448,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	
 	
-	function getGradingSystemDetail($data){
+	function getGradingCriteriaItems($data){
 		$db = $this->getAdapter();
 		$gradingId = empty($data['gradingId'])?0:$data['gradingId'];
 		$subjectId = empty($data['subjectId'])?0:$data['subjectId'];

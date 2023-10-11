@@ -120,7 +120,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
    		$sql.=$dbp->getAccessPermission('s.branch_id');
    		return $db->fetchRow($sql);
    }
-   function getGradingSystemDetail($id){
+   function getGradingDetail($id){
    	$db = $this->getAdapter();
    	$sql="SELECT s.*,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS exam_typetitle 
    		FROM `rms_scoreengsettingdetail` AS s 

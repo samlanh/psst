@@ -91,7 +91,7 @@ class Issuesetting_GradingsystemController extends Zend_Controller_Action {
     		exit();
     	}
 		$this->view->row = $row;
-    	$this->view->detail = $db->getGradingSystemDetail($id);
+    	$this->view->detail = $db->getGradingDetail($id);
     	$this->view->checking = $db->checkingIsInUse($id);
     	$frm = new Issuesetting_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);
@@ -120,7 +120,7 @@ class Issuesetting_GradingsystemController extends Zend_Controller_Action {
     		exit();
     	}
     	
-    	$this->view->detail = $db->getGradingSystemDetail($id);
+    	$this->view->detail = $db->getGradingDetail($id);
     	$frm = new Issuesetting_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);
     	Application_Model_Decorator::removeAllDecorator($frm);

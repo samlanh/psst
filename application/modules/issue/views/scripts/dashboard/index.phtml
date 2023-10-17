@@ -11,6 +11,17 @@
 <?php 
 	//echo $this->render('externalHead.phtml');
 ?>
+<style>
+	/* .table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+    padding: 5px 2px;
+    line-height: 14px;
+	} */
+	ul.sub_list li{
+		float: left;
+		width: 33%;
+		list-style: none;
+	}
+</style>
 	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
 	<div class="row"> 
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -55,59 +66,86 @@
 					   </form>
 				   </div>
 			   </div>
-			   
 			   <div class="row"> 
 					<?php if(!empty($this->row)) foreach($this->row as $row){ 
 						$cardClass = "border-top-primary border-top-darken-1";
 						$bgClass = "border-primary bg-gradient-directional-primary";
-						if($row['examType']==2){
+						if($this->search['exam_type']==2){
 							$cardClass = "border-top-warnings border-top-darken-1";
 							$bgClass = "border-warnings bg-gradient-directional-warnings";
 						}
 					?>
-					<div class="col-md-3 col-sm-3 col-xs-12"> 
+					<div class="col-md-6 col-sm-6 col-xs-12"> 
 						<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
 							<div class="card-content">
 								<div class="row d-flex">
-									<div class="col-xs-4 pr-0">
+									<div class="col-xs-3 pr-0">
 										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
-											<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-2 text-center">
-												<?php echo $row['groupCode']; ?>
-												<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php echo $row['roomName']; ?></small>
+											<span class="text-white font-large-2 text-center">
+												<?php echo $row['group_code']; ?>
+												<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['room_name']; ?></small>
 											</span>
 										</div>
-										
 									</div>
-									<div class="col-xs-8 pl-0">
-										<ul class="nav navbar-right panel_toolbox stusearch">
-										  <li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-											<ul class="dropdown-menu" role="menu">
-												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/issuescore/edit/id/".$row['id'];?>"><?php echo $tr->translate('EDIT');?></a>
-												</li>
-												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$row['id'];?>"><?php echo $tr->translate('SCORE_LIST_REPORT');?></a>
-												</li>
-											</ul>
-										  </li>
-										</ul>
+									<div class="col-xs-9 pl-0">
 										<div class="p-1">
-											<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
-											<div class="text-left">
-											   <strong><?php echo $row['subjectTitle']; ?></strong> <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
-												<p class="mb-0"><?php echo $row['academicYear']; ?></p>
-												<h3 class="mb-0 mt-0 p-relative">
-													<span class="counting-num mr-1"><?php echo $row['gradeTitle']; ?></span>
-													<i class="glyphicon glyphicon-education"></i>  
-												</h3>
-												 <p class="mb-0"><i class="glyphicon glyphicon-calendar"></i> <?php echo date("d-M-Y",strtotime($row['dateInput'])); ?></p>
-												<?php if($row['status']==1){?>
-												<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class=" text-primary glyphicon glyphicon-ok-sign"></i></p>
-												<?php }else{?>
-												<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class="text-danger glyphicon glyphicon-remove-sign"></i></p>
-												<?php }?>
-											</div>
+											<!-- <table class="table-striped table-hover" width="100%">
+												<thead class="thead-light border-bottom"> -->
+													<!-- <tr>
+														<th scope="col">មុខវិជ្ជា</th>
+														<th scope="col"> គ្រូបង្រៀន</th>
+														<th scope="col" class="text-center">បានបញ្ចូល</th>
+													</tr> -->
+												<!-- </thead>
+												<tbody> -->
+												<ul style="list-style: none;">
+													<?php 
+													$dbg = new Issue_Model_DbTable_DbDashboard();
+													$groupId   = $row['id'];
+													$examType  = $this->search['exam_type'];
+													$semester  = $this->search['for_semester'];
+													$month	   = $this->search['for_month'];
+													$startDate = $this->search['start_date'];
+													$endDate   = $this->search['end_date'];
+													$data = array(
+															'groupId'  => $groupId ,
+															'examType'  => $examType ,
+															'forSemester'  => $semester ,
+															'forMonth' 	=> $month ,
+													);
+													$subNum=0;
+													$oldGroup="";
+													$subtotal= $row['totalSubject']/2;
+													$row_subject= $dbg->getSubjectScoreByGroup($data);
+													
+													if(!empty($row_subject)) foreach($row_subject as $rs){ 
+														$subNum++;
+
+														if($rs['subjectLang']==1){
+															$subjectName=$rs['sub_name'];
+															$teacherName=$rs['teacher_name_kh'];
+														}else{
+															$subjectName=$rs['sub_name_en'];
+															$teacherName=$rs['teacher_name_en'];
+														}
+														?>
+														<li class="divi_line">	
+
+															<ul class="sub_list">
+																<li><?php echo $subjectName; ?></li>
+																<li><?php echo $teacherName; ?></li>
+																<li><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true"></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?></li>
+															</ul>
+
+														</li>
+													<?php } 
+												
+
+												//	$oldGroup=$row['id'];
+													?>
+												</ul>
+												<!-- </tbody>
+											</table> -->
 										</div>
 									</div>
 								</div>
@@ -125,9 +163,9 @@
 <script type="text/javascript">
 					dojo.require('dijit.form.DateTextBox');
 
-$( document ).ready(function() {
-   setPageTitle('<?php echo $pageTitle; ?>');
-});
+// $( document ).ready(function() {
+//    setPageTitle('<?php echo $pageTitle; ?>');
+// });
 
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.ready(function(){

@@ -32,6 +32,9 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		if(!empty($data['subjectId'])){
 			$sql.=" AND gd.subjectId = ".$data['subjectId'];
 		}
+		$from_date =(empty($data['start_date']))? '1': "gd.dateInput >= '".$data['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "gd.dateInput <= '".$data['end_date']." 23:59:59'";
+		$sql.= " AND ".$from_date." AND ".$to_date;
 		
 		$sql.=" ORDER BY gd.subjectId ASC ";
 		return $this->getAdapter()->fetchRow($sql);
@@ -47,8 +50,8 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 			sd.*, 
 			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
 			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
-			(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = sd.subject_id LIMIT 1) AS teacher_name_kh,
-			(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = sd.subject_id LIMIT 1) AS teacher_name_en,
+			(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = sd.teacher LIMIT 1) AS teacher_name_kh,
+			(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = sd.teacher LIMIT 1) AS teacher_name_en,
 			$strSubjectLange AS subjectLang
 			FROM
 			rms_group_subject_detail AS sd   WHERE sd.`group_id` = ".$data['groupId'];
@@ -71,12 +74,6 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 	
 	}
     
-	public function getGroupSubjectById($id){
-		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_group_subject_detail WHERE group_id = ".$db->quote($id);
-		$row=$db->fetchAll($sql);
-		return $row;
-	}
 	function getAllGroups($search){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -114,7 +111,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		$where =' WHERE 1 ';
 		$from_date =(empty($search['start_date']))? '1': "g.date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "g.date <= '".$search['end_date']." 23:59:59'";
-		$where.= " AND ".$from_date." AND ".$to_date;
+		//$where.= " AND ".$from_date." AND ".$to_date;
 		
 		if(!empty($search['adv_search'])){
 			$s_where = array();

@@ -5,6 +5,7 @@
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
+	$dbgb = new Application_Model_DbTable_DbGlobal();
 	
 ?>
 
@@ -32,6 +33,40 @@
 				<div class="card-content">
 					<div class="card-body">
 						<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+							<script type="dojo/method" event="onSubmit">			
+								if(this.validate()) {
+									academic_year=dijit.byId('academic_year').get('value');
+									if(academic_year=='' || academic_year==0){
+										alert('<?php echo $tr->translate('PLEASE_SELECT_YEAR');?>!');
+										dijit.byId('academic_year').focus(); 
+										return false;
+									}
+									exam_type=dijit.byId('exam_type').get('value');
+									if(exam_type=='' || exam_type==0){
+										alert('<?php echo $tr->translate('SELECT_EXAM_TYPE');?>!');
+										dijit.byId('exam_type').focus(); 
+										return false;
+									}else if(exam_type==2){
+										for_semester=dijit.byId('for_semester').get('value');
+										if(for_semester=='' || for_semester==0){
+											alert('<?php echo $tr->translate('SELECT_SEMESTER');?>!');
+											dijit.byId('for_semester').focus(); 
+											return false;
+										}
+									}else if(exam_type==1){
+										for_month=dijit.byId('for_month').get('value');
+										if(for_month=='' || for_month==0){
+											alert('<?php echo $tr->translate('CHOOSE_MONTH');?>!');
+											dijit.byId('for_month').focus(); 
+											return false;
+										}
+									}
+									loadingBlock();
+									return true;
+								}else {
+									return false;
+								}
+							</script>
 							<div class="form-group">
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("adv_search");?>
@@ -83,8 +118,25 @@
 										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
 											<span class="text-white font-large-2 text-center">
 												<?php echo $row['group_code']; ?>
-												<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['room_name']; ?></small>
+												<small class="timeSchedule text-white mt-0 mb-3"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['room_name']; ?></small>
+												<?php 
+												$examType  = $this->search['exam_type'];
+												$month	   = $this->search['for_month'];
+												$semester  = $this->search['for_semester'];
+												if($examType==1){
+                                                  $examlabel =  $tr->translate("TEACHERSCORE")." : ".$tr->translate("MONTHLY")." ".$month; 
+												}elseif($examType==2){
+													if($semester==1){
+														$examlabel= $tr->translate("TEACHERSCORE")." : ".$tr->translate("SEMESTER1");
+													}elseif($semester==2){
+														$examlabel= $tr->translate("TEACHERSCORE")." : ".$tr->translate("SEMESTER2");
+													}
+												}
+											
+												?>
+												<small class="timeSchedule text-white mt-0"> <?php echo $examlabel; ?></small>
 											</span>
+										
 										</div>
 									</div>
 									<div class="col-xs-9 pl-0">
@@ -108,10 +160,12 @@
 													$startDate = $this->search['start_date'];
 													$endDate   = $this->search['end_date'];
 													$data = array(
-															'groupId'  => $groupId ,
-															'examType'  => $examType ,
-															'forSemester'  => $semester ,
-															'forMonth' 	=> $month ,
+															'groupId'       => $groupId ,
+															'examType'      => $examType ,
+															'forSemester'   => $semester ,
+															'forMonth' 		=> $month ,
+															'start_date' 	=> $startDate ,
+															'end_date' 		=> $endDate ,
 													);
 													$subNum=0;
 													$oldGroup="";

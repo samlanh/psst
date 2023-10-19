@@ -320,5 +320,37 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		$sql.=" LIMIT 1";
 		return $db->fetchOne($sql);
 	}
+	function countDisplineTranscript($data=null){
+		$db = $this->getAdapter();
+		$sql="SELECT
+			COUNT(satd.id) AS attendence
+		FROM
+			`rms_student_attendence` AS sat,
+			`rms_student_attendence_detail` AS satd
+		WHERE sat.id = satd.attendence_id
+			AND sat.type=2 ";
+			
+// 			if(!empty($for_semester)){
+// 				$sql.= " AND sat.for_semester=".$for_semester;
+// 			}
+			if(!empty($data['groupId'])){
+				$sql.=" AND sat.group_id=".$data['groupId'];
+			}
+			if(!empty($data['semesterId'])){
+				$sql.=" AND sat.for_semester=".$data['semesterId'];
+			}
+			if(!empty($data['studentId'])){
+				$sql.=" AND satd.stu_id=".$data['studentId'];
+			}
+			if(!empty($data['forMonth'])){
+				$sql.=" AND EXTRACT(MONTH FROM sat.date_attendence)=".$data['forMonth'];
+			}
+			
+			if(!empty($data['attStatus'])){
+				$sql.=" AND satd.attendence_status=".$data['attStatus'];
+			}
+		$sql.=" LIMIT 1";
+		return $db->fetchOne($sql);
+	}
 	 
 }

@@ -50,7 +50,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					'percent'		=>$this->tr->translate("55%"),
 					'percentage'	=>"60-69%",
 					'grade'			=>"D",
-					'interpretation'=>"មធ្យម Everage",
+					'interpretation'=>"មធ្យម Average",
 					'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
 				),
 				array(
@@ -102,7 +102,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					'percent'		=>$this->tr->translate("15%"),
 					'percentage'	=>"60-69%",
 					'grade'			=>"D",
-					'interpretation'=>"មធ្យម Everage",
+					'interpretation'=>"មធ្យម Average",
 					'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
 				),
 				array(

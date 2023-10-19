@@ -2642,7 +2642,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,(SELECT te.$teacherName FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherName
 						,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameKh
 						,(SELECT te.teacher_name_en FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameEng
-						,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherTel
+						,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = schDetail.techer_id LIMIT 1) AS teacherTel
 						,(SELECT $label FROM rms_view WHERE rms_view.key_code=schDetail.day_id AND rms_view.type=18 LIMIT 1)AS dayTitle
 						,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=schDetail.day_id AND rms_view.type=18 LIMIT 1)AS daysKh
 						,(SELECT t.$timeTitle FROM rms_timeseting AS t WHERE t.value =schDetail.from_hour LIMIT 1) AS fromHourTitle
@@ -2687,7 +2687,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						$sql.=" AND g.degree=".$search['degree'];
 					}
 					$sql.=" ORDER BY schDetail.day_id ASC ,schDetail.from_hour ASC ";
-    			 
+    			 echo $sql;
 				$row = $db->fetchAll($sql);
 				$result = array(
 					'status' =>true,

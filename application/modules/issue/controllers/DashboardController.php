@@ -8,32 +8,27 @@ class Issue_DashboardController extends Zend_Controller_Action {
 	}
 public function indexAction()
 	{
-		$id=0;
-		
-		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$teacherInfo = $dbExternal->getCurrentTeacherInfo();
-		$currentAcademic = empty($teacherInfo['currentAcademic'])?0:$teacherInfo['currentAcademic'];
-		
+		$db = new Issue_Model_DbTable_DbDashboard();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
-		}
-		else{
-			$search = array(
-						'adv_search'=>'',
-						'academic_year'=> $currentAcademic,
-						'exam_type'=>-1,
-						'for_semester'=>-1,
-						'for_month'=>'',
-						'degree'=>0,
-						'grade'=> 0,
-						'start_date'=> '',
-						'end_date'=>date('Y-m-d'));
-		}
-		$this->view->search = $search;
-		$db = new Application_Model_DbTable_DbIssueScore();
-		$row = $db->getAllSubjectScoreByClass($search);
-		$this->view->row = $row;
+			$this->view->search = $search;
+			$rows= $db->getAllGroups($search);
 
+		}else{
+			// $search = array(
+			// 			'adv_search'=>'',
+			// 			'academic_year'=> $currentAcademic,
+			// 			'exam_type'=>0,
+			// 			'for_semester'=>0,
+			// 			'for_month'=>0,
+			// 			'degree'=>0,
+			// 			'grade'=> 0,
+			// 			'start_date'=> '',
+			// 			'end_date'=>date('Y-m-d'));
+			$rows='';
+		}
+		
+		$this->view->row = $rows;
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);

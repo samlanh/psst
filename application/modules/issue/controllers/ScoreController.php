@@ -61,6 +61,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			try {
 				$rs =  $db->addStudentScore($_data);
 				$notify = array(
+						"optNotification" => 2,
 						"notificationId" => $rs,
 						"groupId" => $_data["group"],
 						"typeNotify" => "studentScoreTranscript",
@@ -89,6 +90,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 				if(isset($_data['save_close'])){
 					$rs =  $dbs->updateStudentScore($_data);
 					$notify = array(
+						"optNotification" => 2,
 						"notificationId" => $_data["score_id"],
 						"groupId" => $_data["group"],
 						"typeNotify" => "studentScoreTranscript",

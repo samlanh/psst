@@ -1887,13 +1887,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{
-				
+				$_data['device_type'] = empty($_data['device_type']) ? 1 : $_data['device_type'];
 				$check = $this->checkTokenDevice($_data['token']);
     			$this->_name='mobile_mobile_token';
 				if(empty($check)){
 					$array = array(
 						'token'	=>$_data['token'],
-						'device_type'=>1,
+						'device_type'=> $_data['device_type'],
 						'date'	=>date('Y-m-d H:i:s'),
 					);
 					return $this->insert($array);
@@ -2359,49 +2359,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 
 				";
 				if($type==1){//attendance
+					
+					$groupId = empty($search['groupId']) ? 0 : $search['groupId'];
+						
 					$sql.="
-						,(SELECT 
-								COUNT(*) AS attendence_status
-							FROM 
-								`rms_student_attendence` AS sat2 
-							WHERE					
-								sat2.type=1
-								AND sat2.`status`=1
-								AND sat2.group_id IN (".$groupList.")
-								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
-								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) AS countNoPermission
-						,(SELECT 
-								COUNT(*) AS attendence_status
-							FROM 
-								`rms_student_attendence` AS sat2 
-							WHERE					
-								sat2.type=1
-								AND sat2.`status`=1
-								AND sat2.group_id IN (".$groupList.")
-								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
-								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) AS countPermission
-						,(SELECT 
-								COUNT(*) AS attendence_status
-							FROM 
-								`rms_student_attendence` AS sat2 
-							WHERE					
-								sat2.type=1
-								AND sat2.`status`=1
-								AND sat2.group_id IN (".$groupList.")
-								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
-								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) AS countLate
-						,(SELECT 
-								COUNT(*) AS attendence_status
-							FROM 
-								`rms_student_attendence` AS sat2 
-							WHERE					
-								sat2.type=1
-								AND sat2.`status`=1
-								AND sat2.group_id IN (".$groupList.")
-								AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y')
-								AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) AS countEalyLeave
-			
-					";
+						,'0' AS countNoPermission
+						,'0' AS countPermission
+						,'0' AS countLate
+						,'0' AS countEalyLeave
+									";
 					
 					/*
 					$sql.="
@@ -2460,6 +2426,35 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$sql.=" LIMIT ".$search['limitRecord'];
 				}
 				$row = $db->fetchAll($sql);
+				if($type==1){
+					if(!empty($row)){
+						$arrFilter =array(
+							"studentId" => $studentId
+						);
+						foreach($row as $key => $rs){
+							
+							$arrFilter["yearMonth"] = $rs["yearMonth"];
+							$arrFilter["group_id"] = $rs["group_id"];
+							$arrFilter["attendence_status"] = 2;
+							$countNoPermission = $this->getCountAttendance($arrFilter);
+							$row[$key]["countNoPermission"] = $countNoPermission;
+							
+							$arrFilter["attendence_status"] = 3;
+							$countPermission = $this->getCountAttendance($arrFilter);
+							$row[$key]["countPermission"] = $countPermission;
+							
+							$arrFilter["attendence_status"] = 4;
+							$countLate = $this->getCountAttendance($arrFilter);
+							$row[$key]["countLate"] = $countLate;
+							
+							$arrFilter["attendence_status"] = 5;
+							$countEalyLeave = $this->getCountAttendance($arrFilter);
+							$row[$key]["countEalyLeave"] = $countEalyLeave;
+							
+						}
+					}
+				}
+				
 				$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -2474,6 +2469,46 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				return $result;
 			}
     	}
+		
+		function getCountAttendance($_data){
+			$db = $this->getAdapter();
+			
+			$yearMonth = empty($_data["yearMonth"]) ? "202310" : $_data["yearMonth"];
+			$studentId = empty($_data["studentId"]) ? "0" : $_data["studentId"];
+			$groupId = empty($_data["group_id"]) ? "0" : $_data["group_id"];
+			$attendence_status = empty($_data["attendence_status"]) ? "0" : $_data["attendence_status"];
+			$sql="
+				SELECT 
+					satd.attendence_id,
+					satd.attendence_status
+				FROM 
+					`rms_student_attendence` AS sat ,
+					`rms_student_attendence_detail` AS satd
+						
+				WHERE satd.attendence_status = $attendence_status
+					AND sat.`id`= satd.`attendence_id`
+					AND satd.stu_id = $studentId
+					AND sat.group_id = $groupId
+					
+					
+				";
+			
+			if(!empty($_data["forSemester"])){
+				$sql.=" AND sat.`for_semester` = ".$_data["forSemester"];
+			}else{
+				$sql.=" AND DATE_FORMAT(sat.`date_attendence`,'%Y%m') = '$yearMonth'";
+			}
+			$sql.="
+					GROUP BY satd.attendence_id,satd.attendence_status
+					ORDER BY satd.attendence_status DESC
+			";
+			$rs = $db->fetchAll($sql);
+			$restult = "0";
+			if(!empty($rs)){
+				$restult = "".COUNT($restult)."";
+			}
+			return $restult;
+		}
 		
 		public function getStudentAttendanceDetail($search){
     		$db = $this->getAdapter();
@@ -2601,13 +2636,19 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$day = empty($search['day'])?0:$search['day'];
 				$sql="
 					SELECT 
-						(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleKh
-						,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleEng
-						,(SELECT sj.".$subjectTitle." FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitle
+					
+						sj.subject_titlekh AS subjectTitleKh
+						,sj.subject_titleen AS subjectTitleEng
+						,sj.subject_lang AS subject_lang
+						
+						,CASE 
+							WHEN sj.subject_lang =1 THEN sj.subject_titlekh
+							ELSE sj.subject_titleen
+						END AS subjectTitle
 						,(SELECT te.$teacherName FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherName
 						,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameKh
 						,(SELECT te.teacher_name_en FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameEng
-						,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS teacherTel
+						,(SELECT t.tel FROM rms_teacher AS t WHERE t.id = schDetail.techer_id LIMIT 1) AS teacherTel
 						,(SELECT $label FROM rms_view WHERE rms_view.key_code=schDetail.day_id AND rms_view.type=18 LIMIT 1)AS dayTitle
 						,(SELECT name_kh FROM rms_view WHERE rms_view.key_code=schDetail.day_id AND rms_view.type=18 LIMIT 1)AS daysKh
 						,(SELECT t.$timeTitle FROM rms_timeseting AS t WHERE t.value =schDetail.from_hour LIMIT 1) AS fromHourTitle
@@ -2630,17 +2671,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,schDetail.*
 					FROM 
 						rms_group_reschedule AS schDetail
-						,rms_group_schedule AS sch
-						,rms_group_detail_student AS grd
-						,rms_group AS g
+						JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
+						JOIN  rms_group AS g ON g.id =sch.group_id
+							LEFT JOIN rms_group_detail_student AS grd ON grd.group_id =sch.group_id
+							LEFT JOIN `rms_subject` AS sj ON sj.id = schDetail.subject_id
 					WHERE 
-						sch.id =schDetail.main_schedule_id
-						AND grd.group_id =sch.group_id
-						
-						AND g.id =sch.group_id
-						AND g.is_use =1
+						g.is_use =1
 						AND g.is_pass =2
-						
 						AND grd.is_current =1
 						AND grd.is_maingrade =1
 					";
@@ -2652,7 +2689,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						$sql.=" AND g.degree=".$search['degree'];
 					}
 					$sql.=" ORDER BY schDetail.day_id ASC ,schDetail.from_hour ASC ";
-    			 
 				$row = $db->fetchAll($sql);
 				$result = array(
 					'status' =>true,
@@ -4576,171 +4612,23 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
     				,g.group_code as groupCode
 					
-					,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=1) 
-			AS totalComeSemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) 
-			AS totalASemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) 
-			AS totalPSemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) 
-			AS totalLSemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) 
-			AS totalELSemester1
-			
-			
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=1) 
-			AS totalComeSemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) 
-			AS totalASemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) 
-			AS totalPSemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) 
-			AS totalLSemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) 
-			AS totalELSemester2
-			
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=1) 
-			AS gTotalCome
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=2) 
-			AS gTotalA
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=3) 
-			AS gTotalP
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=4) 
-			AS gTotalL
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$groupId
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId ORDER BY satd2.attendence_status DESC LIMIT 1)=5) 
-			AS gTotalEL
-			
-			
+					,'0' AS totalComeSemester1
+					,'0' AS totalASemester1
+					,'0' AS totalPSemester1
+					,'0' AS totalLSemester1
+					,'0' AS totalELSemester1
+					
+					,'0' AS totalComeSemester2
+					,'0' AS totalASemester2
+					,'0' AS totalPSemester2
+					,'0' AS totalLSemester2
+					,'0' AS totalELSemester2
+					
+					,'0' AS gTotalCome
+					,'0' AS gTotalA
+					,'0' AS gTotalP
+					,'0' AS gTotalL
+					,'0' AS gTotalEL
 					
 					,sat.`date_attendence`
 					,satd.description
@@ -4757,6 +4645,50 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.= " GROUP BY satd.`stu_id` ";
 		
 			$rowAttendance = $db->fetchRow($sql);
+			if(!empty($rowAttendance)){
+				$arrFilter =array(
+					"studentId" => $studentId,
+					"group_id" => $groupId,
+				);
+				$arrFilter["forSemester"] = 1;
+				$arrFilter["attendence_status"] = 2;
+				$totalASemester1 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalASemester1"] = $totalASemester1;
+				
+				$arrFilter["attendence_status"] = 3;
+				$totalPSemester1 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalPSemester1"] = $totalPSemester1;
+				
+				$arrFilter["attendence_status"] = 4;
+				$totalLSemester1 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalLSemester1"] = $totalLSemester1;
+				
+				$arrFilter["attendence_status"] = 5;
+				$totalELSemester1 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalELSemester1"] = $totalELSemester1;
+				
+				$arrFilter["forSemester"] = 2;
+				$arrFilter["attendence_status"] = 2;
+				$totalASemester2 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalASemester1"] = $totalASemester2;
+				
+				$arrFilter["attendence_status"] = 3;
+				$totalPSemester2 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalPSemester2"] = $totalPSemester2;
+				
+				$arrFilter["attendence_status"] = 4;
+				$totalLSemester2 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalLSemester2"] = $totalLSemester2;
+				
+				$arrFilter["attendence_status"] = 5;
+				$totalELSemester2 = $this->getCountAttendance($arrFilter);
+				$rowAttendance["totalELSemester2"] = $totalELSemester2;
+				
+				$rowAttendance["gTotalA"] = "".$totalASemester1+$totalASemester2."";
+				$rowAttendance["gTotalP"] = "".$totalPSemester1+$totalPSemester2."";
+				$rowAttendance["gTotalL"] = "".$totalLSemester1+$totalLSemester2."";
+				$rowAttendance["gTotalEL"] = "".$totalELSemester1+$totalELSemester2."";
+			}
 			
 			
 			$sql=" SELECT 

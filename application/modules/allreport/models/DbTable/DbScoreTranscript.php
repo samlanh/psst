@@ -136,8 +136,10 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 					(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
 					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
 					sd.amount_subject
-				FROM  `rms_score_detail` AS sd
-					WHERE 1 ";
+				FROM  `rms_score_detail` AS sd 
+					LEFT JOIN rms_group AS g ON g.id=sd.group_id 
+					LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id`
+				WHERE 1 ";
 		if(!empty($scoreId)){
 			$sql.=" AND sd.`score_id`=".$scoreId;
 		}
@@ -150,7 +152,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		if(!empty($data['groupbySubjectId'])){//for get all subject in result detail
 			$sql.=" GROUP BY subject_id ";
 		}
-		$sql.=" ORDER  BY $strSubjectLange ASC ";
+		$sql.=" ORDER  BY $strSubjectLange  ASC, gsj.subject_order  ASC ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -297,6 +299,38 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 			`rms_student_attendence_detail` AS satd
 		WHERE sat.id = satd.attendence_id
 			AND sat.type=1 ";
+			
+// 			if(!empty($for_semester)){
+// 				$sql.= " AND sat.for_semester=".$for_semester;
+// 			}
+			if(!empty($data['groupId'])){
+				$sql.=" AND sat.group_id=".$data['groupId'];
+			}
+			if(!empty($data['semesterId'])){
+				$sql.=" AND sat.for_semester=".$data['semesterId'];
+			}
+			if(!empty($data['studentId'])){
+				$sql.=" AND satd.stu_id=".$data['studentId'];
+			}
+			if(!empty($data['forMonth'])){
+				$sql.=" AND EXTRACT(MONTH FROM sat.date_attendence)=".$data['forMonth'];
+			}
+			
+			if(!empty($data['attStatus'])){
+				$sql.=" AND satd.attendence_status=".$data['attStatus'];
+			}
+		$sql.=" LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+	function countDisplineTranscript($data=null){
+		$db = $this->getAdapter();
+		$sql="SELECT
+			COUNT(satd.id) AS attendence
+		FROM
+			`rms_student_attendence` AS sat,
+			`rms_student_attendence_detail` AS satd
+		WHERE sat.id = satd.attendence_id
+			AND sat.type=2 ";
 			
 // 			if(!empty($for_semester)){
 // 				$sql.= " AND sat.for_semester=".$for_semester;

@@ -50,7 +50,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					'percent'		=>$this->tr->translate("55%"),
 					'percentage'	=>"60-69%",
 					'grade'			=>"D",
-					'interpretation'=>"មធ្យម Everage",
+					'interpretation'=>"មធ្យម Average",
 					'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
 				),
 				array(
@@ -102,7 +102,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					'percent'		=>$this->tr->translate("15%"),
 					'percentage'	=>"60-69%",
 					'grade'			=>"D",
-					'interpretation'=>"មធ្យម Everage",
+					'interpretation'=>"មធ្យម Average",
 					'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
 				),
 				array(
@@ -4074,7 +4074,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
    	}
    	public static function getTeacherUserId(){
-   		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+   		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
    		$userId = $sessionUserExternal->userId;
    		$userId = empty($userId)?0:$userId;
    		return $userId;

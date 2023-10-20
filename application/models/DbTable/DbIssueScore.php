@@ -6,7 +6,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
     protected $_name = 'rms_grading';
     	
 	public static function getUserExternalId(){
-		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 		$userId = $sessionUserExternal->userId;
 		return $userId;
 	}
@@ -56,7 +56,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': " grd.dateInput <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		
-		if(!empty($data['externalAuth'])){
+		if(!empty($search['externalAuth'])){
 			$where.=' AND grd.teacherId='.$this->getUserExternalId();
 		}
 		if(!empty($search['adv_search'])){

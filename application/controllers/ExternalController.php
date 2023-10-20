@@ -14,7 +14,7 @@ class ExternalController extends Zend_Controller_Action
     public function indexAction()
     {
     	$this->_helper->layout()->disableLayout();
-    	$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+    	$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
     	$userName = $sessionUserExternal->userName;
     	$userId = $sessionUserExternal->userId;
     	if (!empty($userId)){
@@ -36,7 +36,7 @@ class ExternalController extends Zend_Controller_Action
 			
 			$dbExternal=new Application_Model_DbTable_DbExternal();
 			if($dbExternal->userAuthenticateTeacher($userName,$passwordKey)){
-				$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+				$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 				$teacherInfo = $dbExternal->getTeacherInfo($userName,$passwordKey);
 
 				$sessionUserExternal->userId= $teacherInfo['id'];
@@ -64,7 +64,7 @@ class ExternalController extends Zend_Controller_Action
         if($this->getRequest()->getParam('value')==1){        	
         	$aut=Zend_Auth::getInstance();
         	$aut->clearIdentity();        	
-        	$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+        	$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
         	if(!empty($sessionUserExternal->userId)){
 	        
 	        	$sessionUserExternal->unsetAll();       	
@@ -182,7 +182,7 @@ class ExternalController extends Zend_Controller_Action
 			
 			$dbExternal = new Application_Model_DbTable_DbExternal();
 			
-			$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+			$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 			$userName = $sessionUserExternal->userName;
 			$userId = $sessionUserExternal->userId;
 		

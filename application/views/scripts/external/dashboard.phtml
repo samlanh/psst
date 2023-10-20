@@ -6,7 +6,7 @@
 	$key = new Application_Model_DbTable_DbKeycode();
 	$dataInfo=$key->getKeyCodeMiniInv(TRUE);
 		
-	$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+	$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 	$userName = $sessionUserExternal->userName;
 	$teacherNameKh = $sessionUserExternal->teacher_name_kh;
 	$teacherNameEn = $sessionUserExternal->teacher_name_en;

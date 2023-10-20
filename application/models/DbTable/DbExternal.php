@@ -65,7 +65,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	
 	public static function getUserExternalId(){
-		$sessionUserExternal=new Zend_Session_Namespace("externalAuth");
+		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 		$userId = $sessionUserExternal->userId;
 		$userId = empty($userId)?0:$userId;
 		return $userId;
@@ -501,7 +501,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		return $rRow;
 	}
 	
-	function getClassSubjectScoreById($gradingId){
+	function getClassSubjectScoreById($gradingId,$fullControlID){
 		$db=$this->getAdapter();
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -560,7 +560,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
 		
 		$where ='';
-		$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		if(empty($fullControlID)){
+			$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		}
 		$where.=' AND grd.id='.$gradingId;
 		$where.=' LIMIT 1 ';
 		

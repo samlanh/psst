@@ -55,7 +55,6 @@ class IssuescoreController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbIssueScore();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			
 			try {
 				$rs = $db->addSubjectScoreByClass($_data);
 				if(isset($_data['save_new'])){

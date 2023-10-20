@@ -59,9 +59,12 @@ class ExtreportController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
     	$gradingID=$this->getRequest()->getParam("id");
     	$gradingID =empty($gradingID)?0:$gradingID;
+    	
+    	$fullControlID=$this->getRequest()->getParam("fullcontrol");
+    	$fullControlID =empty($fullControlID)?0:$fullControlID;
 
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getClassSubjectScoreById($gradingID);
+		$row = $dbExternal->getClassSubjectScoreById($gradingID,$fullControlID);
 		$this->view->rs = $row;
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issuescore/index");

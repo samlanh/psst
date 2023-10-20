@@ -1,8 +1,7 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-$this->headTitle($tr->translate("TRANSCRIPT"));
+$title=$tr->translate("TRANSCRIPT");
 
-echo $this->headTitle();
 $frm =  $this->form_search;
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
@@ -195,7 +194,10 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				}
 			}
 		</style>
-		<?php 	if (!empty($this->studentScoreResult)) {
+		<?php
+			//$titleNum=1;
+			$titleNum=count($this->studentScoreResult);
+		 	if (!empty($this->studentScoreResult)) {
 					foreach ($this->studentScoreResult as $key => $rs) {
 
 						$scoreId = $rs['id'];
@@ -223,7 +225,15 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 						$forSemester = $scoreInfo['for_semester'];
 
 						$break_page = "pages-break";
-
+					
+						//$title= $titleNum;
+						if($titleNum==1){
+							$title="របាយការណ៍ការវិវឌ្ឍ : ".$scoreInfo['groupCode'].'_'.$studentInfo['stu_code'].'_'.$studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'].''.$titleNum;
+						}else{
+							$title="របាយការណ៍ការវិវឌ្ឍ : ".$scoreInfo['groupCode'].$titleNum;
+						}
+						$this->headTitle($title);
+						echo $this->headTitle();
 				?>
 
 		<?php if (1 == 1) { //$scoreInfo['exam_type']

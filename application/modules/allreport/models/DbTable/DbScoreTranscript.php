@@ -136,8 +136,10 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 					(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
 					(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
 					sd.amount_subject
-				FROM  `rms_score_detail` AS sd
-					WHERE 1 ";
+				FROM  `rms_score_detail` AS sd 
+					LEFT JOIN rms_group AS g ON g.id=sd.group_id 
+					LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id`
+				WHERE 1 ";
 		if(!empty($scoreId)){
 			$sql.=" AND sd.`score_id`=".$scoreId;
 		}
@@ -150,7 +152,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 		if(!empty($data['groupbySubjectId'])){//for get all subject in result detail
 			$sql.=" GROUP BY subject_id ";
 		}
-		$sql.=" ORDER  BY $strSubjectLange ASC ";
+		$sql.=" ORDER  BY $strSubjectLange  ASC, gsj.subject_order  ASC ";
 		return $db->fetchAll($sql);
 	}
 	

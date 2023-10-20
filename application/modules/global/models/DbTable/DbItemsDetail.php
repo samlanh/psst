@@ -156,7 +156,7 @@
 								'max_score_semester' =>$_data['max_score_semester'.$i],
 								'amount_subject_sem' =>$_data['amount_subject_semester'.$i],
 								'cut_score'		=>$_data['score_cut_'.$i],
-								
+								'subject_order'	=>$_data['subject_order'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,
@@ -225,6 +225,7 @@
 								'cut_score'	=>$_data['score_cut_'.$i],
 								'amount_subject' =>$_data['amount_subject'.$i],
 								'amount_subject_sem' =>$_data['amount_subject_semester'.$i],
+								'subject_order'	=>$_data['subject_order'.$i],
 								'date' 			=> date("Y-m-d"),
 								'user_id'		=> $this->getUserId(),
 								'status' 		=> 1,

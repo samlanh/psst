@@ -62,6 +62,9 @@ if ($module != 'default') {
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>js/dojo-1.6.1/dijit/themes/<?php echo $them_style . "/" . $them_style ?>.css" />
 		<script src="<?php echo $this->baseUrl() . "/contextMenu/1.11.3/" ?>jquery.min.js"></script>
+		<?php if (($module == 'global' and $controller == "grade" and $action == "add") or ($module == 'global' and $controller == "grade" and $action == "edit")) { ?>
+		<script src="<?php echo $this->baseUrl();?>/admin/js/jquery-ui.js"></script>
+		<?php } ?>
 		<?php if (($module == 'test' and $controller == "index" and $action == "add") or ($module == 'test' and $controller == "index" and $action == "edit") or ($module == 'foundation' and $controller == "register" and $action == "add") or ($module == 'foundation' and $controller == "register" and $action == "copy")) { ?>
 			<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/webcam/webcamjs/webcam.js"></script>
 			<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/webcam/webcamjs/webcam.min.js"></script>

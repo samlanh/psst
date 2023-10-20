@@ -2636,9 +2636,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$day = empty($search['day'])?0:$search['day'];
 				$sql="
 					SELECT 
-						(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleKh
-						,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitleEng
-						,(SELECT sj.".$subjectTitle." FROM `rms_subject` AS sj WHERE sj.id = schDetail.subject_id LIMIT 1) AS subjectTitle
+					
+						sj.subject_titlekh AS subjectTitleKh
+						,sj.subject_titleen AS subjectTitleEng
+						,sj.subject_lang AS subject_lang
+						
+						,CASE 
+							WHEN sj.subject_lang =1 THEN sj.subject_titlekh
+							ELSE sj.subject_titleen
+						END AS subjectTitle
 						,(SELECT te.$teacherName FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherName
 						,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameKh
 						,(SELECT te.teacher_name_en FROM rms_teacher AS te WHERE te.id = schDetail.techer_id LIMIT 1 ) AS teaccherNameEng
@@ -2665,17 +2671,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,schDetail.*
 					FROM 
 						rms_group_reschedule AS schDetail
-						,rms_group_schedule AS sch
-						,rms_group_detail_student AS grd
-						,rms_group AS g
+						JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
+						JOIN  rms_group AS g ON g.id =sch.group_id
+							LEFT JOIN rms_group_detail_student AS grd ON grd.group_id =sch.group_id
+							LEFT JOIN `rms_subject` AS sj ON sj.id = schDetail.subject_id
 					WHERE 
-						sch.id =schDetail.main_schedule_id
-						AND grd.group_id =sch.group_id
-						
-						AND g.id =sch.group_id
-						AND g.is_use =1
+						g.is_use =1
 						AND g.is_pass =2
-						
 						AND grd.is_current =1
 						AND grd.is_maingrade =1
 					";
@@ -2687,7 +2689,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						$sql.=" AND g.degree=".$search['degree'];
 					}
 					$sql.=" ORDER BY schDetail.day_id ASC ,schDetail.from_hour ASC ";
-    			 echo $sql;
 				$row = $db->fetchAll($sql);
 				$result = array(
 					'status' =>true,

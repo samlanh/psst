@@ -541,6 +541,35 @@ class IndexController extends Zend_Controller_Action
 		}
 	}
 	
+	public function sessionteachercheckAction(){
+		if($this->getRequest()->isPost()){
+			$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);
+			$t = time();
+			$t0 = $session_teacher->timeout;
+			$diff = $t - $t0;
+			//500 = 5 min
+			if ($diff > 1000 || !isset($t0))
+			{
+				$session_teacher->unsetAll();
+			}
+	
+			$db_global = new Application_Model_DbTable_DbGlobal();
+			$checkses = $db_global->checkSessionTeacherExpire();
+			if (empty($checkses)){
+				echo true; exit();
+			}
+			echo false; exit();
+		}
+	}
+	public function reloadteacherAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);
+			$session_teacher->timeout= time();
+			print_r(Zend_Json::encode($session_user->timeout));
+			exit();
+		}
+	}
 	public function frontAction()
     {
     	

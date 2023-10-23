@@ -644,9 +644,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				grd.*
 			FROM 
 				`rms_grading_detail` AS grd
-			WHERE 1 ";
+			WHERE 1";
 		if(!empty($gradingId)){
-			$sql.=" grd.gradingId =".$gradingId;
+			$sql.=" AND grd.gradingId =".$gradingId;
 		}
 		if(!empty($studentId)){
 			$sql.=" AND grd.studentId=".$studentId;

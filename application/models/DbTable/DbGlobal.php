@@ -2979,6 +2979,16 @@ function getAllgroupStudyNotPass($action=null){
 			return true;
 		}
   }
+  public function checkSessionTeacherExpire()
+  {
+  	$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);
+  	$teacherId=$session_teacher->userId;
+  	if(empty($teacherId)){
+  		return false;
+  	}else{
+  		return true;
+  	}
+  }
   function reloadPageExpireSession(){
   		$url="";
   		$tr= Application_Form_FrmLanguages::getCurrentlanguage();

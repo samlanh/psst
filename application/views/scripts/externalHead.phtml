@@ -127,7 +127,6 @@
 					                    </li>
 				                  </ul>
 				                </li>
-				               
              				</ul>
             			</nav>
           			</div>
@@ -227,8 +226,55 @@
 								<?php }?>
 							</div> 
 						</div>
-						
-						<?php }?>
-					
-					
-					
+						<?php }?>				
+<script>
+			$(document).ready(function() {
+				$("body").hover(function() {
+					updateTimeOut();
+					checkSessionExpire();
+				});
+			});
+
+			var urlReload = '<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'reloadteacher')); ?> ';
+
+			function updateTimeOut() {
+				var lang = "";
+				jQuery.ajax({
+					url: urlReload,
+					type: "post",
+					data: {
+						'lange': lang
+					},
+					success: function(data) {},
+					error: function(err) {
+
+					}
+				});
+			}
+
+			var urlCheckSession = '<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'sessionteachercheck')); ?> ';
+
+			function checkSessionExpire() {
+				var lang = "";
+				jQuery.ajax({
+					url: urlCheckSession,
+					type: "post",
+					data: {
+						'lange': lang
+					},
+					success: function(data) {
+						if (data == true) {
+							loadingBlock();
+							setTimeout(function() {
+								alert("<?php echo $tr->translate("Session Expire"); ?>");
+								window.location = '<?php echo $this->baseUrl(); ?>/external';
+							}, 1000);
+
+						}
+					},
+					error: function(err) {
+
+					}
+				});
+			}
+</script>

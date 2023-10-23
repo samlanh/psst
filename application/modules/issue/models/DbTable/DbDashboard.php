@@ -67,7 +67,9 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 				$results[$key]['teacher_name_en'] = $rs['teacher_name_en'];
 				$results[$key]['subjectLang'] = $rs['subjectLang'];
 				$data['subjectId']=$rs['subject_id'];
-				$results[$key]['gradingScore']=$this->getGradingScoreData($data);;
+				$rsGrading=$this->getGradingScoreData($data);
+				$results[$key]['gradingScore']=$rsGrading['totalAverage'];
+				$results[$key]['gradingId']=$rsGrading['gradingId'];
 			}
 		}
 		return $results ;

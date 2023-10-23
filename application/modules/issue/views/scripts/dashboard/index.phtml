@@ -1,7 +1,7 @@
 <?php
 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$pageTitle = $tr->translate("ISSUE_SCORE_LIST");
+	$pageTitle = $tr->translate("TEACHER_DASHBOARD");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
@@ -141,15 +141,7 @@
 									</div>
 									<div class="col-xs-9 pl-0">
 										<div class="p-1">
-											<!-- <table class="table-striped table-hover" width="100%">
-												<thead class="thead-light border-bottom"> -->
-													<!-- <tr>
-														<th scope="col">មុខវិជ្ជា</th>
-														<th scope="col"> គ្រូបង្រៀន</th>
-														<th scope="col" class="text-center">បានបញ្ចូល</th>
-													</tr> -->
-												<!-- </thead>
-												<tbody> -->
+										
 												<ul style="list-style: none;">
 													<?php 
 													$dbg = new Issue_Model_DbTable_DbDashboard();
@@ -183,23 +175,18 @@
 															$teacherName=$rs['teacher_name_en'];
 														}
 														?>
-														<li class="divi_line">	
-
+														
+														<li class="divi_line">
 															<ul class="sub_list">
 																<li><?php echo $subjectName; ?></li>
 																<li><?php echo $teacherName; ?></li>
-																<li><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true"></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?></li>
+																<li><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true">&nbsp;&nbsp;<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rs['gradingId'];?>/fullcontrol/1"><i class="fa fa-file-text" aria-hidden="true"></i></a></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?> 
+																</li>
 															</ul>
-
 														</li>
 													<?php } 
-												
-
-												//	$oldGroup=$row['id'];
 													?>
 												</ul>
-												<!-- </tbody>
-											</table> -->
 										</div>
 									</div>
 								</div>

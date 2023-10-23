@@ -9,6 +9,7 @@ defined('PUBLIC_PATH') || define('PUBLIC_PATH', realpath(dirname(__FILE__)));
 defined('TITLE_REPORT') || define('TITLE_REPORT', "style='color:#000; font-size:16px;font-family:Times New Roman,Khmer OS Muol Light;white-space:nowrap;'");
 defined('OTHER_LANG_REQUIRED') || define('OTHER_LANG_REQUIRED', 'false');
 defined('SYSTEM_SES') || define('SYSTEM_SES', "authstupsisnew");
+defined('TEACHER_AUTH') || define('TEACHER_AUTH', "teacherAuth");
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -28,7 +29,7 @@ defined('APP_ID') || define('APP_ID', 'dfc704ab-e023-4b0b-b030-e300f13b74eb');
 defined('RECEIPT_TYPE') || define('RECEIPT_TYPE', 3);//1elt,2nws,3psis
 defined('ICODE') || define('ICODE', '100323');
 defined('SCORE_RESULT_TEMPLATE') || define('SCORE_RESULT_TEMPLATE', 2);//1=for general,2=for AHS
-defined('NEW_STU_ID_FROM_TEST') || define('NEW_STU_ID_FROM_TEST', 1);//0=default,1=show stu_id register to enter
+//defined('NEW_STU_ID_FROM_TEST') || define('NEW_STU_ID_FROM_TEST', 1);//0=default,1=show stu_id register to enter
 defined('STU_ID_TYPE') || define('STU_ID_TYPE', 3);//1=Auto By Branch,2=Auto By Degree,3 by school option
 defined('STU_SERIAL_TYPE') || define('STU_SERIAL_TYPE', 2);//1=for general,2=for psis
 defined('TEST_CONDICTION') || define('TEST_CONDICTION', 1);//1=for general show branch in text index,2=for psis(not show)

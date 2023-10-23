@@ -54,50 +54,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			</div>
 		</div>
 	</div>
-	<!-- <form action="" dojoType="dijit.form.Form" method="post">
-		<div class="form-group">
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<select id="group_id" name="group_id" class="fullside" dojoType="dijit.form.FilteringSelect">
-					<?php if (!empty($this->group)) foreach ($this->group as $rs) { ?>
-						<option value="<?php echo $rs['id'] ?>" <?php //if($rs['id']==$this->search['group_id']){echo "selected='selected'";}
-																?>><?php echo $rs['name'] ?></option>
-					<?php } ?>
-				</select>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<select id="exam_type" name="exam_type" class="fullside" onChange="displaymonth();" dojoType="dijit.form.FilteringSelect">
-					<option value="1" <?php //if ($this->search['exam_type']==1){ echo 'selected="selected"';}
-										?>>ប្រចាំខែ</option>
-					<option value="2" <?php //if ($this->search['exam_type']==2){ echo 'selected="selected"';}
-										?>>ប្រលងឆមាស</option>
-				</select>
-			</div>
-			<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
-				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">
-					<option value="1" <?php //if ($this->search['for_semester']==1){ echo 'selected="selected"';}
-										?>><?php echo $tr->translate("SEMESTER"); ?> 1 </option>
-					<option value="2" <?php //if ($this->search['for_semester']==2){ echo 'selected="selected"';}
-										?>><?php echo $tr->translate("SEMESTER"); ?> 2</option>
-				</select>
-			</div>
-			<div id="month" class="col-md-2 col-sm-2 col-xs-12">
-				<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" type="text">
-					<?php if (!empty($this->month)) {
-						foreach ($this->month as $month) { ?>
-							<option value="<?php echo $month['id'] ?>" <?php //if($month['id']==$this->search['for_month']){echo "selected='selected'";}
-																		?>><?php echo $month['name'] ?></option>
-					<?php }
-					} ?>
-				</select>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
-				<input type="hidden" id="stu_id" name="stu_id" value="<?php //echo $this->search['stu_id']
-																		?>" />
-			</div>
-		</div>
-	</form> -->
-	
+
 	<div id="divPrint">
 		<style type="text/css">
 			table.header,
@@ -325,8 +282,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 												<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
 												<td class="border-right-none"></td>
 												<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
-												<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); ?></strong>&nbsp;</td>
-												<td align="center"><strong><?php echo $scoreInfo['rankingInKhmer']; ?></strong></td>
+												<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); ?></strong>&nbsp;</td>
+												<td rowspan="2" align="center"><strong><?php echo $scoreInfo['rankingInKhmer']; ?></strong></td>
 											</tr>
 											<tr class="style hover">
 												<td colspan="5" align="center" class="blue ">&nbsp;
@@ -339,7 +296,6 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 														echo number_format($totalKhmerAverage, 2); ?>
 													</strong>
 												</td>
-												<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); ?></strong>&nbsp;</td>
 											</tr>
 										<?php
 											$totalAveragescore = 0;
@@ -352,8 +308,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											<td>ល.រ<br />No.</td>
 											<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
 											<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-											<td>ពិន្ទុ<br />score</td>
-											<td>មធ្យមភាគ<br />Average</td>
+											<td colspan="2">ពិន្ទុសរុប<br />Total Socre</td>
 											<td>និទ្ទេស<br />Grade</td>
 											<td>ចំណាត់ថ្នាក់<br />Rank</td>
 										</tr>
@@ -373,8 +328,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
 											<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
-											<td class="border-right-none"></td>
-											<td align="center"><?php echo $resultScore['totalAverage']; ?></td>
+											
+											<td colspan="2" align="center"><?php echo $resultScore['totalAverage']; ?></td>
 											<td align="center" class="colorRed"><?php echo $grade ?></td>
 											<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
 										</tr>
@@ -409,8 +364,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
 								<td class="border-right-none"></td>
 								<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
-								<td></td>
-								<td align="center"><?php echo $scoreInfo['rankingInEnglish']; ?></td>
+								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); ?></strong>&nbsp;</td>
+								<td rowspan="2" align="center"><?php echo $scoreInfo['rankingInEnglish']; ?></td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="5" align="center" class="blue ">&nbsp;
@@ -423,10 +378,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										echo number_format($totalKhmerAverage, 2); ?>
 									</strong>
 								</td>
-								<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); ?></strong>&nbsp;</td>
-								<td></td>
 							</tr>
-
 							<tr class="style hover doubleBorder">
 								<td colspan="7" align="center" class="blue khmerBoldFont">
 									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point For Khmer and English Subjects

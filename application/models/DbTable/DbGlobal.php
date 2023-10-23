@@ -2983,7 +2983,10 @@ function getAllgroupStudyNotPass($action=null){
   {
   	$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);
   	$teacherId=$session_teacher->userId;
-  	if(empty($teacherId)){
+  	
+  	$userId = $this->getUserId();
+  	
+  	if(empty($teacherId) AND empty($userId)){
   		return false;
   	}else{
   		return true;

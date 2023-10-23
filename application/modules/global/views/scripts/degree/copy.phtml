@@ -179,8 +179,8 @@
 											<br />
 											<div class="form-group">
 												<div class="col-md-12 col-sm-12 col-xs-12">
-													<select queryExpr="*${0}*" autoComplete="false" name="comment" id="comment" class="fullside" onchange="addRowComment();" dojoType="dijit.form.FilteringSelect" >
-														<option value="-1"><?php echo $tr->translate("SELECT_COMMENT");?></option>
+													<select placeHolder="<?php echo $tr->translate("SELECT_COMMENT");?>" required="false" queryExpr="*${0}*" autoComplete="false" name="comment" id="comment" class="fullside" onchange="addRowComment();" dojoType="dijit.form.FilteringSelect" >
+														<option value="-1"></option>
 														<?php if(!empty($this->comment)){foreach($this->comment as $comment){?>
 															<option value="<?php echo $comment['id']?>"><?php echo $comment['comment']?></option>
 														<?php }}?>
@@ -398,6 +398,8 @@ var no1 = 0;
 tmp1 = '';
 function addRowComment(){ 
 	comment=dijit.byId("comment").get("value");
+	label_comment = dijit.byId("comment").attr('displayedValue');
+	dijit.byId("comment").reset();
 	if(comment==-1){return false;}
 	var iden = $("#identity1").val();
 	var arrays = iden.split(',');
@@ -412,7 +414,7 @@ function addRowComment(){
 	}
 	template1='';
 	col1++;no1++;
-	label_comment = dijit.byId("comment").attr('displayedValue');
+	
 	template1+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecordComment('+col1+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 	template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'</td>';
 	template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" >&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_'+col1+'" name="comment_'+col1+'" value="'+comment+'" /></td>';
@@ -514,7 +516,8 @@ function initailizeRowComment(){
 	<?php if(!empty($this->row_comment)){foreach ($this->row_comment as $row){?>
 		template1='';
 		col1++;no1++;
-		label_comment = '<?php echo $row["comment"]?>';
+		label_comment = '<?php echo addslashes($row['comment']);?>';
+		
 		template1+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecordComment('+col1+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 		template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'<input type="hidden" dojoType="dijit.form.TextBox" id="old_id_'+col1+'" name="old_id_'+col1+'" value="<?php echo $row['id']?>" /></td>';
 		template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" >&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_'+col1+'" name="comment_'+col1+'" value="<?php echo $row['comment_id']?>" /></td>';

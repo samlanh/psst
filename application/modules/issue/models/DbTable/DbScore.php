@@ -19,6 +19,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 					'branch_id'=>$_data['branch_id'],
 					'title_score'=>$_data['title'],
+					'title_score_en'=>$_data['title_en'],
 					'group_id'=>$_data['group'],
 			        'exam_type'=>$_data['exam_type'],
 					'date_input'=>date("Y-m-d"),
@@ -189,6 +190,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$_arr = array(
 				'branch_id'=>$_data['branch_id'],
 				'title_score'=>$_data['title'],
+				'title_score_en'=>$_data['title_en'],
 				'group_id'=>$_data['group'],
 		        'exam_type'=>$_data['exam_type'],
 				'date_input'=>date("Y-m-d"),
@@ -374,6 +376,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql="SELECT s.id,
 			(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
 			s.title_score,
+			CONCAT(COALESCE(`title_score`,''),' ',COALESCE(`title_score_en`,'')) AS title_score,
 			(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
 			s.for_semester,
 			CASE

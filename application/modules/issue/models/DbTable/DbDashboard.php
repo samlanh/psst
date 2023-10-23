@@ -9,9 +9,11 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
     }
 
 	function getGradingScoreData($data){
+		$sujectId = empty($data['subjectId'])?0:$data['subjectId'];
 		$sql="SELECT 
 				gt.gradingId,
-				gt.totalAverage 
+				gt.totalAverage ,
+				(SELECT COUNT(DISTINCT(g.criteriaId)) FROM `rms_grading_detail` AS g WHERE g.totalGrading>0 AND gd.id=g.gradingId AND gd.subjectId = $sujectId LIMIT 1) AS totalCriteria
 				FROM `rms_grading_total` gt,
 					`rms_grading` gd
 				 WHERE gd.id=gt.gradingId ";
@@ -30,7 +32,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 			$sql.=" AND gd.forSemester = ".$data['forSemester'];
 		}
 		if(!empty($data['subjectId'])){
-			$sql.=" AND gd.subjectId = ".$data['subjectId'];
+			$sql.=" AND gd.subjectId = ".$sujectId;
 		}
 		$from_date =(empty($data['start_date']))? '1': "gd.dateInput >= '".$data['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "gd.dateInput <= '".$data['end_date']." 23:59:59'";
@@ -70,6 +72,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 				$rsGrading=$this->getGradingScoreData($data);
 				$results[$key]['gradingScore']=$rsGrading['totalAverage'];
 				$results[$key]['gradingId']=$rsGrading['gradingId'];
+				$results[$key]['totalCriteria']=$rsGrading['totalCriteria'];
 			}
 		}
 		return $results ;

@@ -17,11 +17,29 @@
     padding: 5px 2px;
     line-height: 14px;
 	} */
+	ul {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	}
+	ul.sub_list li:hover{
+		background-color: #cccccc;
+	}
 	ul.sub_list li{
 		float: left;
 		width: 33%;
 		list-style: none;
 	}
+	ul.bg-color li{
+		background-color: #cccccc;
+		padding: 3px;
+		border-radius: 3px;
+	}
+	ul.bg li{
+		background-color: white;
+		padding: 3px;
+		border-radius: 3px;
+	}	
 </style>
 	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
 	<div class="row"> 
@@ -140,9 +158,8 @@
 										</div>
 									</div>
 									<div class="col-xs-9 pl-0">
-										<div class="p-1">
 										
-												<ul style="list-style: none;">
+												
 													<?php 
 													$dbg = new Issue_Model_DbTable_DbDashboard();
 													$groupId   = $row['id'];
@@ -164,7 +181,7 @@
 													$subtotal= $row['totalSubject']/2;
 													$row_subject= $dbg->getSubjectScoreByGroup($data);
 													
-													if(!empty($row_subject)) foreach($row_subject as $rs){ 
+													if(!empty($row_subject)) foreach($row_subject as $key => $rs){ 
 														$subNum++;
 
 														if($rs['subjectLang']==1){
@@ -176,18 +193,18 @@
 														}
 														?>
 														
-														<li class="divi_line">
-															<ul class="sub_list">
-																<li><?php echo $subjectName; ?></li>
-																<li><?php echo $teacherName; ?></li>
-																<li><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true">&nbsp;&nbsp;<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rs['gradingId'];?>/fullcontrol/1"><i class="fa fa-file-text" aria-hidden="true"></i></a></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?> 
+															<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>" style="hover">
+																<li class="list_subject"><?php echo $subjectName; ?></li>
+																<li><?php echo $teacherName?></li>
+																<li><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true">&nbsp;&nbsp;<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rs['gradingId'];?>/fullcontrol/1"><i class="fa fa-file-text" aria-hidden="true"></i></a> <?php echo $rs['totalCriteria']; ?></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?> 
 																</li>
 															</ul>
-														</li>
+															<div style="clear:both;"></div>
+														
 													<?php } 
 													?>
-												</ul>
-										</div>
+											
+										
 									</div>
 								</div>
 							</div>

@@ -328,8 +328,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
 											<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
-											
-											<td colspan="2" align="center"><?php echo $resultScore['totalAverage']; ?></td>
+											<td class="border-right-none"></td>
+											<td  align="center"><?php echo $resultScore['totalAverage']; ?></td>
 											<td align="center" class="colorRed"><?php echo $grade ?></td>
 											<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
 										</tr>
@@ -348,7 +348,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 												<?php if ($issetMerge == 0) { ?>
 													<td rowspan="<?php echo $rowspan; ?>" align="center"><?php echo $resultScore['totalAverage']; ?></td>
 													<td class="colorRed" rowspan="<?php echo $rowspan; ?>" align="center"><?php echo $grade ?></td>
-													<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
+													<td align="center" rowspan="<?php echo $rowspan; ?>"><?php echo $resultScore['rankingSubject']; ?></td>
 												<?php } ?>
 											</tr>
 										<?php

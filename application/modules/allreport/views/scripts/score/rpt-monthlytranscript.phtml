@@ -225,7 +225,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname']; ?></td>
 								<td>&nbsp;</td>
 								<td align="right" width="25%">សម្រាប់ខែ​ / For : </td>
-								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . $scoreInfo['forMonthEnLabel'] : "SEMESTER " . $scoreInfo['for_semester']; ?>
+								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; ?>
 								<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreTitle; ?></td>
 							</tr>
 							<tr>
@@ -251,7 +251,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							<tr class="style hover">
 								<td colspan="8" align="center" class="blue khmerBoldFont doubleBorder">
 									<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; font-size:12px;margin: 0;">
-										ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENT'S PROGESS IN BASIC SKILLS</strong>
+										ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENT'S PROGRESS IN BASIC SKILLS</strong>
 									</div>
 								</td>
 							</tr>
@@ -303,15 +303,25 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											$totalmultiSubSubject = 0;
 											$i = 1;
 										} ?>
-
-										<tr class="cheader" align="center">
-											<td>ល.រ<br />No.</td>
-											<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
-											<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-											<td colspan="2">ពិន្ទុសរុប<br />Total Socre</td>
-											<td>និទ្ទេស<br />Grade</td>
-											<td>ចំណាត់ថ្នាក់<br />Rank</td>
-										</tr>
+										<?php if($scoreInfo['degreeId']==1){ ?>
+											<tr class="cheader" align="center">
+												<td>ល.រ<br />No.</td>
+												<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
+												<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
+												<td colspan="2">ពិន្ទុ<br />Score</td>
+												<td>និទ្ទេស<br />Grade</td>
+												<td>ចំណាត់ថ្នាក់<br />Rank</td>
+											</tr>
+										<?php }else{ ?>
+											<tr class="cheader" align="center">
+												<td>ល.រ<br />No.</td>
+												<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
+												<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
+												<td colspan="2">ពិន្ទុសរុប<br />Total Score</td>
+												<td>និទ្ទេស<br />Grade</td>
+												<td>ចំណាត់ថ្នាក់<br />Rank</td>
+											</tr>
+										<?php } ?>
 									<?php }
 									$currentLang = $resultScore['subjectLang'];
 
@@ -381,7 +391,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							</tr>
 							<tr class="style hover doubleBorder">
 								<td colspan="7" align="center" class="blue khmerBoldFont">
-									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point For Khmer and English Subjects
+									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point for Khmer and English Subjects
 								</td>
 							</tr>
 							<tr class="style hover">
@@ -403,7 +413,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									អវត្តមាន ABSENCE RECORD
 								</td>
 								<td colspan="5" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-									កិច្ចការវិន័យ DISPLINE RECORD
+									កិច្ចការវិន័យ DISCIPLINE RECORD
 								</td>
 							</tr>
 							<tr class="style hover">

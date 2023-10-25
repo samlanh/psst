@@ -97,10 +97,10 @@ class Issuesetting_Model_DbTable_DbSettingScoreAtt extends Zend_Db_Table_Abstrac
    }
    function getSettingScoreAttById($id){
    		$db = $this->getAdapter();
-   		$sql="SELECT s.* FROM `rms_attendance_score_setting` AS s WHERE s.id=$id  ";
+   		$sql="SELECT s.* FROM `rms_attendance_score_setting` AS s WHERE s.id=$id ";
    		
    		$dbp = new Application_Model_DbTable_DbGlobal();
-   		$sql.=$dbp->getAccessPermission('s.branch_id');
+   		$sql.=$dbp->getAccessPermission('s.branchId');
    		return $db->fetchRow($sql);
    }
    function getSettingScoreAttDetail($id)

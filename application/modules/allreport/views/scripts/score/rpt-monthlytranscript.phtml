@@ -185,9 +185,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					
 						//$title= $titleNum;
 						if($titleNum==1){
-							$title="របាយការណ៍ការវិវឌ្ឍ : ".$scoreInfo['groupCode'].'_'.$studentInfo['stu_code'].'_'.$studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'].''.$titleNum;
+							$title="របាយការណ៍ការវិវឌ្ឍ : ".$scoreInfo['groupCode'].'_'.$studentInfo['stu_code'].'_'.$studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
 						}else{
-							$title="របាយការណ៍ការវិវឌ្ឍ : ".$scoreInfo['groupCode'].$titleNum;
+							$title="របាយការណ៍ការវិវឌ្ឍ : ".$scoreInfo['groupCode'];
 						}
 						$this->headTitle($title);
 						echo $this->headTitle();
@@ -225,7 +225,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname']; ?></td>
 								<td>&nbsp;</td>
 								<td align="right" width="25%">សម្រាប់ខែ​ / For : </td>
-								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . $scoreInfo['forMonthEnLabel'] : "SEMESTER " . $scoreInfo['for_semester']; ?>
+								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; ?>
 								<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreTitle; ?></td>
 							</tr>
 							<tr>
@@ -251,7 +251,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							<tr class="style hover">
 								<td colspan="8" align="center" class="blue khmerBoldFont doubleBorder">
 									<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; font-size:12px;margin: 0;">
-										ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENT'S PROGESS IN BASIC SKILLS</strong>
+										ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENT'S PROGRESS IN BASIC SKILLS</strong>
 									</div>
 								</td>
 							</tr>
@@ -303,15 +303,25 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											$totalmultiSubSubject = 0;
 											$i = 1;
 										} ?>
-
-										<tr class="cheader" align="center">
-											<td>ល.រ<br />No.</td>
-											<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
-											<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-											<td colspan="2">ពិន្ទុសរុប<br />Total Socre</td>
-											<td>និទ្ទេស<br />Grade</td>
-											<td>ចំណាត់ថ្នាក់<br />Rank</td>
-										</tr>
+										<?php if($scoreInfo['degreeId']==1){ ?>
+											<tr class="cheader" align="center">
+												<td>ល.រ<br />No.</td>
+												<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
+												<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
+												<td colspan="2">ពិន្ទុ<br />Score</td>
+												<td>និទ្ទេស<br />Grade</td>
+												<td>ចំណាត់ថ្នាក់<br />Rank</td>
+											</tr>
+										<?php }else{ ?>
+											<tr class="cheader" align="center">
+												<td>ល.រ<br />No.</td>
+												<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
+												<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
+												<td colspan="2">ពិន្ទុសរុប<br />Total Score</td>
+												<td>និទ្ទេស<br />Grade</td>
+												<td>ចំណាត់ថ្នាក់<br />Rank</td>
+											</tr>
+										<?php } ?>
 									<?php }
 									$currentLang = $resultScore['subjectLang'];
 
@@ -328,8 +338,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
 											<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
-											
-											<td colspan="2" align="center"><?php echo $resultScore['totalAverage']; ?></td>
+											<td class="border-right-none"></td>
+											<td  align="center"><?php echo $resultScore['totalAverage']; ?></td>
 											<td align="center" class="colorRed"><?php echo $grade ?></td>
 											<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
 										</tr>
@@ -348,7 +358,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 												<?php if ($issetMerge == 0) { ?>
 													<td rowspan="<?php echo $rowspan; ?>" align="center"><?php echo $resultScore['totalAverage']; ?></td>
 													<td class="colorRed" rowspan="<?php echo $rowspan; ?>" align="center"><?php echo $grade ?></td>
-													<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
+													<td align="center" rowspan="<?php echo $rowspan; ?>"><?php echo $resultScore['rankingSubject']; ?></td>
 												<?php } ?>
 											</tr>
 										<?php
@@ -381,7 +391,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							</tr>
 							<tr class="style hover doubleBorder">
 								<td colspan="7" align="center" class="blue khmerBoldFont">
-									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point For Khmer and English Subjects
+									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point for Khmer and English Subjects
 								</td>
 							</tr>
 							<tr class="style hover">
@@ -403,11 +413,11 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									អវត្តមាន ABSENCE RECORD
 								</td>
 								<td colspan="5" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-									កំហុស Mistake
+									កិច្ចការវិន័យ DISCIPLINE RECORD
 								</td>
 							</tr>
 							<tr class="style hover">
-								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days of Excused Absences&nbsp;</td>
+								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days of Excused Absence&nbsp;</td>
 								<td colspan="1" align="center">&nbsp;<?php
 																		$data = array(
 																			'groupId' => $groupId,
@@ -424,7 +434,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																				echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
-								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unxcused Absences&nbsp;</td>
+								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unexcused Absence&nbsp;</td>
 								<td colspan="1" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 2;
 																				echo $dbAttendance->countAttendenceTranscript($data) ?>&nbsp;</td>
@@ -434,7 +444,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																				echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
-								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Time of Tardiness&nbsp;</td>
+								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
 								<td colspan="1" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 4;
 																				echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>

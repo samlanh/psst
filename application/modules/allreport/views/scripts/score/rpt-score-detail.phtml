@@ -25,6 +25,13 @@ $month = array(
 );
 $link = "/allreport/score/rpt-monthlytranscript";
 ?>
+<style>
+	.style {
+				line-height: 22px !important;
+				font-size: 12px ;
+				font-family: 'Times New Roman', 'Khmer OS Battambang';
+			}
+</style>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">
 	<div class="card-box">
@@ -112,7 +119,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 	<div id="divPrint">
 		<style type="text/css">
 			.style {
-				line-height: 12px;
+				line-height: 10px;
 				font-size: 10px !important;
 				font-family: 'Times New Roman', 'Khmer OS Battambang';
 
@@ -186,6 +193,26 @@ $link = "/allreport/score/rpt-monthlytranscript";
 				pading: 0.5cm;
 				size: landscape;
 			}
+			.principalStamp {
+					position:relative;
+					width: 300px;
+   					height: 140px;
+					margin:0 auto;
+				}
+				.principalStamp .stamp {
+					width:120px;
+					height:120px;
+					position:absolute;
+					transform: translate(-50%);
+					left:50%;
+				}
+				.principalStamp .signature {
+					left: 40px;
+					bottom: 32px;
+					height: 100px;
+					width:200px;
+					position: absolute;
+				}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 			<?php
@@ -218,7 +245,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 						$count_fail = 0;
 						$dbbranch = new Application_Model_DbTable_DbGlobal();
 						$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-						$styleLogo = "max-width: 98%;max-height:80px;min-height:40px;";
+						$styleLogo = "max-width: 98%;max-height:70px;min-height:40px;";
 						$imgSing = "agreementsign.jpg";
 							$branch_info = $dbbranch->getBranchInfo($rs['branch_id']);
 							if (!empty($branch_info)) {
@@ -228,13 +255,8 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										$logo = $baseUrl . '/images/logo/' . $branch_info['photo'];
 									}
 								}
-                              if($lang_id==1){
-								$school_name = $branch_info['school_namekh'];
-							  }else{
-								$school_name = $branch_info['school_nameen'];
-
-							  }
-								
+								$school_name_kh = $branch_info['school_namekh'];
+								$school_name_en = $branch_info['school_nameen'];
 							}
 						?>
 						<tr style="border-bottom: 1px solid #000;">
@@ -243,18 +265,29 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										<tbody>
 											<tr>
 												<td width="35%" valign="top"  style="text-align: left; font-family: 'Times New Roman','Khmer OS Muol Light';">
-													<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 12px; margin-right: 300px; margin-top:15px; margin-bottom: 0px;">
+													<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 12px;font-size: 12px; margin-right: 300px; margin-top:15px; margin-bottom: 0px;">
 														<li><img style=" <?php echo $styleLogo  ?>" src="<?php echo $logo; ?>"></li>
-														<li><span style="  font-family: 'Times New Roman','Khmer OS Muol Light'; font-weight: 600; color: #002c7b;font-size: 10px; "><?php echo $school_name; ?></span></li>
+														<?php if($lang_id==1){ ?>
+															<li><?php echo $school_name_kh; ?></li>
+														<?php }else{ ?>
+															<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px; "><?php echo $school_name_en; ?></span></li>
+														<?php } ?>
 													</ul>
 												</td>
 												<td width="30%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 												</td>
 												<td width="35%" valign="top" style="font-family: 'Times New Roman','Khmer OS Muol Light';">
+													
 													<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;margin-left: 200px;">
-														<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;">KINGDOM OF CAMBODIA</span></li>
-														<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RELIGION KING</span></li>
+														<?php if($lang_id==1){ ?>
+															<li style="font-size: 12px;">ព្រះរាជាណាចក្រកម្ពុជា</li>
+															<li style="font-size: 12px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+														<?php }else{ ?>
+															<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;">KINGDOM OF CAMBODIA</span></li>
+															<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RELIGION KING</span></li>
+														<?php } ?>
 														<li><img style=" height: 12px; " src="<?php echo $baseUrl . '/images/' . $imgSing ; ?>"></li>
+														
 													</ul>
 												</td>
 											</tr>
@@ -414,68 +447,67 @@ $link = "/allreport/score/rpt-monthlytranscript";
 								</table>
 								<?php if (!empty($this->studentgroup)) { ?>
 									<table cellpadding="0" cellspacing="0" width="100%">
-										<!-- <tr>
-											<td valign="top" width="33%" style="text-align: center;"><?php echo $tr->translate("TOTAL_STUDENT"); ?> : <?php if ($i > 0) {
-																																							echo $dbgb->getNumberInkhmer(sprintf("%02d", $i));
-																																						} else {
-																																							echo $dbgb->getNumberInkhmer($i);
-																																						}
-																																						echo " " . $tr->translate("STUDENT_UNIT"); ?></td>
-											<td width="33%" valign="top"><?php echo $tr->translate("FEMALE"); ?>&nbsp;: <?php if ($f > 0) {
-																															echo $dbgb->getNumberInkhmer(sprintf("%02d", $f));
-																														} else {
-																															echo $dbgb->getNumberInkhmer($f);
-																														}
-																														echo " " . $tr->translate("STUDENT_UNIT"); ?> &nbsp;</td>
-											<td width="33%" style="color:#1949d6;white-space: nowrap;" valign="top"></td>
-										</tr>
-										-->
 										<tr>
-											<td valign="top" width="33%" style="text-align: center;"></td>
-											<td valign="top"></td>
-											<td align="center" style="color:#1949d6;white-space: nowrap" valign="top">ភ្នំពេញថ្ងៃទី.............ខែ...............ឆ្នាំ.............។</td>
+											<td colspan="3">&nbsp;</td>
 										</tr>
 										<tr>
-											<td valign="top" width="33%" style="text-align: center;"></td>
-											<td valign="top"></td>
-											<td valign="top" style="color:#1949d6; text-align: center;"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
-										</tr> 
+											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light','Times New Roman';font-size:12px;text-align: center;">
+												<?php echo $tr->translate("CHECKANDAPPROVED"); ?><br />
+											</td>
+											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
+											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center; " valign="top">
+											<?php
+												$moment = date("Y-m-d");
+												$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
+												?>
+												<?php
+													if ($lang_id == 1) { ?>
+														<label class="LabelTeacher smalFont">
+															ភ្នំពេញ​ ថ្ងៃទី
+															<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ
+															<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ
+															<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+														</label>
+													<?php }else{ ?>
+														
+														<label class="LabelTeacher smalFont">
+															Phnom Penh,
+															<?php echo date("l");?>,
+															<?php echo date("d");?> 
+															<?php echo date("F");?>,
+															<?php echo date("Y");?> 
+														</label>
+													<?php } ?>
+											</td>
+										</tr>
 										<tr>
-											<td valign="top" width="33%" style="text-align: center;" class="khmerBold"><?php echo $tr->translate("CHECKANDAPPROVED"); ?></td>
-											<td>&nbsp;</td>
+											<td valign="top" style="font-family:'Khmer os battambang';font-size:12px;text-align: center;"><?php echo $branch_info['principal']; ?></td>
+											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
+											<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'; font-size:12px;"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
+										</tr>
+										<tr>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+												<div class="principalStamp" id="principalStamp" >
+													<div class="stamp">
+														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['stamp']; ?>"  />
+														<div class="signature">
+															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['signature']; ?>" />
+														</div>
+													</div>
+												</div>
+											</td>
 											<td></td>
-										</tr>
-										<tr>
-											<td valign="top" class="khmerBold" style="text-align: center;"><?php echo $tr->translate("PRINCIPAL_SIGNATURE"); ?></td>
-											<td>&nbsp;</td>
 											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 												<?php if (!empty($rs['teacher_sigature'])) { ?>
-													<div id="teachersigature"><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
+													<div id="teachersigature" ><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 												<?php } else { ?>
 													<div style="height: 100px;"></div>
 												<?php } ?>
 												<span style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 											</td>
 										</tr>
-										<!-- <tr class="khmerBold">
-											<td valign="top" style="text-align: center;"><?php echo $tr->translate("DEPUTY_PRINCIPAL"); ?></td>
-											<td valign="top"></td>
-											<td valign="top" style="text-align: center;"><br /><br /><?php echo $rs['teacher'] ?></td>
-										</tr> -->
 									</table>
 								<?php } ?>
-								<?php
-								if ($this->data['scoreresulttye'] == 1 and $show_subject == 0) {
-									$string = ",";
-									if (!empty($subj)) foreach ($subj as $key => $subject) { ?>
-										<?php
-										if ($key + 1 == count($subj)) {
-											$string = "";
-										}
-										echo $subject['shortcut'] . "=" . $subject['subject_titleen'] . $string; ?>
-								<?php }
-								}
-								?>
 							</td>
 						</tr>
 		</table>

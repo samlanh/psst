@@ -390,7 +390,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								</td>
 							</tr>
 							<tr class="style hover doubleBorder">
-								<td colspan="7" align="center" class="blue khmerBoldFont">
+								<td colspan="8" align="center" class="blue khmerBoldFont">
 									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point for Khmer and English Subjects
 								</td>
 							</tr>
@@ -399,14 +399,14 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									ពិន្ទុសរុប Total Grade Point
 								</td>
 								<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
-								<td align="left"></td>
+								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
+								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="5" align="center" class="blue khmerBoldFont">
 									មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 								</td>
 								<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
-								<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?>&nbsp;&nbsp;&nbsp;<?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							</tr>
 							<tr class="doubleBorder">
 								<td colspan="3" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;

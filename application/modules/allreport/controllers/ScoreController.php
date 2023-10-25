@@ -262,6 +262,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$frm = new Application_Form_FrmGlobal();
 		$branch_id = empty($studentgroup[0]['branch_id']) ? 1 : $studentgroup[0]['branch_id'];
 		$this->view->logoleft = $frm->getLeftLogo($branch_id);
+		
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->branchInfo = $db->getBranchInfo($branch_id);
 	}
 	function monthlyOutstandingStudentNophotoAction()
 	{

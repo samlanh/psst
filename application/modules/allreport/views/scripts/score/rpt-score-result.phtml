@@ -680,8 +680,8 @@ tbody#table_row tr {
 							if ($rs['exam_type'] == 1) {
 								$monthChar = empty($monthKH[$rs['for_month_id']]) ? "" : $monthKH[$rs['for_month_id']];
 								$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ '.(!empty($rs['title_score'])?$rs['title_score']:$monthChar);
-								//$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
-								$titleENG = "MONTHLY TEST RESULT";
+								$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
+								$titleENG = (!empty($rs['title_score_en'])?$rs['title_score_en']:$monthCharEn).' TEST RESULT ';
 							} else {
 								$arrRomanNum = array(1 => "I", 2 => "II");
 								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];

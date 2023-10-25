@@ -624,8 +624,8 @@ tbody#table_row tr {
 					margin:0 auto;
 				}
 				.principalStamp .stamp {
-					width:120px;
-					height:120px;
+					width:130px;
+					height:130px;
 					position:absolute;
 					transform: translate(-50%);
 					left:50%;
@@ -633,6 +633,13 @@ tbody#table_row tr {
 				.principalStamp .signature {
 					left: 40px;
 					bottom: 32px;
+					height: 100px;
+					width:200px;
+					position: absolute;
+				}
+				.principalStamp .principalName {
+					left: 48px;
+    				bottom: -52px;
 					height: 100px;
 					width:200px;
 					position: absolute;
@@ -686,7 +693,7 @@ tbody#table_row tr {
 								$arrRomanNum = array(1 => "I", 2 => "II");
 								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
 								$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
-								$titleENG = "SEMESTER " . $romanNumber . " TEST RESULT";
+								$titleENG = "SEMESTER " . $romanNumber . " RESULT";
 							}
 							?>
 							<tr>
@@ -699,7 +706,7 @@ tbody#table_row tr {
 											<?php echo $titleENG; ?>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ថ្នាក់ទី / GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+											ថ្នាក់ទី : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
 											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
@@ -925,23 +932,64 @@ tbody#table_row tr {
 							បានឃើញ និងឯកភាព<br />
 						</td>
 						<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
-						<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'" valign="top"><?php echo $branchInfo['workat'] . $tr->translate("CREATE_WORK_DATE"); ?></td>
+						<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
+							<?php
+							$inputDate =$this->studentScoreResult[0]['date_input'];
+							$time  = strtotime($inputDate);
+							$day   = date('d',$time);
+							$month = date('m',$time);
+							$year  = date('Y',$time);
+
+								if ($lang_id == 1) { ?>
+									<label id= "date" style="display:none">
+										រាជធានីភ្នំពេញ​ ថ្ងៃទី
+										<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ
+										<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ
+										<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+									</label>
+								<?php }else{ ?>
+									<label id= "date" style="display:none">
+										Phnom Penh,
+										<?php echo date("l");?>,
+										<?php echo date("d");?> 
+										<?php echo date("F");?>,
+										<?php echo date("Y");?> 
+									</label>
+							<?php } ?>
+							<div id="blank_date" style="display:none">រាជធានីភ្នំពេញ <?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+						</td>
 					</tr>
 					<tr>
-						<td valign="top" style="font-family:'Khmer os battambang';font-size:14px;text-align: center;"><?php echo $branchInfo['principal']; ?></td>
+						<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"><?php echo $branchInfo['principal']; ?></td>
 						<td valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;">ការិយាល័យសិក្សាធិការ</td>
 						<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
 					</tr>
 					<tr>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-							<div class="principalStamp" id="principalStamp" style="display:none">
-								<div class="stamp">
+							<div class="principalStamp" id="principalStamp" style="display:none;">
+								<div class="stamp" >
 									<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
 									<div class="signature">
 										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
 									</div>
+									<div class="principalName">
+										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+									</div>
 								</div>
 							</div>
+							<div class="principalStamp" id="principalName" >
+								<div class="stamp" >
+									<div class="signature">
+										&nbsp;
+									</div>
+									<div class="principalName">
+										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+									</div>
+								</div>
+							</div>
+							<!-- <div style="height: 100px; display:none" id="height" class="principalName" >
+								<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+							</div> -->
 						</td>
 						<td></td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
@@ -950,7 +998,7 @@ tbody#table_row tr {
 							<?php } else { ?>
 								<div style="height: 100px;"></div>
 							<?php } ?>
-							<span style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
+							<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 						</td>
 					</tr>
 					<tr>
@@ -1235,14 +1283,27 @@ function stampDisplay() {
   var checkBox = document.getElementById("stamp");
   var stamp = document.getElementById("principalStamp");
   var teacher = document.getElementById("teachersigature");
+  var date = document.getElementById("date");
+  var blank_date = document.getElementById("blank_date");
+ 
+  var principalName = document.getElementById("principalName");
   if (checkBox.checked == true){
     stamp.style.display = "block";
 	teacher.style.display = "block";
 	teacher.style.visibility = "visible";
+	date.style.display = "block";
+	blank_date.style.display = "none";
+	principalName.style.display = "none";
+	
+
   } else {
 	stamp.style.display = "none";
 	teacher.style.visibility = "hidden";
-	
+
+	date.style.display = "none";
+	blank_date.style.display = "block";
+	principalName.style.display = "block";
+
   }
 }
 

@@ -217,7 +217,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td align="right" width="25%" >គោត្តនាម និងនាម : </td>
 								<td  align="left" width="23%" class="khmerBoldFont"> &nbsp;<?php echo $studentInfo['stu_khname'] ?></td>
 								<td width="4%">&nbsp;</td>
-								<td align="right" width="25%">ថ្នាក់ទី​ / Grade : </td>
+								<td align="right" width="25%">ថ្នាក់ទី​ : </td>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $scoreInfo['groupCode']; ?></td>
 							</tr>
 							<tr>
@@ -225,8 +225,12 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname']; ?></td>
 								<td>&nbsp;</td>
 								<td align="right" width="25%">សម្រាប់ខែ​ / For : </td>
-								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; ?>
-								<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreTitle; ?></td>
+								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
+									$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))?$scoreInfo['title_score'] . '/' . ucfirst($scoreInfo['title_score_en']) :$scoreTitle;
+
+								?>
+
+								<td class="bold" align="left" width="23%">&nbsp;<?php echo $resultTitle; ?></td>
 							</tr>
 							<tr>
 								<td align="right" width="25%">អត្តលេខ / ID : </td>

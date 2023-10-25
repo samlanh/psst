@@ -189,7 +189,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 
 			@page {
 				page: A4;
-				margin: 0.5cm;
+				margin: none;
 				pading: 0.5cm;
 				size: landscape;
 			}
@@ -200,8 +200,8 @@ $link = "/allreport/score/rpt-monthlytranscript";
 					margin:0 auto;
 				}
 				.principalStamp .stamp {
-					width:120px;
-					height:120px;
+					width:130px;
+					height:130px;
 					position:absolute;
 					transform: translate(-50%);
 					left:50%;
@@ -209,6 +209,13 @@ $link = "/allreport/score/rpt-monthlytranscript";
 				.principalStamp .signature {
 					left: 40px;
 					bottom: 32px;
+					height: 100px;
+					width:200px;
+					position: absolute;
+				}
+				.principalStamp .principalName {
+					left: 48px;
+    				bottom: -52px;
 					height: 100px;
 					width:200px;
 					position: absolute;
@@ -265,7 +272,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										<tbody>
 											<tr>
 												<td width="35%" valign="top"  style="text-align: left; font-family: 'Times New Roman','Khmer OS Muol Light';">
-													<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 12px;font-size: 12px; margin-right: 300px; margin-top:15px; margin-bottom: 0px;">
+													<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 12px;font-size: 12px; margin-right: 300px; margin-top:10px; margin-bottom: 0px;">
 														<li><img style=" <?php echo $styleLogo  ?>" src="<?php echo $logo; ?>"></li>
 														<?php if($lang_id==1){ ?>
 															<li><?php echo $school_name_kh; ?></li>
@@ -455,43 +462,65 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												<?php echo $tr->translate("CHECKANDAPPROVED"); ?><br />
 											</td>
 											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
-											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center; " valign="top">
+											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center; font-size:12px " valign="top">
 											<?php
-												$moment = date("Y-m-d");
-												$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
-												?>
-												<?php
-													if ($lang_id == 1) { ?>
-														<label class="LabelTeacher smalFont">
-															ភ្នំពេញ​ ថ្ងៃទី
-															<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ
-															<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ
-															<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
-														</label>
-													<?php }else{ ?>
-														
-														<label class="LabelTeacher smalFont">
-															Phnom Penh,
-															<?php echo date("l");?>,
-															<?php echo date("d");?> 
-															<?php echo date("F");?>,
-															<?php echo date("Y");?> 
-														</label>
+													$inputDate =$this->studentgroup[0]['date_input'];
+													$time  = strtotime($inputDate);
+													$day   = date('d',$time);
+													$month = date('m',$time);
+													$year  = date('Y',$time);
+
+														if ($lang_id == 1) { ?>
+															<label id= "date" style="display:none">
+																រាជធានីភ្នំពេញ​ ថ្ងៃទី
+																<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ
+																<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ
+																<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+															</label>
+														<?php }else{ ?>
+															<label id= "date" style="display:none">
+																Phnom Penh,
+																<?php echo date("l");?>,
+																<?php echo date("d");?> 
+																<?php echo date("F");?>,
+																<?php echo date("Y");?> 
+															</label>
 													<?php } ?>
+													<div id="blank_date" style="display:none">រាជធានីភ្នំពេញ <?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
 											</td>
 										</tr>
 										<tr>
-											<td valign="top" style="font-family:'Khmer os battambang';font-size:12px;text-align: center;"><?php echo $branch_info['principal']; ?></td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											<?php
+													if ($lang_id == 1) { ?>
+														នាយកស្តីទី
+													<?php }else{ ?>
+														<span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;">Interim Principal</span>
+													<?php } ?>
+											</td>
 											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
 											<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'; font-size:12px;"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
 										</tr>
 										<tr>
 											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-												<div class="principalStamp" id="principalStamp" >
-													<div class="stamp">
+												<div class="principalStamp" id="principalStamp" style="display:none;">
+													<div class="stamp" >
 														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['stamp']; ?>"  />
 														<div class="signature">
 															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['signature']; ?>" />
+														</div>
+														<div class="principalName">
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
+														</div>
+													</div>
+												</div>
+												<div class="principalStamp" id="principalName" >
+													<div class="stamp" >
+														<div class="signature">
+															&nbsp;
+														</div>
+														<div class="principalName">
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
 														</div>
 													</div>
 												</div>
@@ -503,7 +532,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												<?php } else { ?>
 													<div style="height: 100px;"></div>
 												<?php } ?>
-												<span style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
+												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 											</td>
 										</tr>
 									</table>
@@ -511,6 +540,13 @@ $link = "/allreport/score/rpt-monthlytranscript";
 							</td>
 						</tr>
 		</table>
+	</div>
+	<div class="card-box" >
+			<label class="control-label custom-switch float-midd "> 
+				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
+				<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
+				<span class="custom-switch-indicator custom-radius switch-status"></span> 
+			</label> 
 	</div>
 </div>
 <?php
@@ -607,6 +643,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			dijit.byId('branch_id').set('value', '<?php echo $this->search['branch_id'] ?>');
 		<?php } ?>
 		displaymonth();
+		stampDisplay();
 	});
 	url_getacademic = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'get-academicyear')); ?>';
 	var oldBranch = "<?php echo $this->search['branch_id'] ?>";
@@ -671,4 +708,32 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			$("#month").css("display", "none");
 		}
 	}
+
+function stampDisplay() {
+  var checkBox = document.getElementById("stamp");
+  var stamp = document.getElementById("principalStamp");
+  var teacher = document.getElementById("teachersigature");
+  var date = document.getElementById("date");
+  var blank_date = document.getElementById("blank_date");
+ 
+  var principalName = document.getElementById("principalName");
+  if (checkBox.checked == true){
+    stamp.style.display = "block";
+	teacher.style.display = "block";
+	teacher.style.visibility = "visible";
+	date.style.display = "block";
+	blank_date.style.display = "none";
+	principalName.style.display = "none";
+	
+
+  } else {
+	stamp.style.display = "none";
+	teacher.style.visibility = "hidden";
+
+	date.style.display = "none";
+	blank_date.style.display = "block";
+	principalName.style.display = "block";
+
+  }
+}
 </script>

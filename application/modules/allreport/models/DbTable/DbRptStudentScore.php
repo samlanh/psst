@@ -127,7 +127,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				END as for_month,
 			 	s.exam_type,
 			 	s.for_semester,
-			  	s.reportdate
+			  	s.reportdate,
+				s.date_input,
    			FROM 
    				`rms_score` AS s,
    				`rms_group` AS g 
@@ -228,6 +229,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.for_semester,
 		   	s.for_month,
 		   	s.reportdate,
+			s.date_input,
 		   	s.title_score,
 			s.title_score_en,
 		   	s.max_score,
@@ -346,6 +348,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	s.for_semester,
 		   	s.for_month as for_month_id,
 		   	s.reportdate,
+			s.date_input,
 		   	s.title_score,
 			s.title_score_en,
 		   	s.max_score,

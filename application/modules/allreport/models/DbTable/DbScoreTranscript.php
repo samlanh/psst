@@ -168,6 +168,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 					g.academic_year as academicYearId,
 					s.id as scoreId,
 					s.group_id,
+					s.title_score_en,
 					s.title_score,
 					s.exam_type,
 					s.for_month,

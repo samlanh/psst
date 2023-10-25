@@ -1531,19 +1531,19 @@ class Application_Form_FrmGlobal
 			<tbody>
 				<tr>
 					<td width="35%" valign="top"  style="text-align: left; font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
-						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px; margin-right: 300px;">
+						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 12px; margin-right: 300px; margin-top:30px; margin-bottom: 0px;">
 							<li><img style="' . $styleLogo . '" src="' . $logo . '"></li>
 							<li>' . $school_khname . '</li>
 							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">' . $school_name . '</span></li>
 						</ul>
 					</td>
-					<td width="40%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
+					<td width="30%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
 					</td>
-					<td width="25%" valign="top" style="font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
-						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 11px;margin-left: 200px;">
-							<li>ព្រះរាជាណាចក្រកម្ពុជា</li>
-							<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 10px;">KINGDOM OF CAMBODIA</span></li>
-							<li>ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
+					<td width="35%" valign="top" style="font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
+						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;margin-left: 200px;">
+							<li style="font-size: 14px;">ព្រះរាជាណាចក្រកម្ពុជា</li>
+							<li><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;">KINGDOM OF CAMBODIA</span></li>
+							<li style="font-size: 12px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</li>
 							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RALIGION KING</span></li>
 							<li><img style=" height: 12px; " src="' . $baseUrl . '/images/' . $imgSing . '"></li>
 						</ul>

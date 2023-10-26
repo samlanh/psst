@@ -220,6 +220,20 @@ $link = "/allreport/score/rpt-monthlytranscript";
 					width:200px;
 					position: absolute;
 				}
+				ul.scoreTitle {
+					padding: 0;
+					margin: 0;
+					list-style: none;
+					font-size: 12px;
+					line-height: 17px;
+
+				}
+
+				ul.scoreTitle li {
+					color: #002c7b;
+					list-style-type: none !important;
+					
+				}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 			<?php
@@ -303,8 +317,42 @@ $link = "/allreport/score/rpt-monthlytranscript";
 								<?php // echo $this->headerScore; ?>
 							</td>
 						</tr>
-						
+						<?php 
+
+						if ($rs['exam_type'] == 1) {
+								$monthChar = empty($monthKH[$rs['for_month']]) ? "" : $monthKH[$rs['for_month']];
+								$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ '.(!empty($rs['title_score'])?$rs['title_score']:$monthChar);
+								$monthCharEn = empty($monthENG[$rs['for_month']]) ? "" : $monthENG[$rs['for_month']];
+								$titleENG = (!empty($rs['title_score_en'])?$rs['title_score_en']:$monthCharEn).' RESULT ';
+							} else {
+								$arrRomanNum = array(1 => "I", 2 => "II");
+								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
+								$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
+								$titleENG = "SEMESTER " . $romanNumber . " RESULT";
+							}
+
+						?>
 						<tr>
+							<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<ul class="scoreTitle">
+										<li style="font-size:12px; font-family:'Times New Roman','Khmer OS Muol Light';">
+											<?php echo $titleKh; ?>
+										</li>
+										<li style="font-size:11px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+											<?php echo $titleENG; ?>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											ថ្នាក់ទី : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
+										</li>
+									</ul>
+							</td>
+							<td align="center" valign="top"></td>
+						</tr>
+						
+						<!-- <tr>
 							<td align="center" class="khmerBold" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 							<strong style="color:#4839bd;">
 								<?php if ($rs['exam_type'] != 2) { ?>
@@ -316,7 +364,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 								</strong>
 							</td>
 							<td align="center" valign="top"></td>
-						</tr>
+						</tr> -->
 						<tr>
 							<?php
 							$colspan = 1;

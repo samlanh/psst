@@ -87,12 +87,6 @@
 										</div> 
 									</div>
 									 <div class="form-group">
-										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_ID");?> <span class="required">*</span></label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="stu_code">
-										</div>
-									 </div>
-									 <div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input id="stu_name">
@@ -164,7 +158,6 @@
 	dojo.require("dijit.form.Textarea");
 	
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var stu_code_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	var stu_name_store  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	
 	dojo.ready(function(){
@@ -199,33 +192,10 @@
 				setID(2);    
 			}
 		}, "stu_name");
-		new dijit.form.FilteringSelect({
-			store:stu_code_store,
-			queryExpr: "*${0}*",
-			autoComplete: false,                   
-			required: true,               
-			id: "stu_code",
-			name: "stu_code",   
-			class: 'fullside', 
-			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_ID");?>",
-			onChange: function() {  
-				setID(1);    
-			}
-		}, "stu_code");
-		
 		
 		getAllGroupByBranch();
 
 	});
-	function setID(type){
-		if(type==1){
-			stu_id = dijit.byId('stu_code').get('value');
-			dijit.byId('stu_name').attr('value',stu_id);
-		}else{
-			stu_id = dijit.byId('stu_name').get('value');
-			dijit.byId('stu_code').attr('value',stu_id);
-		}
-	}
 
 	function getInfoBygroup(){
 		url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoreeng','action'=>'getgroupinfo'));?>';
@@ -292,16 +262,13 @@
 		});
 	}
 
-	url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendanceone','action'=>'get-studentbygroup'));?>';
+	url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-studentbygroup'));?>';
 	function getStudentByGroup(){
 		dijit.byId('stu_name').reset();
-		dijit.byId('stu_code').reset();
 		group = dijit.byId('group').get('value');
 		if(group=='' || group==-1){
-			var stu_code_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 			var stu_name_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 			dijit.byId('stu_name').set('store',stu_name_store); 
-			dijit.byId('stu_code').set('store',stu_code_store); 			
 			dijit.byId('group').focus();
 			return false;
 		}
@@ -312,11 +279,8 @@
 				},
 			handleAs:"json",
 			load: function(data) {
-				stu_name_store  = getDataStorefromJSON('id','name', data.stu_name);
+				stu_name_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('stu_name').set('store',stu_name_store);   
-				
-				stu_code_store  = getDataStorefromJSON('id','name', data.stu_code);
-				dijit.byId('stu_code').set('store',stu_code_store); 
 			},
 			error: function(err) {
 			}

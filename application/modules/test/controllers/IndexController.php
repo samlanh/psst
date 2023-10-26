@@ -167,25 +167,23 @@ class Test_IndexController extends Zend_Controller_Action
 		$db = new Test_Model_DbTable_DbStudentTest();
 
 		$result_date = $db->getRowTestResultDate($id,$type);
-		
-		$now = time();
-		$ts1 = strtotime($result_date['result_date']);
-		$year = date('Y', $ts1);
-		$this_year = date('Y', $now);
-
-		$month = date('m', $ts1);
-		$this_month = date('m', $now);
-		$month_amount = (($this_year - $year) * 12) + ($this_month - $month);
-			
+	
 		$tp = $db->getTestPeriod();//period in setting
 		$setting_period= $tp['keyValue'];
 		if(empty($setting_period)){
 			$setting_period = 1;
 		}
-
+        
 		if(!empty($result_date)){
-			if($month_amount < $setting_period){
-				Application_Form_FrmMessage::Sucessfull("can not edit",self::REDIRECT_URL);
+			$date_result = new DateTime($result_date['result_date']);
+			$date_result->modify('+'.$setting_period.' month');
+			$expsired_date= $date_result->format('Y-m-d');
+	
+			$now = new DateTime();
+			$today= $now->format('Y-m-d');
+
+			if($today >= $expsired_date){
+				Application_Form_FrmMessage::Sucessfull("can not edit, exspired record since $expsired_date ",self::REDIRECT_URL);
 			}
 		}
 		

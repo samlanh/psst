@@ -101,7 +101,7 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 		//	$dbpush->getTokenUser($_data['stu_code'],null, 3);
 			$arr = array(
 					'attendence_id'	=>$id,
-					'stu_id'		=>$_data['stu_code'],
+					'stu_id'		=>$_data['stu_name'],
 					'attendence_status'=>$_data['mistake'],
 					'description'	=>$_data['comment'],
 					'type'			=>2, //from one student
@@ -139,7 +139,7 @@ class Issue_Model_DbTable_DbStudentdisciplineOne extends Zend_Db_Table_Abstract
 			if ($_data['status']==1){
 				$arr = array(
 						'attendence_id'	=>$_data['att_id'],
-						'stu_id'		=>$_data['stu_code'],
+						'stu_id'		=>$_data['stu_name'],
 						'attendence_status'=>$_data['mistake'],
 						'description'	=>$_data['comment'],
 				);

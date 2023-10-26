@@ -994,6 +994,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$readonly="";
 								if($criterialId==1){
 									$attScore = $maxSubjectScore-($maxSubjectScore*$reductPercentage/100);
+									$attScore = ($attScore<0)?0:$attScore;
 									$readonly="readonly";
 								}
 								$string.='<div class="'.$classCol.'">';

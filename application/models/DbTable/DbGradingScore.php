@@ -867,6 +867,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					$resultScore = empty($rsScore)?0:$rsScore[0]['totalGrading'];
    					if($criterialId==1){
    						$resultScore = $maxSubjectScore-($maxSubjectScore*$reductPercentage/100);
+   						$resultScore = ($resultScore<0)?0:$resultScore;
    						$readonly="readonly";
    					}
    					elseif(!empty($data['getExistingData'])){ 

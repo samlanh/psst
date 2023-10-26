@@ -27,7 +27,7 @@ class Issuesetting_GradingsystemController extends Zend_Controller_Action {
 	    	$rs_rows= $db->getAlGrandingSystem($search);
 	    	
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","DEGREE","TITLE","NOTE","CREATE_DATE","STATUS",);
+	    	$collumns = array("BRANCH","DEGREE","scoreAttPolicy","TITLE","NOTE","CREATE_DATE","STATUS",);
 	    	$link=array(
 	    			'module'=>'issuesetting','controller'=>'gradingsystem','action'=>'edit',
 	    	);

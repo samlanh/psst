@@ -14,6 +14,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 				s.id,
 				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degreeId LIMIT 1) AS degree,
+				(SELECT t.title FROM `rms_attendance_score_setting` AS t WHERE t.id = s.settingScoreAttId LIMIT 1) AS settingScoreAttId,
 				s.title,s.note,s.create_date
     		";
     	$sql.=$dbp->caseStatusShowImage("s.status");

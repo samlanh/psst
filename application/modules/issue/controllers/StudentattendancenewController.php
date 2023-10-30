@@ -147,7 +147,7 @@ class Issue_StudentattendancenewController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbStudentAttendanceNew();
-			$data=$db->getStudentGroupHTML($data);
+			$data=$db->getStudentRowHTML($data);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

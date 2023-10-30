@@ -290,7 +290,8 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 							AND s.status=1
 							AND sgh.status = 1
 							AND sgh.stop_type=0
-							AND sgh.`group_id`=".$group_id;
+							AND sgh.`group_id`=".$group_id." AND s.stu_id=".$data['stuId'];
+							
 		
 		}else{
 			$sql="SELECT 
@@ -314,7 +315,7 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 					AND sgh.status = 1
 					
 					and sgh.stop_type=0
-					AND sgh.`group_id`=".$group_id;
+					AND sgh.`group_id`=".$group_id." AND s.stu_id=".$data['stuId'];
 			
 		}
 		if(!empty($data['sortStundent'])){
@@ -494,34 +495,12 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 		$strStudent = "";
 		$identity="";
 
-		if(!empty($data['attendanceId'])){
-			$attendanceDateOld = "";
-			$attendanceRow = $this->getAttendencetByID($data['attendanceId']);
-			if(!empty($attendanceRow)){
-				$attendanceRowDate = new DateTime($attendanceRow["date_attendence"]);
-				$attendanceDateOld =  $attendanceRowDate->format("Y-m-d");
-			}
-			
-			$date = new DateTime($data['attendenceDate']);
-			$currentAttendenceDate =  $date->format("Y-m-d");
-			if($attendanceDateOld==$currentAttendenceDate){
-				$template = $this->getTemplateStudentAttendanceEdit($data);
-				$strStudent = $template["rowStudentHTML"];
-				$index = $template["keyrow"];
-				$identity = $template["identity"];
-			}else{
-				$template = $this->getTemplateStudentAttendance($data);
-				$strStudent = $template["rowStudentHTML"];
-				$index = $template["keyrow"];
-				$identity = $template["identity"];
-			}
-			
-		}else{
-			$template = $this->getTemplateStudentAttendance($data);
-			$strStudent = $template["rowStudentHTML"];
-			$index = $template["keyrow"];
-			$identity = $template["identity"];
-		}
+	
+		$template = $this->getTemplateStudentAttendance($data);
+		$strStudent = $template["rowStudentHTML"];
+		$index = $template["keyrow"];
+		$identity = $template["identity"];
+		
 		$arr = array(
    			'rowStudentHTML' => $strStudent,
    			'identity' => $identity,
@@ -548,7 +527,7 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 		
 		$groupId = empty($data['group']) ? 0 : $data['group'];
 		date("Y-m-d",strtotime($data['attendenceDate']));
-		$rowStudent = $this->getStudentByGroup($groupId,$data);
+		$row = $this->getStudentByGroup($groupId,$data);
 		$scheduleTime =$this->getScheduleTimeStudty($data);
 		
 		$index = empty($data['keyrow'])?0:$data['keyrow'];

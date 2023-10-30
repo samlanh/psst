@@ -1,6 +1,5 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-echo $this->headTitle($tr->translate("STUDENT_SCORE_REPORT"));
 
 $session_lang = new Zend_Session_Namespace('lang');
 $lang_id = $session_lang->lang_id;
@@ -694,6 +693,9 @@ tbody#table_row tr {
 								$titleKh = 'លទ្ធផលសិក្សាប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
 								$titleENG = "SEMESTER " . $romanNumber . " RESULT";
 							}
+							$title=	$titleKh.' ថ្នាក់ទី​'.$rs['group_code'];
+							$this->headTitle($title);
+							echo $this->headTitle();
 							?>
 							<tr>
 								<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
@@ -973,17 +975,6 @@ tbody#table_row tr {
 									</div>
 								</div>
 							</div>
-							<div class="principalStamp" id="principalName" >
-								<div class="stamp" >
-									<div class="signature"></div>
-									<div class="principalName">
-										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-									</div>
-								</div>
-							</div>
-							<!-- <div style="height: 100px; display:none" id="height" class="principalName" >
-								<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-							</div> -->
 						</td>
 						<td></td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
@@ -992,7 +983,7 @@ tbody#table_row tr {
 							<?php } else { ?>
 								<div id="teachersigature" style="height: 100px;"></div>
 							<?php } ?>
-							<span id="teachersigature"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
+							<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 						</td>
 					</tr>
 					<tr>
@@ -1280,23 +1271,22 @@ function stampDisplay() {
   var date = document.getElementById("date");
   var blank_date = document.getElementById("blank_date");
  
-  var principalName = document.getElementById("principalName");
+  
   if (checkBox.checked == true){
     stamp.style.display = "block";
 	teacher.style.display = "block";
 	teacher.style.visibility = "visible";
 	date.style.display = "block";
 	blank_date.style.display = "none";
-	principalName.style.display = "none";
+
 	
 
   } else {
 	stamp.style.display = "none";
 	teacher.style.visibility = "hidden";
-
 	date.style.display = "none";
 	blank_date.style.display = "block";
-	principalName.style.display = "block";
+
 
   }
 }

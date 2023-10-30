@@ -266,14 +266,14 @@ tbody#table_row tr {
 							if ($rs['exam_type'] == 1) {
 								$monthChar = empty($monthKH[$rs['for_month_id']]) ? "" : $monthKH[$rs['for_month_id']];
 							
-								$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ'.!empty($rs['title_score'])?$rs['title_score']:$monthChar;
+								$titleKh = 'លទ្ធផលសិក្សាប្រចាំខែ'.!empty($rs['title_score'])?$rs['title_score']:$monthChar;
 								$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
-								$titleENG = $monthCharEn . " TEST RESULT";
+								$titleENG = $monthCharEn . " RESULT";
 							} else {
 								$arrRomanNum = array(1 => "I", 2 => "II");
 								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
-								$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
-								$titleENG = "SEMESTER " . $romanNumber . " TEST RESULT";
+								$titleKh = 'លទ្ធផលសិក្សាប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
+								$titleENG = "SEMESTER " . $romanNumber . " RESULT";
 							}
 						?>
 							<?php $i = 0;
@@ -288,10 +288,10 @@ tbody#table_row tr {
 											<?php echo $titleENG; ?>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ថ្នាក់ទី / GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+											ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
+											ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
 										</li>
 									</ul>
 								</td>
@@ -327,7 +327,7 @@ tbody#table_row tr {
 											<td class="red bold" style="width:100px;"><?php echo $tr->translate("RANK"); ?>
 												<br />Rank
 											</td>
-											<td colspan="3">និទ្ទេស និង​ មូលវិចារ
+											<td colspan="3">និទ្ទេស និង មូលវិចារ
 												<br />Letter Grade & Comment
 											</td>
 										</tr>
@@ -584,7 +584,7 @@ tbody#table_row tr {
 				}
 
 				tr.style span.englishName {
-					font-size: 11px;
+					font-size: 13px;
 				}
 
 				span.valueAmount {
@@ -612,8 +612,7 @@ tbody#table_row tr {
 					@page {
 						page: A4;
 						size: portrait;
-						;
-						margin: 0.8cm;
+						margin: 0.8cm 0.8cm 0.2cm 0.8cm;
 					}
 				}
 
@@ -638,11 +637,11 @@ tbody#table_row tr {
 					position: absolute;
 				}
 				.principalStamp .principalName {
-					left: 48px;
-    				bottom: -52px;
-					height: 100px;
-					width:200px;
-					position: absolute;
+					left: 65px;
+				    top: 80px;
+				    height: 100px;
+				    width: 200px;
+				    position: absolute;
 				}
 			</style>
 			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
@@ -686,13 +685,13 @@ tbody#table_row tr {
 							$count = count($subj);
 							if ($rs['exam_type'] == 1) {
 								$monthChar = empty($monthKH[$rs['for_month_id']]) ? "" : $monthKH[$rs['for_month_id']];
-								$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ '.(!empty($rs['title_score'])?$rs['title_score']:$monthChar);
+								$titleKh = 'លទ្ធផលសិក្សាប្រចាំខែ '.(!empty($rs['title_score'])?$rs['title_score']:$monthChar);
 								$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
-								$titleENG = (!empty($rs['title_score_en'])?$rs['title_score_en']:$monthCharEn).' TEST RESULT ';
+								$titleENG = (!empty($rs['title_score_en'])?$rs['title_score_en']:$monthCharEn).' RESULT ';
 							} else {
 								$arrRomanNum = array(1 => "I", 2 => "II");
 								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
-								$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
+								$titleKh = 'លទ្ធផលសិក្សាប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
 								$titleENG = "SEMESTER " . $romanNumber . " RESULT";
 							}
 							?>
@@ -706,10 +705,10 @@ tbody#table_row tr {
 											<?php echo $titleENG; ?>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ថ្នាក់ទី : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+											ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
+											ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
 										</li>
 									</ul>
 								</td>
@@ -761,7 +760,7 @@ tbody#table_row tr {
 													<span class="englishLabel">Rank</span>
 											</td>
 											<td colspan="3">
-												<span class="khmerLabel">និទ្ទេស និង​ មូលវិចារ</span>
+												<span class="khmerLabel">និទ្ទេស និង​មូលវិចារ</span>
 												<br />
 												<span class="englishLabel">Letter Grade & Comment</span>
 											</td>
@@ -942,10 +941,7 @@ tbody#table_row tr {
 
 								if ($lang_id == 1) { ?>
 									<label id= "date" style="display:none">
-										រាជធានីភ្នំពេញ​ ថ្ងៃទី
-										<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ
-										<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ
-										<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+										រាជធានីភ្នំពេញ​ ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
 									</label>
 								<?php }else{ ?>
 									<label id= "date" style="display:none">
@@ -979,9 +975,7 @@ tbody#table_row tr {
 							</div>
 							<div class="principalStamp" id="principalName" >
 								<div class="stamp" >
-									<div class="signature">
-										&nbsp;
-									</div>
+									<div class="signature"></div>
 									<div class="principalName">
 										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
 									</div>
@@ -998,7 +992,7 @@ tbody#table_row tr {
 							<?php } else { ?>
 								<div id="teachersigature" style="height: 100px;"></div>
 							<?php } ?>
-							<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
+							<span id="teachersigature"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 						</td>
 					</tr>
 					<tr>

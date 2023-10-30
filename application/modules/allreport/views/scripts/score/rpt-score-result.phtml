@@ -620,12 +620,13 @@ tbody#table_row tr {
 					width: 300px;
    					height: 140px;
 					margin:0 auto;
+					margin-top:-20px;
 				}
 				.principalStamp .stamp {
-					width:130px;
-					height:130px;
+					width:140px;
+					height:140px;
 					position:absolute;
-					transform: translate(-50%);
+					transform: translate(-81%);
 					left:50%;
 				}
 				.principalStamp .signature {
@@ -635,12 +636,22 @@ tbody#table_row tr {
 					width:200px;
 					position: absolute;
 				}
-				.principalStamp .principalName {
+				.principalStamp .principalName{
 					left: 65px;
-				    top: 80px;
+				    top: 113px;
 				    height: 100px;
 				    width: 200px;
 				    position: absolute;
+				}
+				.seenApproved{
+					position: relative;
+				}
+				.seenApproved .interimPrincipal{
+					position: absolute;
+					left: 50%;
+				    top: 20px;
+				    transform: translate(-50%);
+				    z-index: 1;
 				}
 				
 			.administrator {
@@ -669,6 +680,11 @@ tbody#table_row tr {
 				    height: 100px;
 				    width: 200px;
 				    position: absolute;
+				}
+				label.LabelTeacher {
+					line-height: 25px;
+					font-weight: initial;
+					font-family: 'Times New Roman','Khmer OS Battambang';
 				}
 			</style>
 			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
@@ -954,24 +970,37 @@ tbody#table_row tr {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3">&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td align="center">
+							<label id="lunarDate" class="LabelTeacher">
+							<?php 
+								$inputDate =$this->studentScoreResult[0]['date_input'];
+								$time  = strtotime($inputDate);
+								$day   = date('d',$time);
+								$month = date('m',$time);
+								$year  = date('Y',$time);
+									
+								$lunaDate = date('Y-m-d',strtotime($inputDate));
+								$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+							?>
+							<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
+						</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+						</td>
 					</tr>
 					<tr>
 						<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-							បានឃើញ និងឯកភាព<br />
+							<div class="seenApproved">បានឃើញ និងឯកភាព
+								<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+							</div>
 						</td>
 						<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
 						<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
 							<?php
-							$inputDate =$this->studentScoreResult[0]['date_input'];
-							$time  = strtotime($inputDate);
-							$day   = date('d',$time);
-							$month = date('m',$time);
-							$year  = date('Y',$time);
 
 								if ($lang_id == 1) { ?>
 									<label id= "date" style="display:none">
-										រាជធានីភ្នំពេញ​ ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+										ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
 									</label>
 								<?php }else{ ?>
 									<label id= "date" style="display:none">
@@ -982,11 +1011,11 @@ tbody#table_row tr {
 										<?php echo date("Y");?> 
 									</label>
 							<?php } ?>
-							<div id="blank_date" style="display:none">រាជធានីភ្នំពេញ <?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+							<div id="blank_date" style="display:none">ត្រូវនឹងថ្ងៃទី <?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
 						</td>
 					</tr>
 					<tr>
-						<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"><?php echo $branchInfo['principal']; ?></td>
+						<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
 						<td valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;">ការិយាល័យសិក្សាធិការ</td>
 						<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
 					</tr>
@@ -1003,7 +1032,6 @@ tbody#table_row tr {
 									</div>
 								</div>
 							</div>
-<<<<<<< HEAD
 						</td>
 						<td valign="top">
 							<div class="administrator" id="administrator" style="display:none;">
@@ -1017,8 +1045,6 @@ tbody#table_row tr {
 									</div>
 								</div>
 							</div>
-=======
->>>>>>> e9efb1bf8b394ca61f9a1b26721cc8dd09d7d7ad
 						</td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 							<?php if (!empty($rs['teacher_sigature'])) { ?>
@@ -1312,6 +1338,9 @@ function stampDisplay() {
   var stamp = document.getElementById("principalStamp");
   var teacher = document.getElementById("teachersigature");
   var administrator = document.getElementById("administrator");
+  var lunarBlankDate =  document.getElementById("lunarBlankDate");
+  var lunarDate =  document.getElementById("lunarDate");
+  
   
   var date = document.getElementById("date");
   var blank_date = document.getElementById("blank_date");
@@ -1324,6 +1353,8 @@ function stampDisplay() {
 	teacher.style.visibility = "visible";
 	date.style.display = "block";
 	blank_date.style.display = "none";
+	lunarBlankDate.style.display = "none";
+	lunarDate.style.display = "block";
 
   } else {
 	stamp.style.display = "none";
@@ -1331,8 +1362,8 @@ function stampDisplay() {
 	administrator.style.display = "none";
 	date.style.display = "none";
 	blank_date.style.display = "block";
-
-
+	lunarBlankDate.style.display = "block";
+	lunarDate.style.display = "none";
   }
 }
 

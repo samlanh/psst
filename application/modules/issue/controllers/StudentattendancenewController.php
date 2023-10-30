@@ -134,12 +134,20 @@ class Issue_StudentattendancenewController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
+	function getschedulebygrouphtmlAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendanceNew();
+			$data=$db->getScheduleGroupHTML($data);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
 	function getstudentbygrouphtmlAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbStudentAttendanceNew();
-			$data=$db->getStudentByGroupHTML($data);
+			$data=$db->getStudentRowHTML($data);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

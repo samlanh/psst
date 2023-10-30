@@ -243,6 +243,11 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 		));
+		$admistration_name = new Zend_Dojo_Form_Element_TextBox('admistration_name');
+		$admistration_name->setAttribs(array(
+				'dojoType'=>'dijit.form.TextBox',
+				'class'=>'fullside',
+		));
 		
 		$id = new Zend_Form_Element_Hidden('id');
 		$id->setAttribs(
@@ -280,13 +285,14 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 
 			$deputy_principal->setValue($data['deputy_principal']);
 			$abbreviations->setValue($data['abbreviations']);
+			$admistration_name->setValue($data['admistration_name']);
 			
 			$id->setValue($data['br_id']);
 		}
 		
 		$this->addElements(array($principal,$workat,$officeeys,$centereys,$branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display,$card_type,
-				$color,$id,$deputy_principal,$abbreviations));
+				$color,$id,$deputy_principal,$abbreviations,$admistration_name));
 		
 		return $this;
 	}

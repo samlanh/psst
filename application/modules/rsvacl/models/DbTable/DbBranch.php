@@ -59,6 +59,34 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			else
     				$string = "Image Upload failed";
     		}
+
+			$admin_stamp = $_FILES['administration_stamp']['name'];
+    		$img_adminstamp='';
+			//$img_adminstamp= empty($_data['oldStamp'])?'':$_data['oldStamp'];
+    		if (!empty($admin_stamp)){
+    			$ss = 	explode(".", $admin_stamp);
+    			$image_name = "admin_stamp".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['administration_stamp']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$image_name)){
+    				$img_adminstamp = $image_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
+    		}
+
+			$admin_signature = $_FILES['administration_signature']['name'];
+    		$img_admin_sign='';
+			//$img_admin_sign= empty($_data['oldStamp'])?'':$_data['oldStamp'];
+    		if (!empty($admin_signature)){
+    			$ss = 	explode(".", $admin_signature);
+    			$image_name = "admin_signature".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['administration_signature']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$image_name)){
+    				$img_admin_sign = $image_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
+    		}
     		
     		$sql="SELECT br_id FROM rms_branch WHERE 1 ";
     		$sql.=" AND branch_nameen='".$_data['branch_nameen']."'";
@@ -111,6 +139,9 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 					'abbreviations'		=>$_data['abbreviations'],
 	    			'signature'			=>$imgsignature,
 	    			'stamp'				=>$imgstamp,
+					'admistration_name'	=>$_data['admistration_name'],
+	    			'administration_stamp'		=>$img_adminstamp,
+	    			'administration_signature'	=>$img_admin_sign,
 	    			
 	    		);
 	    	$this->_name ="rms_branch";
@@ -178,6 +209,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			'principal'			=>$_data['principal'],
 				'deputy_principal'	=>$_data['deputy_principal'],
 				'abbreviations'		=>$_data['abbreviations'],
+				'admistration_name'	=>$_data['admistration_name'],
     			
     		);
     	if (!empty($name)){
@@ -206,6 +238,26 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		$tmp = $_FILES['stamp']['tmp_name'];
     		if(move_uploaded_file($tmp, $part.$image_name)){
     			$_arr['stamp']=$image_name;
+    		}
+    	}
+
+		$stampImg = $_FILES['administration_stamp']['name'];
+    	if (!empty($stampImg)){
+    		$ss = 	explode(".", $stampImg);
+    		$image_name = "admin_stamp".date("Y").date("m").date("d").time().".".end($ss);
+    		$tmp = $_FILES['administration_stamp']['tmp_name'];
+    		if(move_uploaded_file($tmp, $part.$image_name)){
+    			$_arr['administration_stamp']=$image_name;
+    		}
+    	}
+
+		$imgSignature = $_FILES['administration_signature']['name'];
+    	if (!empty($imgSignature)){
+    		$ss = 	explode(".", $imgSignature);
+    		$image_name = "admin_signature".date("Y").date("m").date("d").time().".".end($ss);
+    		$tmp = $_FILES['administration_signature']['tmp_name'];
+    		if(move_uploaded_file($tmp, $part.$image_name)){
+    			$_arr['administration_signature']=$image_name;
     		}
     	}
     	

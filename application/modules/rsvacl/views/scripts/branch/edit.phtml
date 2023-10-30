@@ -102,9 +102,6 @@
 									</div>
 								</div>
 							</div>
-							
-							
-							
 						</div>
 											
 						<div class="col-md-4 col-sm-4 col-xs-12">
@@ -326,9 +323,6 @@
 									</div>
 								</div>
 							</div>
-							
-							
-							
 						</div>
 						
 					</div>
@@ -423,16 +417,47 @@
 										<div class="col-md-12 col-sm-12 col-xs-12"> 
 											<div class="d-flex"> 
 												<div class="settings-main-icon ">
-													<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+													<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 												</div> 
 												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRINCIPAL_SINATURE");?></p>
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRINCIPAL");?></p>
 													
 												</div> 
 											</div>
 											<div class="form-group">
 											   <div class="col-md-12 col-sm-12 col-xs-12">
-													<div class="account-image">
+												   &nbsp;
+											   </div>
+											</div>
+											<div class="form-group">
+												<div class="col-md-6 col-sm-6 col-xs-12 text-center">
+											   		<span class="glyphicon glyphicon-pawn"></span>&nbsp;&nbsp;<?php echo $tr->translate("STAMP");?>
+											   </div>
+											   <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+											  		 <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;<?php echo $tr->translate("SINATURE");?>
+											   </div>
+											   <div class="col-md-6 col-sm-6 col-xs-12">
+											  		<div class="account-image">
+														<div class="image-box">
+															<?php
+																$stamp = $this->baseUrl().'/images/noimage.jpg';
+																 if (!empty($this->rs['stamp'])){
+																	 if (file_exists(PUBLIC_PATH."/images/logo/".$this->rs['stamp'])){
+																		$stamp = $this->baseUrl().'/images/logo/'.$this->rs['stamp'];
+																	}
+																}										 
+															?>					
+															<img id="view_stamp" src="<?php echo $stamp;?>" alt=""  />
+														</div>
+														<div class="button_browse">
+														<div id='preview'></div>	
+															<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+															<input class="btn_borwse_image" type="file" id="stamp" name="stamp" >
+														</div>
+													</div>
+											   </div>
+											   <div class="col-md-6 col-sm-6 col-xs-12">
+											   		<div class="account-image">
 														<div class="image-box">
 														<?php
 															$signature = $this->baseUrl().'/images/noimage.jpg';
@@ -464,34 +489,72 @@
 										<div class="col-md-12 col-sm-12 col-xs-12"> 
 											<div class="d-flex"> 
 												<div class="settings-main-icon ">
-													<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+													<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 												</div> 
 												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRINCIPAL_STAMP");?></p>
+													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ADMINISTRATION");?></p>
 													
 												</div> 
 											</div>
-											
 											<div class="form-group">
 											   <div class="col-md-12 col-sm-12 col-xs-12">
-													<div class="account-image">
+												   &nbsp;
+											   </div>
+											</div>
+											<div class="form-group">
+												<div class="col-md-6 col-sm-6 col-xs-12 text-center">
+											   		<span class="glyphicon glyphicon-pawn"></span>&nbsp;&nbsp;<?php echo $tr->translate("STAMP");?>
+											   </div>
+											   <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+											  		 <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;<?php echo $tr->translate("SINATURE");?>
+											   </div>
+											   <div class="col-md-6 col-sm-6 col-xs-12">
+											  		 <div class="account-image">
 														<div class="image-box">
 															<?php
-																$stamp = $this->baseUrl().'/images/noimage.jpg';
+																$admin_stamp = $this->baseUrl().'/images/noimage.jpg';
 																 if (!empty($this->rs['stamp'])){
-																	 if (file_exists(PUBLIC_PATH."/images/logo/".$this->rs['stamp'])){
-																		$stamp = $this->baseUrl().'/images/logo/'.$this->rs['stamp'];
+																	 if (file_exists(PUBLIC_PATH."/images/logo/".$this->rs['administration_stamp'])){
+																		$admin_stamp = $this->baseUrl().'/images/logo/'.$this->rs['administration_stamp'];
 																	}
 																}										 
 															?>					
-															<img id="view_stamp" src="<?php echo $stamp;?>" alt=""  />
+															<img id="view_admin_stamp" src="<?php echo $admin_stamp;?>" alt=""  />
 														</div>
 														<div class="button_browse">
 														<div id='preview'></div>	
 															<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-															<input class="btn_borwse_image" type="file" id="stamp" name="stamp" >
+															<input class="btn_borwse_image" type="file" id="administration_stamp" name="administration_stamp" >
 														</div>
 													</div>
+											   </div>
+											   <div class="col-md-6 col-sm-6 col-xs-12">
+											  	 <div class="account-image">
+														<div class="image-box">
+															<?php
+																$admin_signature = $this->baseUrl().'/images/noimage.jpg';
+																 if (!empty($this->rs['administration_signature'])){
+																	 if (file_exists(PUBLIC_PATH."/images/logo/".$this->rs['administration_signature'])){
+																		$admin_signature = $this->baseUrl().'/images/logo/'.$this->rs['administration_signature'];
+																	}
+																}										 
+															?>					
+															<img id="view_admin_signature" src="<?php echo $admin_signature;?>" alt=""  />
+														</div>
+														<div class="button_browse">
+														<div id='preview'></div>	
+															<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+															<input class="btn_borwse_image" type="file" id="administration_signature" name="administration_signature" >
+														</div>
+													</div>
+											   </div>
+											  
+											</div>
+											<div class="form-group">
+											   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ADMIN_NAME");?>
+											   </label>
+											   <div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("admistration_name");?>
 											   </div>
 											</div>
 										</div>
@@ -673,4 +736,35 @@ var maxSize = 0;
 $("#principalsign").change(function(){
 	readURLSignature(this);
 });
+
+function readURLAdminStamp(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#view_admin_stamp').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+var maxSize = 0;
+$("#administration_stamp").change(function(){
+	readURLAdminStamp(this);
+});
+
+function readURLAminSignature(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#view_admin_signature').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+var maxSize = 0;
+$("#administration_signature").change(function(){
+	readURLAminSignature(this);
+});
+
 </script>	

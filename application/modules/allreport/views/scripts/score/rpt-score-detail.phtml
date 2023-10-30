@@ -342,10 +342,10 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<?php echo $titleENG; ?>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ថ្នាក់ទី/GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+											ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-											ឆ្នាំសិក្សា / ACADEMIC YEAR:<?php echo $rs['academic_year']; ?>
+											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
 										</li>
 									</ul>
 							</td>
@@ -416,10 +416,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										</tr>
 										<tr>
 											<td align="center" colspan="<?php echo $langKhmer; ?>"><?php echo $tr->translate("KHMER_PROGRAM"); ?></td>
-											<?php if(!empty($langEng)){?>
 											<td align="center" colspan="<?php echo $langEng; ?>"><?php echo $tr->translate("ENGLISH_PROGRAM"); ?></td>
-											<?php ?>
 										</tr>
+
 									<?php } ?>
 								<?php }
 							$i++; ?>
@@ -566,7 +565,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												<div class="principalStamp" id="principalName" >
 													<div class="stamp" >
 														<div class="signature">
-															&nbsp;
+															
 														</div>
 														<div class="principalName">
 															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>

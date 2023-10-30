@@ -651,10 +651,10 @@ $branchInfo = $this->branchInfo;
 								position: absolute;
 							}
 							.principalStamp .principalName {
-								left: 48px;
-								bottom: -52px;
+								left: 65px;
+								top: 80px;
 								height: 100px;
-								width:200px;
+								width: 200px;
 								position: absolute;
 							}
 						</style>
@@ -968,16 +968,6 @@ $branchInfo = $this->branchInfo;
 										</div>
 									</div>
 								</div>
-								<div class="principalStamp" id="principalName" >
-									<div class="stamp" >
-										<div class="signature">
-											&nbsp;
-										</div>
-										<div class="principalName">
-											<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-										</div>
-									</div>
-								</div>
 							</td>
 							<td></td>
 							<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;" width="50%">
@@ -1019,23 +1009,18 @@ function stampDisplay() {
   var teacher = document.getElementById("teachersigature");
   var date = document.getElementById("date");
   var blank_date = document.getElementById("blank_date");
- 
-  var principalName = document.getElementById("principalName");
   if (checkBox.checked == true){
     stamp.style.display = "block";
 	teacher.style.display = "block";
 	teacher.style.visibility = "visible";
 	date.style.display = "block";
 	blank_date.style.display = "none";
-	principalName.style.display = "none";
 	
   } else {
 	stamp.style.display = "none";
 	teacher.style.visibility = "hidden";
-
 	date.style.display = "none";
 	blank_date.style.display = "block";
-	principalName.style.display = "block";
 
   }
 }

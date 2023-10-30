@@ -42,14 +42,14 @@
 table#table tbody tr:hover {
     border-bottom: solid 2px #b1badf !important;
     background: #fff;
+	color:#000;
 }
 </style>
 <div class="row"> 
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="card mb-1 ">
 			<div class="card-header pb-1"> 
-				<h3 class="card-title mb-2 "><?php echo $this->row['branchNameKh'].' "ថ្នាក់ '." ".$this->row['group_code'].'"'?></h3> 
-				<h3 class="card-title mb-2 "><?php echo $this->row['branchNameEn'].' "Class'." ".$this->row['group_code'].'"'?></h3> 
+				<h3 class="card-title mb-2 "><?php echo $this->row['branchNameKh'].'/'.$this->row['branchNameEn'].' "ថ្នាក់ /Grade '." ".$this->row['group_code'].'"';?></h3> 
 			</div>
 			<div class="card-content collapse show mt-1">
 				<form id='frmAssessment' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">

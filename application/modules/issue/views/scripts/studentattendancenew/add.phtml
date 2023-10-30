@@ -164,7 +164,7 @@
 										<div class="form-group">
 											<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span></label>
 											<div class="col-md-7 col-sm-7 col-xs-12">
-												<input id="stu_name" />
+												<input id="stuId" />
 											</div>
 										</div>
 									</div> 
@@ -266,14 +266,14 @@
 			queryExpr: "*${0}*",
 			autoComplete: false,                   
 			required: true,               
-			id: "stu_name",
-			name: "stu_name",   
+			id: "stuId",
+			name: "stuId",   
 			class: 'fullside', 
 			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",
 			onChange: function() {  
 			
 			}
-		}, "stu_name");
+		}, "stuId");
 		
 		getAllGroup();
 		var branch_id = dijit.byId('branch_id');
@@ -292,11 +292,11 @@
 
 	url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-studentbygroup'));?>';
 	function getStudentByGroup(){
-		dijit.byId('stu_name').reset();
+		dijit.byId('stuId').reset();
 		group = dijit.byId('group').get('value');
 		if(group=='' || group==-1){
 			var stu_name_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('stu_name').set('store',stu_name_store); 
+			dijit.byId('stuId').set('store',stu_name_store); 
 			dijit.byId('group').focus();
 			return false;
 		}
@@ -308,7 +308,7 @@
 			handleAs:"json",
 			load: function(data) {
 				stu_name_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('stu_name').set('store',stu_name_store);   
+				dijit.byId('stuId').set('store',stu_name_store);   
 			},
 			error: function(err) {
 			}
@@ -592,7 +592,7 @@ function CheckAll(){
 
 var timeAttendanceArray = [];
 var keyrow=0;
-var urlGetStudentByGroupHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'getstudentbygrouphtml')); ?>';
+var urlGetScheduletimeHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendancenew','action'=>'getschedulebygrouphtml')); ?>';
 function filterStudentBygroup(){
 	 $('#identity').val('');
 	  document.getElementById("table_row").innerHTML = '';
@@ -615,7 +615,7 @@ function filterStudentBygroup(){
 	timeAttendanceArray = [];
 	loadingBlock();
 	dojo.xhrPost({
-	    url: urlGetStudentByGroupHTML,
+	    url: urlGetScheduletimeHTML,
 	    content : { 
 		    'group':group,
 			'isCurrent':1,
@@ -626,13 +626,66 @@ function filterStudentBygroup(){
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		   
 	       if(data!=""){
-				
 				dijit.byId('identity').set('value',data.identity); 
 			    dojo.html.set(dojo.byId("tableHeadInfo"),data.tableHeadHTML , {
 					 parseContent: true,
 				});
+				// dojo.html.set(dojo.byId("table_row"),data.rowStudentHTML , {
+				// 	 parseContent: true,
+				// });
+				keyrow = data.keyrow;
+				timeAttendanceArray = data.scheduleTime;
+				HideloadingBlock();
+	       }else{
+			   dijit.byId('identity').set('value',""); 
+	    	   document.getElementById("table_row").innerHTML = '';
+			   HideloadingBlock();
+	       }
+	   },		
+	    error: function(err) {
+	    }
+	});
+}
+
+
+var urlGetStudentByGroupHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendancenew','action'=>'getstudentbygrouphtml')); ?>';
+function addRowStudent(){
+	 $('#identity').val('');
+	  document.getElementById("table_row").innerHTML = '';
+	  inx=0;
+	var textareastyle=" font-family: 'Khmer OS Battambang'";
+	group = dijit.byId('group').get('value');
+	stuId = dijit.byId('stuId').get('value');
+	if(group==''){
+		return false;
+	}
+	sortStundent = dijit.byId('sortStundent').get('value');
+	
+	var attendenceDate = dijit.byId('attendence_date').get('value');	
+	var day = attendenceDate.getDate();
+	if(day <= 9) {day = "0" +day;}
+	var m = attendenceDate.getMonth()+1;
+	if(m <= 9) {m = "0" +m;}
+	var year = attendenceDate.getFullYear();
+	attendenceDateValue = year+"-"+m+"-"+day;
+	
+	timeAttendanceArray = [];
+	loadingBlock();
+	dojo.xhrPost({
+	    url: urlGetStudentByGroupHTML,
+	    content : { 
+		    'group':group,
+			'stuId':stuId,
+			'isCurrent':1,
+			'itemType':1,
+			'sortStundent': sortStundent,
+			'keyrow':keyrow,
+			'attendenceDate':attendenceDateValue
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+	       if(data!=""){
 				dojo.html.set(dojo.byId("table_row"),data.rowStudentHTML , {
 					 parseContent: true,
 				});
@@ -649,6 +702,7 @@ function filterStudentBygroup(){
 	    }
 	});
 }
+
 function _changeSetNextTimeValue(rowIndex,timeIndex){
 	if(timeAttendanceArray.length > 0){
 		var currentValue = dijit.byId('attendenceStatus'+rowIndex+'_'+timeIndex).get('value');
@@ -668,5 +722,45 @@ function _setNextTimeReason(rowIndex,timeIndex){
 			}
 		}
 	}
+}
+
+var col = 0;
+var no = 0;
+var title = 1;
+tmp = '';
+temp='';
+function addRow(){
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		alert('Please Select Branch!');
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	col++;no++;
+	template='';
+		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT");?>" ></td>';
+		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_MONTH");?>" ></td>';
+		template+='<td data-label="<?php echo $tr->translate("CONVERTED_SCORE");?>" ><input readOnly="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="month_converted_score'+col+'" id="month_converted_score'+col+'" value="0" type="text" ></td>';
+
+		template+='<td data-label="<?php echo $tr->translate("MAXSCORE_SEMESTER");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_max_score'+col+'" id="semester_max_score'+col+'" value="0" type="text" onKeyUp="semesterConvertedScore('+col+')"></td>';
+		template+='<td data-label="<?php echo $tr->translate("MULTI_SUBJECT_SEMESTER");?>" ><input required="1" dojoType="dijit.form.NumberTextBox" class="fullside" name="amount_subject_semester'+col+'" onKeyUp="semesterConvertedScore('+col+') " id="amount_subject_semester'+col+'" value="1" type="text"></td>';
+		template+='<td data-label="<?php echo $tr->translate("CONVERTED_SCORE");?>" ><input readOnly="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="semester_converted_score'+col+'" id="semester_converted_score'+col+'" value="0" type="text" ></td>';	
+		template+='<td data-label="<?php echo $tr->translate("SCORE_SHORT");?>" ><input required="true" dojoType="dijit.form.NumberTextBox" class="fullside" name="scoreshort_'+col+'" id="scoreshort_'+col+'" value="0" type="text" onKeyUp="calculateTotalSubject()"></td>';
+		template+='<td data-label="<?php echo $tr->translate("NOTE");?>" ></td>';		
+		
+	tmp='<tr class="rowData hover" id="row'+col+'">';
+	tmp+="</tr>";
+	dojo.query("#table_row").append(tmp);
+
+	if($("#identity1").val()!="") {
+		var identity = $("#identity1").val();
+		$("#identity1").val(identity+','+col);
+	} else {$("#identity1").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+	     parseContent: true,
+	});
+	calculateTotalSubject();
+	monthConvertedScore(col);
+	semesterConvertedScore(col);
 }
 </script> 

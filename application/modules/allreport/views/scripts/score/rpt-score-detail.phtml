@@ -27,7 +27,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 ?>
 <style>
 	.style {
-				line-height: 22px !important;
+				line-height: 25px !important;
 				font-size: 12px ;
 				font-family: 'Times New Roman', 'Khmer OS Battambang';
 			}
@@ -119,10 +119,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 	<div id="divPrint">
 		<style type="text/css">
 			.style {
-				line-height: 10px;
+				line-height: 13px;
 				font-size: 10px !important;
 				font-family: 'Times New Roman', 'Khmer OS Battambang';
-
 			}
 
 			.khmerBold {
@@ -189,19 +188,18 @@ $link = "/allreport/score/rpt-monthlytranscript";
 
 			@page {
 				page: A4;
-				margin: none;
-				pading: 0.5cm;
+				margin: 0cm 0.5cm 0cm 0.5cm;
 				size: landscape;
 			}
-			.principalStamp {
+				.principalStamp {
 					position:relative;
 					width: 300px;
    					height: 140px;
 					margin:0 auto;
 				}
 				.principalStamp .stamp {
-					width:130px;
-					height:130px;
+					width:120px;
+					height:120px;
 					position:absolute;
 					transform: translate(-50%);
 					left:50%;
@@ -214,11 +212,11 @@ $link = "/allreport/score/rpt-monthlytranscript";
 					position: absolute;
 				}
 				.principalStamp .principalName {
-					left: 48px;
-    				bottom: -52px;
-					height: 100px;
-					width:200px;
-					position: absolute;
+					left: 65px;
+				    top: 80px;
+				    height: 100px;
+				    width: 200px;
+				    position: absolute;
 				}
 				ul.scoreTitle {
 					padding: 0;
@@ -418,7 +416,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td align="center" colspan="<?php echo $langKhmer; ?>"><?php echo $tr->translate("KHMER_PROGRAM"); ?></td>
 											<?php if(!empty($langEng)){?>
 											<td align="center" colspan="<?php echo $langEng; ?>"><?php echo $tr->translate("ENGLISH_PROGRAM"); ?></td>
-											<?php ?>
+											<?php }?>
 										</tr>
 									<?php } ?>
 								<?php }
@@ -508,7 +506,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										</tr>
 										<tr>
 											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light','Times New Roman';font-size:12px;text-align: center;">
-												<?php echo $tr->translate("CHECKANDAPPROVED"); ?><br />
+												<?php echo $tr->translate("CHECKANDAPPROVED"); ?>
 											</td>
 											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
 											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center; font-size:12px " valign="top">
@@ -521,10 +519,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 
 														if ($lang_id == 1) { ?>
 															<label id= "date" style="display:none">
-																រាជធានីភ្នំពេញ​ ថ្ងៃទី
-																<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ
-																<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ
-																<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+																រាជធានីភ្នំពេញ​ ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date($day)); ?> 
+																ខែ<?php echo $dbgb->getMonthInkhmer(date($month)); ?> 
+																ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
 															</label>
 														<?php }else{ ?>
 															<label id= "date" style="display:none">
@@ -544,7 +541,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 													if ($lang_id == 1) { ?>
 														នាយកស្តីទី
 													<?php }else{ ?>
-														<span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;">Interim Principal</span>
+														<span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;line-height:18px;">Interim Principal</span>
 													<?php } ?>
 											</td>
 											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
@@ -559,17 +556,16 @@ $link = "/allreport/score/rpt-monthlytranscript";
 															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['signature']; ?>" />
 														</div>
 														<div class="principalName">
-															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
 														</div>
 													</div>
 												</div>
 												<div class="principalStamp" id="principalName" >
 													<div class="stamp" >
 														<div class="signature">
-															&nbsp;
 														</div>
 														<div class="principalName">
-															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
 														</div>
 													</div>
 												</div>
@@ -579,9 +575,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												<?php if (!empty($rs['teacher_sigature'])) { ?>
 													<div id="teachersigature" ><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 												<?php } else { ?>
-													<div style="height: 100px;"></div>
+													<div id="teachersigature" style="height: 100px;"></div>
 												<?php } ?>
-												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
+												<span style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 											</td>
 										</tr>
 									</table>
@@ -766,23 +762,23 @@ function stampDisplay() {
   var blank_date = document.getElementById("blank_date");
  
   var principalName = document.getElementById("principalName");
-  if (checkBox.checked == true){
-    stamp.style.display = "block";
-	teacher.style.display = "block";
-	teacher.style.visibility = "visible";
-	date.style.display = "block";
-	blank_date.style.display = "none";
-	principalName.style.display = "none";
+	  if (checkBox.checked == true){
+	    stamp.style.display = "block";
+		teacher.style.display = "block";
+		teacher.style.visibility = "visible";
+		date.style.display = "block";
+		blank_date.style.display = "none";
+		principalName.style.display = "none";
+		
 	
-
-  } else {
-	stamp.style.display = "none";
-	teacher.style.visibility = "hidden";
-
-	date.style.display = "none";
-	blank_date.style.display = "block";
-	principalName.style.display = "block";
-
+	  } else {
+		stamp.style.display = "none";
+		teacher.style.visibility = "hidden";
+	
+		date.style.display = "none";
+		blank_date.style.display = "block";
+		principalName.style.display = "block";
+	
+	}
   }
-}
 </script>

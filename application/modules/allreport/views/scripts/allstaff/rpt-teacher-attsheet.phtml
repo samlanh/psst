@@ -312,9 +312,14 @@ table.tb-footer tr.style-head {
 						
 						?>
 						<?php if($key>0){?> 
-							<?php for($j=1;$j<=5;$j++){ ?>
+							<?php for($j=1;$j<=5;$j++){ 
+								$extra_num = $i+$j;
+								if ($extra_num > 30) {
+									break;
+								}
+							?>
 							<tr style="font-size:11px;height: 14px;" align="left">
-								<td class="centerClass" style="width:30px"><?php echo $i+$j;?></td>
+								<td class="centerClass" style="width:30px"><?php echo $extra_num;?></td>
 								<td style="width:170px"></td>
 								<td class="centerClass" style="width:120px"></td>
 								<td class="centerClass" style="width:50px">
@@ -558,9 +563,14 @@ table.tb-footer tr.style-head {
 								?>
 							</tr>
 					<?php }?>
-						<?php for($j=1;$j<=5;$j++){ ?>
+						<?php for($j=1;$j<=5;$j++){
+							  $extra_num = $i+$j;
+								if ($extra_num > 30) {
+									break;
+								}
+							 ?>
 							<tr style="font-size:11px;height: 14px;" align="left">
-								<td class="centerClass" style="width:30px"><?php echo $i+$j;?></td>
+								<td class="centerClass" style="width:30px"><?php echo  $extra_num;?></td>
 								<td style="width:170px"></td>
 								<td class="centerClass" style="width:120px"></td>
 								<td class="centerClass" style="width:50px">

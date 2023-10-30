@@ -290,7 +290,8 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 							AND s.status=1
 							AND sgh.status = 1
 							AND sgh.stop_type=0
-							AND sgh.`group_id`=".$group_id;
+							AND sgh.`group_id`=".$group_id." AND s.stu_id=".$data['stuId'];
+							
 		
 		}else{
 			$sql="SELECT 
@@ -314,7 +315,7 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 					AND sgh.status = 1
 					
 					and sgh.stop_type=0
-					AND sgh.`group_id`=".$group_id;
+					AND sgh.`group_id`=".$group_id." AND s.stu_id=".$data['stuId'];
 			
 		}
 		if(!empty($data['sortStundent'])){
@@ -442,6 +443,73 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 		return $arr;
 	
 	}
+
+	function getScheduleGroupHTML($data=array()){
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$textareastyle=" font-family: 'Khmer OS Battambang' ";
+		
+		$groupId = empty($data['group']) ? 0 : $data['group'];
+		date("Y-m-d",strtotime($data['attendenceDate']));
+		$scheduleTime =$this->getScheduleTimeStudty($data);
+		
+		$index = empty($data['keyrow'])?0:$data['keyrow'];
+		$strHeadRow = "";
+		$identity="";
+		
+		$strHeadRow.='<tr class="head-td" align="center">';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("NUM").'</th>';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("STUDENT_ID").'</th>';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("STUDEN_NAME").'</th>';
+			$strHeadRow.='<th scope="col" >'.$tr->translate("GENDER").'</th>';
+			if(!empty($scheduleTime)) {
+				foreach($scheduleTime as $key => $rowTime){
+					$strHeadRow.='<th scope="col" >';
+					$strHeadRow.=$rowTime["subjectSortcut"].'</br>';
+					$strHeadRow.=$rowTime["timeTitle"];
+					$strHeadRow.='</th>';
+				}
+			}else{
+				$strHeadRow.='<th scope="col" >'.$tr->translate("ATTENDANCE").'</th>';
+			}
+		$strHeadRow.='</tr>';
+		$arr = array(
+   			'tableHeadHTML' => $strHeadRow,
+   			'identity' => $identity,
+   			'keyrow' =>$index,
+   			'scheduleTime' =>$scheduleTime,
+		);
+		return $arr;
+	}
+
+	function getStudentRowHTML($data=array()){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$textareastyle=" font-family: 'Khmer OS Battambang' ";
+		
+		$groupId = empty($data['group']) ? 0 : $data['group'];
+		date("Y-m-d",strtotime($data['attendenceDate']));
+		$scheduleTime =$this->getScheduleTimeStudty($data);
+		
+		$index = empty($data['keyrow'])?0:$data['keyrow'];
+		
+		$strStudent = "";
+		$identity="";
+
+	
+		$template = $this->getTemplateStudentAttendance($data);
+		$strStudent = $template["rowStudentHTML"];
+		$index = $template["keyrow"];
+		$identity = $template["identity"];
+		
+		$arr = array(
+   			'rowStudentHTML' => $strStudent,
+   			'identity' => $identity,
+   			'keyrow' =>$index,
+   			'scheduleTime' =>$scheduleTime,
+		);
+		return $arr;
+	
+	}
 	
 	function getTemplateStudentAttendance($data){
 		
@@ -459,7 +527,7 @@ class Issue_Model_DbTable_DbStudentAttendanceNew extends Zend_Db_Table_Abstract
 		
 		$groupId = empty($data['group']) ? 0 : $data['group'];
 		date("Y-m-d",strtotime($data['attendenceDate']));
-		$rowStudent = $this->getStudentByGroup($groupId,$data);
+		$row = $this->getStudentByGroup($groupId,$data);
 		$scheduleTime =$this->getScheduleTimeStudty($data);
 		
 		$index = empty($data['keyrow'])?0:$data['keyrow'];

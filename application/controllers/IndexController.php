@@ -548,7 +548,7 @@ class IndexController extends Zend_Controller_Action
 			$t0 = $session_teacher->timeout;
 			$diff = $t - $t0;
 			//500 = 5 min
-			if ($diff > 1000 || !isset($t0))
+			if ($diff > 12000 || !isset($t0))
 			{
 				$session_teacher->unsetAll();
 			}

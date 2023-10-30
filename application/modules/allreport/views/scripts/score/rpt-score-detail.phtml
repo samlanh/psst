@@ -416,9 +416,10 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										</tr>
 										<tr>
 											<td align="center" colspan="<?php echo $langKhmer; ?>"><?php echo $tr->translate("KHMER_PROGRAM"); ?></td>
+											<?php if(!empty($langEng)){?>
 											<td align="center" colspan="<?php echo $langEng; ?>"><?php echo $tr->translate("ENGLISH_PROGRAM"); ?></td>
+											<?php ?>
 										</tr>
-
 									<?php } ?>
 								<?php }
 							$i++; ?>

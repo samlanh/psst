@@ -214,7 +214,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 					position: absolute;
 				}
 				.principalStamp .principalName {
-					left: 48px;
+					left: 65px;
     				bottom: -52px;
 					height: 100px;
 					width:200px;
@@ -521,10 +521,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 
 														if ($lang_id == 1) { ?>
 															<label id= "date" style="display:none">
-																រាជធានីភ្នំពេញ​ ថ្ងៃទី
-																<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ
-																<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ
-																<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+																រាជធានីភ្នំពេញ​ ថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date($day)); ?> 
+																ខែ<?php echo $dbgb->getMonthInkhmer(date($month)); ?> 
+																ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
 															</label>
 														<?php }else{ ?>
 															<label id= "date" style="display:none">
@@ -566,7 +565,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												<div class="principalStamp" id="principalName" >
 													<div class="stamp" >
 														<div class="signature">
-															&nbsp;
+															
 														</div>
 														<div class="principalName">
 															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
@@ -579,7 +578,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												<?php if (!empty($rs['teacher_sigature'])) { ?>
 													<div id="teachersigature" ><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 												<?php } else { ?>
-													<div style="height: 100px;"></div>
+													<div id="teachersigature" style="height: 100px;"></div>
 												<?php } ?>
 												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 											</td>

@@ -996,7 +996,7 @@ tbody#table_row tr {
 							<?php if (!empty($rs['teacher_sigature'])) { ?>
 								<div id="teachersigature" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 							<?php } else { ?>
-								<div style="height: 100px;"></div>
+								<div id="teachersigature" style="height: 100px;"></div>
 							<?php } ?>
 							<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
 						</td>

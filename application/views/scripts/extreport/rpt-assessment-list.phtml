@@ -318,6 +318,7 @@
 											<?php 
 											$teacherComment="";
 											$allComment=count($this->comments);
+											$oldStudent=0;
 											if(!empty($this->comments)) foreach($this->comments AS $key => $comment){ 
 													
 													$parameter = array(
@@ -327,7 +328,7 @@
 														);
 													$rowDetail = $dbAsse->getAssessmentDetail($parameter);
 													$ratingTitle = empty($rowDetail['ratingTitle'])?"":$rowDetail['ratingTitle'];
-													if($key==0){
+													if($teacherComment==''){
 														$teacherComment = empty($rowDetail['teacherComment'])?"":$rowDetail['teacherComment'];
 													}
 													
@@ -341,7 +342,7 @@
 												?>
 											<td data-label="<?php echo $comment['name'];?>" align="center" >
 												<span class="khmerLabel"><?php echo $ratingTitleKh;?></span>
-												<span class="englishLabel"><?php echo $ratingTitleEng;?></span>
+												<span class="englishLabel"><?php echo $ratingTitleEng.$rowDetail['teacherComment'];?></span>
 											</td>
 											<?php } ?>
 											

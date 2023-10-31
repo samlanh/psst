@@ -115,7 +115,7 @@ class AssessmentController extends Zend_Controller_Action
 			
 			$db = new Application_Model_DbTable_DbGlobal();
 			$this->view->branchInfo = $db->getBranchInfo($branch_id);
-			$this->view->month = $db->getAllMonth();
+			
 		}else{
 			$this->view->studentScoreResult = array();
 			

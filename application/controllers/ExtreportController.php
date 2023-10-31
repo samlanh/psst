@@ -211,11 +211,4 @@ class ExtreportController extends Zend_Controller_Action
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->branchInfo = $db->getBranchInfo($branch_id);
 	}
-	
-	
 }
-
-
-
-
-

@@ -567,7 +567,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 	  	$sql.="  WHERE assDetail.assessmentId= ".$assessmentId;
 				$sql.="  AND assDetail.studentId= ".$studentId;
 				$sql.="  AND assDetail.commentId= ".$commentId;
-	  	$sql.="  ORDER BY assDetail.id DESC LIMIT 1 ";
+	  	$sql.="  ORDER BY assDetail.id ASC LIMIT 1 ";
 	   	return $db->fetchRow($sql);
    }
    
@@ -758,7 +758,6 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			
 			
 			$dbExternal = new Application_Model_DbTable_DbExternal();
-			
 		
 			if(!empty($_data['status'])){
 				
@@ -780,7 +779,6 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 									'commentId'			=> $commentId,
 									'ratingId'			=> $_data['rating_id_'.$i.'_'.$commentId],
 									'teacherComment'	=> $teacherComment,
-									
 									);
 								$this->_name='rms_studentassessment_detail';
 								$this->insert($arr);

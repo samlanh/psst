@@ -318,10 +318,10 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 			}
 
 			.principalStamp .signature {
-				left: 40%;
-				top: 40%;
+				left: 50%;
+				top: 0%;
 				height: 100px;
-				width: 200px;
+				width: 150px;
 				position: absolute;
 			}
 			.bold{
@@ -783,8 +783,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 													<?php echo date("Y");?> 
 												</label>
 											<?php } ?>
-										
-										<h2 class="headerLabel <?php echo $bold; ?>"><?php echo $tr->translate("PRINCIPAL"); ?></h2>
+										<h2 class="headerLabel <?php echo $bold; ?>"><?php echo $branchInfo['principal']; ?></h2>
 									</td>
 								</tr>
 								<tr class="head">
@@ -801,8 +800,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 												<?php	} ?>
 											</div>
 										</div>
-										<h2 style="left:70px; top:10px; width:150px;position:relative; color:#f00; " class="headerLabel red <?php echo $bold; ?>">
-											<?php echo $branchInfo['principal']; ?>
+										<h2 style="left:82px; bottom:50px; width:150px;position:relative; color:#f00; " class="headerLabel red <?php echo $bold; ?>">
+											<?php echo $branchInfo['deputy_principal']; ?>
 										</h2>
 									</td>
 								</tr>

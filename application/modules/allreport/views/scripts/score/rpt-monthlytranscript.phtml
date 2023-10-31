@@ -379,7 +379,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td class="border-right-none"></td>
 								<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
 								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center"><?php echo $scoreInfo['rankingInEnglish']; ?></td>
+								<td rowspan="2" align="center"> <strong><?php echo $scoreInfo['rankingInEnglish']; ?></strong></td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="5" align="center" class="blue ">&nbsp;

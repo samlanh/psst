@@ -1,5 +1,7 @@
 <?php
 class Issue_StudentattendanceController extends Zend_Controller_Action {
+	
+	const SETTING_INPUT_ATTENDANCE = 2; // 1=fullListStudentGroup
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -66,6 +68,8 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		
 		$this->view->branch_id=$db_global->getAllBranch();
+		$this->view->settingInputAttendance = self::SETTING_INPUT_ATTENDANCE;
+		
 	}
 	
 	public	function editAction(){
@@ -88,10 +92,27 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			exit();
 		}
 		$this->view->row=$result;
+		
+		$settingInputAttendance = self::SETTING_INPUT_ATTENDANCE;
+		if($settingInputAttendance !=1){
+			$condiction = array(
+				"attendanceId" => $id
+			);
+			$this->view->attDeatil= $_model->getStudentAttendanceDetail($condiction);
+			$condictionSch = array(
+				"group" => empty($result["group_id"]) ? 0 : $result["group_id"],
+				"attendenceDate" => empty($result["date_attendence"]) ? date("Y-m-d") : date("Y-m-d",strtotime($result["date_attendence"]))
+			);
+			$this->view->scheduleTime =$_model->getScheduleTimeStudty($condictionSch);
+		}
+		$this->view->settingInputAttendance = $settingInputAttendance;
+		
 		$db_global=new Application_Model_DbTable_DbGlobal();
+		
 		$this->view->branch_id=$db_global->getAllBranch();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->allstudentBygroup = $db->getAllStudentByGroupForEdit($result['group_id']);
+		
 		
 			
 	}
@@ -140,6 +161,36 @@ class Issue_StudentattendanceController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Issue_Model_DbTable_DbStudentAttendance();
 			$data=$db->getStudentByGroupHTML($data);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	
+	function getGroupscheduletimeAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$data=$db->getScheduleTimeStudty($data);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	
+	function getStudentInfoAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$data=$db->getStudentInfoWithPermissionRequest($data);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	
+	function getCheckDuplicateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$data=$db->checkingDuplicateIssueAttendance($data);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

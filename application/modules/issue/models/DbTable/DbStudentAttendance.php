@@ -104,7 +104,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					
+					$studentRequestId=0;
 					if(!empty($_data['permissionRecordId'.$i])){
 						$_arr = array(
 							'isCompleted'		=>1,
@@ -112,11 +112,13 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 						$this->_name ='rms_student_attendence_detail';
 						$where="id=".$_data['permissionRecordId'.$i];
 						$this->update($_arr, $where);
+						
+						$studentRequestId=$_data['permissionRecordId'.$i];
 					}
 					
 					if(!empty($scheduleTime)) {
 						foreach($scheduleTime as $keyTime => $rowTime){
-							$indexKeyTime = $keyTime+1;
+							$indexKeyTime = $keyTime+1;							
 							if($_data['attendenceStatus'.$i.'_'.$indexKeyTime]!=1){
 								$arr = array(
 									'attendence_id'		=>$id,
@@ -126,6 +128,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 									'subjectId'			=>$_data['subjectId'.$i.'_'.$indexKeyTime],
 									'fromHour'			=>$_data['fromHour'.$i.'_'.$indexKeyTime],
 									'toHour'			=>$_data['toHour'.$i.'_'.$indexKeyTime],
+									'studentRequestId'			=>$studentRequestId,
 								);
 								$this->_name ='rms_student_attendence_detail';
 								$this->insert($arr);
@@ -138,6 +141,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 								'stu_id'			=>$_data['student_id'.$i],
 								'attendence_status'	=>$_data['attendenceStatus'.$i],
 								'description'		=>$_data['comment'.$i],
+								'studentRequestId'	=>$studentRequestId,
 							);
 							$this->_name ='rms_student_attendence_detail';
 							$this->insert($arr);
@@ -789,5 +793,98 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
     	$sql.= " AND attD.attendanceDate = '".$attendenceDate."' ";
     	$sql.= " LIMIT 1 ";
     	return $db->fetchRow($sql);
+	}
+	
+	function getStudentInfoWithPermissionRequest($data){
+		$db = $this->getAdapter();
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$date = new DateTime($data['attendenceDate']);
+		$attendenceDate =  $date->format("Y-m-d");
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "
+			SELECT 
+				s.*
+				,s.stu_khname AS stuNameKH
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+				,CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.sex AS sex
+				,CASE
+					WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS genderTitle
+				
+				,COALESCE(attD.attendence_status,'') as attendence_status
+				,COALESCE(attD.description,'') as reason
+				,COALESCE(attD.id,'0') AS permissionRecordId
+			FROM `rms_student` AS s 
+				LEFT JOIN rms_student_attendence_detail AS attD ON attD.type=2 AND s.stu_id = attD.stu_id AND attD.attendanceDate ='".$attendenceDate."'
+				
+		";
+		$sql.= "
+			WHERE s.stu_id = $studentId
+		";
+    	$sql.= " LIMIT 1 ";
+    	return $db->fetchRow($sql);
+	}
+	function getStudentAttendanceDetail($data){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
+		$attendanceId = empty($data["attendanceId"]) ? 0 : $data["attendanceId"];
+		$sql = "
+			SELECT 
+				attD.*
+				,s.stu_code AS stu_code
+				,s.stu_khname AS stuNameKH
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+				,CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.sex AS sex
+				,CASE
+					WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS genderTitle
+				,COALESCE(attD.description,'') as reason
+				
+			FROM 
+				`rms_student_attendence_detail` AS attD 
+				JOIN `rms_student_attendence` AS att ON att.id = attD.attendence_id
+				LEFT JOIN `rms_student` AS s ON s.stu_id = attD.stu_id
+		";
+		$sql.=" WHERE att.status = 1 AND attD.attendence_id = $attendanceId  ";
+		$sql.=" GROUP BY attD.stu_id ";
+		return $db->fetchAll($sql);
+	}
+	
+	function checkingDuplicateIssueAttendance($data){
+		$db = $this->getAdapter();
+		
+		$branchId = empty($data["branchId"]) ? 0 : $data["branchId"];
+		$group = empty($data["group"]) ? 0 : $data["group"];
+		$session = empty($data["session"]) ? 0 : $data["session"];
+		
+		$date = new DateTime();
+		$attendenceDate =  $date->format("Y-m-d");
+		if(!empty($data['attendenceDate'])){
+			$date = new DateTime($data['attendenceDate']);
+			$attendenceDate =  $date->format("Y-m-d");
+		}
+		
+		$sql="SELECT 
+				id 
+			FROM rms_student_attendence 
+			WHERE 
+				branch_id = $branchId 
+				AND group_id = $group 
+				AND for_session = $session 
+				AND date_attendence = '$attendenceDate' 
+				AND type=1 
+			LIMIT 1";
+		$rs = $db->fetchOne($sql);
+		if(!empty($rs)){
+			return true;
+		}
+		return false;
+		
 	}
 }

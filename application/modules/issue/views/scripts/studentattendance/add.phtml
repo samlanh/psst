@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("ADD_STUDENT_ATTENDENCE"));
 	$row_sub=$this->rows_sub;
+	$settingInputAttendance = $this->settingInputAttendance; 
 ?>	
 
 <div class="card">
@@ -32,6 +33,14 @@
          				dijit.byId("group").focus();
         				return false;
     				}
+					
+					isDuplicate = dijit.byId('isDuplicate').get('value');
+					if (isDuplicate == 1) {
+						groupTitle = dijit.byId("group").attr('displayedValue');
+						alert("<?php echo $tr->translate('IssueReadyFor');?> "+groupTitle);
+						return false;
+					}
+					
 					var rowId = $('#identity').val();
 					if(rowId==''){ 
 						alert("<?php echo $tr->translate('NO_RECORD_TO_SUBMIT');?>");
@@ -44,7 +53,7 @@
    				}
 			</script>
 			<div class="card-box">
-	    		<div class="col-md-6 col-sm-6 col-xs-12">
+	    		<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -92,14 +101,13 @@
 											</select>
 										</div>
 									 </div>
-									 <div id="gr-info"></div>
-									
+									 
 								 </div>
 							 </div>
 						 </div>
 					 </div>
 		         </div>
-		         <div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -148,7 +156,10 @@
 							</div>
 						</div>
 					</div>
-		         </div>
+		        </div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					 <div id="gr-info"></div>
+				</div>
 		     </div>
 		     <div class="card-box">
 				<div class="card-blogform">
@@ -159,6 +170,7 @@
 									<div class="settings-main-icon ">
 										<i class="glyphicon glyphicon-education"></i>
 									</div> 
+									<?php if($settingInputAttendance==1){?>
 									<div class="col-md-4 col-sm-4 col-xs-12"> 
 										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
 									</div> 
@@ -181,6 +193,21 @@
 											 </div>
 										</div> 
 									</div> 
+									<?php }else{ ?>
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
+										<div class="card-blogform">
+											<div class="form-group" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+												<div class="form-group">
+													<label class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CHOOSE_STUDENT");?></label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<input id="studentId" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</div> 
+									<?php } ?>
 								</div>
 								<div class="form-group">
 									
@@ -204,6 +231,8 @@
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
               		 <input type="hidden" name="identity" id="identity"  value="" dojoType="dijit.form.TextBox" >
+              		 <input type="hidden" name="settingInputAttendance" id="settingInputAttendance"  value="<?php echo $settingInputAttendance;?>" dojoType="dijit.form.TextBox" >
+					<input type="hidden" name="isDuplicate" id="isDuplicate" dojoType="dijit.form.TextBox" />
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button"  />
             	 </div>
             </div>
@@ -222,6 +251,9 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.NodeList-manipulate");
+	
+	var studentStore  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	dojo.ready(function(){
 
 		new dijit.form.FilteringSelect({
@@ -236,8 +268,6 @@
 				getAllGroup();
 			}
 		}, "study_year");
-		
-		
 		new dijit.form.FilteringSelect({
 			store:group_store,
 			queryExpr: "*${0}*",
@@ -252,6 +282,23 @@
 			}
 		}, "group");
 		
+		<?php if($settingInputAttendance !=1 ){?>
+		new dijit.form.FilteringSelect({
+			store: studentStore,
+			queryExpr: "*${0}*",
+			autoComplete: false,                   
+			required: false,               
+			id: "studentId",
+			name: "studentId",   
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",
+			onChange: function() {  
+				addRowStudent();
+			}
+		}, "studentId");
+		<?php } ?>
+		
+		
 		getAllGroup();
 		var branch_id = dijit.byId('branch_id');
 	 	branch_id.on('change', function(evt) {
@@ -261,7 +308,13 @@
 		
 		var attendenceDateChoose = dijit.byId('attendence_date');
 	 	attendenceDateChoose.on('change', function(evt) {
+			<?php if($settingInputAttendance ==1 ){?>
 	 		filterStudentBygroup();
+			<?php }else{ ?>
+			getGroupScheduleTime();
+			getStudentByGroup();
+			<?php } ?>
+			checkingGroupAttendanceExit();
 	    });
 		
 		
@@ -309,6 +362,7 @@ function gender(sex){
 	return sex;
 }
 </script>
+
 <script> //validate controll form 
 function AllowOnlyNumbers(e) {
     e = (e) ? e : window.event;
@@ -405,96 +459,21 @@ function getInfoBygroup(){
 					string+='</div>';
 				string+='</div>';
 			dojo.byId("gr-info").innerHTML = string;
-			filterStudentBygroup();
+			
+			<?php if($settingInputAttendance==1){?>
+				filterStudentBygroup();
+			<?php }else{ ?>
+				getGroupScheduleTime();
+				getStudentByGroup();
+			<?php } ?>
+			checkingGroupAttendanceExit();
 		},
 		error: function(err) {
 		}
 	});
 }
 
-var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
-function filterStudentBygroupOLD(){
-	 $('#identity').val('');
-	  document.getElementById("table_row").innerHTML = '';
-	  inx=0;
-	var textareastyle=" font-family: 'Khmer OS Battambang'";
-	group = dijit.byId('group').get('value');
-	if(group==''){
-		return false;
-	}
-	sortStundent = dijit.byId('sortStundent').get('value');
 
-	dojo.xhrPost({
-	    url: url_getStudentbygroup,
-	    content : { 
-		    'group':group,
-			'isCurrent':1,
-			'itemType':1,
-			'sortStundent': sortStundent,
-		},				    
-	   handleAs:"json", 
-	   load: function(data) {
-		   tem="";
-	       if(data!=""){
-				num =0;
-				title=0;
-				temp='';
-				str='';
-				column = 0;
-				str='';
-				for(i=0;i<data.length;i++){
-					inx = i+1;
-					num++;
-					var gender='';
-					if(data[i].sex==1){
-						gender="<?php echo $tr->translate("MALE");?>";
-					}else{
-						gender="<?php echo $tr->translate("FEMALE");?>";
-					}
-					if(i<1){
-					str+='<thead><tr class="head-td" align="center">';
-						str+='<th scope="col" ><?php echo $tr->translate("NUM");?></th>';
-						str+='<th scope="col" ><?php echo $tr->translate("STUDENT_ID");?></th>';
-						str+='<th scope="col" ><?php echo $tr->translate("STUDEN_NAME");?></th>';
-						str+='<th scope="col" ><?php echo $tr->translate("GENDER");?></th>';
-						str+='<th scope="col" ><?php echo $tr->translate("ATTENDANCE");?></th>';
-						str+='<th scope="col" ><?php echo $tr->translate("DESCRIPTION");?></th>';
-					str+='</tr></thead>';
-					}
-					str+='<tr class="rowData" >';
-						str+='<td data-label="<?php echo $tr->translate("NUM");?>">'+inx+'</td>';
-						str+='<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+data[i].stu_code+'</td>';
-						str+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>">&nbsp;'+data[i].stu_name+'</td>';
-						str+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+data[i].gender+'<input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'"  value="'+data[i].stu_id+'" ></td>';
-						str+='<td data-label="<?php echo $tr->translate("ATTENDANCE");?>">';
-							str+='<input type="radio" checked="checked" name="attendence'+inx+'" id="attendence'+inx+'" value="1" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PRESENT");?></label>';
-							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="2" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("ABSENT");?></label>';
-							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="3" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("PERMISSION");?></label>';
-							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="4" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("LATE");?></label>';
-							str+='<input type="radio"  name="attendence'+inx+'" id="attendence'+inx+'" value="5" style=" margin: 0 10px; vertical-align: middle;"/><label><?php echo $tr->translate("EARLY_LEAVE");?></label>';
-						str+='</td>';
-						str+='<td data-label="<?php echo $tr->translate("DESCRIPTION");?>"><input dojoType="dijit.form.Textarea"  class="fullside" name="comment'+inx+'" type="text" value="" style="'+textareastyle+'"></td>';
-					str+='</tr>';
-				    if(inx!=1) {
-						var identity = $('#identity').val();
-						$('#identity').val(identity+','+inx);
-					} else {
-						$('#identity').val(inx);
-					}
-				}
-				dojo.html.set(dojo.byId("table_row"),str, {
-					 parseContent: true,
-				});
-				
-	       }else{
-	    	   $('#identity').val('');
-	    	   document.getElementById("table_row").innerHTML = '';
-	       }
-	   },		
-	    error: function(err) {
-	    }
-	});
-}
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 function getStudyYear(){
 	dijit.byId('study_year').reset();
@@ -509,6 +488,266 @@ function getStudyYear(){
 	}
 	getAllYear(url_getacademic,contentData,null,'study_year');
 }
+
+var timeAttendanceArray = [];
+var keyrow=0;
+<?php if($settingInputAttendance==1){?>
+	var urlGetStudentByGroupHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'getstudentbygrouphtml')); ?>';
+	function filterStudentBygroup(){
+		 $('#identity').val('');
+		  document.getElementById("table_row").innerHTML = '';
+		  inx=0;
+		var textareastyle=" font-family: 'Khmer OS Battambang'";
+		group = dijit.byId('group').get('value');
+		if(group==''){
+			return false;
+		}
+		sortStundent = dijit.byId('sortStundent').get('value');
+		
+		var attendenceDate = dijit.byId('attendence_date').get('value');	
+		var day = attendenceDate.getDate();
+		if(day <= 9) {day = "0" +day;}
+		var m = attendenceDate.getMonth()+1;
+		if(m <= 9) {m = "0" +m;}
+		var year = attendenceDate.getFullYear();
+		attendenceDateValue = year+"-"+m+"-"+day;
+		
+		timeAttendanceArray = [];
+		loadingBlock();
+		dojo.xhrPost({
+			url: urlGetStudentByGroupHTML,
+			content : { 
+				'group':group,
+				'isCurrent':1,
+				'itemType':1,
+				'sortStundent': sortStundent,
+				'keyrow':keyrow,
+				'attendenceDate':attendenceDateValue
+			},				    
+		   handleAs:"json", 
+		   load: function(data) {
+			   
+			   if(data!=""){
+					
+					dijit.byId('identity').set('value',data.identity); 
+					dojo.html.set(dojo.byId("tableHeadInfo"),data.tableHeadHTML , {
+						 parseContent: true,
+					});
+					dojo.html.set(dojo.byId("table_row"),data.rowStudentHTML , {
+						 parseContent: true,
+					});
+					keyrow = data.keyrow;
+					timeAttendanceArray = data.scheduleTime;
+					HideloadingBlock();
+			   }else{
+				   dijit.byId('identity').set('value',""); 
+				   document.getElementById("table_row").innerHTML = '';
+				   HideloadingBlock();
+			   }
+		   },		
+			error: function(err) {
+			}
+		});
+	}
+<?php }else{ ?>
+	urlGetStudentInfo = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-info'));?>';
+	function addRowStudent(){
+		studentId=dijit.byId("studentId").get("value");
+		if(studentId==-1 || studentId==""){return false;}
+		var iden = $("#identity").val();
+		var arrays = iden.split(',');
+		if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++) {
+				 readychoose = dijit.byId('student_id'+arrays[i]).get('value');
+				 if(readychoose==studentId){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+					dijit.byId('studentId').reset();
+					 return false;
+				 }
+			}
+		}
+		
+		var attendenceDate = dijit.byId('attendence_date').get('value');	
+		var day = attendenceDate.getDate();
+		if(day <= 9) {day = "0" +day;}
+		var m = attendenceDate.getMonth()+1;
+		if(m <= 9) {m = "0" +m;}
+		var year = attendenceDate.getFullYear();
+		attendenceDateValue = year+"-"+m+"-"+day;
+		dojo.xhrPost({
+			url: urlGetStudentInfo,
+			content:{
+				'studentId':studentId,
+				'attendenceDate': attendenceDateValue,
+				},
+			handleAs:"json",
+			load: function(data) { 
+			
+			var attendanceType = [
+						{"id":1,"name":"<?php echo $tr->translate("PRESENT");?>"},
+						{"id":2,"name":"<?php echo $tr->translate("ABSENT");?>"},
+						{"id":3,"name":"<?php echo $tr->translate("PERMISSION");?>"},
+						{"id":4,"name":"<?php echo $tr->translate("LATE");?>"},
+						{"id":5,"name":"<?php echo $tr->translate("EARLY_LEAVE");?>"},
+				];
+			
+				if(data!=""){
+					keyrow = keyrow+1;
+					
+					var requestValueAtt = data.attendence_status =="" ? 2 : data.attendence_status;
+					var reason = data.reason;
+					var strStudent="";
+					
+					strStudent+='<td data-label="<?php echo $tr->translate("NUM");?>">'+keyrow+'</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+data.stu_code+'</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>">';
+						strStudent+=data.stuNameKH+'<br />';
+						strStudent+=data.stuNameLatin;
+						strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="student_id'+keyrow+'" id="student_id'+keyrow+'"  value="'+data.stu_id+'" >';
+						strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="permissionRecordId'+keyrow+'" id="permissionRecordId'+keyrow+'"  value="'+data.permissionRecordId+'" >';
+					strStudent+='</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+data.genderTitle+'</td>';
+					
+					if(timeAttendanceArray.length>0){
+						var indexKeyTime=0;
+						for(indexArr=0;indexArr<timeAttendanceArray.length;indexArr++){ indexKeyTime++;
+							strStudent+='<td data-label="'+timeAttendanceArray[indexArr].subjectSortcut+' '+timeAttendanceArray[indexArr].timeTitle+'">';
+								strStudent+='<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="_changeSetNextTimeValue('+keyrow+','+indexKeyTime+');" name="attendenceStatus'+keyrow+'_'+indexKeyTime+'" placeHolder="<?php echo $tr->translate("attendanceType");?>" id="attendenceStatus'+keyrow+'_'+indexKeyTime+'" autoComplete="false" queryExpr="*${0}*">';
+									
+									for(i=0;i<attendanceType.length;i++){
+										var selected = "";
+										if(requestValueAtt==attendanceType[i].id){
+											selected = "selected";
+										}
+										strStudent+='<option '+selected+' value="'+attendanceType[i].id+'">'+attendanceType[i].name+'</option>';
+									}
+								strStudent+='</select></br>';
+								strStudent+='<input dojoType="dijit.form.Textarea"  class="fullside" onKeyup="_setNextTimeReason('+keyrow+','+indexKeyTime+');" id="comment'+keyrow+'_'+indexKeyTime+'" name="comment'+keyrow+'_'+indexKeyTime+'" value="'+reason+'" type="text" style=" font-family: '+"'Khmer OS Battambang'"+' ">';
+								strStudent+='<input type="hidden" name="subjectId'+keyrow+'_'+indexKeyTime+'" id="subjectId'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].subject_id+'" >';
+								strStudent+='<input type="hidden" name="scheduleDetailId'+keyrow+'_'+indexKeyTime+'" id="scheduleDetailId'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].id+'" >';
+								
+								strStudent+='<input type="hidden" name="fromHour'+keyrow+'_'+indexKeyTime+'" id="fromHour'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].from_hour+'" >';
+								strStudent+='<input type="hidden" name="toHour'+keyrow+'_'+indexKeyTime+'" id="toHour'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].to_hour+'" >';
+							strStudent+='</td>';
+							
+						}
+					}else{
+						strStudent+='<td data-label="<?php echo $tr->translate("ATTENDANCE");?>">';
+						strStudent+='<select dojoType="dijit.form.FilteringSelect" class="fullside" name="attendenceStatus'+keyrow+'" placeHolder="<?php echo $tr->translate("attendanceType");?>" id="attendenceStatus'+keyrow+'" autoComplete="false" queryExpr="*${0}*">';
+								for(i=0;i<attendanceType.length;i++){
+									var selected = "";
+									if(requestValueAtt==attendanceType[i].id){
+										selected = "selected";
+									}
+									strStudent+='<option '+selected+' value="'+attendanceType[i].id+'">'+attendanceType[i].name+'</option>';
+								}
+						strStudent+='</select></br>';
+						strStudent+='<input dojoType="dijit.form.Textarea"  class="fullside" name="comment'+keyrow+'" type="text" value="'+reason+'" style=" font-family: '+"'Khmer OS Battambang'"+' ">';
+						strStudent+='</td>';
+					}
+					tmp='<tr class="rowData" id="row'+keyrow+'">';
+					tmp+="</tr>";
+	
+					dojo.query("#table_row").append(tmp);
+					if($("#identity").val()!="") {
+						var identity = $("#identity").val();
+						$("#identity").val(identity+','+keyrow);
+					} else {$("#identity").val(keyrow);}
+					dojo.html.set(dojo.byId("row"+keyrow),strStudent , {
+						 parseContent: true,
+					});
+					dijit.byId('studentId').reset();
+				}
+			
+			},
+			error: function(err) {
+			}
+		});	
+	}
+
+	url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-studentbygroup'));?>';
+	function getStudentByGroup(){
+		dijit.byId('studentId').reset();
+		group = dijit.byId('group').get('value');
+		sortStundent = dijit.byId('sortStundent').get('value');
+		if(group=='' || group==-1){
+			var studentStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('studentId').set('store',studentStore); 
+			dijit.byId('group').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getstudent,
+			content:{
+				'group':group,
+				'sortStundent': sortStundent,
+				},
+			handleAs:"json",
+			load: function(data) {
+				studentStore  = getDataStorefromJSON('id','name', data);
+				dijit.byId('studentId').set('store',studentStore);   
+			},
+			error: function(err) {
+			}
+		});
+	}
+	urlGetScheduleTime = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-groupscheduletime'));?>';
+	function getGroupScheduleTime(){
+		$('#identity').val('');
+		document.getElementById("tableHeadInfo").innerHTML = '';
+		document.getElementById("table_row").innerHTML = '';
+		 
+		group = dijit.byId('group').get('value');
+		if(group=='' || group==-1){
+			dijit.byId('group').focus();
+			return false;
+		}
+		
+		var attendenceDate = dijit.byId('attendence_date').get('value');	
+		var day = attendenceDate.getDate();
+		if(day <= 9) {day = "0" +day;}
+		var m = attendenceDate.getMonth()+1;
+		if(m <= 9) {m = "0" +m;}
+		var year = attendenceDate.getFullYear();
+		attendenceDateValue = year+"-"+m+"-"+day;
+		
+		dojo.xhrPost({
+			url: urlGetScheduleTime,
+			content:{
+				'group':group,
+				'attendenceDate': attendenceDateValue,
+				},
+			handleAs:"json",
+			load: function(data) {
+				var strHeadRow="";
+				strHeadRow+='<tr class="head-td" align="center">';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("NUM"); ?></th>';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("STUDENT_ID"); ?></th>';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("STUDEN_NAME"); ?></th>';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("GENDER"); ?></th>';
+				if(data!=""){
+					timeAttendanceArray = data;
+					for(i=0;i<timeAttendanceArray.length;i++){
+						strHeadRow+='<th scope="col" >';
+						strHeadRow+=timeAttendanceArray[i].subjectSortcut+'</br>';
+						strHeadRow+=timeAttendanceArray[i].timeTitle;
+						strHeadRow+='</th>';
+					}
+				}else{
+					strHeadRow+='<th scope="col" ><?php echo $tr->translate("ATTENDANCE"); ?></th>';
+				}
+				strHeadRow+='</tr>';
+				dojo.html.set(dojo.byId("tableHeadInfo"),strHeadRow, {
+					 parseContent: true,
+				});
+
+			},
+			error: function(err) {
+			}
+		});
+	}
+<?php } ?>
+
 
 function CheckAll(){
 	var identity = $('#identity').val();
@@ -542,65 +781,7 @@ function CheckAll(){
 }
 
 
-var timeAttendanceArray = [];
-var keyrow=0;
-var urlGetStudentByGroupHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'getstudentbygrouphtml')); ?>';
-function filterStudentBygroup(){
-	 $('#identity').val('');
-	  document.getElementById("table_row").innerHTML = '';
-	  inx=0;
-	var textareastyle=" font-family: 'Khmer OS Battambang'";
-	group = dijit.byId('group').get('value');
-	if(group==''){
-		return false;
-	}
-	sortStundent = dijit.byId('sortStundent').get('value');
-	
-	var attendenceDate = dijit.byId('attendence_date').get('value');	
-	var day = attendenceDate.getDate();
-	if(day <= 9) {day = "0" +day;}
-	var m = attendenceDate.getMonth()+1;
-	if(m <= 9) {m = "0" +m;}
-	var year = attendenceDate.getFullYear();
-	attendenceDateValue = year+"-"+m+"-"+day;
-	
-	timeAttendanceArray = [];
-	loadingBlock();
-	dojo.xhrPost({
-	    url: urlGetStudentByGroupHTML,
-	    content : { 
-		    'group':group,
-			'isCurrent':1,
-			'itemType':1,
-			'sortStundent': sortStundent,
-			'keyrow':keyrow,
-			'attendenceDate':attendenceDateValue
-		},				    
-	   handleAs:"json", 
-	   load: function(data) {
-		   
-	       if(data!=""){
-				
-				dijit.byId('identity').set('value',data.identity); 
-			    dojo.html.set(dojo.byId("tableHeadInfo"),data.tableHeadHTML , {
-					 parseContent: true,
-				});
-				dojo.html.set(dojo.byId("table_row"),data.rowStudentHTML , {
-					 parseContent: true,
-				});
-				keyrow = data.keyrow;
-				timeAttendanceArray = data.scheduleTime;
-				HideloadingBlock();
-	       }else{
-			   dijit.byId('identity').set('value',""); 
-	    	   document.getElementById("table_row").innerHTML = '';
-			   HideloadingBlock();
-	       }
-	   },		
-	    error: function(err) {
-	    }
-	});
-}
+
 function _changeSetNextTimeValue(rowIndex,timeIndex){
 	if(timeAttendanceArray.length > 0){
 		var currentValue = dijit.byId('attendenceStatus'+rowIndex+'_'+timeIndex).get('value');
@@ -620,5 +801,48 @@ function _setNextTimeReason(rowIndex,timeIndex){
 			}
 		}
 	}
+}
+
+urlCheckingDuplicate = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-check-duplicate'));?>';
+	
+function checkingGroupAttendanceExit(){
+	branchId = dijit.byId('branch_id').get('value');
+	group = dijit.byId('group').get('value');
+	if(group=='' || group==-1){
+		dijit.byId('group').focus();
+		return false;
+	}
+	
+	var attendenceDate = dijit.byId('attendence_date').get('value');	
+	var day = attendenceDate.getDate();
+	if(day <= 9) {day = "0" +day;}
+	var m = attendenceDate.getMonth()+1;
+	if(m <= 9) {m = "0" +m;}
+	var year = attendenceDate.getFullYear();
+	attendenceDateValue = year+"-"+m+"-"+day;
+	sessionType = dijit.byId('session_type').get('value');
+	dojo.xhrPost({
+		url: urlCheckingDuplicate,
+		content:{
+			'branchId':branchId,
+			'group':group,
+			'attendenceDate': attendenceDateValue,
+			'session': sessionType,
+			},
+		handleAs:"json",
+		load: function(data) {
+			
+			if(data == true){
+				dijit.byId('isDuplicate').attr('value', 1);
+				groupTitle = dijit.byId("group").attr('displayedValue');
+				alert("<?php echo $tr->translate('IssueReadyFor');?> "+groupTitle);
+			}else{
+				dijit.byId('isDuplicate').attr('value', 0);
+			}
+
+		},
+		error: function(err) {
+		}
+	});
 }
 </script> 

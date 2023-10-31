@@ -288,12 +288,12 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
 					);
 	   				$this->_name='rms_scoreengsettingdetail';
 	   				
-	   				if(!empty($_data['forExamType'.$i]) AND $_data['subjectId'.$i]>0){
+	   				if(!empty($_data['forExamType'.$i])){//AND $_data['subjectId'.$i]>0
 	   					$this->insert($arr);
 	   				}
 	   				
 	   				
-	   				if(!empty($_data['forMonth'.$i]) AND $_data['subjectId'.$i]>0){
+	   				if(!empty($_data['forMonth'.$i])){
 	   				
 	   					$arr['subCriterialTitleKh']=$_data['subCriterialTitleKhMonth'.$i];
 	   					$arr['subCriterialTitleEng']=$_data['subCriterialTitleEngMonth'.$i];

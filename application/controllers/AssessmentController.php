@@ -87,6 +87,47 @@ class AssessmentController extends Zend_Controller_Action
 // 		$rs =$db->getSecondFormatStudentForAssessment($data); // format 2
 		
 // 		print_r($rs);exit();
+		$scoreId = $dbExternal->getLatestScoreByGroup($id);
+		$scoreId = empty($scoreId)?0:$scoreId;
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		$row = $db->getScoreExamByID($scoreId);
+		if(!empty($row)){
+			$search = array(
+					'group' => $row['group_id'],
+					'study_year' => $row['for_academic_year'],
+					'exam_type' => $row['exam_type'],
+					'branch_id' => $row['branch_id'],
+					'for_month' => $row['for_month'],
+					'for_semester' => $row['for_semester'],
+					'grade' => '',
+					'degree' => '',
+					'session' => '',
+			);
+			$result = $db->getStundetScoreResult($search, $scoreId, 1);
+			$this->view->studentScoreResult = $result;
+		
+			$this->view->scoreId = $scoreId;
+			
+			$frm = new Application_Form_FrmGlobal();
+			$branch_id = empty($result[0]['branch_id']) ? 1 : $result[0]['branch_id'];
+			$this->view->header = $frm->getHeaderReceipt($branch_id);
+			$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+			
+			$db = new Application_Model_DbTable_DbGlobal();
+			$this->view->branchInfo = $db->getBranchInfo($branch_id);
+			$this->view->month = $db->getAllMonth();
+		}else{
+			$this->view->studentScoreResult = array();
+			
+			$this->view->scoreId = 0;
+				
+			$frm = new Application_Form_FrmGlobal();
+			$branch_id = 0;
+			$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+				
+			$db = new Application_Model_DbTable_DbGlobal();
+			$this->view->branchInfo = $db->getBranchInfo(0);
+		}
 	}
 
 	public function editAction()

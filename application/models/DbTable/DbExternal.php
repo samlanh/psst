@@ -1010,5 +1010,10 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			}
 			return $reductPercent;
 	}
+	function getLatestScoreByGroup($groupId){
+		$sql="SELECT id FROM `rms_score` WHERE group_id=$groupId ORDER BY id DESC limit 1";
+		return $this->getAdapter()->fetchOne($sql);
+		
+	}
 	
 }

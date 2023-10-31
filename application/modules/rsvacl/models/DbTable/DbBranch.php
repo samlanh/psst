@@ -34,7 +34,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		
     		$principalsign = $_FILES['principalsign']['name'];
     		$imgsignature='';
-			$imgsignature= empty($_data['oldSignature'])?'':$_data['oldSignature'];
+			$imgsignature= empty($_data['old_prin_sign'])?'':$_data['old_prin_sign'];
     		if(!empty($principalsign)){
     			$ss = 	explode(".", $principalsign);
     			$image_name = "signature_".date("Y").date("m").date("d").time().".".end($ss);
@@ -48,7 +48,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     		
     		$stamp = $_FILES['stamp']['name'];
     		$imgstamp='';
-			$imgstamp= empty($_data['oldStamp'])?'':$_data['oldStamp'];
+			$imgstamp= empty($_data['old_prin_stamp'])?'':$_data['old_prin_stamp'];
     		if (!empty($stamp)){
     			$ss = 	explode(".", $stamp);
     			$image_name = "stamp".date("Y").date("m").date("d").time().".".end($ss);
@@ -62,7 +62,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 
 			$admin_stamp = $_FILES['administration_stamp']['name'];
     		$img_adminstamp='';
-			//$img_adminstamp= empty($_data['oldStamp'])?'':$_data['oldStamp'];
+			$img_adminstamp= empty($_data['old_admin_stamp'])?'':$_data['old_admin_stamp'];
     		if (!empty($admin_stamp)){
     			$ss = 	explode(".", $admin_stamp);
     			$image_name = "admin_stamp".date("Y").date("m").date("d").time().".".end($ss);
@@ -76,7 +76,7 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
 
 			$admin_signature = $_FILES['administration_signature']['name'];
     		$img_admin_sign='';
-			//$img_admin_sign= empty($_data['oldStamp'])?'':$_data['oldStamp'];
+			$img_admin_sign= empty($_data['old_admin_sign'])?'':$_data['old_admin_sign'];
     		if (!empty($admin_signature)){
     			$ss = 	explode(".", $admin_signature);
     			$image_name = "admin_signature".date("Y").date("m").date("d").time().".".end($ss);
@@ -230,16 +230,22 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			$_arr['signature']=$image_name;
     		}
     	}
+		if (!empty($name) and file_exists($part . $_data['old_prin_sign'])) { //delelete old file
+			unlink($part . $_data['old_prin_sign']);
+		}
     	
-    	$name = $_FILES['stamp']['name'];
-    	if (!empty($name)){
-    		$ss = 	explode(".", $name);
+    	$stamp = $_FILES['stamp']['name'];
+    	if (!empty($stamp)){
+    		$ss = 	explode(".", $stamp);
     		$image_name = "stamp_".date("Y").date("m").date("d").time().".".end($ss);
     		$tmp = $_FILES['stamp']['tmp_name'];
     		if(move_uploaded_file($tmp, $part.$image_name)){
     			$_arr['stamp']=$image_name;
     		}
     	}
+		if (!empty($stamp) and file_exists($part . $_data['old_prin_stamp'])) { //delelete old file
+			unlink($part . $_data['old_prin_stamp']);
+		}
 
 		$stampImg = $_FILES['administration_stamp']['name'];
     	if (!empty($stampImg)){
@@ -250,6 +256,9 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			$_arr['administration_stamp']=$image_name;
     		}
     	}
+		if (!empty($stampImg) and file_exists($part . $_data['old_admin_stamp'])) { //delelete old file
+			unlink($part . $_data['old_admin_stamp']);
+		}
 
 		$imgSignature = $_FILES['administration_signature']['name'];
     	if (!empty($imgSignature)){
@@ -260,6 +269,9 @@ class RsvAcl_Model_DbTable_DbBranch extends Zend_Db_Table_Abstract
     			$_arr['administration_signature']=$image_name;
     		}
     	}
+		if (!empty($imgSignature) and file_exists($part . $_data['old_admin_sign'])) { //delelete old file
+			unlink($part . $_data['old_admin_sign']);
+		}
     	
     	$where=$this->getAdapter()->quoteInto("br_id=?", $id);
     	$this->update($_arr, $where);

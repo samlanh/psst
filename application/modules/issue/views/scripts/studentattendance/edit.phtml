@@ -2,6 +2,9 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_ATTENDENCE"));
 	$row_sub=$this->rows_sub;
+	$settingInputAttendance = $this->settingInputAttendance; 
+	
+	$dbAtt = new Issue_Model_DbTable_DbStudentAttendance();
 ?>	
 
 <div class="card">
@@ -44,7 +47,7 @@
    				}
 			</script>
 			<div class="card-box">
-	    		<div class="col-md-6 col-sm-6 col-xs-12">
+	    		<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -86,7 +89,7 @@
 											</select>
 										</div>
 									 </div>
-									 <div id="gr-info"></div>
+									 
 									 <div class="form-group">
 										<label class="control-label custom-switch float-end "> 
 											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
@@ -100,7 +103,7 @@
 						 </div>
 					 </div>
 		         </div>
-		         <div class="col-md-6 col-sm-6 col-xs-12">
+		         <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -150,6 +153,9 @@
 						</div>
 					</div>
 		         </div>
+				 <div class="col-md-4 col-sm-4 col-xs-12">
+				 <div id="gr-info"></div>
+		         </div>
 		     </div>
 		     <div class="card-box">
 				<div class="card-blogform">
@@ -157,6 +163,7 @@
 						<div class="row"> 
 							<div class="col-md-12 col-sm-12 col-xs-12"> 
 								<div class="d-flex"> 
+								<?php if($settingInputAttendance==1){?>
 									<div class="settings-main-icon ">
 										<i class="glyphicon glyphicon-education"></i>
 									</div> 
@@ -182,6 +189,21 @@
 											 </div>
 										</div> 
 									</div> 
+									<?php }else{ ?>
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
+										<div class="card-blogform">
+											<div class="form-group" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+												<div class="form-group">
+													<label class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CHOOSE_STUDENT");?></label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<input id="studentId" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</div> 
+									<?php } ?>
 								</div>
 								<div class="form-group">
 									
@@ -205,6 +227,7 @@
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
               		 <input type="hidden" name="identity" id="identity"  value="" dojoType="dijit.form.TextBox" >
+					 <input type="hidden" name="settingInputAttendance" id="settingInputAttendance"  value="<?php echo $settingInputAttendance;?>" dojoType="dijit.form.TextBox" >
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button"  />
             	 </div>
             </div>
@@ -223,6 +246,9 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.NodeList-manipulate");
+	
+	var studentStore  = getDataStorefromJSON('id','name',  <?php print_r(array())?>  );
 	dojo.ready(function(){
 		
 		new dijit.form.FilteringSelect({
@@ -240,6 +266,22 @@
 			}
 		}, "group");
 		
+		<?php if($settingInputAttendance !=1 ){?>
+		new dijit.form.FilteringSelect({
+			store: studentStore,
+			queryExpr: "*${0}*",
+			autoComplete: false,                   
+			required: false,               
+			id: "studentId",
+			name: "studentId",   
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",
+			onChange: function() {  
+				addRowStudent();
+			}
+		}, "studentId");
+		<?php } ?>
+		
 		getAllGroup();
 		var branch_id = dijit.byId('branch_id');
 	 	branch_id.on('change', function(evt) {
@@ -248,9 +290,13 @@
 		
 		var attendenceDateChoose = dijit.byId('attendence_date');
 	 	attendenceDateChoose.on('change', function(evt) {
+			<?php if($settingInputAttendance ==1 ){?>
 	 		filterStudentBygroup();
+			<?php }else{ ?>
+			getGroupScheduleTime();
+			getStudentByGroup();
+			<?php } ?>
 	    });
-		
 		
 	});
 
@@ -386,7 +432,13 @@ function getInfoBygroup(){
 			dojo.byId("gr-info").innerHTML = string;
 				
 			setTimeout(() => {
-			  filterStudentBygroup();
+			<?php if($settingInputAttendance==1){?>
+				filterStudentBygroup();
+			<?php }else{ ?>
+				getGroupScheduleTime();
+				getStudentByGroup();
+			<?php } ?>
+			
 			}, "100");
 			
 		},
@@ -429,6 +481,7 @@ function CheckAll(){
 
 var timeAttendanceArray = [];
 var keyrow=0;
+<?php if($settingInputAttendance==1){?>
 var urlGetStudentByGroupHTML= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'getstudentbygrouphtml')); ?>';
 function filterStudentBygroup(){
 	 $('#identity').val('');
@@ -490,6 +543,305 @@ function filterStudentBygroup(){
 	    }
 	});
 }
+<?php }else{ ?>
+
+	function initailizeRowStudent(){
+		var attendanceType = [
+				{"id":1,"name":"<?php echo $tr->translate("PRESENT");?>"},
+				{"id":2,"name":"<?php echo $tr->translate("ABSENT");?>"},
+				{"id":3,"name":"<?php echo $tr->translate("PERMISSION");?>"},
+				{"id":4,"name":"<?php echo $tr->translate("LATE");?>"},
+				{"id":5,"name":"<?php echo $tr->translate("EARLY_LEAVE");?>"},
+		];
+		<?php if(!empty($this->attDeatil)) foreach($this->attDeatil as $row){ ?>
+			keyrow = keyrow+1;
+			var attendenceStatusValue = "<?php echo empty($row["attendence_status"]) ? 1 : $row["attendence_status"];?>";
+			var strStudent="";
+			strStudent+='<td data-label="<?php echo $tr->translate("NUM");?>">'+keyrow+'</td>';
+			strStudent+='<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $row["stu_code"];?></td>';
+			strStudent+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>">';
+				strStudent+='<?php echo $row["stuNameKH"];?><br />';
+				strStudent+='<?php echo $row["stuNameLatin"];?>';
+				strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="student_id'+keyrow+'" id="student_id'+keyrow+'"  value="<?php echo $row["stu_id"];?>" >';
+				strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="permissionRecordId'+keyrow+'" id="permissionRecordId'+keyrow+'"  value="<?php echo $row["studentRequestId"];?>" >';
+			strStudent+='</td>';
+			strStudent+='<td data-label="<?php echo $tr->translate("GENDER");?>"><?php echo $row["genderTitle"];?></td>';
+			if(timeAttendanceArray.length>0){
+				var indexKeyTime = 0;
+				<?php 
+				$arrCondiction = array(
+					"studentId" => $row["stu_id"],
+					"attendanceId" => $row["attendence_id"],
+				);
+				if(!empty($this->scheduleTime)) foreach($this->scheduleTime as $key => $schTime){ 
+					$arrCondiction["subjectId"] = $schTime["subject_id"];
+					$arrCondiction["fromHour"] = $schTime["from_hour"];
+					$arrCondiction["toHour"] = $schTime["to_hour"];
+					$checkStuP = $dbAtt->getCheckAttendaceDetailForEditAction($arrCondiction);
+					$attendanceTypeValue="1";
+					$reason="";
+					$detailId="0";
+					if(!empty($checkStuP)){
+						$attendanceTypeValue= $checkStuP["attendence_status"];
+						$reason= $checkStuP["description"];
+						$detailId= $checkStuP["id"];
+					}
+				?>
+				attendenceStatusValue = '<?php echo $attendanceTypeValue;?>';
+				indexKeyTime++;
+				strStudent+='<td data-label="<?php echo $schTime["subjectSortcut"]." ".$schTime["timeTitle"];?>">';
+					strStudent+='<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="_changeSetNextTimeValue('+keyrow+','+indexKeyTime+');" name="attendenceStatus'+keyrow+'_'+indexKeyTime+'" placeHolder="<?php echo $tr->translate("attendanceType");?>" id="attendenceStatus'+keyrow+'_'+indexKeyTime+'" autoComplete="false" queryExpr="*${0}*">';
+						for(i=0;i<attendanceType.length;i++){
+							var selected = "";
+							if(attendenceStatusValue==attendanceType[i].id){
+								selected = "selected";
+							}
+							strStudent+='<option '+selected+' value="'+attendanceType[i].id+'">'+attendanceType[i].name+'</option>';
+						}
+					strStudent+='</select></br>';
+					strStudent+='<input dojoType="dijit.form.Textarea"  class="fullside" onKeyup="_setNextTimeReason('+keyrow+','+indexKeyTime+');" id="comment'+keyrow+'_'+indexKeyTime+'" name="comment'+keyrow+'_'+indexKeyTime+'" value="<?php echo $reason;?>" type="text" style=" font-family: '+"'Khmer OS Battambang'"+' ">';
+					strStudent+='<input type="hidden" name="subjectId'+keyrow+'_'+indexKeyTime+'" id="subjectId'+keyrow+'_'+indexKeyTime+'"  value="<?php echo $schTime["subject_id"];?>" >';
+					strStudent+='<input type="hidden" name="scheduleDetailId'+keyrow+'_'+indexKeyTime+'" id="scheduleDetailId'+keyrow+'_'+indexKeyTime+'"  value="<?php echo $schTime["id"];?>" >';
+					
+					strStudent+='<input type="hidden" name="detailId'+keyrow+'_'+indexKeyTime+'" id="detailId'+keyrow+'_'+indexKeyTime+'"  value="<?php echo $detailId;?>" >';
+					strStudent+='<input type="hidden" name="fromHour'+keyrow+'_'+indexKeyTime+'" id="fromHour'+keyrow+'_'+indexKeyTime+'"  value="<?php echo $schTime["from_hour"];?>" >';
+					strStudent+='<input type="hidden" name="toHour'+keyrow+'_'+indexKeyTime+'" id="toHour'+keyrow+'_'+indexKeyTime+'"  value="<?php echo $schTime["to_hour"];?>" >';
+				strStudent+='</td>';
+				<?php }?>
+				
+			}else{
+				strStudent+='<td data-label="<?php echo $tr->translate("ATTENDANCE");?>">';
+				strStudent+='<select dojoType="dijit.form.FilteringSelect" class="fullside" name="attendenceStatus'+keyrow+'" placeHolder="<?php echo $tr->translate("attendanceType");?>" id="attendenceStatus'+keyrow+'" autoComplete="false" queryExpr="*${0}*">';
+						for(i=0;i<attendanceType.length;i++){
+							var selected = "";
+							if(attendenceStatusValue==attendanceType[i].id){
+								selected = "selected";
+							}
+							strStudent+='<option '+selected+' value="'+attendanceType[i].id+'">'+attendanceType[i].name+'</option>';
+						}
+				strStudent+='</select></br>';
+				strStudent+='<input dojoType="dijit.form.Textarea"  class="fullside" name="comment'+keyrow+'" type="text" value="<?php echo $row["description"];?>" style=" font-family: '+"'Khmer OS Battambang'"+' ">';
+				strStudent+='</td>';
+			}
+			tmp='<tr class="rowData" id="row'+keyrow+'">';
+			tmp+="</tr>";		
+			
+			dojo.query("#table_row").append(tmp);
+			if($("#identity").val()!="") {
+				var identity = $("#identity").val();
+				$("#identity").val(identity+','+keyrow);
+			} else {$("#identity").val(keyrow);}
+			dojo.html.set(dojo.byId("row"+keyrow),strStudent , {
+				 parseContent: true,
+			});
+					
+		<?php } ?>
+	}
+	urlGetStudentInfo = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-info'));?>';
+	function addRowStudent(){
+		studentId=dijit.byId("studentId").get("value");
+		if(studentId==-1 || studentId==""){return false;}
+		var iden = $("#identity").val();
+		var arrays = iden.split(',');
+		if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++) {
+				 readychoose = dijit.byId('student_id'+arrays[i]).get('value');
+				 if(readychoose==studentId){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+					dijit.byId('studentId').reset();
+					 return false;
+				 }
+			}
+		}
+		
+		var attendenceDate = dijit.byId('attendence_date').get('value');	
+		var day = attendenceDate.getDate();
+		if(day <= 9) {day = "0" +day;}
+		var m = attendenceDate.getMonth()+1;
+		if(m <= 9) {m = "0" +m;}
+		var year = attendenceDate.getFullYear();
+		attendenceDateValue = year+"-"+m+"-"+day;
+		dojo.xhrPost({
+			url: urlGetStudentInfo,
+			content:{
+				'studentId':studentId,
+				'attendenceDate': attendenceDateValue,
+				},
+			handleAs:"json",
+			load: function(data) { 
+			
+				var attendanceType = [
+						{"id":1,"name":"<?php echo $tr->translate("PRESENT");?>"},
+						{"id":2,"name":"<?php echo $tr->translate("ABSENT");?>"},
+						{"id":3,"name":"<?php echo $tr->translate("PERMISSION");?>"},
+						{"id":4,"name":"<?php echo $tr->translate("LATE");?>"},
+						{"id":5,"name":"<?php echo $tr->translate("EARLY_LEAVE");?>"},
+				];
+			
+				if(data!=""){
+					keyrow = keyrow+1;
+					
+					var requestValueAtt = data.attendence_status =="" ? 2 : data.attendence_status;
+					var reason = data.reason;
+					var strStudent="";
+					
+					strStudent+='<td data-label="<?php echo $tr->translate("NUM");?>">'+keyrow+'</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("STUDENT_ID");?>">'+data.stu_code+'</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>">';
+						strStudent+=data.stuNameKH+'<br />';
+						strStudent+=data.stuNameLatin;
+						strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="student_id'+keyrow+'" id="student_id'+keyrow+'"  value="'+data.stu_id+'" >';
+						strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="permissionRecordId'+keyrow+'" id="permissionRecordId'+keyrow+'"  value="'+data.permissionRecordId+'" >';
+					strStudent+='</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+data.genderTitle+'</td>';
+					
+					if(timeAttendanceArray.length>0){
+						var indexKeyTime=0;
+						for(indexArr=0; indexArr<timeAttendanceArray.length; indexArr++){ indexKeyTime++;
+							strStudent+='<td data-label="'+timeAttendanceArray[indexArr].subjectSortcut+' '+timeAttendanceArray[indexArr].timeTitle+'">';
+								strStudent+='<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="_changeSetNextTimeValue('+keyrow+','+indexKeyTime+');" name="attendenceStatus'+keyrow+'_'+indexKeyTime+'" placeHolder="<?php echo $tr->translate("attendanceType");?>" id="attendenceStatus'+keyrow+'_'+indexKeyTime+'" autoComplete="false" queryExpr="*${0}*">';
+									
+									for(i=0;i<attendanceType.length;i++){
+										var selected = "";
+										if(requestValueAtt==attendanceType[i].id){
+											selected = "selected";
+										}
+										strStudent+='<option '+selected+' value="'+attendanceType[i].id+'">'+attendanceType[i].name+'</option>';
+									}
+								strStudent+='</select></br>';
+								strStudent+='<input dojoType="dijit.form.Textarea"  class="fullside" onKeyup="_setNextTimeReason('+keyrow+','+indexKeyTime+');" id="comment'+keyrow+'_'+indexKeyTime+'" name="comment'+keyrow+'_'+indexKeyTime+'" value="'+reason+'" type="text" style=" font-family: '+"'Khmer OS Battambang'"+' ">';
+								strStudent+='<input type="hidden" name="subjectId'+keyrow+'_'+indexKeyTime+'" id="subjectId'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].subject_id+'" >';
+								strStudent+='<input type="hidden" name="scheduleDetailId'+keyrow+'_'+indexKeyTime+'" id="scheduleDetailId'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].id+'" >';
+								
+								strStudent+='<input type="hidden" name="fromHour'+keyrow+'_'+indexKeyTime+'" id="fromHour'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].from_hour+'" >';
+								strStudent+='<input type="hidden" name="toHour'+keyrow+'_'+indexKeyTime+'" id="toHour'+keyrow+'_'+indexKeyTime+'"  value="'+timeAttendanceArray[indexArr].to_hour+'" >';
+							strStudent+='</td>';
+							
+						}
+					}else{
+						strStudent+='<td data-label="<?php echo $tr->translate("ATTENDANCE");?>">';
+						strStudent+='<select dojoType="dijit.form.FilteringSelect" class="fullside" name="attendenceStatus'+keyrow+'" placeHolder="<?php echo $tr->translate("attendanceType");?>" id="attendenceStatus'+keyrow+'" autoComplete="false" queryExpr="*${0}*">';
+								for(i=0;i<attendanceType.length;i++){
+									var selected = "";
+									if(requestValueAtt==attendanceType[i].id){
+										selected = "selected";
+									}
+									strStudent+='<option '+selected+' value="'+attendanceType[i].id+'">'+attendanceType[i].name+'</option>';
+								}
+						strStudent+='</select></br>';
+						strStudent+='<input dojoType="dijit.form.Textarea"  class="fullside" name="comment'+keyrow+'" type="text" value="'+reason+'" style=" font-family: '+"'Khmer OS Battambang'"+' ">';
+						strStudent+='</td>';
+					}
+					tmp='<tr class="rowData" id="row'+keyrow+'">';
+					tmp+="</tr>";
+	
+					dojo.query("#table_row").append(tmp);
+					if($("#identity").val()!="") {
+						var identity = $("#identity").val();
+						$("#identity").val(identity+','+keyrow);
+					} else {$("#identity").val(keyrow);}
+					dojo.html.set(dojo.byId("row"+keyrow),strStudent , {
+						 parseContent: true,
+					});
+					dijit.byId('studentId').reset();
+				}
+			
+			},
+			error: function(err) {
+			}
+		});	
+	}
+
+	url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentevaluation','action'=>'get-studentbygroup'));?>';
+	function getStudentByGroup(){
+		dijit.byId('studentId').reset();
+		group = dijit.byId('group').get('value');
+		sortStundent = dijit.byId('sortStundent').get('value');
+		if(group=='' || group==-1){
+			var studentStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('studentId').set('store',studentStore); 
+			dijit.byId('group').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getstudent,
+			content:{
+				'group':group,
+				'sortStundent': sortStundent,
+				},
+			handleAs:"json",
+			load: function(data) {
+				studentStore  = getDataStorefromJSON('id','name', data);
+				dijit.byId('studentId').set('store',studentStore);   
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+	var oldGroup = "<?php echo empty($this->row["group_id"]) ? 0 : $this->row["group_id"];?>";
+	var oldAttendanceDate = "<?php echo empty($this->row["date_attendence"]) ? date("Y-m-d") : date("Y-m-d",strtotime($this->row["date_attendence"]));?>";
+	urlGetScheduleTime = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-groupscheduletime'));?>';
+	function getGroupScheduleTime(){
+		$('#identity').val('');
+		document.getElementById("tableHeadInfo").innerHTML = '';
+		document.getElementById("table_row").innerHTML = '';
+		 
+		group = dijit.byId('group').get('value');
+		if(group=='' || group==-1){
+			dijit.byId('group').focus();
+			return false;
+		}
+		
+		var attendenceDate = dijit.byId('attendence_date').get('value');	
+		var day = attendenceDate.getDate();
+		if(day <= 9) {day = "0" +day;}
+		var m = attendenceDate.getMonth()+1;
+		if(m <= 9) {m = "0" +m;}
+		var year = attendenceDate.getFullYear();
+		attendenceDateValue = year+"-"+m+"-"+day;
+		
+		dojo.xhrPost({
+			url: urlGetScheduleTime,
+			content:{
+				'group':group,
+				'attendenceDate': attendenceDateValue,
+				},
+			handleAs:"json",
+			load: function(data) {
+				var strHeadRow="";
+				strHeadRow+='<tr class="head-td" align="center">';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("NUM"); ?></th>';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("STUDENT_ID"); ?></th>';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("STUDEN_NAME"); ?></th>';
+				strHeadRow+='<th scope="col" ><?php echo $tr->translate("GENDER"); ?></th>';
+				if(data!=""){
+					timeAttendanceArray = data;
+					for(i=0;i<timeAttendanceArray.length;i++){
+						strHeadRow+='<th scope="col" >';
+						strHeadRow+=timeAttendanceArray[i].subjectSortcut+'</br>';
+						strHeadRow+=timeAttendanceArray[i].timeTitle;
+						strHeadRow+='</th>';
+					}
+				}else{
+					strHeadRow+='<th scope="col" ><?php echo $tr->translate("ATTENDANCE"); ?></th>';
+				}
+				strHeadRow+='</tr>';
+				dojo.html.set(dojo.byId("tableHeadInfo"),strHeadRow, {
+					 parseContent: true,
+				});
+				
+				if(oldGroup == group && attendenceDateValue== oldAttendanceDate){
+					initailizeRowStudent();
+				}
+
+			},
+			error: function(err) {
+			}
+		});
+	}
+<?php } ?>
+
 function _changeSetNextTimeValue(rowIndex,timeIndex){
 	if(timeAttendanceArray.length > 0){
 		var currentValue = dijit.byId('attendenceStatus'+rowIndex+'_'+timeIndex).get('value');

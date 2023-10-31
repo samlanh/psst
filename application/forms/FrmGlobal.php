@@ -1534,7 +1534,7 @@ class Application_Form_FrmGlobal
 						<ul style="color:#002c7b;list-style: none;padding: 0;text-align: center;line-height: 18px;font-size: 12px; margin-right: 300px; margin-top:30px; margin-bottom: 0px;">
 							<li><img style="' . $styleLogo . '" src="' . $logo . '"></li>
 							<li>' . $school_khname . '</li>
-							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">' . $school_name . '</span></li>
+							<li><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 12px; ">' . $school_name . '</span></li>
 						</ul>
 					</td>
 					<td width="30%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">

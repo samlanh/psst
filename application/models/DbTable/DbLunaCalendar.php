@@ -8,7 +8,7 @@ class Application_Model_DbTable_DbLunaCalendar extends Zend_Db_Table_Abstract
 	const MOON_STATUS_SHORT = "ក_រ";
 	const MOON_DAY = "᧡_᧢_᧣_᧤_᧥_᧦_᧧_᧨_᧩_᧪_᧫_᧬_᧭_᧮_᧯_᧱_᧲_᧳_᧴_᧵_᧶_᧷_᧸_᧹_᧺_᧻_᧼_᧽_᧾_᧿";
 	
-	const WEEKDAYS = "អាទិត្យ_ច័ន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍";
+	const WEEKDAYS = "អាទិត្យ_ចន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍";
 	const WEEKDAYS_SHORT = "អា_ច_អ_ព_ព្រ_សុ_ស";
  	const ANIMAL_YEAR = "ជូត_ឆ្លូវ_ខាល_ថោះ_រោង_ម្សាញ់_មមីរ_មមែ_វក_រកា_ច_កុរ";
  	

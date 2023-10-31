@@ -248,13 +248,18 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 		));
-		
+
+		$old_prin_stamp = new Zend_Form_Element_Hidden('old_prin_stamp');
+		$old_prin_sign = new Zend_Form_Element_Hidden('old_prin_sign');
+
+		$old_admin_stamp = new Zend_Form_Element_Hidden('old_admin_stamp');
+		$old_admin_sign = new Zend_Form_Element_Hidden('old_admin_sign');
+
 		$id = new Zend_Form_Element_Hidden('id');
 		$id->setAttribs(
 				array('dojoType'=>'dijit.form.TextBox',)
 		);
 		
-		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
 			$school_namekh->setValue($data['school_namekh']);
 			$school_nameen->setValue($data['school_nameen']);
@@ -286,13 +291,19 @@ Class RsvAcl_Form_Frmbranch extends Zend_Dojo_Form {
 			$deputy_principal->setValue($data['deputy_principal']);
 			$abbreviations->setValue($data['abbreviations']);
 			$admistration_name->setValue($data['admistration_name']);
+
+			$old_prin_stamp->setValue($data['stamp']);
+			$old_prin_sign->setValue($data['signature']);
+
+			$old_admin_stamp->setValue($data['administration_stamp']);
+			$old_admin_sign->setValue($data['administration_signature']);
 			
 			$id->setValue($data['br_id']);
 		}
 		
 		$this->addElements(array($principal,$workat,$officeeys,$centereys,$branch_tel1,$school_nameen,$school_namekh,$branch_id,$prefix_code,$_btn_search,$_title,$_status,$br_id,$branch_namekh,$website,$email,$branch_nameen,$br_address,$branch_code,$branch_tel,$_fax ,$branch_note,
 				$branch_status,$branch_display,$card_type,
-				$color,$id,$deputy_principal,$abbreviations,$admistration_name));
+				$color,$id,$deputy_principal,$abbreviations,$admistration_name,$old_admin_stamp,$old_admin_sign ,$old_prin_stamp,$old_prin_sign));
 		
 		return $this;
 	}

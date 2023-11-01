@@ -520,17 +520,16 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 							   		$string.='<td>'.$rComment['name'].'</td>';
 							   		$string.='<td>'.$rsComment['previousRating'].'</td>';
 							   		///camappgit/psis/public/images/icon/apply2.png
-							   		$string.='<td><img title="click to copy" class="pointer" src='.$imgtick.'  onclick="copyPreviousData('.$keyIndex.','.$number.','.$rsComment['ratingId'].');" /></td>';
-							   		$string.='<td><select queryExpr="*${0}*" autoComplete="false" id="rating_id_'.$keyIndex.'_'.$number.'"  name="rating_id_'.$keyIndex.'_'.$number.'" class="fullside"  dojoType="dijit.form.FilteringSelect" >'.$stringOption.'</select></td>';
+							   		$string.='<td><img title="click to copy" class="pointer" src='.$imgtick.'  onclick="copyPreviousData('.$keyIndex.','.$rComment['id'].','.$rsComment['ratingId'].');" /></td>';
+							   		$string.='<td><select queryExpr="*${0}*" autoComplete="false" id="rating_id_'.$keyIndex.'_'.$rComment['id'].'"  name="rating_id_'.$keyIndex.'_'.$rComment['id'].'" class="fullside"  dojoType="dijit.form.FilteringSelect" >'.$stringOption.'</select></td>';
 						   		$string.='</tr>';
 						   		
 						   			if($key==1){//for first student
 								   		if (empty($identityComment)){
-								   			$identityComment=$number;
+								   			$identityComment=$rComment['id'];
 								   		}else{
-								   			$identityComment=$identityComment.",".$number;
+								   			$identityComment=$identityComment.",".$rComment['id'];
 								   		}
-						   		
 						   			}
 						   			
 						   		}

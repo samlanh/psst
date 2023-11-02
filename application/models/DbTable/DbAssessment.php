@@ -670,7 +670,9 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 						
 						
 					if(!empty($rowDetail)){
-						$teacherComment=$rowDetail['teacherComment'];
+						if($teacherComment==""){
+							$teacherComment=$rowDetail['teacherComment'];
+						}
 						$string.='<td  data-label="'.$rComment['name'].'">';
 							$string.='<select queryExpr="*${0}*" autoComplete="false" name="rating_id_'.$keyIndex.'_'.$rComment['id'].'" class="fullside" id="rating_id_'.$keyIndex.'_'.$rComment['id'].'" dojoType="dijit.form.FilteringSelect" >';
 									if(!empty($rating)){ foreach($rating as $rate){
@@ -779,9 +781,10 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 									'ratingId'			=> $_data['rating_id_'.$i.'_'.$commentId],
 									'teacherComment'	=> $teacherComment,
 									);
+							
 								$this->_name='rms_studentassessment_detail';
 								$this->insert($arr);
-						
+								$teacherComment='';
 						}
 					}
 				}

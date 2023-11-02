@@ -1587,18 +1587,20 @@ function getAllgroupStudyNotPass($action=null){
       $im = imagecreatefromgif($uploadimage);
     }
   
-    if ($image['size']>(1000000*5)){
-      // Save the image to file and free memory quality 50%
-      imagejpeg($im, $uploadimage, 50);
-    }else if($image['size']>(1000000)){
-      imagejpeg($im, $uploadimage, 70); //quality 80%
-    }else if($image['size']>512000){
-      // Save the image to file and free memory quality 60%
-      imagejpeg($im, $uploadimage, 80);
-    }else if($image['size']>=1024000){
-      	// Save the image to file and free memory quality 60%
-      	imagejpeg($im, $uploadimage, 90);
-    }
+   if ($image['size']>(1000000*5)){
+	  // Save the image to file and free memory quality 70%
+	  imagejpeg($im, $uploadimage, 10);
+	}else if($image['size']>(1200000)){
+		imagejpeg($im, $uploadimage, 15); //quality 50%
+	}else if($image['size']>(1000000)){
+	  imagejpeg($im, $uploadimage, 20); //quality 50%
+	}else if($image['size']>512000){
+	  // Save the image to file and free memory quality 80%
+	  imagejpeg($im, $uploadimage, 60);
+	}else if($image['size']>=102400){
+		// Save the image to file and free memory quality 90%
+		imagejpeg($im, $uploadimage, 70);
+	}
   //  imagedestroy($uploadimage);
     return $new_name;
   }

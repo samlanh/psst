@@ -1439,7 +1439,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$order_by = " ORDER BY s.branch_id DESC,gds.`academic_year` ASC, gds.`degree` ASC,gds.`grade` ASC,gds.`session` ASC ";
     	return $db->fetchAll($sql.$where.$group_by.$order_by);
     }
-    
+ 
     
     function getStudenCetificate($search){
     	$db = $this->getAdapter();

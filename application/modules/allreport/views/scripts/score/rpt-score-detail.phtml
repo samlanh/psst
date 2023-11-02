@@ -409,6 +409,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 									<?php
 									$langKhmer = 0;
 									$langEng = 0;
+									$langChinese = 0;
 									if ($this->data['scoreresulttye'] == 1) { ?>
 										<tr class="header" align="center">
 											<?php
@@ -416,8 +417,10 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												foreach ($subj as $subject) {
 													if ($subject['subjectLang'] == 1) {
 														$langKhmer = $langKhmer + 1;
-													} else {
+													} else if($subject['subjectLang'] == 2) {
 														$langEng = $langEng + 1;
+													}else{
+														$langChinese = $langChinese + 1;
 													}
 
 													if ($this->data['scoreresulttye'] == 1) {
@@ -437,6 +440,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td align="center" colspan="<?php echo $langKhmer; ?>"><?php echo $tr->translate("KHMER_PROGRAM"); ?></td>
 											<?php if(!empty($langEng)){?>
 											<td align="center" colspan="<?php echo $langEng; ?>"><?php echo $tr->translate("ENGLISH_PROGRAM"); ?></td>
+											<?php }?>
+											<?php if(!empty($langChinese)){?>
+											<td align="center" colspan="<?php echo $langChinese; ?>"><?php echo $tr->translate("CHINESE_PROGRAM"); ?></td>
 											<?php }?>
 										</tr>
 									<?php } ?>

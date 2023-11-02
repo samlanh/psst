@@ -78,7 +78,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			.cheader {
 				line-height: 15px;
 				white-space: nowrap;
-				color: #4839bd;
+				color:#000;
 				font-weight: bold;
 			}
 
@@ -117,7 +117,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			}
 
 			.colorRed {
-				color: red !important;
+				color: #000 !important;
 			}
 
 			.khmerBoldFont {
@@ -129,7 +129,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			}
 
 			.circleHeader {
-				border: 2px solid #150781;
+				border: 2px solid #000;
 				padding: 5px;
 				border-radius: 5px;
 			}
@@ -204,12 +204,12 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			}
 			?>
 			<table class="<?php echo $break_page; ?>" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
-				<tr style="height: 130px;">
+				<tr style="height: 150px;">
 					<td align="center" colspan="3"></td>
 				</tr>
 				<tr>
 					<td colspan="3" align="center">
-						<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; margin: 0;font-size:14px;margin-bottom:10px;">
+						<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:14px;margin-bottom:10px;">
 							<span class="circleHeader">របាយការណ៍ការវិវឌ្ឍ <strong>PROGRESS REPORT</strong></span>
 						</div>
 						<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;">
@@ -224,27 +224,31 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td align="right" width="25%">Student's name in Latin : </td>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname']; ?></td>
 								<td>&nbsp;</td>
-								<td align="right" width="25%">សម្រាប់ខែ​ / For : </td>
-								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] . '-' . ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
-									$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))?$scoreInfo['title_score'] . '/' . ucfirst($scoreInfo['title_score_en']) :$scoreTitle;
+								<td align="right" width="25%">សម្រាប់ខែ : </td>
+								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] : "SEMESTER " . $scoreInfo['for_semester']; 
+									$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))?$scoreInfo['title_score'] :$scoreTitle;
 
 								?>
-
 								<td class="bold" align="left" width="23%">&nbsp;<?php echo $resultTitle; ?></td>
 							</tr>
 							<tr>
 								<td align="right" width="25%">អត្តលេខ / ID : </td>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['stu_code']; ?></td>
 								<td>&nbsp;</td>
-								<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
-								<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['academicYearLabel']; ?></td>
+								<td align="right" width="25%">For : </td>
+								<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
+									$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))? ucfirst($scoreInfo['title_score_en']) :$scoreTitle;
+
+								?>
+								<td class="bold" align="left" width="23%">&nbsp;<?php echo $resultTitle; ?></td>
+								
 							</tr>
 							<tr>
 								<td align="right" width="25%">ភេទ / Gender : </td>
 								<td class="bold" align="left" width="23%"> &nbsp;<?php echo $sexkh . '-' . $sexen; ?></td>
 								<td>&nbsp;</td>
-								<td align="right" width="25%"> </td>
-								<td class="bold" align="left" width="23%">&nbsp;</td>
+								<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
+								<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['academicYearLabel']; ?></td>
 							</tr>
 						</table>
 					</td>
@@ -253,8 +257,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td colspan="3" id="exportExcel" valign="top">
 						<table class="header" cellpadding="2" ​ border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
 							<tr class="style hover">
-								<td colspan="8" align="center" class="blue khmerBoldFont doubleBorder">
-									<div class="khmerBoldFont" style="color:#4839bd;line-height:20px; font-size:12px;margin: 0;">
+								<td colspan="8" align="center" class=" khmerBoldFont doubleBorder">
+									<div class="khmerBoldFont" style="color:#000;line-height:20px; font-size:12px;margin: 0;">
 										ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>STUDENT'S PROGRESS IN BASIC SKILLS</strong>
 									</div>
 								</td>
@@ -280,7 +284,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								?>
 										<?php if ($keyLang > 0) { ?>
 											<tr class="style hover">
-												<td colspan="3" align="center" class="blue ">&nbsp;
+												<td colspan="3" align="center" class=" ">&nbsp;
 													ពិន្ទុសរុប Total Grade Point
 												</td>
 												<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
@@ -290,7 +294,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 												<td rowspan="2" align="center"><strong><?php echo $scoreInfo['rankingInKhmer']; ?></strong></td>
 											</tr>
 											<tr class="style hover">
-												<td colspan="5" align="center" class="blue ">&nbsp;
+												<td colspan="5" align="center" class=" ">&nbsp;
 													មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 												</td>
 												<td align="center">
@@ -310,7 +314,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										<?php if($scoreInfo['degreeId']==1){ ?>
 											<tr class="cheader" align="center">
 												<td>ល.រ<br />No.</td>
-												<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
+												<td colspan="2"><?php echo ($resultScore['subjectLang'] == 1) ? 'កម្មវិធីខ្មែរ  Khmer Program' : 'កម្មវិធីអង់គ្លេស  English Program' ?></td>
 												<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
 												<td colspan="2">ពិន្ទុ<br />Score</td>
 												<td>និទ្ទេស<br />Grade</td>
@@ -319,7 +323,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										<?php }else{ ?>
 											<tr class="cheader" align="center">
 												<td>ល.រ<br />No.</td>
-												<td colspan="2">មុខវិជ្ជា <?php echo ($resultScore['subjectLang'] == 1) ? 'ជាភាសាខ្មែរ Khmer Subjects' : 'ជាភាសាអង់គ្លេស English Subjects' ?></td>
+												<td colspan="2"><?php echo ($resultScore['subjectLang'] == 1) ? 'កម្មវិធីខ្មែរ  Khmer Program' : 'កម្មវិធីអង់គ្លេស  English Program' ?></td>
 												<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
 												<td colspan="2">ពិន្ទុសរុប<br />Total Score</td>
 												<td>និទ្ទេស<br />Grade</td>
@@ -372,7 +376,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								} ?>
 							<?php } ?>
 							<tr class="style hover">
-								<td colspan="3" align="center" class="blue ">&nbsp;
+								<td colspan="3" align="center" class=" ">&nbsp;
 									ពិន្ទុសរុប Total Grade Point
 								</td>
 								<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
@@ -382,7 +386,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td rowspan="2" align="center"> <strong><?php echo $scoreInfo['rankingInEnglish']; ?></strong></td>
 							</tr>
 							<tr class="style hover">
-								<td colspan="5" align="center" class="blue ">&nbsp;
+								<td colspan="5" align="center" class=" ">&nbsp;
 									មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 								</td>
 								<td align="center">
@@ -393,13 +397,13 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									</strong>
 								</td>
 							</tr>
-							<tr class="style hover doubleBorder">
-								<td colspan="8" align="center" class="blue khmerBoldFont">
-									ពិន្ទុសរុបមុខវិជ្ជាភាសាខ្មែរ និង ភាសាអង់គ្លេស Overall Grade Point for Khmer and English Subjects
+							<tr class="style hover doubleBorder" style=" font-size:13px;">
+								<td colspan="8" align="center" class=" khmerBoldFont">
+									ពិន្ទុសរុបកម្មវិធីខ្មែរ និងអង់គ្លេស Overall Grade Point for Khmer and English Programs
 								</td>
 							</tr>
 							<tr class="style hover">
-								<td colspan="5" align="center" class="blue khmerBoldFont">
+								<td colspan="5" align="center" class=" khmerBoldFont">
 									ពិន្ទុសរុប Total Grade Point
 								</td>
 								<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
@@ -407,7 +411,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
-								<td colspan="5" align="center" class="blue khmerBoldFont">
+								<td colspan="5" align="center" class=" khmerBoldFont">
 									មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 								</td>
 								<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
@@ -463,9 +467,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			</table>
 			<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 				<tr>
-					<td colspan="6" class="blue khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+					<td colspan="6" class=" khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 				</tr>
-				<tr class="khmerBoldFont blue" align="center">
+				<tr class="khmerBoldFont " align="center">
 					<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
 					<td>ភាគរយ<br />PERCENTAGE</td>
 					<td>កម្រិត <br />GRADE</td>
@@ -476,7 +480,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				$ismergRow=0;
 				if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
 					?>
-					<tr class="blue" align="center">
+					<tr class="" align="center">
 						
 					<?php
 					
@@ -499,7 +503,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 						<td><?php echo $rsgd['achievment']; ?></td>
 					</tr>
 				<?php } ?>
-				<tr class="blue" align="center">
+				<tr class="" align="center">
 					<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
 					<td >100%</td>
 					<td colspan="3"></td>
@@ -516,20 +520,20 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				?>
 					<?php if ($commentType != $rsComment['commentType']) { ?>
 						<tr align="center">
-							<td colspan="6" class="blue doubleBorder khmerBoldFont"><?php echo $rsComment['commentType']; ?></td>
+							<td colspan="6" class=" doubleBorder khmerBoldFont"><?php echo $rsComment['commentType']; ?></td>
 						</tr>
 					<?php }
 					$commentType = $rsComment['commentType'];
 					?>
 					<tr>
-						<td align="left" colspan="5" class="blue">&nbsp;<?php echo $rsComment['commentLabel']; ?></td>
+						<td align="left" colspan="5" class="">&nbsp;<?php echo $rsComment['commentLabel']; ?></td>
 						<td align="center"><?php echo $rsComment['ratingLabel']; ?></td>
 					</tr>
 				<?php } ?>
 			</table>
 			<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
 				<tr align="left">
-					<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT'S COMMENT AND SUGGESTION:</td>
+					<td colspan="6" class=" khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT'S COMMENT AND SUGGESTION:</td>
 				</tr>
 				<?php for ($i = 0; $i <= 3; $i++) { ?>
 					<tr class="borderBottom">
@@ -542,31 +546,31 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td class="borderSolidBottom" width="30%">&nbsp;</td>
 				</tr>
 				<tr>
-					<td class="borderSolidBottom blue">&nbsp;ហត្ថលេខាមាតាបិតា Parent's Signature</td>
+					<td class="borderSolidBottom ">&nbsp;ហត្ថលេខាមាតាបិតា Parent's Signature</td>
 					<td colspan="4" class="borderSolidBottom">&nbsp;</td>
-					<td class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
+					<td class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
 				</tr>
 				<tr>
-					<td colspan="6">&nbsp;<span class="blue">សេចក្តីសង្កេតទូទៅរបស់គ្រូបន្ទុកថ្នាក់​ TEACHER'S GENERAL COMMENT:</span>
+					<td colspan="6">&nbsp;<span class="">សេចក្តីសង្កេតទូទៅរបស់គ្រូបន្ទុកថ្នាក់​ TEACHER'S GENERAL COMMENT:</span>
 						<div class="teacherComment">
 							<?php echo $teacherComment; ?>
 						</div>
 					</td>
 				</tr>
 				<tr height="100px;">
-					<td class="borderSolidBottom blue">&nbsp;</td>
+					<td class="borderSolidBottom ">&nbsp;</td>
 					<td colspan="4">&nbsp;</td>
-					<td class="borderSolidBottom blue">&nbsp;</td>
+					<td class="borderSolidBottom ">&nbsp;</td>
 				</tr>
 				<tr height="100px;">
-					<td valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
+					<td valign="top" class="borderSolidBottom ">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 					<td colspan="4">&nbsp;</td>
-					<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
+					<td valign="top" class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
 				</tr>
 				<tr>
-					<td class=" blue">&nbsp;នាយកស្តីទី Interim Principal</td>
+					<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
 					<td colspan="4">&nbsp;</td>
-					<td class=" blue">&nbsp;កាលបរិច្ឆេទ Date</td>
+					<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
 				</tr>
 			</table>
 		<?php } ?>

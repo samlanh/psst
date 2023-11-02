@@ -1453,4 +1453,127 @@ function getExamByExamIdAndStudent($data){
    		return $db->fetchAll($sql);
    		
    	}
+	   function getScoreStatistic($search){//using
+    	$db = $this->getAdapter();
+    	$_db  = new Application_Model_DbTable_DbGlobal();
+    	$lang = $_db->currentlang();
+    	if($lang==1){// khmer
+    		$label = "name_kh";
+    		$branch = "branch_namekh";
+    		$grade = "rms_itemsdetail.title";
+    		$degree = "rms_items.title";
+    	}else{ // English
+    		$label = "name_en";
+    		$branch = "branch_nameen";
+    		$grade = "rms_itemsdetail.title_en";
+    		$degree = "rms_items.title_en";
+    	}
+    	$sql="SELECT g.group_code, g.grade, g.degree,
+				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name
+				
+			FROM `rms_score` AS s  
+			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
+    	";
+		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC ";
+
+		$scoreInfo = $db->fetchAll($sql.$orderBy);
+
+		$resultInfo = array();
+		if(!empty($scoreInfo)){
+			foreach($scoreInfo as $key=>$rs){
+				// $results[$key]['group_code'] = $rs['group_code'];
+				// $results[$key]['degreeId'] = $rs['degree'];
+				// $results[$key]['gradeId'] = $rs['grade'];
+
+				$data['degree']=$rs['degree'];
+
+				$rsMention=$this->getCountStudentScore($data);
+				$resultInfo[$key] = array_merge($rs,$rsMention);
+				// if(!empty($rsMention)){
+				// 	foreach($rsMention as $results){
+				// 		$results[$key]['TotaStuden']=$rsMention['TotaStuden'];
+						
+				// 	}
+
+				// }
+
+				
+				
+			}
+		}
+	//echo count($resultInfo);exit();
+		// print_r($resultInfo);exit();
+		return $resultInfo ;
+    	// $where=' ';
+    	// if(($search['branch_id'])>0){
+    	// 	$where.=' AND s.branch_id='.$search['branch_id'];
+    	// }
+    	// if(($search['study_status'])>0){
+    	// 	if($search['study_status']==1){//upgraded
+    	// 		$where.=' AND gds.stop_type=0 AND gds.is_pass=1';
+    	// 	}elseif($search['study_status']==2){//studying
+    	// 		$where.=' AND gds.stop_type=0 AND gds.is_pass=0';
+    	// 	}
+    		
+    	// }
+    	// if(!empty($search['academic_year'])){
+    	// 	$where.=' AND gds.academic_year='.$search['academic_year'];
+    	// }
+    	// if(!empty($search['degree'])){
+    	// 	$where.=' AND gds.degree='.$search['degree'];
+    	// }
+    	// if(!empty($search['grade'])){
+    	// 	$where.=' AND gds.grade='.$search['grade'];
+    	// }
+    	// if(!empty($search['session'])){
+    	// 	$where.=' AND gds.session='.$search['session'];
+    	// }
+    	// if(isset($search['issetGroup'])){
+    	// 	$where.=' AND gds.is_setgroup='.$search['issetGroup'];
+    	// }
+    	// $dbp = new Application_Model_DbTable_DbGlobal();
+    	// $where.=$dbp->getAccessPermission("s.branch_id");
+    	
+    	// $where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `gds`.`degree` )');
+    	
+    }
+	function getCountStudentScore($data){//using
+    	$db = $this->getAdapter();
+
+		$sqlMention ="SELECT md.`max_score`, md.`metion_grade` FROM `rms_metionscore_setting` AS m 
+		INNER JOIN `rms_metionscore_setting_detail` AS md ON m.`id`=md.`metion_score_id` WHERE m.`degree`= ".$data['degree']." ORDER BY md.`max_score` DESC";
+		$mentionResult = $db->fetchAll($sqlMention);
+		$mentionResultArr=array(
+			"0"=> 0,
+			"1"=> 0,
+			"2"=> 0,
+			"3"=> 0,
+			"4"=> 0,
+			"5"=> 0,
+		);
+
+		if(!empty($mentionResult)){
+			foreach($mentionResult as $key => $row){
+				$mentionResultArr[$key] = $row["max_score"];
+			}
+		}
+
+    	$sql="SELECT  
+		COUNT(sm.`student_id`) AS TotaStuden,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['0']."'   , sm.total_score, NULL)) AS Total_A,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['1']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['0']."'  , sm.total_score, NULL)) AS Total_B,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['2']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['1']."'  , sm.total_score, NULL)) AS Total_C,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['3']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['2']."'  , sm.total_score, NULL)) AS Total_D,
+		   COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['4']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['3']."'  , sm.total_score, NULL)) AS Total_E,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['4']."'  , sm.total_score, NULL)) AS Total_F
+		   
+		 FROM `rms_score` AS s  
+	
+		INNER JOIN `rms_score_monthly` AS sm  ON s.`id` = sm.`score_id` GROUP BY sm.`score_id`
+    	";
+		return $db->fetchAll($sql);
+
+    }
+
 }

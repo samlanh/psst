@@ -331,6 +331,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
 	}
+	
 	function rptResultbysemesterAction()
 	{
 		$group_id = $this->getRequest()->getParam("id");
@@ -998,5 +999,38 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$this->view->rs = $row;
 		$rs = $db->getGroupDetailByID($id);
 		$this->view->rr = $rs;
+	}
+	public function rptScoreStatisticAction()
+	{
+		if ($this->getRequest()->isPost()) {
+			$search = $this->getRequest()->getPost();
+		} else {
+			$search = array(
+				'adv_search' 	=> "",
+				'group' 		=> "",
+				'branch_id' 	=> "",
+				'academic_year'	=> "",
+				'grade' 		=> "",
+				'session' 		=> "",
+				'teacher' 		=> "",
+				'room' => 0,
+				'degree' => 0,
+				'study_status' => -1,
+			);
+		}
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		$rs = $db->getScoreStatistic($search);
+		$this->view->rs = $rs;
+		$this->view->search = $search;
+
+		$branch_id = empty($search['branch_id']) ? 1 : $search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
+
+		$form = new Application_Form_FrmSearchGlobal();
+		$forms = $form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search = $form;
 	}
 }

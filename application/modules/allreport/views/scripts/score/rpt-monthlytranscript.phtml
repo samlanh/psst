@@ -510,7 +510,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				$teacherComment = '';
 				$commentType = '';
 				if (!empty($evalueationList)) foreach ($evalueationList as $keycom => $rsComment) {
-					if ($keycom == 0) {
+					if ($teacherComment == '') {
 						$teacherComment = $rsComment['teacherComment'];
 					}
 				?>

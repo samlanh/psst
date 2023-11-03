@@ -1469,73 +1469,59 @@ function getExamByExamIdAndStudent($data){
     		$degree = "rms_items.title_en";
     	}
     	$sql="SELECT g.group_code, g.grade, g.degree,
+				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
 				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name
 				
 			FROM `rms_score` AS s  
 			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
     	";
+		
+    	$where=' ';
+    	if(($search['branch_id'])>0){
+    		$where.=' AND s.branch_id='.$search['branch_id'];
+    	}
+    	if(!empty($search['group'])){
+    		$where.=' AND s.group_id='.$search['group'];
+    	}
+		if(!empty($search['academic_year'])){
+    		$where.=' AND g.academic_year='.$search['academic_year'];
+    	}
+    	if(!empty($search['degree'])){
+    		$where.=' AND g.degree='.$search['degree'];
+    	}
+    	if(!empty($search['grade'])){
+    		$where.=' AND g.grade='.$search['grade'];
+    	}
+		if(!empty($search['exam_type'])){
+    		$where.=' AND s.exam_type='.$search['exam_type'];
+    	}
+		if(!empty($search['for_semester'])){
+    		$where.=' AND s.for_semester='.$search['for_semester'];
+    	}
+		if(!empty($search['for_month'])){
+    		$where.=' AND s.for_month='.$search['for_month'];
+    	}
+    	
+    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	$where.=$dbp->getAccessPermission("s.branch_id");
+    	
 		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC ";
-
-		$scoreInfo = $db->fetchAll($sql.$orderBy);
+		//echo $sql.$where.$orderBy; exit();
+		$scoreInfo = $db->fetchAll($sql.$where.$orderBy);
 
 		$resultInfo = array();
 		if(!empty($scoreInfo)){
 			foreach($scoreInfo as $key=>$rs){
-				// $results[$key]['group_code'] = $rs['group_code'];
-				// $results[$key]['degreeId'] = $rs['degree'];
-				// $results[$key]['gradeId'] = $rs['grade'];
-
+				
 				$data['degree']=$rs['degree'];
 
 				$rsMention=$this->getCountStudentScore($data);
 				$resultInfo[$key] = array_merge($rs,$rsMention);
-				// if(!empty($rsMention)){
-				// 	foreach($rsMention as $results){
-				// 		$results[$key]['TotaStuden']=$rsMention['TotaStuden'];
-						
-				// 	}
-
-				// }
-
-				
-				
+			
 			}
 		}
-	//echo count($resultInfo);exit();
-		// print_r($resultInfo);exit();
 		return $resultInfo ;
-    	// $where=' ';
-    	// if(($search['branch_id'])>0){
-    	// 	$where.=' AND s.branch_id='.$search['branch_id'];
-    	// }
-    	// if(($search['study_status'])>0){
-    	// 	if($search['study_status']==1){//upgraded
-    	// 		$where.=' AND gds.stop_type=0 AND gds.is_pass=1';
-    	// 	}elseif($search['study_status']==2){//studying
-    	// 		$where.=' AND gds.stop_type=0 AND gds.is_pass=0';
-    	// 	}
-    		
-    	// }
-    	// if(!empty($search['academic_year'])){
-    	// 	$where.=' AND gds.academic_year='.$search['academic_year'];
-    	// }
-    	// if(!empty($search['degree'])){
-    	// 	$where.=' AND gds.degree='.$search['degree'];
-    	// }
-    	// if(!empty($search['grade'])){
-    	// 	$where.=' AND gds.grade='.$search['grade'];
-    	// }
-    	// if(!empty($search['session'])){
-    	// 	$where.=' AND gds.session='.$search['session'];
-    	// }
-    	// if(isset($search['issetGroup'])){
-    	// 	$where.=' AND gds.is_setgroup='.$search['issetGroup'];
-    	// }
-    	// $dbp = new Application_Model_DbTable_DbGlobal();
-    	// $where.=$dbp->getAccessPermission("s.branch_id");
-    	
-    	// $where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `gds`.`degree` )');
     	
     }
 	function getCountStudentScore($data){//using

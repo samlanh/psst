@@ -1,23 +1,22 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('SCORE_SEMESTER_YEAR')); 
+	$this->headTitle($tr->translate('RPT_SCORE_STATISTIC')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
-	print_r($this->rs);
 
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
     	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('SCORE_SEMESTER_YEAR');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_SCORE_STATISTIC');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
     	</div>
     </div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("adv_search");?>
@@ -31,26 +30,28 @@
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="group" />
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="teacher" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("study_status");?>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("degree");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="grade" />
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("session");?>
+        </div>
+        <div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("exam_type");?>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php //echo $frm->getElement("room");?>
-            	<input id="room" />
+			<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("for_semester");?>
+            </div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("for_month");?>
+            </div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("start_date");?>
+            </div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+            	<?php echo $frm->getElement("end_date");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -73,51 +74,126 @@
 			<tr>
 				<td width="28%" align="left"></td>
 				<td width="44%" align="center">
-					<p><strong style="font-weight:normal;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("SCORE_SEMESTER_YEAR");?></strong></p>
+					<p><strong style="font-weight:normal;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_SCORE_STATISTIC");?></strong></p>
 				</td>
 				<td align="right" width="28%"></td>
 			</tr>
 			<tr>
 				<td colspan="3" valign="top" id="exportExcel">
 						<style type="text/css">
-							th,td{ padding:0 1px;}
-							table{ border-collapse:collapse; margin:0 auto;border-color:#000; }
-							.padding{ padding: 0 1px !important;}
-							table{ page-break-inside:auto;font-family:Arial,'Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
-							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
-							.hover:hover{background: #ccc;}
-							.hidden{display: none;}
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-							@media print {
-								@page {
-									page: A4;
-									size: portrait;;
-									margin: 0.8cm;
-								}
-							}
+								.style{
+										line-height: 20px;font-size: 12px !important;
+										font-family: 'Times New Roman','Khmer OS Battambang';
+									}
+									.hideblog{display: none;}
+									.hiddenblog{display: block !important;}
+									.style1:hover{ background: #ccc; }
+									table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+									
+									table.content-data { page-break-inside:auto }
+									table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
+									#header {
+									display: table-header-group;
+									page-break-inside:avoid; page-break-after:auto;
+									margin-top: 100px;
+									}
+									.hide{visibility: hidden;}
+									@media print {
+									div.divFooter {
+										position: fixed;
+										top: 0;
+										width: 100%;
+										height: 100px;
+										bottom:0px;
+										margin:0;
+									}
+										.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+										
+									}
+									.center{text-align: center !important;}
+									table.content-data{
+										border-collapse:collapse;
+										border:1px solid #000; 
+										font-size:8px;
+										width:100%;
+								
+									}
+									table.content-data thead tr.style {
+									line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+										background: #c1d0f3;
+										font-weight:600;
+									}
+									table.content-data  tr.style {
+									
+									white-space: nowrap;
+										
+									}
+									
+									
+									table.tb-footer{
+										border-collapse:collapse;
+										border:1px solid #000; 
+										font-size:12px;
+										font-family: 'Times New Roman','Khmer OS Battambang';
+									}
+									table.tb-footer tr{
+									line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
+									}
+									table tr td{
+										padding:0 2px;
+									}
+									tr.voidclass {
+										background: #fff7f7;
+									}
+									td.centerText{
+										text-align: center;
+									}
+									.redBold {
+										font-weight: 600;
+										color: #f80000;
+									}
+									table.content-data tr td{
+										padding: 1px;
+									}
+
+									@media print{
+										@page{
+											margin:0.3cm 0.7cm 0cm 0.7cm;
+											page-break-before: avoid;
+											-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+											-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+											-ms-transform: scale(0.5);   /* IE 9 */
+											-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+											transform: scale(0.5);
+											page: A4;
+											size:portrait;
+										}
+									}
 						</style>
 						<?php 
 						
 						$active_student = 0;
 						$drop_student = 0;?>
 					<div id="exportExcel">
-						<table cellpadding="3" class="padd" width="99%" border="1" align="left" style="white-space:nowrap;font-family:Times New Roman,Khmer OS Battambang">
+						<table class="content-data" cellpadding="4"​ border="1">
 						  <thead>
-							  <tr style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
-								<td>&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+							  <tr class="style" align="center">
+								<td >&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
+								<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("A");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("B");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("C");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("D");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("E");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("F");?>&nbsp;</td>
+								<td><?php echo $tr->translate("GRADE_A");?>(%)</td>
+								<td><?php echo $tr->translate("GRADE_B");?>(%)</td>
+								<td><?php echo $tr->translate("GRADE_C");?>(%)</td>
+								<td><?php echo $tr->translate("GRADE_D");?>(%)</td>
+								<td><?php echo $tr->translate("GRADE_E");?>(%)</td>
+								<td><?php echo $tr->translate("GRADE_F");?>(%)</td>
 							  </tr>
 						  </thead>
 						  <?php $i=0; 
 						  $degreeOld='';
+						  $oldGrade='';
 						  $totalDegreeStu=0;
 						  $totalGradeA=0;
 						  $totalGradeB=0;
@@ -125,21 +201,102 @@
 						  $totalGradeD=0;
 						  $totalGradeE=0;
 						  $totalGradeF=0;
-						
 
-						  if (!empty($this->rs)){ foreach($this->rs as $key=> $rs ){ $i++;
+						  $totalGradeStu=0;
+						  $totalSubgA=0;
+						  $totalSubgB=0;
+						  $totalSubgC=0;
+						  $totalSubgD=0;
+						  $totalSubgE=0;
+						  $totalSubgF=0;
+
+						  $Total_Grade_A_Percent =0;
+						  $Total_Grade_B_Percent =0;
+						  $Total_Grade_C_Percent =0;
+						  $Total_Grade_D_Percent =0;
+						  $Total_Grade_E_Percent =0;
+						  $Total_Grade_F_Percent =0;
+
+						  $Total_A_Percent =0;
+						  $Total_B_Percent =0;
+						  $Total_C_Percent =0;
+						  $Total_D_Percent =0;
+						  $Total_E_Percent =0;
+						  $Total_F_Percent =0;
+
+						  $Total_Group_A_Percent =0;
+						  $Total_Group_B_Percent =0;
+						  $Total_Group_C_Percent =0;
+						  $Total_Group_D_Percent =0;
+						  $Total_Group_E_Percent =0;
+						  $Total_Group_F_Percent =0;
+						
+						  if (!empty($this->rs)){ foreach($this->rs as $key=> $rs ){ 
+							$i++;
+								
+							$Total_Group_A_Percent =round($rs[$key]['Total_A']/$rs[$key]['TotaStuden']*100);
+							$Total_Group_B_Percent =round($rs[$key]['Total_B']/$rs[$key]['TotaStuden']*100);
+							$Total_Group_C_Percent =round($rs[$key]['Total_C']/$rs[$key]['TotaStuden']*100);
+							$Total_Group_D_Percent =round($rs[$key]['Total_D']/$rs[$key]['TotaStuden']*100);
+							$Total_Group_E_Percent =round($rs[$key]['Total_E']/$rs[$key]['TotaStuden']*100);
+							$Total_Group_F_Percent =round($rs[$key]['Total_F']/$rs[$key]['TotaStuden']*100);
+							
+							if($oldGrade!=$rs['grade']){ 
+							if($key!=0){?>
+								<tr class="style hover" align="center">
+									<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL_GRADE");?>:</td>
+									<td ><?php echo $totalGradeStu; ?></td>
+									<td ><?php echo $totalSubgA.' ('.$Total_A_Percent.')%'; ?></td>
+									<td ><?php echo $totalSubgB.' ('.$Total_B_Percent.')%'; ?></td>
+									<td ><?php echo $totalSubgC.' ('.$Total_C_Percent.')%'; ?></td>
+									<td ><?php echo $totalSubgD.' ('.$Total_D_Percent.')%'; ?></td>
+									<td ><?php echo $totalSubgE.' ('.$Total_E_Percent.')%'; ?></td>
+									<td ><?php echo $totalSubgF.' ('.$Total_F_Percent.')%'; ?></td>
+								</tr> 
+							<?php
+								$totalGradeStu=0;
+								$totalSubgA=0;
+								$totalSubgB=0;
+								$totalSubgC=0;
+								$totalSubgD=0;
+								$totalSubgE=0;
+								$totalSubgF=0;
+						
+							} ?>
+							
+							<?php } 
+								$oldGrade=$rs['grade'];
+								$totalGradeStu = $totalGradeStu +$rs[$key]['TotaStuden'];
+								$totalSubgA = $totalSubgA +$rs[$key]['Total_A'];
+								$totalSubgB = $totalSubgB +$rs[$key]['Total_B'];
+								$totalSubgC = $totalSubgC +$rs[$key]['Total_C'];
+								$totalSubgD = $totalSubgD +$rs[$key]['Total_D'];
+								$totalSubgE = $totalSubgE +$rs[$key]['Total_E'];
+								$totalSubgF = $totalSubgF +$rs[$key]['Total_F'];
+
+								$Total_A_Percent =round($totalSubgA/$totalGradeStu*100);
+								$Total_B_Percent =round($totalSubgB/$totalGradeStu*100);
+								$Total_C_Percent =round($totalSubgC/$totalGradeStu*100);
+								$Total_D_Percent =round($totalSubgD/$totalGradeStu*100);
+								$Total_E_Percent =round($totalSubgE/$totalGradeStu*100);
+								$Total_F_Percent =round($totalSubgF/$totalGradeStu*100);
+
+							?>
+
+						<?php
 							if($degreeOld!=$rs['degree']){ 
 							if($key!=0){?>
-							<tr class='hover padding context-menu-one'>
-								<td  colspan="2"><?php echo $tr->translate("TOTAL");?>:</td>
-								<td ><?php echo $totalDegreeStu; ?></td>
-								<td ><?php echo $totalGradeA; ?></td>
-								<td ><?php echo $totalGradeB; ?></td>
-								<td ><?php echo $totalGradeC; ?></td>
-								<td ><?php echo $totalGradeD; ?></td>
-								<td ><?php echo $totalGradeE; ?></td>
-								<td ><?php echo $totalGradeF; ?></td>
-							  </tr> 
+							
+							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
+								<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
+								<td ><?php echo $totalDegreeStu ?></td>
+								<td ><?php echo $totalGradeA.' ('.$Total_Grade_A_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeB.' ('.$Total_Grade_B_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeC.' ('.$Total_Grade_C_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeD.' ('.$Total_Grade_D_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeE.' ('.$Total_Grade_E_Percent.')%';?></td>
+								<td ><?php echo $totalGradeF.' ('.$Total_Grade_F_Percent.')%'; ?></td>
+							</tr> 
 							<?php
 							  $totalDegreeStu=0;
 							  $totalGradeA=0;
@@ -149,10 +306,9 @@
 							  $totalGradeE=0;
 							  $totalGradeF=0;
 						
-						} ?>
-							<tr class='hover padding context-menu-one'>
-								<td ><?php echo $tr->translate("DEGREE");?>:</td>
-								<td colspan="8"><?php echo $rs['degree_name']; ?></td>
+							} ?>
+							<tr class="style hover" align="center">
+								<td colspan="11"><?php echo $tr->translate("DEGREE");?>:&nbsp;<?php echo $rs['degree_name']; ?></td>
 							  </tr>
 							<?php } 
 								$degreeOld=$rs['degree'];
@@ -163,30 +319,52 @@
 								$totalGradeD = $totalGradeD +$rs[$key]['Total_D'];
 								$totalGradeE = $totalGradeE +$rs[$key]['Total_E'];
 								$totalGradeF = $totalGradeF +$rs[$key]['Total_F'];
+
+								$Total_Grade_A_Percent =round($totalGradeA/$totalDegreeStu*100);
+								$Total_Grade_B_Percent =round($totalGradeB/$totalDegreeStu*100);
+								$Total_Grade_C_Percent =round($totalGradeC/$totalDegreeStu*100);
+								$Total_Grade_D_Percent =round($totalGradeD/$totalDegreeStu*100);
+								$Total_Grade_E_Percent =round($totalGradeE/$totalDegreeStu*100);
+								$Total_Grade_F_Percent =round($totalGradeF/$totalDegreeStu*100);
 							?>
-							  <tr class='hover padding context-menu-one'>
+
+						
+							
+							  <tr class="style hover" align="center" >
 								<td align="center"><?php echo $i;?></td>
+								<td><?php echo $rs['branch_name']; ?></td>
+								<td><?php echo $rs['grade_name']; ?></td>
 								<td><?php echo $rs['group_code']; ?></td>
 								<td><?php echo $rs[$key]['TotaStuden']; ?></td>
-								<td><?php echo $rs[$key]['Total_A']; ?></td>
-								<td><?php echo $rs[$key]['Total_B']; ?></td>
-								<td><?php echo $rs[$key]['Total_C']; ?></td>
-								<td><?php echo $rs[$key]['Total_D']; ?></td>
-								<td><?php echo $rs[$key]['Total_E']; ?></td>
-								<td><?php echo $rs[$key]['Total_F']; ?></td>
+								<td><?php echo $rs[$key]['Total_A'].' ('.$Total_Group_A_Percent.')%'; ?></td>
+								<td><?php echo $rs[$key]['Total_B'].' ('.$Total_Group_B_Percent.')%'; ?></td>
+								<td><?php echo $rs[$key]['Total_C'].' ('.$Total_Group_C_Percent.')%'; ?></td>
+								<td><?php echo $rs[$key]['Total_D'].' ('.$Total_Group_D_Percent.')%'; ?></td>
+								<td><?php echo $rs[$key]['Total_E'].' ('.$Total_Group_E_Percent.')%'; ?></td>
+								<td><?php echo $rs[$key]['Total_F'].' ('.$Total_Group_F_Percent.')%'; ?></td>
 							  </tr>
 						  <?php 
 							  
 							} }?>
-							<tr class='hover padding context-menu-one'>
-								<td  colspan="2"><?php echo $tr->translate("TOTAL");?>:</td>
+							<tr class="style hover" align="center">
+								<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL_GRADE");?>:</td>
+								<td ><?php echo $totalGradeStu; ?></td>
+								<td ><?php echo $totalSubgA.' ('.$Total_A_Percent.')%'; ?></td>
+								<td ><?php echo $totalSubgB.' ('.$Total_B_Percent.')%'; ?></td>
+								<td ><?php echo $totalSubgC.' ('.$Total_C_Percent.')%'; ?></td>
+								<td ><?php echo $totalSubgD.' ('.$Total_D_Percent.')%'; ?></td>
+								<td ><?php echo $totalSubgE.' ('.$Total_E_Percent.')%'; ?></td>
+								<td ><?php echo $totalSubgF.' ('.$Total_F_Percent.')%'; ?></td>
+							</tr>
+							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
+								<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
 								<td ><?php echo $totalDegreeStu; ?></td>
-								<td ><?php echo $totalGradeA; ?></td>
-								<td ><?php echo $totalGradeB; ?></td>
-								<td ><?php echo $totalGradeC; ?></td>
-								<td ><?php echo $totalGradeD; ?></td>
-								<td ><?php echo $totalGradeE; ?></td>
-								<td ><?php echo $totalGradeF; ?></td>
+								<td ><?php echo $totalGradeA.' ('.$Total_Grade_A_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeB.' ('.$Total_Grade_B_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeC.' ('.$Total_Grade_C_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeD.' ('.$Total_Grade_D_Percent.')%'; ?></td>
+								<td ><?php echo $totalGradeE.' ('.$Total_Grade_E_Percent.')%';?></td>
+								<td ><?php echo $totalGradeF.' ('.$Total_Grade_F_Percent.')%'; ?></td>
 							</tr> 
 						</table>
 						<br>
@@ -211,7 +389,7 @@
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var room_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	
 	dojo.ready(function(){
 
 		new dijit.form.FilteringSelect({
@@ -227,20 +405,7 @@
 			}
 		}, "teacher");
 
-		new dijit.form.FilteringSelect({
-			store: room_store,
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                     
-			id: "room",
-			name: "room",
-			class: "fullside", 		
-			placeHolder:"<?php echo $tr->translate("SELECT_ROOM");?>",          
-			onChange: function() {
-				  
-			}
-		}, "room");
-		
+
 		new dijit.form.FilteringSelect({
 			store: group_store,
 		    queryExpr: "*${0}*",
@@ -271,17 +436,15 @@
 		 var branch_id = dijit.byId('branch_id');
 		 branch_id.on('change', function(evt) {
 			 getAllGroupByBranch();
-			 getRefreshRoom();
-			 getRefreshTeacher();
+			
 	    });
 		 var academic_year = dijit.byId('academic_year');
 		 academic_year.on('change', function(evt) {
 			 getAllGroupByBranch();
 	    });
 		 getallGrade();
-		 getRefreshTeacher();
 		 getAllGroupByBranch();
-		 getRefreshRoom();
+	
 	});
 	var oldBranch = "<?php echo $this->search['branch_id']?>";
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
@@ -344,152 +507,5 @@
 				error: function(err) {
 				}
 			});
-	}
-	var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
-	function getRefreshTeacher(){
-		dijit.byId('teacher').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('teacher').set('store',teacher_store);  
-			return false;
-		}
-		dojo.xhrPost({
-			url:url_gettecher,
-			content:{
-				'branch_id':branch_id,'has_addnew':1
-				},
-			handleAs:"json",
-			load: function(data) {
-			    teacher_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('teacher').set('store',teacher_store);  
-			    if(oldBranch==branch_id){
-			   	 dijit.byId('teacher').set('value','<?php echo $this->search['teacher']?>'); 
-			    }
-			    document.getElementsByClassName("overlay")[0].style.display="none";
-			},
-			error: function(err){
-				document.getElementsByClassName("overlay")[0].style.display="none";
-			}
-		});
-	}
-
-	var url_getRoom = '<?php echo $this->url(array("module"=>"global","controller"=>"room","action"=>"getroom"));?>';	
-	function getRefreshRoom(){
-		dijit.byId('room').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id == -1){
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getRoom,
-			handleAs:"json",
-			content:{
-					'branch_id':branch_id,'has_addnew':1
-					},
-			load: function(data) {
-				room_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('room').set('store',room_store);  
-			    if(oldBranch==branch_id){
-			    	dijit.byId('room').set('value','<?php echo $this->search['room']?>');  
-			    }
-			    document.getElementsByClassName("overlay")[0].style.display="none";
-			},
-			error: function(err) {
-				document.getElementsByClassName("overlay")[0].style.display="none";
-			}
-		});
-	}
-<?php
-	$urlResultSemester1 = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
-	$urlHonorSemester1 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
-	$urlHonorSemester1_nophoto = $this->baseUrl()."/allreport/score/semester-outstanding-student-nophoto/id/";
-	
-	$urlResultSemester2 = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
-	$urlHonorSemester2 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
-	$urlHonorSemester2_nophoto = $this->baseUrl()."/allreport/score/semester-outstanding-student-nophoto/id/";
-	
-	$urlResultYearly = $this->baseUrl()."/allreport/score/rpt-resultbyyear/id/";
-	$urlHonorYearly = $this->baseUrl()."/allreport/score/yearly-outstanding-student/id/";
-	$urlHonorYearly_nophoto = $this->baseUrl()."/allreport/score/yearly-outstanding-student-nophoto/id/";
-	
-	$type1 = "/type/1";
-	$type2 = "/type/2";
-	$type3 = "/type/3";
-?>
-	var row=0;
-	var url="";
-	var type="";
-	$(function(){
-		$.contextMenu({
-			selector: '.context-menu-one', 
-			callback: function(key, options) {
-				if(key=="rpt-resultbysemester1"){
-					url='<?php echo $urlResultSemester1;?>';
-					type='<?php echo $type1;?>';
-				}else if(key=="rpt-resultbysemester2"){
-					url='<?php echo $urlResultSemester2;?>';
-					type='<?php echo $type2;?>';
-				}else if(key=="rpt-resultbyyear"){
-					url='<?php echo $urlResultYearly;?>';
-					type='<?php echo $type3;?>';
-				}else if(key=="semester-outstanding-student1"){
-					url='<?php echo $urlHonorSemester1;?>';
-					type='<?php echo $type1;?>';
-				}
-				else if(key=="semester-outstanding-student1-nophoto"){
-					url='<?php echo $urlHonorSemester1_nophoto;?>';
-					type='<?php echo $type1;?>';
-				} 
-				else if(key=="semester-outstanding-student2"){
-					url='<?php echo $urlHonorSemester2;?>';
-					type='<?php echo $type2;?>';
-				}
-				else if(key=="semester-outstanding-student2-nophoto"){
-					url='<?php echo $urlHonorSemester2_nophoto;?>';
-					type='<?php echo $type2;?>';
-				}
-				else if(key=="yearly-outstanding-student"){
-					url='<?php echo $urlHonorYearly;?>';
-					type='<?php echo $type3;?>';
-				}
-				else if(key=="yearly-outstanding-student-nophoto"){
-					url='<?php echo $urlHonorYearly_nophoto;?>';
-					type='<?php echo $type3;?>';
-				}  
-				
-				gotoAction();
-			},
-			items: {
-				 "outstandingsem": {
-		                "name": "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", 
-		                icon: "fa-file-text-o",
-		                "items": {
-		                	"semester-outstanding-student1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
-		                	"semester-outstanding-student2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
-		    				"yearly-outstanding-student": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
-		    				"semester-outstanding-student1-nophoto": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>(No Photo)", icon: "fa-file-text-o"},
-		    				"semester-outstanding-student2-nophoto": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>(No Photo)", icon: "fa-file-text-o"},
-		    				"yearly-outstanding-student-nophoto": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>(No Photo)", icon: "fa-file-text-o"},
-			              }
-		            },
-					"result": {
-		                "name": "<?php echo $tr->translate("RESULT");?>", 
-		                icon: "fa-file-text-o",
-		                "items": {
-		                    "rpt-resultbysemester1": {"name": "<?php echo $tr->translate("RESULT_SEMESTER1");?>",icon: "fa-file-text-o"},
-		                    "rpt-resultbysemester2": {"name": "<?php echo $tr->translate("RESULT_SEMESTER2");?>",icon: "fa-file-text-o"},
-		                    "rpt-resultbyyear": {"name": "<?php echo $tr->translate("YEARLY_EXAM");?>",icon: "fa-file-text-o"}
-		                }
-		            },
-			}
-		});
-	});
-	function setrowdata(index){
-		row = index;
-	}
-	var recordid ='';
-	function gotoAction(){
-		window.open(url+row+type);
 	}
 </script>

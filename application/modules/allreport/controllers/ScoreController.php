@@ -1007,15 +1007,16 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		} else {
 			$search = array(
 				'adv_search' 	=> "",
-				'group' 		=> "",
 				'branch_id' 	=> "",
 				'academic_year'	=> "",
+				'group' 		=> "",
 				'grade' 		=> "",
-				'session' 		=> "",
-				'teacher' 		=> "",
-				'room' => 0,
-				'degree' => 0,
-				'study_status' => -1,
+				'degree' 		=> "",
+				'exam_type' 	=> 0,
+				'for_semester' 	=> 0,
+				'for_month' 	=> 0,
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d'),
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();

@@ -155,6 +155,8 @@
 									table.content-data tr td{
 										padding: 1px;
 									}
+									.bold{font-weight: bold;
+									background:#dee5e7;}
 
 									@media print{
 										@page{
@@ -180,7 +182,6 @@
 							  <tr class="style" align="center">
 								<td >&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-								<td>&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("GROUP");?>&nbsp;</td>
 								<td>&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td><?php echo $tr->translate("GRADE_A");?>(%)</td>
@@ -230,6 +231,7 @@
 						  $Total_Group_D_Percent =0;
 						  $Total_Group_E_Percent =0;
 						  $Total_Group_F_Percent =0;
+						  $oldGradeName=''; 
 						
 						  if (!empty($this->rs)){ foreach($this->rs as $key=> $rs ){ 
 							$i++;
@@ -243,8 +245,8 @@
 							
 							if($oldGrade!=$rs['grade']){ 
 							if($key!=0){?>
-								<tr class="style hover" align="center">
-									<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL_GRADE");?>:</td>
+								<tr class="style hover bold" align="center">
+									<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL_GRADE").' '.$oldGradeName;?>:</td>
 									<td ><?php echo $totalGradeStu; ?></td>
 									<td ><?php echo $totalSubgA.' ('.$Total_A_Percent.')%'; ?></td>
 									<td ><?php echo $totalSubgB.' ('.$Total_B_Percent.')%'; ?></td>
@@ -261,8 +263,10 @@
 								$totalSubgD=0;
 								$totalSubgE=0;
 								$totalSubgF=0;
-						
-							} ?>
+								$oldGradeName='';
+							}
+							$oldGradeName=$rs['grade_name'];
+							?>
 							
 							<?php } 
 								$oldGrade=$rs['grade'];
@@ -288,7 +292,7 @@
 							if($key!=0){?>
 							
 							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
-								<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
+								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
 								<td ><?php echo $totalDegreeStu ?></td>
 								<td ><?php echo $totalGradeA.' ('.$Total_Grade_A_Percent.')%'; ?></td>
 								<td ><?php echo $totalGradeB.' ('.$Total_Grade_B_Percent.')%'; ?></td>
@@ -333,7 +337,6 @@
 							  <tr class="style hover" align="center" >
 								<td align="center"><?php echo $i;?></td>
 								<td><?php echo $rs['branch_name']; ?></td>
-								<td><?php echo $rs['grade_name']; ?></td>
 								<td><?php echo $rs['group_code']; ?></td>
 								<td><?php echo $rs[$key]['TotaStuden']; ?></td>
 								<td><?php echo $rs[$key]['Total_A'].' ('.$Total_Group_A_Percent.')%'; ?></td>
@@ -346,8 +349,8 @@
 						  <?php 
 							  
 							} }?>
-							<tr class="style hover" align="center">
-								<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL_GRADE");?>:</td>
+							<tr class="style hover bold" align="center">
+								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL_GRADE").' '.$oldGradeName;?>:</td>
 								<td ><?php echo $totalGradeStu; ?></td>
 								<td ><?php echo $totalSubgA.' ('.$Total_A_Percent.')%'; ?></td>
 								<td ><?php echo $totalSubgB.' ('.$Total_B_Percent.')%'; ?></td>
@@ -357,7 +360,7 @@
 								<td ><?php echo $totalSubgF.' ('.$Total_F_Percent.')%'; ?></td>
 							</tr>
 							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
-								<td  colspan="4" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
+								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
 								<td ><?php echo $totalDegreeStu; ?></td>
 								<td ><?php echo $totalGradeA.' ('.$Total_Grade_A_Percent.')%'; ?></td>
 								<td ><?php echo $totalGradeB.' ('.$Total_Grade_B_Percent.')%'; ?></td>
@@ -368,7 +371,6 @@
 							</tr> 
 						</table>
 						<br>
-					
 					</div>
 				</td>
 			</tr>

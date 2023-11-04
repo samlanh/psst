@@ -166,6 +166,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 					g.group_code AS groupCode,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) as academicYearLabel,
 					g.academic_year as academicYearId,
+					s.branch_id,
 					s.id as scoreId,
 					s.group_id,
 					s.title_score_en,
@@ -247,8 +248,11 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 			stu_id AS student_id,
 			stu_code,
 			stu_khname,
-			last_name,stu_enname,
-			sex FROM rms_student WHERE 1 ";
+			last_name,
+			stu_enname,
+			sex,
+			DATE_FORMAT(dob,'%d-%m-%Y') As dob
+		 FROM rms_student WHERE 1 ";
 		if(!empty($data['studentId'])){
 			$sql.=" AND stu_id=".$data['studentId'];
 		}

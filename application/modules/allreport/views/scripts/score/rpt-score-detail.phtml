@@ -23,6 +23,23 @@ $month = array(
 	"11" => "វិច្ឆិកា",
 	"12" => "ធ្នូ"
 );
+$monthKH = array(
+		"1" => "មករា",
+		"2" => "កុម្ភៈ",
+		"3" => "មីនា",
+		"4" => "មេសា",
+		"5" => "ឧសភា",
+		"6" => "មិថុនា",
+		"7" => "កក្កដា",
+		"8" => "សីហា",
+		"9" => "កញ្ញា",
+		"10" => "តុលា",
+		"11" => "វិច្ឆិកា",
+		"12" => "ធ្នូ"
+);
+$monthENG = array(
+		"1" => "January", "2" => "February", "3" => "March", "4" => "April", "5" => "May", "6" => "June", "7" => "July", "8" => "August", "9" => "September", "10" => "October", "11" => "November", "12" => "December"
+);
 $link = "/allreport/score/rpt-monthlytranscript";
 ?>
 <style>
@@ -135,8 +152,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 				font-weight: bold;
 				background: #fffbcb;
 				white-space: nowrap;
-				line-height: 16px;
+				line-height: 20px;
 			}
+			tr.header td{padding:0px 2px;}
 
 			table {
 				font-size: 10px;
@@ -249,6 +267,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 					list-style-type: none !important;
 					
 				}
+				.program{white-space: nowrap;line-height: 22px}
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 			<?php
@@ -335,9 +354,10 @@ $link = "/allreport/score/rpt-monthlytranscript";
 						</tr>
 						<?php 
 
-						if ($rs['exam_type'] == 1) {
+						if ($rs['exam_type'] == 1){
 								$monthChar = empty($monthKH[$rs['for_month']]) ? "" : $monthKH[$rs['for_month']];
 								$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ '.(!empty($rs['title_score'])?$rs['title_score']:$monthChar);
+								
 								$monthCharEn = empty($monthENG[$rs['for_month']]) ? "" : $monthENG[$rs['for_month']];
 								$titleENG = (!empty($rs['title_score_en'])?$rs['title_score_en']:$monthCharEn).' RESULT ';
 							} else {
@@ -436,7 +456,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												}
 											} ?>
 										</tr>
-										<tr>
+										<tr class="program">
 											<td align="center" colspan="<?php echo $langKhmer; ?>"><?php echo $tr->translate("KHMER_PROGRAM"); ?></td>
 											<?php if(!empty($langEng)){?>
 											<td align="center" colspan="<?php echo $langEng; ?>"><?php echo $tr->translate("ENGLISH_PROGRAM"); ?></td>

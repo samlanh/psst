@@ -93,7 +93,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$frm = new Application_Form_FrmGlobal();
 		$branch_id = empty($result[0]['branch_id']) ? 1 : $result[0]['branch_id'];
-		$this->view->header = $frm->getHeaderReceipt($branch_id);
+// 		$this->view->header = $frm->getHeaderReceipt($branch_id);
 		$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
 
 		$db = new Application_Model_DbTable_DbGlobal();

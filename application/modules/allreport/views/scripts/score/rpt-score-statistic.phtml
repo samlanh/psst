@@ -1,5 +1,8 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$session_lang = new Zend_Session_Namespace('lang');
+	$lang_id = $session_lang->lang_id;
+	$dbgb = new Application_Model_DbTable_DbGlobal();
 	$this->headTitle($tr->translate('RPT_SCORE_STATISTIC')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
@@ -17,24 +20,50 @@
     	</div>
     </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+						<script type="dojo/method" event="onSubmit">			
+								if(this.validate()) {
+									
+									exam_type=dijit.byId('exam_type').get('value');
+									if(exam_type=='' || exam_type==0){
+										alert('<?php echo $tr->translate('SELECT_EXAM_TYPE');?>!');
+										dijit.byId('exam_type').focus(); 
+										return false;
+									}else if(exam_type==2){
+										for_semester=dijit.byId('for_semester').get('value');
+										if(for_semester=='' || for_semester==0){
+											alert('<?php echo $tr->translate('SELECT_SEMESTER');?>!');
+											dijit.byId('for_semester').focus(); 
+											return false;
+										}
+									}else if(exam_type==1){
+										for_month=dijit.byId('for_month').get('value');
+										if(for_month=='' || for_month==0){
+											alert('<?php echo $tr->translate('CHOOSE_MONTH');?>!');
+											dijit.byId('for_month').focus(); 
+											return false;
+										}
+									}
+									loadingBlock();
+									return true;
+								}else {
+									return false;
+								}
+			</script>
 		<div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("adv_search");?>
-            </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("branch_id");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("academic_year");?>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="group" />
-            </div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("degree");?>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<input id="grade" />
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-12">
+            	<input id="group" />
             </div>
         </div>
         <div class="form-group">
@@ -48,15 +77,15 @@
             	<?php echo $frm->getElement("for_month");?>
             </div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("start_date");?>
-            </div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("end_date");?>
+				<select name="sort_degree" class="fullside height-text" dojoType="dijit.form.FilteringSelect" required="false" placeholder="Select Degree Option">
+					<option></option>
+					<option <?php echo($this->search['sort_degree']==4)?"selected":"";?> value="4">Kindergarten</option>
+					<option <?php echo($this->search['sort_degree']==1)?"selected":"";?> value="1">Primary</option>
+					<option <?php echo($this->search['sort_degree']=='3,4')?"selected":"";?> value="2,3">Junior-Senior</option>
+				</select>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
             </div>
         </div>
 	</form>	
@@ -74,7 +103,37 @@
 			<tr>
 				<td width="28%" align="left"></td>
 				<td width="44%" align="center">
-					<p><strong style="font-weight:normal;color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_SCORE_STATISTIC");?></strong></p>
+					<?php 
+					$resulTilte="";
+					$academicYear="";
+					
+					if(!empty($this->rs)){ 
+						if(!empty($this->search)){
+							if($this->search['exam_type']==1){
+								$titleScore=$this->rs['0']['title_score'];
+								$resulTilte = "ប្រចាំខែ ".$titleScore;
+							}else{
+								if($this->search['for_semester']==1){
+									$resulTilte = "ប្រចាំ ឆមាសទី១";
+								}elseif($this->search['for_semester']==2){
+									$resulTilte = "ប្រចាំ ឆមាសទី២";
+								}
+							}
+						 } 
+						 $academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academicYear'];
+						}
+					?>
+					<ul class="headerTitle">
+						<li>
+							<strong><?php echo $tr->translate("RPT_SCORE_STATISTIC");?></strong>
+						</li>
+						<li>
+							<?php echo $resulTilte;?>
+						</li>
+						<li>
+							<?php echo $academicYear;?>
+						</li>
+					</ul>
 				</td>
 				<td align="right" width="28%"></td>
 			</tr>
@@ -82,7 +141,7 @@
 				<td colspan="3" valign="top" id="exportExcel">
 						<style type="text/css">
 								.style{
-										line-height: 20px;font-size: 12px !important;
+										line-height: 20px;font-size: 13px !important;
 										font-family: 'Times New Roman','Khmer OS Battambang';
 									}
 									.hideblog{display: none;}
@@ -124,11 +183,18 @@
 										font-weight:600;
 									}
 									table.content-data  tr.style {
-									
-									white-space: nowrap;
-										
+										white-space: nowrap;
 									}
 									
+									ul.headerTitle li{
+										list-style:none;line-height:20px;
+										font-size: 14px;
+										font-family:'Times New Roman','Khmer OS Battambang';
+									}
+									span.separateColumn{
+										width:49%;
+										display: inline-block;
+									}
 									
 									table.tb-footer{
 										border-collapse:collapse;
@@ -160,7 +226,7 @@
 
 									@media print{
 										@page{
-											margin:0.3cm 0.7cm 0cm 0.7cm;
+											margin:0.5cm 0.7cm 0.5cm 0.7cm;
 											page-break-before: avoid;
 											-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
 											-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
@@ -171,6 +237,78 @@
 											size:portrait;
 										}
 									}
+									.principalStamp {
+										position:relative;
+										width: 300px;
+										height: 140px;
+										margin:0 auto;
+										margin-top:-20px;
+									}
+									.principalStamp .stamp {
+										width:140px;
+										height:140px;
+										position:absolute;
+										transform: translate(-81%);
+										left:50%;
+									}
+									.principalStamp .signature {
+										left: 40px;
+										bottom: 32px;
+										height: 100px;
+										width:200px;
+										position: absolute;
+									}
+									.principalStamp .principalName{
+										left: 65px;
+										top: 113px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+									.seenApproved{
+										position: relative;
+									}
+									.seenApproved .interimPrincipal{
+										position: absolute;
+										left: 50%;
+										top: 20px;
+										transform: translate(-50%);
+										z-index: 1;
+									}
+									
+									.administrator {
+											position:relative;
+											width: 300px;
+											height: 140px;
+											margin:0 auto;
+										}
+										.administrator .administratorstamp {
+											width:130px;
+											height:130px;
+											position:absolute;
+											transform: translate(-50%);
+											left:50%;
+										}
+										.administrator .administratorsignature {
+											left: 40px;
+											bottom: 32px;
+											height: 100px;
+											width:200px;
+											position: absolute;
+										}
+										.administrator .administratorName {
+											left: 65px;
+											top: 80px;
+											height: 100px;
+											width: 200px;
+											position: absolute;
+										}
+										label.LabelTeacher {
+											line-height: 25px;
+											font-weight: initial;
+											font-family: 'Times New Roman','Khmer OS Battambang';
+											white-space: nowrap;
+										}
 						</style>
 						<?php 
 						
@@ -195,6 +333,15 @@
 						  <?php $i=0; 
 						  $degreeOld='';
 						  $oldGrade='';
+
+						  $grandTotal=0;
+						  $grandTotalA=0;
+						  $grandTotalB=0;
+						  $grandTotalC=0;
+						  $grandTotalD=0;
+						  $grandTotalE=0;
+						  $grandTotalF=0;
+						  
 						  $totalDegreeStu=0;
 						  $totalGradeA=0;
 						  $totalGradeB=0;
@@ -232,28 +379,38 @@
 						  $Total_Group_E_Percent =0;
 						  $Total_Group_F_Percent =0;
 						  $oldGradeName=''; 
+						  $oldDegreeName=''; 
 						
 						  if (!empty($this->rs)){ foreach($this->rs as $key=> $rs ){ 
 							$i++;
-								
-							$Total_Group_A_Percent =round($rs[$key]['Total_A']/$rs[$key]['TotaStuden']*100);
-							$Total_Group_B_Percent =round($rs[$key]['Total_B']/$rs[$key]['TotaStuden']*100);
-							$Total_Group_C_Percent =round($rs[$key]['Total_C']/$rs[$key]['TotaStuden']*100);
-							$Total_Group_D_Percent =round($rs[$key]['Total_D']/$rs[$key]['TotaStuden']*100);
-							$Total_Group_E_Percent =round($rs[$key]['Total_E']/$rs[$key]['TotaStuden']*100);
-							$Total_Group_F_Percent =round($rs[$key]['Total_F']/$rs[$key]['TotaStuden']*100);
+									
+									$Total_Group_A_Percent =@round($rs['Total_A']/$rs['TotaStudent']*100);
+									$Total_Group_B_Percent =@round($rs['Total_B']/$rs['TotaStudent']*100);
+									$Total_Group_C_Percent =@round($rs['Total_C']/$rs['TotaStudent']*100);
+									$Total_Group_D_Percent =@round($rs['Total_D']/$rs['TotaStudent']*100);
+									$Total_Group_E_Percent =@round($rs['Total_E']/$rs['TotaStudent']*100);
+									$Total_Group_F_Percent =@round($rs['Total_F']/$rs['TotaStudent']*100);
+									
+									$grandTotal = $grandTotal +$rs['TotaStudent'];
+									$grandTotalA = $grandTotalA +@$rs['Total_A'];
+									$grandTotalB = $grandTotalB +@$rs['Total_B'];
+									$grandTotalC = $grandTotalC +@$rs['Total_C'];
+									$grandTotalD = $grandTotalD +@$rs['Total_D'];
+									$grandTotalE = $grandTotalE +@$rs['Total_E'];
+									$grandTotalF = $grandTotalF +@$rs['Total_F'];
+									
 							
 							if($oldGrade!=$rs['grade']){ 
 							if($key!=0){?>
 								<tr class="style hover bold" align="center">
 									<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL_GRADE").' '.$oldGradeName;?>:</td>
 									<td ><?php echo $totalGradeStu; ?></td>
-									<td ><?php echo $totalSubgA.' ('.$Total_A_Percent.')%'; ?></td>
-									<td ><?php echo $totalSubgB.' ('.$Total_B_Percent.')%'; ?></td>
-									<td ><?php echo $totalSubgC.' ('.$Total_C_Percent.')%'; ?></td>
-									<td ><?php echo $totalSubgD.' ('.$Total_D_Percent.')%'; ?></td>
-									<td ><?php echo $totalSubgE.' ('.$Total_E_Percent.')%'; ?></td>
-									<td ><?php echo $totalSubgF.' ('.$Total_F_Percent.')%'; ?></td>
+									<td ><span class="separateColumn passedGrade"><?php echo $totalSubgA;?></span><span class="separateColumn passedGrade"><?php echo $Total_A_Percent.'%'; ?></span></td>
+									<td ><span class="separateColumn passedGrade"><?php echo $totalSubgB;?></span><span class="separateColumn passedGrade"><?php echo $Total_B_Percent.'%'; ?></span></td>
+									<td ><span class="separateColumn passedGrade"><?php echo $totalSubgC;?></span><span class="separateColumn passedGrade"><?php echo $Total_C_Percent.'%'; ?></span></td>
+									<td ><span class="separateColumn passedGrade"><?php echo $totalSubgD;?></span><span class="separateColumn passedGrade"><?php echo $Total_D_Percent.'%'; ?></span></td>
+									<td ><span class="separateColumn passedGrade"><?php echo $totalSubgE;?></span><span class="separateColumn passedGrade"><?php echo $Total_E_Percent.'%'; ?></span></td>
+									<td ><span class="separateColumn passedGrade"><?php echo $totalSubgF;?></span><span class="separateColumn passedGrade"><?php echo $Total_F_Percent.'%'; ?></span></td>
 								</tr> 
 							<?php
 								$totalGradeStu=0;
@@ -270,20 +427,20 @@
 							
 							<?php } 
 								$oldGrade=$rs['grade'];
-								$totalGradeStu = $totalGradeStu +$rs[$key]['TotaStuden'];
-								$totalSubgA = $totalSubgA +$rs[$key]['Total_A'];
-								$totalSubgB = $totalSubgB +$rs[$key]['Total_B'];
-								$totalSubgC = $totalSubgC +$rs[$key]['Total_C'];
-								$totalSubgD = $totalSubgD +$rs[$key]['Total_D'];
-								$totalSubgE = $totalSubgE +$rs[$key]['Total_E'];
-								$totalSubgF = $totalSubgF +$rs[$key]['Total_F'];
+								$totalGradeStu = $totalGradeStu +$rs['TotaStudent'];
+								$totalSubgA = $totalSubgA +@$rs['Total_A'];
+								$totalSubgB = $totalSubgB +@$rs['Total_B'];
+								$totalSubgC = $totalSubgC +@$rs['Total_C'];
+								$totalSubgD = $totalSubgD +@$rs['Total_D'];
+								$totalSubgE = $totalSubgE +@$rs['Total_E'];
+								$totalSubgF = $totalSubgF +@$rs['Total_F'];
 
-								$Total_A_Percent =round($totalSubgA/$totalGradeStu*100);
-								$Total_B_Percent =round($totalSubgB/$totalGradeStu*100);
-								$Total_C_Percent =round($totalSubgC/$totalGradeStu*100);
-								$Total_D_Percent =round($totalSubgD/$totalGradeStu*100);
-								$Total_E_Percent =round($totalSubgE/$totalGradeStu*100);
-								$Total_F_Percent =round($totalSubgF/$totalGradeStu*100);
+								$Total_A_Percent =@round($totalSubgA/$totalGradeStu*100);
+								$Total_B_Percent =@round($totalSubgB/$totalGradeStu*100);
+								$Total_C_Percent =@round($totalSubgC/$totalGradeStu*100);
+								$Total_D_Percent =@round($totalSubgD/$totalGradeStu*100);
+								$Total_E_Percent =@round($totalSubgE/$totalGradeStu*100);
+								$Total_F_Percent =@round($totalSubgF/$totalGradeStu*100);
 
 							?>
 
@@ -291,15 +448,15 @@
 							if($degreeOld!=$rs['degree']){ 
 							if($key!=0){?>
 							
-							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
-								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
-								<td ><?php echo $totalDegreeStu ?></td>
-								<td ><?php echo $totalGradeA.' ('.$Total_Grade_A_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeB.' ('.$Total_Grade_B_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeC.' ('.$Total_Grade_C_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeD.' ('.$Total_Grade_D_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeE.' ('.$Total_Grade_E_Percent.')%';?></td>
-								<td ><?php echo $totalGradeF.' ('.$Total_Grade_F_Percent.')%'; ?></td>
+							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #e3e3e3;font-family:'Times New Roman','Khmer OS Battambang'" align="center">
+								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL").' '.$oldDegreeName;?>:</td>
+								<td><?php echo $totalDegreeStu ?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeA;?></span><?php echo $Total_Grade_A_Percent.' %'; ?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeB;?></span><?php echo $Total_Grade_B_Percent.' %'; ?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeC; ?></span><?php echo $Total_Grade_C_Percent.' %'; ?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeD; ?></span><?php echo $Total_Grade_D_Percent.' %'; ?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeE; ?></span><?php echo $Total_Grade_E_Percent.' %';?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeF; ?></span><?php echo $Total_Grade_F_Percent.' %'; ?></td>
 							</tr> 
 							<?php
 							  $totalDegreeStu=0;
@@ -309,81 +466,181 @@
 							  $totalGradeD=0;
 							  $totalGradeE=0;
 							  $totalGradeF=0;
-						
-							} ?>
+							  $oldDegreeName=''; 
+							} 
+							$oldDegreeName=$rs['degree_name'];
+							?>
 							<tr class="style hover" align="center">
 								<td colspan="11"><?php echo $tr->translate("DEGREE");?>:&nbsp;<?php echo $rs['degree_name']; ?></td>
 							  </tr>
 							<?php } 
 								$degreeOld=$rs['degree'];
-								$totalDegreeStu = $totalDegreeStu +$rs[$key]['TotaStuden'];
-								$totalGradeA = $totalGradeA +$rs[$key]['Total_A'];
-								$totalGradeB = $totalGradeB +$rs[$key]['Total_B'];
-								$totalGradeC = $totalGradeC +$rs[$key]['Total_C'];
-								$totalGradeD = $totalGradeD +$rs[$key]['Total_D'];
-								$totalGradeE = $totalGradeE +$rs[$key]['Total_E'];
-								$totalGradeF = $totalGradeF +$rs[$key]['Total_F'];
+								$totalDegreeStu = $totalDegreeStu +$rs['TotaStudent'];
+								$totalGradeA = $totalGradeA +@$rs['Total_A'];
+								$totalGradeB = $totalGradeB +@$rs['Total_B'];
+								$totalGradeC = $totalGradeC +@$rs['Total_C'];
+								$totalGradeD = $totalGradeD +@$rs['Total_D'];
+								$totalGradeE = $totalGradeE +@$rs['Total_E'];
+								$totalGradeF = $totalGradeF +@$rs['Total_F'];
 
-								$Total_Grade_A_Percent =round($totalGradeA/$totalDegreeStu*100);
-								$Total_Grade_B_Percent =round($totalGradeB/$totalDegreeStu*100);
-								$Total_Grade_C_Percent =round($totalGradeC/$totalDegreeStu*100);
-								$Total_Grade_D_Percent =round($totalGradeD/$totalDegreeStu*100);
-								$Total_Grade_E_Percent =round($totalGradeE/$totalDegreeStu*100);
-								$Total_Grade_F_Percent =round($totalGradeF/$totalDegreeStu*100);
+								$Total_Grade_A_Percent =@round($totalGradeA/$totalDegreeStu*100);
+								$Total_Grade_B_Percent =@round($totalGradeB/$totalDegreeStu*100);
+								$Total_Grade_C_Percent =@round($totalGradeC/$totalDegreeStu*100);
+								$Total_Grade_D_Percent =@round($totalGradeD/$totalDegreeStu*100);
+								$Total_Grade_E_Percent =@round($totalGradeE/$totalDegreeStu*100);
+								$Total_Grade_F_Percent =@round($totalGradeF/$totalDegreeStu*100);
 							?>
-
-						
-							
 							  <tr class="style hover" align="center" >
 								<td align="center"><?php echo $i;?></td>
 								<td><?php echo $rs['branch_name']; ?></td>
 								<td><?php echo $rs['group_code']; ?></td>
-								<td><?php echo $rs[$key]['TotaStuden']; ?></td>
-								<td><?php echo $rs[$key]['Total_A'].' ('.$Total_Group_A_Percent.')%'; ?></td>
-								<td><?php echo $rs[$key]['Total_B'].' ('.$Total_Group_B_Percent.')%'; ?></td>
-								<td><?php echo $rs[$key]['Total_C'].' ('.$Total_Group_C_Percent.')%'; ?></td>
-								<td><?php echo $rs[$key]['Total_D'].' ('.$Total_Group_D_Percent.')%'; ?></td>
-								<td><?php echo $rs[$key]['Total_E'].' ('.$Total_Group_E_Percent.')%'; ?></td>
-								<td><?php echo $rs[$key]['Total_F'].' ('.$Total_Group_F_Percent.')%'; ?></td>
+								<td><?php echo $rs['TotaStudent']; ?></td>
+								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_A'];?></span><span class="separateColumn passedGrade"><?php echo $Total_Group_A_Percent.'%'; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_B'];?></span><span class="separateColumn passedGrade"><?php echo $Total_Group_B_Percent.'%'; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_C'];?></span><span class="separateColumn passedGrade"><?php echo $Total_Group_C_Percent.'%'; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_D'];?></span><span class="separateColumn passedGrade"><?php echo $Total_Group_D_Percent.'%'; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_E'];?></span><span class="separateColumn passedGrade"><?php echo $Total_Group_E_Percent.'%'; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_F'];?></span><span class="separateColumn passedGrade"><?php echo $Total_Group_F_Percent.'%'; ?></span></td>
 							  </tr>
 						  <?php 
 							  
 							} }?>
+							<?php if(!empty($this->rs)){ ?> 
 							<tr class="style hover bold" align="center">
 								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL_GRADE").' '.$oldGradeName;?>:</td>
 								<td ><?php echo $totalGradeStu; ?></td>
-								<td ><?php echo $totalSubgA.' ('.$Total_A_Percent.')%'; ?></td>
-								<td ><?php echo $totalSubgB.' ('.$Total_B_Percent.')%'; ?></td>
-								<td ><?php echo $totalSubgC.' ('.$Total_C_Percent.')%'; ?></td>
-								<td ><?php echo $totalSubgD.' ('.$Total_D_Percent.')%'; ?></td>
-								<td ><?php echo $totalSubgE.' ('.$Total_E_Percent.')%'; ?></td>
-								<td ><?php echo $totalSubgF.' ('.$Total_F_Percent.')%'; ?></td>
+								<td ><span class="separateColumn passedGrade"><?php echo $totalSubgA;?></span><span class="separateColumn"><?php echo $Total_A_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedGrade"><?php echo $totalSubgB;?></span><span class="separateColumn"><?php echo $Total_B_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedGrade"><?php echo $totalSubgC;?></span><span class="separateColumn"><?php echo $Total_C_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedGrade"><?php echo $totalSubgD;?></span><span class="separateColumn"><?php echo $Total_D_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedGrade"><?php echo $totalSubgE;?></span><span class="separateColumn"><?php echo $Total_E_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedGrade"><?php echo $totalSubgF;?></span><span class="separateColumn"><?php echo $Total_F_Percent.'%'; ?></span></td>
 							</tr>
-							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #ccd9ff;" align="center">
-								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL");?>:</td>
+							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #e3e3e3;font-family:'Times New Roman','Khmer OS Battambang';" align="center">
+								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL").' '.$oldDegreeName;?>:</td>
 								<td ><?php echo $totalDegreeStu; ?></td>
-								<td ><?php echo $totalGradeA.' ('.$Total_Grade_A_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeB.' ('.$Total_Grade_B_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeC.' ('.$Total_Grade_C_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeD.' ('.$Total_Grade_D_Percent.')%'; ?></td>
-								<td ><?php echo $totalGradeE.' ('.$Total_Grade_E_Percent.')%';?></td>
-								<td ><?php echo $totalGradeF.' ('.$Total_Grade_F_Percent.')%'; ?></td>
+								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeA;?></span><span class="separateColumn"><?php echo $Total_Grade_A_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeB;?></span><span class="separateColumn"><?php echo $Total_Grade_B_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeC;?></span><span class="separateColumn"><?php echo $Total_Grade_C_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeD;?></span><span class="separateColumn"><?php echo $Total_Grade_D_Percent.'%'; ?></span></td>
+								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeE;?></span><span class="separateColumn"><?php echo $Total_Grade_E_Percent.'%';?></span></td>
+								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeF;?></span><span class="separateColumn"><?php echo $Total_Grade_F_Percent.'%'; ?></span></td>
 							</tr> 
+							<tr class='hover padding context-menu-one' style="font-size:14px; height: 28px;  background: #ccd9ff;font-family: 'Times New Roman' , 'Khmer OS Muol Light';" align="center">
+								<td  colspan="3" align="center"><?php echo $tr->translate("TOTLE_AMOUNT");?>:</td>
+								<td ><?php echo $grandTotal; ?></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalA;?></span><span class="separateColumn"><?php echo number_format($grandTotalA/$grandTotal*100,2).'%'; ?></span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalB;?></span><span class="separateColumn"><?php echo number_format($grandTotalB/$grandTotal*100,2).'%'; ?></span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalC;?></span><span class="separateColumn"><?php echo number_format($grandTotalC/$grandTotal*100,2).'%'; ?></span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalD;?></span><span class="separateColumn"><?php echo number_format($grandTotalD/$grandTotal*100,2).'%'; ?></span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalE;?></span><span class="separateColumn"><?php echo number_format($grandTotalE/$grandTotal*100,2).'%';?></span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalF;?></span><span class="separateColumn"><?php echo number_format($grandTotalF/$grandTotal*100,2).'%'; ?></span></td>
+							</tr> 
+							<?php  } ?>
+						
 						</table>
 						<br>
 					</div>
 				</td>
 			</tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
+			
+			<?php 	
+				$dbbranch = new Application_Model_DbTable_DbGlobal();
+				$branch_id= empty($this->rs[0]['branch_id'])?0:$this->rs[0]['branch_id'];
+				$branchInfo =  $dbbranch->getBranchInfo($branch_id);
+			?>
 			<tr >
 				<td colspan="3" width="100%">
-					<?php echo $this->rsfooter; ?>
+					<table>
+						<tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td align="center">
+							<label id="lunarDate" class="LabelTeacher">
+								<?php 
+										$inputDate =date("Y-m-d") ;
+										$time  = strtotime($inputDate);
+										$day   = date('d',$time);
+										$month = date('m',$time);
+										$year  = date('Y',$time);
+											
+										$lunaDate = date('Y-m-d',strtotime($inputDate));
+										$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+									?>
+									<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
+									</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+							</td>
+						</tr>
+						<tr>
+								<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+									<div class="seenApproved">បានឃើញ និងឯកភាព
+										<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+									</div>
+								</td>
+								<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
+								<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
+									<?php
+										if ($lang_id == 1) { ?>
+											<label id= "date" style="display:none">
+												ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+											</label>
+										<?php }else{ ?>
+											<label id= "date" style="display:none">
+												Phnom Penh,
+												<?php echo date("l");?>,
+												<?php echo date("d");?> 
+												<?php echo date("F");?>,
+												<?php echo date("Y");?> 
+											</label>
+									<?php } ?>
+									<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+								</td>
+						</tr>
+						<tr>
+								<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
+								<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
+								<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">ការិយាល័យផ្នែកសិក្សាធិការ</td>
+						</tr>
+						<tr>
+								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+									<div class="principalStamp" id="principalStamp" style="display:none;">
+										<div class="stamp" >
+											<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
+											<div class="signature">
+												<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
+											</div>
+											<div class="principalName">
+												<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+											</div>
+										</div>
+									</div>
+								</td>
+								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+								</td>
+								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+									<?php if (!empty($branchInfo['administration_signature'])) { ?>
+										<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
+									<?php } else { ?>
+										<div id="administrator" style="height: 100px;"></div>
+									<?php } ?>
+									<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
+								</td>
+						</tr>
+					</table>
+					
 				</td>
 			</tr>
+			
+			
 		</table>
 	</div>	
+	<div class="card-box" >
+			<label class="control-label custom-switch float-midd "> 
+				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
+				<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
+				<span class="custom-switch-indicator custom-radius switch-status"></span> 
+			</label> 
+	</div>
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
@@ -446,9 +703,9 @@
 	    });
 		 getallGrade();
 		 getAllGroupByBranch();
-	
+		 stampDisplay();
 	});
-	var oldBranch = "<?php echo $this->search['branch_id']?>";
+	
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByBranch(){
 		dijit.byId('group').reset();
@@ -480,9 +737,7 @@
 			load: function(data) {
 			    group_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('group').set('store',group_store);   
-			    if(oldBranch==branch_id){
-			    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-			    }
+			   
 			},
 			error: function(err) {
 			}
@@ -504,10 +759,44 @@
 					dijit.byId('grade').attr('value','');
 					grade_store  = getDataStorefromJSON('id','name', data);
 				    dijit.byId('grade').set('store',grade_store); 
-				    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+				   
 				},
 				error: function(err) {
 				}
 			});
 	}
+
+function stampDisplay() {
+  var checkBox = document.getElementById("stamp");
+  var stamp = document.getElementById("principalStamp");
+
+  var administrator = document.getElementById("administrator");
+  var lunarBlankDate =  document.getElementById("lunarBlankDate");
+  var lunarDate =  document.getElementById("lunarDate");
+  
+  
+  var date = document.getElementById("date");
+  var blank_date = document.getElementById("blank_date");
+  
+  if (checkBox.checked == true){
+    stamp.style.display = "block";
+	
+	administrator.style.display = "block";
+	administrator.style.visibility = "visible";
+	
+	
+	date.style.display = "block";
+	blank_date.style.display = "none";
+	lunarBlankDate.style.display = "none";
+	lunarDate.style.display = "block";
+
+  } else {
+	stamp.style.display = "none";
+	administrator.style.visibility = "hidden";
+	date.style.display = "none";
+	blank_date.style.display = "block";
+	lunarBlankDate.style.display = "block";
+	lunarDate.style.display = "none";
+  }
+}
 </script>

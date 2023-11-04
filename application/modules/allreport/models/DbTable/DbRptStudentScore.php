@@ -128,7 +128,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			 	s.exam_type,
 			 	s.for_semester,
 			  	s.reportdate,
-				s.date_input,
+				s.date_input
    			FROM 
    				`rms_score` AS s,
    				`rms_group` AS g 
@@ -1468,16 +1468,18 @@ function getExamByExamIdAndStudent($data){
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
     	}
-    	$sql="SELECT g.group_code, g.grade, g.degree,
+    	$sql="SELECT s.id,s.title_score,s.title_score_en, 
+    			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academicYear,
+    			g.group_code, g.grade, g.degree,g.branch_id,
 				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
 				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
-				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name
-				
+				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+				(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id) TotaStudent
 			FROM `rms_score` AS s  
 			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
     	";
 		
-    	$where=' ';
+    	$where=' WHERE 1 ';
     	if(($search['branch_id'])>0){
     		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
@@ -1502,33 +1504,66 @@ function getExamByExamIdAndStudent($data){
 		if(!empty($search['for_month'])){
     		$where.=' AND s.for_month='.$search['for_month'];
     	}
+		if(!empty($search['sort_degree'])){
+    		$where.=' AND g.degree in('.$search['sort_degree'].')';
+    	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("s.branch_id");
     	
 		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC ";
-		//echo $sql.$where.$orderBy; exit();
 		$scoreInfo = $db->fetchAll($sql.$where.$orderBy);
 
 		$resultInfo = array();
 		if(!empty($scoreInfo)){
 			foreach($scoreInfo as $key=>$rs){
+				$resultInfo[$key]['title_score']=$rs['title_score'];
+				$resultInfo[$key]['title_score_en']=$rs['title_score_en'];
+				$resultInfo[$key]['academicYear']=$rs['academicYear'];
+				$resultInfo[$key]['group_code']=$rs['group_code'];
+				$resultInfo[$key]['grade']=$rs['grade'];
+				$resultInfo[$key]['degree']=$rs['degree'];
+				$resultInfo[$key]['branch_id']=$rs['branch_id'];
+				$resultInfo[$key]['branch_name']=$rs['branch_name'];
 				
-				$data['degree']=$rs['degree'];
-
-				$rsMention=$this->getCountStudentScore($data);
-				$resultInfo[$key] = array_merge($rs,$rsMention);
-			
+				$resultInfo[$key]['degree_name']=$rs['degree_name'];
+				$resultInfo[$key]['grade_name']=$rs['grade_name'];
+				$resultInfo[$key]['TotaStudent']=$rs['TotaStudent'];
+				
+				$resultInfo[$key]['Total_A']=0;
+				$resultInfo[$key]['Total_B']=0;
+				$resultInfo[$key]['Total_C']=0;
+				$resultInfo[$key]['Total_D']=0;
+				$resultInfo[$key]['Total_E']=0;
+				$resultInfo[$key]['Total_F']=0;
+				
+				$search['degree']=$rs['degree'];
+				$search['scoreId']=$rs['id'];
+				
+				$rsMention=$this->getCountStudentScore($search);
+				if(!empty($rsMention))foreach ($rsMention as $rsGrade){
+					$resultInfo[$key]['Total_A']=!empty($rsGrade['Total_A'])?$rsGrade['Total_A']:0;
+					$resultInfo[$key]['Total_B']=!empty($rsGrade['Total_B'])?$rsGrade['Total_B']:0;
+					$resultInfo[$key]['Total_C']=!empty($rsGrade['Total_C'])?$rsGrade['Total_C']:0;
+					$resultInfo[$key]['Total_D']=!empty($rsGrade['Total_D'])?$rsGrade['Total_D']:0;
+					$resultInfo[$key]['Total_E']=!empty($rsGrade['Total_E'])?$rsGrade['Total_E']:0;
+					$resultInfo[$key]['Total_F']=!empty($rsGrade['Total_F'])?$rsGrade['Total_F']:0;
+				}
 			}
 		}
-		return $resultInfo ;
+		return $resultInfo;
     	
     }
-	function getCountStudentScore($data){//using
+	function getCountStudentScore($search){//using
     	$db = $this->getAdapter();
 
-		$sqlMention ="SELECT md.`max_score`, md.`metion_grade` FROM `rms_metionscore_setting` AS m 
-		INNER JOIN `rms_metionscore_setting_detail` AS md ON m.`id`=md.`metion_score_id` WHERE m.`degree`= ".$data['degree']." ORDER BY md.`max_score` DESC";
+		$sqlMention ="SELECT 
+								md.`max_score`, 
+								md.`metion_grade` FROM 
+								`rms_metionscore_setting` AS m 
+									INNER JOIN `rms_metionscore_setting_detail` AS md 
+						ON m.`id`=md.`metion_score_id` 
+						WHERE m.`degree`= ".$search['degree']." ORDER BY md.`max_score` DESC";
 		$mentionResult = $db->fetchAll($sqlMention);
 		$mentionResultArr=array(
 			"0"=> 0,
@@ -1546,19 +1581,23 @@ function getExamByExamIdAndStudent($data){
 		}
 
     	$sql="SELECT  
-		COUNT(sm.`student_id`) AS TotaStuden,
+		 s.id,
 		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['0']."'   , sm.total_score, NULL)) AS Total_A,
 		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['1']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['0']."'  , sm.total_score, NULL)) AS Total_B,
 		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['2']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['1']."'  , sm.total_score, NULL)) AS Total_C,
 		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['3']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['2']."'  , sm.total_score, NULL)) AS Total_D,
-		   COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['4']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['3']."'  , sm.total_score, NULL)) AS Total_E,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['4']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['3']."'  , sm.total_score, NULL)) AS Total_E,
 		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['4']."'  , sm.total_score, NULL)) AS Total_F
 		   
-		 FROM `rms_score` AS s  
-	
-		INNER JOIN `rms_score_monthly` AS sm  ON s.`id` = sm.`score_id` GROUP BY sm.`score_id`
-    	";
-		return $db->fetchAll($sql);
+		 FROM `rms_score` AS s  ,
+			`rms_score_monthly` AS sm  
+		WHERE s.`id` = sm.`score_id` ";
+    	$where=' ';
+    	if(($search['scoreId'])>0){
+    		$where.=' AND s.id='.$search['scoreId'];
+    	}
+		$where.=" GROUP BY sm.`score_id`";
+		return $db->fetchAll($sql.$where);
 
     }
 

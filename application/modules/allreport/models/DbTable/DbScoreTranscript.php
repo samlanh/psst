@@ -324,8 +324,9 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 			if(!empty($data['attStatus'])){
 				$sql.=" AND satd.attendence_status=".$data['attStatus'];
 			}
-		$sql.=" LIMIT 1";
-		return $db->fetchOne($sql);
+		$sql.=" GROUP BY sat.date_attendence";
+		//echo $sql; exit();
+		return $db->fetchAll($sql);
 	}
 	function countDisplineTranscript($data=null){
 		$db = $this->getAdapter();

@@ -157,7 +157,9 @@ class Application_Model_DbTable_DbNotification extends Zend_Db_Table_Abstract
 				AND s.status=1
 				AND gd.is_current=1
 				AND gd.stop_type=0
-				AND s.stu_id = gd.stu_id AND gd.group_id=0 ";
+				AND s.stu_id = gd.stu_id 
+				AND gd.is_setgroup=0
+				AND gd.group_id=0 ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission("s.branch_id");
 		$limit="";

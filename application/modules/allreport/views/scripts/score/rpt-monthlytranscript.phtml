@@ -431,7 +431,7 @@
 																			'attStatus' => 3,
 																		);
 																		$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
-																		echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
+																		echo count($dbAttendance->countAttendenceTranscript($data)) ; ?>&nbsp;</td>
 								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
 								<td colspan="3" align="center">&nbsp;<?php
 																				$data['attStatus'] = 1;
@@ -441,7 +441,7 @@
 								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unexcused Absence&nbsp;</td>
 								<td colspan="1" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 2;
-																				echo $dbAttendance->countAttendenceTranscript($data) ?>&nbsp;</td>
+																				echo count($dbAttendance->countAttendenceTranscript($data)) ?>&nbsp;</td>
 								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
 								<td colspan="3" align="center">&nbsp;<?php
 																				$data['attStatus'] = 2;
@@ -451,7 +451,7 @@
 								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
 								<td colspan="1" align="center" class="">&nbsp;<?php
 																				$data['attStatus'] = 4;
-																				echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
+																				echo count($dbAttendance->countAttendenceTranscript($data)) ?>&nbsp;</td>
 								<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
 								<td colspan="3" align="center">&nbsp;<?php
 																				$data['attStatus'] = 3;

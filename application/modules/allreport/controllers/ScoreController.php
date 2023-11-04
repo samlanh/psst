@@ -1004,23 +1004,12 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	{
 		if ($this->getRequest()->isPost()) {
 			$search = $this->getRequest()->getPost();
+			$db = new Allreport_Model_DbTable_DbRptStudentScore();
+			$rs = $db->getScoreStatistic($search);
 		} else {
-			$search = array(
-				'adv_search' 	=> "",
-				'branch_id' 	=> "",
-				'academic_year'	=> "",
-				'group' 		=> "",
-				'grade' 		=> "",
-				'degree' 		=> "",
-				'exam_type' 	=> 0,
-				'for_semester' 	=> 0,
-				'for_month' 	=> 0,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
-			);
+			$rs="";
+			$search = array();
 		}
-		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		$rs = $db->getScoreStatistic($search);
 		$this->view->rs = $rs;
 		$this->view->search = $search;
 
@@ -1033,5 +1022,6 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$forms = $form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
+
 	}
 }

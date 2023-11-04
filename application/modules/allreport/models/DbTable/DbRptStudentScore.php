@@ -1468,7 +1468,7 @@ function getExamByExamIdAndStudent($data){
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
     	}
-    	$sql="SELECT g.group_code, g.grade, g.degree,
+    	$sql="SELECT s.title_score,s.title_score_en, g.group_code, g.grade, g.degree,g.branch_id,
 				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
 				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name
@@ -1502,24 +1502,27 @@ function getExamByExamIdAndStudent($data){
 		if(!empty($search['for_month'])){
     		$where.=' AND s.for_month='.$search['for_month'];
     	}
+		if(!empty($search['sort_degree'])){
+    		$where.=' AND g.degree in('.$search['sort_degree'].')';
+    	}
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("s.branch_id");
     	
 		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC ";
-		//echo $sql.$where.$orderBy; exit();
+		//echo $sql.$where.$orderBy; //exit();
 		$scoreInfo = $db->fetchAll($sql.$where.$orderBy);
 
 		$resultInfo = array();
 		if(!empty($scoreInfo)){
 			foreach($scoreInfo as $key=>$rs){
-				
 				$data['degree']=$rs['degree'];
-
 				$rsMention=$this->getCountStudentScore($data);
 				$resultInfo[$key] = array_merge($rs,$rsMention);
 			
 			}
+		}else{
+			return $scoreInfo;
 		}
 		return $resultInfo ;
     	

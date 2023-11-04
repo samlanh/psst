@@ -531,6 +531,25 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				2=>$this->tr->translate("DEBT_STOCK"));
 		$_cut_stock_type->setMultiOptions($_stock_opt);
 		$_cut_stock_type->setValue($request->getParam("cut_stock_type"));
+
+		
+		$_sort_degree = new Zend_Dojo_Form_Element_FilteringSelect('sort_degree');
+		$_sort_degree->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("DEGREE"),
+		));
+		$_sort_dg_opt = array(
+
+				''=>$this->tr->translate("ALL"),
+				'2,3'=>$this->tr->translate("Junior-Senior"),
+				
+			);
+		$_sort_degree->setMultiOptions($_sort_dg_opt);
+		$_sort_degree->setValue($request->getParam("sort_degree"));
+
+	
 		
 		
 		$this->addElements(array(
@@ -567,7 +586,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_result_status,
 				$_register_status,
 				$_student_group_status,
-				$_cut_stock_type
+				$_cut_stock_type,
+				$_sort_degree
 				)
 			);
 		return $this;

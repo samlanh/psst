@@ -293,7 +293,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
-   public function getStundetScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
+   public function getStundentScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
+   	//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/
    	$db = $this->getAdapter();
    	$_db = new Application_Model_DbTable_DbGlobal();
    	$lang = $_db->currentlang();
@@ -312,46 +313,49 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}
 
    	$sql="SELECT
-		   	s.`id`,
-		   	st.`stu_id`,
-		   	g.`branch_id`,
+		   	
 		   	(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
 			(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh,
 			(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameEng,
-		   	s.`group_id`,
+			
+		    g.`branch_id`,
 		   	g.`group_code`,
-		   	s.for_academic_year,
 		   	`g`.`degree` as degree_id,
+		   	`g`.`semester` AS `semester`,
 			
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
 			(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS start_year,
 			(SELECT ac.toYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS end_year,
-		  
 			(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
 		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-		   	`g`.`semester` AS `semester`,
-		   	
-		   	
 		   	(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
 		   	(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
-		   	sm.`student_id`,
+
+		   	
+		   	CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,
+		   	st.`stu_id`,
+		   	st.`sex`,
+		   	st.photo,
 		   	st.`stu_code`,
 		   	st.stu_khname,
 		   	st.last_name,
 		   	st.stu_enname,
-		   	CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,
-		   	st.`sex`,
-		   	st.photo,
-		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
-		   	s.exam_type,
-		   	s.for_semester,
-		   	s.for_month as for_month_id,
-		   	s.reportdate,
-			s.date_input,
-		   	s.title_score,
-			s.title_score_en,
-		   	s.max_score,
+		   	
+			   	s.`id`,
+			   	s.for_academic_year,
+		   		s.`group_id`,
+		   		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+			   	s.exam_type,
+			   	s.for_semester,
+			   	s.for_month as for_month_id,
+			   	s.reportdate,
+				s.date_input,
+			   	s.title_score,
+				s.title_score_en,
+			   	s.max_score,
+			   	
+			sm.`student_id`,
 		   	sm.total_score,
 		    sm.total_avg,
 		    sm.totalMaxScore,
@@ -410,7 +414,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	$where.= $_db->getAccessPermission('s.branch_id');
    	
    	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
-   	ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
+   				ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,
+   				s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
    	if($limit==2){
    		$limit = " limit 5";
    	}else{
@@ -1511,7 +1516,7 @@ function getExamByExamIdAndStudent($data){
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("s.branch_id");
     	
-		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC ";
+		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
 		$scoreInfo = $db->fetchAll($sql.$where.$orderBy);
 
 		$resultInfo = array();

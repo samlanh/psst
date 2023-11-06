@@ -64,9 +64,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		if ($this->getRequest()->isPost()) {
 			$search = $this->getRequest()->getPost();
-			$result = $db->getStundetScoreResult($search, null, 1);
-			$this->view->studentScoreResult = $result;
+			$isgetId = null;
 		} else {
+			$isgetId = $id ;
 			$row = $db->getScoreExamByID($id);
 			$search = array(
 				'group' => $row['group_id'],
@@ -79,9 +79,11 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'degree' => '',
 				'session' => '',
 			);
-			$result = $db->getStundetScoreResult($search, $id, 1);
-			$this->view->studentScoreResult = $result;
+			
 		}
+		$result = $db->getStundentScoreResult($search, $isgetId, 1);
+		$this->view->studentScoreResult = $result;
+		
 		$this->view->scoreId = $id;
 
 		$this->view->search = $search;
@@ -93,7 +95,6 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$frm = new Application_Form_FrmGlobal();
 		$branch_id = empty($result[0]['branch_id']) ? 1 : $result[0]['branch_id'];
-// 		$this->view->header = $frm->getHeaderReceipt($branch_id);
 		$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
 
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -141,73 +142,26 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$this->view->data = $key->getKeyCodeMiniInv(TRUE);
 	}
 
-	function rptMonthlytranscriptOldAction()
-	{
-		$scoreId = $this->getRequest()->getParam("scoreid");
-		$stu_id = $this->getRequest()->getParam("stuid");
-		if ($this->getRequest()->isPost()) {
-			$data = array(
-				'scoreId' => $scoreId, //use
-				'studentId' => $stu_id, //use and all above not use
-			);
-		} else {
-			if (empty($scoreId)) {
-				Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/score/rpt-score");
-				exit();
-			} elseif (empty($stu_id)) {
-				Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/allreport/score/rpt-score");
-				exit();
-			}
-			$data = array(
-				'scoreId' => $scoreId, //use
-				'studentId' => $stu_id, //use and all above not use
-			);
-		}
-		$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
-		$resultData = $dbscore->getTranscriptExam($data);
-		$this->view->resultData = $resultData;
-
-		$this->view->search = $data;
-		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-
-		$group = $db->getAllGroupOfStudent($data['studentId']);
-		$this->view->group = $group;
-
-		$db = new Application_Model_DbTable_DbGlobal();
-		$this->view->month = $db->getAllMonth();
-	}
 	function rptMonthlytranscriptAction()
 	{
 
-		$id = $this->getRequest()->getParam("id");
+		$scoreId = $this->getRequest()->getParam("id");
 		$stu_id = $this->getRequest()->getParam("stu_id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		
-		$row = $db->getScoreExamByID($id);
 		$search = array(
-				'group' => $row['group_id'],
-				'study_year' => $row['for_academic_year'],
-				'exam_type' => $row['exam_type'],
-				'branch_id' => $row['branch_id'],
-				'for_month' => $row['for_month'],
-				'for_semester' => $row['for_semester'],
-				'grade' => '',
-				'degree' => '',
-				'session' => '',
-				
+				'scoreId'=>empty($scoreId)?0:$scoreId
 		);
 		if(!empty($stu_id)){
-			$search=array(
-				'stu_id' => $stu_id,
-			);
+			$search['stu_id']=$stu_id;
 		}
 		
-		$result = $db->getStundetScoreResult($search, $id, 1);
+		$result = $db->getStundentScoreResult($search, $scoreId, 1);
 		$this->view->studentScoreResult = $result;
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
-		$this->view->grading = $db->getGradingSystem($result[0]['degree_id']);
+		$this->view->grading = $db->getGradingSystem(@$result[0]['degree_id']);
 	}
 
 	function certificateLetterofpraisenewAction()
@@ -248,7 +202,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		$studentgroup = $db->getStundetScoreResult($search, $id);
+		$studentgroup = $db->getStundentScoreResult($search, $id);
 		$this->view->studentgroup = $studentgroup;
 
 		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
@@ -284,7 +238,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		$this->view->studentgroup = $db->getStundetScoreResult($search, $id, 2);
+		$this->view->studentgroup = $db->getStundentScoreResult($search, $id, 2);
 
 		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
 

@@ -41,6 +41,8 @@ $monthENG = array(
 );
 $template = SCORE_RESULT_TEMPLATE;
 $branchInfo = $this->branchInfo;
+$principalInfo = $this->principalInfo;
+$academicStaffInfo = $this->academicStaffInfo;
 ?>
 <style>
 .hover:hover{ background:#ccc;}
@@ -992,7 +994,7 @@ tbody#table_row tr {
 					<tr>
 						<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
 							<div class="seenApproved">បានឃើញ និងឯកភាព
-								<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+								<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
 							</div>
 						</td>
 						<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
@@ -1017,31 +1019,31 @@ tbody#table_row tr {
 					</tr>
 					<tr>
 						<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
-						<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">ការិយាល័យផ្នែកសិក្សាធិការ</td>
+						<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"><?php echo $academicStaffInfo['positionkh']; ?></td>
 						<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
 					</tr>
 					<tr>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 							<div class="principalStamp" id="principalStamp" style="display:none;">
 								<div class="stamp" >
-									<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
+									<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['stamp']; ?>"  />
 									<div class="signature">
-										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
+										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['signature']; ?>" />
 									</div>
 									<div class="principalName">
-										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $principalInfo['duty_namekh'] ?></span>
 									</div>
 								</div>
 							</div>
 						</td>
 					
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-							<?php if (!empty($branchInfo['administration_signature'])) { ?>
-								<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
+							<?php if (!empty($academicStaffInfo['signature'])) { ?>
+								<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $academicStaffInfo['signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 							<?php } else { ?>
 								<div id="administrator" style="height: 100px;"></div>
 							<?php } ?>
-							<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
+							<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $academicStaffInfo['duty_namekh']; ?></span>
 						</td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 							<?php if (!empty($rs['teacher_sigature'])) { ?>

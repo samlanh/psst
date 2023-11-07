@@ -166,7 +166,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 					g.group_code AS groupCode,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) as academicYearLabel,
 					g.academic_year as academicYearId,
-					s.branch_id,
+					g.branch_id,
 					s.id as scoreId,
 					s.group_id,
 					s.title_score_en,

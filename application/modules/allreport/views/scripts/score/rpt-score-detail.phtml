@@ -570,7 +570,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										<tr>
 											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
 												<div class="seenApproved">បានឃើញ និងឯកភាព
-													<span class="interimPrincipal"><?php echo $branch_info['principal']; ?></span>
+													<span class="interimPrincipal"><?php echo $this->principalInfo['positionkh']; ?></span>
 												</div>
 											</td>
 											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
@@ -602,12 +602,12 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 												<div class="principalStamp" id="principalStamp" style="display:none;">
 													<div class="stamp" >
-														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['stamp']; ?>"  />
+														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $this->principalInfo['stamp']; ?>"  />
 														<div class="signature">
-															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branch_info['signature']; ?>" />
+															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $this->principalInfo['signature']; ?>" />
 														</div>
 														<div class="principalName">
-															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branch_info['deputy_principal'] ?></span>
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $this->principalInfo['duty_namekh'] ?></span>
 														</div>
 													</div>
 												</div>

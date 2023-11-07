@@ -226,7 +226,7 @@
 
 									@media print{
 										@page{
-											margin:0.5cm 0.7cm 0.5cm 0.7cm;
+											margin:0.5cm 0.7cm 0.2cm 0.7cm;
 											page-break-before: avoid;
 											-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
 											-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
@@ -451,12 +451,12 @@
 							<tr class='hover padding context-menu-one' style="font-size:12px; height: 28px; font-weight: bold; background: #e3e3e3;font-family:'Times New Roman','Khmer OS Battambang'" align="center">
 								<td  colspan="3" align="center"><?php echo $tr->translate("TOTAL").' '.$oldDegreeName;?>:</td>
 								<td><?php echo $totalDegreeStu ?></td>
-								<td><span class="separateColumn passedDegree"><?php echo $totalGradeA;?></span><?php echo $Total_Grade_A_Percent.' %'; ?></td>
-								<td><span class="separateColumn passedDegree"><?php echo $totalGradeB;?></span><?php echo $Total_Grade_B_Percent.' %'; ?></td>
-								<td><span class="separateColumn passedDegree"><?php echo $totalGradeC; ?></span><?php echo $Total_Grade_C_Percent.' %'; ?></td>
-								<td><span class="separateColumn passedDegree"><?php echo $totalGradeD; ?></span><?php echo $Total_Grade_D_Percent.' %'; ?></td>
-								<td><span class="separateColumn passedDegree"><?php echo $totalGradeE; ?></span><?php echo $Total_Grade_E_Percent.' %';?></td>
-								<td><span class="separateColumn passedDegree"><?php echo $totalGradeF; ?></span><?php echo $Total_Grade_F_Percent.' %'; ?></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeA;?></span><span class="separateColumn passedDegree"><?php echo $Total_Grade_A_Percent.' %'; ?></span></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeB;?></span><span class="separateColumn passedDegree"><?php echo $Total_Grade_B_Percent.' %'; ?></span></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeC; ?></span><span class="separateColumn passedDegree"><?php echo $Total_Grade_C_Percent.' %'; ?></span></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeD; ?></span><span class="separateColumn passedDegree"><?php echo $Total_Grade_D_Percent.' %'; ?></span></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeE; ?></span><span class="separateColumn passedDegree"><?php echo $Total_Grade_E_Percent.' %';?></span></td>
+								<td><span class="separateColumn passedDegree"><?php echo $totalGradeF; ?></span><span class="separateColumn passedDegree"><?php echo $Total_Grade_F_Percent.' %'; ?></span></td>
 							</tr> 
 							<?php
 							  $totalDegreeStu=0;
@@ -526,15 +526,15 @@
 								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeE;?></span><span class="separateColumn"><?php echo $Total_Grade_E_Percent.'%';?></span></td>
 								<td ><span class="separateColumn passedDegree"><?php echo $totalGradeF;?></span><span class="separateColumn"><?php echo $Total_Grade_F_Percent.'%'; ?></span></td>
 							</tr> 
-							<tr class='hover padding context-menu-one' style="font-size:14px; height: 28px;  background: #ccd9ff;font-family: 'Times New Roman' , 'Khmer OS Muol Light';" align="center">
+							<tr class='hover padding context-menu-one' style="font-size:12px; height: 30px;font-weight: bold;  background: #ccd9ff;font-family: 'Times New Roman' , 'Khmer OS Battambang';" align="center">
 								<td  colspan="3" align="center"><?php echo $tr->translate("TOTLE_AMOUNT");?>:</td>
 								<td ><?php echo $grandTotal; ?></td>
-								<td ><span class="separateColumn"><?php echo $grandTotalA;?></span><span class="separateColumn"><?php echo number_format($grandTotalA/$grandTotal*100,2).'%'; ?></span></td>
-								<td ><span class="separateColumn"><?php echo $grandTotalB;?></span><span class="separateColumn"><?php echo number_format($grandTotalB/$grandTotal*100,2).'%'; ?></span></td>
-								<td ><span class="separateColumn"><?php echo $grandTotalC;?></span><span class="separateColumn"><?php echo number_format($grandTotalC/$grandTotal*100,2).'%'; ?></span></td>
-								<td ><span class="separateColumn"><?php echo $grandTotalD;?></span><span class="separateColumn"><?php echo number_format($grandTotalD/$grandTotal*100,2).'%'; ?></span></td>
-								<td ><span class="separateColumn"><?php echo $grandTotalE;?></span><span class="separateColumn"><?php echo number_format($grandTotalE/$grandTotal*100,2).'%';?></span></td>
-								<td ><span class="separateColumn"><?php echo $grandTotalF;?></span><span class="separateColumn"><?php echo number_format($grandTotalF/$grandTotal*100,2).'%'; ?></span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalA;?></span><span class="separateColumn"><?php echo number_format($grandTotalA/$grandTotal*100,2).'%'; ?>&nbsp;</span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalB;?></span><span class="separateColumn"><?php echo number_format($grandTotalB/$grandTotal*100,2).'%'; ?>&nbsp;</span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalC;?></span><span class="separateColumn"><?php echo number_format($grandTotalC/$grandTotal*100,2).'%'; ?>&nbsp;</span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalD;?></span><span class="separateColumn"><?php echo number_format($grandTotalD/$grandTotal*100,2).'%'; ?>&nbsp;</span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalE;?></span><span class="separateColumn"><?php echo number_format($grandTotalE/$grandTotal*100,2).'%';?>&nbsp;</span></td>
+								<td ><span class="separateColumn"><?php echo $grandTotalF;?></span><span class="separateColumn"><?php echo number_format($grandTotalF/$grandTotal*100,2).'%'; ?>&nbsp;</span></td>
 							</tr> 
 							<?php  } ?>
 						

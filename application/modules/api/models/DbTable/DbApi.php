@@ -1907,7 +1907,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	
     	
     	
-    	public function getStundetScoreResult($id=null){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
+    	public function getScoreResult($id=null){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត
     		$db = $this->getAdapter();
     		$_db = new Application_Model_DbTable_DbGlobal();
     		$lang = $_db->currentlang();

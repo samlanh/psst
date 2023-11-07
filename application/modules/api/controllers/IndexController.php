@@ -287,7 +287,7 @@ class Api_IndexController extends Zend_Controller_Action
 	   		$id=$this->getRequest()->getParam("id");
 	   		$dbApi = new Api_Model_DbTable_DbApi();
 	   		 
-	   		$result = $dbApi->getStundetScoreResult($id);
+	   		$result = $dbApi->getScoreResult($id);
 	   		$this->view->studentgroup = $result;
 	   	}
 	   		

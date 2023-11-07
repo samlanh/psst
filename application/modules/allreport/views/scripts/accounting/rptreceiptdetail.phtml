@@ -182,12 +182,9 @@ function setDatatoReceipt(){
 					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo '<span class="spanBlog">'.$rs['start_date'].'</span>'; echo empty($rs['validate'])?"":'<span class="spanBlog">'.$rs['validate'].'</span>';}else{echo'&nbsp;';}?>';	
 							  				  
 					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</span></td>';
-					  note = '<?php echo addslashes($rs['note']);?>';
-					  var div = document.getElementById('noteContent');
 					  var htmlString = $( '#noteContent'+'<?php echo $key;?>').html();
- 
   
-					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">'+htmlString+'</td>';
+					  temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;white-space: pre-line;text-align:left;">'+htmlString+'</td>';
 					  temp+='</tr>';
 					  i++;
 					<?php } ?>

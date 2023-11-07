@@ -35,6 +35,14 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 	</div>
 	<div id="divPrint">
 		<style type="text/css">
+			body{
+			    min-height: 100vh;
+			    display: flex;
+			    flex-direction: column;
+			}
+			footer{
+			    margin-top: auto;
+			}
 			table.header,table.khmerFont,
 			table.studentInfo {
 				page-break-inside: auto;
@@ -83,7 +91,11 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			}
 
 			.teacherComment {
-				min-height: 50px;
+				min-height: 80px;
+				border:1px solid #000;
+			}
+			.SingleBorder{
+				border:1px solid #000;
 			}
 
 			.border-none {
@@ -119,15 +131,23 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				page-break-inside: always;
 				page-break-before: always;
 			}
-			ul.overallScore{width: 100%;padding:0;margin: 0;}
-			ul.overallScore li{
-				float: left;
-				border-left:1px solid #000;
-				list-style: none;
+			
+			td.separateColumn{
+				width:33%;
 				font-weight: bold;
-				color:red;
 				white-space: nowrap;
-				width: 33.32%;
+				color:red;
+				border-right:1px solid #a4a4a4;
+				font-size:14px;
+				text-align: center;
+				background:#ccc;
+			}
+			#footer {
+			   position:absolute;
+			   bottom:0;
+			   width:100%;
+			   height:60px;   /* Height of the footer */
+			   background:#6cf;
 			}
 
 			@media print {
@@ -161,10 +181,6 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 						$dbscore = new Allreport_Model_DbTable_DbScoreTranscript();
 						$resultData = $dbscore->getTranscriptExam($data);
 					
-						$db = new Allreport_Model_DbTable_DbRptStudentScore();
-						$group = $db->getAllGroupOfStudent($data['studentId']);
-						//$this->view->group = $group;
-
 						$studentInfo = $resultData['studentInfo'];
 						$scoreSubjectList = $resultData['scoreSubjectInfo'];
 						$evalueationList = $resultData['EvalueationList'];
@@ -216,15 +232,15 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<td colspan="3" align="center">
 						<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:14px;margin-bottom:10px;">
 							<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] : "SEMESTER " . $scoreInfo['for_semester']; 
-									$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))?$scoreInfo['title_score'] :$scoreTitle;
+									$resultTitle=(!empty($scoreInfo['title_score']))?$scoreInfo['title_score'] :$scoreTitle;
 
 								?>
 								<?php 
 									$scoreTitle = ($scoreInfo['exam_type'] == 1) ? strtoupper($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
-									$resultTitleEn=(!empty($scoreInfo['forMonthKhLabel']))? strtoupper($scoreInfo['title_score_en']) :$scoreTitle;
+									$resultTitleEn=(!empty($scoreInfo['title_score_en']))? strtoupper($scoreInfo['title_score_en']) :$scoreTitle;
 
 								?>
-							<span class="circleHeader">របាយការណ៍ប្រចាំ <?php echo $resultTitle;?></span>
+							<span class="circleHeader">របាយការណ៍ប្រចាំខែ<?php echo $resultTitle;?></span>
 							<strong>REPORT FOR <?php echo $resultTitleEn;?></strong>
 						</div>
 						<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;">
@@ -261,7 +277,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel" valign="top">
-						<table class="header" cellpadding="2" ​ border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
+						<table class="header" ​ border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
 							<?php
 							$totalAveragescore = 0;
 							$totalMaxScore = 0;
@@ -289,18 +305,15 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 												<td class="border-right-none"></td>
 												<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
 												<td colspan="2" align="center">
-													<ul class="overallScore">
-														<li><?php
-															$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-															echo number_format($totalKhmerAverage, 2); ?>
-														</li>
-														<li><?php echo $scoreInfo['rankingInKhmer']; ?>
-														</li>
-														<li><?php 
-																echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); 
-															?>
-														</li>
-													</ul>
+													<table width="100%">
+														<tr>
+															<td class="separateColumn">
+																<?php $totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject; echo number_format($totalKhmerAverage, 2); ?>
+															</td>
+															<td class="separateColumn"><?php echo $scoreInfo['rankingInKhmer']; ?></td>
+															<td class="separateColumn"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore);?></td>
+														</tr>
+													</table>
 												</td>
 											</tr>
 										<?php
@@ -388,40 +401,38 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								<td class="border-right-none"></td>
 								<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
 								<td colspan="2" align="center">
-									<ul class="overallScore">
-										<li><?php
-											$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-											echo number_format($totalKhmerAverage, 2); ?>
-										</li>
-										<li><?php echo $scoreInfo['rankingInKhmer']; ?>
-										</li>
-										<li><?php 
-												echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); 
-											?>
-										</li>
-									</ul>
+									<table width="100%">
+										<tr>
+											<tr>
+												<td class="separateColumn">
+													<?php
+														$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
+														echo number_format($totalKhmerAverage, 2); ?>
+												</td>
+												<td class="separateColumn"><?php echo $scoreInfo['rankingInKhmer']; ?></td>
+												<td class="separateColumn"><?php 
+														echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); 
+													?>
+												</td>
+											</tr>
+									</table>
 								</td>
 							</tr>
-							
-							<tr class="style hover doubleBorder" style=" font-size:13px;">
-								<td colspan="8" align="center" class=" khmerBoldFont">
-									ពិន្ទុសរុបកម្មវិធីខ្មែរ និងអង់គ្លេស Overall Grade Point for Khmer and English Programs
-								</td>
-							</tr>
+							<!-- 
 							<tr class="style hover">
 								<td colspan="5" align="center" class=" khmerBoldFont">
 									ពិន្ទុសរុប Total Grade Point
 								</td>
-								<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
-								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+								<td class="" align="center">&nbsp;<strong><?php //echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
+								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php //echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
+								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php //echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							</tr>
 							<tr class="style hover">
 								<td colspan="5" align="center" class=" khmerBoldFont">
 									មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 								</td>
-								<td class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
-							</tr>
+								<td class="" align="center">&nbsp;<strong><?php //echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
+							</tr> -->
 						</table>
 					</td>
 				</tr>
@@ -448,7 +459,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 								'attStatus' => 3,
 							);
 							$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
-							echo $dbAttendance->countAttendenceTranscript($data); 
+							echo count($dbAttendance->countAttendenceTranscript($data)); 
 						?>&nbsp;</td>
 						<td align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
 						<td  align="center">&nbsp;<?php
@@ -458,22 +469,22 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<tr class="style hover">
 						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unexcused Absence&nbsp;</td>
 						<td align="center" class="">&nbsp;<?php
-																		$data['attStatus'] = 2;
-																		echo $dbAttendance->countAttendenceTranscript($data) ?>&nbsp;</td>
+								$data['attStatus'] = 2;
+								echo count($dbAttendance->countAttendenceTranscript($data)) ?>&nbsp;</td>
 						<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
 						<td align="center">&nbsp;<?php
-																		$data['attStatus'] = 2;
-																		echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
+								$data['attStatus'] = 2;
+								echo ($dbAttendance->countDisplineTranscript($data)); ?>&nbsp;</td>
 					</tr>
 					<tr class="style hover">
 						<td align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
 						<td align="center" class="">&nbsp;<?php
-																		$data['attStatus'] = 4;
-																		echo $dbAttendance->countAttendenceTranscript($data); ?>&nbsp;</td>
+								$data['attStatus'] = 4;
+								echo count($dbAttendance->countAttendenceTranscript($data)); ?>&nbsp;</td>
 						<td align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
 						<td align="center">&nbsp;<?php
-																		$data['attStatus'] = 3;
-																		echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
+								$data['attStatus'] = 3;
+								echo ($dbAttendance->countDisplineTranscript($data)); ?>&nbsp;</td>
 					</tr>
 				</table>
 				
@@ -539,49 +550,65 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<?php } ?>
 			</table>
 			<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-				<tr align="left">
-					<td colspan="6" class=" khmerBoldFont">&nbsp;មតិយោបល់របស់មាតាបិតា និងសំណូមពរ /PARENT'S COMMENT AND SUGGESTION:</td>
+				<tr class="SingleBorder cheader">
+					<td colspan="6" align="center">&nbsp;<span >មតិយោបល់របស់គ្រូ និងសំណូមពរ / TEACHER'S COMMENTS AND SUGESTION</span>
+					</td>
 				</tr>
-				<?php for ($i = 0; $i <= 3; $i++) { ?>
-					<tr class="borderBottom">
-						<td colspan="6" class="borderBottom">&nbsp;</td>
-					</tr>
-				<?php } ?>
-				<tr>
-					<td class="borderSolidBottom" width="30%">&nbsp;</td>
-					<td colspan="4">&nbsp;</td>
-					<td class="borderSolidBottom" width="30%">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="borderSolidBottom ">&nbsp;ហត្ថលេខាមាតាបិតា Parent's Signature</td>
-					<td colspan="4" class="borderSolidBottom">&nbsp;</td>
-					<td class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
-				</tr>
-				<tr>
-					<td colspan="6">&nbsp;<span class="">សេចក្តីសង្កេតទូទៅរបស់គ្រូបន្ទុកថ្នាក់​ TEACHER'S GENERAL COMMENT:</span>
+				<tr >
+					<td colspan="6" align="center">
 						<div class="teacherComment">
 							<?php echo $teacherComment; ?>
 						</div>
 					</td>
 				</tr>
-				<tr height="100px;">
-					<td class="borderSolidBottom ">&nbsp;</td>
-					<td colspan="4">&nbsp;</td>
-					<td class="borderSolidBottom ">&nbsp;</td>
+				<tr align="left">
+					<td colspan="6" class=" khmerBoldFont">&nbsp;មតិយោបល់របស់មាតាបិតា និងសំណូមពរ /PARENT'S COMMENT AND SUGGESTION:</td>
 				</tr>
-				<tr height="100px;">
-					<td valign="top" class="borderSolidBottom ">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
+				<?php for ($i = 0; $i <= 2; $i++) { ?>
+					<tr class="borderBottom">
+						<td colspan="6" class="borderBottom">&nbsp;</td>
+					</tr>
+				<?php } ?>
+				<tr>
+					<td class="" width="30%">&nbsp;</td>
 					<td colspan="4">&nbsp;</td>
-					<td valign="top" class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
+					<td class="" width="30%">&nbsp;</td>
 				</tr>
 				<tr>
-					<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
-					<td colspan="4">&nbsp;</td>
-					<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
+					<td>&nbsp;កាលបរិច្ឆេទ / Date:......./......./.......</td>
+					<td colspan="4" class="">&nbsp;</td>
+					<td>&nbsp;កាលបរិច្ឆេទ / Date:......./......./.......</td>
 				</tr>
+				<tr height="100px;">
+					<td class="borderSolidBottom ">&nbsp;</td>
+					<td colspan="4">&nbsp;</td>
+					<td class="borderSolidBottom ">&nbsp;</td>
+				</tr>
+				<tr height="40px;">
+					<td valign="top">&nbsp; ហត្ថលេខាមាតាបិតា Parent's Signature</td>
+					<td colspan="4">&nbsp;</td>
+					<td valign="top">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
+				</tr>
+				<tr height="130px;">
+					<td valign="top" class="borderSolidBottom khmerBoldFont">&nbsp;បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
+					<td colspan="4">&nbsp;</td>
+					<td valign="top" class="borderSolidBottom ">&nbsp;<strong>បានពិនិត្យត្រឹមត្រូវ / Checked</strong></td>
+				</tr>
+				<tr >
+					<td>&nbsp;នាយករង / VICE PRINCIPLE</td>
+					<td colspan="4">&nbsp;</td>
+					<td>&nbsp;ការិយាល័យសិក្សា / Academic Office</td>
+				</tr>
+				<tfoot>
+					<tr>
+						<td>
+							
+						</td>
+					</tr>
+				</tfoot>
 			</table>
 		<?php } ?>
-
-		<?php	}}?>
+		
+		<?php }}?>
 	</div>
 </div>

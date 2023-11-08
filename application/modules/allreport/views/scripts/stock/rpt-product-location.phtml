@@ -162,7 +162,7 @@ table.tb-footer tr.style-head {
 							<thead>
 								<tr class="style" align="center">
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-									<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
+									<td scope="col" colspan="4">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
 									<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("STOCK_INFO");?>&nbsp;</td>
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("DATE");?>&nbsp;</td>
 									<?php if($show_image==1){?>
@@ -175,6 +175,7 @@ table.tb-footer tr.style-head {
 									<td scope="col">&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('PRODUCT_CODE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
@@ -198,6 +199,7 @@ table.tb-footer tr.style-head {
 							    <td data-label="<?php echo $tr->translate("PRODUCT_CODE");?>"><?php echo $rs['pro_code'];?></td>
 							    <?php //$url_barcode = $this->url(array("module"=>"allreport","controller"=>"accounting","action"=>"generate-barcode","pro_code"=>$rs['pro_code']),null,true); ?>
 							    <td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left">&nbsp;<?php echo $rs['pro_name'];?></td>
+								<td data-label="<?php echo $tr->translate("TYPE");?>" align="left">&nbsp;<?php echo $rs['product_type'];?></td>
 							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo number_format($rs['pro_qty'],0); ?></td>
 							    <td data-label="<?php echo $tr->translate("UNIT_PRICE");?>"><?php echo number_format($rs['costing'],2);?></td>
 							    <td data-label="<?php echo $tr->translate("TOTAL");?>"  align="right"><?php echo number_format($rs['pro_qty']*$rs['costing'],2);?></td>

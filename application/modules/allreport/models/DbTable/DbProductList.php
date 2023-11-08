@@ -3,7 +3,7 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
 {
     function getProductLocation($search=null){
     	$db=$this->getAdapter();
-    	
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$level = $_db->getUserType();
     	$lang = $_db->currentlang();
@@ -30,6 +30,10 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     				$grade AS pro_name ,
     				(SELECT $degree FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS category_name,
     	            (SELECT $branch FROM rms_branch WHERE rms_branch.br_id=pl.branch_id LIMIT 1) AS brand_name,
+					CASE    
+					WHEN p.product_type = 1 THEN '".$tr->translate("PRODUCT_FOR_SELL")."'
+					WHEN p.product_type = 2 THEN '".$tr->translate("OFFICE_MATERIAL")."'
+					END AS product_type,
     	            pl.branch_id,
     				pl.pro_qty,
     				pl.note,

@@ -337,7 +337,7 @@ tbody#table_row tr {
 									<tr class="style style-rowdata hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id']; ?>','<?php echo $rs['stu_id']; ?>','<?php echo $i; ?>','<?php echo $rs['group_id']; ?>','<?php echo $rs['exam_type']; ?>','<?php echo $rs['for_semester']; ?>','<?php echo $rs['for_month_id']; ?>');return false;">
 										<td align="center"><?php echo $i; ?></td>
 										<td align="center" style="white-space:nowrap;">
-											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
+											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/id/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
 										</td>
 										<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id == 1) ? trim($rs['stu_khname']) : trim($rs['stu_enname']); ?>&nbsp;</td>
 										<td align="center" class="bg_<?php echo $rs['sex']; ?>">&nbsp;<?php echo $sex; ?>&nbsp;</td>
@@ -823,7 +823,7 @@ tbody#table_row tr {
 										</td>
 										<td align="center"><?php echo $i; ?></td>
 										<td align="center" style="white-space:nowrap;">
-											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
+											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/id/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
 										</td>
 										<td style="min-width:100px;">
 											<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span>

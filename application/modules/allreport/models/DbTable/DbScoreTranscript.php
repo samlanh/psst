@@ -217,7 +217,20 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract{
 						GROUP BY sd.`student_id`
 					) AS StGroupconcateKH)) AS rankingInEnglish,
 				 
-
+				
+					 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =3
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =3
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)) AS rankingInChinese,
 				 
 				 
 				 (SELECT sm.total_avg 

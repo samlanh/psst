@@ -20,7 +20,6 @@
 					}
 					<?php 
 					$expiredDate = '';
-					print_r($this->groupByBranchAndSchool);
 					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 						$imagepick = $this->baseUrl().'/images/card/default_card_bg.jpg';
 						$bgpick = $_dbgb->getPickupCardBackground($bck['branch_id'],$bck['schoolOption']);
@@ -32,7 +31,7 @@
 							}
 						}
 						?>
-					.card-content-student-printpickup<?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
+					.card-content-student-printpickup <?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
 						background-image: url('<?php echo $imagepick;?>');
 						background-size: 100%;background-repeat: no-repeat;					
 					}

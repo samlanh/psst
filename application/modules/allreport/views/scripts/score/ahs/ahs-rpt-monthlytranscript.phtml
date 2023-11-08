@@ -189,6 +189,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 						$forMonthId = $scoreInfo['for_month'];
 						$academicId = $scoreInfo['academicYearId'];
 						$forSemester = $scoreInfo['for_semester'];
+						$degreeId = $scoreInfo['degreeId'];
 						$branchId = $scoreInfo['branch_id'];
 
 						$break_page = "pages-break";
@@ -310,7 +311,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 															<td class="separateColumn">
 																<?php $totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject; echo number_format($totalKhmerAverage, 2); ?>
 															</td>
-															<td class="separateColumn"><?php echo $scoreInfo['rankingInKhmer']; ?></td>
+															<td class="separateColumn"><?php echo getRankingBySubjectLangId($scoreInfo,$currentLang); ?></td>
 															<td class="separateColumn"><?php echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore);?></td>
 														</tr>
 													</table>
@@ -409,7 +410,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 														$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
 														echo number_format($totalKhmerAverage, 2); ?>
 												</td>
-												<td class="separateColumn"><?php echo $scoreInfo['rankingInKhmer']; ?></td>
+												<td class="separateColumn"><?php echo getRankingBySubjectLangId($scoreInfo,$currentLang); ?></td>
 												<td class="separateColumn"><?php 
 														echo $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore); 
 													?>
@@ -418,21 +419,15 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									</table>
 								</td>
 							</tr>
-							<!-- 
-							<tr class="style hover">
-								<td colspan="5" align="center" class=" khmerBoldFont">
-									ពិន្ទុសរុប Total Grade Point
+							<tr class="style hover cheader">
+								<td rowspan="2" colspan="4" align="center">
+									ពិន្ទុសរុប មធ្យមភាគ និងចំណាត់ថ្នាក់ Total Score Average  Rank
 								</td>
-								<td class="" align="center">&nbsp;<strong><?php //echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php //echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
-								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php //echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+								<td rowspan="2" class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
+								<td rowspan="2" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
+								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
+								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							</tr>
-							<tr class="style hover">
-								<td colspan="5" align="center" class=" khmerBoldFont">
-									មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
-								</td>
-								<td class="" align="center">&nbsp;<strong><?php //echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
-							</tr> -->
 						</table>
 					</td>
 				</tr>
@@ -499,7 +494,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					</tr>
 					<?php
 					$ismergRow=0;
-					if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
+					$reGradingResult  = $dbgb->getGradingSystem($degreeId);
+					if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) { 
 						?>
 						<tr align="center">
 						<?php
@@ -608,6 +604,17 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			</table>
 		<?php } ?>
 		
-		<?php }}?>
+		<?php }}
+		function getRankingBySubjectLangId($ResultData,$subjectLangId){
+			$indexResult = array(
+					1=>'rankingInKhmer',
+					2=>'rankingInEnglish',
+					3=>'rankingInChinese',
+					);
+			$resultValue = $indexResult[$subjectLangId];
+			return $ResultData[$resultValue];
+		}
+		
+		?>
 	</div>
 </div>

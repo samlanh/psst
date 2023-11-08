@@ -54,7 +54,6 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     		$s_where[]= " p.cost LIKE '%{$s_search}%'";
     		$s_where[]= " p.price LIKE '%{$s_search}%'";
     		$s_where[]= "  pl.pro_qty LIKE '%{$s_search}%'";
-    		$s_where[]= "  pl.total_amount LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
     	if(!empty($search['location'])){

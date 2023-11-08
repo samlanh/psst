@@ -8,8 +8,8 @@
 	<div data-dojo-type="dijit.Dialog" style="width:22cm;margin: 0 auto;" align="center" data-dojo-props="title:'<?php echo $tr->translate("PAYMENT_RECEIPT");?>'" id="print_pickup_card" >
 		<div id="PickupCard" style="margin: 0 auto;width:100%;" >
 				<style>
-					/*.card-content-student-printpickup{
-						background-image: url('<?php //echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
+					.card-content-student-printpickup{
+						background-image: url('<?php echo $this->baseUrl().'/images/card/pickup-student-card.png';?>');
 						background-size: 100%;background-repeat: no-repeat;	
 						position: relative;			
 						display:inline-block;	
@@ -17,7 +17,7 @@
 						border:solid 1px #eee;
 						width: 14.5cm; 
 						height:10.3cm; 	
-					}*/
+					}
 					<?php 
 					$expiredDate = '';
 					if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
@@ -31,15 +31,9 @@
 							}
 						}
 						?>
-					.card-content-student-printpickup<?php //echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
+					.card-content-student-printpickup <?php echo ".card".$bck['branch_id']."card".$bck['schoolOption'];?>{	
 						background-image: url('<?php echo $imagepick;?>');
-						background-size: 100%;background-repeat: no-repeat;	
-						position: relative;			
-						display:inline-block;	
-						float:left;					
-						border:solid 1px #eee;
-						width: 14.5cm; 
-						height:10.3cm; 					
+						background-size: 100%;background-repeat: no-repeat;					
 					}
 				<?php }?>
 				.profile-card-block .student-photo {
@@ -91,7 +85,7 @@
 			<?php 			
 				$i=0;
 				if(!empty($this->rs)){foreach ($this->rs as $key => $row){?>
-				<div class="card-content-student-printpickup <?php //echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
+				<div class="card-content-student-printpickup <?php echo "card".$row['branch_id']."card".$row['schoolOption'];?>" style=" <?php if($key==0 || $key==1){ echo "margin-top:-5px;";}else{ echo "margin-top:4px;";} ?> line-height: 16.285px;    color: #3f3f95; font-family: 'Times New Roman', sans-serif,'Kh Battambang','Khmer Battambang'; ">
 					<?php 
 						$image = $this->baseUrl().'/images/no-profile.png';
 						
@@ -155,7 +149,7 @@
 					</div>
 					<div class="expired_bg">
 						<div class="lblexpired">
-							Expiration Date: <?php echo date('d-m-Y',strtotime($expiredDate));?>
+							Expiration Date: <?php echo date($expiredDate,strtotime("d-m-Y"));?>
 						</div>
 					</div>
 				</div>

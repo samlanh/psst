@@ -892,6 +892,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					gsd.itemType=1 
 					AND sta.type=1
 					AND gsd.status=1
+					AND gsd.stop_type=0
 	    			AND g.`id` = gsd.`group_id`
 				 	AND sta.group_id = g.id 
 				 	AND st.`stu_id` = gsd.`stu_id` 
@@ -1386,6 +1387,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=gds.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
 				(SELECT $degree FROM rms_items WHERE rms_items.id=gds.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 				COUNT(gds.stu_id) AS totalStu,
+				COUNT(if(gds.stop_type = '1', gds.is_newstudent, NULL)) AS stopStudent,
+				COUNT(if(gds.stop_type = '2', gds.is_newstudent, NULL)) AS suspendStudent,
 				COUNT(if(gds.is_newstudent = '1', gds.is_newstudent, NULL)) AS newStudent,
 				COUNT(if(gds.is_newstudent = '0', gds.is_newstudent, NULL)) AS oldStudent,
 				COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) AS stuMale ,

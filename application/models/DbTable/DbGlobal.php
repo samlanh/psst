@@ -3040,7 +3040,7 @@ function getAllgroupStudyNotPass($action=null){
   	
   	$userId = $this->getUserId();
   	
-  	if(empty($teacherId) AND empty($userId)){
+  	if(empty($teacherId) OR empty($userId)){
   		return false;
   	}else{
   		return true;

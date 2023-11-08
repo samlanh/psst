@@ -223,6 +223,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							$where="stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group']." AND grade=".$fromGroupDetail['grade']." AND itemType=1 ";
 							$this->_name='rms_group_detail_student';
 							$this->update($stu, $where);
+							
+							$this->moveCurrentScoreToOtherGroup($_data['from_group'], $_data['groupId'], $_data['stu_id_'.$k]);//move score from current group to new group
 						}
 					}
 				}
@@ -234,6 +236,8 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				);
 				$where=" id=".$_data['groupId'];
 				$this->update($group, $where);
+				
+				
 				
 			}elseif ($_data['change_type']==2){//ឡើងថ្នាក់//done
 				
@@ -374,6 +378,57 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$_db->rollBack();
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 		}
+	}
+	function getScorebyGroup($data){
+		$db = $this->getAdapter();
+		$sql="SELECT * FROM rms_score WHERE 1";
+		if(!empty($data['groupId'])){
+			$sql.=" AND group_id=".$data['groupId'];
+		}
+		if(!empty($data['fetchRow'])){
+			return $db->fetchRow($sql);
+		}else{
+			return $db->fetchAll($sql);
+		}
+	}
+	function moveCurrentScoreToOtherGroup($FromGroupId,$toGroupId,$studentId){
+		$db = $this->getAdapter();
+		$rsScores = $this->getScorebyGroup($FromGroupId);
+		if(!empty($rsScores)){
+			foreach($rsScores as $rsScore){
+				$arr = array(
+						'fetchRow'=>1,
+						'groupId'=>$toGroupId,
+						'exam_type'=>$rsScore['exam_type'],
+						'for_month'=>$rsScore['for_month'],
+						'for_semester'=>$rsScore['for_semester'],
+					);	
+				$rsScoreToGroup = $this->getScorebyGroup($arr);
+				if(!!empty($rsScoreToGroup)){
+					$scoreId = $rsScoreToGroup['id'];
+					$sqlColumn = '
+							gradingTotalId,
+							group_id,
+							student_id,
+							subject_id,
+							score,
+							score_cut,
+							amount_subject,
+							STATUS,
+							note,
+							subjectExam,
+							orgScore ';
+					$sql="
+					INSERT INTO rms_score_detail (score_id,$sqlColumn)
+					SELECT '".$scoreId."',".$sqlColumn."
+							FROM `rms_score_detail`
+							WHERE score_id=".$rsScore['score_id'];
+// 					echo $sql;exit();
+					$db->query($sql);
+				}
+			}
+		}
+		
 	}
 	function updateOldGrouptoFinish($groupId,$stopType=null){
 		$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$groupId;

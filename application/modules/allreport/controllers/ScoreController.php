@@ -81,7 +81,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			);
 			
 		}
-		$result = $db->getStundentScoreResult($search, $isgetId, 1);
+		$result = $db->getStudentScoreResult($search, $isgetId, 1);
 		$this->view->studentScoreResult = $result;
 		
 		$this->view->scoreId = $id;
@@ -168,12 +168,12 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search['stu_id']=$stu_id;
 		}
 		
-		$result = $db->getStundentScoreResult($search, $scoreId, 1);
+		$result = $db->getAllStudentIdByScoreResult($search, $scoreId, 1);
 		$this->view->studentScoreResult = $result;
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
-		$this->view->grading = $db->getGradingSystem(@$result[0]['degree_id']);
+// 		$this->view->grading =array();// $db->getGradingSystem(@$result[0]['degree_id']);
 	}
 
 	function certificateLetterofpraisenewAction()
@@ -214,7 +214,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		$studentgroup = $db->getStundentScoreResult($search, $id);
+		$studentgroup = $db->getStudentScoreResult($search, $id);
 		$this->view->studentgroup = $studentgroup;
 
 		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
@@ -254,7 +254,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		}
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		$this->view->studentgroup = $db->getStundentScoreResult($search, $id, 2);
+		$this->view->studentgroup = $db->getStudentScoreResult($search, $id, 2);
 
 		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
 

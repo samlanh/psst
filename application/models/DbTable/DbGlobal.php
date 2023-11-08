@@ -18,111 +18,163 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		return $lang;
 	}
-	public function getGradingSystem($degreeId){
-		if($degreeId==1){
-			$rs = array(
-				array(
-						'criteria'		=>$this->tr->translate("CLASS PARTICIPATION"),
+	public function getGradingSystem($degreeId,$template=1){//$template1=psis,2=ahs
+		if($template==1){
+			if($degreeId==1){
+				$rs = array(
+					array(
+							'criteria'		=>$this->tr->translate("CLASS PARTICIPATION"),
+							'percent'		=>"15%",
+							'percentage'	=>"90-100%",
+							'grade'			=>"A",
+							'interpretation'=>"ល្អណាស់ Very Good",
+							'achievment'	=>"ប្រសើរជាងគេ Outstanding",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("HOMEWORK AND ASSIGNMENT"),
 						'percent'		=>"15%",
-						'percentage'	=>"90-100%",
-						'grade'			=>"A",
-						'interpretation'=>"ល្អណាស់ Very Good",
-						'achievment'	=>"ប្រសើរជាងគេ Outstanding",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("HOMEWORK AND ASSIGNMENT"),
-					'percent'		=>"15%",
-					'percentage'	=>"80-89%",
-					'grade'			=>"B",
-					'interpretation'=>"ល្អ Good",
-					'achievment'	=>"គួរជាទីពេញចិត្ត Satisfactory",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("QUIZZES"),
-					'percent'		=>"15%",
-					'percentage'	=>"70-79%",
-					'grade'			=>"C",
-					'interpretation'=>"ល្អបង្គួរ Fair",
-					'achievment'	=>"ត្រូវខំប្រឹងតទៅទៀត Needs Improvement",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("MONTHLY TEST"),
-					'percent'		=>$this->tr->translate("55%"),
-					'percentage'	=>"60-69%",
-					'grade'			=>"D",
-					'interpretation'=>"មធ្យម Average",
-					'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
-				),
-				array(
-					'criteria'		=>'',
-					'percent'		=>"",
-					'percentage'	=>"50-59%",
-					'grade'			=>"E",
-					'interpretation'=>"ខ្សោយ Poor",
-					'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
-				),
-				array(
-					'criteria'		=>"",
-					'percent'		=>"",
-					'percentage'	=>"0-49%",
-					'grade'			=>"F",
-					'interpretation'=>"ធ្លាក់ Failed",
-					'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
-				),
-			);
-
-		}else{
-			$rs = array(
-				array(
-						'criteria'		=>$this->tr->translate("Attendance"),
+						'percentage'	=>"80-89%",
+						'grade'			=>"B",
+						'interpretation'=>"ល្អ Good",
+						'achievment'	=>"គួរជាទីពេញចិត្ត Satisfactory",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("QUIZZES"),
+						'percent'		=>"15%",
+						'percentage'	=>"70-79%",
+						'grade'			=>"C",
+						'interpretation'=>"ល្អបង្គួរ Fair",
+						'achievment'	=>"ត្រូវខំប្រឹងតទៅទៀត Needs Improvement",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("MONTHLY TEST"),
+						'percent'		=>$this->tr->translate("55%"),
+						'percentage'	=>"60-69%",
+						'grade'			=>"D",
+						'interpretation'=>"មធ្យម Average",
+						'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
+					),
+					array(
+						'criteria'		=>'',
+						'percent'		=>"",
+						'percentage'	=>"50-59%",
+						'grade'			=>"E",
+						'interpretation'=>"ខ្សោយ Poor",
+						'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+					),
+					array(
+						'criteria'		=>"",
+						'percent'		=>"",
+						'percentage'	=>"0-49%",
+						'grade'			=>"F",
+						'interpretation'=>"ធ្លាក់ Failed",
+						'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+					),
+				);
+	
+			}else{
+				$rs = array(
+					array(
+							'criteria'		=>$this->tr->translate("Attendance"),
+							'percent'		=>"5%",
+							'percentage'	=>"90-100%",
+							'grade'			=>"A",
+							'interpretation'=>"ល្អណាស់ Very Good",
+							'achievment'	=>"ប្រសើរជាងគេ Outstanding",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("Discipline"),
+						'percent'		=>"10%",
+						'percentage'	=>"80-89%",
+						'grade'			=>"B",
+						'interpretation'=>"ល្អ Good",
+						'achievment'	=>"គួរជាទីពេញចិត្ត Satisfactory",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("Book Check/Oral Question"),
 						'percent'		=>"5%",
-						'percentage'	=>"90-100%",
-						'grade'			=>"A",
-						'interpretation'=>"ល្អណាស់ Very Good",
-						'achievment'	=>"ប្រសើរជាងគេ Outstanding",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("Discipline"),
-					'percent'		=>"10%",
-					'percentage'	=>"80-89%",
-					'grade'			=>"B",
-					'interpretation'=>"ល្អ Good",
-					'achievment'	=>"គួរជាទីពេញចិត្ត Satisfactory",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("Book Check/Oral Question"),
-					'percent'		=>"5%",
-					'percentage'	=>"70-79%",
-					'grade'			=>"C",
-					'interpretation'=>"ល្អបង្គួរ Fair",
-					'achievment'	=>"ត្រូវខំប្រឹងតទៅទៀត Needs Improvement",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("Homework"),
-					'percent'		=>$this->tr->translate("15%"),
-					'percentage'	=>"60-69%",
-					'grade'			=>"D",
-					'interpretation'=>"មធ្យម Average",
-					'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("Quiz"),
-					'percent'		=>"15%",
-					'percentage'	=>"50-59%",
-					'grade'			=>"E",
-					'interpretation'=>"ខ្សោយ Poor",
-					'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
-				),
-				array(
-					'criteria'		=>$this->tr->translate("Monthly Exam"),
-					'percent'		=>"50%",
-					'percentage'	=>"0-49%",
-					'grade'			=>"F",
-					'interpretation'=>"ធ្លាក់ Failed",
-					'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
-				),
+						'percentage'	=>"70-79%",
+						'grade'			=>"C",
+						'interpretation'=>"ល្អបង្គួរ Fair",
+						'achievment'	=>"ត្រូវខំប្រឹងតទៅទៀត Needs Improvement",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("Homework"),
+						'percent'		=>$this->tr->translate("15%"),
+						'percentage'	=>"60-69%",
+						'grade'			=>"D",
+						'interpretation'=>"មធ្យម Average",
+						'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("Quiz"),
+						'percent'		=>"15%",
+						'percentage'	=>"50-59%",
+						'grade'			=>"E",
+						'interpretation'=>"ខ្សោយ Poor",
+						'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+					),
+					array(
+						'criteria'		=>$this->tr->translate("Monthly Exam"),
+						'percent'		=>"50%",
+						'percentage'	=>"0-49%",
+						'grade'			=>"F",
+						'interpretation'=>"ធ្លាក់ Failed",
+						'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+					),
+				);
+			}
+		}if($template==2){//ahs
+			$rs = array(
+					array(
+							'criteria'		=>"ការចូលរួម / Class Participation",
+							'percent'		=>"5%",
+							'percentage'	=>"90-100%",
+							'grade'			=>"A",
+							'interpretation'=>"ល្អប្រសើរ / Excellence",
+							'achievment'	=>"ប្រសើរជាងគេ Outstanding",
+					),
+					array(
+							'criteria'		=>"តេស្តខ្លី / Quiz",
+							'percent'		=>"5%",
+							'percentage'	=>"80-89.99%",
+							'grade'			=>"B",
+							'interpretation'=>"ល្អណាស់ / Very Good",
+							'achievment'	=>"គួរជាទីពេញចិត្ត Satisfactory",
+					),
+					array(
+							'criteria'		=>"វត្តមាន / Attendance",
+							'percent'		=>"10%",
+							'percentage'	=>"70-79.99%",
+							'grade'			=>"C",
+							'interpretation'=>"ល្អបង្គួរ / Fair Good",
+							'achievment'	=>"ត្រូវខំប្រឹងតទៅទៀត Needs Improvement",
+					),
+					array(
+							'criteria'		=>"អាកប្បកិរិយា / Behavior",
+							'percent'		=>$this->tr->translate("10%"),
+							'percentage'	=>"60-69.99%",
+							'grade'			=>"D",
+							'interpretation'=>"ល្អ / Good",
+							'achievment'	=>"មិនទាន់ពេញចិត្ត Unsatisfactory",
+					),
+					array(
+							'criteria'		=>"កិច្ចការផ្ទះ / Homework",
+							'percent'		=>"20%",
+							'percentage'	=>"50-59.99%",
+							'grade'			=>"E",
+							'interpretation'=>"មធ្យម /Average",
+							'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+					),
+					array(
+							'criteria'		=>"ប្រឡងប្រចាំខែ / Monthly Test",
+							'percent'		=>"50%",
+							'percentage'	=>"0-49.99%",
+							'grade'			=>"F",
+							'interpretation'=>"ធ្លាក់ / Failed",
+							'achievment'	=>"មិនអនុវត្តកើត Not Applicable",
+					),
 			);
-
 		}
 		
 		return $rs; 

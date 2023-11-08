@@ -294,7 +294,34 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    	}
    	return $db->fetchAll($sql.$where.$order.$limit);
    }
-   public function getStundentScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
+   public function getAllStudentIdByScoreResult($search,$scoreId=null,$limit=0){ // rptMonthlytranscript
+	   	$db = $this->getAdapter();
+	   
+	   	$sql="SELECT
+		   	sm.`student_id` AS stu_id,
+		   	sm.score_id AS id
+	   	FROM
+		   	`rms_score_monthly` AS sm
+	   	WHERE 1 ";
+	   
+	   	if (!empty($scoreId)){
+	   		$sql.=" AND sm.score_id = $scoreId ";
+	    }
+	    if(!empty($search['stu_id'])){
+	   		$sql.=" AND sm.`student_id` IN (".$search['stu_id'].")";
+	    }
+	   	$order = "  GROUP BY 
+	   						sm.score_id,
+	   						sm.`student_id`
+					   		ORDER BY total_score DESC ";
+	   			if($limit==2){
+	   				$limit = " limit 5";
+			   	}else{
+			   		$limit = " ";
+			  	}
+   			return $db->fetchAll($sql.$order.$limit);
+   }
+   public function getStudentScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
    	//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/
    	$db = $this->getAdapter();
    	$_db = new Application_Model_DbTable_DbGlobal();

@@ -176,6 +176,7 @@
 						$forMonthId = $scoreInfo['for_month'];
 						$academicId = $scoreInfo['academicYearId'];
 						$forSemester = $scoreInfo['for_semester'];
+						$degreeId = $scoreInfo['degreeId'];
 
 						$break_page = "pages-break";
 					
@@ -474,7 +475,9 @@
 				</tr>
 				<?php
 				$ismergRow=0;
-				if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
+				
+				$reGradingResult  = $dbgb->getGradingSystem($degreeId);
+				if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) { 
 					?>
 					<tr class="" align="center">
 						
@@ -589,6 +592,4 @@
 			$("#month").css("display", "none");
 		}
 	}
-
-	
 </script>

@@ -408,7 +408,7 @@ function deleteRecord(index) {
 var template1 = '';
 var col1 = 0;
 var no1 = 0;
-tmp1 = '';
+var tmp1 = '';
 function addRowComment(){ 
 	comment=dijit.byId("comment").get("value");
 	label_comment = dijit.byId("comment").attr('displayedValue');
@@ -428,11 +428,15 @@ function addRowComment(){
 	}
 	template1='';
 	col1++;no1++;
+	alert(col1);
+	alert(no1);
+	alert(template1);
 	
 	template1+='<td data-label="<?php echo $tr->translate("REMOVE_RECORD");?>" align="center"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecordComment('+col1+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
 	template1+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no1+'</td>';
 	template1+='<td data-label="<?php echo $tr->translate("COMMENT");?>" >&nbsp;'+label_comment+'<input type="hidden" dojoType="dijit.form.TextBox" id="comment_'+col1+'" name="comment_'+col1+'" value="'+comment+'" /></td>';
 	template1+='<td data-label="<?php echo $tr->translate("NOTE");?>" > <input type="text"  name="remark'+col1+'" class="fullside" id="remark'+col1+'" dojoType="dijit.form.TextBox" placeholder="<?php echo $tr->translate("OTHER");?>"/></td>';
+
 	tmp1='<tr id="row1'+col1+'" class="rowData">';
 	tmp1+="</tr>";
 	dojo.query("#table_row_comment").append(tmp1);

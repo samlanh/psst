@@ -103,7 +103,7 @@ class AssessmentController extends Zend_Controller_Action
 					'degree' => '',
 					'session' => '',
 			);
-			$result = $db->getStundentScoreResult($search, $scoreId, 1);
+			$result = $db->getStudentScoreResult($search, $scoreId, 1);
 			$this->view->studentScoreResult = $result;
 		
 			$this->view->scoreId = $scoreId;

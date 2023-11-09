@@ -23,7 +23,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	    		</div>
     		</div>
     	</div>
-    	<form action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+    	<form action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
     		<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
                  loadingBlock();
@@ -33,7 +33,7 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 			}
 			</script>
 	    	<div class="card-box">
-	    		<div class="col-md-8 col-sm-8 col-xs-12">
+	    		<div class="col-md-6 col-sm-6 col-xs-12">
 	        		<?php if ($countlang>1){?>
 				    	<div class="card-box">
 				    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
@@ -107,17 +107,9 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 						</div>
 						<?php }?>
 	            </div>
-	    		<div class="col-md-4 col-sm-4 col-xs-12">
-	                <!-- 
+	    		
+	    		<div class="col-md-3 col-sm-3 col-xs-12">
 	                
-	                <div class="form-group">
-	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("TITLE");?> :
-	                   </label>
-	                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		<input type="text" value="<?php //echo $row['title']?>"  name="title" id="title" dojoType="dijit.form.TextBox" class="fullside"  />
-	                   </div>
-	                </div>
-	                 -->
 	                <div class="form-group">
 	                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Latitude");?> :
 	                   </label>
@@ -199,13 +191,104 @@ $db = new Mobileapp_Model_DbTable_DbContact();
 	                </div>
 	                 -->
 	            </div>
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCHOOL_IMAGE");?></p>
+										</div> 
+									</div>
+									 <div class="form-group">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="account-image">
+												<div class="image-box">
+													<?php
+														$images = $this->baseUrl().'/images/noimage.jpg';
+														 if (!empty($this->contact['schoolImage'])){
+															if (file_exists(PUBLIC_PATH."/images/logo/".$this->contact['schoolImage'])){
+																$images = $this->baseUrl().'/images/logo/'.$this->contact['schoolImage'];
+															}
+														}										 
+													?>
+													<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />
+												</div>
+												<p style="padding: 10px 0;text-align: center;margin-bottom: 0;/* background: #454545; */margin-top: 10px;color: #000;">រូបភាព (2000 X 1700px)</p>
+												<div class="button_browse">
+													<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image" type="file" id="photo" name="photo" >
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 	       </div>
 	       <div class="clearfix"></div>
 		    <div class="card-box">
-               	<div class="col-md-6 col-sm-6 col-xs-12 border-top mt-20 ptb-10 text-center">
-					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk"​ type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button"  />
+               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+					<input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE');?>" dojoType="dijit.form.Button"  />
                	</div>
             </div>
 	    </form>
     </div>
 </div>
+<style>
+.account-image {
+    border: solid 1px #eee;
+    width: 100%;
+    margin: 0 auto;
+}
+.image-box {
+    text-align: center;
+    height: 260px;
+}
+.image-box img {
+    height: 260px;
+    width: 100%;
+}
+.button_browse {
+    
+    cursor: pointer;
+}
+.button_browse span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
+input.btn_borwse_image {
+    position: absolute;
+    width: 100%;
+    height: 38px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+   cursor: pointer;
+}
+</style>
+<script>
+$("#photo").change(function(){
+    readURL(this);
+});
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#profile_wiew').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>

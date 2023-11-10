@@ -166,27 +166,6 @@ class Test_IndexController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam("id");//student id
 		$db = new Test_Model_DbTable_DbStudentTest();
 
-		$result_date = $db->getRowTestResultDate($id,$type);
-	
-		$tp = $db->getTestPeriod();//period in setting
-		$setting_period= $tp['keyValue'];
-		if(empty($setting_period)){
-			$setting_period = 1;
-		}
-        
-		if(!empty($result_date)){
-			$date_result = new DateTime($result_date['result_date']);
-			$date_result->modify('+'.$setting_period.' month');
-			$expsired_date= $date_result->format('Y-m-d');
-	
-			$now = new DateTime();
-			$today= $now->format('Y-m-d');
-
-			if($today >= $expsired_date){
-				Application_Form_FrmMessage::Sucessfull("can not edit, exspired record since $expsired_date ",self::REDIRECT_URL);
-			}
-		}
-		
     	if ($type!=1 AND $type!=2 AND $type!=3){ // check it again with branch that has schooloption
     		Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL);
     		exit();
@@ -226,9 +205,32 @@ class Test_IndexController extends Zend_Controller_Action
     		if (empty($result)){
     			Application_Form_FrmMessage::Sucessfull('No Record', "/test/index");
     		}
+			if ($result['is_registered']==1){
+    			Application_Form_FrmMessage::Sucessfull('Can Not Edit, Already Register!', "/test/index");
+    		}
     		$subject = $db->getSubjectScoreByTest($test);
     		$this->view->subjectScore = $subject;
-    	}
+    	}else{
+			$result_date = $db->getRowTestResultDate($id,$type);
+			$tp = $db->getTestPeriod();//period in setting
+			$setting_period= $tp['keyValue'];
+			if(empty($setting_period)){
+				$setting_period = 1;
+			}
+			
+			if(!empty($result_date)){
+				$date_result = new DateTime($result_date['result_date']);
+				$date_result->modify('+'.$setting_period.' month');
+				$expsired_date= $date_result->format('Y-m-d');
+		
+				$now = new DateTime();
+				$today= $now->format('Y-m-d');
+
+				if($today < $expsired_date){
+					Application_Form_FrmMessage::Sucessfull("Can Not Test Againt , Untill $expsired_date ",self::REDIRECT_URL);
+				}
+			}
+		}
     	$this->view->detailscore = $result;
     	$frm = new Test_Form_FrmStudentTest();
     	$frm->FrmEnterResultTest($row,$result,$type);

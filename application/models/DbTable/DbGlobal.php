@@ -3033,11 +3033,6 @@ function getAllgroupStudyNotPass($action=null){
 			return true;
 		}
   }
-  
-  public function getTeacherUserId(){
-   	$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);
-   	return $session_teacher->userId;
-   }
   public function checkSessionTeacherExpire()
   {
   	$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);

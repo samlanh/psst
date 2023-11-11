@@ -176,7 +176,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$this->_name='rms_group_detail_student';
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			
-			$idsss=explode(',', $_data['identity']);
+			$ids=explode(',', $_data['identity']);
 			
 			if(!empty($_data['groupId']) AND $_data['groupId']>0){
 				$toGroupResult = $this->getGroupDetailInStudentChangeGroup($_data['groupId']);//new group
@@ -197,12 +197,13 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 				$fromGroupDetail = $this->getGroupDetailInStudentChangeGroup($_data['from_group']);
 				
-				foreach ($idsss as $k){
+				foreach ($ids as $k){
 					if (!empty($_data['stu_id_'.$k])){
 					
 						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['groupId']);//check to group existing or not 
 						
 						if(empty($rsexist)){
+							
 							$stu=array(
 								'group_id'		=> $_data['groupId'],
 								'degree'		=> $degreeId,
@@ -237,12 +238,10 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				$where=" id=".$_data['groupId'];
 				$this->update($group, $where);
 				
-				
-				
 			}elseif ($_data['change_type']==2){//ឡើងថ្នាក់//done
 				
 				$this->_name='rms_group_detail_student';
-				foreach ($idsss as $k){
+				foreach ($ids as $k){
 					if(!empty($_data['stu_id_'.$k])){
 						$rsOldGroup =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);//okay
 						
@@ -308,7 +307,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				
 			}elseif($_data['change_type']==3){//ឆ្លងភូមិសិក្សា
 				$newStuId = '';
-				foreach ($idsss as $k){
+				foreach ($ids as $k){
 					if(!empty($_data['stu_id_'.$k])){
 						
 						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);
@@ -374,6 +373,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$_db->commit();
 			
 		}catch(Exception $e){
+			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
 			Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -393,7 +393,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	}
 	function moveCurrentScoreToOtherGroup($FromGroupId,$toGroupId,$studentId){
 		$db = $this->getAdapter();
-		$rsScores = $this->getScorebyGroup($FromGroupId);
+		$param = array(
+				'groupId'=>$FromGroupId
+				);
+		$rsScores = $this->getScorebyGroup($param);
+		
 		if(!empty($rsScores)){
 			foreach($rsScores as $rsScore){
 				$arr = array(
@@ -404,7 +408,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						'for_semester'=>$rsScore['for_semester'],
 					);	
 				$rsScoreToGroup = $this->getScorebyGroup($arr);
-				if(!!empty($rsScoreToGroup)){
+				
+				
+				if(!empty($rsScoreToGroup)){
 					$scoreId = $rsScoreToGroup['id'];
 					$sqlColumn = '
 							gradingTotalId,
@@ -414,17 +420,36 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 							score,
 							score_cut,
 							amount_subject,
-							STATUS,
+							`status`,
 							note,
 							subjectExam,
 							orgScore ';
 					$sql="
 					INSERT INTO rms_score_detail (score_id,$sqlColumn)
-					SELECT '".$scoreId."',".$sqlColumn."
-							FROM `rms_score_detail`
-							WHERE score_id=".$rsScore['score_id'];
-// 					echo $sql;exit();
+						SELECT '".$scoreId."' AS score_id ,".$sqlColumn."
+					FROM `rms_score_detail`
+						WHERE score_id=".$rsScore['id']." AND student_id=".$studentId;
 					$db->query($sql);
+					
+					//score monthly here 
+					
+					$sqlColumnMonthly='
+					student_id,
+					amount_subject,
+					total_score,
+					total_avg,
+					totalMaxScore,
+					remark,
+					isRead,
+					readDate ';
+					
+					$sql="
+						INSERT INTO rms_score_monthly (score_id,$sqlColumnMonthly)
+							SELECT '".$scoreId."' AS score_id ,".$sqlColumnMonthly."
+						FROM `rms_score_monthly`
+							WHERE score_id=".$rsScore['id']." AND student_id=".$studentId;
+					$db->query($sql);
+					
 				}
 			}
 		}

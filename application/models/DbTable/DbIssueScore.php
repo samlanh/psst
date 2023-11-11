@@ -8,6 +8,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	public static function getUserExternalId(){
 		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 		$userId = $sessionUserExternal->userId;
+		$userId = empty($userId) ? 0 :$userId;
 		return $userId;
 	}
 	
@@ -661,7 +662,10 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    			,4=>"col-md-3 col-sm-3 col-xs-12"
    			,5=>"col-md-2 col-sm-2 col-xs-12"
    			,6=>"col-md-2 col-sm-2 col-xs-12"
+	   		,1=>"col-md-1 col-sm-1 col-xs-1"
 	   );
+	   
+	   
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
 			$string.='<thead>';
@@ -686,8 +690,15 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								
 								$titleSubCriteria="";
 								$titleSubCriteriaEng="";
-								foreach ($subCriterial AS $keyV => $subCriTitle){ $indexSub++;
+								foreach ($subCriterial AS $keyV => $subCriTitle){ 
+									$indexSub++;
 									if($coutnSubCriterial>1){
+										if($arrClassCol>6 AND $keyV<5){
+											$coutnSubCriterial=6;
+										}else{
+											$coutnSubCriterial=1;
+										}
+										$classCol= $arrClassCol[$coutnSubCriterial];
 										$titleSubCriterial = $subCriTitle;
 										$titleSubCriteriaEng = $subCriterialEng[$keyV];
 									}
@@ -864,6 +875,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    			,4=>"col-md-3 col-sm-3 col-xs-12"
    			,5=>"col-md-2 col-sm-2 col-xs-12"
    			,6=>"col-md-2 col-sm-2 col-xs-12"
+	   		,1=>"col-md-1 col-sm-1 col-xs-1"
 	   );
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';
@@ -893,6 +905,13 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 									if($coutnSubCriterial>1){
 										$titleSubCriterial = $subCriTitle;
 										$titleSubCriteriaEng = $subCriterialEng[$keyV];
+										
+										if($coutnSubCriterial>6 AND $keyV<=4){
+											$coutnSubCriterial=6;
+										}elseif($coutnSubCriterial>6 AND $keyV<4){
+											$coutnSubCriterial=1;
+										}
+										$classCol= $arrClassCol[$coutnSubCriterial];
 									}
 									$string.='<div class="'.$classCol.'">';
 										$string.='<strong  >'.$maxSubjectScore.'</strong>';
@@ -980,7 +999,15 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 								$coutnSubCriterial = count($subCriterial);
 								$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
 								$indexSub=0;
-								foreach ($subCriterial as $subCriTitle){ 
+								foreach($subCriterial as $keyV=>$subCriTitle){ 
+									
+									if($coutnSubCriterial>6 AND $keyV<=3){
+										$coutnSubCriterial=6;
+									}elseif($coutnSubCriterial>6 AND $keyV<4){
+										$coutnSubCriterial=1;
+									}
+									$classCol= $arrClassCol[$coutnSubCriterial];
+									
 									$indexSub++;
 									$string.='<div class="'.$classCol.'">';
 										$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')"  name="score_'.$keyIndex.'_'.$indexSub.$criterialId.'" id="scores_'.$keyIndex.'_'.$indexSub.$criterialId.'"  />';

@@ -256,7 +256,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 		}else{
 			$tel='';
 		}
-		if(!empty(($title))){
+		if(!empty($title)){
 			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh = '".$kh_name."' ";
 			$teacherId =  $db->fetchOne($sql);
 			$dbg = new Application_Model_DbTable_DbGlobal();

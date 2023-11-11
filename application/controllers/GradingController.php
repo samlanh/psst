@@ -100,6 +100,7 @@ class GradingController extends Zend_Controller_Action
 				'gradingId'=>$gradingId
 				);
 		$result = $dbExternal->getGradingCriteriaItems($array);
+
 		$this->view->criteria = $result;
 	}
 	public function editAction()

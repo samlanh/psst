@@ -18,6 +18,10 @@ class Mobileapp_ContactController extends Zend_Controller_Action
 	    	$id = $this->getRequest()->getParam("id");
 	    	if($this->getRequest()->isPost()){
 	    		$_data = $this->getRequest()->getPost();
+				if (empty($_data)){
+					Application_Form_FrmMessage::Sucessfull("Image File is to large can't upload and Save data !",self::REDIRECT_URL);
+					exit();
+				}
 	    		$db->updateContactLocation($_data);
 	    		Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	    	}

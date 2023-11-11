@@ -8,6 +8,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
 	public static function getUserExternalId(){
 		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 		$userId = $sessionUserExternal->userId;
+		$userId = empty($userId) ? 0 :$userId;
 		return $userId;
 	}
 	

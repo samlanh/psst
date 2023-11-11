@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("EDIT_STUDENT_SCORE"));
 	$student = $this->student;
+	print_r($student );
 	$db_score = new Issue_Model_DbTable_DbScore();	 
 ?>	
 <head>

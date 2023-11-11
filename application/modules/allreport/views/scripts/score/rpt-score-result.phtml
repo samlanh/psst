@@ -337,7 +337,7 @@ tbody#table_row tr {
 									<tr class="style style-rowdata hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id']; ?>','<?php echo $rs['stu_id']; ?>','<?php echo $i; ?>','<?php echo $rs['group_id']; ?>','<?php echo $rs['exam_type']; ?>','<?php echo $rs['for_semester']; ?>','<?php echo $rs['for_month_id']; ?>');return false;">
 										<td align="center"><?php echo $i; ?></td>
 										<td align="center" style="white-space:nowrap;">
-											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
+											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/id/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
 										</td>
 										<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id == 1) ? trim($rs['stu_khname']) : trim($rs['stu_enname']); ?>&nbsp;</td>
 										<td align="center" class="bg_<?php echo $rs['sex']; ?>">&nbsp;<?php echo $sex; ?>&nbsp;</td>
@@ -823,7 +823,7 @@ tbody#table_row tr {
 										</td>
 										<td align="center"><?php echo $i; ?></td>
 										<td align="center" style="white-space:nowrap;">
-											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
+											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/id/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
 										</td>
 										<td style="min-width:100px;">
 											<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span>
@@ -997,7 +997,7 @@ tbody#table_row tr {
 								<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
 							</div>
 						</td>
-						<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
+						<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"><?php if(!empty($academicStaffInfo['duty_namekh'])){ echo "បានពិនិត្យត្រឹមត្រូវ"; } ?></td>
 						<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
 							<?php
 
@@ -1019,7 +1019,7 @@ tbody#table_row tr {
 					</tr>
 					<tr>
 						<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
-						<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"><?php echo $academicStaffInfo['positionkh']; ?></td>
+						<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"><?php if(!empty($academicStaffInfo['positionkh'])){ echo $academicStaffInfo['positionkh']; }?></td>
 						<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'"><?php echo $tr->translate("TEACHER_ROOM"); ?></td>
 					</tr>
 					<tr>
@@ -1031,7 +1031,7 @@ tbody#table_row tr {
 										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['signature']; ?>" />
 									</div>
 									<div class="principalName">
-										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $principalInfo['duty_namekh'] ?></span>
+										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php if(!empty($principalInfo['duty_namekh'])){ echo $principalInfo['duty_namekh']; } ?></span>
 									</div>
 								</div>
 							</div>
@@ -1043,7 +1043,7 @@ tbody#table_row tr {
 							<?php } else { ?>
 								<div id="administrator" style="height: 100px;"></div>
 							<?php } ?>
-							<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $academicStaffInfo['duty_namekh']; ?></span>
+							<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php if(!empty($academicStaffInfo['duty_namekh'])){ echo $academicStaffInfo['duty_namekh']; }?></span>
 						</td>
 						<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
 							<?php if (!empty($rs['teacher_sigature'])) { ?>

@@ -218,7 +218,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				$rssubject = $_data['selector'];
-				$total_score = 0;
 				$totalMutiAll=0;
 				$totalMaxScore=0;
 				if(!empty($ids))foreach ($ids as $i){

@@ -46,7 +46,6 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
       	$db = $this->getAdapter();
         $db->beginTransaction();
         try{
-            
             $_arr=array(
                     'title' => $data['title'],                  
                     'description' => $des,                  
@@ -87,11 +86,17 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
  	$db->beginTransaction();
  	try{
  		$this->_name = "mobile_location";
+		
+		$part= PUBLIC_PATH.'/images/logo/';
+		$fileName = $_FILES['photo']['name'];
+		$size = $_FILES['photo']['size'];
+		if (!file_exists($part)) {
+			mkdir($part, 0777, true);
+		}
+			
  		$arr=array(
-//  				'title' => $data['title'],
  				'latitude' => $data['latitude'],
  				'longitude' => $data['longitude'],
-//  				'address' => $data['address'],
  				'date'		=>date("Y-m-d H:i:s"),
  				'phone' 	=> $data['phone'],
  				'email' 	=> $data['email'],
@@ -102,11 +107,18 @@ class Mobileapp_Model_DbTable_DbContact extends Zend_Db_Table_Abstract
 				'tiktok'    => $data['tiktok'],
  				'other_social' => $data['other_social'],
  		);
+		if (!empty($fileName)){
+			$ss = 	explode(".", $fileName);
+			$image_name = "school_image".date("Y").date("m").date("d").time().".".end($ss);
+			$tmp = $_FILES['photo']['tmp_name'];
+			if(move_uploaded_file($tmp, $part.$image_name)){
+				$arr['schoolImage']=$image_name;
+			}
+		}
  		
  		$dbglobal = new Application_Model_DbTable_DbGlobal();
  		$lang = $dbglobal->getLaguage();
  		if (!empty($data['id'])){
-//  			$arr['status']= $data['status'];
  			$where=" id=".$data['id'];
  			$this->_name="mobile_location";
  			$this->update($arr, $where);

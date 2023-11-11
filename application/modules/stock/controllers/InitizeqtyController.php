@@ -15,6 +15,7 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
     			$search=array(
     				'title' => '',
     				'branch_id'=>'',
+					'product_type'=>0,
     				'start_date'=> date('Y-m-d'),
     				'end_date'=>date('Y-m-d'),
     				'status_search'=>-1,
@@ -24,7 +25,7 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$rows = $db->getAllProductLocattion($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","PRODUCT_NAME","BARCODE","CURRENT_QTY","UNIT_COST","SELL_PRICE","PRICE_SET","DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","BARCODE","PRODUCT_NAME","CURRENT_QTY","UNIT_COST","SELL_PRICE","PRICE_SET","TYPE","DATE","BY_USER","STATUS");
 
 // 			$link=array(
 // 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',

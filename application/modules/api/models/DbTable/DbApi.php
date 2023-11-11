@@ -2883,6 +2883,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		try{
 			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			$scoreId = empty($search['scoreId'])?0:$search['scoreId'];
 			
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$label = "name_en";
@@ -2901,6 +2902,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$month = "month_kh";
 				$mentionGradeTitle= "metion_in_khmer";
 			}
+			
+			$strSubLang=" (SELECT subject_lang FROM `rms_subject` sub WHERE sub.id=sd.subject_id LIMIT 1) ";
 			$sql="SELECT
 				s.*
 				,g.`branch_id`
@@ -2947,6 +2950,50 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND sSecond.id=s.`id`
 					)
 				) AS rank
+				
+				,FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =1
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =1
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)
+				) AS rankingInKhmer
+				,FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =2
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =2
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)
+				) AS rankingInEnglish
+				,FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =3
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =3
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)
+				) AS rankingInChinese
+					
 				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
 				,(SELECT 
 						mstd.$mentionGradeTitle
@@ -4499,11 +4546,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					);
 			$studentInfo =  $dbTrancript->getStudentProfile($arrStudent);
 		
-			$resultArray= array(
-					'scoreId'=>$scoreId,
-					'studentId'=>$studentId
-			);
-			$scoreInfo =  $dbTrancript->getScoreInformation($resultArray);
+			$scoreInfoFromAPI =  $this->getScoreInformation($_data);
+			$scoreInfoApi = empty($scoreInfoFromAPI["value"]) ? null : $scoreInfoFromAPI["value"];
+			$scoreInfo = $scoreInfoApi;
+			
+			//$resultArray= array(
+					//'scoreId'=>$scoreId,
+					//'studentId'=>$studentId
+			//);
+			//$scoreInfo =  $dbTrancript->getScoreInformation($resultArray);
 			$scoreInfo['group_id'] 	= empty($scoreInfo['group_id']) ? 0: $scoreInfo['group_id'];
 			$scoreInfo['exam_type'] = empty($scoreInfo['exam_type']) ? 0: $scoreInfo['exam_type'];
 			$scoreInfo['for_semester'] = empty($scoreInfo['for_semester']) ? 0: $scoreInfo['for_semester'];
@@ -4524,6 +4575,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							'subject_id'=>$result['subject_id'],
 							'gradingTotalId'=>$result['gradingTotalId'],
 							'totalAverage'=>$result['totalAverage'],
+							'rankingSubject'=>$result['rankingSubject'],
+							
 							'score_cut'=>$result['score_cut'],
 							'sub_name'=>$result['sub_name'],
 							'subjectLang'=>$result['subjectLang'],
@@ -4531,7 +4584,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							'maxScore'	=>$result['maxScore'],
 							'multiSubject'=>$result['multiSubject'],
 							'amount_subject'=>$result['amount_subject'],
-							'gradingTotalId'=>$result['gradingTotalId'],
 							'innerSubject'=>0
 						);
 					
@@ -4558,8 +4610,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				);
 			$resultEvalueAtion = $dbTrancript->getStudentAssessmentEvaluation($arreValue);
 		
-			$scoreInfoFromAPI =  $this->getScoreInformation($_data);
-			$scoreInfoApi = empty($scoreInfoFromAPI["value"]) ? null : $scoreInfoFromAPI["value"];
+			//$scoreInfoFromAPI =  $this->getScoreInformation($_data);
+			//$scoreInfoApi = empty($scoreInfoFromAPI["value"]) ? null : $scoreInfoFromAPI["value"];
 			$result= array(
 				'studentInfo'=>$studentInfo,
 				'scoreInfo'=>$scoreInfoApi,

@@ -46,7 +46,7 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$duty_namekh->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'required'=>true,
+				'required'=>false,
 				
 				));
 
@@ -54,14 +54,14 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$duty_nameen->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'required'=>true,
+				'required'=>false,
 				));
 
 		$position_kh = new Zend_Dojo_Form_Element_TextBox('positionkh');
 		$position_kh->setAttribs(array(
 			'dojoType'=>'dijit.form.ValidationTextBox',
 			'class'=>'fullside',
-			'required'=>true,
+			'required'=>false,
 			
 			));
 
@@ -69,7 +69,7 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$position_en->setAttribs(array(
 			'dojoType'=>'dijit.form.ValidationTextBox',
 			'class'=>'fullside',
-			'required'=>true,
+			'required'=>false,
 		
 		));
 

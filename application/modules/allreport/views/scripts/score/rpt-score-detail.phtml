@@ -512,32 +512,54 @@ $link = "/allreport/score/rpt-monthlytranscript";
 									?>
 									<td align="center"><?php echo number_format($average, 2); ?></td>
 									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-										<?php echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['totalMaxScore']); ?>
+										<?php
+											if($rs['totalMaxScore']>0){
+												echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['totalMaxScore']); 
+											}else{
+												echo "-";
+											}
+										 ?>
 										&nbsp;</td>
 									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-										<?php echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['totalMaxScore']); ?>
+										<?php
+											if($rs['totalMaxScore']>0){
+												 echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['totalMaxScore']); 
+											}else{
+												echo "-";
+											 }
+										 ?>
 										&nbsp;</td>
 									<td class="red" align="center" style="white-space: nowrap;">&nbsp;
-										<?php echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['totalMaxScore']); ?>
+										<?php 
+										if($rs['totalMaxScore']>0){
+											echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['totalMaxScore']);
+										}else{
+											echo "-";
+										}
+										 ?>
 										&nbsp;
 									</td>
-									<td align="center"><label id="record<?php echo $i; ?>"></label><?php echo $old_rank; ?></td>
-									<td align="center" <?php if ($total_score < ($rs['totalMaxScore'] / 2)) {
+									<td align="center"><label id="record<?php echo $i; ?>"></label><?php if($rs['totalMaxScore']>0){ echo $old_rank; }else{ echo "-"; }  ?></td>
+									<td align="center" <?php  if ($total_score < ($rs['totalMaxScore'] / 2)) {
 															echo 'style=" background: #fdbdbd;"';
 														} ?>>
-										<?php if ($total_score >= ($rs['totalMaxScore'] / 2)) {
-											echo $tr->translate("STUDENT_PASS");
-											$count_pass++;
-											if ($rs['sex'] == 2) {
-												$pass_female = $pass_female + 1;
-											} //femail
-										} else {
-											$count_fail++;
-											echo $tr->translate("STUDENT_FAIL");
-											if ($rs['sex'] == 2) {
-												$fail_female = $fail_female + 1;
-											}
-										} ?>
+										<?php
+										if($rs['totalMaxScore']>0){
+											if ($total_score >= ($rs['totalMaxScore'] / 2)) {
+												echo $tr->translate("STUDENT_PASS");
+												$count_pass++;
+												if ($rs['sex'] == 2) {
+													$pass_female = $pass_female + 1;
+												} //femail
+											} else {
+												$count_fail++;
+												echo $tr->translate("STUDENT_FAIL");
+												if ($rs['sex'] == 2) {
+													$fail_female = $fail_female + 1;
+												}
+											} 
+										} else { echo '-'; }
+										?>
 									</td>
 								</tr>
 								<?php

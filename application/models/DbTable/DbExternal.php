@@ -641,7 +641,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="
 			SELECT 
-				grd.*
+				grd.*,
+				(SELECT g.dateInput FROM `rms_grading` AS g WHERE grd.`gradingId`=g.id LIMIT 1 ) AS inputDate
 			FROM 
 				`rms_grading_detail` AS grd
 			WHERE 1";

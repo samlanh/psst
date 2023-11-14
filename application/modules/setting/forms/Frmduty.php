@@ -15,7 +15,7 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$this->tarea = 'dijit.form.SimpleTextarea';
 	}
 	public function Frmbranch($data=null){
-		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
 		$_title = new Zend_Dojo_Form_Element_TextBox('adv_search');
@@ -46,7 +46,7 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$duty_namekh->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'required'=>false,
+				'required'=>'false',
 				
 				));
 
@@ -54,14 +54,14 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$duty_nameen->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'required'=>false,
+				'required'=>'false',
 				));
 
 		$position_kh = new Zend_Dojo_Form_Element_TextBox('positionkh');
 		$position_kh->setAttribs(array(
 			'dojoType'=>'dijit.form.ValidationTextBox',
 			'class'=>'fullside',
-			'required'=>false,
+			'required'=>'false',
 			
 			));
 
@@ -69,9 +69,36 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 		$position_en->setAttribs(array(
 			'dojoType'=>'dijit.form.ValidationTextBox',
 			'class'=>'fullside',
-			'required'=>false,
+			'required'=>'false',
 		
 		));
+
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$_degree->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("DEGREE"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>'true',
+		));
+		$_degree->setValue($request->getParam('degree'));
+		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
+		$opt_degree = $_dbgb->getAllItems(1);//degree
+		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
+		$_degree->setMultiOptions($opt_deg);
+
+		$_type=  new Zend_Dojo_Form_Element_FilteringSelect('type');
+		$_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'required'=>'true',
+		));
+		$_type_opt = array(
+				''=>$this->tr->translate("PLEASE_SELECT_DEPARTMENT"),
+				 1=>$this->tr->translate("PRINCIPAL_PART"),
+				 2=>$this->tr->translate("ADMIN_PART"));
+		$_type->setMultiOptions($_type_opt);
+		$_type->setValue($request->getParam("type"));
 
 		$old_prin_stamp = new Zend_Form_Element_Hidden('old_prin_stamp');
 		$old_prin_sign = new Zend_Form_Element_Hidden('old_prin_sign');
@@ -91,6 +118,8 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 
 			$old_prin_stamp->setValue($data['stamp']);
 			$old_prin_sign->setValue($data['signature']);
+			$_degree->setValue($data['degree']);
+			$_type->setValue($data['type']);
 			$id->setValue($data['id']);
 		}
 		
@@ -103,9 +132,10 @@ Class Setting_Form_Frmduty extends Zend_Dojo_Form {
 			$duty_nameen,
 			$position_kh,
 			$position_en,
-			
+			$_type,
 			$old_prin_stamp,
-			$old_prin_sign
+			$old_prin_sign,
+			$_degree 
 		));
 		
 		return $this;

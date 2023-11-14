@@ -26,12 +26,12 @@ class Setting_DutysettingController extends Zend_Controller_Action {
            $glClass = new Application_Model_GlobalClass();
 			$rs_rowshow = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("NAME_KH","NAME_EN","POSITION_KH","POSITION_EN","CREATE_DATE","STATUS");
+			$collumns = array("DEGREE","NAME_KH","NAME_EN","POSITION_KH","POSITION_EN","CREATE_DATE","STATUS");
 			$link=array(
 					      'module'=>'setting','controller'=>'dutysetting','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(10, $collumns,
-					$rs_rowshow,array('duty_namekh'=>$link,'duty_nameen'=>$link,
+					$rs_rowshow,array('degree'=>$link,'duty_namekh'=>$link,'duty_nameen'=>$link,
 							'positionkh'=>$link,'positionen'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message($this->tr->translate("APPLICATION_ERROR"));
@@ -89,20 +89,4 @@ class Setting_DutysettingController extends Zend_Controller_Action {
 		$this->view->frm_branch=$update;
 		Application_Model_Decorator::removeAllDecorator($update);
 	}
-    // function checkduplicateAction(){
-    // 	if($this->getRequest()->isPost()){
-    // 		$data = $this->getRequest()->getPost();
-    
-    // 		$prefix_code = empty($data['prefix_code'])?"":$data['prefix_code'];
-    // 		$id = empty($data['id'])?"":$data['id'];
-    // 		$arr  = array(
-    // 				'prefix_code'=>$prefix_code,
-    // 				'id'=>$id,
-    // 		);
-    // 		$_dbmodel = new Setting_Model_DbTable_Dbduty();
-    // 		$result=$_dbmodel->checkuDuplicatePrefix($arr);
-    // 		print_r(Zend_Json::encode($result));
-    // 		exit();
-    // 	}
-    // }
 }

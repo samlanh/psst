@@ -107,6 +107,13 @@ class ExtreportController extends Zend_Controller_Action
     	
     	$db = new Application_Model_DbTable_DbGlobal();
     	$this->view->branchInfo = $db->getBranchInfo($branch_id);
+
+		$dbSetting = new Setting_Model_DbTable_Dbduty();
+		$principalId = 2;
+		$academicStaffId = 1;
+
+		$this->view->principalInfo = $dbSetting->getDutyById($principalId);
+		$this->view->academicStaffInfo = $dbSetting->getDutyById($academicStaffId);
     }
     function rptGradingListAction(){
     	$this->_helper->layout()->disableLayout();

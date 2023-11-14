@@ -3,7 +3,6 @@
 class Setting_Model_DbTable_Dbduty extends Zend_Db_Table_Abstract
 {
     protected $_name = 'rms_duty';   
-  
     function addDutySetting($_data){
 		$dbg = new Application_Model_DbTable_DbGlobal();
     	$_db= $this->getAdapter();
@@ -41,7 +40,8 @@ class Setting_Model_DbTable_Dbduty extends Zend_Db_Table_Abstract
     		}
     	
 	    	$_arr = array(
-	    			
+					'degree' 		=>$_data['degree'],
+					'type' 			=>$_data['type'],
 	    			'duty_namekh' 	=>$_data['duty_namekh'],
 	    			'duty_nameen' 	=>$_data['duty_nameen'],
 					'positionkh' 	=>$_data['positionkh'],
@@ -77,7 +77,8 @@ class Setting_Model_DbTable_Dbduty extends Zend_Db_Table_Abstract
 		$status = empty($_data['status'])?0:1;
     		
     	$_arr = array(
-
+			'degree' 		=>$_data['degree'],
+			'type' 			=>$_data['type'],
 			'duty_namekh' 	=>$_data['duty_namekh'],
 			'duty_nameen' 	=>$_data['duty_nameen'],
 			'positionkh' 	=>$_data['positionkh'],
@@ -128,6 +129,7 @@ class Setting_Model_DbTable_Dbduty extends Zend_Db_Table_Abstract
     function getAllDutySetting($search){
     	$db = $this->getAdapter();
     	$sql = "SELECT d.id,
+				(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = d.degree LIMIT 1) AS degree,
     			d.duty_namekh,
 				d.duty_nameen,
     			d.positionkh,
@@ -161,23 +163,14 @@ class Setting_Model_DbTable_Dbduty extends Zend_Db_Table_Abstract
     	$where = " WHERE `id`= $id" ;  
    		return $db->fetchRow($sql.$where);
     }
+	function getDutyByDegree($degreeId,$type){
+ 		
+    	$db = $this->getAdapter();
+    	$sql = "SELECT * FROM
+    	$this->_name ";
+    	$where = " WHERE `degree`=".$degreeId." AND type=".$type;  
+		
+   		return $db->fetchRow($sql.$where);
+    }
 
-    
-    // function checkuDuplicatePrefix($data){
-    // 	$db = $this->getAdapter();
-    // 	$sql="
-    // 	SELECT
-    // 	* FROM rms_branch AS i
-    // 	WHERE i.prefix='".$data['prefix_code']."'
-    // 	 ";
-    // 	if (!empty($data['id'])){
-    // 		$sql.=" AND i.br_id != ".$data['id'];
-    // 	}
-    // 	$sql.=" LIMIT 1 ";
-    // 	$row = $db->fetchRow($sql);
-    // 	if (!empty($row)){
-    // 		return 1;
-    // 	}
-    // 	return 0;
-    // }
 }

@@ -65,13 +65,15 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				line-height: 20px;
 				white-space: nowrap;
 				color:#000;
-				font-weight: bold;
-				background: #b1c1ff;
+				font-weight: normal;
+				font-family: 'Times New Roman', 'Khmer OS Muol Light';
 			}
 			.hover:hover {
 				background: #ccc;
 			}
 
+		
+			
 			.blue {
 				color: #4839bd;
 			}
@@ -107,7 +109,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			}
 
 			.colorRed {
-				color: #000 !important;
+				color: #ff0000 !important;
+				font-weight: bold;
 			}
 
 			.khmerBoldFont {
@@ -125,7 +128,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			}
 
 			table tr {
-				line-height: 19px;
+				line-height: 22px;
 			}
 			.pages-break {
 				page-break-inside: always;
@@ -158,6 +161,18 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					margin: 0.8cm 0.8cm 0.2cm 0.8cm;
 				}
 			}
+			.bg-grey{
+				background: #b1c1ff !important;
+			}
+			.bg-blue{
+				background: #2facff !important;
+			}
+			.bg-yellow{
+				background: #fffb3b;
+			}
+			.bg-red{
+				background: #ff4646!important;
+			}
 		</style>
 		<?php
 		
@@ -166,6 +181,12 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					2=>'កម្មវិធីសិក្សាជាភាសាអង់គ្លេស English Program',
 					3=>'កម្មវិធីភាសាចិន Chinese Program',
 					);
+				
+			$bgProgramColor= array(
+				1=>'bg-blue',
+				2=>'bg-yellow',
+				3=>'bg-red',
+			);
 			$titleNum=count($this->studentScoreResult);
 		 	if (!empty($this->studentScoreResult)) {
 					foreach ($this->studentScoreResult as $key => $rs) {
@@ -227,6 +248,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			<table class="<?php echo $break_page; ?>" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
 				<tr style="height: 150px;">
 					<td align="center" colspan="3"><?php echo $headerScore;?></td>
+				</tr>
+				<tr style="height: 10px;">
+					<td align="center" colspan="3">&nbsp;</td>
 				</tr>
 				
 				<tr>
@@ -303,8 +327,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 													<strong>ការវាយតម្លៃរួម / Overall Assessment</strong>
 												</td>
 												<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
-												<td class="border-right-none"></td>
-												<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
+												
+												<td colspan="2" align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
 												<td colspan="2" align="center">
 													<table width="100%">
 														<tr>
@@ -324,7 +348,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											$i = 1;
 										} ?>
 										<?php if($scoreInfo['degreeId']==1){ ?>
-											<tr class="cheader" align="center">
+											<tr class="cheader <?php echo @$bgProgramColor[$resultScore['subjectLang']];  ?> " align="center">
 												<td>ល.រ<br />No.</td>
 												<td colspan="2">
 												<?php 
@@ -336,7 +360,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 												<td>ចំណាត់ថ្នាក់<br />Rank</td>
 											</tr>
 										<?php }else{ ?>
-											<tr class="cheader" align="center">
+											<tr class="cheader <?php echo @$bgProgramColor[$resultScore['subjectLang']];  ?> " align="center">
 												<td>ល.រ<br />No.</td>
 												<td colspan="2">
 													<?php 
@@ -365,8 +389,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 											<td align="left">&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
 											<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
-											<td class="border-right-none"></td>
-											<td  align="center"><?php echo $resultScore['totalAverage']; ?></td>
+											<td colspan="2"  align="center"><?php echo $resultScore['totalAverage']; ?></td>
 											<td align="center" class="colorRed"><?php echo $grade ?></td>
 											<td align="center"><?php echo $resultScore['rankingSubject']; ?></td>
 										</tr>
@@ -399,8 +422,8 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									<strong>ការវាយតម្លៃរួម / Overall Assessment</strong>
 								</td>
 								<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
-								<td class="border-right-none"></td>
-								<td align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
+								
+								<td  colspan="2" align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
 								<td colspan="2" align="center">
 									<table width="100%">
 										<tr>
@@ -419,73 +442,73 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									</table>
 								</td>
 							</tr>
-							<tr class="style hover cheader">
+							<tr class="style hover cheader bg-blue">
 								<td rowspan="2" colspan="4" align="center">
 									ពិន្ទុសរុប មធ្យមភាគ និងចំណាត់ថ្នាក់ Total Score Average  Rank
 								</td>
-								<td rowspan="2" class="" align="center">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
-								<td rowspan="2" class="" align="center">&nbsp;<strong class="colorRed"><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+								<td rowspan="2"  align="center" class="colorRed">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
+								<td rowspan="2" align="center" class="colorRed">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
+								<td rowspan="2" align="center" class="colorRed">&nbsp;<strong ><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
+								<td rowspan="2"  align="center" class="colorRed">&nbsp;<strong ><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+							</tr>
+						</table>
+						<br>
+						<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
+							<tr class="cheader bg-blue">
+								<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+									អវត្តមាន ABSENCE RECORD
+								</td>
+								<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+									កិច្ចការវិន័យ DISCIPLINE RECORD
+								</td>
+							</tr>
+							<tr class="style hover">
+								<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days of Excused Absence&nbsp;</td>
+								<td  align="center">&nbsp;
+								<?php
+									$data = array(
+										'groupId' => $groupId,
+										'semesterId' => $forSemester,
+										'studentId' => $studentInfo['student_id'],
+										'forMonth' => $forMonthId,
+										'attStatus' => 3,
+									);
+									$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
+									echo count($dbAttendance->countAttendenceTranscript($data)); 
+								?>&nbsp;</td>
+								<td align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
+								<td  align="center">&nbsp;<?php
+									$data['attStatus'] = 1;
+									echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
+							</tr>
+							<tr class="style hover">
+								<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unexcused Absence&nbsp;</td>
+								<td align="center" class="">&nbsp;<?php
+										$data['attStatus'] = 2;
+										echo count($dbAttendance->countAttendenceTranscript($data)) ?>&nbsp;</td>
+								<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
+								<td align="center">&nbsp;<?php
+										$data['attStatus'] = 2;
+										echo ($dbAttendance->countDisplineTranscript($data)); ?>&nbsp;</td>
+							</tr>
+							<tr class="style hover">
+								<td align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
+								<td align="center" class="">&nbsp;<?php
+										$data['attStatus'] = 4;
+										echo count($dbAttendance->countAttendenceTranscript($data)); ?>&nbsp;</td>
+								<td align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
+								<td align="center">&nbsp;<?php
+										$data['attStatus'] = 3;
+										echo ($dbAttendance->countDisplineTranscript($data)); ?>&nbsp;</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 			</table>
 			<br />
-			<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-					<tr class="doubleBorder">
-						<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-							អវត្តមាន ABSENCE RECORD
-						</td>
-						<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-							កិច្ចការវិន័យ DISCIPLINE RECORD
-						</td>
-					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days of Excused Absence&nbsp;</td>
-						<td  align="center">&nbsp;
-						<?php
-							$data = array(
-								'groupId' => $groupId,
-								'semesterId' => $forSemester,
-								'studentId' => $studentInfo['student_id'],
-								'forMonth' => $forMonthId,
-								'attStatus' => 3,
-							);
-							$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
-							echo count($dbAttendance->countAttendenceTranscript($data)); 
-						?>&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
-						<td  align="center">&nbsp;<?php
-							$data['attStatus'] = 1;
-							echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
-					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unexcused Absence&nbsp;</td>
-						<td align="center" class="">&nbsp;<?php
-								$data['attStatus'] = 2;
-								echo count($dbAttendance->countAttendenceTranscript($data)) ?>&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
-						<td align="center">&nbsp;<?php
-								$data['attStatus'] = 2;
-								echo ($dbAttendance->countDisplineTranscript($data)); ?>&nbsp;</td>
-					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
-						<td align="center" class="">&nbsp;<?php
-								$data['attStatus'] = 4;
-								echo count($dbAttendance->countAttendenceTranscript($data)); ?>&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
-						<td align="center">&nbsp;<?php
-								$data['attStatus'] = 3;
-								echo ($dbAttendance->countDisplineTranscript($data)); ?>&nbsp;</td>
-					</tr>
-				</table>
-				
 				<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 					<tr>
-						<td align="center" colspan="5" class="khmerBoldFont">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+						<td align="center" colspan="5" class="khmerBoldFont  bg-blue">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 					</tr>
 					<tr class="khmerBoldFont " align="center">
 						<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
@@ -545,7 +568,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<?php } ?>
 			</table>
 			<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-				<tr class="SingleBorder cheader">
+				<tr class="SingleBorder cheader  bg-blue">
 					<td colspan="6" align="center">&nbsp;<span >មតិយោបល់របស់គ្រូ និងសំណូមពរ / TEACHER'S COMMENTS AND SUGESTION</span>
 					</td>
 				</tr>

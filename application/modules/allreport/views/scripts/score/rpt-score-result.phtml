@@ -689,6 +689,9 @@ tbody#table_row tr {
 					font-family: 'Times New Roman','Khmer OS Battambang';
 					white-space: nowrap;
 				}
+				.upperCase{
+					text-transform: uppercase;
+				}
 			</style>
 			<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
 				<tr style="border-bottom: 1px solid #000;">
@@ -829,7 +832,7 @@ tbody#table_row tr {
 											<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span>
 										</td>
 										<td style="min-width:100px;">
-											<span class="englishName"><?php echo empty(trim($rs['stu_enname'])) ? "" : trim($rs['stu_enname']); ?></span>
+											<span class="upperCase englishName"><?php echo empty(trim($rs['stu_enname'])) ? "" : trim($rs['stu_enname']); ?></span>
 										</td>
 										<td align="center" class="bg_<?php echo $rs['sex']; ?>">&nbsp;<?php echo $sex; ?>&nbsp;</td>
 										<?php

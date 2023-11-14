@@ -525,9 +525,15 @@
 											?>
 											<td data-label="មធ្យមភាគ/Average" align="center" ><?php echo $totalAverage;?></td>
 											
-											<td data-label="និទ្ទេស/Grade" align="center" >
+											<td data-label="និទ្ទេស/Grade" align="center">
 												<strong>
-												<?php  echo $dbgb->getMentionScore($totalAverage, $rs['academicYearId'],$rs['degreeId'],1,$rs['gradeId'],$averageRow['maxScore']);?>
+												<?php 
+												if($averageRow['maxScore']>0){ 
+													echo $dbgb->getMentionScore($totalAverage, $rs['academicYearId'],$rs['degreeId'],1,$rs['gradeId'],$averageRow['maxScore']);
+												}else{
+													echo "-";
+												}
+												 ?>
 												</strong>
 											</td>
 											<td data-label="ចំណាត់ថ្នាក់/Rank" align="center" class="red"><strong><?php echo $rank;?></strong></td>
@@ -696,46 +702,6 @@
 											</td>
 											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'" valign="top"></td>
 										</tr>
-										<!-- <tr>
-											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light'; text-align: center;">
-												បានឃើញ និងឯកភាព<br />
-											</td>
-											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang'; text-align: center;">បានពិនិត្យត្រឹមត្រូវ</td>
-											<td width="33%" style="white-space: nowrap; font-family:'Khmer OS Battambang';" valign="top"><?php echo $branchInfo['workat'].$tr->translate("CREATE_WORK_DATE");?></td>
-										</tr>
-										<tr>
-											<td valign="top" style="font-family:'Khmer OS Muol Light'; text-align: center;"><?php echo $branchInfo['principal'];?></td>
-											<td valign="top" style="font-family:'Khmer OS Battambang'; text-align: center;">ការិយាល័យសិក្សាធិការ</td>
-											<td valign="top" style=" text-align: center; font-family:'Khmer OS Battambang'; "><?php echo $tr->translate("TEACHER_ROOM");?></td>
-										</tr>
-										<tr>
-											<td valign="top"  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-												<div>
-													<?php if(!empty($stamp)){?>
-													<img src="<?php echo $stamp;?>" style="max-height:100px;position:relative;" />
-													<?php } ?>
-												</div>
-												<?php if(!empty($signature)){?>
-													<img src="<?php echo $signature;?>" style="left:100px;bottom:50px;width:200px;position:relative;" />
-												<?php } ?>
-											</td>
-											<td></td>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-												<?php if(!empty($mainTeacherSigature)){?>
-												<div><img src="<?php echo $mainTeacherSigature;?>" style="height:70px;position:relative;margin-bottom:20px;" /></div>
-												<?php }else{?>
-													<div style="height: 100px;"></div>
-												<?php } ?>
-												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['mainTeaccherNameKh']?></span>
-											</td>
-										</tr>
-										<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-											</td>
-											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:14px;text-align: center;">
-											</td>
-											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'" valign="top"></td>
-										</tr> -->
 									</table>
 								<?php }?>
 								</td>
@@ -746,11 +712,11 @@
 					<div class="footPrintDate"></div>
 				</div>
 				<div class="card-box" >
-						<label class="control-label custom-switch float-end "> 
+					<label class="control-label custom-switch float-start "> 
 						<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
 						<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
 						<span class="custom-switch-indicator custom-radius switch-status"></span> 
-						</label> 
+					</label> 
 				</div>
 			</div>
 		</div>

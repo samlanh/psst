@@ -618,8 +618,7 @@
 											<td align="center">
 												<label id="lunarDate" class="LabelTeacher">
 												<?php 
-													
-													$inputDate = $rsScore[0]['inputDate'];
+													$inputDate = $rs['dateInput'];
 													$time  = strtotime($inputDate);
 													$day   = date('d',$time);
 													$month = date('m',$time);

@@ -111,6 +111,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 			.colorRed {
 				color: #ff0000 !important;
 				font-weight: bold;
+				font-size: 14px;
 			}
 
 			.khmerBoldFont {
@@ -255,7 +256,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				
 				<tr>
 					<td colspan="3" align="center">
-						<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:14px;margin-bottom:10px;">
+						<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:16px;margin-bottom:10px;">
 							<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] : "SEMESTER " . $scoreInfo['for_semester']; 
 									$resultTitle=(!empty($scoreInfo['title_score']))?$scoreInfo['title_score'] :$scoreTitle;
 
@@ -442,14 +443,14 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 									</table>
 								</td>
 							</tr>
-							<tr class="style hover cheader bg-blue">
-								<td rowspan="2" colspan="4" align="center">
+							<tr class="style hover bg-blue" style=" height: 40px;">
+								<td rowspan="2" colspan="4" align="center" class="cheader">
 									ពិន្ទុសរុប មធ្យមភាគ និងចំណាត់ថ្នាក់ Total Score Average  Rank
 								</td>
-								<td rowspan="2"  align="center" class="colorRed">&nbsp;<strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center" class="colorRed">&nbsp;<strong><?php echo $scoreInfo['totalAvg']; ?></strong>&nbsp;</td>
-								<td rowspan="2" align="center" class="colorRed">&nbsp;<strong ><?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?></strong>&nbsp;</td>
-								<td rowspan="2"  align="center" class="colorRed">&nbsp;<strong ><?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+								<td rowspan="2"  align="center" class="colorRed">&nbsp;<?php echo $scoreInfo['totalScoreAvg']; ?>&nbsp;</td>
+								<td rowspan="2" align="center" class="colorRed">&nbsp;<?php echo $scoreInfo['totalAvg']; ?>&nbsp;</td>
+								<td rowspan="2" align="center" class="colorRed">&nbsp;<?php echo $dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore); ?>&nbsp;</td>
+								<td rowspan="2"  align="center" class="colorRed">&nbsp;<?php echo $scoreInfo['rank'] . '/' . $scoreInfo['amountStudent']; ?>&nbsp;</td>
 							</tr>
 						</table>
 						<br>

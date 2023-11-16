@@ -142,6 +142,7 @@ class ExtreportController extends Zend_Controller_Action
     			'subjectId'=>$subjectId,
     			'examType'=>$examType,
     			'forMonth'=>$forMonth,
+    			
     	);
     	
     	$dbExternal = new Application_Model_DbTable_DbExternal();

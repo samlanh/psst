@@ -468,8 +468,9 @@ function checkStudent(){
 		load: function(data) {	
 			if(data !== false ){
 		   		document.getElementById('message').innerHTML ='<?php echo $tr->translate('STUDENT_ALRADY_EXIST')?>';
-		   		dijit.byId('kh_name_stu').focus();
-				check_student=1;
+		   		//dijit.byId('kh_name_stu').focus();
+				check_student=0;
+				addRow();
 			}else{
 				check_student=0;
 				document.getElementById('message').innerHTML ='';

@@ -104,6 +104,7 @@
 														<input type="hidden" name="branch_id" id="branch_id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branch_id']?>" />
 														<input type="hidden" name="group" id="group" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
 														<input type="hidden" name="gradingId" id="gradingId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['gradingId']?>"/>
+														<input type="hidden" name="recordId" id="recordId" class="fullside"  dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->gradingRowId;?>"/>
 													</div>
 													<div class="col-md-6 col-sm-6 col-xs-12">
 														<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								

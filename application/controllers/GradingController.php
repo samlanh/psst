@@ -112,12 +112,8 @@ class GradingController extends Zend_Controller_Action
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				$rs = $db->addScoreGradingByClass($_data);
-				if(isset($_data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/add");
-				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");
-				}
+				$rs = $db->UpdateScoreGradingByClass($_data);
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");				
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

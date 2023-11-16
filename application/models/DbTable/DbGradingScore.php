@@ -146,6 +146,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 				$_arr = array(
 						'branchId'			=>$_data['branch_id'],
 						'gradingSettingId'	=>$gradingSettingId,
+						'gradingTmpId'		=>$id,
 						'groupId'			=>$_data['group'],
 						'dateInput'			=>date("Y-m-d"),
 						'examType'			=>$_data['examType'],
@@ -188,6 +189,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 								
 							$arr=array(
 									'gradingId'			=>$idGrading,
+									'gradingTmpId'		=>$id,
 									'studentId'			=>$old_studentid,
 									'subjectId'			=> $subjectId,
 									'totalAverage'		=> number_format($totalScoreAverage,2),
@@ -243,6 +245,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 										$totalGrading = $totalGrading+$score;
 										$arr=array(
 												'gradingId'				=> $idGrading,
+												'gradingTmpId'		=>$id,
 												'studentId'				=> $old_studentid,
 												'subjectId'				=> $subjectId,
 												'criteriaId'			=> $criterialId,
@@ -290,6 +293,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 									
 									$arr=array(
 											'gradingId'			=> $idGrading,
+											'gradingTmpId'		=>$id,
 											'studentId'			=> $old_studentid,
 											'subjectId'			=> $subjectId,
 											'criteriaId'		=> $criterialId,
@@ -315,6 +319,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 				if($totalScoreAverage>0 AND $_data['criteriaId']==$criteriaSubmitSettingId){//submit final score
 					$arr=array(
 							'gradingId'		=> $idGrading,
+							'gradingTmpId'		=>$id,
 							'studentId'		=> $_data['student_id'.$i],
 							'subjectId'		=> $subjectId,
 							'totalAverage'	=> number_format($totalScoreAverage,2),
@@ -331,10 +336,266 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 		  $db->commit();
 		  return $id;
 		}catch(Exception $e){
-			echo $e->getMessage();exit();
+			echo $e->getMessage();
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+   }
+   public function UpdateScoreGradingByClass($_data){
+   	$db = $this->getAdapter();
+   	$db->beginTransaction();
+   	try{
+   			
+   		$dbExternal = new Application_Model_DbTable_DbExternal();
+   		$group_info = $dbExternal->getGroupDetailByIDExternal($_data['group']);
+   		$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
+   		$subjectId = $_data['subjectId'];
+   		$maxSubjectScore = $_data['maxSubjectScore'];
+   		$gradingSettingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
+   
+   		$_arr = array(
+   				'branchId'			=>$_data['branch_id'],
+   				'gradingSettingId'	=>$gradingSettingId,
+   				'academicYear'		=>$academicYear,
+   				'groupId'			=>$_data['group'],
+   				'examType'			=>$_data['examType'],
+   				'forMonth'			=>$_data['forMonth'],
+   				'forSemester'		=>$_data['forSemester'],
+   				'subjectId'			=>$subjectId,
+   				'criteriaId'=> $_data['criteriaId'],
+   				'inputOption'		=>2, //1 normal,2 teache input
+   				'note'				=>$_data['note'],
+   				'status'			=>1,
+   				'teacherId'			=>$this->getUserExternalId(),
+   				'modifyDate'		=>date("Y-m-d H:i:s"),
+   				'dateInput'			=>date("Y-m-d"),
+   		);
+   		$this->_name='rms_grading_tmp';
+   		$recordId = $_data['recordId'];
+   		$where='id='.$recordId;
+   		$this->update($_arr, $where);
+   		
+   		 
+   		$where='gradingId='.$recordId;
+   		$this->_name='rms_grading_detail_tmp';
+   		$this->delete($where);
+   		
+   		$where='gradingTmpId='.$recordId;
+   		
+   		$this->_name='rms_grading';
+   		$this->delete($where);
+   		
+   		
+   		$this->_name='rms_grading_detail';
+   		$this->delete($where);
+   		
+   		
+   		$this->_name='rms_grading_total';
+   		$this->delete($where);
+   		
+   		
+   			
+   		$criteriaSubmitSettingId=9;//for final score submit
+   			
+   		$arrSearch  = array(
+   				'gradingId'=>$gradingSettingId
+   				,'subjectId'=>$subjectId
+   				,'examType'=>$_data['examType']
+   		);
+   		if($_data['criteriaId']==$criteriaSubmitSettingId){//submit final score
+   			$_arr = array(
+   					'branchId'			=>$_data['branch_id'],
+   					'gradingSettingId'	=>$gradingSettingId,
+   					'gradingTmpId'		=>$recordId,
+   					'groupId'			=>$_data['group'],
+   					'dateInput'			=>date("Y-m-d"),
+   					'examType'			=>$_data['examType'],
+   						
+   					'forMonth'			=>$_data['forMonth'],
+   					'forSemester'		=>$_data['forSemester'],
+   					'academicYear'		=>$academicYear,
+   						
+   					'subjectId'			=>$subjectId,
+   					'inputOption'		=>2, //1 normal,2 teache input
+   						
+   					'note'				=>$_data['note'],
+   					'status'			=>1,
+   						
+   					'teacherId'			=>$this->getUserExternalId(),
+   					'createDate'		=>date("Y-m-d H:i:s"),
+   					'modifyDate'		=>date("Y-m-d H:i:s"),
+   			);
+   			$this->_name='rms_grading';
+   			$idGrading=$this->insert($_arr);
+   		}else{
+   			$arrSearch['criteriaId']=$_data['criteriaId'];
+   		}
+   			
+   			
+   		$criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
+   			
+   		$old_studentid = 0;
+   		if(!empty($_data['identity'])){
+   			$ids = explode(',', $_data['identity']);
+   
+   			$totalScoreAverage = 0;
+   			$totalGrading =0;
+   			if(!empty($ids))foreach ($ids as $i){
+   					
+   				if(!empty($criterial)) foreach($criterial AS $rowCri){
+   					$criterialId=$rowCri['criteriaId'];
+   
+   					if($_data['criteriaId']==$criteriaSubmitSettingId AND $totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){//submit final score
+   
+   						$arr=array(
+   								'gradingId'			=>$idGrading,
+   								'gradingTmpId'		=>$recordId,
+   								'studentId'			=>$old_studentid,
+   								'subjectId'			=>$subjectId,
+   								'totalAverage'		=>number_format($totalScoreAverage,2),
+   								'remark'			=>$_data['note_'.$i],
+   								'maxScore'			=>$_data['maxSubjectScore'],
+   						);
+   						$this->_name='rms_grading_total';
+   						$this->insert($arr);
+   						$totalScoreAverage = 0;
+   					}
+   
+   					$old_studentid=$_data['student_id'.$i];
+   					$pecentageScore = $rowCri['pecentage_score'];
+   
+   					if(!empty($rowCri['subjectId'])){
+   						if(!empty($rowCri['subCriterialTitleKh'])){
+   
+   							$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+   							$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
+   							$subcriteriaAmount = count($subCriterial);
+   
+   							$indexSub=0;
+   							$titleSubCriterial="";
+   							$titleSubCriteriaEng="";
+   
+   							$totalGrading =0;
+   							foreach ($subCriterial AS $keyV => $subCriTitle){
+   									
+   								$indexSub++;
+   									
+   								if($subcriteriaAmount>1){
+   									$titleSubCriterial = $subCriTitle;
+   									$titleSubCriteriaEng = $subCriterialEng[$keyV];
+   								}
+   									
+   								$score = $_data['score_'.$i.'_'.$criterialId.'_'.$indexSub];
+   									
+   								if($criterialId==$_data['criteriaId']){
+   									$arr=array(
+   											'gradingId'				=> $recordId,
+   											'studentId'				=> $old_studentid,
+   											'totalGrading'			=> $score,
+   											'subCriterialTitleKh'	=> $titleSubCriterial,
+   											'subCriterialTitleEng'	=> $titleSubCriteriaEng,
+   									);
+   
+   									$this->_name='rms_grading_detail_tmp';
+   									$this->insert($arr);
+   								}
+   									
+   								if($_data['criteriaId']==$criteriaSubmitSettingId){//submit final score
+   
+   									$totalGrading = $totalGrading+$score;
+   									$arr=array(
+   											'gradingId'				=> $idGrading,
+   											'gradingTmpId'			=>$recordId,
+   											'studentId'				=> $old_studentid,
+   											'subjectId'				=> $subjectId,
+   											'criteriaId'			=> $criterialId,
+   											'totalGrading'			=> $score,
+   											'criteriaAmount'		=> $subcriteriaAmount,
+   											'percentage'			=> $pecentageScore,
+   											'subCriterialTitleKh'	=> $titleSubCriterial,
+   											'subCriterialTitleEng'	=> $titleSubCriteriaEng,
+   									);
+   										
+   									$this->_name='rms_grading_detail';
+   									$this->insert($arr);
+   								}
+   									
+   							}
+   							if($_data['criteriaId']==$criteriaSubmitSettingId){
+   								$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
+   								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+   								$totalScoreAverage = $totalScoreAverage+$totalGrading;
+   							}
+   						}
+   					}else{
+   							
+   						$idCriterials = explode(',', $_data['criteriaList_'.$i.'_'.$criterialId]);
+   						$totalGrading=0;
+   						if(!empty($idCriterials)) foreach($idCriterials as $innerId){
+   							$score = $_data['score_'.$i.'_'.$criterialId.'_'.$innerId];//problem or not ?score_2_11score_1_1
+   							if($criterialId==$_data['criteriaId']){
+   								$arr=array(
+   										'gradingId'			=> $recordId,
+   										'studentId'			=> $old_studentid,
+   										'note'				=> $_data['note_'.$i],
+   										'totalGrading'		=> $score,
+   								);
+   
+   								$this->_name='rms_grading_detail_tmp';
+   								$this->insert($arr);
+   							}
+   
+   
+   							if($_data['criteriaId']==$criteriaSubmitSettingId){//submit final score
+   
+   								$totalGrading = $totalGrading+$score;
+   									
+   								$arr=array(
+   										'gradingId'			=> $idGrading,
+   										'gradingTmpId'		=> $recordId,
+   										'studentId'			=> $old_studentid,
+   										'subjectId'			=> $subjectId,
+   										'criteriaId'		=> $criterialId,
+   										'criteriaAmount'	=> count($idCriterials),
+   										'totalGrading'		=> $score,
+   										'percentage'		=> $pecentageScore,
+   								);
+   
+   								$this->_name='rms_grading_detail';
+   								$this->insert($arr);
+   							}
+   						}
+   							
+   						if($_data['criteriaId']==$criteriaSubmitSettingId){//submit final score
+   							$subcriteriaAmount= count($idCriterials);
+   							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
+   							$totalScoreAverage = $totalScoreAverage+$totalGrading;
+   						}
+   					}
+   				}
+   			}
+   
+   			if($totalScoreAverage>0 AND $_data['criteriaId']==$criteriaSubmitSettingId){//submit final score
+   				$arr=array(
+   						'gradingId'		=> $idGrading,
+   						'gradingTmpId'	=> $recordId,
+   						'studentId'		=> $_data['student_id'.$i],
+   						'subjectId'		=> $subjectId,
+   						'totalAverage'	=> number_format($totalScoreAverage,2),
+   						'remark'		=> $_data['note_'.$i],
+   						'maxScore'		=> $_data['maxSubjectScore'],
+   				);
+   
+   				$this->_name='rms_grading_total';
+   				$this->insert($arr);
+   			}
+   		}
+   		$db->commit();
+   	}catch(Exception $e){
+   		echo $e->getMessage();
+   		$db->rollBack();
+   		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+   	}
    }
    function submittoGradingTotal($_data){
    		$sql="
@@ -389,222 +650,6 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    			//$sql.=" GROUP BY  ORDER BY criteriaId ASC ";
    			
    			return $result = $this->getAdapter()->fetchAll($sql);
-   			
-//    			$dbExternal = new Application_Model_DbTable_DbExternal();
-//    			$group_info = $dbExternal->getGroupDetailByIDExternal($_data['group']);
-//    			$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
-//    			$gradingSettingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
-   			
-//    			$_arr = array(
-//    					'branchId'			=>$_data['branch_id'],
-//    					'gradingSettingId'	=>$gradingSettingId,
-//    					'groupId'			=>$_data['group'],
-//    					'dateInput'			=>date("Y-m-d"),
-//    					'examType'			=>$_data['examType'],
-//    					'forMonth'			=>$_data['forMonth'],
-//    					'forSemester'		=>$_data['forSemester'],
-//    					'academicYear'		=>$academicYear,
-//    					'subjectId'			=>$_data['subjectId'],
-//    					'inputOption'		=>2, //1 normal,2 teache input
-//    					'note'				=>$_data['note'],
-//    					'status'			=>1,
-//    					'teacherId'			=>$this->getUserExternalId(),
-//    					'createDate'		=>date("Y-m-d H:i:s"),
-//    					'modifyDate'		=>date("Y-m-d H:i:s"),
-//    			);
-//    			$this->_name='rms_grading';
-//    			$id=$this->insert($_arr);
-   			
-//    			$old_studentid = 0;
-//    			if(!empty($result)){
-//    				$oldCritrial=0;
-//    				$oldStudentid=0;
-//    				$score=0;
-//    				$subcriteriaAmount=0;
-//    				$pecentageScore = 0;
-//    				foreach ($result as $rs){
-   					   		
-//    					   		   		$arrSearch  = array(
-//    					   		   				'gradingId'=>$gradingSettingId
-//    					   		   				,'subjectId'=>$_data['subjectId']
-//    					   		   				,'examType'=>$_data['examType']
-//    					   		   		);
-//    					   		   		$criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
-   					   		   		
-//    					   		   		   $arr=array(
-//    					   		   		   										'gradingId'				=>$id,
-//    					   		   		   										'studentId'				=>$oldStudentid,
-//    					   		   		   										'subjectId'				=>$_data['subjectId'],
-//    					   		   		   										'criteriaId'			=>$oldCritrial,
-//    					   		   		   										'totalGrading'			=> $rs['avgTotalGrading'],
-//    					   		   		   										'criteriaAmount'		=> $rs['subcriteriaAmount'],
-// //    					   		   		   										'percentage'			=> $pecentageScore,
-// //    					   		   		   										'subCriterialTitleKh'	=> $titleSubCriterial,
-// //    					   		   		   										'subCriterialTitleEng'	=> $titleSubCriteriaEng,
-//    					   		   		   								);
-   					   		   		
-//    					   		   		   								$this->_name='rms_grading_detail';
-//    					   		   		   								$this->insert($arr);
-   					   		   		   								
-//    					   		   		   								$oldStudentid = $rs['studentId'];
-//    					   		   		   								$oldCritrial = $rs['criteriaId'];
-//    				}
-//    			}
-   		
-
-
-
-
-//    		$old_studentid = 0;
-//    		if(!empty($_data['identity'])){
-//    			$ids = explode(',', $_data['identity']);
-   		
-//    			$totalScoreAverage = 0;
-//    			$criteriaAmount = count($criterial) ;
-//    			if(!empty($ids))foreach ($ids as $i){
-   					
-//    				if(!empty($criterial)) foreach($criterial AS $rowCri){
-//    					$criterialId=$rowCri['criteriaId'];
-//    					if($totalScoreAverage>0 AND $old_studentid!=$_data['student_id'.$i]){
-   							
-//    						$arr=array(
-//    								'gradingId'			=>$id,
-//    								'studentId'			=>$old_studentid,
-//    								'subjectId'			=> $subjectId,
-//    								'totalAverage'		=> number_format($totalScoreAverage,2),
-//    								'remark'			=> $_data['note_'.$i],
-//    								'maxScore'			=> $_data['maxSubjectScore'],
-//    						);
-//    						$this->_name='rms_grading_total';
-//    						$this->insert($arr);
-//    						$totalScoreAverage = 0;
-//    					}
-   		
-//    					$old_studentid=$_data['student_id'.$i];
-//    					$pecentageScore = $rowCri['pecentage_score'];
-//    					if(!empty($rowCri['subjectId'])){
-//    						if(!empty($rowCri['subCriterialTitleKh'])){
-//    							$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
-//    							$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
-//    							$subcriteriaAmount = count($subCriterial);
-   		
-//    							$indexSub=0;
-//    							$titleSubCriterial="";
-//    							$titleSubCriteriaEng="";
-   		
-//    							$totalGrading =0;
-//    							foreach ($subCriterial AS $keyV => $subCriTitle){
-//    								$indexSub++;
-   		
-   									
-//    								if($subcriteriaAmount>1){
-//    									$titleSubCriterial = $subCriTitle;
-//    									$titleSubCriteriaEng = $subCriterialEng[$keyV];
-//    								}
-   									
-//    								$score = $_data['score_'.$i.'_'.$indexSub.$criterialId];
-   									
-//    								$totalGrading = $totalGrading+$score;
-   									
-//    								$arr=array(
-//    										'gradingId'				=>$id,
-//    										'studentId'				=>$old_studentid,
-//    										'subjectId'				=> $subjectId,
-//    										'criteriaId'			=> $criterialId,
-//    										'totalGrading'			=> $score,
-//    										'criteriaAmount'		=> $subcriteriaAmount,
-//    										'percentage'			=> $pecentageScore,
-//    										'subCriterialTitleKh'	=> $titleSubCriterial,
-//    										'subCriterialTitleEng'	=> $titleSubCriteriaEng,
-//    								);
-   									
-//    								$this->_name='rms_grading_detail';
-//    								$this->insert($arr);
-   		
-//    							}
-   		
-//    							$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
-//    							$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-   								
-//    							$totalScoreAverage = $totalScoreAverage+$totalGrading;
-//    						}
-//    					}else{
-//    						$subcriteriaAmount=0;
-//    						$totalGrading =0;
-//    						for ($x = 1; $x <= $rowCri['timeInput']; $x++) {
-   		
-//    							if($rowCri['timeInput']>1){
-//    								if(empty($_data['checkAll'.$x.$criterialId])){
-//    									$subcriteriaAmount=$subcriteriaAmount+1;
-   		
-//    									$score = $_data['score_'.$i.'_'.$x.$criterialId];
-//    									$totalGrading = $totalGrading+$score;
-   		
-//    									$arr=array(
-//    											'gradingId'			=> $id,
-//    											'studentId'			=> $old_studentid,
-//    											'subjectId'			=> $subjectId,
-//    											'criteriaId'		=> $criterialId,
-//    											'criteriaAmount'	=> $subcriteriaAmount,
-//    											'totalGrading'		=> $score,
-//    											'percentage'		=> $pecentageScore,
-//    									);
-   		
-//    									$this->_name='rms_grading_detail';
-//    									$this->insert($arr);
-   										
-//    								}
-//    							}else{
-//    								$subcriteriaAmount = $rowCri['timeInput'];
-//    								$score = $_data['score_'.$i.'_'.$x.$criterialId];
-//    								$pecentageScore = $rowCri['pecentage_score'];
-   									
-   									
-//    								$totalGrading = $totalGrading+$score;
-   									
-   									
-//    								$arr=array(
-//    										'gradingId'			=> $id,
-//    										'studentId'			=> $old_studentid,
-//    										'subjectId'			=> $subjectId,
-//    										'criteriaId'		=> $criterialId,
-//    										'criteriaAmount'	=> $subcriteriaAmount,
-//    										'totalGrading'		=> $score,
-//    										'percentage'		=> $pecentageScore,
-//    								);
-   									
-//    								$this->_name='rms_grading_detail';
-//    								$this->insert($arr);
-   		
-//    							}
-   		
-//    						}
-//    						$subcriteriaAmount= empty($subcriteriaAmount)?1:$subcriteriaAmount;
-//    						$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
-   							
-//    						$totalScoreAverage = $totalScoreAverage+$totalGrading;
-//    					}
-   						
-//    				}
-   					
-//    			}
-   		
-//    			if(!empty($ids)){
-//    				if($totalScoreAverage>0){
-//    					$arr=array(
-//    							'gradingId'		=>$id,
-//    							'studentId'		=>$_data['student_id'.$i],
-//    							'subjectId'		=> $subjectId,
-//    							'totalAverage'	=> number_format($totalScoreAverage,2),
-//    							'remark'		=>$_data['note_'.$i],
-//    							'maxScore'			=> $_data['maxSubjectScore'],
-//    					);
-   		
-//    					$this->_name='rms_grading_total';
-//    					$this->insert($arr);
-//    				}
-//    			}
-//    		}
    }
    
  
@@ -628,7 +673,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	
    	
    	$sql="SELECT
-		   grd.id,
+		   grd.id ,
 		   grd.status,
 		   grd.criteriaId,
 		   grd.groupId,

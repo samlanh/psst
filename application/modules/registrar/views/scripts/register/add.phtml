@@ -1229,7 +1229,9 @@ function getTermStudy(key){
 }
 var url_service_fee = "<?php echo $this->url(array('module'=>'accounting','controller'=>'servicecharge','action'=>'getservicefee')); ?>";
 function getservicefee(key){
-
+		if(dijit.byId('isoldBalance'+key).get('value')==1){
+			return ;
+		}
 		periodStore  = getDataStorefromJSON('id','name', []);
 		dijit.byId("term_study"+key).set('store',periodStore);  	
 	

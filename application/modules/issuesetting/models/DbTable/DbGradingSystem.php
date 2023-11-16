@@ -19,7 +19,7 @@ class Issuesetting_Model_DbTable_DbGradingSystem extends Zend_Db_Table_Abstract
     		";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_scoreengsetting` AS s
-				WHERE 1 AND s.schoolOption=1 ";
+				WHERE 1 ";
     	$orderby = " ORDER BY s.id DESC";
     	$where = ' ';
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";

@@ -10,9 +10,18 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+		$monthly=$tr->translate('MONTHLY');
+		$semester=$tr->translate('SEMESTER');
+
     	$sql = " SELECT s.id,
 		(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branch_name,
-		s.title,s.examFromDate,s.`examEndDate`,s.fromDate,s.`endDate`,s.description, s.createDate ";
+		s.title,
+		CASE
+			WHEN s.examType = 1 THEN '$monthly'
+			WHEN s.examType = 1 THEN '$semester'
+		END AS examType,
+		s.examFromDate,s.`examEndDate`,s.fromDate,s.`endDate`,s.description, s.createDate ";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_score_entry_setting` AS s WHERE 1 ";
     	$orderby = "  ORDER BY s.id DESC";

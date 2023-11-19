@@ -4153,8 +4153,15 @@ function getAllgroupStudyNotPass($action=null){
    	}
    	function checkEntryScoreSetting($data){
    		$currentDate =  date('Y-m-d');
-   		$sql="SELECT fromDate,endDate,title,degreeId FROM `rms_score_entry_setting` ";
-   		$sql.=" WHERE '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate";
+   		$sql="SELECT 
+	   		fromDate,
+	   		endDate,
+	   		examFromDate,
+	   		examEndDate,
+	   		title,
+	   		degreeId 
+   		FROM `rms_score_entry_setting` ";
+   		$sql.=" WHERE status=1 AND '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate ORDER BY examEndDate DESC ";
    		return $this->getAdapter()->fetchRow($sql);
    	}
    

@@ -161,7 +161,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					WHEN g.teacher_id = $currentTeacher THEN '".$tr->translate("MAINTEACHER")."' 
 				END AS mainTeacher
 				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) as mainTeaccher
-				,(SELECT te.teacher_name_kh FROM rms_teacher AS te WHERE te.id = gsjb.teacher LIMIT 1 ) as subjectTeaccher
 				,(SELECT $label from rms_view where type=9 and key_code=g.is_pass) as groupStatus
 				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
 			
@@ -456,6 +455,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				s.*
+				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
 				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
 				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
 			FROM 
@@ -474,6 +474,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				s.*
+				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
 				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
 				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
 			FROM `rms_scoreengsettingdetail` AS s 
@@ -1015,6 +1016,12 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="SELECT id FROM `rms_score` WHERE group_id=$groupId ORDER BY id DESC limit 1";
 		return $this->getAdapter()->fetchOne($sql);
 		
+	}
+	function getGroupListAndCriterial($search){
+		$groupResult = $this->getAllClassByUser($search);
+		if(!empty($groupResult)){
+			
+		}
 	}
 	
 }

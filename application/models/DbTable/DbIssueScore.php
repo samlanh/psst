@@ -875,7 +875,7 @@ class Application_Model_DbTable_DbIssueScore extends Zend_Db_Table_Abstract
    			,4=>"col-md-3 col-sm-3 col-xs-12"
    			,5=>"col-md-2 col-sm-2 col-xs-12"
    			,6=>"col-md-2 col-sm-2 col-xs-12"
-	   		,1=>"col-md-1 col-sm-1 col-xs-1"
+	   		,1=>"col-md-12 col-sm-12 col-xs-1"
 	   );
 	   $string='';
 		$string.='<table class="collape responsiveTable" id="table" >';

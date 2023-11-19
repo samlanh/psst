@@ -911,13 +911,12 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					$attScore=0;
    					$readonly="";
    					$resultScore = empty($rsScore)?0:$rsScore[0]['totalGrading'];
-   					if($criterialId==1){
+   					if($rowCri['criteriaType']==0){//att
    						$resultScore = $maxSubjectScore-($maxSubjectScore*$reductPercentage/100);
    						$resultScore = ($resultScore<0)?0:$resultScore;
    						$readonly="readonly";
    					}
-   					elseif(!empty($data['getExistingData'])){ 
-   						
+   					elseif(!empty($data['getExistingData']) AND $rowCri['criteriaType']!=2){ 
    						$readonly="readonly";
    						$resultScore = empty($resultEntry[$x-1]['avgTotalGrading'])?0:$resultEntry[$x-1]['avgTotalGrading'];//check more
    					}

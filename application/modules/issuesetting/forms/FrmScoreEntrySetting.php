@@ -169,6 +169,43 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 		}
 		$_branch_search->setValue($request->getParam("branch_search"));
 
+		$_arr = array(0=>$this->tr->translate("SELECT_TYPE"),1=>$this->tr->translate("MONTHLY"),2=>$this->tr->translate("SEMESTER"));
+		$examType = new Zend_Dojo_Form_Element_FilteringSelect("examType");
+		$examType->setMultiOptions($_arr);
+		$examType->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_TYPE"),
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$examType->setValue($request->getParam("examType"));
+
+		$_arr = array(0=>$this->tr->translate("SELECT_SEMESTER"),1=>$this->tr->translate("SEMESTER1"),2=>$this->tr->translate("SEMESTER2"));
+		$forSemester = new Zend_Dojo_Form_Element_FilteringSelect("forSemester");
+		$forSemester->setMultiOptions($_arr);
+		$forSemester->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_SEMESTER"),
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$forSemester->setValue($request->getParam("forSemester"));
+		
+		$_opt_month = array(0=>$this->tr->translate("CHOOSE_MONTH"));
+		$_allMonth = $_dbgb->getAllMonth();
+		if(!empty($_allMonth))foreach($_allMonth AS $row) $_opt_month[$row['id']]=$row['name'];
+		$forMonth = new Zend_Dojo_Form_Element_FilteringSelect("forMonth");
+		$forMonth->setMultiOptions($_opt_month);
+		$forMonth->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'false',
+				'autoComplete'=>'false',
+				'placeholder'=>$this->tr->translate("CHOOSE_MONTH"),
+				'queryExpr'=>'*${0}*',
+				'missingMessage'=>'Invalid Module!',
+				'class'=>'fullside height-text',));
+		$forMonth->setValue($request->getParam("forMonth"));
+
 		if (!empty($data)) {
 			$_branch_id->setValue($data["branchId"]);
 			$title->setValue($data["title"]);
@@ -177,6 +214,9 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$end_date->setValue($data["endDate"]);
 			$exam_from_date->setValue($data["examFromDate"]);
 			$exam_end_date->setValue($data["examEndDate"]);
+			$examType->setValue($data["examType"]);
+			$forSemester->setValue($data["forSemester"]);
+			$forMonth->setValue($data["forMonth"]);
 			$_status->setValue($data["status"]);
 			$id->setValue($data["id"]);
 		}
@@ -193,7 +233,10 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$end_date,
 			$_branch_search,
 			$exam_from_date,
-			$exam_end_date
+			$exam_end_date,
+			$examType,
+			$forSemester,
+			$forMonth
 		));
 		return $this;
 	}

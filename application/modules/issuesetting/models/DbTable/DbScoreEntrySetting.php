@@ -10,9 +10,18 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+		$monthly=$tr->translate('MONTHLY');
+		$semester=$tr->translate('SEMESTER');
+
     	$sql = " SELECT s.id,
 		(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branch_name,
-		s.title,s.examFromDate,s.`examEndDate`,s.fromDate,s.`endDate`,s.description, s.createDate ";
+		s.title,
+		CASE
+			WHEN s.examType = 1 THEN '$monthly'
+			WHEN s.examType = 1 THEN '$semester'
+		END AS examType,
+		s.examFromDate,s.`examEndDate`,s.fromDate,s.`endDate`,s.description, s.createDate ";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_score_entry_setting` AS s WHERE 1 ";
     	$orderby = "  ORDER BY s.id DESC";
@@ -48,17 +57,20 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 	    		}
 	    	}
 			$_arr = array(
-					'branchId'	 =>$_data['branch_id'],
-					'degreeId'	 =>$dept,
-					'title'		 =>$_data['title'],
-					'description'=>$_data['description'],
-					'fromDate'	 =>$_data['from_date'],
-					'endDate'	 =>$_data['end_date'],
-					'examFromDate'=>$_data['exam_from_date'],
-					'examEndDate'=>$_data['exam_end_date'],
-					'createDate' =>date("Y-m-d H:i:s"),
-					'modifyDate' =>date("Y-m-d H:i:s"),
-					'status'	 =>1,
+					'branchId'	 	=>$_data['branch_id'],
+					'degreeId'		=>$dept,
+					'title'			 =>$_data['title'],
+					'description'	=>$_data['description'],
+					'fromDate'		 =>$_data['from_date'],
+					'endDate'		 =>$_data['end_date'],
+					'examFromDate'	=>$_data['exam_from_date'],
+					'examEndDate'	=>$_data['exam_end_date'],
+					'createDate' 	=>date("Y-m-d H:i:s"),
+					'modifyDate' 	=>date("Y-m-d H:i:s"),
+					'status'		 =>1,
+					'examType'		=>$_data['examType'],
+					'forMonth'		=>$_data['forMonth'],
+					'forSemester'	=>$_data['forSemester'],
 			);
 			$this->_name='rms_score_entry_setting';
 			$this->insert($_arr);
@@ -102,6 +114,9 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 			'createDate' =>date("Y-m-d H:i:s"),
 			'modifyDate' =>date("Y-m-d H:i:s"),
 			'status'	 =>$status,
+			'examType'		=>$_data['examType'],
+			'forMonth'		=>$_data['forMonth'],
+			'forSemester'	=>$_data['forSemester'],
    		);
    		$this->_name='rms_score_entry_setting';
    		$where=' id='.$_data['id'];

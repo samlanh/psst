@@ -168,7 +168,7 @@ class Issuesetting_Form_FrmGradingengSetting extends Zend_Dojo_Form
 				'class'=>'fullside height-text',));
 		
 		$degreeResult = $_dbgb->getAllItems(1,null,2);
-		$degreeOpt =array();
+		$degreeOpt = array(""=>$this->tr->translate("PLEASE_SELECT_DEGREE"));
 		if(!empty($degreeResult))foreach($degreeResult AS $row){
 			 $degreeOpt[$row['id']]=$row['name'];
 		}

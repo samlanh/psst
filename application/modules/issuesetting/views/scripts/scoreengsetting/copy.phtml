@@ -24,6 +24,12 @@
 						dijit.byId('branch_id').focus();
 						return false;
 					}
+					degreeId = dijit.byId('degreeId').get('value');
+					if(degreeId==-1 || degreeId==""){
+						alert('<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>');
+						dijit.byId('degreeId').focus();
+						return false;
+					}
 					identity =dijit.byId("identity").get('value');
 					if(identity=='' || identity==null){
 						alert("<?php echo $tr->translate("PLEASE_SET_ITEMS");?>");

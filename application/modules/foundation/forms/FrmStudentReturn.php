@@ -20,7 +20,7 @@ Class Foundation_Form_FrmStudentReturn extends Zend_Dojo_Form {
 		//$this->check='dijit.form.CheckBox';
 	}
 	
-	public function FrmAddGroup($data=null){
+	public function FrmStudentReturn($data=null){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		
@@ -65,6 +65,18 @@ Class Foundation_Form_FrmStudentReturn extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 				'autoComplete'=>'false',
 		));
+
+		$_return_type=  new Zend_Dojo_Form_Element_FilteringSelect('return_type');
+		$_return_type->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>true,
+		));
+		$_type_opt = array(
+				''=>$this->tr->translate("SELECT_RETURN_TYPE"),
+				1=>$this->tr->translate("RETURN_TO_TEST"),
+				2=>$this->tr->translate("RETURN_TO_GROUP"));
+		$_return_type->setMultiOptions($_type_opt);
 		
 		$_academic->setValue($request->getParam("academic_year"));
 		$rows =  $_dbgb->getAllAcademicYear();
@@ -116,14 +128,14 @@ Class Foundation_Form_FrmStudentReturn extends Zend_Dojo_Form {
 		
 		if($data!=null){
 			$id->setValue($data['id']);
-			$_branch_id->setValue($data['branch_id']);
+			$_branch_id->setValue($data['branchId']);
 			$_branch_id->setAttribs(array('readonly'=>'readonly'));
 			$_degree->setAttribs(array('readonly'=>'readonly'));
 			
 			$_degree->setValue($data['degree']);
-			$return_date->setValue($data['return_date']);
+			$return_date->setValue($data['returnDate']);
 			$_note->setValue($data['note']);
-			$_academic->setValue($data['academic_year']);
+			$_academic->setValue($data['academicYear']);
 			$_status->setValue($data['status']);
 		}
 		$this->addElements(array(
@@ -135,7 +147,7 @@ Class Foundation_Form_FrmStudentReturn extends Zend_Dojo_Form {
 			,$groupId
 			,$degreeId
 			,$gradeId
-			
+			,$_return_type
 			));
 		return $this;
 	}

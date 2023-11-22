@@ -13,6 +13,7 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
     	$sql = " SELECT 
 				s.id,
 				(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+				(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = s.degreeId LIMIT 1) AS degree,
 				s.title,s.note,s.create_date
     		";
     	$sql.=$dbp->caseStatusShowImage("s.status");
@@ -44,13 +45,15 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
 		try{
 			$_arr = array(
-					'branch_id'=>$_data['branch_id'],
-					'title'=>$_data['title'],
-					'note'=>$_data['note'],
-					'status'=>1,
-					'create_date'=>date("Y-m-d H:i:s"),
-					'modify_date'=>date("Y-m-d H:i:s"),
-					'user_id'=>$this->getUserId(),
+					'branch_id'		=>$_data['branch_id'],
+					'degreeId'		=>$_data['degreeId'],
+					'schoolOption'	=>$_data['schoolOption'],
+					'title'			=>$_data['title'],
+					'note'			=>$_data['note'],
+					'status'		=>1,
+					'create_date'	=>date("Y-m-d H:i:s"),
+					'modify_date'	=>date("Y-m-d H:i:s"),
+					'user_id'		=>$this->getUserId(),
 			);
 			$this->_name='rms_scoreengsetting';
 			$id = $this->insert($_arr);
@@ -85,7 +88,7 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
    }
    function getScoreSettingDetail($id){
    	$db = $this->getAdapter();
-   	$sql="SELECT s.*,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.exam_typeid LIMIT 1) AS exam_typetitle FROM `rms_scoreengsettingdetail` AS s WHERE s.score_setting_id=$id";
+   	$sql="SELECT s.*,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS exam_typetitle FROM `rms_scoreengsettingdetail` AS s WHERE s.score_setting_id=$id";
    	return $db->fetchAll($sql);
    }
    public function editScoreSetting($_data){
@@ -95,6 +98,8 @@ class Issuesetting_Model_DbTable_DbScoreSetting extends Zend_Db_Table_Abstract
 		$status = empty($_data['status'])?0:1;
    		$_arr = array(
    				'branch_id'=>$_data['branch_id'],
+				'degreeId'		=>$_data['degreeId'],
+				'schoolOption'	=>$_data['schoolOption'],
    				'title'=>$_data['title'],
    				'note'=>$_data['note'],
    				'status'=>$status,

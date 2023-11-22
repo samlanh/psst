@@ -3,14 +3,37 @@
 	$baseUrl = $this->baseUrl()."/";
 	$pageTitle = $tr->translate("CLASS_LIST");
 	echo $this->headTitle($pageTitle);
-
 	$frm =  $this->form_search;
-	 
+	
 ?>
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
-
+<style>
+	ul {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	}
+	ul.sub_list li:hover{
+		background-color: #cccccc;
+	}
+	ul.sub_list li{
+		float: left;
+		
+		list-style: none;
+	}
+	ul.bg-color li{
+		background-color: #cccccc;
+		padding: 3px;
+		border-radius: 3px;
+	}
+	ul.bg li{
+		background-color: white;
+		padding: 3px;
+		border-radius: 3px;
+	}	
+</style>
 	
 	<div class="row"> 
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -78,7 +101,7 @@
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 											<ul class="dropdown-menu" role="menu">
 												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
+													<a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
 												</li>
 												<?php if(!empty($row['mainTeacher'])){ ?>
 												<li>
@@ -100,10 +123,39 @@
 												<span class="adjustLineHeight material-icons-outlined">groups</span> 
 											</h3>
 											<p class="mb-0"><?php if(!empty($row['mainTeacher'])){ echo "(".$row['mainTeacher'].")";} ?></p>
+											<?php   
+
+											$dbg = new Application_Model_DbTable_DbGlobal();
+											$degreeId = $row['degreeId'];
+											$scoreSetting= array(
+												'degreeId' => $degreeId,
+											);
+											$rsEntrySetting = $dbg->checkEntryScoreSetting($scoreSetting);
+											
+											$dbExternal = new Application_Model_DbTable_DbExternal;
+											$gradingId= $row['gradingId'];
+											$data = array(
+												'gradingId' => $gradingId,
+											);
+											$criterial = $dbExternal -> getCriterialByGrading($data);
+											if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
+											?>
+											<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
+												<li style="width: 60%;" ><?php echo $rsCriterial['criterialTitle']; ?></li>
+												<?php if(!empty($rsEntrySetting)){ ?>
+												<li style="width: 40%; text-align:center;" ><a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId'];?>"><i class="fa fa-share-square-o" aria-hidden="true"></i>&nbsp;<i class="text-success fa fa-toggle-on" aria-hidden="true"></i></a></li>	
+												<?php }else{ ?>	
+													<li style="width: 40%; text-align:center;" ><i class="fa fa-share-square-o" aria-hidden="true">&nbsp;</i><i class="text-info fa fa-toggle-off" aria-hidden="true"></i></li>	
+												<?php }?>	
+											</ul>
+
+											<?php } ?>
+											<div style="clear:both;"></div>
+
 											<ul class="listSmallBtn">
 													<li>
 														<div class="form-group">
-															<a class="small-button-class" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$row['id'];?>">
+															<a class="small-button-class" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id'];?>">
 																<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_SCORE');?>
 															</a>
 														</div>

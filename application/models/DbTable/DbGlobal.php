@@ -4161,7 +4161,11 @@ function getAllgroupStudyNotPass($action=null){
 	   		title,
 	   		degreeId 
    		FROM `rms_score_entry_setting` ";
-   		$sql.=" WHERE status=1 AND '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate ORDER BY examEndDate DESC ";
+   		$sql.=" WHERE status=1 AND '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate ";
+		if(!empty($data['degreeId'])){
+			$sql.=" AND  FIND_IN_SET( ".$data['degreeId'].", degreeId )";
+		}
+		$sql.=" ORDER BY examEndDate DESC  ";
    		return $this->getAdapter()->fetchRow($sql);
    	}
    

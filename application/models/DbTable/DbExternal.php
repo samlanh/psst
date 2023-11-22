@@ -145,6 +145,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				g.*
+				,g.degree as degreeId
 				,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchName
 				,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
 				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
@@ -1022,6 +1023,22 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($groupResult)){
 			
 		}
+	}
+	function getCriterialByGrading($data){
+		$db = $this->getAdapter();
+		$gradingId = empty($data['gradingId'])?0:$data['gradingId'];
+		$sql="SELECT 
+				s.*
+				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
+				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
+				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
+			FROM `rms_scoreengsettingdetail` AS s 
+			WHERE s.score_setting_id=$gradingId 
+			AND s.subjectId =0
+		";
+		$db = $this->getAdapter();
+		$Row = $db->fetchAll($sql);
+		return $Row;
 	}
 	
 }

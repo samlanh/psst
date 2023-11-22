@@ -27,18 +27,18 @@ class Issuesetting_ScoreengsettingController extends Zend_Controller_Action {
 	    	$rs_rows= $db->getAllScoreSetting($search);
 	    	
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","TITLE","NOTE","CREATE_DATE","STATUS",);
+	    	$collumns = array("BRANCH","DEGREE","TITLE","NOTE","CREATE_DATE","STATUS",);
 	    	$link=array(
 	    			'module'=>'issuesetting','controller'=>'scoreengsetting','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link ,'title'=>$link ,'degree'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link ,'degree'=>$link ,'title'=>$link ,'degree'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     	
-    	$frm = new Issuesetting_Form_FrmScoreSetting();
+    	$frm = new Issuesetting_Form_FrmGradingengSetting();
     	$frm->FrmAddScoreSetting(null,$type);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
@@ -60,7 +60,7 @@ class Issuesetting_ScoreengsettingController extends Zend_Controller_Action {
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     		}
     	}
-    	$frm = new Issuesetting_Form_FrmScoreSetting();
+    	$frm = new Issuesetting_Form_FrmGradingengSetting();
     	$frm->FrmAddScoreSetting(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
@@ -92,7 +92,7 @@ class Issuesetting_ScoreengsettingController extends Zend_Controller_Action {
     	}
 		$this->view->row = $row;
     	$this->view->detail = $db->getScoreSettingDetail($id);
-    	$frm = new Issuesetting_Form_FrmScoreSetting();
+    	$frm = new Issuesetting_Form_FrmGradingengSetting();
     	$frm->FrmAddScoreSetting($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
@@ -114,7 +114,7 @@ class Issuesetting_ScoreengsettingController extends Zend_Controller_Action {
     	}
     	$row = $db->getScoreSettingById($id);
     	$this->view->detail = $db->getScoreSettingDetail($id);
-    	$frm = new Issuesetting_Form_FrmScoreSetting();
+    	$frm = new Issuesetting_Form_FrmGradingengSetting();
     	$frm->FrmAddScoreSetting($row);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;

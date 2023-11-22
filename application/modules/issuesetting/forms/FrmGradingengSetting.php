@@ -1,6 +1,6 @@
 <?php
 
-class Issuesetting_Form_FrmScoreSetting extends Zend_Dojo_Form
+class Issuesetting_Form_FrmGradingengSetting extends Zend_Dojo_Form
 {
 	protected  $tr;
 	protected $filter;
@@ -158,7 +158,7 @@ class Issuesetting_Form_FrmScoreSetting extends Zend_Dojo_Form
     			'dojoType'=>'dijit.form.TextBox',
     			'class'=>'fullside '
     	));
-		$_schoolOption->setValue(1);
+		$_schoolOption->setValue(2);
 		
 		$degreeId = new Zend_Dojo_Form_Element_FilteringSelect("degreeId");
 		$degreeId->setMultiOptions($_arr);
@@ -167,8 +167,8 @@ class Issuesetting_Form_FrmScoreSetting extends Zend_Dojo_Form
 				'missingMessage'=>'Invalid Module!',
 				'class'=>'fullside height-text',));
 		
-		$degreeResult = $_dbgb->getAllItems(1,null,1);
-		$degreeOpt =array();
+		$degreeResult = $_dbgb->getAllItems(1,null,2);
+		$degreeOpt = array(""=>$this->tr->translate("PLEASE_SELECT_DEGREE"));
 		if(!empty($degreeResult))foreach($degreeResult AS $row){
 			 $degreeOpt[$row['id']]=$row['name'];
 		}

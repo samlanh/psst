@@ -63,7 +63,7 @@ class Foundation_StudentreturnController extends Zend_Controller_Action {
 				}
 			}
 			$tsub = new Foundation_Form_FrmStudentReturn();
-			$frm_student=$tsub->FrmAddGroup();
+			$frm_student=$tsub->FrmStudentReturn();
 			Application_Model_Decorator::removeAllDecorator($frm_student);
 			$this->view->frm = $frm_student;			
 		}catch(Exception $e){
@@ -100,7 +100,7 @@ class Foundation_StudentreturnController extends Zend_Controller_Action {
 			}
 			$this->view->row =$row;
 			$tsub= new Foundation_Form_FrmStudentReturn();
-			$frm_student=$tsub->FrmAddGroup($row);
+			$frm_student=$tsub->FrmStudentReturn($row);
 			Application_Model_Decorator::removeAllDecorator($frm_student);
 			$this->view->frm = $frm_student;
 			

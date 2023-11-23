@@ -81,7 +81,12 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 		if(!empty($search['grade'])){
 			$where.=" AND `g`.`grade` =".$search['grade'];
 		}
-
+		if(!empty($search['group'])){
+			$where.=" AND `g`.`id` =".$search['group'];
+		}
+		if(!empty($search['criteriaId'])){
+			$where.=" AND `grd`.`criteriaId` =".$search['criteriaId'];
+		}
 		if($search['for_month']>0){
 			$where.=" AND grd.forMonth =".$search['for_month'];
 		}

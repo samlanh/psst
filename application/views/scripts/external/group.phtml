@@ -32,7 +32,17 @@
 		background-color: white;
 		padding: 3px;
 		border-radius: 3px;
-	}	
+	}
+	a.mini-button-class {
+    padding: 3px;
+    font-size: 10px;
+    color: #fff;
+    background-color: #0150a6;
+    border-color: #004b9c;
+    border-radius: 6px;
+    width: 75px !important;
+    display: block;
+	}
 </style>
 	
 	<div class="row"> 
@@ -88,14 +98,14 @@
 					<div class="col-md-3 col-sm-3 col-xs-12"> 
 						<div class="card mb-0 <?php echo $cardClass; ?> border-top-5">
 							<div class="card-content">
-								<div class="row d-flex">
-									<div class="col-xs-4 pr-0">
-										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
+								<div class="row d-flex mb-1">
+									<div class="col-xs-5 pr-0">
+										<div class="d-flex align-items-center h-100 text-white  <?php echo $bgClass; ?>">
 											<i class="mt-0 mb-0 mr-auto ml-auto glyphicon glyphicon-education icon-opacity text-white font-large-4"></i>
 											<strong><?php echo $row['group_code']; ?></strong>
 										</div>
 									</div>
-									<div class="col-xs-8 pl-0">
+									<div class="col-xs-7 pl-0">
 										<ul class="nav navbar-right panel_toolbox stusearch">
 										  <li class="dropdown">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
@@ -114,7 +124,7 @@
 											</ul>
 										  </li>
 										</ul>
-										<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-12 col-sm-12 col-xs-12 ">
 											<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
 											<p class="mb-0"><?php echo $row['academicYear']; ?></p>
 											<p class="mb-0"><?php echo $row['groupStatus']; ?></p>
@@ -123,43 +133,7 @@
 												<span class="adjustLineHeight material-icons-outlined">groups</span> 
 											</h3>
 											<p class="mb-0"><?php if(!empty($row['mainTeacher'])){ echo "(".$row['mainTeacher'].")";} ?></p>
-											<?php   
-
-											$dbg = new Application_Model_DbTable_DbGlobal();
-											$degreeId = $row['degreeId'];
-											$scoreSetting= array(
-												'degreeId' => $degreeId,
-											);
-											$rsEntrySetting = $dbg->checkEntryScoreSetting($scoreSetting);
-											
-											$dbExternal = new Application_Model_DbTable_DbExternal;
-											$gradingId= $row['gradingId'];
-											$data = array(
-												'gradingId' => $gradingId,
-											);
-											$criterial = $dbExternal -> getCriterialByGrading($data);
-											if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
-											?>
-											<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
-												<li style="width: 60%;" ><?php echo $rsCriterial['criterialTitle']; ?></li>
-												<?php if(!empty($rsEntrySetting)){ ?>
-												<li style="width: 40%; text-align:center;" ><a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId'];?>"><i class="fa fa-share-square-o" aria-hidden="true"></i>&nbsp;<i class="text-success fa fa-toggle-on" aria-hidden="true"></i></a></li>	
-												<?php }else{ ?>	
-													<li style="width: 40%; text-align:center;" ><i class="fa fa-share-square-o" aria-hidden="true">&nbsp;</i><i class="text-info fa fa-toggle-off" aria-hidden="true"></i></li>	
-												<?php }?>	
-											</ul>
-
-											<?php } ?>
-											<div style="clear:both;"></div>
-
 											<ul class="listSmallBtn">
-													<li>
-														<div class="form-group">
-															<a class="small-button-class" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id'];?>">
-																<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_SCORE');?>
-															</a>
-														</div>
-													</li>
 													<?php if(!empty($row['mainTeacher'])){ ?>
 													<li>
 														<div class="form-group">
@@ -173,12 +147,46 @@
 										</div>
 									</div>
 								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12 ">
+									<?php   
+										$dbg = new Application_Model_DbTable_DbGlobal();
+										$degreeId = $row['degreeId'];
+										$scoreSetting= array(
+											'degreeId' => $degreeId,
+										);
+										$rsEntrySetting = $dbg->checkEntryScoreSetting($scoreSetting);
+
+										$dbExternal = new Application_Model_DbTable_DbExternal;
+										$gradingId= $row['gradingId'];
+										$data = array(
+											'gradingId' => $gradingId,
+										);
+										$criterial = $dbExternal -> getCriterialByGrading($data);
+										$no =0;
+										if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
+											$no++;
+										?>
+										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
+											<li style="width: 60%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>
+											<?php if(!empty($rsEntrySetting)){ ?>
+												<li style="width: 40%; text-align:center;" >
+													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId'];?>">
+														<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
+													</a>
+												<!-- <a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId'];?>"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>&nbsp;<i class="text-success fa fa-toggle-on" aria-hidden="true"></i></a> -->
+												</li>	
+											<?php }else{ ?>	
+												<li style="width: 40%; text-align:center;" ><i class="text-info fa fa-toggle-off" aria-hidden="true"></i>
+											<?php }?>	
+										</ul>
+									<?php } ?>
+									<div style="clear:both;"></div>
+								</div>
+
 							</div>
 						</div>
 					</div>
 					<?php } ?>
-					
-					
 				</div> 
 	
 			</div>

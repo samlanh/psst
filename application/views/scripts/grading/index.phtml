@@ -1,11 +1,14 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("ISSUE_SCORE_LIST");
+	$pageTitle = $tr->translate("GRADING_SYSTEM");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	
+
+	$groupId =  $this->groupId;
+	$criteriaId =  $this->criteriaId;
 	//$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
+
 $frm =  $this->form_search;
 ?>	
 <?php 
@@ -15,7 +18,14 @@ $frm =  $this->form_search;
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="card mb-1 pb-3 ">
 				<div class="card-header pb-1"> 
-					<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
+					<div class="col-md-10 col-sm-10 col-xs-12">
+						<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<a  class="small-button-class" href="<?php echo $this->baseUrl()."/grading/add/id/".$groupId."/criteriaId/".$criteriaId;?>">
+							<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i><?php echo $tr->translate('ISSUE_SCORE');?>
+						</a>
+					</div>
 				</div>
 				<div class="card-content">
 					<div class="card-body">
@@ -33,6 +43,9 @@ $frm =  $this->form_search;
 							   </div>
 							   <div class="col-md-2 col-sm-2 col-xs-12">
 									<input id="grade" />
+							   </div>
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<input id="group" />
 							   </div>
 							   <div class="col-md-2 col-sm-3 col-xs-12">
 									<?php echo $frm->getElement("exam_type");?>
@@ -128,7 +141,9 @@ $( document ).ready(function() {
    setPageTitle('<?php echo $pageTitle; ?>');
 });
 
+
 dojo.require("dojo.data.ItemFileWriteStore"); 
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 
 	new dijit.form.FilteringSelect({
@@ -140,10 +155,29 @@ dojo.ready(function(){
 		class: 'fullside',  
 		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
+			getAllGroup();
 		}
 	}, "grade");
+
+	new dijit.form.FilteringSelect({
+			store: group_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: true,                      
+			id: "group",
+			name: "group",  
+			class: 'fullside', 
+			readonly:false,
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+			onChange: function() {  
+				
+			}
+		}, "group");
+		
 	
 	getallGrade();
+	getAllGroup();
 	<?php if(!empty($this->search['academic_year'])){?>
 	 dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year'];?>'); 
 	<?php } ?>
@@ -170,6 +204,38 @@ function getallGrade(){
 			}
 		});
 }
+
+	url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+	function getAllGroup(){
+		dijit.byId('group').reset();
+		degree = dijit.byId('degree').get('value');
+		if(degree=='' || degree==-1){
+			degree ="";
+		}
+		grade = dijit.byId('grade').get('value');
+		if(grade=='' || grade==-1){
+			grade ="";
+		}
+		dojo.xhrPost({
+			url: url_getallgroup,
+			content:{
+				'degree':degree,
+				'grade':grade,
+				'noaddnew':1
+			},
+			handleAs:"json",
+			load: function(data) {
+			    group_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('group').set('store',group_store);  
+			    <?php if (!empty($this->search['group'])){?>
+				dijit.byId('group').attr('value','<?php echo $this->search['group']?>');  
+				<?php }?> 
+			},
+			error: function(err) {
+			}
+		});
+	}
+
 </script>
 <?php 
 	echo $this->render('externalFoot.phtml');

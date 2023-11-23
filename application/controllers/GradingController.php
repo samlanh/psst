@@ -19,12 +19,20 @@ class GradingController extends Zend_Controller_Action
 		
 		$teacherInfo = $dbExternal->getCurrentTeacherInfo();
 		$currentAcademic = empty($teacherInfo['currentAcademic'])?0:$teacherInfo['currentAcademic'];
+
+		$groupId=$this->getRequest()->getParam("id");
+		$groupId = empty($groupId)?0:$groupId;
+		$this->view->groupId = $groupId;
+		$criteriaId=$this->getRequest()->getParam("criteriaId");
+		$criteriaId = empty($criteriaId)?'':$criteriaId;
+		$this->view->criteriaId = $groupId;
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			$search['externalAuth']=1;
 		}
 		else{
+			
 			$search = array(
 				'adv_search'=>'',
 				'externalAuth'=>1,//for teacher access
@@ -34,12 +42,13 @@ class GradingController extends Zend_Controller_Action
 				'for_month'=>'',
 				'degree'=>0,
 				'grade'=> 0,
+				'group'=> $groupId ,
+				'criteriaId'=>$criteriaId,
 				'start_date'=> '',
 				'end_date'=>date('Y-m-d')
 			);
 		}
 		$this->view->search = $search;
-		
 		$db = new Application_Model_DbTable_DbGradingScore();
 		$row = $db->getAllGradingScore($search);
 		$this->view->row = $row;
@@ -171,5 +180,6 @@ class GradingController extends Zend_Controller_Action
 			exit();
 		}
 	}
+	
 
 }

@@ -25,7 +25,7 @@ class GradingController extends Zend_Controller_Action
 		$this->view->groupId = $groupId;
 		$criteriaId=$this->getRequest()->getParam("criteriaId");
 		$criteriaId = empty($criteriaId)?'':$criteriaId;
-		$this->view->criteriaId = $groupId;
+		$this->view->criteriaId = $criteriaId;
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -52,7 +52,6 @@ class GradingController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbGradingScore();
 		$row = $db->getAllGradingScore($search);
 		$this->view->row = $row;
-
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
@@ -82,6 +81,10 @@ class GradingController extends Zend_Controller_Action
 		}
 		$id=$this->getRequest()->getParam("id");
 		$id = empty($id)?0:$id;
+
+		$criteriaId=$this->getRequest()->getParam("criteriaId");
+		$criteriaId = empty($criteriaId)?0:$criteriaId;
+		$this->view->criteriaId = $criteriaId;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getGroupDetailByIDExternal($id,1);

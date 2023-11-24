@@ -6,7 +6,9 @@
 	$db_global = new Application_Model_DbTable_DbGlobal();
 	$session_lang = new Zend_Session_Namespace('lang');
 	$lang_id = $session_lang->lang_id;
+	$principalInfo = $this->principalInfo;
 ?>	
+
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
@@ -72,6 +74,45 @@
 	</style>
 		<table width="100%" style="background:#fff;margin: 0 auto;width: 100%; font-family: 'Times New Roman','Kh Battambang','Khmer Battambang';">
 			<style>
+			.principalStamp {
+					position:relative;
+					width: 300px;
+   					height: 140px;
+					margin:0 auto;
+					margin-top:-5px;
+				}
+				.principalStamp .stamp {
+					width:140px;
+					height:140px;
+					position:absolute;
+					transform: translate(-81%);
+					left:50%;
+				}
+				.principalStamp .signature {
+					left: 40px;
+					bottom: 32px;
+					height: 100px;
+					width:200px;
+					position: absolute;
+				}
+				.principalStamp .principalName{
+					left: 130px;
+				    top: 113px;
+				    height: 100px;
+				    width: 200px;
+				    position: absolute;
+				}
+				.seenApproved{
+					position: relative;
+				}
+				.seenApproved .interimPrincipal{
+					position: absolute;
+					left: 50%;
+				    top: 20px;
+				    transform: translate(-50%);
+				    z-index: 1;
+				}
+				
 				.hover:hover{background: #ccc;}
 				table { page-break-inside:auto }
 				  tr{ page-break-inside:avoid; page-break-after:auto; }
@@ -93,12 +134,13 @@
 				    margin: 0;
 				}
 				tr.line td{ border-bottom: 1px solid #000;}
+				.padding-top{padding-top:20px;}
 
 				.headerKhmer {
-				font-size: 16px;
-				line-height: 12px;
-				font-weight: initial;
-				font-family: 'Times New Roman','Khmer OS Muol Light', serif;
+					font-size: 13px;
+					line-height: 12px;
+					font-weight: initial;
+					font-family: 'Times New Roman','Khmer OS Muol Light', serif;
 				}
 				.headerLabel {
 				font-size: 14px;
@@ -107,16 +149,15 @@
 				font-family: 'Times New Roman','Khmer OS Muol Light';
 				}
 				span.valueLabel.khmerLabel {
-				font-size: 14px;
+				font-size: 12px;
 				font-weight: normal !important;
-				line-height: 18px;
 				font-family: 'Times New Roman', 'Khmer OS Muol Light';
 				line-height: 12px;
 				}
 				@media print {
 						@page {
 							page:A4;
-							margin: 0.8cm;
+							margin:0.8cm 0.8cm 0cm 0.8cm;
 						}
 					}
 					.pages-break {
@@ -134,14 +175,14 @@
 				?>
 				<tr class="<?php echo $break_page; ?> ">
 					<td colspan="2" valign="bottom">
-						<h2 class="headerKhmer "><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
+						<h2 class="headerKhmer padding-top"><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
 						<h2 class="headerKhmer ">
 							<?php echo $rs['school_name']?>
 						</h2>
 					</td>
 					<td align="center" valign="top">
-						<h2 class="headerKhmer "><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
-						<h2 class="headerKhmer "><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
+						<h2 class="headerKhmer" style="font-size:15px;"><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
+						<h2 class="headerKhmer"><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
 						<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
 					</td>
 				</tr>
@@ -262,83 +303,74 @@
 											$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
 											$num++;
 										 ?>
-										<li style="width: 25%;float: left;list-style-type: none;line-height: 20px;"><?php echo $num;?>.&nbsp;<?php echo $SubjectName;?>:&nbsp;<?php echo $totalTime;?></li>
+										<li style="width: 25%;float: left;list-style-type: none;line-height:18px;"><?php echo $num;?>.&nbsp;<?php echo $SubjectName;?>:&nbsp;<?php echo $totalTime;?></li>
 									 <?php }}?>
 									 </ul>
+									 <span class="className valueLabel" style="font-size: 10px;">Note: The effetive date of this schedule is <?php echo date("l");?>,<?php echo date("d");?> <?php echo date("F");?>,<?php echo date("Y");?>.this schedule is subject to change as deemed nesessary</span>
 							 	</td>
 							 </tr>
-						</table>											
+							</table>											
 					</td>
 				</tr>
-				<tr class="footer">
-						<td colspan="3" >
-							<table width="100%" >
-								<tr  >
-									<td   width="5%" style="margin-top: 30px;">
-										&nbsp;
-									</td>
-									<td   align="left" width="45%" style="margin-top: 30px;">
-										&nbsp;
-									</td>
-									<td  align="center"  width="50%"  valign="top">
-										<?php
-										$moment = date("Y-m-d");
-										$lunar = new Application_Model_DbTable_DbLunaCalendar($moment);
-										?>
-										<?php
-											if ($lang_id == 1) { ?>
-												<label class="LabelTeacher smalFont">
-													ភ្នំពេញ​ ថ្ងៃទី
-													<?php echo $db_global->getNumberInkhmer(date("d")); ?> ខែ
-													<?php echo $db_global->getMonthInkhmer(date("m")); ?> ឆ្នាំ
-													<?php echo $db_global->getNumberInkhmer(date("Y")); ?>
-												</label>
-											<?php }else{ ?>
-												
-												<label class="LabelTeacher smalFont">
-													Phnom Penh,
-													<?php echo date("l");?>,
-													<?php echo date("d");?> 
-													<?php echo date("F");?>,
-													<?php echo date("Y");?> 
-												</label>
-											<?php } ?>
-										
-										<h2 class="headerLabel "><?php echo $tr->translate("INTERIM_PRINCIPAL"); ?></h2>
-									</td>
-								</tr>
-								<tr  >
-									<td valign="top"  width="5%" >
-											<?php
-												if ($lang_id == 1) { ?>
-											<span class="className valueLabel "><i>Note:</i><span>
-											<?php }else{ ?>
-											<span class="className valueLabel "><i>Note:</i></span>
-										<?php } ?>	
-										
-									</td>
-									<td   align="left" width="45%" style="margin-top: 30px;">
-										
-												<?php
-													if ($lang_id == 1) { ?>
-															<span class="className valueLabel ">The effetive date of this schedule is monday,<?php echo date("l");?>,<?php echo date("d");?> <?php echo date("F");?>,<?php echo date("Y");?>.this schedule is subject to change as deemed nesessary<span>
-														<?php }else{ ?>
-															<span class="className valueLabel ">The effetive date of this schedule is monday,<?php echo date("l");?>,<?php echo date("d");?> <?php echo date("F");?>,<?php echo date("Y");?>.this schedule is subject to change as deemed nesessary<span>
-													<?php } ?>	
-										</span>
-									</td>
-									<td   align="left" width="50%" >
-										&nbsp;
-									</td>
-								</tr>
-							</table>
+				<tr>
+						<td  align="center" width="33%" valign="top">
+							<div class="seenApproved headerKhmer">បានឃើញ និងឯកភាព
+								<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
+							</div>
+
 						</td>
+						<td colspan="2" align="center" >
+						</td>
+						
 					</tr>
-				<!-- <tr>
-					<td colspan="3" style="border:1px solid #fff;" valign="top">
-						<?php echo $this->rsfooter; ?>
-					</td>
-				</tr> -->
+					<tr>
+						<td>
+							<div class="principalStamp" id="principalStamp" >
+								<div class="stamp" >
+									<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['stamp']; ?>"  />
+									<div class="signature">
+										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['signature']; ?>" />
+									</div>
+									<div class="principalName">
+										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php if(!empty($principalInfo['duty_namekh'])){ echo $principalInfo['duty_namekh']; } ?></span>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td></td>
+						<td align="right" style="font-size:11px;" valign="top">
+								<label id="lunarDate" class="LabelTeacher" >
+								<?php 
+									$dbgb = new Application_Model_DbTable_DbGlobal();
+									$inputDate =date("d-m-Y");
+									$time  = strtotime($inputDate);
+									$day   = date('d',$time);
+									$month = date('m',$time);
+									$year  = date('Y',$time);
+										
+									$lunaDate = date('Y-m-d',strtotime($inputDate));
+									$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+								?>
+								<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
+							</label>
+							<label id= "date" style="display: block;">
+								ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date($day)); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date($month)); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date($year)); ?>
+							</label>
+							<?php
+
+					if ($lang_id == 1) { ?>
+						
+					<?php }else{ ?>
+						<label id= "date" style="display:none">
+							Phnom Penh,
+							<?php echo date("l");?>,
+							<?php echo date("d");?> 
+							<?php echo date("F");?>,
+							<?php echo date("Y");?> 
+						</label>
+				<?php } ?>
+							</td>
+					</tr>
 				<?php  }?>
 		</table>
 	</div>		
@@ -404,6 +436,7 @@ dojo.ready(function(){
     });
 	 getallGrade();
 	 getAllGroupByBranch();
+	 stampDisplay();
 });
 var oldBranch = "<?php echo $this->search['branch_id']?>";
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
@@ -494,4 +527,11 @@ function getRefreshRoom(){
 		}
 	});
 }
+function stampDisplay() {
+	  var checkBox = document.getElementById("stamp");
+	  var stamp = document.getElementById("principalStamp");
+	  stamp.style.display = "block";
+	  
+	}
+
 </script>

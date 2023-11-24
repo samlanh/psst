@@ -516,6 +516,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$forms = $form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
+		
+		$dbSetting = new Setting_Model_DbTable_Dbduty();
+		$this->view->principalInfo = $dbSetting->getDutyById(1);
 	}
 	public function rptRescheduleGroupAction()
 	{

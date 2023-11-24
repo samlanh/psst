@@ -1,6 +1,6 @@
 <?php 
 
-$xml=simplexml_load_file(PUBLIC_PATH."/Test Schedule (24-Nov-23).xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+$xml=simplexml_load_file(PUBLIC_PATH."/xml/schedule.xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
 $dbxml = new Issue_Model_DbTable_DbImportxml;
 $array = json_decode(json_encode((array)$xml), TRUE);
 //print_r($xml->attributes);
@@ -30,66 +30,22 @@ $array = json_decode(json_encode((array)$xml), TRUE);
 // $tableData = $array["subjects"]["subject"];
 // $periodsColumn = $array["subjects"]["@attributes"]["columns"];
 // $columnList = explode(',', $periodsColumn);
-
 // if(!empty($tableData)) foreach($tableData as $row){
 
 // 	$subjectTitle =$row["@attributes"]['name'];
 // 	$strId =$row["@attributes"]['id'];
 // 	$Subject = $dbxml->getSubjectId($subjectTitle,$strId);
-// 	echo $Subject;
-// 	foreach ($columnList as $i){
-	
-// 	}
-// 	echo "<br />";
 // }
 
 // $tableData = $array["teachers"]["teacher"];
 // $periodsColumn = $array["teachers"]["@attributes"]["columns"];
 // $columnList = explode(',', $periodsColumn);
-
 // if(!empty($tableData)) foreach($tableData as $row){
 
 // 	$teacherTitle =$row["@attributes"]['name'];
 // 	$strId =$row["@attributes"]['id'];
 // 	$gender =$row["@attributes"]['gender'];
 // 	$teacher = $dbxml->getTeacherId($teacherTitle,$gender,$strId);
-// 	echo $teacher;
-// 	echo "<br />";
-// }
-
-$tableData = $array["classes"]["class"];
-$periodsColumn = $array["classes"]["@attributes"]["columns"];
-$columnList = explode(',', $periodsColumn);
-
-if(!empty($tableData)) foreach($tableData as $row){
-
-	$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
-	$strId =$row["@attributes"]['id'];
-	$groupId = $dbxml->getGroupId($groupCode,$strId);
-	echo $groupId;
-	echo "<br />";
-}
-
-// $tableData = $array["teachers"]["teacher"];
-// $periodsColumn = $array["teachers"]["@attributes"]["columns"];
-// $columnList = explode(',', $periodsColumn);
-
-// if(!empty($tableData)) foreach($tableData as $row){
-// 	foreach ($columnList as $i){
-// 		echo $i."=".$row["@attributes"][$i]." ";
-// 	}
-// 	echo "<br />";
-// }
-
-// $tableData = $array["classrooms"]["classroom"];
-// $periodsColumn = $array["classrooms"]["@attributes"]["columns"];
-// $columnList = explode(',', $periodsColumn);
-
-// if(!empty($tableData)) foreach($tableData as $row){
-// 	foreach ($columnList as $i){
-// 		echo $i."=".$row["@attributes"][$i]." ";
-// 	}
-// 	echo "<br />";
 // }
 
 // $tableData = $array["classes"]["class"];
@@ -97,65 +53,42 @@ if(!empty($tableData)) foreach($tableData as $row){
 // $columnList = explode(',', $periodsColumn);
 
 // if(!empty($tableData)) foreach($tableData as $row){
-// 	foreach ($columnList as $i){
-// 		echo $i."=".$row["@attributes"][$i]." ";
-// 	}
-// 	echo "<br />";
+// 	$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
+// 	$strId =$row["@attributes"]['id'];
+// 	$groupId = $dbxml->getGroupId($groupCode,$strId);
 // }
 
-
-// print_r($xml->cards);
-// $result = json_decode(json_encode((array)$xml), TRUE);
-// print_r($result);
-// echo($xml->count());//count //used
-
-// foreach ($array as $result){
-// 	foreach ($result as $key=> $sub1){
-// 		print_r($sub1);
-// 		echo "<br />";
-// 			if(!empty($sub1['columns'])){
-// // 				echo "Column:";
-// // 				print_r($sub1['columns']);//show column;
-// 				echo".......<br /><br /><br /><br />..........";
-// 				$columns = explode(',',$sub1['columns']);
-// 				foreach($columns as $column){
-// // 					echo $column;
-// // 					echo"________<br /><br /><br /><br />_______";
-// 					foreach($sub1 as $subkey=> $sub2){
-// // 						print_r($sub2);
-// // 						echo"________<br /><br /><br /><br />_______";
-						
-// 					}
-// 				}
-				
-				
-// 			}
-		
-// 	}
+// $tableData = $array["cards"]["card"];
+// if(!empty($tableData)) foreach($tableData as $row){
+// 	$lessionId = $row["@attributes"]['lessonid'];
+// 	$period = $row["@attributes"]['period'];
+// 	$days = $row["@attributes"]['days'];
+// 	$dbxml->addcard($lessionId,$period,$days);
 // }
 
+$tableData = $array["lessons"]["lesson"];
+$periodsColumn = $array["classes"]["@attributes"]["columns"];
+$columnList = explode(',', $periodsColumn);
 
-// for ($xml->rewind(); $xml->valid(); $xml->next()) {
-//     foreach($xml->getChildren() as $name => $data) {
-//     echo "The $name is '$data' from the class " . get_class($data) . "<br />";
-//     }
-// }
-// foreach ($xml as $first) {
-// 	print_r($first)."<br /><br /><br /><br />";
-// // 	foreach ($first->children() as $second) {
-// 		//echo ' who begot a ' . $third_gen['role'] . ';';
-// 		//echo"<br />child 1 ".$second->['name']."<br />";//use 1 get all sub element(list of table)
+if(!empty($tableData)) foreach($tableData as $row){
+	$subjectId= $dbxml->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
+	$teacherId = $dbxml->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
+	$groupId = $dbxml->getGroupIdbyStrId($row["@attributes"]['classids']);
+	
+// 	echo $subjectId."subject<br />";
+// 	echo $teacherId."teacherId<br />";
+// 	echo $groupId."groupId<br />";
+	
+	$lessionId = $row["@attributes"]['id'];
+	
+	$data = array(
+					'subject_id'=>$subjectId,
+					'techer_id' =>$teacherId,
+					'note'=>'abc',
+			);
+// 	$dbxml->updateExistingSchedule($lessionId,$data,$groupId);
+}
 
-// // 		foreach ($third_gen->children() as $fourth_gen) {
-// // 			echo ' and that ' . $third_gen['role'] .
-// // 			' begot a ' . $fourth_gen['role'];
-// // 		}
-// // 	}
-// }
-// foreach ($xml->children() as $child)
-// {
-// 	 echo"<br />child 1 ".$child->getName()."<br />";//use 1 get all sub element(list of table)
 
-// }
 
 ?>

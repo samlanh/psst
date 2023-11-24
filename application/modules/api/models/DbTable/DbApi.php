@@ -2505,7 +2505,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$rs = $db->fetchAll($sql);
 			$restult = "0";
 			if(!empty($rs)){
-				$restult = "".COUNT($restult)."";
+				$restult = "".COUNT($rs)."";
 			}
 			return $restult;
 		}

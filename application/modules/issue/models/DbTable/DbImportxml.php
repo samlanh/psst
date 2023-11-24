@@ -22,7 +22,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
         
 		if(empty($subject_id)){
 			echo $title;
-		//	exit();
+			exit();
 			// $arr = array(
 			// 	'subject_titlekh'=>$kh_name,
 			// 	'subject_titleen'=>$eng_name,
@@ -50,29 +50,73 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		}
 		return $subject_id;
 	}
+	public function getSubjectIdbyStrId($strId){
+		$db = $this->getAdapter();
+		$sql=" SELECT id FROM `rms_subject` WHERE strId = '".$strId."'" ;
+		return $db->fetchOne($sql);
+	}
+	function getTeacherIdbyStrId($strId){
+		$db = $this->getAdapter();
+		$sql=" SELECT id FROM `rms_teacher` WHERE strId = '".$strId."'" ;
+		return $db->fetchOne($sql);
+	}
+	function getGroupIdbyStrId($strId){
+		$db = $this->getAdapter();
+		$sql=" SELECT id FROM `rms_group` WHERE strId = '".$strId."'" ;
+		return $db->fetchOne($sql);
+	}
+	function getPeriodData($index){
+		$rs = array(
+				1=>array('fromhr'=>'7.30','tohr'=>'8.20'),
+				2=>array('fromhr'=>'8.40','tohr'=>'9.30'),
+				3=>array('fromhr'=>'9.40','tohr'=>'10.30'),
+				4=>array('fromhr'=>'10.40','tohr'=>'11.30'),
+				5=>array('fromhr'=>'13.10','tohr'=>'14.00'),
+				6=>array('fromhr'=>'14.10','tohr'=>'15.00'),
+				7=>array('fromhr'=>'15.10','tohr'=>'16.00')
+				);
+		return $rs[$index];
+	}
+	function addcard($lessionId,$period,$day){
+			$db = $this->getAdapter();
+			$rs = $this->getPeriodData($period);
+					$_arr=array(
+						'lessionstrId' 		 => $lessionId,
+						'periodstrId'	 => $period,
+						'fromhr'		=>$rs['fromhr'],
+						'tohr'		=>$rs['tohr'],
+						'daystrId'	 =>$this->dayofWeek($day),
+				);
+				$this->_name = "rms_cards";
+				$this->insert($_arr);
+	}
+	
 
 	public function getTeacherId($title,$gender,$strId){
+		
 		$db = $this->getAdapter();
 		$sex= ($gender=='M')?1:2;
 		if(!empty($title)){
 			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh = '".$title."' OR teacher_name_en = '".$title."' ";
 			$teacherId =  $db->fetchOne($sql);
 			$dbg = new Application_Model_DbTable_DbGlobal();
-			$code = $dbg->getTeacherCode(1);
+			
 			if(empty($teacherId)){
 				 echo $title;
-				// 	$_arr=array(
-				// 		'branch_id' 		 => 1,
-				// 		'teacher_name_en'	 => $title,
-				// 		'teacher_name_kh'	 => $title,
-				// 		'teacher_code'		 => $code,
-				// 		'sex'				 => $sex,
-				// 		'nation' 			 => 1,
-				// 		'create_date' 		 => date("Y-m-d"),
-				// 		'user_id'	  		 => $this->getUserId(),
-				// );
-				// $this->_name = "rms_teacher";
-				// $teacherId =  $this->insert($_arr);
+				 exit();
+				 $code = $dbg->getTeacherCode(1);
+					$_arr=array(
+						'branch_id' 		 => 1,
+						'teacher_name_en'	 => $title,
+						'teacher_name_kh'	 => $title,
+						'teacher_code'		 => $code,
+						'sex'				 => $sex,
+						'nation' 			 => 1,
+						'create_date' 		 => date("Y-m-d"),
+						'user_id'	  		 => $this->getUserId(),
+				);
+				$this->_name = "rms_teacher";
+				$teacherId =  $this->insert($_arr);
 			}else{
 				$this->_name='rms_teacher';
 				$array = array(
@@ -94,6 +138,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			if(empty($groupId)){
 				 echo $title;
+				 exit();
 				// 	$_arr=array(
 				// 		'branch_id' 		 => $data['branch_id'],
 				// 		'teacher_name_en'	 => $eng_name,
@@ -119,9 +164,39 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		
 		return $groupId;
 	}
+	function dayofWeek($str){
+		$days = array(
+				'10000'=>1,//mon
+				'01000'=>2,
+				'00100'=>3,
+				'00010'=>4,
+				'00001'=>5,//fri
+				);
+		return $days[$str];
+	}
 	
-
-
+	function getCardList($strId){
+		$db = $this->getAdapter();
+		$sql="SELECT
+			periodstrId,
+			fromhr,
+			tohr,
+			daystrId
+		FROM `rms_cards`
+			WHERE lessionstrId='".$strId."'";
+		$sql.=" ORDER BY daystrId ASC,fromhr ASC";
+		return $db->fetchAll($sql);
+	}
 	
+	function updateExistingSchedule($lessionId,$data,$groupId){
+		$db = $this->getAdapter();
+		$results = $this->getCardList($lessionId);
+		foreach($results as $rs){
+			$this->_name="rms_group_reschedule";
+			$where = "year_id=7 AND group_id=".$groupId." AND day_id=".$rs['daystrId']." AND from_hour=".$rs['fromhr']." AND to_hour=".$rs['tohr'];
+			 $this->update($data, $where);
+// 			exit();
+		}
+	}
 }   
 

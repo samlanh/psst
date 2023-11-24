@@ -549,7 +549,19 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_sort_degree->setMultiOptions($_sort_dg_opt);
 		$_sort_degree->setValue($request->getParam("sort_degree"));
 
-	
+		$_arr_opt_exam = array(""=>$this->tr->translate("PLEASE_SELECT_CRITERIAL"));
+    	$optionExametype = $_dbgb->getExamTypeEngItems();
+    	if(!empty($optionExametype))foreach($optionExametype AS $row) $_arr_opt_exam[$row['id']]=$row['name'];
+    	$_criteriaId = new Zend_Dojo_Form_Element_FilteringSelect("criteriaId");
+    	$_criteriaId->setMultiOptions($_arr_opt_exam);
+    	$_criteriaId->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'false',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'onChange'=>'addRow()',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
 		
 		
 		$this->addElements(array(
@@ -587,7 +599,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_register_status,
 				$_student_group_status,
 				$_cut_stock_type,
-				$_sort_degree
+				$_sort_degree,
+				$_criteriaId
 				)
 			);
 		return $this;

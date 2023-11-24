@@ -9,7 +9,8 @@
 
 	$current_month = date("m");
 	$msgTitle = "ទិន្នន័យស្ទួន / Duplicated Record";
-	$msgDesc = "ពិន្ទុមុខវិជ្ជានេះបានបញ្ចូលរួចរាល់ហើយ / This subject's score has been entered !"
+	$msgDesc = "ពិន្ទុមុខវិជ្ជានេះបានបញ្ចូលរួចរាល់ហើយ / This subject's score has been entered !";
+	$criteriaId = $this->criteriaId;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -70,7 +71,7 @@
 															<div class="col-md-7 col-sm-7 col-xs-12">
 																<select onchange="getSubjectInfo();"  dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="criteriaId" name="criteriaId" queryExpr="*${0}*" autoComplete="false">								
 																	<?php if(!empty($this->criteria)){foreach ($this->criteria as $rscriteria){?>
-																		<option value="<?php echo $rscriteria['criteriaId']?>" ><?php echo $rscriteria['criterialTitle'].'/'.$rscriteria['criterialTitleEng'];?></option>
+																		<option value="<?php echo $rscriteria['criteriaId']?>" <?php if($criteriaId== $rscriteria['criteriaId']) echo 'selected';?> ><?php echo $rscriteria['criterialTitle'].'/'.$rscriteria['criterialTitleEng'];?></option>
 																	<?php }}?>
 																</select>
 															</div>

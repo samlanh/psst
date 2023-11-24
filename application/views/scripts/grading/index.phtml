@@ -7,9 +7,8 @@
 
 	$groupId =  $this->groupId;
 	$criteriaId =  $this->criteriaId;
-	//$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
 
-$frm =  $this->form_search;
+	$frm =  $this->form_search;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -47,11 +46,14 @@ $frm =  $this->form_search;
 							   <div class="col-md-2 col-sm-2 col-xs-12">
 									<input id="group" />
 							   </div>
-							   <div class="col-md-2 col-sm-3 col-xs-12">
-									<?php echo $frm->getElement("exam_type");?>
-								</div>
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("criteriaId");?>
+							   </div>
 						   </div>
 							<div class="form-group"> 
+								<div class="col-md-2 col-sm-3 col-xs-12">
+									<?php echo $frm->getElement("exam_type");?>
+								</div>
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("for_semester");?>
 								</div>
@@ -180,6 +182,10 @@ dojo.ready(function(){
 	getAllGroup();
 	<?php if(!empty($this->search['academic_year'])){?>
 	 dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year'];?>'); 
+	<?php } ?>
+
+	<?php if(!empty($criteriaId)){?>
+	 dijit.byId('criteriaId').attr('value','<?php echo $criteriaId;?>'); 
 	<?php } ?>
 });
 

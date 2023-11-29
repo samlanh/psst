@@ -66,6 +66,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,t.id AS teacherId
 						,t.teacher_code AS teacherCode
 						,t.$teacherName AS teacherName
+						,t.teacher_name_kh AS teacherNameKh
+						,t.teacher_name_en AS teacherNameEng
 						
 						,t.branch_id AS branchId
 						,(SELECT $lbView from rms_view where type=2 and key_code=t.sex LIMIT 1) as genderTitle
@@ -154,6 +156,49 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     		return null;
     	}
     }
+	
+	function checkChangePassword($_data){
+		$db = $this->getAdapter();
+		try{
+	
+			$sql ="
+			SELECT
+				t.id AS id
+				,t.teacher_code AS teacherCode
+				,t.teacher_name_kh AS teaccherNameKh
+				,t.teacher_name_en AS teaccherNameEng
+				,t.photo
+			FROM
+				rms_teacher AS t
+			WHERE t.status = 1 ";
+			$sql.= " AND ".$db->quoteInto('t.id=?', $_data['userId']);
+			$sql.= " AND ".$db->quoteInto('t.password=?', md5($_data['oldPassword']));
+			$row = $db->fetchRow($sql);
+			if (empty($row)){
+				return false;
+			}
+			return true;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
+	
+	function changePassword($_data){
+		$db = $this->getAdapter();
+		try{
+			$_arr=array(
+					'password'	  	=> md5($_data['newPassword']),
+			);
+			$this->_name = "rms_teacher";
+			$where = $this->getAdapter()->quoteInto("id=?",$_data['userId']);
+			$this->update($_arr, $where);
+			return true;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			return false;
+		}
+	}
 	
 	
 	function getTeachingSchedule($_data){
@@ -279,7 +324,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
 					END AS forMonthTitle
 					,g.group_code AS  groupCode
-					,(SELECT sj.$subjectTitle FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1) AS subjectTitle
+					,(SELECT
+						CASE
+							WHEN sj.`subject_lang` = 2 THEN sj.`subject_titleen`
+							ELSE sj.subject_titlekh
+						END  FROM `rms_subject` AS sj WHERE sj.id = grd.subjectId LIMIT 1
+					) AS subjectTitle
 					,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
 					,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
 					,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
@@ -309,7 +359,17 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($_data['groupId'])){
 				$sql.=" AND g.id =".$_data['groupId'];
 			}
+			if(!empty($_data['subjectId'])){
+				$sql.=" AND grd.subjectId =".$_data['subjectId'];
+			}
 			$sql.=" ORDER BY grd.id DESC ";
+			
+			if(!empty($_data['LimitStart'])){
+				$sql.=" LIMIT ".$_data['LimitStart'].",".$_data['limitRecord'];
+			}else if(!empty($_data['limitRecord'])){
+				$sql.=" LIMIT ".$_data['limitRecord'];
+			}
+				
 			$row = $_db->fetchAll($sql);
 			$result = array(
 					'status' =>true,
@@ -1000,6 +1060,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,gsjb.subject_id AS subjectId
 				,subj.shortcut AS subjectShortCut
 				,subj.subject_lang AS subjectLang
+				,tmp.createDate AS createDate
 		";
 		$sql.="FROM 
 				(`rms_scoreengsettingdetail` AS sttD JOIN `rms_scoreengsetting` AS stt ON stt.id = sttD.score_setting_id )
@@ -1251,6 +1312,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								'percentage'			=> $pecentageScore,
 								'subCriterialTitleKh'	=> $i,
 								'subCriterialTitleEng'	=> $subCriteriaTitleEngExp[$key],
+								'dateInput'		=>date("Y-m-d H:i:s"),
 								);
 							
 							$this->_name='rms_grading_detail';
@@ -1276,6 +1338,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								'totalGrading'			=> $subCriteriaScore,
 								'criteriaAmount'		=> $subCriteriaAmount,
 								'percentage'			=> $pecentageScore,
+								'dateInput'		=>date("Y-m-d H:i:s"),
 								);
 							
 						$this->_name='rms_grading_detail';
@@ -1307,6 +1370,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 									'subjectId'				=> $subjectId,
 									'criteriaId'			=> $criteriaStudent["criteriaId"],
 									'totalGrading'			=> $tmpInfo["totalGrading"],
+									'dateInput'				=> $tmpInfo["createDate"],
 									'criteriaAmount'		=> ($indexKey+1),
 									'percentage'			=> $criteriaStudent["percentageScore"],
 									);
@@ -1324,6 +1388,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								'criteriaAmount'		=> 0,
 								'percentage'			=> $criteriaStudent["percentageScore"],
 								);
+							if(!empty($criteriaStudent["createDate"])){
+								$arrGradingDetail['dateInput'] = $criteriaStudent["createDate"];
+							}
 							$this->_name='rms_grading_detail';
 							$this->insert($arrGradingDetail);
 						}
@@ -1347,6 +1414,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				tmp.id AS gradingTmpId
+				,tmp.createDate AS createDate
 				,tmp.criteriaId
 				,tmp.`groupId`
 				,tmpD.`studentId`
@@ -1409,12 +1477,25 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								WHERE  dd.`gradingId`= grdT.`gradingId`
 							)
 						) AS ranking
+					,IF(COALESCE(grdT.`totalAverage`,'0') >0, 
+							(SELECT sd.metion_grade AS mention
+							FROM `rms_metionscore_setting_detail` AS sd,
+								`rms_metionscore_setting` AS s
+							WHERE s.id = sd.metion_score_id
+								AND s.academic_year=g.`academic_year`
+								AND degree = g.`degree`
+								AND grdT.`totalAverage`>=sd.max_score
+								ORDER BY sd.max_score DESC
+								LIMIT 1)
+								,NULL 
+					) AS mentionGrade
 				
 			";
 			$sql.="
 				FROM 
 					`rms_group_detail_student` AS gds 
 					JOIN `rms_student` AS s ON s.`stu_id` = gds.`stu_id`
+					JOIN rms_group AS g ON g.`id` = gds.`group_id`
 					LEFT JOIN `rms_grading_total` AS grdT ON grdT.`studentId` = gds.`stu_id`
 			";
 			
@@ -1431,10 +1512,15 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$order_by = " ORDER BY grdT.`totalAverage` DESC,s.`stu_code` ASC ";
 			$row =  $_db->fetchAll($sql.$where.$order_by);
 			
+			$gradingSystem = $this->getGradingSystemInfo($_data);
 			$criteriaInfoList = $this->groupGradingDetail($_data);
+			$_data['summaryCriteriaStudent'] = 1;
+			$criteriaSummaryList = $this->groupGradingDetail($_data);
 			$arrayResult = array(
-				'studentList' 		 =>$row,
-				"criteriaInfoList"   =>$criteriaInfoList
+				'studentList' 		 	=>$row,
+				"criteriaInfoList"   	=>$criteriaInfoList,
+				"criteriaSummaryList"   =>$criteriaSummaryList,
+				"gradingSystem"   		=>$gradingSystem,
 			);
 			
 			$result = array(
@@ -1458,16 +1544,41 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$groupId = empty($_data['groupId'])?0:$_data['groupId'];
 		$gradingId = empty($_data['gradingId'])?0:$_data['gradingId'];
+		$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+		$colunmName='title_en';
+		if ($currentLang==1){
+			$colunmName='title';
+		}
 		$sql="
 			SELECT 
 				grdd.`gradingId`
+				,grdd.`dateInput`
 				,gds.`stu_id` AS studentId
 				,grdd.`criteriaId`
-				,cri.`title`
+				,cri.$colunmName AS criteriaTitle
+				,cri.title AS criteriaTitleKh
+				,cri.title_en AS criteriaTitleEng
 				,grdd.`totalGrading`
 				,grdd.`percentage`
 				,grdd.`subCriterialTitleEng`
 				,grdd.`subCriterialTitleKh`
+			
+		";
+		$sqlCol="";
+		$sqlGroupBy="";
+		if(!empty($_data['summaryCriteriaStudent'])){
+			$sqlCol="
+				,SUM(grdd.`totalGrading`) AS totalGradingScore
+				,COUNT(grdd.`criteriaId`) AS timesInputCriteria
+				,FORMAT(IF(COUNT(grdd.`criteriaId`)>0 AND COALESCE(SUM(grdd.`totalGrading`),'0') >0, (SUM(grdd.totalGrading) / COUNT(grdd.`criteriaId`)),0),2) AS averageScore
+			";
+			$sqlGroupBy="
+				GROUP BY grdd.`criteriaId`,
+						grdd.`studentId`
+			";
+		}
+		$sql.= $sqlCol;
+		$sql.="
 			FROM 
 				`rms_group_detail_student` AS gds 
 				LEFT JOIN `rms_grading_detail` AS grdd ON grdd.`studentId` = gds.`stu_id`
@@ -1475,10 +1586,154 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			WHERE 
 				gds.`group_id` = $groupId 
 				AND grdd.`gradingId` = $gradingId
+		";
+		$sql.= $sqlGroupBy;
+		$sql.="
 			ORDER BY 
 				grdd.`studentId` ASC
 				,cri.`criteriaType` ASC
 				,cri.`id` ASC
+				,grdd.`id` ASC
+		";
+		return $db->fetchAll($sql);
+	}
+	
+	function getGradingSystemInfo($_data){
+		$db = $this->getAdapter();
+		$gradingId = empty($_data['gradingId'])?0:$_data['gradingId'];
+		$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+		$colunmName='title_en';
+		if ($currentLang==1){
+			$colunmName='title';
+		}
+		$sql="
+			SELECT 
+				gSet.id AS gradingSettingId
+				,cri.`title` AS criteriaTitleKh
+				,cri.`title_en` AS criteriaTitleEng
+				,gSetD.`pecentage_score` AS percentageScore
+				,gSetD.`subCriterialTitleEng` AS subCriteriaTitleEng
+				,gSetD.`subCriterialTitleKh` AS subCriteriaTitleKh
+		";
+		$sql.="
+				FROM `rms_scoreengsetting` AS gSet
+					JOIN `rms_scoreengsettingdetail`  AS gSetD ON gSet.`id` = gSetD.`score_setting_id`
+					LEFT JOIN `rms_exametypeeng` AS cri ON cri.id = gSetD.`criteriaId`
+			";
+		$sql.="
+			WHERE gSet.`id` = gSetD.`score_setting_id`
+				AND gSet.id = 3
+				ORDER BY 
+				cri.`criteriaType` ASC
+				,cri.id ASC
+			";
+		
+		return $db->fetchAll($sql);
+	}
+	
+	
+	public function getFormOptionSelect($_data){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$getControlType = empty($_data['getControlType'])?"status":$_data['getControlType'];
+			$_data['userId'] = empty($_data['userId'])?0:$_data['userId'];
+			$_data['branchId'] = empty($_data['branchId'])?0:$_data['branchId'];
+			$row=array();
+			if($getControlType=="status"){
+				$row = array(
+					array("id"=>1,"name"=>$currentLang==1 ? "ប្រើប្រាស់" : "Active"),
+					array("id"=>2,"name"=>$currentLang==1 ? "មិនប្រើប្រាស់" : "Deactive"),
+				);
+			}else if($getControlType=="academicYear"){
+				$row = $this->getAllAcadmicYearByTeacher($_data);
+			}else if($getControlType=="teachingGroup"){
+				$row = $this->getAllTeachingGroupByTeacher($_data);
+			}else if($getControlType=="teachingSubject"){
+				$row = $this->getAllTeachingSubjectByTeacher($_data);
+			
+			}
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	function getAllAcadmicYearByTeacher($_data){
+		$db = $this->getAdapter();
+		$userId = empty($_data['userId'])?0:$_data['userId'];
+		$sql="
+			SELECT 
+				ac.id
+				,CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) AS `name`
+			FROM 
+				rms_group AS g
+				JOIN `rms_group_subject_detail` AS gSubj ON g.`id` = gSubj.`group_id`
+				LEFT JOIN `rms_academicyear` AS ac ON ac.id = g.`academic_year`
+		";
+		$sql.=" WHERE gSubj.`teacher` = $userId ";
+		$sql.=" 
+		GROUP BY ac.id
+		ORDER BY 
+			ac.`fromYear` DESC
+		";
+		return $db->fetchAll($sql);
+	}
+	function getAllTeachingGroupByTeacher($_data){
+		$db = $this->getAdapter();
+		$userId = empty($_data['userId'])?0:$_data['userId'];
+		$_data['academicYear'] = empty($_data['academicYear'])?0:$_data['academicYear'];
+		$sql="
+			SELECT 
+				g.`id`
+				,CONCAT(COALESCE(g.`group_code`,''),COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) AS `name`
+			FROM 
+				rms_group AS g
+				JOIN `rms_group_subject_detail` AS gSubj ON g.`id` = gSubj.`group_id`
+				LEFT JOIN `rms_academicyear` AS ac ON ac.id = g.`academic_year`
+		";
+		$sql.=" WHERE gSubj.`teacher` = $userId ";
+		if(!empty($_data['academicYear'])){
+			$sql.=" AND g.academic_year = ".$_data['academicYear'];	
+		}
+		$sql.=" ORDER BY 
+			g.`degree` ASC,
+			g.grade ASC,
+			g.id ASC 
+		";
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllTeachingSubjectByTeacher($_data){
+		$db = $this->getAdapter();
+		$userId = empty($_data['userId'])?0:$_data['userId'];
+		$sql="
+			SELECT 
+				sub.`id`
+				,CASE
+					WHEN sub.`subject_lang` = 2 THEN sub.`subject_titleen`
+					ELSE sub.subject_titlekh
+				END AS `name`
+			FROM 
+				`rms_group_subject_detail` AS gSubj 
+				 JOIN `rms_subject` AS sub ON sub.id = gSubj.`subject_id`
+		";
+		$sql.=" WHERE gSubj.`teacher` = $userId ";
+		$sql.=" GROUP BY sub.`id`
+				ORDER BY 
+				CASE
+					WHEN sub.`subject_lang` = 2 THEN sub.`subject_titleen`
+					ELSE sub.subject_titlekh
+				END ASC
 		";
 		return $db->fetchAll($sql);
 	}

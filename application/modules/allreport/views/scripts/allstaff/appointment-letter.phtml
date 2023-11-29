@@ -21,7 +21,6 @@ $yearId = $this->yearId;
 
 $yearValue = $this->yearValue;
 list($fromYear, $toYear) = explode("-", $yearValue);
-
 ?>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js" type="text/javascript"></script>
 
@@ -352,7 +351,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					if ($rs['sex'] == 'Male') {
 						$NameTitle = 'Mr.';
 					} elseif ($rs['sex'] == 'Female') {
-						$NameTitle = 'Mrs.';
+						$NameTitle = 'Ms.';
 					}
 					$teacherName= $rs['teacher_name_en'].",";
 					$bold= "bold";
@@ -561,11 +560,12 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 											<?php } ?>
 									</tr>
 								</thead>
-
 								<?php
-								$param['id'] = $rs['id'];
-								$param['yearId'] = $yearId;
+							//	$param['id'] 		   = $rs['id'];
+								$param['yearId'] 	   = $yearId;
+								$param['schSettingId'] = $rs['schSettingId'];
 								$timeTeaching = $dbExternal->getTimeTeachingByTeacher($param);
+							
 
 								$i = 0;
 								$m = 0;
@@ -625,8 +625,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 														<td data-label="<?php echo $days['daysKh'] . "/" . $days['daysEng']; ?>" align="center">
 															<?php if (empty($row)) { ?>
 																<span class="valueLabel khmerLabel "></span>
-																<!-- <span class="valueLabel khmerLabel empty">មិនមាន</span>
-													<span class="valueLabel englishLabel empty">(Empty)</span> -->
+																<span class="className valueLabel ">&nbsp;</span>
+																<span class="className valueLabel ">&nbsp;</span>
 															<?php } else {
 																$gradeTitle = $row['gradeTitle'];
 																if (empty($gradeTitle)) {
@@ -702,8 +702,8 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 														<td data-label="<?php echo $days['daysKh'] . "/" . $days['daysEng']; ?>" align="center">
 															<?php if (empty($row)) { ?>
 																<span class="valueLabel khmerLabel "></span>
-																<!-- <span class="valueLabel khmerLabel empty">មិនមាន</span>
-													<span class="valueLabel englishLabel empty">(Empty)</span> -->
+																<span class="className valueLabel ">&nbsp;</span>
+																<span class="className valueLabel ">&nbsp;</span>
 															<?php } else {
 																$gradeTitle = $row['gradeTitle'];
 																if (empty($gradeTitle)) {

@@ -2499,6 +2499,7 @@ function getAllgroupStudyNotPass($action=null){
   	$tr = $this->tr;
   	$str = '';
   	$studyInfo='';
+  	$studentCode= array();
   	$style='';
   	$link = Zend_Controller_Front::getInstance()->getBaseUrl().'/home/searchstudentinfo/student-detail/id/'.$student_id;
   	/*$student_type=$tr->translate("Old Student");

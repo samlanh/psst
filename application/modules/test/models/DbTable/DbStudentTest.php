@@ -466,7 +466,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				'study_term'    => $data['term_test'],
 				'degree'        => $data['degree'],
 				'grade'         => $data['grade'],
-				'study_term'    => $data['term_test'],
 				'test_date'		=> $data['test_date'],
 				'note'		    => $data['note'],
 				'modify_date'   => date("Y-m-d H:i:s"),

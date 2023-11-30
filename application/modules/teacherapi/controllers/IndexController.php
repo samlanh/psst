@@ -52,6 +52,11 @@ class Teacherapi_IndexController extends Zend_Controller_Action
 				$GetData['getControlType'] = "teachingSubject";
     			$_dbAction->getFormOptionSelectAction($GetData);
 				
+			}else if ($GetData['url']=="countingClass"){
+    			$_dbAction->getCountingClassAction($GetData);
+			}else if ($GetData['url']=="teachingClassList"){
+    			$_dbAction->getTeachingClassListAction($GetData);
+				
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

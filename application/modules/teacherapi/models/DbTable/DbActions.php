@@ -475,4 +475,67 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	}
 	
 	
+	public function getCountingClassAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$row = $db->getCountingClassByTeacher($search);
+	
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			header('Content-Type: application/json');
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function getTeachingClassListAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$row = $db->getTeachingClassList($search);
+	
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			header('Content-Type: application/json');
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	
 }

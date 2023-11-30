@@ -92,8 +92,50 @@ $frm_items = $this->frm_items;
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-12">
-				</div>
+				<div id="degreee" class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SUBJECT");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL');?>
+										</label>
+									</div>
+									 <div class="form-group">
+										<ul class="optListRow">
+											<div id="subjectInfo"> </div>
+											<!-- <?php 
+												if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+												?>
+												<li class="opt-items"> 
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"  >
+														<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
+															<?php echo $rs['name'];?>
+														</label>
+													</div>
+												</li>
+												
+											<?php } ?> -->
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>	
+			
 				<div class="clearfix"></div>
 				<div class="card-box mt-20">
 					<div class="col-md-6 col-sm-6 col-xs-6 border-top mt-20 ptb-10 text-center">
@@ -274,8 +316,22 @@ $frm_items = $this->frm_items;
 			},
 			handleAs: "json",
 			load: function(data) {
-				subject_store = getDataStorefromJSON('id', 'name', data);
-				dijit.byId('subject').set('store', subject_store);
+				alert(data);
+				// subject_store = getDataStorefromJSON('id', 'name', data);
+				// dijit.byId('subject').set('store', subject_store);
+				var string='';
+				if(data!=''){
+					var DateStop = data.date_stop;
+					<li class="opt-items"> 
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"  >
+							<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
+								<?php echo $rs['name'];?>
+							</label>
+						</div>
+					</li>
+				}
+				dojo.byId("subjectInfo").innerHTML = string;
 			},
 			error: function(err) {}
 		});

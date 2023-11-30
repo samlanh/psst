@@ -65,6 +65,8 @@ class Issuesetting_AllowteacherscoresettingController extends Zend_Controller_Ac
 		$frm->FrmAddScoreEntrySetting(null);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_items = $frm;
+
+		$this->view->faculty = $_db->getAllDegreeName();
 	}
 
 	public function editAction()

@@ -55,6 +55,9 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 				'academicYear' 	 => $_data['academic_year'],
 				'subjectId'		 => $_data['subject'],
 				'endDate'		 => $_data['end_date'],
+				'createDate' 	 =>date("Y-m-d H:i:s"),
+				'modifyDate' 	 =>date("Y-m-d H:i:s"),
+				'userId'	 	 => $this->getUserId(),
 				'status'	 	 => 1,
 			);
 			$this->_name = 'rms_allowed_teacher_score_setting';

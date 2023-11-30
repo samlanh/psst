@@ -293,6 +293,7 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 					AND s.stu_id = sgh.stu_id
 					
 					and sgh.is_pass = 0
+					AND sgh.stop_type = 0
 					and sgh.group_id = $group_id
 			";
 		$order=" ORDER BY s.stu_code ASC ";

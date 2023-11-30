@@ -47,13 +47,20 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		$db->beginTransaction();
 		try {
 
+			$subjectId = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($subjectId)){
+	    			$subjectId = $rs;
+	    		}else{ $subjectId = $subjectId.",".$rs;
+	    		}
+	    	}
 			$_arr = array(
 				'branchId'		 => $_data['branch_id'],
 				'teacherId'		 => $_data['teacher_id'],
 				'degree' 	 	 => $_data['degree'],
 				'group'		 	 => $_data['group'],
 				'academicYear' 	 => $_data['academic_year'],
-				'subjectId'		 => $_data['subject'],
+				'subjectId'		 => $subjectId,
 				'endDate'		 => $_data['end_date'],
 				'createDate' 	 =>date("Y-m-d H:i:s"),
 				'modifyDate' 	 =>date("Y-m-d H:i:s"),

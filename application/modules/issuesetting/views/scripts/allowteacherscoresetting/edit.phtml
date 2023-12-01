@@ -4,20 +4,6 @@ echo $this->headTitle($tr->translate("EDIT_ALLOWED_TEACHER_SCORE_SETTING"));
 $baseurl = $this->baseUrl();
 $frm_items = $this->frm_items;
 $rs = $this->rs;
-//print_r($rs);
-
-$subjectId = '';
-if (!empty($rs['subjectId'])) {
-	$subjectId =  explode(",", $rs['subjectId']);
-}
-$array = array();
-if (!empty($subjectId)) {
-	foreach ($subjectId as $key=> $ss) {
-		$array[$key] = $ss;
-	}
-}
-
-print_r($array );
 
 ?>
 <div class="card">
@@ -312,9 +298,9 @@ print_r($array );
 			load: function(data) {
 				var string='';
 				if(data!=''){
-					var expppp =" <?php echo $rs['subjectId']; ?>";
-					var myArray = expppp.split(",");
-					alert(myArray);
+					var subjString ="<?php echo $rs['subjectId']; ?>";
+					var myArray = subjString.split(",");
+				//	alert(myArray);
 					subjectArray = data;
 					string+='	<div class="custom-control custom-checkbox ">';
 					string+='	<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >';
@@ -326,10 +312,8 @@ print_r($array );
 					string+='	<ul class="optListRow">';
 						for(i=0;i<subjectArray.length;i++){
 							var checkeed="";
-							for(j=0; j<myArray.length; j++){
-								if(subjectArray[i].id==myArray[j]){
-									checkeed="checked";
-								}
+							if(myArray.includes(subjectArray[i].id)){
+								checkeed="checked";
 							}
 							string+='<li class="opt-items"> ';
 							string+='	<div class="custom-control custom-checkbox">';

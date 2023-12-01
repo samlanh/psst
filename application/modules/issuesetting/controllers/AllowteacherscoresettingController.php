@@ -26,7 +26,7 @@ class Issuesetting_AllowteacherscoresettingController extends Zend_Controller_Ac
 			$rs_rows = $db->getAllTeacherScoreSetting($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH", "GROUP", "TEACHER", "SUBJECT",  "END_DATE", "STATUS",);
+			$collumns = array("BRANCH", "GROUP", "TEACHER", "SUBJECT",  "END_DATE","USER", "CREATE_DATE","STATUS");
 			$link = array(
 				'module' => 'issuesetting', 'controller' => 'allowteacherscoresetting', 'action' => 'edit',
 			);

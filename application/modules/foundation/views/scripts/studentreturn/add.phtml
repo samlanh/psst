@@ -129,6 +129,12 @@
 									<input id="group" />
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FEE");?> <span class="required"></span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input id="feeId" />
+								</div>
+							</div>
 						
 							<div class="form-group">
 								<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("RETURN_STUDY_DATE");?> <span class="required">*</span></label>
@@ -235,6 +241,19 @@ dojo.ready(function(){
 			getStudentDropInfo();
 		}
 	}, "drop_id");
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                     
+		id: "feeId",
+		name: "feeId",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("PLEASE_SELECT_STUDENT_FEE");?>",          
+		onChange: function() {  
+			feeId = dijit.byId('feeId').get('value');
+		}
+	}, "feeId");
 	
 	getAllDropStudent();
 	getAllGroup();
@@ -242,6 +261,7 @@ dojo.ready(function(){
 	 	branch_id.on('change', function(evt){
 	 		getAllDropStudent();
 	 		getAllGroup();
+			getAllFeeByBranch();
 	    });
 	var return_type = dijit.byId('return_type');
 		return_type.on('change', function(evt){
@@ -390,4 +410,31 @@ function getStudentDropInfo(){
 		}
 	});
 }
+
+url_getfeeid = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
+	function getAllFeeByBranch(){
+		dijit.byId('feeId').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var fee_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('feeId').set('store',fee_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getfeeid,
+			content:{
+				'branch_id':branch_id,
+				'selectOption':1
+				},
+			handleAs:"json",
+			load: function(data){
+				fee_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('feeId').set('store',fee_store);  
+			},
+			error: function(err) {
+			}
+		});
+	}
+
 </script>

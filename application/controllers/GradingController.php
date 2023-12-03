@@ -104,8 +104,9 @@ class GradingController extends Zend_Controller_Action
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$degreeId = $row['degree_id'];
 		$gradingId = $row['gradingId'];
-		$result = $dbg->checkEntryScoreSetting($degreeId);
-		if(empty($result)){
+		$entrySetting = $dbg->checkEntryScoreSetting($degreeId);
+		$this->view->entrySetting = $entrySetting;
+		if(empty($entrySetting)){
 			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
 		}
 		$array = array(

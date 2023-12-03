@@ -16,7 +16,7 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branchName,
 		(SELECT group_code FROM `rms_group` WHERE id=s.group LIMIT 1) AS groupName,
 		(SELECT teacher_name_kh FROM `rms_teacher` WHERE id=s.teacherId LIMIT 1) AS TeacherName,
-		(SELECT CONCAT(subject_titlekh,', ',subject_titleen) FROM `rms_subject` WHERE id=s.subjectId LIMIT 1) AS SubjectName,
+		(SELECT GROUP_CONCAT(sub.subject_titlekh) FROM rms_subject AS sub WHERE FIND_IN_SET( sub.id , s.subjectId ) LIMIT 1) AS subjectTitle,
 		s.endDate,
 		(SELECT CONCAT(first_name) FROM rms_users WHERE id=userId )AS userName,
 		s.createDate ";

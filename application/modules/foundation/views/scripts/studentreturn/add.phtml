@@ -268,8 +268,11 @@ dojo.ready(function(){
 	 		if(return_type==1){
 				dijit.byId('group').attr('value','');
 				dijit.byId('group').set('readOnly',true); 
+				dijit.byId('feeId').attr('value','');
+				dijit.byId('feeId').set('readOnly',true); 
 			}else{
 				dijit.byId('group').set('readOnly',false); 
+				dijit.byId('feeId').set('readOnly',false); 
 			}
 	    });
 });

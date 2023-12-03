@@ -125,7 +125,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 					'forSemester'		=>$_data['forSemester'],
 					
 					'subjectId'			=>$subjectId,
-					'criteriaId'=> $_data['criteriaId'],
+					'criteriaId'		=> $_data['criteriaId'],
 					
 					'inputOption'		=>2, //1 normal,2 teache input
 					
@@ -136,6 +136,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 					'createDate'		=>date("Y-m-d H:i:s"),
 					'modifyDate'		=>date("Y-m-d H:i:s"),
 					'dateInput'			=>date("Y-m-d"),
+					'settingEntryId'	=> $_data['settingEntryId'],
 			);
 			$this->_name='rms_grading_tmp';		
 			$id=$this->insert($_arr);
@@ -169,14 +170,14 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 						'teacherId'			=>$this->getUserExternalId(),
 						'createDate'		=>date("Y-m-d H:i:s"),
 						'modifyDate'		=>date("Y-m-d H:i:s"),
+						'settingEntryId'	=> $_data['settingEntryId'],
 				);
 				$this->_name='rms_grading';
 				$idGrading=$this->insert($_arr);
 			}else{
 				$arrSearch['criteriaId']=$_data['criteriaId'];
 			}
-			
-			
+
 			$criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
 			
 			$old_studentid = 0;
@@ -258,7 +259,8 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 												'criteriaAmount'		=> $subcriteriaAmount,
 												'percentage'			=> $pecentageScore,
 												'subCriterialTitleKh'	=> $titleSubCriterial,
-											'subCriterialTitleEng'	=> $titleSubCriteriaEng,
+												'subCriterialTitleEng'	=> $titleSubCriteriaEng,
+												'dateInput'				=>date("Y-m-d"),
 										);
 									
 										$this->_name='rms_grading_detail';
@@ -305,6 +307,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 											'criteriaAmount'	=> count($idCriterials),
 											'totalGrading'		=> $score,
 											'percentage'		=> $pecentageScore,
+											'dateInput'			=>date("Y-m-d"),
 									);
 								
 									$this->_name='rms_grading_detail';

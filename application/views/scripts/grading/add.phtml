@@ -11,6 +11,7 @@
 	$msgTitle = "ទិន្នន័យស្ទួន / Duplicated Record";
 	$msgDesc = "ពិន្ទុមុខវិជ្ជានេះបានបញ្ចូលរួចរាល់ហើយ / This subject's score has been entered !";
 	$criteriaId = $this->criteriaId;
+	$entrySetting = $this->entrySetting;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -74,6 +75,7 @@
 																		<option value="<?php echo $rscriteria['criteriaId']?>" <?php if($criteriaId== $rscriteria['criteriaId']) echo 'selected';?> ><?php echo $rscriteria['criterialTitle'].'/'.$rscriteria['criterialTitleEng'];?></option>
 																	<?php }}?>
 																</select>
+																<input type="hidden" name="settingEntryId" id="settingEntryId" class="fullside" dojoType="dijit.form.TextBox" value="<?php if(!empty($entrySetting)){ echo $entrySetting['id']; } ?>"/>
 															</div>
 														</div>
 													</div>
@@ -200,7 +202,7 @@
 					 <div class="card-box mt-20">
 						<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" label="រក្សាទុក/Save" dojoType="dijit.form.Button" />
-							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="រក្សាទុក&បន្ថែមថ្មី/Save New" dojoType="dijit.form.Button"  />
+							<!-- <input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="រក្សាទុក&បន្ថែមថ្មី/Save New" dojoType="dijit.form.Button"  /> -->
 						</div>
 					 </div>
 				</form>

@@ -4154,6 +4154,7 @@ function getAllgroupStudyNotPass($action=null){
    	function checkEntryScoreSetting($data){
    		$currentDate =  date('Y-m-d');
    		$sql="SELECT 
+			id,
 	   		fromDate,
 	   		endDate,
 	   		examFromDate,

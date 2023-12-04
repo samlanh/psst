@@ -479,6 +479,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 									AND aTs.endDate > sett.examEndDate
 				";
 			$sql.=' WHERE gsjb.teacher='.$userId;
+			$sql.=' AND g.`gradingId` !=0 ';
 			
 			$date = new DateTime();
 			$currentDate = $date->format("Y-m-d");
@@ -584,7 +585,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs ON aTs.teacherId = gsjb.teacher AND g.id = aTs.group AND FIND_IN_SET(gsjb.subject_id,(aTs.subjectId)) AND aTs.endDate > sett.examEndDate
 				";
 			$sql.=' WHERE gsjb.teacher='.$userId;
-			$sql.=' AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
+			$sql.=' AND g.`gradingId` !=0 AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
 			
 			$date = new DateTime();
 			$currentDate = $date->format("Y-m-d");

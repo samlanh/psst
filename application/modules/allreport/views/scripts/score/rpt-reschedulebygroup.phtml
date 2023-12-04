@@ -92,14 +92,14 @@
 					left: 40px;
 					bottom: 32px;
 					height: 100px;
-					width:200px;
+					width:150px;
 					position: absolute;
 				}
 				.principalStamp .principalName{
 					left: 130px;
 				    top: 113px;
 				    height: 100px;
-				    width: 200px;
+				    width: 100px;
 				    position: absolute;
 				}
 				.seenApproved{
@@ -164,6 +164,12 @@
 						page-break-inside: always;
 						page-break-before: always;
 					}
+					.blue{
+						color: blue;
+					}
+					.red{
+						color: red;
+					}
 			</style>
 				<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
 					foreach ($this->rs As $rs){
@@ -180,7 +186,7 @@
 							<?php echo $rs['school_name']?>
 						</h2>
 					</td>
-					<td align="center" valign="top">
+					<td align="center" valign="top" width="35%">
 						<h2 class="headerKhmer" style="font-size:15px;"><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
 						<h2 class="headerKhmer"><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
 						<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
@@ -243,14 +249,14 @@
 							if($time['from_hour']<=12){
 								if($title==0){?>
 								<tr  align="center" >
-									<td  align="center"  colspan="<?php echo $amt_day+1?>" style="font-size:10px;padding: 5px 2px;text-decoration: underline;"><?php echo  $tr->translate("MORNING");?></td>
+									<td  align="center"  colspan="<?php echo $amt_day+1?>" style="font-size:10px;padding: 5px 2px;text-decoration: underline; color:blue;"><?php echo  $tr->translate("MORNING");?></td>
 								</tr>
 								<?php $title=1;}
 							}else{
 								if($titles==0){
 							?>
 								<tr  align="center" >
-									<td  align="center" colspan="<?php echo $amt_day+1?>" style="text-decoration: underline;"><?php echo  $tr->translate("AFTERNOON");?></td>
+									<td  align="center" colspan="<?php echo $amt_day+1?>" style="text-decoration: underline; color:blue;"><?php echo  $tr->translate("AFTERNOON");?></td>
 								</tr>
 							<?php $titles=1;}
 							}
@@ -266,16 +272,17 @@
 								 	if (!empty($subjecNteacher)){
 								 		if (!empty($subjecNteacher['subject_name'])){
 											if(!empty($subjecNteacher['subject_lang'])){
-												if($subjecNteacher['subject_lang']==1){
-													echo "<strong>".$subjecNteacher['subject_name_kh']."</strong><br />";
-												}else{
-													echo "<strong>".$subjecNteacher['subject_name_en']."</strong><br />";
-												}
+												if($subjecNteacher['subject_lang']==1){ ?>
+													<span class= "blue"><strong> <?php echo $subjecNteacher['subject_name_kh']; ?> </strong></span><br>
+												<?php }else{ ?>
+													<span class= "blue"><strong> <?php echo $subjecNteacher['subject_name_en']; ?> </strong></span><br>
+											<?php	}
 											}
 								 		}
-								 		if (!empty($subjecNteacher['teacher_name'])){echo "".$subjecNteacher['teacher_name'];}
-										if (!empty($subjecNteacher['teacher_phone'])){echo "<br />".$subjecNteacher['teacher_phone']."";}
-								   }?>
+										?>
+										<span class= "red"><?php 	if (!empty($subjecNteacher['teacher_name'])){echo "".$subjecNteacher['teacher_name'];} ?> </span><br>
+										<span class= "red"><?php 	if (!empty($subjecNteacher['teacher_phone'])){echo "".$subjecNteacher['teacher_phone'];} ?> </span>
+								<?php   }?>
 								</td>
 								<?php }?>
 							</tr>
@@ -306,7 +313,11 @@
 										<li style="width: 25%;float: left;list-style-type: none;line-height:18px;"><?php echo $num;?>.&nbsp;<?php echo $SubjectName;?>:&nbsp;<?php echo $totalTime;?></li>
 									 <?php }}?>
 									 </ul>
-									 <span class="className valueLabel" style="font-size: 10px;">Note: The effetive date of this schedule is <?php echo date("l");?>,<?php echo date("d");?> <?php echo date("F");?>,<?php echo date("Y");?>.this schedule is subject to change as deemed nesessary</span>
+									 <?php 
+										 $engDate = $this->search['end_date'];
+										 $time  = strtotime($engDate);
+									  ?>
+									 <span class="className valueLabel" style="font-size: 12px;"><i>Note:</i> The effective date of this schedule is <?php echo date("l", $time );?>, <?php echo date("d", $time);?> <?php echo date("F", $time);?>, <?php echo date("Y", $time);?>. This schedule is subject to change as deemed necessary.</span>
 							 	</td>
 							 </tr>
 							</table>											
@@ -314,10 +325,6 @@
 				</tr>
 				<tr>
 						<td  align="center" width="33%" valign="top">
-							<div class="seenApproved headerKhmer">បានឃើញ និងឯកភាព
-								<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
-							</div>
-
 						</td>
 						<td colspan="2" align="center" >
 						</td>
@@ -325,20 +332,10 @@
 					</tr>
 					<tr>
 						<td>
-							<div class="principalStamp" id="principalStamp" >
-								<div class="stamp" >
-									<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['stamp']; ?>"  />
-									<div class="signature">
-										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['signature']; ?>" />
-									</div>
-									<div class="principalName">
-										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php if(!empty($principalInfo['duty_namekh'])){ echo $principalInfo['duty_namekh']; } ?></span>
-									</div>
-								</div>
-							</div>
+							
 						</td>
 						<td></td>
-						<td align="right" style="font-size:11px;" valign="top">
+						<td align="center" style="font-size:11px;" valign="top">
 								<label id="lunarDate" class="LabelTeacher" >
 								<?php 
 									$dbgb = new Application_Model_DbTable_DbGlobal();
@@ -371,7 +368,37 @@
 				<?php } ?>
 							</td>
 					</tr>
-				<?php  }?>
+					<tr>
+					<td  align="center" width="33%" valign="top">
+					</td>
+					<td >
+					</td>
+					<td colspan="2" align="center" >
+						<div class="seenApproved headerKhmer">បានឃើញ និងឯកភាព
+								<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td  align="center" width="33%" valign="top">
+					</td>
+					<td >
+					</td>
+					<td colspan="2" align="center" >
+						<div class="principalStamp" id="principalStamp" >
+								<div class="stamp" >
+									<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['stamp']; ?>"  />
+									<div class="signature">
+										<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['signature']; ?>" />
+									</div>
+									<div class="principalName">
+										<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php if(!empty($principalInfo['duty_namekh'])){ echo $principalInfo['duty_namekh']; } ?></span>
+									</div>
+								</div>
+						</div>
+					</td>
+				</tr>
+			<?php  }?>
 		</table>
 	</div>		
 </div>

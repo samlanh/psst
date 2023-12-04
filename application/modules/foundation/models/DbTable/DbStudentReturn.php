@@ -90,6 +90,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 			$stu_id = $_data['stu_id'];
 			$newDegreeId = $_data['degree'];
 			$newGradeId = $_data['grade'];
+			$feeId = $_data['feeId'];
 			
 			$academic_year=0;
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
@@ -126,53 +127,110 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 				$this->_name="rms_student_drop";
 				$whereStuDropRecord="id = ".$_data['drop_id'];
 				$this->update($_arrStuDropRecord,$whereStuDropRecord);
-				if($return_type ==1){
-					/*update Student to crm */
 
-					// $_arrStu= array(
-					// 	'branch_id'	 	 => $_data['branch_id'],
-					// 	'customer_type'	 =>3,
-					// 	'crm_degree'	=> $newDegreeId,
-					// 	'crm_grade'		=> $newGradeId,
-					// 	'user_id'	  	=> $this->getUserId(),
-					// );
-					// $this->_name="rms_student";
-					// $wherestuId="stu_id = ".$stu_id;
-					// $this->update($_arrStu,$wherestuId);
+				if($return_type ==1){
+					/*Copy Student to crm */
+				
+					$stuInfo = $this->getStudentById($stu_id);
+					$_arr=array(
+						'branch_id'	  	 => $stuInfo['branch_id'],
+						'kh_name' 	   	 => $stuInfo['stu_khname'],
+						'first_name'   	 => $stuInfo['stu_khname'],
+						'last_name'    	 => $stuInfo['last_name'],
+						'sex'         	 => $stuInfo['sex'],
+						'know_by'		 => $stuInfo['know_by'],
+						'tel'            => $stuInfo['tel'],
+						'current_address'=> $stuInfo['address'],
+						'note'           => 'From Student Return',
+						'crm_status'     => 1,
+						'create_date'    => date("Y-m-d H:i:s"),
+						'modify_date'    => date("Y-m-d H:i:s"),
+						'user_id'	     => $this->getUserId()
+					);
+					$this->_name="rms_crm";
+					$crmId =  $this->insert($_arr);
+
+					$stuToken = $_dbgb->getStudentToken();
+					$array = array(
+							'branch_id'	 	 => $stuInfo['branch_id'],
+							'crm_id'	 	 => $crmId,
+							'customer_type'	 =>3,
+							'stu_khname'	 => $stuInfo['stu_khname'],
+							'stu_enname'     => $stuInfo['stu_enname'],
+							'last_name'		 => $stuInfo['last_name'],
+							'sex'			 => $stuInfo['sex'],
+							'tel'		     => $stuInfo['tel'],
+							'crm_degree'     => $newDegreeId,
+							'crm_grade'      => $newGradeId,
+							'age'            => $stuInfo['age'],
+							'nationality'    => $stuInfo['nationality'],
+							'nation'         => $stuInfo['nation'],
+							'dob'            => $stuInfo['dob'],
+							'pob'            => $stuInfo['pob'],
+							'email'          => $stuInfo['email'],
+							'address'        => $stuInfo['address'],
+							'home_num'       => $stuInfo['home_num'],
+							'street_num'     => $stuInfo['street_num'],
+							'village_name'   => $stuInfo['village_name'],
+							'commune_name'   => $stuInfo['commune_name'],
+							'province_id'    => $stuInfo['province_id'],
+							'father_enname'  => $stuInfo['father_enname'],
+							'father_khname'  => $stuInfo['father_khname'],
+							'father_dob'     => $stuInfo['father_dob'],
+							'father_nation'  => $stuInfo['father_nation'],
+							'father_job'     => $stuInfo['father_job'],
+							'father_phone'   => $stuInfo['father_phone'],
+							'mother_khname'  => $stuInfo['mother_khname'],
+							'mother_enname'  => $stuInfo['mother_enname'],
+							'mother_nation'  => $stuInfo['mother_nation'],
+							'mother_phone'   => $stuInfo['mother_phone'],
+							'guardian_first_name' => $stuInfo['guardian_first_name'],
+							'guardian_enname'=> $stuInfo['guardian_enname'],
+							'guardian_khname'=> $stuInfo['guardian_khname'],
+							'guardian_dob'   => $stuInfo['guardian_dob'],
+							'guardian_nation'=> $stuInfo['guardian_nation'],
+							'guardian_tel'   => $stuInfo['guardian_tel'],
+							'street'         => $stuInfo['street'],
+							'comm_id'        => $stuInfo['comm_id'],
+							'vill_id'        => $stuInfo['vill_id'],
+							'dis_id'         => $stuInfo['dis_id'],
+							'pro_id'         => $stuInfo['pro_id'],
+							'photo'          => $stuInfo['photo'],
+							'father_photo'   => $stuInfo['father_photo'],
+							'mother_photo'   => $stuInfo['mother_photo'],
+							'guardian_photo' => $stuInfo['guardian_photo'],
+							'from_school'    => $stuInfo['from_school'],
+							'know_by'        => $stuInfo['know_by'],
+							'studentToken'   =>$stuToken,
+							'create_date'    => date("Y-m-d H:i:s"),
+							'modify_date'    => date("Y-m-d H:i:s"),
+							'user_id'	     => $this->getUserId()
+							);
+					$this->_name="rms_student";
+					$newStuId = $this->insert($array);
 
 					/* insert student to rms_group_detail_student */
-
-					// $_arrOldGroupDetail = array(
-					// 	'is_current'		=>0,
-					// 	'modify_date'		=>date("Y-m-d H:i:s"),
-					// 	'user_id'			=>$this->getUserId(),
-					// );
-					// $this->_name="rms_group_detail_student";
-					// $whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=1 ";
-					// if(!empty($oldGroupId)){
-					// 	$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
-					// }
-					// $this->update($_arrOldGroupDetail,$whereOldGroupDetail);
-					
-					// $school_option = $_dbgb->getSchoolOptionbyDegree($newDegreeId);
-					// $_arr = array(
-					// 		'stu_id'			=>$stu_id,
-					// 		'status'			=>1,
-					// 		'group_id'			=>0,
-					// 		'degree'			=>$newDegreeId,
-					// 		'grade'				=>$newGradeId,
-					// 		'academic_year'		=>$academic_year,
-					// 		'school_option'		=>$school_option,
-					// 		'is_current'		=>1,
-					// 		'is_setgroup'		=>0,
-					// 		'is_maingrade'		=>1,
-					// 		'note'				=>"New Group Detail From Student Return",
-					// 		'create_date'		=>date("Y-m-d H:i:s"),
-					// 		'modify_date'		=>date("Y-m-d H:i:s"),
-					// 		'user_id'			=>$this->getUserId(),
-					// );
-					// $this->_name="rms_group_detail_student";
-					// $this->insert($_arr);
+					$school_option = $_dbgb->getSchoolOptionbyDegree($newDegreeId);
+					$_arr = array(
+						'branch_id'			=>$_data['branch_id'],
+						'stu_id'			=>$newStuId,
+						'is_newstudent'		=>1,
+						'status'			=>1,
+						'group_id'			=>0,
+						'degree'			=>$newDegreeId,
+						'grade'				=>$newGradeId,
+						'school_option'		=>$school_option,
+						'is_current'		=>1,
+						'is_setgroup'		=>0,
+						'is_maingrade'		=>1,
+						'create_date'		=>date("Y-m-d H:i:s"),
+						'modify_date'		=>date("Y-m-d H:i:s"),
+						'user_id'			=>$this->getUserId(),
+						'itemType'			=>1,
+						'entryFrom'			=>1,
+					);
+					$this->_name="rms_group_detail_student";
+					$this->insert($_arr);
 
 				}else{
 					if($oldGroupId!=$newGroupId){
@@ -198,6 +256,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 								'grade'				=>$newGradeId,
 								'academic_year'		=>$academic_year,
 								'is_current'		=>1,
+								'feeId'				=>$feeId,
 								'is_setgroup'		=>$isSetgroup,
 								'is_maingrade'		=>1,
 								'note'				=>"New Group Detail From Student Return",
@@ -360,6 +419,11 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 			AND dr.id=$drop_id 
 			LIMIT 1
 		";
+		return $db->fetchRow($sql);
+	}
+	function getStudentById($id){
+		$db = $this->getAdapter();
+		$sql="SELECT * FROM `rms_student` WHERE stu_id = $id ";
 		return $db->fetchRow($sql);
 	}
 }

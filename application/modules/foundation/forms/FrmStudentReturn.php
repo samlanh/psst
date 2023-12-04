@@ -73,9 +73,9 @@ Class Foundation_Form_FrmStudentReturn extends Zend_Dojo_Form {
 			'required'=>true,
 		));
 		$_type_opt = array(
-				''=>$this->tr->translate("SELECT_RETURN_TYPE"),
+				2=>$this->tr->translate("RETURN_TO_GROUP"),
 				1=>$this->tr->translate("RETURN_TO_TEST"),
-				2=>$this->tr->translate("RETURN_TO_GROUP"));
+			);
 		$_return_type->setMultiOptions($_type_opt);
 		
 		$_academic->setValue($request->getParam("academic_year"));

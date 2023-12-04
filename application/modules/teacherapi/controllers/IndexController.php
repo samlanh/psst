@@ -42,6 +42,24 @@ class Teacherapi_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="groupMonthlyScoreDetail"){
     			$_dbAction->getGroupMonthlyScoreDetailAction($GetData);
 				
+			}else if ($GetData['url']=="optionAcademicYear"){
+				$GetData['getControlType'] = "academicYear";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionGroup"){
+				$GetData['getControlType'] = "teachingGroup";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionDegree"){
+				$GetData['getControlType'] = "teachingDegree";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionSubject"){
+				$GetData['getControlType'] = "teachingSubject";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+				
+			}else if ($GetData['url']=="countingClass"){
+    			$_dbAction->getCountingClassAction($GetData);
+			}else if ($GetData['url']=="teachingClassList"){
+    			$_dbAction->getTeachingClassListAction($GetData);
+				
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

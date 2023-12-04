@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('EDIT_STUDENT_DROP')); 
 	$frm = $this->frm;	
+	
 ?>
 <div class="card">
 	<div class="card-content collapse show">
@@ -189,11 +190,11 @@ dojo.ready(function(){
 	    required: false,
 	    id: "group",
 	    name: "group",   
-	    readOnly:true,           
+	    readOnly:false,           
 	    class: 'fullside', 
 	    value:'<?php echo $this->row['group'];?>',         
-	    required:'true',
-	    placeHolder:"<?php echo $tr->translate("SELECT_YEAR")?>",          
+	   
+	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP")?>",          
 	    onChange: function() {  
 	    }
 	}, "group");
@@ -218,7 +219,8 @@ dojo.ready(function(){
 		id: "studentid",
 		name: "studentid",  
 		readOnly:true,   
-		required:true,        
+		required:true, 
+		value:'<?php echo $this->row['stu_id'];?>',  		
 		class: 'fullside',
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() { 
@@ -248,7 +250,7 @@ function getallstudentname(){//
 		load: function(data) {
 			student_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('studentid').set('store',student_store);  
-		    dijit.byId('studentid').set('value',study_id);  
+		   // dijit.byId('studentid').set('value',study_id);  
 		},
 		error: function(err) {
 			alert(err);

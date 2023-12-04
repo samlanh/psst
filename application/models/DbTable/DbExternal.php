@@ -862,6 +862,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	function getTimeTeachingByTeacher($data=null){
 		$db = $this->getAdapter();
+		$getUserExternalId= $this->getUserExternalId();
 		$sql="
 		SELECT 
 			schDetail.from_hour
@@ -877,13 +878,13 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			sch.id =schDetail.main_schedule_id
 			AND g.id =sch.group_id 
 		";
-		if(!empty($data['id'])){
-			$sql.=' AND schDetail.techer_id ='.$data['id'];
-		}else{
-			$sql.=' AND schDetail.techer_id ='.$this->getUserExternalId();
-		}
 		if(!empty($data['yearId'])){
 			$sql.=' AND schDetail.year_id ='.$data['yearId'];
+		}
+		if(!empty($data['schSettingId'])){
+			$sql.=' AND sch.schedule_setting ='.$data['schSettingId'];
+		}else{
+			$sql.=' AND schDetail.techer_id ='.$getUserExternalId;
 		}
 		$sql.=" GROUP BY CONCAT (schDetail.from_hour,schDetail.to_hour) ";
 		$sql.=" ORDER BY schDetail.from_hour ASC ";

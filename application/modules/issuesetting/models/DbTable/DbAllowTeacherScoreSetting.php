@@ -17,13 +17,15 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		(SELECT group_code FROM `rms_group` WHERE id=s.group LIMIT 1) AS groupName,
 		(SELECT teacher_name_kh FROM `rms_teacher` WHERE id=s.teacherId LIMIT 1) AS TeacherName,
 		(SELECT CONCAT(subject_titlekh,', ',subject_titleen) FROM `rms_subject` WHERE id=s.subjectId LIMIT 1) AS SubjectName,
-		s.endDate ";
+		s.endDate,
+		(SELECT CONCAT(first_name) FROM rms_users WHERE id=userId )AS userName,
+		s.createDate ";
 		$sql .= $dbp->caseStatusShowImage("s.status");
 		$sql .= " FROM `rms_allowed_teacher_score_setting` AS s WHERE 1  ";
 		$orderby = "  ORDER BY s.id DESC";
 		$where = ' ';
-		$from_date = (empty($search['start_date'])) ? '1' : "s.endDate >= '" . $search['start_date'] . " 00:00:00'";
-		$to_date = (empty($search['end_date'])) ? '1' : "s.endDate <= '" . $search['end_date'] . " 23:59:59'";
+		$from_date = (empty($search['start_date'])) ? '1' : "s.createDate >= '" . $search['start_date'] . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : "s.createDate <= '" . $search['end_date'] . " 23:59:59'";
 		$where .= " AND " . $from_date . " AND " . $to_date;
 		if (!empty($search['advance_search'])) {
 			$s_where = array();
@@ -47,14 +49,24 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		$db->beginTransaction();
 		try {
 
+			$subjectId = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($subjectId)){
+	    			$subjectId = $rs;
+	    		}else{ $subjectId = $subjectId.",".$rs;
+	    		}
+	    	}
 			$_arr = array(
 				'branchId'		 => $_data['branch_id'],
 				'teacherId'		 => $_data['teacher_id'],
 				'degree' 	 	 => $_data['degree'],
 				'group'		 	 => $_data['group'],
 				'academicYear' 	 => $_data['academic_year'],
-				'subjectId'		 => $_data['subject'],
+				'subjectId'		 => $subjectId,
 				'endDate'		 => $_data['end_date'],
+				'createDate' 	 =>date("Y-m-d H:i:s"),
+				'modifyDate' 	 =>date("Y-m-d H:i:s"),
+				'userId'	 	 => $this->getUserId(),
 				'status'	 	 => 1,
 			);
 			$this->_name = 'rms_allowed_teacher_score_setting';
@@ -81,6 +93,13 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try {
+			$subjectId = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($subjectId)){
+	    			$subjectId = $rs;
+	    		}else{ $subjectId = $subjectId.",".$rs;
+	    		}
+	    	}
 			$status = empty($_data['status']) ? 0 : 1;
 			$_arr = array(
 				'branchId'		 => $_data['branch_id'],
@@ -88,8 +107,11 @@ class Issuesetting_Model_DbTable_DbAllowTeacherScoreSetting extends Zend_Db_Tabl
 				'degree' 		 => $_data['degree'],
 				'group'			 => $_data['group'],
 				'academicYear' 	 => $_data['academic_year'],
-				'subjectId'		 => $_data['subject'],
+				'subjectId'		 => $subjectId,
 				'endDate'		 => $_data['end_date'],
+				'createDate' 	 =>date("Y-m-d H:i:s"),
+				'modifyDate' 	 =>date("Y-m-d H:i:s"),
+				'userId'	 	 => $this->getUserId(),
 				'status'	 	 => $status,
 			);
 			$this->_name = 'rms_allowed_teacher_score_setting';

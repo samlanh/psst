@@ -8,7 +8,6 @@
     background: #b1badf !important;
 }
 .bgintro label{font-size: 11px !important;}
-
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -779,7 +778,6 @@ function getAllFromGroupByBranch(typeFrom=0){
 		    if(fromGroup=='' || fromGroup==null){
 		    	dijit.byId('from_group').set('store',group_store);  
 			}
-			
 			getToGroupByBranch();
 		},
 		error: function(err) {
@@ -806,7 +804,7 @@ function getStudyYear(){
 	getAllYear(urlGetstudyYear,contentData,null,'study_year');
 }
 
-function getToGroupByBranch(contentData){
+function getToGroupByBranch(){
 	dijit.byId('groupId').reset();
 	fromDegree = dijit.byId('degree').get('value');
 	fromGrade = dijit.byId('grade').get('value');
@@ -835,14 +833,11 @@ function getToGroupByBranch(contentData){
 			return false;
 		}
 	}else{
-		//fromDegree = dijit.byId('degree').get('value');
-		change_type='';//corrected
+		change_type='';
 	}
-	
 	contentData={
 			'branch_id':branch_id,
 			'academic_year':study_year,
-			//'change_type':change_type,
 			'group_id':group_id,
 			'degree':fromDegree,
 			'grade':fromGrade,

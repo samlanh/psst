@@ -9,14 +9,22 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
 
-	public function getSubjectId($title,$strId){
-		$sublang = !empty(strpos($title,'(EN)'))?2:1;
-		$title = str_replace('(EN)','', $title);
-		$title = str_replace('(KH)','', $title);
+	public function getSubjectId($title=null,$strId,$shortcut=null){
 		
 		$db = $this->getAdapter();
-		$sql=" SELECT id FROM `rms_subject` WHERE subject_titlekh = '".$title."' OR  subject_titleen='".$title."'";
-		$sql.="  AND subject_lang= $sublang AND type_subject=1";
+		$sql=" SELECT id FROM `rms_subject` WHERE 1 ";
+		
+		if(!empty($title)){
+			$sublang = !empty(strpos($title,'(EN)'))?2:1;
+			$title = str_replace('(EN)','', $title);
+			$title = str_replace('(KH)','', $title);
+			
+			$sql.=" AND subject_titlekh = '".$title."' OR  subject_titleen='".$title."'";
+			$sql.=" AND subject_lang= $sublang AND type_subject=1";
+		}
+		if(!empty($shortcut)){
+			$sql.=" AND shortcut='".$shortcut."'";
+		}
 
 		$subject_id =  $db->fetchOne($sql);
         
@@ -49,6 +57,85 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			$this->update($array,$where);
 		}
 		return $subject_id;
+	}
+	public function getTeacherId($title,$gender,$strId,$shortcut=null){
+	
+		$db = $this->getAdapter();
+		
+			$sql="SELECT id FROM `rms_teacher` WHERE 1";
+			if(!empty($title)){
+				$sql.=" AND teacher_name_kh = '".$title."' OR teacher_name_en = '".$title."'"; 
+			}
+			elseif(!empty($shortcut)){
+				$sql.=" AND teacher_code = '".$shortcut."'";
+			}
+			
+			$teacherId =  $db->fetchOne($sql);
+			$dbg = new Application_Model_DbTable_DbGlobal();
+				
+			if(empty($teacherId)){
+				$sex= ($gender=='M')?1:2;
+				echo $title;
+				exit();
+				$code = $dbg->getTeacherCode(1);
+				$_arr=array(
+						'branch_id' 		 => 1,
+						'teacher_name_en'	 => $title,
+						'teacher_name_kh'	 => $title,
+						'teacher_code'		 => $code,
+						'sex'				 => $sex,
+						'nation' 			 => 1,
+						'create_date' 		 => date("Y-m-d"),
+						'user_id'	  		 => $this->getUserId(),
+				);
+				$this->_name = "rms_teacher";
+				$teacherId =  $this->insert($_arr);
+			}else{
+				$this->_name='rms_teacher';
+				$array = array(
+						'strId' => $strId,
+				);
+				$where = "id =".$teacherId;
+				$this->update($array,$where);
+			}
+		
+		return $teacherId;
+	}
+	
+	public function getGroupId($title,$strId){
+		$db = $this->getAdapter();
+	
+	
+		$sql=" SELECT id FROM `rms_group` WHERE group_code like '%".$title."%' AND academic_year=7";
+		$groupId =  $db->fetchOne($sql);
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		if(empty($groupId)){
+			echo $title;
+			exit();
+			// 	$_arr=array(
+			// 		'branch_id' 		 => $data['branch_id'],
+			// 		'teacher_name_en'	 => $eng_name,
+			// 		'teacher_name_kh'	 => $kh_name,
+			// 		'teacher_code'		 => $code,
+			// 		'tel'				 => $tel,
+			// 		'sex'				 => $sex,
+			// 		'nation' 			 => 1,
+			// 		'create_date' 		 => date("Y-m-d"),
+			// 		'user_id'	  		 => $this->getUserId(),
+			// );
+			// $this->_name = "rms_teacher";
+			// $teacherId =  $this->insert($_arr);
+		}else{
+			$this->_name='rms_group';
+			$array = array(
+					'strId' => $strId,
+			);
+			$where = "id =".$groupId;
+			$this->update($array,$where);
+	
+		}
+	
+		return $groupId;
 	}
 	public function getSubjectIdbyStrId($strId){
 		$db = $this->getAdapter();
@@ -92,78 +179,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 	}
 	
 
-	public function getTeacherId($title,$gender,$strId){
-		
-		$db = $this->getAdapter();
-		$sex= ($gender=='M')?1:2;
-		if(!empty($title)){
-			$sql=" SELECT id FROM `rms_teacher` WHERE teacher_name_kh = '".$title."' OR teacher_name_en = '".$title."' ";
-			$teacherId =  $db->fetchOne($sql);
-			$dbg = new Application_Model_DbTable_DbGlobal();
-			
-			if(empty($teacherId)){
-				 echo $title;
-				 exit();
-				 $code = $dbg->getTeacherCode(1);
-					$_arr=array(
-						'branch_id' 		 => 1,
-						'teacher_name_en'	 => $title,
-						'teacher_name_kh'	 => $title,
-						'teacher_code'		 => $code,
-						'sex'				 => $sex,
-						'nation' 			 => 1,
-						'create_date' 		 => date("Y-m-d"),
-						'user_id'	  		 => $this->getUserId(),
-				);
-				$this->_name = "rms_teacher";
-				$teacherId =  $this->insert($_arr);
-			}else{
-				$this->_name='rms_teacher';
-				$array = array(
-					'strId' => $strId,
-				);
-				$where = "id =".$teacherId;
-				$this->update($array,$where);
-			}
-		}
-		return $teacherId;
-	}
-
-	public function getGroupId($title,$strId){
-		$db = $this->getAdapter();
-
 	
-			$sql=" SELECT id FROM `rms_group` WHERE group_code like '%".$title."%' AND academic_year=7";
-			$groupId =  $db->fetchOne($sql);
-			$dbg = new Application_Model_DbTable_DbGlobal();
-			if(empty($groupId)){
-				 echo $title;
-				 exit();
-				// 	$_arr=array(
-				// 		'branch_id' 		 => $data['branch_id'],
-				// 		'teacher_name_en'	 => $eng_name,
-				// 		'teacher_name_kh'	 => $kh_name,
-				// 		'teacher_code'		 => $code,
-				// 		'tel'				 => $tel,
-				// 		'sex'				 => $sex,
-				// 		'nation' 			 => 1,
-				// 		'create_date' 		 => date("Y-m-d"),
-				// 		'user_id'	  		 => $this->getUserId(),
-				// );
-				// $this->_name = "rms_teacher";
-				// $teacherId =  $this->insert($_arr);
-			}else{
-				$this->_name='rms_group';
-				$array = array(
-					'strId' => $strId,
-				);
-				$where = "id =".$groupId;
-				$this->update($array,$where);
-
-			}
-		
-		return $groupId;
-	}
 	function dayofWeek($str){
 		$days = array(
 				'10000'=>1,//mon

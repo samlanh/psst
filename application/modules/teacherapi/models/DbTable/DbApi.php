@@ -479,6 +479,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 									AND aTs.endDate > sett.examEndDate
 				";
 			$sql.=' WHERE gsjb.teacher='.$userId;
+			$sql.=' AND g.`gradingId` !=0 ';
 			
 			$date = new DateTime();
 			$currentDate = $date->format("Y-m-d");
@@ -584,7 +585,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs ON aTs.teacherId = gsjb.teacher AND g.id = aTs.group AND FIND_IN_SET(gsjb.subject_id,(aTs.subjectId)) AND aTs.endDate > sett.examEndDate
 				";
 			$sql.=' WHERE gsjb.teacher='.$userId;
-			$sql.=' AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
+			$sql.=' AND g.`gradingId` !=0 AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
 			
 			$date = new DateTime();
 			$currentDate = $date->format("Y-m-d");
@@ -979,8 +980,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($_data['gradingTmpId'])){
 				$gradingTmpId = $_data['gradingTmpId'];
 				$sqlColScoreValue = "
-						,(SELECT tmpD.subCriterialTitleKh FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1) AS subCriteriaTitleKh
-						,(SELECT tmpD.subCriterialTitleKh FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1) AS subCriteriaTitleEng
+						,(SELECT GROUP_CONCAT(tmpD.subCriterialTitleKh) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1) AS subCriteriaTitleKh
+						,(SELECT GROUP_CONCAT(tmpD.subCriterialTitleEng) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1) AS subCriteriaTitleEng
 						,(SELECT GROUP_CONCAT(tmpD.totalGrading) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId ) AS subCriteriaScore
 						,(SELECT  IF(SUM(tmpD.totalGrading) >0, FORMAT((COALESCE(SUM(tmpD.totalGrading),'0') / COUNT(tmpD.id) ),2) ,'0') FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId) AS criteriaScoreAvg
 						,(SELECT COALESCE(grdT.totalAverage,'0') FROM `rms_grading_total` AS grdT WHERE grdT.studentId = s.stu_id AND grdT.`gradingTmpId` =$gradingTmpId LIMIT 1) AS grandTotalAverageScore
@@ -1105,7 +1106,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,COALESCE(g.`gradingId`,'0') AS gradingId
 				,g.group_code AS groupCode
 				,tmp.subjectId AS subjectId
-				
+				,tmp.settingEntryId
 				,(SELECT subj.subject_titleen 	FROM `rms_subject` AS subj	WHERE subj.id = tmp.subjectId  LIMIT 1) AS subjectTitleEng
 				,(SELECT subj.subject_titlekh 	FROM `rms_subject` AS subj	WHERE subj.id = tmp.subjectId  LIMIT 1) AS subjectTitleKh
 				,(SELECT subj.shortcut 			FROM `rms_subject` AS subj 	WHERE subj.id = tmp.subjectId  LIMIT 1) AS subjectShortCut
@@ -1500,6 +1501,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			WHERE 
 				tmp.id = tmpD.`gradingId`
 				AND tmp.`criteriaId` = ".$_data["criteriaId"]."
+				AND tmp.`settingEntryId` = ".$_data["settingEntryId"]."
+				AND tmp.`subjectId` = ".$_data["subjectId"]."
 				AND tmpD.`studentId` = ".$_data["studentId"]."
 			ORDER BY tmp.id ASC
 		";
@@ -1728,6 +1731,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $this->getAllTeachingGroupByTeacher($_data);
 			}else if($getControlType=="teachingSubject"){
 				$row = $this->getAllTeachingSubjectByTeacher($_data);
+			}else if($getControlType=="teachingDegree"){
+				$row = $this->getAllTeachingDegreeByTeacher($_data);
 			
 			}
 			
@@ -1788,6 +1793,23 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			g.grade ASC,
 			g.id ASC 
 		";
+		return $db->fetchAll($sql);
+	}
+	
+	function getAllTeachingDegreeByTeacher($_data){
+		$db = $this->getAdapter();
+		$userId = empty($_data['userId'])?0:$_data['userId'];
+		$sql="
+			SELECT 
+				g.`degree` AS id
+				,(SELECT de.title FROM `rms_items` AS de WHERE de.type=1 AND de.id = g.`degree` LIMIT 1 ) AS `name`
+			FROM 
+				rms_group AS g
+				JOIN `rms_group_subject_detail` AS gSubj ON g.`id` = gSubj.`group_id`
+		";
+		$sql.=" WHERE gSubj.`teacher` = $userId ";
+		$sql.=" GROUP BY g.`degree` ";
+		$sql.=" ORDER BY g.`degree` ASC ";
 		return $db->fetchAll($sql);
 	}
 	
@@ -1890,7 +1912,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($_data['degree'])){
 				$sql.=" AND g.degree =".$_data['degree'];
 			}
-			
+			if(!empty($_data['groupProcess'])){
+				$sql.=" AND g.is_pass =".$_data['groupProcess'];
+			}
 			$sql.=" GROUP BY g.id ";
 			$sql.=" ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
 			

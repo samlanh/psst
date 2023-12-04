@@ -1,8 +1,9 @@
 <?php 
 
-$xml=simplexml_load_file(PUBLIC_PATH."/xml/schedule.xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
-$dbxml = new Issue_Model_DbTable_DbImportxml;
-$array = json_decode(json_encode((array)$xml), TRUE);
+	$xml=simplexml_load_file(PUBLIC_PATH."/xml/schedulev3.xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+	$dbxml = new Issue_Model_DbTable_DbImportxml;
+	$array = json_decode(json_encode((array)$xml), TRUE);
+
 //print_r($xml->attributes);
 
 // print_r($array["periods"]["@attributes"]["columns"]);
@@ -27,30 +28,32 @@ $array = json_decode(json_encode((array)$xml), TRUE);
 
 
 
-// $tableData = $array["subjects"]["subject"];
-// $periodsColumn = $array["subjects"]["@attributes"]["columns"];
-// $columnList = explode(',', $periodsColumn);
+$tableData = $array["subjects"]["subject"];
+$periodsColumn = $array["subjects"]["@attributes"]["columns"];
+$columnList = explode(',', $periodsColumn);
 // if(!empty($tableData)) foreach($tableData as $row){
 
-// 	$subjectTitle =$row["@attributes"]['name'];
+// 	$subjectTitle =null;//$row["@attributes"]['name'];
 // 	$strId =$row["@attributes"]['id'];
-// 	$Subject = $dbxml->getSubjectId($subjectTitle,$strId);
+// 	$shortcut =$row["@attributes"]['short'];
+// 	$Subject = $dbxml->getSubjectId($subjectTitle,$strId,$shortcut);
 // }
 
-// $tableData = $array["teachers"]["teacher"];
-// $periodsColumn = $array["teachers"]["@attributes"]["columns"];
-// $columnList = explode(',', $periodsColumn);
+$tableData = $array["teachers"]["teacher"];
+$periodsColumn = $array["teachers"]["@attributes"]["columns"];
+$columnList = explode(',', $periodsColumn);
 // if(!empty($tableData)) foreach($tableData as $row){
 
-// 	$teacherTitle =$row["@attributes"]['name'];
+// 	$teacherTitle =null;//$row["@attributes"]['name'];
 // 	$strId =$row["@attributes"]['id'];
 // 	$gender =$row["@attributes"]['gender'];
-// 	$teacher = $dbxml->getTeacherId($teacherTitle,$gender,$strId);
+// 	$shortcut = $row['@attributes']['short'];
+// 	$teacher = $dbxml->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
 // }
 
-// $tableData = $array["classes"]["class"];
-// $periodsColumn = $array["classes"]["@attributes"]["columns"];
-// $columnList = explode(',', $periodsColumn);
+$tableData = $array["classes"]["class"];
+$periodsColumn = $array["classes"]["@attributes"]["columns"];
+$columnList = explode(',', $periodsColumn);
 
 // if(!empty($tableData)) foreach($tableData as $row){
 // 	$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
@@ -75,9 +78,6 @@ if(!empty($tableData)) foreach($tableData as $row){
 	$teacherId = $dbxml->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
 	$groupId = $dbxml->getGroupIdbyStrId($row["@attributes"]['classids']);
 	
-// 	echo $subjectId."subject<br />";
-// 	echo $teacherId."teacherId<br />";
-// 	echo $groupId."groupId<br />";
 	
 	$lessionId = $row["@attributes"]['id'];
 	
@@ -86,7 +86,7 @@ if(!empty($tableData)) foreach($tableData as $row){
 					'techer_id' =>$teacherId,
 					'note'=>'abc',
 			);
-// 	$dbxml->updateExistingSchedule($lessionId,$data,$groupId);
+	$dbxml->updateExistingSchedule($lessionId,$data,$groupId);
 }
 
 

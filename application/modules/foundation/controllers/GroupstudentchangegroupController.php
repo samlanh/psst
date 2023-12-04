@@ -24,11 +24,11 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$db_student= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 			$rs_rows = $db_student->selectAllStudentChangeGroup($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","FROM_GROUP","ACADEMIC_YEAR","GRADE","SESSION","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
+			$collumns = array("BRANCH","FROM_GROUP","ACADEMIC_YEAR","GRADE","TYPE","TO_GROUP","ACADEMIC_YEAR","GRADE","SESSION","MOVING_DATE","NOTE","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'academic'=>$link,'grade'=>$link,'session'=>$link,'to_group_code'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'academic'=>$link,'grade'=>$link,'changeType'=>$link,'to_group_code'=>$link));
 			$this->view->adv_search = $search;
 			
 		}catch (Exception $e){
@@ -68,7 +68,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			try{
 				$data = $this->getRequest()->getPost();
 				$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
-				$row=$db->updateStudentChangeGroup($data,$id);
+				$row=$db->updateStudentChangeGroup($data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/groupstudentchangegroup/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
@@ -77,11 +77,11 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 		}	
 		$db= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$result = $db->getAllGroupStudentChangeGroupById($id);
-		$this->view->rs = $result;
 		if(empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/groupstudentchangegroup/index");
+			exit();
 		}
-		
+		$this->view->rs = $result;
 		$this->view->studentpass = $db->selectStudentPass($result['from_group']);
 		$db = new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
 		$this->view->row = $db->getfromGroup();
@@ -108,8 +108,8 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$db = new Application_Model_DbTable_DbGlobal();
 			$grade = $db->getStudentGroupInfoById($data['to_group']);
 			print_r(Zend_Json::encode($grade));
-			exit();
 		}
+		exit();
 	}
 	
 	function getAllStudentAction(){

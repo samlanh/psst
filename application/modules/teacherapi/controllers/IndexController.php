@@ -48,6 +48,9 @@ class Teacherapi_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="optionGroup"){
 				$GetData['getControlType'] = "teachingGroup";
     			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionDegree"){
+				$GetData['getControlType'] = "teachingDegree";
+    			$_dbAction->getFormOptionSelectAction($GetData);
 			}else if ($GetData['url']=="optionSubject"){
 				$GetData['getControlType'] = "teachingSubject";
     			$_dbAction->getFormOptionSelectAction($GetData);

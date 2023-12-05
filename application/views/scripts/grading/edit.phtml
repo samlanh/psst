@@ -74,6 +74,7 @@
 																		<option <?php echo ($rscriteria['criteriaId']==$resultRecord['criteriaId'])?"selected":"";?> value="<?php echo $rscriteria['criteriaId']?>" ><?php echo $rscriteria['criterialTitle'].'/'.$rscriteria['criterialTitleEng'];?></option>
 																	<?php }}?>
 																</select>
+																<input type="hidden" name="settingEntryId" id="settingEntryId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $resultRecord['settingEntryId']; ?>"/>
 															</div>
 														</div>
 													</div>
@@ -316,7 +317,7 @@ function getSubjectInfo(){
 	   load: function(data) {
 		   dijit.byId('maxSubjectScore').attr('value',data.maxSubjectscore);
 		   filterStudent();
-		   duplicationRecord();
+		 //  duplicationRecord();
 	   },		
 	    error: function(err) {
 	    }

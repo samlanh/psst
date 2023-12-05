@@ -9,6 +9,15 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$row = $db->getTeacherLogin($_data);
 			if ($row['status']){
 				if(!empty($row['value'])){
+					
+					$condictionArray = array();
+					$condictionArray['id'] = empty($row['value']["id"])?0:$row['value']["id"];
+					$condictionArray['deviceType'] = empty($_data['deviceType'])?1:$_data['deviceType'];
+					$condictionArray['mobileToken'] = empty($_data['mobileToken'])?1:$_data['mobileToken'];
+					$condictionArray['currentUserId'] = empty($_data['currentUserId'])?0:$_data['currentUserId'];
+					$condictionArray['tokenType'] = empty($_data['tokenType'])?0:$_data['tokenType'];
+					$token = $db->generateToken($condictionArray);
+					
 					$arrResult = array(
 						"result" => $row['value'],
 						"code" => "SUCCESS",

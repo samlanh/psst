@@ -120,6 +120,7 @@ class GradingController extends Zend_Controller_Action
 	{
 		$this->_helper->layout()->disableLayout();
 		$key = new Application_Model_DbTable_DbKeycode();
+		$dbg = new Application_Model_DbTable_DbGlobal();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		$db = new Application_Model_DbTable_DbGradingScore();
 		if($this->getRequest()->isPost()){
@@ -140,6 +141,17 @@ class GradingController extends Zend_Controller_Action
 		if(empty($resultRecord)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/grading/index");
 		}
+	
+		$rscoreType = $dbg->checkScoreType($resultRecord);
+		if(!empty($rscoreType)){
+			if($rscoreType['isLock']==1){
+				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+			}elseif($resultRecord['criteriaType'] != 2 ){
+				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+			}
+			
+		}
+
 		$this->view->resultRecord = $resultRecord;
 		$this->view->gradingRowId = $gradingRowId;
 		
@@ -161,13 +173,12 @@ class GradingController extends Zend_Controller_Action
 		}
 		$this->view-> month = $dbExternal->getAllMonth();
 	
-		$dbg = new Application_Model_DbTable_DbGlobal();
 		$degreeId = $row['degree_id'];
-		$gradingId = $row['gradingId'];
 		$result = $dbg->checkEntryScoreSetting($degreeId);
 		if(empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
 		}
+		$gradingId = $row['gradingId'];
 		$array = array(
 				'gradingId'=>$gradingId
 		);

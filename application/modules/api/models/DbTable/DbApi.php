@@ -5160,7 +5160,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		
 			$sql.=" LIMIT 1 ";
 			$row = $db->fetchRow($sql);
-			$row = empty($row) ? null : $row;
+			$row = empty($row) ? array() : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,

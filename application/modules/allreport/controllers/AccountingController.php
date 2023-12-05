@@ -485,14 +485,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'branch_id'		=>'',
 				);
 			}
+			$this->view->search = $search;
+			$db = new Allreport_Model_DbTable_DbRptStudentBalance();
+			$this->view->rs = $db->getStudentBalance($search);
 			
 			$form=new Registrar_Form_FrmSearchInfor();
 			$form->FrmSearchRegister();
 			Application_Model_Decorator::removeAllDecorator($form);
 			$this->view->form_search=$form;
-			
-			
-			$this->view->search = $search;
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();

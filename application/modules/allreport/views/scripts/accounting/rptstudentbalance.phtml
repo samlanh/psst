@@ -4,6 +4,7 @@
 	echo $this->headTitle(''); 
 	$frm=$this->form_search;
 	$classHideHeight=classHideHeight;
+	// print_r($this->rs);	
 ?>	
 <div style="padding:0.2cm;margin:0 auto;">
 	<div class="card-box">
@@ -171,7 +172,7 @@
 								<td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $row['branch_name'];?></td>
 								<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" >&nbsp;<?php echo $row['receipt_number'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" align="left" >&nbsp;<?php echo $row['stu_code'];?></td>	
-								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"><?php echo $row['stu_name'];?></td>
+								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"><?php echo $row['stu_khname'];?></td>
 								<td data-label="<?php echo $tr->translate("GRADE");?>" align="left" >&nbsp;<?php echo $row['grade_name'];?></td>
 								<td data-label="<?php echo $tr->translate("FINE");?>" >&nbsp;<?php echo "$".$row['penalty'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("TOTAL_PAYMENT");?>" ><?php echo "$".$row['grand_total'];?></td>
@@ -179,7 +180,7 @@
 								<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" ><?php echo "$".$row['paid_amount'];?></td>
 								<td data-label="<?php echo $tr->translate("BALANCE");?>" ><?php echo "$".$row['balance_due'];?></td>
 								<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo $row['note'];?></td>
-								<td data-label="<?php echo $tr->translate("USER");?>" ><?php echo $row['user'];?></td>
+								<td data-label="<?php echo $tr->translate("USER");?>" ><?php echo $row['USER'];?></td>
 								<td data-label="<?php echo $tr->translate("CREATE_DATE");?>" >&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 							</tr>
 							<?php 

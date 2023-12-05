@@ -92,6 +92,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" GROUP BY t.id ";
 			$sql.=" LIMIT 1";
 			$row = $_db->fetchAll($sql);
+			$row = empty($row) ? array() : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -1859,7 +1860,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					AND gsjb.`teacher` = $userId
 			";
 			$sql.=" GROUP BY gsjb.`teacher` ";
+			$sql.=" LIMIT 1";
 			$row = $_db->fetchAll($sql);
+			$row = empty($row) ? array() : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,

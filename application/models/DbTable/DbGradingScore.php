@@ -377,6 +377,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    				'teacherId'			=>$this->getUserExternalId(),
    				'modifyDate'		=>date("Y-m-d H:i:s"),
    				'dateInput'			=>date("Y-m-d"),
+				'settingEntryId'	=> $_data['settingEntryId'],
    		);
    		$this->_name='rms_grading_tmp';
    		$recordId = $_data['recordId'];
@@ -432,6 +433,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					'teacherId'			=>$this->getUserExternalId(),
    					'createDate'		=>date("Y-m-d H:i:s"),
    					'modifyDate'		=>date("Y-m-d H:i:s"),
+					'settingEntryId'	=> $_data['settingEntryId'],
    			);
    			$this->_name='rms_grading';
    			$idGrading=$this->insert($_arr);
@@ -691,6 +693,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 		   grd.forSemester,
 		   grd.criteriaId,
 		   grd.note,
+		   grd.settingEntryId,
 		   	(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
 		   	,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
 		   	,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
@@ -719,6 +722,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 		   	,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 		   	,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
 		   	,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+			,(SELECT `t`.`criteriaType` FROM `rms_exametypeeng` AS t WHERE t.id = grd.criteriaId LIMIT 1) AS criteriaType 
 		   	
    			";
    			$sql.=" FROM rms_grading_tmp AS grd,
@@ -741,7 +745,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		$data['getExistingData']=1;
    	}
    	$criterial = $dbExternal->getGradingCriteriaItems($data);
-   	 
+   	
    	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
    	$db=$this->getAdapter();
    	 

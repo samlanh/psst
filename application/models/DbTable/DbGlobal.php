@@ -4170,6 +4170,26 @@ function getAllgroupStudyNotPass($action=null){
 		$sql.=" ORDER BY examEndDate DESC  ";
    		return $this->getAdapter()->fetchRow($sql);
    	}
+	function checkScoreType($data){
+		$sql="SELECT * FROM `rms_grading` WHERE status=1  ";
+		if(!empty($data['settingEntryId'])){
+			$sql.=" AND settingEntryId =".$data['settingEntryId'];
+		}
+		if(!empty($data['groupId'])){
+			$sql.=" AND groupId =".$data['groupId'];
+		}
+		if(!empty($data['subjectId'])){
+			$sql.=" AND subjectId =".$data['subjectId'];
+		}
+		if(!empty($data['forMonth'])){
+			$sql.=" AND forMonth =".$data['forMonth'];
+		}
+		if(!empty($data['teacherId'])){
+			$sql.=" AND teacherId =".$data['teacherId'];
+		}
+	 $sql.=" ORDER BY id DESC limit 1 ";
+		return $this->getAdapter()->fetchRow($sql);
+	}
    
 }
 ?>

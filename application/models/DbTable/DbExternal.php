@@ -470,6 +470,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['criteriaId'])){
 			$sql.=" AND s.criteriaId =".$data['criteriaId'];
 		}
+		$sql.=" ORDER BY criteriaType ASC, s.criteriaId ASC";
 		$row = $db->fetchRow($sql);
 		
 		$sql="
@@ -491,15 +492,13 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['criteriaId'])){
 			$sql.=" AND s.criteriaId =".$data['criteriaId'];
 		}
-		
-		$db = $this->getAdapter();
+		$sql.=" ORDER BY criteriaType ASC, s.criteriaId ASC ";
 		$rRow = $db->fetchAll($sql);
    	
 		if(!empty($row)){
 			array_unshift($rRow, $row);
+			asort($rRow);
 		}
-		asort($rRow);
-		
 		return $rRow;
 	}
 	

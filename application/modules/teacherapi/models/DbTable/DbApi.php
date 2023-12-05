@@ -269,7 +269,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,`g`.`group_code` AS groupCode
 				,`g`.`degree` AS degree_id
 				,`g`.`grade` AS gradeId
-				,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `roomName`
+				,COALESCE((SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1),'N/A') AS `roomName`
 				,(SELECT $degree FROM `rms_items`	WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degreeTitle
 				,(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as gradeTitle	
 				,schDetail.*
@@ -346,7 +346,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
 					,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 					,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
-					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+					,COALESCE((SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1),'N/A') AS roomName
 					,(SELECT sEtStt.title FROM rms_score_entry_setting AS sEtStt WHERE sEtStt.id = grd.settingEntryId LIMIT 1) titleScoreFor
 					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =grd.groupId LIMIT 1 ) AS totalStudent
 					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.stu_id=gds.stu_id AND gds.group_id =grd.groupId LIMIT 1 ) AS maleStudent
@@ -444,7 +444,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
 					,(SELECT i.$colunmName FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
-					,(SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1) AS `roomName`
+					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
 					
 					,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitle
@@ -513,6 +513,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					, gsjb.subject_id ASC
 			";
 			$row = $_db->fetchAll($sql);
+			$row = empty($row) ? array() : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -625,6 +626,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				}
 				$row = $newArray;
 			}
+			$row = empty($row) ? array() : $row;
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -878,7 +880,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
 					,(SELECT i.$colunmName FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
-					,(SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1) AS `roomName`
+					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
 					
 					,(SELECT subj.$subjectTitle 	FROM `rms_subject` AS subj 	WHERE subj.id = gTmp.subjectId   LIMIT 1) AS subjectTitle
@@ -1892,7 +1894,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
 					,g.`group_code` AS groupCode
 					,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id = g.`academic_year` LIMIT 1) AS academicYear
-					,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `roomName`
+					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)),'N/A') AS `roomName`
 					,(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS mainTeacherNameKh
 					,(SELECT t.teacher_name_en FROM rms_teacher AS t WHERE t.id = g.teacher_id LIMIT 1) AS mainTeacherNameEng
 					,CASE 

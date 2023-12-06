@@ -23,9 +23,17 @@ class GradingController extends Zend_Controller_Action
 		$groupId=$this->getRequest()->getParam("id");
 		$groupId = empty($groupId)?0:$groupId;
 		$this->view->groupId = $groupId;
+
 		$criteriaId=$this->getRequest()->getParam("criteriaId");
 		$criteriaId = empty($criteriaId)?'':$criteriaId;
 		$this->view->criteriaId = $criteriaId;
+
+		$subjectId=$this->getRequest()->getParam("subjectId");
+		$subjectId = empty($subjectId)?'':$subjectId;
+		$this->view->subjectId = $subjectId;
+
+		$settingEntryId=$this->getRequest()->getParam("settingEntryId");
+		$this->view->settingEntryId = $settingEntryId;
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -43,6 +51,7 @@ class GradingController extends Zend_Controller_Action
 				'degree'=>0,
 				'grade'=> 0,
 				'group'=> $groupId ,
+				'subjectId'=> $subjectId ,
 				'criteriaId'=>$criteriaId,
 				'start_date'=> '',
 				'end_date'=>date('Y-m-d')
@@ -85,30 +94,35 @@ class GradingController extends Zend_Controller_Action
 		$criteriaId=$this->getRequest()->getParam("criteriaId");
 		$criteriaId = empty($criteriaId)?0:$criteriaId;
 		$this->view->criteriaId = $criteriaId;
+
+		$subjectId=$this->getRequest()->getParam("subjectId");
+		$subjectId = empty($subjectId)?'':$subjectId;
+		$this->view->subjectId = $subjectId;
+
+		$settingEntryId=$this->getRequest()->getParam("settingEntryId");
+		$this->view->settingEntryId = $settingEntryId;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getGroupDetailByIDExternal($id,1);
 		
 		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/dashboard");
-			exit();
+			$this->_redirect("/external/group");
 		}
 		
 		$this->view->row = $row;
 		if(empty($row)){
 			$this->_redirect("/external/group");
 		}
-	
 		$this->view-> month = $dbExternal->getAllMonth();
 		
-		$dbg = new Application_Model_DbTable_DbGlobal();
-		$degreeId = $row['degree_id'];
+		//$dbg = new Application_Model_DbTable_DbGlobal();
+		// $entrySetting = $dbg->checkEntryScoreSetting($degreeId);
+		// $this->view->entrySetting = $entrySetting;
+		// if(empty($entrySetting)){
+		// 	Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
+		// }
+
 		$gradingId = $row['gradingId'];
-		$entrySetting = $dbg->checkEntryScoreSetting($degreeId);
-		$this->view->entrySetting = $entrySetting;
-		if(empty($entrySetting)){
-			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
-		}
 		$array = array(
 				'gradingId'=>$gradingId
 				);

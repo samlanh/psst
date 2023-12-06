@@ -88,6 +88,7 @@ class ExternalController extends Zend_Controller_Action
 		$search = array(
 			'limitedRecord'=>10
 		);
+		$search['groupBy']=1;
 		$search['classTypeFilter']=2;
 		$this->view->activeClassList = $dbExternal->getAllClassByUser($search);
 		$search['classTypeFilter']=1;

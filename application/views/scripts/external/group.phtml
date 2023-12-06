@@ -171,9 +171,7 @@
 												'teacherId' 	=> $teacherId,
 												'criterialType' => $rsCriterial['criteriaType'],
 											);
-											$rsEntrySetting = $dbg->checkEntryScoreSetting($scoreSetting);
-										//	print_r($rsEntrySetting);
-											
+											$rsEntrySetting = $dbg->checkTecherEntrySetting($scoreSetting);
 										?>
 										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
 											<li style="width: 60%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>

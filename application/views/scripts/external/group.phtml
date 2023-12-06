@@ -4,7 +4,7 @@
 	$pageTitle = $tr->translate("CLASS_LIST");
 	echo $this->headTitle($pageTitle);
 	$frm =  $this->form_search;
-	
+	//print_r($this->allClass);
 ?>
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -110,9 +110,9 @@
 										  <li class="dropdown">
 											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 											<ul class="dropdown-menu" role="menu">
-												<li>
+												<!-- <li>
 													<a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
-												</li>
+												</li> -->
 												<?php if(!empty($row['mainTeacher'])){ ?>
 												<li>
 													<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?></a>
@@ -125,6 +125,7 @@
 										  </li>
 										</ul>
 										<div class="col-md-12 col-sm-12 col-xs-12 ">
+											<h4 class="mb-0"><?php echo $row['subjectNameKh']; ?></h4>
 											<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
 											<p class="mb-0"><?php echo $row['academicYear']; ?></p>
 											<p class="mb-0"><?php echo $row['groupStatus']; ?></p>
@@ -150,12 +151,7 @@
 								<div class="col-md-12 col-sm-12 col-xs-12 ">
 									<?php   
 										$dbg = new Application_Model_DbTable_DbGlobal();
-										$degreeId = $row['degreeId'];
-										$scoreSetting= array(
-											'degreeId' => $degreeId,
-										);
-										$rsEntrySetting = $dbg->checkEntryScoreSetting($scoreSetting);
-
+									
 										$dbExternal = new Application_Model_DbTable_DbExternal;
 										$gradingId= $row['gradingId'];
 										$data = array(
@@ -165,15 +161,27 @@
 										$no =0;
 										if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
 											$no++;
+
+											$degreeId = $row['degreeId'];
+											$subjectId = $row['subjectId'];
+											$teacherId = $row['teacherId'];
+											$scoreSetting= array(
+												'degreeId'  	=> $degreeId,
+												'subjectId' 	=> $subjectId,
+												'teacherId' 	=> $teacherId,
+												'criterialType' => $rsCriterial['criteriaType'],
+											);
+											$rsEntrySetting = $dbg->checkEntryScoreSetting($scoreSetting);
+										//	print_r($rsEntrySetting);
+											
 										?>
 										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
 											<li style="width: 60%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>
 											<?php if(!empty($rsEntrySetting)){ ?>
 												<li style="width: 40%; text-align:center;" >
-													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId'];?>">
+													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId'];?>">
 														<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 													</a>
-												<!-- <a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId'];?>"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>&nbsp;<i class="text-success fa fa-toggle-on" aria-hidden="true"></i></a> -->
 												</li>	
 											<?php }else{ ?>	
 												<li style="width: 40%; text-align:center;" ><i class="text-info fa fa-toggle-off" aria-hidden="true"></i>

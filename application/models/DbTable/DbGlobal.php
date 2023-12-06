@@ -4172,6 +4172,15 @@ function getAllgroupStudyNotPass($action=null){
    	}
 	function checkTecherEntrySetting($data){
 		$currentDate =  date('Y-m-d');
+		$criterialType = $data['criterialType'];
+		if($criterialType==2){
+			$fromDate = "st.examFromDate";
+			$endDate = "st.examEndDate";
+		}else{
+			$fromDate = "st.fromDate";
+			$endDate = "st.endDate";
+		}
+		$db = $this->getAdapter();
 		$sql="SELECT 
 			st.id,
 			st.fromDate,
@@ -4179,14 +4188,24 @@ function getAllgroupStudyNotPass($action=null){
 			st.examFromDate,
 			st.examEndDate,
 			st.title,
-			st.degreeId 
-		FROM `rms_score_entry_setting` as st ";
-		$sql.=" WHERE status=1 AND '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate ";
-	 if(!empty($data['degreeId'])){
-		 $sql.=" AND  FIND_IN_SET( ".$data['degreeId'].", tt.degreeId )";
-	 }
-	 $sql.=" ORDER BY examEndDate DESC  ";
-		return $this->getAdapter()->fetchRow($sql);
+			st.degreeId ,
+			att.subjectId,
+			CASE 
+				WHEN att.endDate IS NOT NULL 
+				THEN att.endDate
+				ELSE ".$endDate."
+			END AS endDateExam
+		FROM `rms_score_entry_setting` as st 
+		LEFT JOIN `rms_allowed_teacher_score_setting` as att ON att.`teacherId`=".$data['teacherId']." AND att.status=1	AND FIND_IN_SET( ".$data['subjectId'].",att.`subjectId`) AND att.endDate > ".$endDate;
+		$sql.=" WHERE st.status=1 AND '".$currentDate."'>=".$fromDate;
+		$sql.="	AND CASE 
+			WHEN att.endDate IS NOT NULL
+			THEN att.endDate ELSE ".$endDate." END >= '".$currentDate."' ";
+
+		if(!empty($data['degreeId'])){
+			$sql.=" AND  FIND_IN_SET( ".$data['degreeId'].", st.degreeId )";
+		}
+		return $db->fetchRow($sql);
 	}
 	function checkScoreType($data){
 		$sql="SELECT * FROM `rms_grading` WHERE status=1  ";

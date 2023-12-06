@@ -4170,6 +4170,24 @@ function getAllgroupStudyNotPass($action=null){
 		$sql.=" ORDER BY examEndDate DESC  ";
    		return $this->getAdapter()->fetchRow($sql);
    	}
+	function checkTecherEntrySetting($data){
+		$currentDate =  date('Y-m-d');
+		$sql="SELECT 
+			st.id,
+			st.fromDate,
+			st.endDate,
+			st.examFromDate,
+			st.examEndDate,
+			st.title,
+			st.degreeId 
+		FROM `rms_score_entry_setting` as st ";
+		$sql.=" WHERE status=1 AND '".$currentDate."'>=fromDate AND '".$currentDate."'<=endDate ";
+	 if(!empty($data['degreeId'])){
+		 $sql.=" AND  FIND_IN_SET( ".$data['degreeId'].", tt.degreeId )";
+	 }
+	 $sql.=" ORDER BY examEndDate DESC  ";
+		return $this->getAdapter()->fetchRow($sql);
+	}
 	function checkScoreType($data){
 		$sql="SELECT * FROM `rms_grading` WHERE status=1  ";
 		if(!empty($data['settingEntryId'])){

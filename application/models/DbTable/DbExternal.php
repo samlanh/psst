@@ -146,9 +146,15 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			SELECT 
 				g.*
 				,g.degree as degreeId
+				,gsjb.subject_id as subjectId
+				,gsjb.teacher as teacherId
 				,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchName
 				,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
 				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
+
+				,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectNameKh 
+				,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectNameEn 
+
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
 				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree
 				,(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
@@ -217,7 +223,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			}
 		}
 		
-		$where.=' GROUP BY gsjb.group_id ';
+		$where.=' GROUP BY gsjb.group_id,gsjb.subject_id ';
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
 		if(!empty($search['limitedRecord'])){
 			$search['limitedRecord'] = empty($search['limitedRecord'])?0:$search['limitedRecord'];

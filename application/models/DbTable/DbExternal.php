@@ -180,8 +180,6 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					 ';
 		$where.=' AND gsjb.teacher='.$currentTeacher;
 		
-		
-		
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
@@ -222,8 +220,11 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				$where.=" AND g.is_pass=2 ";
 			}
 		}
-		
-		$where.=' GROUP BY gsjb.group_id,gsjb.subject_id ';
+		if(!empty($search['groupBy'])){
+			$where.=' GROUP BY gsjb.group_id';
+		}else{
+			$where.=' GROUP BY gsjb.group_id,gsjb.subject_id ';
+		}
 		$order =  ' ORDER BY `g`.`id` DESC ' ;
 		if(!empty($search['limitedRecord'])){
 			$search['limitedRecord'] = empty($search['limitedRecord'])?0:$search['limitedRecord'];

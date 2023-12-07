@@ -177,7 +177,7 @@
 											<li style="width: 60%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>
 											<?php if(!empty($rsEntrySetting)){ ?>
 												<li style="width: 40%; text-align:center;" >
-													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId'];?>">
+													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$rsEntrySetting['id'];?>">
 														<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 													</a>
 												</li>	

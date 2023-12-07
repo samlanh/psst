@@ -7,7 +7,8 @@
 
 	$groupId =  $this->groupId;
 	$criteriaId =  $this->criteriaId;
-
+	$subjectId =  $this->subjectId;
+	$settingEntryId = $this->settingEntryId;
 	$frm =  $this->form_search;
 ?>	
 <?php 
@@ -33,7 +34,7 @@
 						<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<a  class="mini-button-class " href="<?php echo $this->baseUrl()."/grading/add/id/".$groupId."/criteriaId/".$criteriaId;?>">
+						<a  class="mini-button-class " href="<?php echo $this->baseUrl()."/grading/add/id/".$groupId."/criteriaId/".$criteriaId."/subjectId/".$subjectId."/settingEntryId/".$settingEntryId;?>">
 							<i class="glyphicon glyphicon-plus-sign" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('INPUT_SCORE');?>
 						</a>
 					</div>
@@ -58,11 +59,15 @@
 							   <div class="col-md-2 col-sm-2 col-xs-12">
 									<input id="group" />
 							   </div>
-							   <div class="col-md-2 col-sm-2 col-xs-12">
-									<?php echo $frm->getElement("criteriaId");?>
-							   </div>
+							  
 						   </div>
 							<div class="form-group"> 
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<input id="subjectId" />
+							   </div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("criteriaId");?>
+							   </div>
 								<div class="col-md-2 col-sm-3 col-xs-12">
 									<?php echo $frm->getElement("exam_type");?>
 								</div>
@@ -72,6 +77,8 @@
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("for_month");?>
 								</div>
+							</div>
+							<div class="form-group"> 
 								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
 								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div>
 								<div class="col-md-2 col-sm-2 col-xs-12">
@@ -185,11 +192,22 @@ dojo.ready(function(){
 			required:false,
 			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 			onChange: function() {  
-				
+				getAllSubject();
 			}
 		}, "group");
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false, 
+			required:false,            
+			id: "subjectId",
+			name: "subjectId",           
+			class: 'fullside', 
+			placeHolder:"ជ្រើសមុខវិជ្ជា/Select Subject",          
+			onChange: function() {
+			}
+		}, "subjectId");
 		
-	
+	getAllSubject();
 	getallGrade();
 	getAllGroup();
 	<?php if(!empty($this->search['academic_year'])){?>
@@ -200,6 +218,31 @@ dojo.ready(function(){
 	 dijit.byId('criteriaId').attr('value','<?php echo $criteriaId;?>'); 
 	<?php } ?>
 });
+
+urlGetSubjectStore = '<?php echo $this->url(array('module'=>'default','controller'=>'external','action'=>'getsubjectlist'));?>';
+function getAllSubject(){
+	dijit.byId('subjectId').reset();
+	var subjectStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dijit.byId('subjectId').set('store',subjectStore); 
+	group = <?php echo $groupId; ?>;
+	if(group==''){
+		group = dijit.byId('group').get('value');
+	}
+	dojo.xhrPost({
+		url: urlGetSubjectStore,
+		content:{
+			'groupId':group,
+			},
+		handleAs:"json",
+		load: function(data) {
+		    subjectStore  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('subjectId').set('store',subjectStore); 
+			dijit.byId('subjectId').attr('value','<?php echo $this->search['subjectId']?>');      
+		},
+		error: function(err) {
+		}
+	});
+}
 
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getallGrade(){

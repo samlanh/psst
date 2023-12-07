@@ -146,9 +146,9 @@
 													  <li class="dropdown">
 														<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 														<ul class="dropdown-menu" role="menu">
-															<li>
+															<!-- <li>
 																<a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$group['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
-															</li>
+															</li> -->
 															<?php if(!empty($group['mainTeacher'])){ ?>
 															<li>
 																<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/add/id/".$group['id'];?>"><?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?></a>
@@ -181,13 +181,13 @@
 														</div>
 														<div class="col-md-4 col-sm-4 col-xs-12">
 															<ul class="listSmallBtn">
-																<li>
+																<!-- <li>
 																	<div class="form-group">
 																		<a class="small-button-class" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$group['id'];?>">
 																			<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_SCORE');?>
 																		</a>
 																	</div>
-																</li>
+																</li> -->
 																<?php if(!empty($group['mainTeacher'])){ ?>
 																<li>
 																	<div class="form-group">
@@ -242,9 +242,9 @@
 													  <li class="dropdown">
 														<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 														<ul class="dropdown-menu" role="menu">
-															<li>
+															<!-- <li>
 																<a target="_blank" href="<?php echo $this->baseUrl()."/issuescore/add/id/".$group['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
-															</li>
+															</li> -->
 															<?php if(!empty($group['mainTeacher'])){ ?>
 															<li>
 																<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/add/id/".$group['id'];?>"><?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?></a>

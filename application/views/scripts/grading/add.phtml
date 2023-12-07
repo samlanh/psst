@@ -11,7 +11,8 @@
 	$msgTitle = "ទិន្នន័យស្ទួន / Duplicated Record";
 	$msgDesc = "ពិន្ទុមុខវិជ្ជានេះបានបញ្ចូលរួចរាល់ហើយ / This subject's score has been entered !";
 	$criteriaId = $this->criteriaId;
-	$entrySetting = $this->entrySetting;
+	$subjectId = $this->subjectId;
+	$settingEntryId = $this->settingEntryId;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -70,12 +71,12 @@
 																ប្រភេទ / Criteria
 															</label>
 															<div class="col-md-7 col-sm-7 col-xs-12">
-																<select onchange="getSubjectInfo();"  dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="criteriaId" name="criteriaId" queryExpr="*${0}*" autoComplete="false">								
+																<select readonly onchange="getSubjectInfo();"  dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="criteriaId" name="criteriaId" queryExpr="*${0}*" autoComplete="false">								
 																	<?php if(!empty($this->criteria)){foreach ($this->criteria as $rscriteria){?>
 																		<option value="<?php echo $rscriteria['criteriaId']?>" <?php if($criteriaId== $rscriteria['criteriaId']) echo 'selected';?> ><?php echo $rscriteria['criterialTitle'].'/'.$rscriteria['criterialTitleEng'];?></option>
 																	<?php }}?>
 																</select>
-																<input type="hidden" name="settingEntryId" id="settingEntryId" class="fullside" dojoType="dijit.form.TextBox" value="<?php if(!empty($entrySetting)){ echo $entrySetting['id']; } ?>"/>
+																<input type="hidden" name="settingEntryId" id="settingEntryId" class="fullside" dojoType="dijit.form.TextBox" value="<?php if(!empty($settingEntryId)){ echo $settingEntryId; } ?>"/>
 															</div>
 														</div>
 													</div>
@@ -257,6 +258,7 @@ dojo.ready(function(){
 		id: "subjectId",
 		name: "subjectId",           
 		class: 'fullside', 
+		readOnly:'false',
 		placeHolder:"ជ្រើសមុខវិជ្ជា/Select Subject",          
 		onChange: function() {
 			getSubjectInfo();
@@ -283,7 +285,10 @@ function getAllSubject(){
 		handleAs:"json",
 		load: function(data) {
 		    subjectStore  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('subjectId').set('store',subjectStore);   
+		    dijit.byId('subjectId').set('store',subjectStore);
+			<?php if (!empty($subjectId)){?>
+				dijit.byId('subjectId').attr('value','<?php echo $subjectId?>');  
+			<?php }?> 
 		},
 		error: function(err) {
 		}

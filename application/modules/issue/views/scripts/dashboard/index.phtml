@@ -246,9 +246,18 @@
 														?>
 														<ul class="sub_list <?php echo ($index%2)==0?'bg-color':'bg';?>" style="hover">
 															<li style="width: 10%; text-align:center; "><?php echo $crNum; ?></li>
-															<li style="width: 35%;"><?php echo $rsCt['criterialTitle']; ?></li>
-															<li style="width: 35%;"><?php echo $rsCt['criterialTitleEng'];?></li>
-															<li style="width: 20%; text-align:center; ">
+															<li style="width: 30%;"><?php echo $rsCt['criterialTitle']; ?></li>
+															<li style="width: 30%;"><?php echo $rsCt['criterialTitleEng'];?></li>
+															<li style="width: 20%;">
+															<?php 
+																$format = 'd-M-Y';
+																$dateString = $rsCt['dateInput'];
+																$date = new DateTime($dateString);
+																$dateInput = $date->format($format);
+																echo $dateInput;
+															?>
+															</li>
+															<li style="width: 10%; text-align:center; ">
 																<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-grading-list/id/".$rsCt['id']."/fullcontrol/1";?>">
 																	<?php echo $tr->translate('SCORE');?>&nbsp;<i class="fa fa-list-alt text-primary" aria-hidden="true"></i>
 																</a>

@@ -10,7 +10,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 
 	function checkCriterial($data){
 		$db = $this->getAdapter();
-		$sql="SELECT g.id,			
+		$sql="SELECT g.id, g.dateInput,			
 		(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= g.criteriaId LIMIT 1) criteriaType
 		,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitle 
 		,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitleEng 

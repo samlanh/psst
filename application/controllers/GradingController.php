@@ -151,7 +151,7 @@ class GradingController extends Zend_Controller_Action
 		$gradingRowId=$this->getRequest()->getParam("gradingRowId");
 		$gradingRowId = empty($gradingRowId)?0:$gradingRowId;
 		
-		$resultRecord = $db->getGradingScoreById($gradingRowId);
+		$resultRecord = $db->getGradingScoreById($gradingRowId,$fullControlID=NULL);
 		if(empty($resultRecord)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/grading/index");
 		}

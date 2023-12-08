@@ -6,7 +6,6 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 	$dbgb = new Application_Model_DbTable_DbGlobal();
-	
 ?>
 
 <?php 
@@ -27,7 +26,6 @@
 	}
 	ul.sub_list li{
 		float: left;
-		width: 33%;
 		list-style: none;
 	}
 	ul.bg-color li{
@@ -40,6 +38,12 @@
 		padding: 3px;
 		border-radius: 3px;
 	}	
+	.btn-sm {
+		padding: 0px 10px;
+		font-size: 10px;
+		line-height: 1.5;
+		border-radius: 3px;
+	}
 </style>
 	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
 	<div class="row"> 
@@ -158,53 +162,111 @@
 										</div>
 									</div>
 									<div class="col-xs-9 pl-0">
-										
-												
-													<?php 
-													$dbg = new Issue_Model_DbTable_DbDashboard();
-													$groupId   = $row['id'];
-													$examType  = $this->search['exam_type'];
-													$semester  = $this->search['for_semester'];
-													$month	   = $this->search['for_month'];
-													$startDate = $this->search['start_date'];
-													$endDate   = $this->search['end_date'];
-													$data = array(
-															'groupId'       => $groupId ,
-															'examType'      => $examType ,
-															'forSemester'   => $semester ,
-															'forMonth' 		=> $month ,
-															'start_date' 	=> $startDate ,
-															'end_date' 		=> $endDate ,
-													);
-													$subNum=0;
-													$oldGroup="";
-													$subtotal= $row['totalSubject']/2;
-													$row_subject= $dbg->getSubjectScoreByGroup($data);
-													
-													if(!empty($row_subject)) foreach($row_subject as $key => $rs){ 
-														$subNum++;
+										<?php 
+											$dbg = new Issue_Model_DbTable_DbDashboard();
+											$groupId   = $row['id'];
+											$examType  = $this->search['exam_type'];
+											$semester  = $this->search['for_semester'];
+											$month	   = $this->search['for_month'];
+											$startDate = $this->search['start_date'];
+											$endDate   = $this->search['end_date'];
+											$data = array(
+												'groupId'     => $groupId ,
+												'examType'    => $examType ,
+												'forSemester' => $semester ,
+												'forMonth' 	  => $month ,
+												'start_date'  => $startDate ,
+												'end_date' 	  => $endDate ,
+											);
+											$subNum=0;
+											$oldGroup="";
+											$subtotal= $row['totalSubject']/2;
+											$row_subject= $dbg->getSubjectScoreByGroup($data);
+											if(!empty($row_subject)) foreach($row_subject as $key => $rs){ 
+												$subNum++;
 
-														if($rs['subjectLang']==1){
-															$subjectName=$rs['sub_name'];
-															$teacherName=$rs['teacher_name_kh'];
-														}else{
-															$subjectName=$rs['sub_name_en'];
-															$teacherName=$rs['teacher_name_en'];
-														}
+												if($rs['subjectLang']==1){
+													$subjectName=$rs['sub_name'];
+													$teacherName=$rs['teacher_name_kh'];
+												}else{
+													$subjectName=$rs['sub_name_en'];
+													$teacherName=$rs['teacher_name_en'];
+												}
+												$gradingTpm = array(
+													'gradingId' => $row['gradingId'],
+													'subjectId' => $rs['subjectId'],
+													'groupId'     => $groupId ,
+													'examType'    => $examType ,
+													'forSemester' => $semester ,
+													'forMonth' 	  => $month ,
+												);
+												$rsCriterrial= $dbg->checkCriterial($gradingTpm);
+												//print_r($rsCriterrial);
+											?>
+											<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>" style="hover">
+												<li style="width: 35%;"><?php echo $subjectName; ?></li>
+												<li style="width: 35%;"><?php echo $teacherName?></li>
+												<li style="width: 15%;"><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true">&nbsp;&nbsp;<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rs['gradingId'];?>/fullcontrol/1"><i class="fa fa-file-text" aria-hidden="true"></i></a> <?php echo $rs['totalCriteria']; ?></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?> 
+												</li>
+												<li style="width: 15%; text-align:center;">
+													<?php if(!empty($rsCriterrial)){ ?>
+
+													<!-- Button trigger modal -->
+														<button type="button" class="btn btn-sm" data-toggle="modal" data-target="#criterialId_<?php echo $key; ?>">
+															<i class="fa fa-indent text-primary" aria-hidden="true"></i>
+														</button>
+													<!-- Modal -->
+
+														<?php }else{ ?>
+														<i class="fa fa-square-o" aria-hidden="true"></i>
+													 <?php } ?>
+												</li>
+											</ul>
+											<div style="clear:both;"></div>
+
+											<!-- Pop Up Body -->
+											<div class="modal fade" id="criterialId_<?php echo $key; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered" role="document">
+													<div class="modal-content">
+													<div class="modal-header">
+														<button  type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span class="text-danger" aria-hidden="true">&times;</span>
+														</button>
+														
+														<h4 class="modal-title text-primary"><?php echo $row['group_code']; ?> (<?php echo $subjectName.' / '.$teacherName; ?>) </h4>
+														&nbsp;
+														<h5 class="modal-title" id="exampleModalLongTitle">ប្រព័ន្ធពិន្ទុបណ្តោះអាសន្ត / Temporary Criterial Score</h5>
+														
+													</div>
+													<div class="modal-body">
+														<?php  
+														$crNum=0;
+														if(!empty($rsCriterrial)) foreach($rsCriterrial as $index => $rsCt){ 
+															$crNum++;
 														?>
+														<ul class="sub_list <?php echo ($index%2)==0?'bg-color':'bg';?>" style="hover">
+															<li style="width: 10%; text-align:center; "><?php echo $crNum; ?></li>
+															<li style="width: 35%;"><?php echo $rsCt['criterialTitle']; ?></li>
+															<li style="width: 35%;"><?php echo $rsCt['criterialTitleEng'];?></li>
+															<li style="width: 20%; text-align:center; ">
+																<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-grading-list/id/".$rsCt['id']."/fullcontrol/1";?>">
+																	<?php echo $tr->translate('SCORE');?>&nbsp;<i class="fa fa-list-alt text-primary" aria-hidden="true"></i>
+																</a>
+															</li>
+														</ul>
+														<div style="clear:both;"></div>
+														<?php } ?>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+													</div>
+													</div>
+												</div>
+											</div>
+											<!-- end -->
 														
-															<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>" style="hover">
-																<li class="list_subject"><?php echo $subjectName; ?></li>
-																<li><?php echo $teacherName?></li>
-																<li><?php if(!empty($rs['gradingScore'])){ ?> <i class="fa fa-check-square-o" aria-hidden="true">&nbsp;&nbsp;<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rs['gradingId'];?>/fullcontrol/1"><i class="fa fa-file-text" aria-hidden="true"></i></a> <?php echo $rs['totalCriteria']; ?></i> <?php }else{ ?><i class="fa fa-square-o" aria-hidden="true"></i><?php }?> 
-																</li>
-															</ul>
-															<div style="clear:both;"></div>
-														
-													<?php } 
-													?>
-											
-										
+										<?php } 
+										?>
 									</div>
 								</div>
 							</div>

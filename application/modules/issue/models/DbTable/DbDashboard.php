@@ -8,6 +8,36 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     }
 
+	function checkCriterial($data){
+		$db = $this->getAdapter();
+		$sql="SELECT g.id,			
+		(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= g.criteriaId LIMIT 1) criteriaType
+		,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitle 
+		,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitleEng 
+		
+		FROM `rms_grading_tmp` AS g WHERE 1 ";
+		if(!empty($data['gradingId'])){
+			$sql.= ' AND  g.gradingSettingId='.$data['gradingId'];
+		}
+		if(!empty($data['groupId'])){
+			$sql.= ' AND  g.`groupId`='.$data['groupId'];
+		}
+		if(!empty($data['subjectId'])){
+			$sql.= ' AND  g.`subjectId`='.$data['subjectId'];
+		}
+		if(!empty($data['examType'])){
+			$sql.= ' AND  g.`examType`='.$data['examType'];
+		}
+		if(!empty($data['forMonth'])){
+			$sql.= ' AND  g.`forMonth`='.$data['forMonth'];
+		}
+		$order="  ORDER BY criteriaType ASC, g.`criteriaId` ASC ";
+		//echo $sql; exit();
+		$db = $this->getAdapter();
+		$Row = $db->fetchAll($sql.$order);
+		return $Row;
+	}
+
 	function getGradingScoreData($data){
 		$sujectId = empty($data['subjectId'])?0:$data['subjectId'];
 		$sql="SELECT 
@@ -63,6 +93,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		$results = array();
 		if(!empty($subjectDetail)){
 			foreach($subjectDetail as $key=>$rs){
+				$results[$key]['subjectId'] = $rs['subject_id'];
 				$results[$key]['sub_name'] = $rs['sub_name'];
 				$results[$key]['sub_name_en'] = $rs['sub_name_en'];
 				$results[$key]['teacher_name_kh'] = $rs['teacher_name_kh'];
@@ -92,7 +123,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 			$branch = "branch_namekh";
 		}
 		
-		$sql = "SELECT `g`.`id`,
+		$sql = "SELECT `g`.`id`, `g`.`gradingId`,
 			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 			`g`.`group_code` AS `group_code`,
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS tuitionfee_id,	

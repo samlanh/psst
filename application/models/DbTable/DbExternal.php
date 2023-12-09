@@ -1043,6 +1043,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			WHERE s.score_setting_id=$gradingId 
 			AND s.subjectId =0
 		";
+		$sql.=" ORDER BY criteriaType ASC, s.criteriaId ASC ";
 		$db = $this->getAdapter();
 		$Row = $db->fetchAll($sql);
 		return $Row;

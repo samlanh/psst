@@ -33,6 +33,11 @@
 		padding: 3px;
 		border-radius: 3px;
 	}
+	ul.bg-head li{
+		background-color: #575f69;
+		padding: 4px;
+		border-radius: 3px;
+	}
 	ul.bg li{
 		background-color: white;
 		padding: 3px;
@@ -162,6 +167,12 @@
 										</div>
 									</div>
 									<div class="col-xs-9 pl-0">
+										<ul class="sub_list bg-head">
+											<li style="width: 35%; color:azure; "><?php echo $tr->translate("SUBJECT"); ?></li>
+											<li style="width: 35%; color:azure; "><?php echo $tr->translate("TEACHER"); ?></li>
+											<li style="width: 15%; color:azure; "><?php echo $tr->translate("SCORE"); ?></li>
+											<li style="width: 15%; color:azure; "><?php echo $tr->translate("SCORE_LEVEL"); ?></li>
+										</ul>
 										<?php 
 											$dbg = new Issue_Model_DbTable_DbDashboard();
 											$groupId   = $row['id'];

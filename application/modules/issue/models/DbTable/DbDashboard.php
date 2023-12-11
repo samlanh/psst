@@ -22,6 +22,9 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		if(!empty($data['groupId'])){
 			$sql.= ' AND  g.`groupId`='.$data['groupId'];
 		}
+		if(!empty($data['teacherId'])){
+			$sql.= ' AND  g.`teacherId`='.$data['teacherId'];
+		}
 		if(!empty($data['subjectId'])){
 			$sql.= ' AND  g.`subjectId`='.$data['subjectId'];
 		}
@@ -93,6 +96,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		$results = array();
 		if(!empty($subjectDetail)){
 			foreach($subjectDetail as $key=>$rs){
+				$results[$key]['teacher'] = $rs['teacher'];
 				$results[$key]['subjectId'] = $rs['subject_id'];
 				$results[$key]['sub_name'] = $rs['sub_name'];
 				$results[$key]['sub_name_en'] = $rs['sub_name_en'];

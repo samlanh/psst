@@ -29,6 +29,9 @@
 					<?php echo $frm->getElement('grade');?>
 				</td>
 				<td>
+					<?php echo $frm->getElement('balance_status');?>
+				</td>
+				<td>
 					<?php echo $frm->getElement('start_date');?>
 				</td>
 				<td>
@@ -162,6 +165,7 @@
 									<td scope="col" ><?php echo $tr->translate("PAID_AMOUNT");?></td>
 									<td scope="col" ><?php echo $tr->translate("BALANCE");?></td>
 									<td scope="col" ><?php echo $tr->translate("NOTE");?></td>
+									<td scope="col" ><?php echo $tr->translate("STATUS");?></td>
 									<td scope="col" ><?php echo $tr->translate("USER");?></td>
 									<td scope="col" ><?php echo $tr->translate("CREATE_DATE");?></td>
 								</tr>
@@ -180,6 +184,14 @@
 								<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" ><?php echo "$".$row['paid_amount'];?></td>
 								<td data-label="<?php echo $tr->translate("BALANCE");?>" ><?php echo "$".$row['balance_due'];?></td>
 								<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo $row['note'];?></td>
+								<td data-label="<?php echo $tr->translate("STATUS");?>" >
+									<?php if($row['balance_status']==1){
+										echo $tr->translate("PAID");
+									} else{
+										echo $tr->translate("REMAIN_BALANCE");
+									}
+									?>
+								</td>
 								<td data-label="<?php echo $tr->translate("USER");?>" ><?php echo $row['USER'];?></td>
 								<td data-label="<?php echo $tr->translate("CREATE_DATE");?>" >&nbsp;<?php echo date("d-M-Y",strtotime($row['create_date']));?>&nbsp;</td>
 							</tr>

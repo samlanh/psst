@@ -576,6 +576,20 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				1=>$this->tr->translate("USAGE_STOCK"),
 				2=>$this->tr->translate("DEBT_STOCK"));
 		$_cut_stock_type->setMultiOptions($_cut_stock);
+
+		$_balance_status=  new Zend_Dojo_Form_Element_FilteringSelect('balance_status');
+		$_balance_status->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("ALL_STATUS"),
+				));
+		$_b_status_opt = array(
+				-1=>$this->tr->translate("ALL_STATUS"),
+				1=>$this->tr->translate("PAID"),
+				0=>$this->tr->translate("REMAIN_BALANCE"));
+		$_balance_status->setMultiOptions($_b_status_opt);
+		$_balance_status->setValue($request->getParam("balance_status"));
 		
 		$this->addElements(array(
 				$receipt_order,
@@ -592,7 +606,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$_for_month,
 				$_test_type,
 				$_cut_stock_type,
-				$_session_type
+				$_session_type,
+				$_balance_status
 				));
 		return $this;
 	} 

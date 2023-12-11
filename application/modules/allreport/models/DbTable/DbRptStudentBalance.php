@@ -30,6 +30,7 @@ class Allreport_Model_DbTable_DbRptStudentBalance extends Zend_Db_Table_Abstract
 				   s.stu_khname,
 				   s.stu_enname,
 				   s.last_name,
+				   sp.balance_status,
 				   (SELECT title FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade LIMIT 1) AS grade_name,	
 				   sp.note,		  
 				   (SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS USER ,
@@ -55,6 +56,9 @@ class Allreport_Model_DbTable_DbRptStudentBalance extends Zend_Db_Table_Abstract
     	}
     	if($search['grade']>0){
     		$where .= " and sp.grade = ".$search['grade'];
+    	}
+		if($search['balance_status']>-1 AND $search['balance_status'] !=''){
+    		$where .= " and sp.balance_status = ".$search['balance_status'];
     	}
     	return $db->fetchAll($sql.$where.$order);
     }

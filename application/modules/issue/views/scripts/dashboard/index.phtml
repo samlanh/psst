@@ -129,7 +129,7 @@
 				   </div>
 			   </div>
 			   <div class="row"> 
-					<?php if(!empty($this->row)) foreach($this->row as $row){ 
+					<?php if(!empty($this->row)) foreach($this->row as $gindex =>$row){ 
 						$cardClass = "border-top-primary border-top-darken-1";
 						$bgClass = "border-primary bg-gradient-directional-primary";
 						if($this->search['exam_type']==2){
@@ -210,6 +210,7 @@
 													'examType'    => $examType ,
 													'forSemester' => $semester ,
 													'forMonth' 	  => $month ,
+													'teacherId'   => $rs['teacher'] ,
 												);
 												$rsCriterrial= $dbg->checkCriterial($gradingTpm);
 												//print_r($rsCriterrial);
@@ -223,7 +224,7 @@
 													<?php if(!empty($rsCriterrial)){ ?>
 
 													<!-- Button trigger modal -->
-														<button type="button" class="btn btn-sm" data-toggle="modal" data-target="#criterialId_<?php echo $key; ?>">
+														<button type="button" class="btn btn-sm" data-toggle="modal" data-target="#criterialId_<?php echo $gindex.'_'.$key; ?>">
 															<i class="fa fa-indent text-primary" aria-hidden="true"></i>
 														</button>
 													<!-- Modal -->
@@ -236,7 +237,7 @@
 											<div style="clear:both;"></div>
 
 											<!-- Pop Up Body -->
-											<div class="modal fade" id="criterialId_<?php echo $key; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+											<div class="modal fade" id="criterialId_<?php echo $gindex.'_'.$key; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 												<div class="modal-dialog modal-dialog-centered" role="document">
 													<div class="modal-content">
 													<div class="modal-header">

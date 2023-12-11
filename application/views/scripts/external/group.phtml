@@ -40,7 +40,7 @@
     background-color: #0150a6;
     border-color: #004b9c;
     border-radius: 6px;
-    width: 118px  !important;
+    width: 70px  !important;
     display: block;
 	}
 </style>
@@ -133,18 +133,6 @@
 												<span class="counting-num mr-1"><?php echo sprintf('%02d',$row['amountStudent']); ?></span>
 												<span class="adjustLineHeight material-icons-outlined">groups</span> 
 											</h3>
-											<p class="mb-0"><?php if(!empty($row['mainTeacher'])){ echo "(".$row['mainTeacher'].")";} ?></p>
-											<ul class="listSmallBtn">
-													<?php if(!empty($row['mainTeacher'])){ ?>
-													<li>
-														<div class="form-group">
-															<a  class="small-button-class" href="<?php echo $this->baseUrl()."/assessment/add/id/".$row['id'];?>">
-																<i class="glyphicon glyphicon-baby-formula" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?>
-															</a>
-														</div>
-													</li>
-												<?php } ?>
-											</ul>
 										</div>
 									</div>
 								</div>
@@ -169,20 +157,22 @@
 												'degreeId'  	=> $degreeId,
 												'subjectId' 	=> $subjectId,
 												'teacherId' 	=> $teacherId,
+												'groupId' 		=> $row['id'],
 												'criterialType' => $rsCriterial['criteriaType'],
 											);
 											$rsEntrySetting = $dbg->checkTecherEntrySetting($scoreSetting);
+										//	print_r($rsEntrySetting);
 										?>
 										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
-											<li style="width: 60%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>
+											<li style="width: 75%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']." / ".$rsCriterial['criterialTitleEng']; ?></li>
 											<?php if(!empty($rsEntrySetting)){ ?>
-												<li style="width: 40%; text-align:center;" >
+												<li style="width: 25%; text-align:center;" >
 													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$rsEntrySetting['id'];?>">
 														<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 													</a>
 												</li>	
 											<?php }else{ ?>	
-												<li style="width: 40%; text-align:center;" ><i class="text-info fa fa-toggle-off" aria-hidden="true"></i>
+												<li style="width: 25%; text-align:center;" ><i class="text-info fa fa-toggle-off" aria-hidden="true"></i>
 											<?php }?>	
 										</ul>
 									<?php } ?>

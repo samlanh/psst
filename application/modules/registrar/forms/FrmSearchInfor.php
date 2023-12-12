@@ -577,8 +577,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				2=>$this->tr->translate("DEBT_STOCK"));
 		$_cut_stock_type->setMultiOptions($_cut_stock);
 
-		$_balance_status=  new Zend_Dojo_Form_Element_FilteringSelect('balance_status');
-		$_balance_status->setAttribs(array(
+		$_is_current=  new Zend_Dojo_Form_Element_FilteringSelect('is_current');
+		$_is_current->setAttribs(array(
 				'dojoType'=>$this->filter,
 				'class'=>'fullside',
 				'required'=>'false',
@@ -588,8 +588,8 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				-1=>$this->tr->translate("ALL_STATUS"),
 				1=>$this->tr->translate("PAID"),
 				0=>$this->tr->translate("REMAIN_BALANCE"));
-		$_balance_status->setMultiOptions($_b_status_opt);
-		$_balance_status->setValue($request->getParam("balance_status"));
+		$_is_current->setMultiOptions($_b_status_opt);
+		$_is_current->setValue($request->getParam("is_current"));
 		
 		$this->addElements(array(
 				$receipt_order,
@@ -607,7 +607,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$_test_type,
 				$_cut_stock_type,
 				$_session_type,
-				$_balance_status
+				$_is_current
 				));
 		return $this;
 	} 

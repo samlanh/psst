@@ -148,14 +148,15 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'adv_search' 		=>'',
+					'adv_search' 	=>'',
 					'branch_id'		=>0,
 					'degree'		=>0,
-					'academic_year' 	=>'',
-					'grade' 	=>'',
+					'academic_year' =>'',
+					'grade' 		=>'',
 					'session' 		=>'',
 					'group'			=>'',
-					'stu_type'=>'',
+					'stu_type'		=>'',
+					'stuOrderBy'	=>0,
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
 			);

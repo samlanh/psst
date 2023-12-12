@@ -483,7 +483,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'end_date'		=>date('Y-m-d'),
 						'grade'			=>'',
 						'branch_id'		=>'',
-						'balance_status'=>'',
+						'is_current'    =>'',
 				);
 			}
 			$this->view->search = $search;

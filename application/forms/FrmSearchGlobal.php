@@ -562,6 +562,22 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
     			'onChange'=>'addRow()',
     			'missingMessage'=>'Invalid Module!',
     			'class'=>'fullside height-text',));
+
+		$_stuOrderBy=  new Zend_Dojo_Form_Element_FilteringSelect('stuOrderBy');
+		$_stuOrderBy->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("ORDER_BY"),
+		));
+		$_order_opt = array(
+				0=>$this->tr->translate("DEFAULT"),
+				1=>$this->tr->translate("BY_STU_CODE_ASC"),
+				2=>$this->tr->translate("BY_STU_KHNAME_ASC"),
+				3=>$this->tr->translate("BY_STU_ENNAME_ASC")
+			);
+		$_stuOrderBy->setMultiOptions($_order_opt);
+		$_stuOrderBy->setValue($request->getParam("stuOrderBy"));
 		
 		
 		$this->addElements(array(
@@ -600,7 +616,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_student_group_status,
 				$_cut_stock_type,
 				$_sort_degree,
-				$_criteriaId
+				$_criteriaId,
+				$_stuOrderBy
 				)
 			);
 		return $this;

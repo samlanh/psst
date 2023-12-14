@@ -546,5 +546,161 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	public function getScoreResultOfClassAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$row = $db->getScoreResultOfClass($search);
+	
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			header('Content-Type: application/json');
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function getClassAvailableForEvaluationAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$row = $db->getClassAvailableForEvaluation($search);
+	
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			header('Content-Type: application/json');
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function getEvaluationCommentByDegreeAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$row = $db->getEvaluationCommentByDegree($search);
+	
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			header('Content-Type: application/json');
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function submitEvaluationStudentAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$submitRequest = $db->submitEvaluationRatingStudent($search);
+			
+			if($submitRequest){
+				$arrResult = array(
+					"code" => "SUCCESS",
+					"result" =>$submitRequest,
+				);		
+				
+			}else{
+				$arrResult = array(
+					"code" => "FAIL",
+					"message" => "FAIL_TO_SUBMIT",
+				);
+			}
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
+	public function getAssessmentListOfClassAction($search){
+		try{
+			$search['userId'] = empty($search['userId'])?0:$search['userId'];
+			$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
+			$db = new Teacherapi_Model_DbTable_DbApi();
+			$row = $db->getAssessmentListOfClass($search);
+	
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			header('Content-Type: application/json');
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	
 	
 }

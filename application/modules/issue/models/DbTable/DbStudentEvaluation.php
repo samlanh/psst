@@ -67,8 +67,10 @@ class Issue_Model_DbTable_DbStudentEvaluation extends Zend_Db_Table_Abstract
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'user_id'		=>$this->getUserId(),
 			);
+			
 			$this->_name='rms_student_evaluation';
 			$idevd=$this->insert($_arr);
+			
 			
 			if(!empty($_data['identity_cmt'])){
 				$idcm = explode(',', $_data['identity_cmt']);

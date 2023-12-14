@@ -667,11 +667,11 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	function getGradingByCriterial($data){
 		$db=$this->getAdapter();
-		$sql="
-		SELECT
-			grd.*
+		$sql="SELECT
+			grd.*, gt.`criteriaId`, gt.dateInput
 		FROM
 			`rms_grading_detail_tmp` AS grd
+			 INNER JOIN `rms_grading_tmp` AS gt ON grd.`gradingId`=gt.`id`
 		WHERE 1 ";
 		if(!empty($data['studentId'])){
 			$sql.=" AND grd.studentId=".$data['studentId'];
@@ -679,8 +679,36 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if(!empty($data['gradingRowId'])){
 			$sql.=" AND grd.gradingId=".$data['gradingRowId'];
 		}
-		
-		return $db->fetchAll($sql);
+		if(!empty($data['criteriaId'])){
+			$sql.=" AND gt.`criteriaId`=".$data['criteriaId'];
+		}
+		if(!empty($data['subjectId'])){
+			$sql.=" AND gt.`subjectId`=".$data['subjectId'];
+		}
+		if(!empty($data['groupId'])){
+			$sql.=" AND gt.`groupId`=".$data['groupId'];
+		}
+		if(!empty($data['forMonth'])){
+			$sql.=" AND gt.`forMonth`=".$data['forMonth'];
+		}
+		if(!empty($data['examType'])){
+			$sql.=" AND gt.`examType`=".$data['examType'];
+		}
+		$order=" ORDER BY gt.dateInput ASC ";
+		//echo $sql;
+		return $db->fetchAll($sql.$order);
+	}
+	function countInputCriterial($data){
+		$db=$this->getAdapter();
+		$sql="SELECT id,  dateInput FROM  rms_grading_tmp WHERE groupId= ".$data['groupId']." AND subjectId=".$data['subjectId']." AND criteriaId=".$data['criteriaId'];
+		if(!empty($data['examType'])){
+			$sql.=" AND examType =".$data['examType'];
+		}
+		if(!empty($data['forMonth'])){
+			$sql.=" AND forMonth =".$data['forMonth'];
+		}
+		$order=" ORDER BY dateInput ASC ";
+		return $db->fetchAll($sql.$order);
 	}
 	function getAverageAndRankBySubjectOfCriterial($gradingId,$studentId){
 		$db=$this->getAdapter();

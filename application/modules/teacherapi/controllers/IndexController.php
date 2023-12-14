@@ -54,12 +54,23 @@ class Teacherapi_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="optionSubject"){
 				$GetData['getControlType'] = "teachingSubject";
     			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionRating"){
+				$GetData['getControlType'] = "ratingOption";
+    			$_dbAction->getFormOptionSelectAction($GetData);
 				
 			}else if ($GetData['url']=="countingClass"){
     			$_dbAction->getCountingClassAction($GetData);
 			}else if ($GetData['url']=="teachingClassList"){
     			$_dbAction->getTeachingClassListAction($GetData);
+			}else if ($GetData['url']=="scoreResultClass"){
+    			$_dbAction->getScoreResultOfClassAction($GetData);
 				
+			}else if ($GetData['url']=="classForEvaluation"){
+    			$_dbAction->getClassAvailableForEvaluationAction($GetData);
+			}else if ($GetData['url']=="evaluationComment"){
+    			$_dbAction->getEvaluationCommentByDegreeAction($GetData);
+			}else if ($GetData['url']=="assessmentList"){
+    			$_dbAction->getAssessmentListOfClassAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
@@ -77,6 +88,8 @@ class Teacherapi_IndexController extends Zend_Controller_Action
     				$_dbAction->submitEditCriteriaScoreAction($postData);
 				}else if ($GetData['url']=="submitMonthlyScore"){
     				$_dbAction->submitMonthlyScoreAction($postData);
+				}else if ($GetData['url']=="submitEvaluationStudent"){
+    				$_dbAction->submitEvaluationStudentAction($postData);
     			}
     			else{
     				echo Zend_Http_Response::responseCodeAsText(401,true);

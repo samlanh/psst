@@ -14,7 +14,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= g.criteriaId LIMIT 1) criteriaType
 		,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitle 
 		,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitleEng 
-		
+		,COUNT(g.criteriaId) AS inputTime
 		FROM `rms_grading_tmp` AS g WHERE 1 ";
 		if(!empty($data['gradingId'])){
 			$sql.= ' AND  g.gradingSettingId='.$data['gradingId'];
@@ -34,10 +34,11 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		if(!empty($data['forMonth'])){
 			$sql.= ' AND  g.`forMonth`='.$data['forMonth'];
 		}
-		$order="  ORDER BY criteriaType ASC, g.`criteriaId` ASC ";
-		//echo $sql; exit();
+		$sql.=" GROUP BY g.`criteriaId` ";
+		$sql.="  ORDER BY criteriaType ASC, g.`criteriaId` ASC ";
+	
 		$db = $this->getAdapter();
-		$Row = $db->fetchAll($sql.$order);
+		$Row = $db->fetchAll($sql);
 		return $Row;
 	}
 

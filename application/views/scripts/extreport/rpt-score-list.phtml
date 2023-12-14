@@ -483,30 +483,20 @@
 											<td data-label="ភេទ/Sex" align="center" class="bg_<?php echo $student['sex'];?>"><?php echo $sex;?></td>
 											<?php 
 												
-											
 											if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
 												$timeInput = $criterial['timeInput'];
 												$rsScore = $dbExternal->getScoreByCriterial($gradingId,$student['studentId'],$criterial['criteriaId']);
 												if(!empty($rsScore)) foreach($rsScore AS $score){
-											?>
-											<td data-label="<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng'];?>" align="center">
-												<?php 
-													
-													$point = empty($score['totalGrading'])?0:$score['totalGrading'];
-													echo (float) $point;
-													
 												?>
-											</td>
-											<?php } 
-												$currentTimeInput = count($rsScore);
-												if($timeInput>$currentTimeInput){
-													for ($x = $currentTimeInput+1; $x <= $timeInput; $x++) {
-											?>
 												<td data-label="<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng'];?>" align="center">
-													-
+													<?php 
+														
+														$point = empty($score['totalGrading'])?0:$score['totalGrading'];
+														echo (float) $point;
+														
+													?>
 												</td>
-												<?php }
-											} ?>
+												<?php } ?>
 											<?php } ?>
 											
 											<?php 

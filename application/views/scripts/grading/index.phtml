@@ -127,6 +127,7 @@
 										<div class="p-1">
 											<!-- <p class="mb-0 mt-0"><small class="text-muted float-right"><?php //echo $row['branchName']; ?></small></p> -->
 											<div class="text-left">
+												<strong><p class="mb-0 text-primary"><?php if(!empty($row['note'])){ echo  "( ".$row['note']." )";}  ?></p></strong>
 											   <strong><?php echo $row['subjectTitle']; ?></strong> <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
 												<p class="mb-0"><?php echo $row['academicYear']; ?></p>
 												<h3 class="mb-0 mt-0 p-relative">
@@ -141,6 +142,7 @@
 												<?php }else{?>
 												<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class="text-danger glyphicon glyphicon-remove-sign"></i></p>
 												<?php }?>
+											
 											</div>
 										</div>
 									</div>

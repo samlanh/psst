@@ -59,6 +59,7 @@
 	
 	$dbExternal = new Application_Model_DbTable_DbExternal();
 	$rs = $this->rs;
+	
 	$gradingId = $rs['id'];
 	$maxSubjectScore = $rs['maxSubjectscore'];
 	
@@ -384,8 +385,18 @@
 															}
 							
 														}else{
-															if($criterial['timeInput']>1){
-																$colSpan=$criterial['timeInput'];
+															$param = array(
+																'subjectId'	 =>$rs['subjectId'],
+																'groupId'	 =>$rs['groupId'],
+																'criteriaId' =>$criterial['criteriaId'],
+																'examType'   =>$rs['examType'],
+																'forMonth'   =>$rs['forMonth'],
+																);
+															$TimeInput = $dbExternal->countInputCriterial($param);
+															$currentTimeInput = count($TimeInput);
+
+															if($currentTimeInput>1){
+																$colSpan=$currentTimeInput;
 																$subCol.='<td colspan="'.$colSpan.'"scope="col">';
 																$subCol.=$criterial['criterialTitleEng'];
 																$subCol.='</td>';

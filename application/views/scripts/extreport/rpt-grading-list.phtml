@@ -57,6 +57,7 @@
 	
 	$dbExternal = new Application_Model_DbTable_DbExternal();
 	$rs = $this->rs;
+
 	$gradingId = $rs['id'];
 	$maxSubjectScore = $rs['maxSubjectscore'];
 	
@@ -263,25 +264,26 @@
 										<thead>
 											
 											<tr class="style" align="center" >
-												<td	scope="col" rowspan="3">
+												<td	scope="col" rowspan="4">
 													<span class="khmerLabel">ល.រ</span>
 													<span class="englishLabel">N<sup>o</sup></span>
 												</td>
-												<td scope="col" rowspan="3">
+												<td scope="col" rowspan="4">
 													<span class="khmerLabel">អត្តលេខ</span>
 													<span class="englishLabel">ID</span>
 												</td>
-												<td scope="col" rowspan="3" colspan="2">
+												<td scope="col" rowspan="4" colspan="2">
 													<span class="khmerLabel">គោត្តនាម-នាម</span>
 													<span class="englishLabel">Student Name</span>
 												</td>
-												<td scope="col" rowspan="3">
+												<td scope="col" rowspan="4">
 													<span class="khmerLabel">ភេទ</span>
 													<span class="englishLabel">Sex</span>
 												</td>
 												<?php 
 													$subCol="";
 													$subColII="";
+													$subColIII="";
 													$colSpan=1;
 													if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
 														if(!empty($criterial['subjectId'])){
@@ -299,19 +301,32 @@
 																		$titleSubCriterial = $subCriTitle;
 																		$titleSubCriteriaEng = $subCriterialEng[$keyV];
 																	}
-																	$subCol.='<td scope="col">';
+																	$subCol.='<td rowspan="2"  scope="col">';
 																	$subCol.=$titleSubCriterial."<br />".$titleSubCriteriaEng;
 																	$subCol.='</td>';
 																	
-																	$subColII.='<td scope="col">';
-																	$subColII.=$maxSubjectScore;
-																	$subColII.='</td>';
+																	// $subColII.='<td scope="col">';
+																	// $subColII.='';
+																	// $subColII.='</td>';
+
+																	$subColIII.='<td scope="col">';
+																	$subColIII.=$maxSubjectScore;;
+																	$subColIII.='</td>';
 																}
 															}
 							
 														}else{
-															if($criterial['timeInput']>1){
-																$colSpan=$criterial['timeInput'];
+															$param = array(
+																'subjectId'	 =>$rs['subjectId'],
+																'groupId'	 =>$rs['groupId'],
+																'criteriaId' =>$rs['criteriaId'],
+																'examType'   =>$rs['examType'],
+																'forMonth'   =>$rs['forMonth'],
+																);
+															$TimeInput = $dbExternal->countInputCriterial($param);
+															$currentTimeInput = count($TimeInput);
+															if($currentTimeInput>1){
+																$colSpan=$currentTimeInput;
 																$subCol.='<td colspan="'.$colSpan.'"scope="col">';
 																$subCol.=$criterial['criterialTitleEng'];
 																$subCol.='</td>';
@@ -319,6 +334,17 @@
 																$subColII.='<td colspan="'.$colSpan.'"scope="col">';
 																$subColII.=$maxSubjectScore;
 																$subColII.='</td>';
+																foreach ($TimeInput AS $t => $inputDate){ 
+
+																	$format = 'd-M-Y';
+																	$dateString = $inputDate['dateInput'];
+																	$date = new DateTime($dateString);
+																	$dateInput = $date->format($format);
+																
+																	$subColIII.='<td scope="col">';
+																	$subColIII.=$dateInput ;
+																	$subColIII.='</td>';
+																}
 															}else{
 																$colSpan=1;
 																$subCol.='<td scope="col">';
@@ -328,6 +354,17 @@
 																$subColII.='<td scope="col">';
 																$subColII.=$maxSubjectScore;
 																$subColII.='</td>';
+																foreach ($TimeInput AS $t => $inputDate){ 
+																	
+																	$format = 'd-M-Y';
+																	$dateString = $inputDate['dateInput'];
+																	$date = new DateTime($dateString);
+																	$dateInput = $date->format($format);
+																
+																	$subColIII.='<td scope="col">';
+																	$subColIII.=$dateInput ;
+																	$subColIII.='</td>';
+																}
 															}
 														}
 												?>
@@ -338,7 +375,7 @@
 													<?php } ?>
 												</td>
 												<?php } ?>
-												<td scope="col" rowspan="3" width="120px">
+												<td scope="col" rowspan="4" width="120px">
 													<span class="khmerLabel">ផ្សេងៗ</span>
 													<span class="englishLabel">Remark</span>
 												</td>
@@ -348,6 +385,9 @@
 											</tr>
 											<tr class="style" align="center">
 												<?php echo $subColII;?>
+											</tr>
+											<tr class="style" align="center">
+												<?php echo $subColIII;?>
 											</tr>
 										</thead>
 										<tr class="headReportRespone" align="left" >
@@ -359,7 +399,7 @@
 												<td align="left" colspan="8" style="border-left: none;">
 													គ្រូបង្រៀន / Lecturer : <?php echo $rs['teaccherNameKh']." / ".$rs['teaccherNameEng']; ?>
 												</td>	
-											</tr>
+										</tr>
 										<?php 
 										$i=0; 
 										$m=0;$f=0;
@@ -388,10 +428,16 @@
 											if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
 												$timeInput = $criterial['timeInput'];
 												$param = array(
-														'gradingRowId'=>$gradingId,
-														'studentId'=>$student['studentId'],
+														//'gradingRowId'=>$gradingId,
+														'studentId'	 =>$student['studentId'],
+														'criteriaId' =>$criterial['criteriaId'],
+														'subjectId'	 =>$rs['subjectId'],
+														'groupId'	 =>$rs['groupId'],
+														'examType'   =>$rs['examType'],
+														'forMonth'   =>$rs['forMonth'],
 														);
 												$rsScore = $dbExternal->getGradingByCriterial($param);
+											//	print_r($rsScore);
 												if(!empty($rsScore)) foreach($rsScore AS $score){
 											?>
 											<td data-label="<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng'];?>" align="center">

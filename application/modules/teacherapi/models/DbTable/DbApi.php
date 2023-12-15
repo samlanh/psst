@@ -2278,13 +2278,13 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code=c.commentType AND v.type=36 LIMIT 1) AS commentTypeTitleKh
 					,(SELECT v.name_en FROM `rms_view` AS v WHERE v.key_code=c.commentType AND v.type=36 LIMIT 1) AS commentTypeTitleEn
 					
-					,(SELECT assD.ratingId FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId !=$scoreId AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ) AS previousRatingValue
-					,(SELECT rt.rating FROM rms_rating AS rt WHERE rt.id = COALESCE((SELECT assD.ratingId FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId !=$scoreId AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ),'0') LIMIT 1 ) AS previousRatingTitle
-					,(SELECT assD.teacherComment FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId !=$scoreId AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ) AS previousTeacherComment
+					,COALESCE((SELECT assD.ratingId FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId < $scoreId AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ),'0') AS previousRatingValue
+					,COALESCE((SELECT rt.rating FROM rms_rating AS rt WHERE rt.id = COALESCE((SELECT assD.ratingId FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId < $scoreId AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ),'0') LIMIT 1 ),'') AS previousRatingTitle
+					,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId < $scoreId AND ass.status=1 AND ass.groupId=$groupId AND assD.studentId=$studentId ORDER BY assD.teacherComment DESC,assD.assessmentId DESC  LIMIT 1 ),'') AS previousTeacherComment
 					
 					,COALESCE((SELECT assD.ratingId FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND ass.scoreId=$scoreId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ),'2') AS ratingValue
 					,(SELECT rt.rating FROM rms_rating AS rt WHERE rt.id = COALESCE((SELECT assD.ratingId FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.scoreId =$scoreId AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ),'0') LIMIT 1 ) AS ratingTitle
-					,(SELECT assD.teacherComment FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND ass.scoreId=$scoreId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ) AS teacherComment
+					,(SELECT assD.teacherComment FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND ass.scoreId=$scoreId ORDER BY assD.teacherComment DESC,assD.assessmentId DESC  LIMIT 1 ) AS teacherComment
 					,COALESCE((SELECT GROUP_CONCAT(assD.id) FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND ass.scoreId=$scoreId ORDER BY assD.assessmentId DESC  LIMIT 1 ),'') AS detailIdList
 					,COALESCE((SELECT assD.id FROM `rms_studentassessment_detail` AS assD,`rms_studentassessment` AS ass WHERE assD.assessmentId=ass.id AND ass.status=1 AND ass.groupId=$groupId AND  assD.studentId=$studentId AND ass.scoreId=$scoreId AND assD.commentId = c.id ORDER BY assD.assessmentId DESC  LIMIT 1 ),'') AS detailId
 			";
@@ -2296,7 +2296,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=' WHERE 
 						dc.comment_id = c.id
 						AND dc.degree_id = '.$degreeId;
-			$sql.=' ORDER BY commentType DESC, c.id ASC ';
+			$sql.=' ORDER BY commentType ASC, c.id ASC ';
+			
 			
 			$row = $_db->fetchAll($sql);
 			$row = empty($row) ? array() : $row;

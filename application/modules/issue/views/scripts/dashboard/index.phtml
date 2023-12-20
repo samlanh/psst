@@ -6,6 +6,7 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 	$dbgb = new Application_Model_DbTable_DbGlobal();
+	
 ?>
 
 <?php 
@@ -161,9 +162,14 @@
 												}
 											
 												?>
-												<small class="timeSchedule text-white mt-0"> <?php echo $examlabel; ?></small>
+												<small class="timeSchedule text-white mt-0 mb-3"> <?php echo $examlabel; ?></small>
+												<small class="timeSchedule text-white mt-0 "><?php echo $tr->translate("RPT_GRADING_TMP_LIST"); ?></small>
+												<small class="text-white mt-0">
+													<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-gradingtmp-list/groupId/".$row['id']; ?>">
+														<i class="fa fa-file-text text-white" aria-hidden="true"></i>
+													</a>
+												</small>
 											</span>
-										
 										</div>
 									</div>
 									<div class="col-xs-9 pl-0">

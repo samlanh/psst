@@ -62,7 +62,7 @@
 	
 	$gradingId = $rs['id'];
 	$maxSubjectScore = $rs['maxSubjectscore'];
-	
+	$studentId= $this->students[0]['studentId'];
 	$mainTeacherSigature="";
 	if (!empty($rs['mainTeacherSigature'])){
 		if (file_exists(PUBLIC_PATH."/images/photo/".$rs['mainTeacherSigature'])){
@@ -392,8 +392,9 @@
 																'examType'   =>$rs['examType'],
 																'forMonth'   =>$rs['forMonth'],
 																);
-															$TimeInput = $dbExternal->countInputCriterial($param);
-															$currentTimeInput = count($TimeInput);
+															
+															$rsScore = $dbExternal->getScoreByCriterial($gradingId,$studentId,$criterial['criteriaId']);
+															$currentTimeInput = count($rsScore);
 
 															if($currentTimeInput>1){
 																$colSpan=$currentTimeInput;
@@ -460,7 +461,11 @@
 											</tr>
 										<?php 
 										$i=0; 
-										$m=0;$f=0;
+										$m=0;
+										$f=0;
+
+										$title=1;
+
 										if(!empty($this->students)) foreach($this->students as $student){ 
 										$i++;
 										if($student['sex']==1){ 

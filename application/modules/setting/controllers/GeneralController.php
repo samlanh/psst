@@ -73,6 +73,9 @@ public function init()
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_general = $frm;
 	}
+	public function editAction()
+	{
+	}
 	
 }
 

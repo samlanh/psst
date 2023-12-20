@@ -2951,7 +2951,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					)
 				) AS rank
 				
-				,FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				,COALESCE(FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
 				 	 sd.`score_id`=$scoreId  
 					 AND sd.`student_id`=$studentId
 					 AND $strSubLang =1
@@ -2964,8 +2964,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND $strSubLang =1
 						GROUP BY sd.`student_id`
 					) AS StGroupconcateKH)
-				) AS rankingInKhmer
-				,FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				),'0') AS rankingInKhmer
+				,COALESCE(FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
 				 	 sd.`score_id`=$scoreId  
 					 AND sd.`student_id`=$studentId
 					 AND $strSubLang =2
@@ -2978,8 +2978,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND $strSubLang =2
 						GROUP BY sd.`student_id`
 					) AS StGroupconcateKH)
-				) AS rankingInEnglish
-				,FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				),'0') AS rankingInEnglish
+				,COALESCE(FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
 				 	 sd.`score_id`=$scoreId  
 					 AND sd.`student_id`=$studentId
 					 AND $strSubLang =3
@@ -2992,7 +2992,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND $strSubLang =3
 						GROUP BY sd.`student_id`
 					) AS StGroupconcateKH)
-				) AS rankingInChinese
+				),'0') AS rankingInChinese
 					
 				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
 				,(SELECT 

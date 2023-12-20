@@ -576,6 +576,47 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		
 		return $db->fetchRow($sql.$where);
 	}
+
+	function getSubjectScoreByGroup($data){
+		
+		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE
+		s.id=sd.subject_id LIMIT 1) ";
+		
+		$db=$this->getAdapter();
+		$sql="SELECT
+			sd.*, 
+			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
+			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
+			(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = sd.teacher LIMIT 1) AS teacher_name_kh,
+			(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = sd.teacher LIMIT 1) AS teacher_name_en,
+			$strSubjectLange AS subjectLang,
+			(SELECT g.gradingId FROM `rms_group` AS g WHERE g.id = sd.group_id LIMIT 1) AS gradingId
+			FROM
+			rms_group_subject_detail AS sd   WHERE sd.`group_id` = ".$data['groupId'];
+		$sql.=" ORDER  BY $strSubjectLange ";
+		$subjectDetail= $db->fetchAll($sql);
+		return $subjectDetail ;
+
+		// $results = array();
+		// if(!empty($subjectDetail)){
+		// 	foreach($subjectDetail as $key=>$rs){
+		// 		$results[$key]['teacher'] = $rs['teacher'];
+		// 		$results[$key]['subjectId'] = $rs['subject_id'];
+		// 		$results[$key]['sub_name'] = $rs['sub_name'];
+		// 		$results[$key]['sub_name_en'] = $rs['sub_name_en'];
+		// 		$results[$key]['teacher_name_kh'] = $rs['teacher_name_kh'];
+		// 		$results[$key]['teacher_name_en'] = $rs['teacher_name_en'];
+		// 		$results[$key]['subjectLang'] = $rs['subjectLang'];
+		// 		$data['subjectId']=$rs['subject_id'];
+		// 		$rsGrading=$this->getGradingScoreData($data);
+		// 		$results[$key]['gradingScore']=$rsGrading['totalAverage'];
+		// 		$results[$key]['gradingId']=$rsGrading['gradingId'];
+		// 		$results[$key]['totalCriteria']=$rsGrading['totalCriteria'];
+		// 	}
+		// }
+		// return $results ;
+	
+	}
 	
 	
 	function getStudentByGroupExternal($data=array()){
@@ -666,6 +707,40 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	function getGradingByCriterial($data){
+		$db=$this->getAdapter();
+		$sql="SELECT
+			grd.*, gt.`criteriaId`, gt.dateInput
+		FROM
+			`rms_grading_detail_tmp` AS grd
+			 INNER JOIN `rms_grading_tmp` AS gt ON grd.`gradingId`=gt.`id`
+		WHERE 1 ";
+		if(!empty($data['studentId'])){
+			$sql.=" AND grd.studentId=".$data['studentId'];
+		}
+		if(!empty($data['gradingRowId'])){
+			$sql.=" AND grd.gradingId=".$data['gradingRowId'];
+		}
+		if(!empty($data['criteriaId'])){
+			$sql.=" AND gt.`criteriaId`=".$data['criteriaId'];
+		}
+		if(!empty($data['subjectId'])){
+			$sql.=" AND gt.`subjectId`=".$data['subjectId'];
+		}
+		if(!empty($data['groupId'])){
+			$sql.=" AND gt.`groupId`=".$data['groupId'];
+		}
+		if(!empty($data['forMonth'])){
+			$sql.=" AND gt.`forMonth`=".$data['forMonth'];
+		}
+		if(!empty($data['examType'])){
+			$sql.=" AND gt.`examType`=".$data['examType'];
+		}
+		$order=" ORDER BY gt.dateInput ASC ";
+		//echo $sql;
+		return $db->fetchAll($sql.$order);
+	}
+
+	function getAllGradingByCriterial($data){
 		$db=$this->getAdapter();
 		$sql="SELECT
 			grd.*, gt.`criteriaId`, gt.dateInput

@@ -144,7 +144,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 			$this->_name='rms_grading_tmp';		
 			$id=$this->insert($_arr);
 			
-			$criteriaSubmitSettingId=9;//for final score submit
+			$criteriaSubmitSettingId=8;//for final score submit
 			
 			$arrSearch  = array(
 					'gradingId'=>$gradingSettingId
@@ -407,7 +407,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		
    		
    			
-   		$criteriaSubmitSettingId=9;//for final score submit
+   		$criteriaSubmitSettingId=8;//for final score submit
    			
    		$arrSearch  = array(
    				'gradingId'=>$gradingSettingId
@@ -745,7 +745,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	$dbExternal = new Application_Model_DbTable_DbExternal();
    	$students = $dbExternal->getStudentByGroupExternal($data);
    	 
-   	if(!empty($data['criteriaId']) AND $data['criteriaId']==9){
+   	if(!empty($data['criteriaId']) AND $data['criteriaId']==8){
    		unset($data['criteriaId']);
    		$data['getExistingData']=1;
    	}

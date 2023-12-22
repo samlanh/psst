@@ -785,6 +785,19 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$order=" ORDER BY dateInput ASC ";
 		return $db->fetchAll($sql.$order);
 	}
+
+	function countGradingInput($data){
+		$db=$this->getAdapter();
+		$sql="SELECT id,  dateInput FROM  rms_grading_tmp WHERE groupId= ".$data['groupId']." AND subjectId=".$data['subjectId']." AND criteriaId=".$data['criteriaId'];
+		if(!empty($data['examType'])){
+			$sql.=" AND examType =".$data['examType'];
+		}
+		if(!empty($data['forMonth'])){
+			$sql.=" AND forMonth =".$data['forMonth'];
+		}
+		$order=" ORDER BY dateInput ASC ";
+		return $db->fetchAll($sql.$order);
+	}
 	function getAverageAndRankBySubjectOfCriterial($gradingId,$studentId){
 		$db=$this->getAdapter();
 		$sql="

@@ -333,9 +333,7 @@
 								<?php //if($rs['is_void']==1){echo "style='color:red;'";}?>><?php //echo 'status';?></td>
 							<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $row['voidBy'];?></td>
 						</tr>
-
 								<?php } ?>
-
 								<?php if(!empty($this->expense)){?>
 								<tr>
 							<td colspan="15"><span style="font-size: 12px;"><?php echo $tr->translate("OTHER_EXPENSE");?></span></td>
@@ -380,8 +378,7 @@
 										data-label="<?php echo $tr->translate("EXPENSE_TITLE");?>"
 										style="text-align: left;">&nbsp;<?php echo $row['title']; ?>&nbsp;</td>
 									<td data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($row['total_amount'],2);?></td>
-									<td colspan="2"
-										data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>"
+									<td colspan="2" data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>"
 										align="center"><a style="text-decoration: none; color: #000;"
 										href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>"
 										target="blank"><?php echo $row['payment_type']; ?> <?php echo $row['cheque_no']; ?></a></td>

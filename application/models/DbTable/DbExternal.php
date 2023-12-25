@@ -1088,8 +1088,17 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			return null;
 		}
 	}
-	function calculateScoreByAtt($stuId , $data,$attSettingResult){
+	function getSettingEntryById($Id){
 		
+		$db = $this->getAdapter();
+		$sql=" SELECT * FROM `rms_score_entry_setting` WHERE id=".$Id;
+		return $db->fetchRow($sql);
+	}
+
+	function calculateScoreByAtt($stuId , $data,$attSettingResult){
+
+		     $attResult = $this->getSettingEntryById($data['settingEntryId']);
+
 			$sql="
 			SELECT
 				sad.`stu_id`,
@@ -1112,12 +1121,12 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			if(!empty($stuId)){
 				$sql.=" AND sad.`stu_id`= ".$stuId;
 			}
-			// 	   	if(!empty($data['studentId'])){//date check att
-			// 	   		$sql.=" AND sad.`stu_id`= ".$data['studentId'];
-			// 	   	}
+			$from_date =(empty($attResult['fromDate']))? '1': "sa.date_attendence >= '".$attResult['fromDate']." 00:00:00'";
+    		$to_date = (empty($attResult['endDate']))? '1': "sa.date_attendence <= '".$attResult['endDate']." 23:59:59'";
+    		$where = " AND ".$from_date." AND ".$to_date;
 			
-			$sql.=" GROUP BY attendence_status,sad.stu_id ";
-			$result = $this->getAdapter()->fetchRow($sql);
+			$sql.=" GROUP BY sad.attendence_status,sad.stu_id ";
+			$result = $this->getAdapter()->fetchRow($sql.$where);
 
 			$reductPercent = 0;
 			if(!empty($attSettingResult))foreach($attSettingResult as $rs){

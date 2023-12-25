@@ -135,10 +135,12 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$colunmname='title_en';
 		$label="name_en";
 		$branch = "branch_nameen";
+		$langSubject = 'subject_titleen';
 		if ($currentLang==1){
 			$colunmname='title';
 			$label="name_kh";
 			$branch = "branch_namekh";
+			$langSubject = 'subject_titlekh';
 		}
 		$tr=Application_Form_FrmLanguages::getCurrentlanguage();
 		$currentTeacher = $this->getUserExternalId();
@@ -152,8 +154,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
 				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
 
-				,(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectNameKh 
-				,(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectNameEn 
+				,(SELECT $langSubject FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectName, 
 
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
 				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree

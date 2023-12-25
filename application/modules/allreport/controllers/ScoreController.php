@@ -102,11 +102,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$this->view->month = $db->getAllMonth();
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$principalId = empty($result[0]['principalId']) ? 0 : $result[0]['principalId'];
-		$academicStaffId = empty($result[0]['academicStaffId']) ? 0 : $result[0]['academicStaffId'];
-
-		$this->view->principalInfo = $dbSetting->getDutyById($principalId);
-		$this->view->academicStaffInfo = $dbSetting->getDutyById($academicStaffId);
+		$dregreeId= empty($result[0]['degree_id'])?0:$result[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
+		$this->view->academicStaffInfo = $dbSetting->getDutyByDegree($dregreeId,2);
 	}
 	function rptScoreDetailAction()
 	{ //តាមមុខវិជ្ជាលម្អិត
@@ -148,9 +146,13 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data = $key->getKeyCodeMiniInv(TRUE);
 
+		// $dbSetting = new Setting_Model_DbTable_Dbduty();
+		// $principalId = empty($resultScore[0]['principalId']) ? 0 : $resultScore[0]['principalId'];
+		// $this->view->principalInfo = $dbSetting->getDutyById($principalId);
+
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$principalId = empty($resultScore[0]['principalId']) ? 0 : $resultScore[0]['principalId'];
-		$this->view->principalInfo = $dbSetting->getDutyById($principalId);
+		$dregreeId= empty($resultScore[0]['degree_id'])?0:$resultScore[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
 	
 	}
 
@@ -232,9 +234,13 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->branchInfo = $db->getBranchInfo($branch_id);
 
+		// $dbSetting = new Setting_Model_DbTable_Dbduty();
+		// $principalId = empty($studentgroup[0]['principalId']) ? 0 : $studentgroup[0]['principalId'];
+		// $this->view->principalInfo = $dbSetting->getDutyById($principalId);
+
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$principalId = empty($studentgroup[0]['principalId']) ? 0 : $studentgroup[0]['principalId'];
-		$this->view->principalInfo = $dbSetting->getDutyById($principalId);
+		$dregreeId= empty($studentgroup[0]['degree_id'])?0:$studentgroup[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
 		
 	}
 	function monthlyOutstandingStudentNophotoAction()

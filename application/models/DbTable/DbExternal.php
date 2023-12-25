@@ -154,7 +154,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameKh
 				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branchNameEn
 
-				,(SELECT $langSubject FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectName, 
+				,(SELECT $langSubject FROM `rms_subject` AS sj WHERE sj.id = gsjb.subject_id LIMIT 1) AS subjectName
 
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear	
 				,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degree
@@ -1100,18 +1100,18 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 
 		     $attResult = $this->getSettingEntryById($data['settingEntryId']);
 
-			$sql="
-			SELECT
-				sad.`stu_id`,
-				sad.attendence_status,
-				COUNT(if(sad.attendence_status = '2' , sad.attendence_status, NULL)) AS totalA,
-				COUNT(if(sad.attendence_status = '3' , sad.attendence_status, NULL)) AS totalP,
-				COUNT(if(sad.attendence_status = '4' , sad.attendence_status, NULL)) AS totalLate,
-				COUNT(if(sad.attendence_status = '5' , sad.attendence_status, NULL)) AS totalLeave
-			FROM
-				`rms_student_attendence` sa,
-				`rms_student_attendence_detail` sad
-			WHERE sa.id=sad.`attendence_id`";
+			$sql="SELECT
+			sad.`stu_id`,
+			sad.attendence_status,
+			COUNT(IF(sad.attendence_status = '2' , sad.attendence_status, NULL)) AS totalA,
+			COUNT(IF(sad.attendence_status = '3' , sad.attendence_status, NULL)) AS totalP,
+			COUNT(IF(sad.attendence_status = '4' , sad.attendence_status, NULL)) AS totalLate,
+			COUNT(IF(sad.attendence_status = '5' , sad.attendence_status, NULL)) AS totalLeave
+		FROM
+			`rms_student_attendence` AS  sa INNER JOIN 
+			`rms_student_attendence_detail` AS sad
+			
+		ON sa.id=sad.`attendence_id`  WHERE 1 ";
 			
 			if(!empty($data['groupId'])){
 				$sql.=" AND sa.`group_id`= ".$data['groupId'];
@@ -1126,8 +1126,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
     		$to_date = (empty($attResult['endDate']))? '1': "sa.date_attendence <= '".$attResult['endDate']." 23:59:59'";
     		$where = " AND ".$from_date." AND ".$to_date;
 			
-			$sql.=" GROUP BY sad.attendence_status,sad.stu_id ";
-			$result = $this->getAdapter()->fetchRow($sql.$where);
+			$groupBy=" GROUP BY sad.attendence_status , sad.stu_id ";
+			$result = $this->getAdapter()->fetchRow($sql.$where.$groupBy);
 
 			$reductPercent = 0;
 			if(!empty($attSettingResult))foreach($attSettingResult as $rs){

@@ -346,6 +346,7 @@ function filterStudent(){
 	forMonth = dijit.byId('forMonth').get('value');
 
 	criteriaId = dijit.byId('criteriaId').get('value');
+	settingEntryId = dijit.byId('settingEntryId').get('value');
 	
 	if(group==''){
 		return false;
@@ -363,6 +364,7 @@ function filterStudent(){
 			,'forSemester':forSemester
 			,'forMonth':forMonth
 			,'keyIndex':inx
+			,'settingEntryId':settingEntryId
 			
 		},				    
 	   handleAs:"json", 

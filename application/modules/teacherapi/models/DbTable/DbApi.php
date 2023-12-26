@@ -1066,7 +1066,6 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$where.=' GROUP By gds.stu_id ';
 			
 			$order_by = " ORDER BY s.stu_id ASC ";
-			echo $sql.$where.$order_by;exit();
 			$row =  $_db->fetchAll($sql.$where.$order_by);
 			
 			

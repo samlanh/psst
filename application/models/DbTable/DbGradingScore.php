@@ -140,6 +140,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 					'modifyDate'		=>date("Y-m-d H:i:s"),
 					'dateInput'			=>date("Y-m-d"),
 					'settingEntryId'	=> $_data['settingEntryId'],
+					'inputFrom'			=> 1,
 			);
 			$this->_name='rms_grading_tmp';		
 			$id=$this->insert($_arr);
@@ -174,6 +175,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 						'createDate'		=>date("Y-m-d H:i:s"),
 						'modifyDate'		=>date("Y-m-d H:i:s"),
 						'settingEntryId'	=> $_data['settingEntryId'],
+						'inputFrom'			=> 1,
 				);
 				$this->_name='rms_grading';
 				$idGrading=$this->insert($_arr);
@@ -381,6 +383,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    				'modifyDate'		=>date("Y-m-d H:i:s"),
    				'dateInput'			=>date("Y-m-d"),
 				'settingEntryId'	=> $_data['settingEntryId'],
+				'inputFrom'			=> 1,
    		);
    		$this->_name='rms_grading_tmp';
    		$recordId = $_data['recordId'];
@@ -437,6 +440,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					'createDate'		=>date("Y-m-d H:i:s"),
    					'modifyDate'		=>date("Y-m-d H:i:s"),
 					'settingEntryId'	=> $_data['settingEntryId'],
+					'inputFrom'			=> 1,
    			);
    			$this->_name='rms_grading';
    			$idGrading=$this->insert($_arr);

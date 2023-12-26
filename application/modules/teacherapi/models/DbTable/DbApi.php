@@ -1066,6 +1066,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$where.=' GROUP By gds.stu_id ';
 			
 			$order_by = " ORDER BY s.stu_id ASC ";
+			echo $sql.$where.$order_by;exit();
 			$row =  $_db->fetchAll($sql.$where.$order_by);
 			
 			
@@ -1177,12 +1178,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$sqlCol = "
 				
 				,COALESCE(SUM(IF(sttD.`criteriaId`  = tmp.`criteriaId`, tmpD.totalGrading, 0)),'0') AS totalCriteriaScore
-				,COALESCE((SELECT COUNT(tmp1.id) FROM `rms_grading_tmp` AS tmp1 WHERE tmp1.settingEntryId =".$settingEntryId." AND tmp1.criteriaId = sttD.criteriaId AND g.id = tmp1.groupId LIMIT 1 ),'0') AS inputTime
+				,COALESCE((SELECT COUNT(tmp1.id) FROM `rms_grading_tmp` AS tmp1 WHERE tmp.subjectId = tmp1.subjectId AND tmp1.settingEntryId =".$settingEntryId." AND tmp1.criteriaId = sttD.criteriaId AND g.id = tmp1.groupId LIMIT 1 ),'0') AS inputTime
 	
 				,FORMAT(
 					IF(
-					COALESCE((SELECT COUNT(tmp1.id) FROM `rms_grading_tmp` AS tmp1 WHERE tmp1.settingEntryId =".$settingEntryId." AND tmp1.criteriaId = sttD.criteriaId AND g.id = tmp1.groupId LIMIT 1 ),'0')>0 AND COALESCE(SUM(tmpD.totalGrading),'0') >0, 
-					(SUM(IF(sttD.`criteriaId`  = tmp.`criteriaId`, tmpD.totalGrading, 0)) / COALESCE((SELECT COUNT(tmp1.id) FROM `rms_grading_tmp` AS tmp1 WHERE tmp1.settingEntryId =".$settingEntryId." AND tmp1.criteriaId = sttD.criteriaId AND g.id = tmp1.groupId LIMIT 1 ),'0')),
+					COALESCE((SELECT COUNT(tmp1.id) FROM `rms_grading_tmp` AS tmp1 WHERE tmp.subjectId = tmp1.subjectId AND tmp1.settingEntryId =".$settingEntryId." AND tmp1.criteriaId = sttD.criteriaId AND g.id = tmp1.groupId LIMIT 1 ),'0')>0 AND COALESCE(SUM(tmpD.totalGrading),'0') >0, 
+					(SUM(IF(sttD.`criteriaId`  = tmp.`criteriaId`, tmpD.totalGrading, 0)) / COALESCE((SELECT COUNT(tmp1.id) FROM `rms_grading_tmp` AS tmp1 WHERE tmp.subjectId = tmp1.subjectId AND tmp1.settingEntryId =".$settingEntryId." AND tmp1.criteriaId = sttD.criteriaId AND g.id = tmp1.groupId LIMIT 1 ),'0')),
 					0)
 					,2) AS averageScore
 		";

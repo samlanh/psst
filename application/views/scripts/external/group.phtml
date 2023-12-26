@@ -148,6 +148,8 @@
 										$criterial = $dbExternal -> getCriterialByGrading($data);
 										$no =0;
 										if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
+											if($rsCriterial['criteriaType']!=0){
+
 											$no++;
 
 											$degreeId = $row['degreeId'];
@@ -175,7 +177,7 @@
 												<li style="width: 25%; text-align:center;" ><i class="text-info fa fa-toggle-off" aria-hidden="true"></i>
 											<?php }?>	
 										</ul>
-									<?php } ?>
+									<?php } }?>
 									<div style="clear:both;"></div>
 								</div>
 

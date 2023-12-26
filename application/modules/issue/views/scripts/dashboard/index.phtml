@@ -50,6 +50,11 @@
 		line-height: 1.5;
 		border-radius: 3px;
 	}
+	
+	.score-dashboard .col-md-6.col-sm-6.col-xs-12.classListSubject {
+		height: 480px;
+		overflow: auto;
+	}
 </style>
 	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
 	<div class="row"> 
@@ -129,7 +134,7 @@
 					   </form>
 				   </div>
 			   </div>
-			   <div class="row"> 
+			   <div class="row score-dashboard"> 
 					<?php if(!empty($this->row)) foreach($this->row as $gindex =>$row){ 
 						$cardClass = "border-top-primary border-top-darken-1";
 						$bgClass = "border-primary bg-gradient-directional-primary";
@@ -138,7 +143,7 @@
 							$bgClass = "border-warnings bg-gradient-directional-warnings";
 						}
 					?>
-					<div class="col-md-6 col-sm-6 col-xs-12"> 
+					<div class="col-md-6 col-sm-6 col-xs-12 classListSubject"> 
 						<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
 							<div class="card-content">
 								<div class="row d-flex">

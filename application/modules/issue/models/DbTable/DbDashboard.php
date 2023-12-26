@@ -68,6 +68,9 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		if(!empty($data['subjectId'])){
 			$sql.=" AND gd.subjectId = ".$sujectId;
 		}
+		if(!empty($data['teacherId'])){
+			$sql.=" AND gd.teacherId = ".$data['teacherId'];
+		}
 		$from_date =(empty($data['start_date']))? '1': "gd.dateInput >= '".$data['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "gd.dateInput <= '".$data['end_date']." 23:59:59'";
 		$sql.= " AND ".$from_date." AND ".$to_date;
@@ -105,6 +108,7 @@ class Issue_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 				$results[$key]['teacher_name_en'] = $rs['teacher_name_en'];
 				$results[$key]['subjectLang'] = $rs['subjectLang'];
 				$data['subjectId']=$rs['subject_id'];
+				$data['teacherId']=$rs['teacher'];
 				$rsGrading=$this->getGradingScoreData($data);
 				$results[$key]['gradingScore']=$rsGrading['totalAverage'];
 				$results[$key]['gradingId']=$rsGrading['gradingId'];

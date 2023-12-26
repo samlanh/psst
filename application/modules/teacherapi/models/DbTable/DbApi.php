@@ -783,6 +783,54 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     }
 	
 	
+	function checkTimeSecondBeforeSubmit($scoreInfo){
+		$db = $this->getAdapter();
+		$settingEntryId = empty($scoreInfo['settingEntryId']) ? 0 : $scoreInfo['settingEntryId'];
+		$academicYearId = empty($scoreInfo['academicYearId']) ? 0 : $scoreInfo['academicYearId'];
+		$groupId		= empty($scoreInfo['groupId']) ? 0 : $scoreInfo['groupId'];
+		$examType 		= empty($scoreInfo['examType']) ? 0 : $scoreInfo['examType'];
+		$forSemester 	= empty($scoreInfo['forSemester']) ? 0 : $scoreInfo['forSemester'];
+		$forMonth 		= empty($scoreInfo['forMonth']) ? 0 : $scoreInfo['forMonth'];
+		$subjectId 		= empty($scoreInfo['subjectId']) ? 0 : $scoreInfo['subjectId'];
+		$criteriaId 	= empty($scoreInfo['criteriaId']) ? 0 : $scoreInfo['criteriaId'];
+		$teacherId 		= empty($scoreInfo['userId']) ? 0 : $scoreInfo['userId'];
+		$sql ="
+			SELECT 
+					gtmp.`createDate`
+			FROM 
+				`rms_grading_tmp` AS gtmp
+			WHERE 1 
+					AND gtmp.`groupId` =$groupId
+					AND gtmp.`settingEntryId`=$settingEntryId
+					AND gtmp.`examType` =$examType
+					AND gtmp.`forMonth`=$forMonth
+					AND gtmp.`criteriaId` =$criteriaId
+					AND gtmp.`subjectId`=$subjectId 
+					AND gtmp.`teacherId`=$teacherId 
+					ORDER BY gtmp.`id` DESC
+				LIMIT 1 ";
+		$row = $db->fetchRow($sql);
+		
+		if(!empty($row)){
+			$secondLimit="10";
+			$createDate = $row["createDate"];
+			$newCreateDate = new DateTime($createDate);
+			$newCreateDate->add(new DateInterval('PT'.$secondLimit.'S')); 
+			$createDateNew = $newCreateDate->format('Y-m-d H:i:s');
+			
+			$todayDate = new DateTime();
+			$timeToday = $todayDate->format('Y-m-d H:i:s');
+			
+			$timeToday = date_create($timeToday);
+			$timeCreateDateNew = date_create($createDateNew);
+			
+			if($timeToday > $timeCreateDateNew){
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
 	
 	function submitCriteriaScore($_data){
     	$db = $this->getAdapter();
@@ -792,12 +840,18 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$_data['userId']	= empty($_data['userId'])?0:$_data['userId'];
 			$scoreSettingEntryPost 	 = empty($_data['scoreSettingEntry'])?null:$_data['scoreSettingEntry'];
 			
-			$scoreInfo 	 = Zend_Json::decode($scoreSettingEntryPost);
+			$scoreInfo = Zend_Json::decode($scoreSettingEntryPost);
+			$scoreInfo["subjectId"] =$_data['subjectId'];
+			$scoreInfo["criteriaId"] =$_data['criteriaId'];
+			$scoreInfo["userId"] = $_data['userId'];
+			
 			
 			$listFromPost 	 = empty($_data['studentScoreListSubmit'])?null:$_data['studentScoreListSubmit'];
 			$studentScoreList 	 = Zend_Json::decode($listFromPost);
 			
-    		$arr = array(
+			$checkingSubmitCriterial = $this->checkTimeSecondBeforeSubmit($scoreInfo);
+			if(empty($checkingSubmitCriterial)){
+				$arr = array(
     				'branchId'			=>$scoreInfo['branchId'],
     				'settingEntryId'	=>$scoreInfo['settingEntryId'],
     				'gradingSettingId'	=>$scoreInfo['gradingSettingId'],
@@ -805,7 +859,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				'groupId'			=>$scoreInfo['groupId'],
     				'examType'			=>$scoreInfo['examType'],
     				'forSemester'		=>$scoreInfo['forSemester'],
-    				'forMonth'			=>$scoreInfo['forSemester'],
+    				'forMonth'			=>$scoreInfo['forMonth'],
     				'subjectId'			=>$_data['subjectId'],
     				'criteriaId'		=>$_data['criteriaId'],
     				'inputOption'		=>2,
@@ -815,22 +869,25 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     				'createDate'		=>date("Y-m-d H:i:s"),
     				'modifyDate'		=>date("Y-m-d H:i:s"),
     				'teacherId'			=>$_data['userId'],
-    		);
-    		$this->_name='rms_grading_tmp';
-    		$gradinTmpId = $this->insert($arr);
-    		
-			if(!empty($studentScoreList)) foreach($studentScoreList AS $row){
-				
-				$arrDetail = array(
-						'gradingId'			=>$gradinTmpId,
-						'studentId'			=>$row['studentId'],
-						'totalGrading'		=>$row['scoreValue'],
-							
 				);
-				$this->_name='rms_grading_detail_tmp';	
-				$this->insert($arrDetail);
+				$this->_name='rms_grading_tmp';
+				$gradinTmpId = $this->insert($arr);
 				
+				if(!empty($studentScoreList)) foreach($studentScoreList AS $row){
+					
+					$arrDetail = array(
+							'gradingId'			=>$gradinTmpId,
+							'studentId'			=>$row['studentId'],
+							'totalGrading'		=>$row['scoreValue'],
+								
+					);
+					$this->_name='rms_grading_detail_tmp';	
+					$this->insert($arrDetail);
+					
+				}
 			}
+			
+    		
 			
 			
 			$db->commit();
@@ -1347,6 +1404,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$criteriaListOfStudentList 	 = Zend_Json::decode($criteriaListOfStudentPost);
 			$criteriaId = $_data['criteriaId'];
 			$subjectId = $_data['subjectId'];
+			
+			$scoreInfo["criteriaId"] = $criteriaId;
+			$scoreInfo["subjectId"] = $subjectId;
+			$scoreInfo["userId"] = $_data['userId'];
+			$checkingSubmitCriterial = $this->checkTimeSecondBeforeSubmit($scoreInfo);
+			
     		$arr = array(
     				'branchId'			=>$scoreInfo['branchId'],
     				'settingEntryId'	=>$scoreInfo['settingEntryId'],
@@ -1370,9 +1433,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$where=" id = ".$gradingTmpId;
 				$this->update($arr, $where);
 			}else{
-				$arr['dateInput'] = date("Y-m-d H:i:s");
-				$arr['createDate'] = date("Y-m-d H:i:s");
-				$gradingTmpId = $this->insert($arr);
+				$gradingTmpId = 0;
+				if(empty($checkingSubmitCriterial)){
+					$arr['dateInput'] = date("Y-m-d H:i:s");
+					$arr['createDate'] = date("Y-m-d H:i:s");
+					$gradingTmpId = $this->insert($arr);
+				}
 			}
 			
 			$arrGrading = array(
@@ -1414,9 +1480,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$this->delete($where);
 				}
 			}else{
-				$arrGrading['dateInput'] = date("Y-m-d H:i:s");
-				$arrGrading['createDate'] = date("Y-m-d H:i:s");
-				$idGrading = $this->insert($arrGrading);
+				$idGrading = 0;
+				if(empty($checkingSubmitCriterial)){
+					$arrGrading['dateInput'] = date("Y-m-d H:i:s");
+					$arrGrading['createDate'] = date("Y-m-d H:i:s");
+					$idGrading = $this->insert($arrGrading);
+				}
 			}
 			if(!empty($gradingTmpId) && !empty($idGrading) ){
 				$subCriteriaTitle = empty($criteriaInfo['subCriteriaTitleKh']) ? "" : $criteriaInfo['subCriteriaTitleKh'];

@@ -1426,7 +1426,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$subCriteriaAmount = count($subCriteriaTitleList);
 				
 				$maxScoreSubject = empty($criteriaInfo['maxScoreSubject']) ? "" : $criteriaInfo['maxScoreSubject'];
-				$pecentageScore = empty($criteriaInfo['pecentageScore']) ? "" : $criteriaInfo['pecentageScore'];
+				$percentageScore = empty($criteriaInfo['percentageScore']) ? "" : $criteriaInfo['percentageScore'];
 				
 				if(!empty($studentScoreList)) foreach($studentScoreList AS $row){
 					if($subCriteriaTitle!="" && $subjectIdInCriteriaSetting !="0"){
@@ -1452,7 +1452,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								'criteriaId'			=> $criteriaId,
 								'totalGrading'			=> $subCriteriaScoreExp[$key],
 								'criteriaAmount'		=> $subCriteriaAmount,
-								'percentage'			=> $pecentageScore,
+								'percentage'			=> $percentageScore,
 								'subCriterialTitleKh'	=> $i,
 								'subCriterialTitleEng'	=> $subCriteriaTitleEngExp[$key],
 								'dateInput'		=>date("Y-m-d H:i:s"),
@@ -1480,7 +1480,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 								'criteriaId'			=> $criteriaId,
 								'totalGrading'			=> $subCriteriaScore,
 								'criteriaAmount'		=> $subCriteriaAmount,
-								'percentage'			=> $pecentageScore,
+								'percentage'			=> $percentageScore,
 								'dateInput'		=>date("Y-m-d H:i:s"),
 								);
 							

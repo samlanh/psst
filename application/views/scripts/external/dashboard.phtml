@@ -6,11 +6,12 @@
 	$key = new Application_Model_DbTable_DbKeycode();
 	$dataInfo=$key->getKeyCodeMiniInv(TRUE);
 		
-	$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-	$userName = $sessionUserExternal->userName;
-	$teacherNameKh = $sessionUserExternal->teacher_name_kh;
-	$teacherNameEn = $sessionUserExternal->teacher_name_en;
-	$userId = $sessionUserExternal->userId;
+		
+	$teacherInfo = $this->teacherInfo;
+	$userName = $teacherInfo["user_name"];
+	$teacherNameKh = $teacherInfo["teacher_name_kh"];
+	$teacherNameEn = $teacherInfo["teacher_name_en"];
+	$userId = $teacherInfo["id"];
 	
 	$teachName = $teacherNameKh;
 	if(empty($teachName)){

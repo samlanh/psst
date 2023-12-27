@@ -14,12 +14,14 @@ class ExternalController extends Zend_Controller_Action
     public function indexAction()
     {
     	$this->_helper->layout()->disableLayout();
-    	$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-    	$userName = $sessionUserExternal->userName;
-    	$userId = $sessionUserExternal->userId;
+		
+		$zendRequest = new Zend_Controller_Request_Http();
+		$userId = $zendRequest->getCookie(TEACHER_AUTH.'userId');
+		
     	if (!empty($userId)){
     		$this->_redirect("/external/dashboard");
     	}
+		
     	
 		
 		$session_lang=new Zend_Session_Namespace('lang');
@@ -36,18 +38,12 @@ class ExternalController extends Zend_Controller_Action
 			
 			$dbExternal=new Application_Model_DbTable_DbExternal();
 			if($dbExternal->userAuthenticateTeacher($userName,$passwordKey)){
-				$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
 				$teacherInfo = $dbExternal->getTeacherInfo($userName,$passwordKey);
-
-				$sessionUserExternal->userId= $teacherInfo['id'];
-				$sessionUserExternal->userName=$userName;
-				$sessionUserExternal->pwd=$passwordKey;
-				$sessionUserExternal->staffType= $teacherInfo['staff_type'];
-				
-				$sessionUserExternal->teacher_code= $teacherInfo['teacher_code'];
-				$sessionUserExternal->teacher_name_en= $teacherInfo['teacher_name_en'];
-				$sessionUserExternal->teacher_name_kh= $teacherInfo['teacher_name_kh'];
-				
+				setcookie(TEACHER_AUTH.'userId', $teacherInfo['id'], time() + (86400 * 30), '/');// 86400 = 1 day
+				setcookie(TEACHER_AUTH.'userName', $userName, time() + (86400 * 30), '/');
+				setcookie(TEACHER_AUTH.'pwd', $passwordKey, time() + (86400 * 30), '/');
+				setcookie(TEACHER_AUTH.'staffType', $teacherInfo['staff_type'], time() + (86400 * 30), '/');
+				setcookie(TEACHER_AUTH.'teacherCode', $teacherInfo['teacher_code'], time() + (86400 * 30), '/');
 				
 				Application_Form_FrmMessage::redirectUrl("/external/dashboard");
 				exit();
@@ -63,14 +59,19 @@ class ExternalController extends Zend_Controller_Action
         // action body
         if($this->getRequest()->getParam('value')==1){        	
         	$aut=Zend_Auth::getInstance();
-        	$aut->clearIdentity();        	
-        	$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-        	if(!empty($sessionUserExternal->userId)){
-	        
-	        	$sessionUserExternal->unsetAll();       	
-	        	Application_Form_FrmMessage::redirectUrl("/external");
-	        	exit();
-        	}
+        	$aut->clearIdentity();    
+
+			$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
+			$sessionUserExternal->unsetAll();
+			
+			setcookie(TEACHER_AUTH.'userId', null, -1, '/'); 
+			setcookie(TEACHER_AUTH.'pwd', null, -1, '/'); 
+            setcookie(TEACHER_AUTH.'userName', null, -1, '/'); 		
+            setcookie(TEACHER_AUTH.'staffType', null, -1, '/');    
+			setcookie(TEACHER_AUTH.'teacherCode', null, -1, '/');  
+			
+			Application_Form_FrmMessage::redirectUrl("/external");
+			exit();
         } 
     }
 	public function dashboardAction()
@@ -108,6 +109,7 @@ class ExternalController extends Zend_Controller_Action
 		$arrFilterI['day']=$nextDay;
 		$this->view->tomorrowSchedule = $dbExternal->getTeachingSchedule($arrFilterI);
 		
+		$this->view->teacherInfo = $dbExternal->getCurrentTeacherInfo();
 		
     }
 	public function groupAction()
@@ -180,21 +182,19 @@ class ExternalController extends Zend_Controller_Action
 		
 		$this->_helper->layout()->disableLayout();
 		if ($this->getRequest()->isPost()){
+			$zendRequest = new Zend_Controller_Request_Http();
+			$userId = $zendRequest->getCookie(TEACHER_AUTH.'userId');
+			$userName = $zendRequest->getCookie(TEACHER_AUTH.'userName');
+			$pwd = $zendRequest->getCookie(TEACHER_AUTH.'pwd');
+			$userId = empty($userId)?0:$userId;
 			
 			$dbExternal = new Application_Model_DbTable_DbExternal();
-			
-			$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-			$userName = $sessionUserExternal->userName;
-			$userId = $sessionUserExternal->userId;
-		
 			$pass_data=$this->getRequest()->getPost();
-			if ($pass_data['password'] == $sessionUserExternal->pwd){
+			if ($pass_data['password'] == $pwd){
 				
 				try {
 					$dbExternal->changePassword($pass_data['new_password']);
-					$sessionUserExternal->unlock();
-					$sessionUserExternal->pwd=$pass_data['new_password'];
-					$sessionUserExternal->lock();
+					setcookie(TEACHER_AUTH.'pwd', $pass_data['new_password'], time() + (86400 * 30), '/');
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/external");
 				} catch (Exception $e) {
 					Application_Form_FrmMessage::message("INSERT_FAIL");

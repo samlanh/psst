@@ -7,9 +7,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
     
 	public function checkSessionTeacherExpireBeforeSubmit()
 	{
-
-		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-		$teacherId=$sessionUserExternal->userId;
+		$teacherId=$this->getUserExternalId();
+		$teacherId = empty($teacherId) ? 0 : $teacherId;
 		if (empty($teacherId)){
 			return false;
 		}else{
@@ -85,8 +84,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	
 	public static function getUserExternalId(){
-		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-		$userId = $sessionUserExternal->userId;
+		$zendRequest = new Zend_Controller_Request_Http();
+		$userId = $zendRequest->getCookie(TEACHER_AUTH.'userId');
 		$userId = empty($userId)?0:$userId;
 		return $userId;
 	}

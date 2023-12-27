@@ -3036,9 +3036,9 @@ function getAllgroupStudyNotPass($action=null){
   }
   public function checkSessionTeacherExpire()
   {
-  	$session_teacher=new Zend_Session_Namespace(TEACHER_AUTH);
-  	$teacherId=$session_teacher->userId;
   	
+	$dbExternal=new Application_Model_DbTable_DbExternal();
+	$teacherId = $dbExternal->getUserExternalId();
   	$userId = $this->getUserId();
   	
   	if(empty($teacherId) OR empty($userId)){
@@ -4142,8 +4142,8 @@ function getAllgroupStudyNotPass($action=null){
 	   	}
    	}
    	public static function getTeacherUserId(){
-   		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
-   		$userId = $sessionUserExternal->userId;
+		$dbExternal= new Application_Model_DbTable_DbExternal();
+		$userId = $dbExternal->getUserExternalId();
    		$userId = empty($userId)?0:$userId;
    		return $userId;
    	}

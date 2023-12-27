@@ -557,8 +557,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sttD.criteriaId
 					,sttD.timeInput
 					,sttD.pecentage_score AS percentageScore
-					,sttD.subCriterialTitleKh AS subCriteriaTitleKh
-					,sttD.subCriterialTitleEng AS subCriteriaTitleEng
+					,COALESCE(sttD.subCriterialTitleKh,'') AS subCriteriaTitleKh
+					,COALESCE(sttD.subCriterialTitleEng,'') AS subCriteriaTitleEng
 					,sttD.subjectId AS subjectIdInCriteriaSetting
 					
 					,(SELECT crit.$colunmName FROM `rms_exametypeeng` AS crit WHERE crit.id = sttD.criteriaId LIMIT 1) AS criteriaTitle
@@ -589,6 +589,20 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=' WHERE gsjb.teacher='.$userId;
 			$sql.=' AND g.`gradingId` !=0 AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
 			
+			$sql.="
+				AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = sttD.criteriaId LIMIT 1) 
+					> CASE 
+						WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = g.`gradingId` AND sttDi.subjectId =  gsjb.subject_id ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+						ELSE '0'
+					END 
+				AND sttD.isNotEnteryCri = CASE 
+					WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = g.`gradingId` AND sttDi.subjectId =  gsjb.subject_id ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+					ELSE '0'
+					END 
+			";
+			
 			$date = new DateTime();
 			$currentDate = $date->format("Y-m-d");
 			$sql.= " AND sett.fromDate <= '".$currentDate."' 
@@ -618,11 +632,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($row)){ 
 				$newArray = array();
 				$criteriaId = "";
+				$groupId = "";
+				$subjectId = "";
 				foreach($row as $criteria){
-					if($criteriaId != $criteria["criteriaId"]){
+					if( ($criteriaId != $criteria["criteriaId"]) OR ($groupId != $criteria["groupId"]) ){
 						array_push($newArray, $criteria);
 					}
 					$criteriaId = $criteria["criteriaId"];
+					$groupId = $criteria["groupId"];
 				}
 				$row = $newArray;
 			}
@@ -1095,8 +1112,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($_data['gradingTmpId'])){
 				$gradingTmpId = $_data['gradingTmpId'];
 				$sqlColScoreValue = "
-						,(SELECT GROUP_CONCAT(tmpD.subCriterialTitleKh) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1) AS subCriteriaTitleKh
-						,(SELECT GROUP_CONCAT(tmpD.subCriterialTitleEng) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1) AS subCriteriaTitleEng
+						,COALESCE((SELECT GROUP_CONCAT(tmpD.subCriterialTitleKh) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1),'') AS subCriteriaTitleKh
+						,COALESCE((SELECT GROUP_CONCAT(tmpD.subCriterialTitleEng) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId LIMIT 1),'') AS subCriteriaTitleEng
 						,(SELECT GROUP_CONCAT(tmpD.totalGrading) FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId ) AS subCriteriaScore
 						,(SELECT  IF(SUM(tmpD.totalGrading) >0, FORMAT((COALESCE(SUM(tmpD.totalGrading),'0') / COUNT(tmpD.id) ),2) ,'0') FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.studentId = s.stu_id AND tmpD.`gradingId` =$gradingTmpId) AS criteriaScoreAvg
 						,(SELECT COALESCE(grdT.totalAverage,'0') FROM `rms_grading_total` AS grdT WHERE grdT.studentId = s.stu_id AND grdT.`gradingTmpId` =$gradingTmpId LIMIT 1) AS grandTotalAverageScore

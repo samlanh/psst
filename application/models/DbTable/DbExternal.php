@@ -5,6 +5,26 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 
     protected $_name = 'rms_teacher';
     
+	public function checkSessionTeacherExpireBeforeSubmit()
+	{
+
+		$sessionUserExternal=new Zend_Session_Namespace(TEACHER_AUTH);
+		$teacherId=$sessionUserExternal->userId;
+		if (empty($teacherId)){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	function reloadPageTecherExpireSession(){
+		$url="/external";
+		$tr= Application_Form_FrmLanguages::getCurrentlanguage();
+		$msg = $tr->translate("Session Expire");
+		echo '<script language="javascript">
+		alert("'.$msg.'");		
+		window.location = "'.Zend_Controller_Front::getInstance()->getBaseUrl().$url.'";
+		</script>';
+	}
 	public function userAuthenticateTeacher($username,$password)
 	{
 		$db_adapter = Application_Model_DbTable_DbUsers::getDefaultAdapter();

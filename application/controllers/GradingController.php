@@ -73,9 +73,17 @@ class GradingController extends Zend_Controller_Action
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		$db = new Application_Model_DbTable_DbGradingScore();
+		$dbg = new Application_Model_DbTable_DbExternal();
+
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			
+			$checkTeachSesion=  $dbg->checkSessionTeacherExpireBeforeSubmit();
+			if(empty($checkTeachSesion)){
+				$dbg->reloadPageTecherExpireSession();
+				exit();
+			}
+
 			try {
 				$rs = $db->addScoreGradingByClass($_data);
 				if(isset($_data['save_new'])){
@@ -137,8 +145,16 @@ class GradingController extends Zend_Controller_Action
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		$db = new Application_Model_DbTable_DbGradingScore();
+		$dbexnternal = new Application_Model_DbTable_DbExternal();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+
+			$checkTeachSesion=  $dbexnternal->checkSessionTeacherExpireBeforeSubmit();
+			if(empty($checkTeachSesion)){
+				$dbexnternal->reloadPageTecherExpireSession();
+				exit();
+			}
+			
 			try{
 				$rs = $db->UpdateScoreGradingByClass($_data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");				
@@ -156,15 +172,15 @@ class GradingController extends Zend_Controller_Action
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/grading/index");
 		}
 	
-		$rscoreType = $dbg->checkScoreType($resultRecord);
-		if(!empty($rscoreType)){
-			if($rscoreType['isLock']==1){
-				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
-			}elseif($resultRecord['criteriaType'] != 2 ){
-				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
-			}
+		// $rscoreType = $dbg->checkScoreType($resultRecord);
+		// if(!empty($rscoreType)){
+		// 	if($rscoreType['isLock']==1){
+		// 		Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+		// 	}elseif($resultRecord['criteriaType'] != 2 ){
+		// 		Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+		// 	}
 			
-		}
+		// }
 
 		$this->view->resultRecord = $resultRecord;
 		$this->view->gradingRowId = $gradingRowId;

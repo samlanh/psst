@@ -12,7 +12,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		return $userId;
 	}
 	
-	function getAllIssueAssessmentByClass($search=null){
+	function getAllScoreResult($search=null){
 		$db=$this->getAdapter();
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -29,43 +29,40 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			$month = "month_kh";
 			$subjectTitle='subject_titlekh';
 		}
-		$sql="SELECT 
-				grd.*
-				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
-				,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
-				,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
-				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.forType LIMIT 1) as examTypeTitle
-				,CASE
-					WHEN grd.forType = 2 THEN grd.forSemester
-					ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
-				END AS forMonthTitle
-				,g.group_code AS  groupCode
-				
-				,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
-				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
-				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
-				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
-				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+		$sql="SELECT s.*, g.*,
+		s.id as scoreId,
+		s.group_id as groupId,
+		(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=s.branch_id LIMIT 1) as branchName,	
+		(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as examTypeTitle,
+		CASE
+			WHEN s.exam_type  = 2 THEN s.for_semester
+			ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month LIMIT 1) 
+		END AS forMonthTitle,
+		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName,
+		(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear,
+		COALESCE((SELECT a.id FROM `rms_studentassessment` AS a WHERE s.`id`=a.scoreId LIMIT 1),0) AS IsAssesment,
+		(SELECT a.isLock FROM `rms_studentassessment` AS a WHERE s.`id`=a.scoreId LIMIT 1) AS islisLock
+		
 		";
 		
-		$sql.=" FROM rms_studentassessment AS grd,
-					rms_group AS g 
-			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
+		$sql.=" FROM  `rms_score` AS s
+		INNER JOIN  `rms_group` AS g ON s.`group_id` = g.`id` WHERE 1";
 		
 		$where ='';
-		$from_date =(empty($search['start_date']))? '1': " grd.issueDate >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " grd.issueDate <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': "s.date_input >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		
-		$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		$where.=' AND g.`teacher_id` ='.$this->getUserExternalId();
 
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]=" grd.titleScore LIKE '%{$s_search}%'";
-			$s_where[]=" (SELECT br.branch_namekh FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
-			$s_where[]=" (SELECT br.branch_nameen FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) LIKE '%{$s_search}%'";
-			$s_where[]=" grd.note LIKE '%{$s_search}%'";
+			$s_where[]=" a.title_score LIKE '%{$s_search}%'";
+			$s_where[]=" a.title_score_en LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT br.branch_namekh FROM `rms_branch` AS br WHERE br.br_id=s.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]=" (SELECT br.branch_nameen FROM `rms_branch` AS br WHERE br.br_id=s.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+		
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if($search['degree']>0){
@@ -79,17 +76,18 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		}
 
 		if($search['for_month']>0){
-			$where.=" AND grd.forMonth =".$search['for_month'];
+			$where.=" AND s.for_month =".$search['for_month'];
 		}
 		if($search['exam_type']>0){
-			$where.= " AND grd.forType =".$search['exam_type'];
+			$where.= " AND s.exam_type =".$search['exam_type'];
 		}
 		if($search['for_semester']>0){
-			$where.= " AND grd.forSemester =".$search['for_semester'];
+			$where.= " AND s.for_semester =".$search['for_semester'];
 		}
-		$order=" ORDER BY grd.id DESC ";
+		$order=" ORDER BY s.`id` DESC ";
 		return $db->fetchAll($sql.$where.$order);
 	}
+	
 	public function getAssessmentByID($id){
 	   	$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -143,6 +141,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		$sql.=" WHERE grd.status =1 ";
 		$sql.=" AND grd.groupId=".$_data['groupId'];
 		$sql.=" AND grd.forType=".$_data['examType'];
+		$sql.=" AND grd.scoreId=".$_data['scoreId'];
 		if($_data['examType']==1){
 			$sql.=" AND grd.forMonth=".$_data['forMonth'];
 		}else{
@@ -175,7 +174,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 					'issueDate'			=>$_data['issueDate'],
 					'returnDate'		=>$_data['returnDate'],
 					'note'				=>$_data['note'],
-					
+					'scoreId'			=>$_data['scoreId'],
 					'createDate'		=>date("Y-m-d H:i:s"),
 					'modifyDate'		=>date("Y-m-d H:i:s"),
 					'status'			=>1,

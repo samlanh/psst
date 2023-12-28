@@ -66,7 +66,7 @@
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ការវាយតម្លៃសម្រាប់ / Assement For</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
+														<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" readOnly >
 															<option value="1" <?php if(1==$this->row['forType']){echo "selected='selected'";}?> >ប្រចាំខែ/Monthly</option>
 															<option value="2" <?php if(2==$this->row['forType']){echo "selected='selected'";}?> >ប្រចាំឆមាស/Semester</option>
 														</select>
@@ -76,13 +76,13 @@
 														<input type="hidden" name="id" id="id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								
+														<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false" readOnly>								
 															<option value="1" <?php if(1==$this->row['forSemester']){echo "selected='selected'";}?> >ឆមាសទី១/Semester I</option>
 															<option value="2" <?php if(2==$this->row['forSemester']){echo "selected='selected'";}?> >ឆមាសទី២/Semester II</option>
 														</select>
 													</div>
 													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
+														<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false" readOnly>								
 															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->row['forMonth']){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
 															<?php }}?>

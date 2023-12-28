@@ -114,7 +114,7 @@ table#table tbody tr:hover {
 															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ការវាយតម្លៃសម្រាប់ / Assement For</label>
 															<div class="col-md-7 col-sm-7 col-xs-12">
 																<div class="col-md-4 col-sm-4 col-xs-12">
-																	<select id="examType" name="examType" class="fullside" onchange="checkExamType(); "  dojoType="dijit.form.FilteringSelect" >
+																	<select id="examType" name="examType" class="fullside" onchange="checkExamType(); "  dojoType="dijit.form.FilteringSelect"  readOnly>
 																		<option value="1">ប្រចាំខែ/Monthly</option>
 																		<option value="2">ប្រចាំឆមាស/Semester</option>
 																	</select>
@@ -123,17 +123,18 @@ table#table tbody tr:hover {
 																	<input type="hidden" name="degree" id="degree" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['degree_id']?>"/>
 																</div>
 																<div class="col-md-4 col-sm-4 col-xs-12">
-																	<select dojoType="dijit.form.FilteringSelect" onchange="duplicationRecord();" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false">								
+																	<select dojoType="dijit.form.FilteringSelect" onchange="duplicationRecord();" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false" readOnly>								
 																		<option value="1">ឆមាសទី១/Semester I</option>
 																		<option value="2">ឆមាសទី២/Semester II</option>
 																	</select>
 																</div>
 																<div class="col-md-4 col-sm-4 col-xs-12">
-																	<select dojoType="dijit.form.FilteringSelect" required="true" onchange="duplicationRecord();" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false">								
+																	<select dojoType="dijit.form.FilteringSelect" required="true" onchange="duplicationRecord();" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false" readOnly>								
 																		<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 																			<option value="<?php echo $month['id']?>" <?php if($month['id']==$current_month){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
 																		<?php }}?>
 																	</select>
+																	<input type="hidden" name="scoreId" id="scoreId" class="fullside" dojoType="dijit.form.TextBox" value="<?php if(!empty($this->scoreId)){ echo $this->scoreId; } ?>"/>
 																</div>
 															</div>
 														</div>
@@ -224,7 +225,6 @@ table#table tbody tr:hover {
 								 <div class="card-box mt-20">
 									<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 										<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" label="រក្សាទុក/Save" dojoType="dijit.form.Button" />
-										<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="រក្សាទុក&បន្ថែមថ្មី/Save New" dojoType="dijit.form.Button"  />
 									</div>
 								 </div>
 							</form>
@@ -887,6 +887,7 @@ function duplicationRecord(){
 	examType = dijit.byId('examType').get('value');
 	forSemester = dijit.byId('forSemester').get('value');
 	forMonth = dijit.byId('forMonth').get('value');
+	scoreId = dijit.byId('scoreId').get('value');
 	
 	if(groupId==''){
 		return false;
@@ -898,11 +899,11 @@ function duplicationRecord(){
 			,'examType':examType
 			,'forSemester':forSemester
 			,'forMonth':forMonth
+			,'scoreId':scoreId
 			
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		 
 	       if(data==1){
 				isDuplicate=1;
 				var msgTitle = $( '.msgTitle' ).html();

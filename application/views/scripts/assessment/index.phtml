@@ -8,6 +8,29 @@
 	//$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
 $frm =  $this->form_search;
 ?>	
+<style>
+
+	a.mini-button-edit {
+		padding: 8px;
+		font-size: 12px;
+		color: #fff;
+		background-color: #d8a304;
+		border-color: #004b9c;
+		border-radius: 6px;
+		width: 160px !important;
+		display: block;
+	}
+	span.mini-button-success {
+		padding: 8px;
+		font-size: 12px;
+		color: #fff;
+		background-color: #16941a;
+		border-color: #004b9c;
+		border-radius: 6px;
+		width: 160px !important;
+		display: block;
+	}
+</style>
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
@@ -56,63 +79,106 @@ $frm =  $this->form_search;
 			   </div>
 			   
 			   <div class="row"> 
-				<?php if(!empty($this->row)) foreach($this->row as $row){ 
+				<?php
+					//print_r($this->row);
+
+				 if(!empty($this->row)) foreach($this->row as $row){ 
 					$cardClass = "border-top-primary border-top-darken-1";
 					$bgClass = "border-primary bg-gradient-directional-primary";
-					if($row['forType']==2){
+					if($row['exam_type']==2){
 						$cardClass = "border-top-warnings border-top-darken-1";
 						$bgClass = "border-warnings bg-gradient-directional-warnings";
 					}
 				?>
-				<div class="col-md-3 col-sm-3 col-xs-12"> 
-					<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
-						<div class="card-content">
-							<div class="row d-flex">
-								<div class="col-xs-4 pr-0">
-									<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
-										<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-2 text-center">
-											<?php echo $row['groupCode']; ?>
-											<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php echo $row['roomName']; ?></small>
-										</span>
-										
-									</div>
-								</div>
-								<div class="col-xs-8 pl-0">
-									<ul class="nav navbar-right panel_toolbox stusearch">
-									  <li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-										<ul class="dropdown-menu" role="menu">
-											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/edit/id/".$row['id'];?>"><?php echo $tr->translate('EDIT');?></a>
-											</li>
-											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-assessment-list/id/".$row['id'];?>"><?php echo $tr->translate('STUDENT_ASSESSMENT_REPORT');?></a>
-											</li>
-										</ul>
-									  </li>
-									</ul>
-									<div class="p-1">
-										<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
-										<div class="text-left">
-										   <?php echo $row['examTypeTitle']; ?> <strong><?php echo $row['forMonthTitle']; ?></strong>
-											<p class="mb-0"><?php echo $row['academicYear']; ?></p>
-											<h3 class="mb-0 mt-0 p-relative">
-												<span class="counting-num mr-1"><?php echo $row['gradeTitle']; ?></span>
-												<i class="glyphicon glyphicon-education"></i>  
-											</h3>
-											<p class="mb-0"><i class="glyphicon glyphicon-calendar"></i> <?php echo date("d-M-Y",strtotime($row['issueDate'])); ?></p>
-											<?php if($row['status']==1){?>
-											<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class=" text-primary glyphicon glyphicon-ok-sign"></i></p>
-											<?php }else{?>
-											<p class="mb-0"><?php echo $tr->translate('STATUS');?> <i class="text-danger glyphicon glyphicon-remove-sign"></i></p>
-											<?php }?>
+								<div class="col-md-6 col-sm-12 col-xs-12"> 
+									<div class="card mb-1 border-bottom-primary border-bottom-darken-1 border-bottom-5">
+										<div class="card-content">
+											<div class="row d-flex">
+												<div class="col-md-3 col-sm-2 col-xs-4 pr-0">
+													<div class="d-flex align-items-center h-100 border-primary bg-gradient-directional-primary">
+														<span class="mt-0 mb-0 mr-auto ml-auto font-large-1 text-white text-center ">
+															<?php echo $row['group_code']; ?>
+														</span>
+													</div>
+												</div>
+												<div class="col-md-9 col-sm-10 col-xs-8 pl-0">
+													<!-- <ul class="nav navbar-right panel_toolbox stusearch">
+													  <li class="dropdown">
+														<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+													  </li>
+													</ul> -->
+													<div class="p-1">
+														<div class="col-md-8 col-sm-8 col-xs-12">
+															<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $tr->translate('STUDENT_SCORE_REPORT');?> </small></p>
+															<div class="text-left">
+															  	<strong> <?php echo $row['examTypeTitle']; ?> <?php echo $row['title_score']."/".$row['title_score_en']; ?></strong> 
+																<p class="mb-0">
+																	<div class="col-md-5 col-sm-5 col-xs-12">
+																		<i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; <?php echo $row['branchName']; ?><br>
+																		<i class="fa fa-graduation-cap" aria-hidden="true"></i> <?php echo $row['academicYear']; ?><br>
+																		<i class="fa fa-calendar" aria-hidden="true"></i> <?php echo $row['date_input']; ?>
+																	</div>
+																	<div class="col-md-3 col-sm-3 col-xs-12">
+																		<i class="glyphicon glyphicon-blackboard" aria-hidden="true"></i>  <?php echo $row['roomName']; ?>
+																	</div>
+																</p>
+															</div>
+														</div>
+														<div class="col-md-4 col-sm-4 col-xs-12">
+															<ul class="listSmallBtn ">
+																<?php if($row['IsAssesment']>0){ 
+																	if($row['islisLock']== 1){ 
+																?>
+																	<li>
+																		<div class="form-group">
+																			<span  class="mini-button-success" >
+																				<i class="glyphicon glyphicon-ok-sign" aria-hidden="true"></i> <?php echo $tr->translate('Assessment Completed');?>
+																			</span>
+																		</div>
+																	</li>
+																	<li>
+																		<div class="form-group">
+																			<a  class="small-button-class" href="<?php echo $this->baseUrl()."/extreport/rpt-assessment-list/id/".$row['IsAssesment'];?>">
+																				<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('STUDENT_ASSESSMENT_REPORT');?>
+																			</a>
+																		</div>
+																	</li>
+
+																<?php }else{ ?>
+																	<li>
+																		<div class="form-group">
+																			<a  class="mini-button-edit" href="<?php echo $this->baseUrl()."/assessment/edit/id/".$row['IsAssesment'];?>">
+																				<i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo $tr->translate('EDIT_STUDENT_ASSESSMENT');?>
+																			</a>
+																		</div>
+																	</li>
+																	<li>
+																		<div class="form-group">
+																			<a  class="small-button-class" href="<?php echo $this->baseUrl()."/extreport/rpt-assessment-list/id/".$row['IsAssesment'];?>">
+																				<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo $tr->translate('STUDENT_ASSESSMENT_REPORT');?>
+																			</a>
+																		</div>
+																	</li>
+																<?php } }else{ ?>
+																	<li>
+																		<div class="form-group">
+																			<a  class="small-button-class" href="<?php  echo $this->baseUrl()."/assessment/add/id/".$row['groupId']."/scoreId/".$row['scoreId'];?>">
+																				<i class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true"></i> <?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?>
+																			</a>
+																		</div>
+																	</li>
+																<?php } ?>
+															</ul>
+														</div>
+														
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
+						
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+			
 				<?php } ?>
 			</div>
 	

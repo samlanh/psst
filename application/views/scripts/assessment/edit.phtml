@@ -1,30 +1,79 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("EDIT_STUDENT_ASSESSMENT");
+	$pageTitle = $tr->translate("ISSUE_STUDENT_ASSESSMENT");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
-	$pageTitle = '<i class="fa fa-edit"></i> '.$pageTitle;
+	$pageTitle = '<i class="glyphicon glyphicon-pencil"></i> '.$pageTitle;
 
-	
 	$current_month = date("m");
 	$msgTitle = "ទិន្នន័យស្ទួន / Duplicated Record";
-	$msgDesc = "ការវាយតម្លៃសម្រាប់ខែនេះបានបញ្ចូលរួចរាល់ហើយ / This students's assessment for this month has been entered !"
+	$msgDesc = "ការវាយតម្លៃសម្រាប់ខែនេះបានបញ្ចូលរួចរាល់ហើយ / This students's assessment for this month has been entered !";
+
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
 ?>
+<style>
+.table-striped tr td{font-size:12px;}
+.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+    padding: 1px 2px;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    line-height: 30px;
+}
+.pointer{cursor: pointer;}
+.noted{
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	word-break: break-all;
+	white-space: pre;
+	font:12px 'Khmer OS Battambang';
+	border: 1px solid #ccc;
+	
+	line-height:15px;
+	font-weight: normal !important;
+	padding:2px;
+	white-space: normal;
+	width:95%;
+	min-height: 50px;border-radius:2px;}
+	.teacherComment{min-height: 50px;}
+table#table tbody tr:hover {
+    border-bottom: solid 2px #b1badf !important;
+    background: #fff;
+	color:#000;
+}
+</style>
 <div class="row"> 
 	<div class="col-md-12 col-sm-12 col-xs-12">
 		<div class="card mb-1 ">
+			<!-- Tab Menu -->
+	    	<div class="card-box">
+	    		 <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+		            <li class="nav-item active">
+		                <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("STUDENT_EVALUATION");?></a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+		                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("STUDENT_SCORE_REPORT");?>
+		                </a>
+		            </li>
+		        </ul>
+		    </div>
+		    <!--/. Tab Menu -->
 			<div class="card-header pb-1"> 
-				<h3 class="card-title mb-2 "><?php echo $this->row['branchName'].' "ថ្នាក់'." ".$this->row['groupCode'].'"'?></h3> 
-				<h3 class="card-title mb-2 "><?php echo $this->row['branchNameEn'].' "Class'." ".$this->row['groupCode'].'"'?></h3> 
-			</div>
-			<div class="card-content collapse show mt-1">
-				<form id='frmAssessment' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-					<script type="dojo/method" event="onSubmit">   
+					<div class="col-md-7 col-sm-7 col-xs-12">
+						<h3 class="card-title mb-2 "><?php echo $this->row['branchNameKh'].'/'.$this->row['branchNameEn'].' "ថ្នាក់ /Grade '." ".$this->row['group_code'].'"';?></h3> 
+					</div>
+					<div class="col-md-5 col-sm-5 col-xs-12">
+					</div>
+				</div>
+				<div class="tab-content vertical">
+					<div class="tab-pane fade in active" id="panel21" role="tabpanel">
+						<div class="card-content collapse show mt-1">
+							<form id='frmAssessment' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+								<script type="dojo/method" event="onSubmit">   
 					if(this.validate()){
 						if(isDuplicate==1){
 							var msgTitle = $( '.msgTitle' ).html();
@@ -42,164 +91,691 @@
 						var msgTitle = "អ្នកពិតជាចង់រក្សាទុកទីន្នន័យនេះឬ ? / Do you want to Save it ?";
 						var msgDesc = "សូមធ្វើការត្រួតពិនិត្យព័ត៌មានមុនពេលរក្សាទុក ! / Please checking information before saving !";
 						comfirmingSubmit('frmAssessment',msgTitle,msgDesc);
-						return false;
+						 return false;
 					}else {
 						return false;
 					}
 					</script>
-					<div class="card-box">
-						<div class="col-md-6 col-sm-6 col-xs-12">
-							<div class="card-blogform">
-								<div class="card-body"> 
-									<div class="row"> 
-										<div class="col-md-12 col-sm-12 col-xs-12"> 
-											<div class="d-flex"> 
-												<div class="settings-main-icon ">
-													<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
-												</div> 
-												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex ">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</p>
-												</div> 
-											</div>
+								<div class="card-box">
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="card-blogform">
+											<div class="card-body"> 
+												<div class="row"> 
+													<div class="col-md-12 col-sm-12 col-xs-12"> 
+														<div class="d-flex"> 
+															<div class="settings-main-icon ">
+																<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+															</div> 
+															<div class="col-md-10 col-sm-10 col-xs-12"> 
+																<p class="tx-20 font-weight-semibold d-flex ">ព័ត៌មានការវាយតម្លៃសិស្ស / Student Assessment Info.</p>
+															</div> 
+														</div>
+														<div class="form-group">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ការវាយតម្លៃសម្រាប់ / Assement For</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<div class="col-md-4 col-sm-4 col-xs-12">
+																	<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" readOnly >
+																		<option value="1" <?php if(1==$this->rowAss['forType']){echo "selected='selected'";}?> >ប្រចាំខែ/Monthly</option>
+																		<option value="2" <?php if(2==$this->rowAss['forType']){echo "selected='selected'";}?> >ប្រចាំឆមាស/Semester</option>
+																	</select>
+																	<input type="hidden" name="branchId" id="branchId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rowAss['branchId']?>" />
+																	<input type="hidden" name="groupId" id="groupId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rowAss['groupId']?>"/>
+																	<input type="hidden" name="degree" id="degree" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rowAss['degreeId']?>"/>
+																	<input type="hidden" name="id" id="id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->rowAss['id']?>"/>
+																	<input type="hidden" name="scoreId" id="scoreId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $this->rowAss['scoreId'];  ?>"/>
+																</div>
+																<div class="col-md-4 col-sm-4 col-xs-12">
+																	<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false" readOnly>								
+																		<option value="1" <?php if(1==$this->rowAss['forSemester']){echo "selected='selected'";}?> >ឆមាសទី១/Semester I</option>
+																		<option value="2" <?php if(2==$this->rowAss['forSemester']){echo "selected='selected'";}?> >ឆមាសទី២/Semester II</option>
+																	</select>
+																</div>
+																<div class="col-md-4 col-sm-4 col-xs-12">
+																	<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false" readOnly>								
+																		<?php if(!empty($this->month)){foreach ($this->month as $month){?>
+																			<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->rowAss['forMonth']){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
+																		<?php }}?>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="control-label col-md-5 col-sm-5 col-xs-12">ថ្ងៃចេញ /Issue Date</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<input dojoType="dijit.form.DateTextBox"  class="fullside" id="issueDate" name="issueDate" value="<?php echo $this->rowAss['issueDate']?>" constraints="{datePattern:'dd/MM/yyyy'}" >
+															</div>
+														</div>
 											 
-											<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ការវាយតម្លៃសម្រាប់ / Assement For</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" readOnly >
-															<option value="1" <?php if(1==$this->row['forType']){echo "selected='selected'";}?> >ប្រចាំខែ/Monthly</option>
-															<option value="2" <?php if(2==$this->row['forType']){echo "selected='selected'";}?> >ប្រចាំឆមាស/Semester</option>
-														</select>
-														<input type="hidden" name="branchId" id="branchId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branchId']?>" />
-														<input type="hidden" name="groupId" id="groupId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['groupId']?>"/>
-														<input type="hidden" name="degree" id="degree" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['degreeId']?>"/>
-														<input type="hidden" name="id" id="id" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
-													</div>
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false" readOnly>								
-															<option value="1" <?php if(1==$this->row['forSemester']){echo "selected='selected'";}?> >ឆមាសទី១/Semester I</option>
-															<option value="2" <?php if(2==$this->row['forSemester']){echo "selected='selected'";}?> >ឆមាសទី២/Semester II</option>
-														</select>
-													</div>
-													<div class="col-md-4 col-sm-4 col-xs-12">
-														<select onchange="duplicationRecord();" dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false" readOnly>								
-															<?php if(!empty($this->month)){foreach ($this->month as $month){?>
-																<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->row['forMonth']){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
-															<?php }}?>
-														</select>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12">ថ្ងៃចេញ /Issue Date</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input dojoType="dijit.form.DateTextBox"  class="fullside" id="issueDate" name="issueDate" value="<?php echo $this->row['issueDate']?>" constraints="{datePattern:'dd/MM/yyyy'}" >
-												</div>
-											</div>
+														<div class="form-group">
+															<label class="control-label col-md-5 col-sm-5 col-xs-12">ថ្ងៃប្រគល់ត្រឡប់ /Return Date</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<input dojoType="dijit.form.DateTextBox"  class="fullside" id="returnDate" name="returnDate" value="<?php echo $this->rowAss['returnDate']?>" constraints="{datePattern:'dd/MM/yyyy'}" >
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">តម្រៀបសិស្ស/Sort Student Lists</label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<select id="sortStundent" name="sortStundent" class="fullside" onchange="filterStudent()"  dojoType="dijit.form.FilteringSelect" >
+																	<option value="0">ទូរទៅ / Default </option>
+																	<option value="1">លេខសម្គាល់សិស្ស/Student ID (ASC)</option>
+																	<option value="2">ឈ្មោះសិស្សខ្មែរ/Name In Khmer (ASC)</option>
+																	<option value="3"> ឈ្មោះសិស្សអង់គ្លេស / Name In English (ASC)</option>
+																</select>
+															</div>
+														</div>
+														<div class="form-group">
+															<label class="control-label bold col-md-5 col-sm-5 col-xs-12">សម្គាល់ / Remark</label><div class="col-md-7 col-sm-7 col-xs-12">
+																<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->rowAss['note']?>" type="text" style=" height: 120px !important;"  >
+															</div>
+														</div>
 											 
-											<div class="form-group">
-												<label class="control-label col-md-5 col-sm-5 col-xs-12">ថ្ងៃប្រគល់ត្រឡប់ /Return Date</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<input dojoType="dijit.form.DateTextBox"  class="fullside" id="returnDate" name="returnDate" value="<?php echo $this->row['returnDate']?>" constraints="{datePattern:'dd/MM/yyyy'}" >
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">តម្រៀបសិស្ស/Sort Student Lists</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<select id="sortStundent" name="sortStundent" class="fullside" onchange="filterStudent()"  dojoType="dijit.form.FilteringSelect" >
-														<option value="0">ទូរទៅ / Default </option>
-														<option value="1">លេខសម្គាល់សិស្ស/Student ID (ASC)</option>
-														<option value="2">ឈ្មោះសិស្សខ្មែរ/Name In Khmer (ASC)</option>
-														<option value="3"> ឈ្មោះសិស្សអង់គ្លេស / Name In English (ASC)</option>
-													</select>
-												</div>
+														<div class="form-group">
+															<label class="control-label custom-switch float-end "> 
+																<a href="javascript:void(0);" class="switchButton status">ស្ថានការណ៍/Status</a> 
+																<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($this->rowAss['status'])){ echo "checked";} ?> > 
+																<span class="custom-switch-indicator custom-radius switch-status"></span> 
+															</label>
+														</div>
+													 </div>
+												 </div>
 											 </div>
-											 <div class="form-group">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12">សម្គាល់ / Remark</label><div class="col-md-7 col-sm-7 col-xs-12">
-													<input class="fullside" placeholder="<?php echo $tr->translate("NOTE");?>" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->row['note']?>" type="text" style=" height: 120px !important;"  >
-												</div>
-											 </div>
-											 
-											<div class="form-group">
-													<label class="control-label custom-switch float-end "> 
-														<a href="javascript:void(0);" class="switchButton status">ស្ថានការណ៍/Status</a> 
-														<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($this->row['status'])){ echo "checked";} ?> > 
-														<span class="custom-switch-indicator custom-radius switch-status"></span> 
-													</label>
-												</div>
-								
 										 </div>
-									 </div>
-								 </div>
-							 </div>
-							
-								
-								  
-						  </div>
-						  <div class="col-md-6 col-sm-6 col-xs-12">
-								<div id="duplicateMessage" class="hidden alert round alert-secondary alert-icon-left alert-dismissible mb-3 " role="alert">
-									<span class="alert-icon">
-										<i class="glyphicon glyphicon-time text-dark"></i>
-									</span>
-									<h4 class="msgTitle"><?php echo $msgTitle;?></h4>
-									<small class="msgDesc">
-										<?php echo $msgDesc;?>
-									</small>
-								</div>
-								 <div class="card-info bg-gradient-directional-notice">
-									<div class="card-content">
-										<div class="card-body">
-											<div class="media d-flex">
-												<div class="media-body text-dark text-left align-self-bottom ">
-													<span class="d-block mb-1 font-medium-1"></span>
-													<ul class="optListRow">
-														<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានថ្នាក់សិក្សា/Class Student Info.</h4></li>
-														<li class="opt-items two-column"><span class="lbl-tt">ឆ្នាំសិក្សា/Academic Year</span>:<span class="text-value"><?php echo $this->row['academicYear']?></span></li>
-														<li class="opt-items two-column"><span class="lbl-tt">កម្រិត/Degree</span>: 		<span class="text-value"><?php echo $this->row['degreeTitle']?></span></li>
-														<li class="opt-items two-column"><span class="lbl-tt">បន្ទប់/Room</span>: 			<span class="text-value"><?php echo $this->row['roomName']?></span></li>
-														<li class="opt-items two-column"><span class="lbl-tt">ថ្នាក់/Grade</span>: 			<span class="text-value"><?php echo $this->row['gradeTitle']?></span></li>
-														
-													</ul>
-												</div>
-												<div class="align-self-top">
-												<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>
+									  </div>
+									  <div class="col-md-6 col-sm-6 col-xs-12">
+											<div id="duplicateMessage" class="hidden alert round alert-secondary alert-icon-left alert-dismissible mb-3 " role="alert">
+												<span class="alert-icon">
+													<i class="glyphicon glyphicon-time text-dark"></i>
+												</span>
+												<h4 class="msgTitle"><?php echo $msgTitle;?></h4>
+												<small class="msgDesc">
+													<?php echo $msgDesc;?>
+												</small>
+											</div>
+											<div class="card-info bg-gradient-directional-notice">
+												<div class="card-content">
+													<div class="card-body">
+														<div class="media d-flex">
+															<div class="media-body text-dark text-left align-self-bottom ">
+																<span class="d-block mb-1 font-medium-1"></span>
+																<ul class="optListRow">
+																	<li class="opt-items titleEx"><h4 class="text-dark mb-10">ព័ត៌មានថ្នាក់សិក្សា/Class Student Info.</h4></li>
+																	<li class="opt-items two-column"><span class="lbl-tt">ឆ្នាំសិក្សា/Academic Year</span>: <span class="text-value"><?php echo $this->row['academic']?></span></li>
+																	<li class="opt-items two-column"><span class="lbl-tt">កម្រិត/Degree</span>: 			<span class="text-value"><?php echo $this->row['degree']?></span></li>
+																	<li class="opt-items two-column"><span class="lbl-tt">បន្ទប់/Room</span>: 				<span class="text-value"><?php echo $this->row['room_name']?></span></li>
+																	<li class="opt-items two-column"><span class="lbl-tt">ថ្នាក់/Grade</span>: 				<span class="text-value"><?php echo $this->row['grade']?></span></li>
+																	
+																</ul>
+															</div>
+															<div class="align-self-top">
+															<i class="fa fa-info-circle icon-opacity2 text-dark font-large-4 float-end"></i>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
+											<div id="assessmentInfo">
+											</div>
+									  </div>
+								 </div>
+								 <div class="card-box">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div id="studentList">
+										</div>
+										<input type="hidden" name="identity" id="identity"  value="" >
+										<input type="hidden" name="identityComment" id="identityComment"  value="" >
+										
+										<div class="form-group">
+											<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
+											</table>
 										</div>
 									</div>
-								</div>
-											
-								<div id="assessmentInfo">
-								</div>
+							   </div>
+							   <div class="clearfix"></div>
+								 <div class="card-box mt-20">
+									<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+										<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" label="រក្សាទុក/Save" dojoType="dijit.form.Button" />
+									</div>
+								 </div>
+							</form>
+						</div>
+				</div>
+				<div class="tab-pane fade in " id="panel22" role="tabpanel">
+					<div id="divPrint">
+						<?php 
+						$db = new Allreport_Model_DbTable_DbRptStudentScore();
+						$dbgb = new Application_Model_DbTable_DbGlobal();
+						$link = "/allreport/score/rpt-monthlytranscript";
+						$month = array(
+								"01" => "មករា",
+								"02" => "កុម្ភៈ",
+								"03" => "មីនា",
+								"04" => "មេសា",
+								"05" => "ឧសភា",
+								"06" => "មិថុនា",
+								"07" => "កក្កដា",
+								"08" => "សីហា",
+								"09" => "កញ្ញា",
+								"10" => "តុលា",
+								"11" => "វិច្ឆិកា",
+								"12" => "ធ្នូ"
+						);
+						$monthKH = array(
+								"1" => "មករា",
+								"2" => "កុម្ភៈ",
+								"3" => "មីនា",
+								"4" => "មេសា",
+								"5" => "ឧសភា",
+								"6" => "មិថុនា",
+								"7" => "កក្កដា",
+								"8" => "សីហា",
+								"9" => "កញ្ញា",
+								"10" => "តុលា",
+								"11" => "វិច្ឆិកា",
+								"12" => "ធ្នូ"
+						);
+						$monthENG = array(
+								"1" => "January", "2" => "February", "3" => "March", "4" => "April", "5" => "May", "6" => "June", "7" => "July", "8" => "August", "9" => "September", "10" => "October", "11" => "November", "12" => "December"
+						);
+						$template = SCORE_RESULT_TEMPLATE;
+						$branchInfo = $this->branchInfo;
+						$session_lang = new Zend_Session_Namespace('lang');
+						$lang_id = $session_lang->lang_id;
+						?>
+							<style type="text/css">
+								table tr td,
+								table tr td span {
+									color: #4839bd;
+								}
+				
+								.style {
+									line-height: 20px;
+									font-size: 13px;
+									color: #4839bd;
+									font-family: 'Times New Roman', 'Khmer OS Battambang';
+								}
+				
+								table .header {
+									page-break-inside: auto;
+									font-family: Arial, 'Khmer OS Battambang';
+								}
+				
+								.header tr {
+									page-break-inside: avoid;
+									page-break-after: auto
+								}
+				
+								#header {
+									display: table-header-group;
+									page-break-inside: avoid;
+									page-break-after: auto;
+								}
+				
+								tr.cheader td {
+									white-space: nowrap;
+									color: #002c7b;
+									font-size: 12px;
+									font-family: 'Times New Roman', 'Khmer OS Muol Light';
+									padding: 5px 1px;
+									text-align: center;
+								}
+				
+								tr.cheader td span.khmerLabel,
+								tr.cheader td span.englishLabel {
+									color: inherit;
+									line-height: 16px;
+									padding: 0;
+									margin: 0;
+								}
+				
+								.hover:hover {
+									background: #ccc;
+								}
+				
+								.red {
+									color: #ff1a02;
+								}
+				
+								.border-right-none {
+									border-right: #fff solid 1px;
+								}
+				
+								.border-bottom-none {
+									border-bottom: #fff solid 1px;
+								}
+				
+								table.content-data tr.style-rowdata {
+									font-size: 13px;
+									height: 20px;
+								}
+				
+								span.khmerName,
+								span.englishName {
+									line-height: 23px;
+									margin: 0;
+									padding: 0;
+									white-space: nowrap;
+									padding: 0 3px;
+								}
+				
+								tr.style span.khmerName {
+									font-size: 13px;
+								}
+				
+								tr.style span.englishName {
+									font-size: 13px;
+								}
+				
+								span.valueAmount {
+									font-weight: 600;
+									color: #002c7b;
+								}
+				
+								ul.scoreTitle {
+									padding: 0;
+									margin: 0;
+									list-style: none;
+									font-size: 13px;
+				
+								}
+				
+								ul.scoreTitle li {
+									line-height: 20px;
+									color: #002c7b;
+									list-style-type: none !important;
+									list-type: none !important;
+								}
+								.hidden{visibility: hidden; display: none;}
+				
+								@media print {
+									@page {
+										page: A4;
+										size: portrait;
+										margin: 0.8cm 0.8cm 0.2cm 0.8cm;
+									}
+								}
+				
+								.principalStamp {
+									position:relative;
+									width: 300px;
+				   					height: 140px;
+									margin:0 auto;
+									margin-top:-20px;
+								}
+								.principalStamp .stamp {
+									width:140px;
+									height:140px;
+									position:absolute;
+									transform: translate(-81%);
+									left:50%;
+								}
+								.principalStamp .signature {
+									left: 40px;
+									bottom: 32px;
+									height: 100px;
+									width:200px;
+									position: absolute;
+								}
+								.principalStamp .principalName{
+									left: 65px;
+								    top: 113px;
+								    height: 100px;
+								    width: 200px;
+								    position: absolute;
+								}
+								.seenApproved{
+									position: relative;
+								}
+								.seenApproved .interimPrincipal{
+									position: absolute;
+									left: 50%;
+								    top: 20px;
+								    transform: translate(-50%);
+								    z-index: 1;
+								}
 								
-							 
-								 
-						  </div>
-					 </div>
-					 <div class="card-box">
-						<div class="col-md-12 col-sm-12 col-xs-12">
-							<div id="studentList">
-							</div>
-							<input type="hidden" name="identity" id="identity"  value="" >
-							<div class="form-group">
-								
-								<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
+							.administrator {
+									position:relative;
+									width: 300px;
+				   					height: 140px;
+									margin:0 auto;
+								}
+								.administrator .administratorstamp {
+									width:130px;
+									height:130px;
+									position:absolute;
+									transform: translate(-50%);
+									left:50%;
+								}
+								.administrator .administratorsignature {
+									left: 40px;
+									bottom: 32px;
+									height: 100px;
+									width:200px;
+									position: absolute;
+								}
+								.administrator .administratorName {
+									left: 65px;
+								    top: 80px;
+								    height: 100px;
+								    width: 200px;
+								    position: absolute;
+								}
+								label.LabelTeacher {
+									line-height: 25px;
+									font-weight: initial;
+									font-family: 'Times New Roman','Khmer OS Battambang';
+								}
+							</style>
+							<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+								<tr style="border-bottom: 1px solid #000;">
+									<td colspan="3" align="center">
+										<?php echo $this->headerScore; ?>
+										<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+									</td>
+								</tr>
+								<?php
+								$old_groupid = 0;
+								$i = 0;
+								$count_fail = 0;
+								$count = 0;
+								$old_avg = 0;
+								$old_totalscore = 0;
+								$old_rank = 0;
+								$duplicate = 0;
+								$count_pass = 0;
+								$default_col = 0;
+								$m = 0;
+								$f = 0;
+								$pass_female = 0;
+								$fail_female = 0;
+				
+								if (!empty($this->studentScoreResult)) {
+									foreach ($this->studentScoreResult as $key => $rs) {
+										if ($rs['sex'] == 1) {
+											$sex = $tr->translate("MALE_SHORT");
+											$m = $m + 1;
+										} else {
+											$sex = $tr->translate("FEMALE_SHORT");
+											$f = $f + 1;
+										}
+										$subj = $db->getSubjectScoreGroup($rs['group_id'], null, $rs['exam_type']);
+								?>
+										<?php if ($old_groupid != $rs['group_id']) { ?>
+											<?php
+											$i = 0;
+											$count_fail = 0;
+											$count = count($subj);
+											if ($rs['exam_type'] == 1) {
+												$monthChar = empty($monthKH[$rs['for_month_id']]) ? "" : $monthKH[$rs['for_month_id']];
+												$titleKh = 'លទ្ធផលសិក្សាប្រចាំខែ '.(!empty($rs['title_score'])?$rs['title_score']:$monthChar);
+												$monthCharEn = empty($monthENG[$rs['for_month_id']]) ? "" : $monthENG[$rs['for_month_id']];
+												$titleENG = (!empty($rs['title_score_en'])?$rs['title_score_en']:$monthCharEn).' RESULT ';
+											} else {
+												$arrRomanNum = array(1 => "I", 2 => "II");
+												$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
+												$titleKh = 'លទ្ធផលសិក្សាប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
+												$titleENG = "SEMESTER " . $romanNumber . " RESULT";
+											}
+											$title=	$titleKh.' ថ្នាក់ទី​'.$rs['group_code'];
+											$this->headTitle($title);
+											echo $this->headTitle();
+											?>
+											<tr>
+												<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+													<ul class="scoreTitle">
+														<li style="font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+															<?php echo $titleKh; ?>
+														</li>
+														<li style="font-size:13px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+															<?php echo $titleENG; ?>
+														</li>
+														<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+															ថ្នាក់ទី / GRADE : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+														</li>
+														<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+															ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
+														</li>
+													</ul>
+												</td>
+												<td align="center" valign="top"></td>
+											</tr>
+											<tr>
+												<?php
+												$colspan = 1;
+												if ($this->data['scoreresulttye'] == 1) {
+													$colspan = 2;
+												} ?>
+												<td colspan="3" id="exportExcel" valign="top">
+													<table class="header" cellpadding="2" ​ style="margin:0 auto;width:100%;border-collapse:collapse;border:4px double #5a71b5;" border="1">
+														<tr class="cheader" align="center">
+															<td  class="hidden"><input type="checkBox" onclick="checkAllStudent('<?php echo count($this->studentScoreResult);?>');" name="checkall" id="checkall" /></th>
+															<td>
+																<span class="khmerLabel"><?php echo $tr->translate("NUM"); ?></span>
+																<br />
+																<span class="englishLabel">No</span>
+															</td>
+															<td>
+																<span class="khmerLabel"><?php echo $tr->translate("ID_NUMBER"); ?></span>
+																<br />
+																<span class="englishLabel">ID</span>
+															</td>
+															<td colspan="2">
+																<span class="khmerLabel"><?php echo $tr->translate("STUDENT_NAMEKHMERWORD"); ?>
+																	<br />
+																	<span class="englishLabel">Family and Given Name</span>
+															</td>
+															<td>
+																<span class="khmerLabel"><?php echo $tr->translate("SEX"); ?>
+																	<br />
+																	<span class="englishLabel">Gender</span>
+															</td>
+															<td>
+																<span class="khmerLabel"><?php echo $tr->translate("TOTAL_SCORE"); ?>
+																	<br />
+																	<span class="englishLabel">Total Score</span>
+															</td>
+															<td>
+																<span class="khmerLabel"><?php echo $tr->translate("AVERAGE"); ?>
+																	<br />
+																	<span class="englishLabel">Average</span>
+															</td>
+															<td>
+																<span class="khmerLabel"><?php echo $tr->translate("RANK"); ?>
+																	<br />
+																	<span class="englishLabel">Rank</span>
+															</td>
+															<td colspan="3">
+																<span class="khmerLabel">និទ្ទេស និង​មូលវិចារ</span>
+																<br />
+																<span class="englishLabel">Letter Grade & Comment</span>
+															</td>
+														</tr>
+													<?php }
+												$i++; ?>
+													<tr class="style style-rowdata hover context-menu-one" style="line-height: 20px;">
+														<td class="hidden" align="center">
+															<input style="height: 15px;margin-top: 5px;" type="checkBox" onClick="checked_id(<?php echo $i?>)" name="check_box<?php echo $i?>" id="check_box<?php echo $i?>" />
+															<input type="hidden" name="stu_id<?php echo $i;?>" id="stu_id<?php echo $i;?>" value="<?php echo $rs['stu_id'];?>" dojoType="dijit.form.TextBox" />
+														</td>
+														<td align="center"><?php echo $i; ?></td>
+														<td align="center" style="white-space:nowrap;">
+															<?php echo $rs['stu_code']; ?>
+														</td>
+														<td style="min-width:100px;">
+															<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span>
+														</td>
+														<td style="min-width:100px;">
+															<span class="englishName"><?php echo empty(trim($rs['stu_enname'])) ? "" : trim($rs['stu_enname']); ?></span>
+														</td>
+														<td align="center" class="bg_<?php echo $rs['sex']; ?>">&nbsp;<?php echo $sex; ?>&nbsp;</td>
+														<?php
+														$total_score = $rs['total_score'];
+				
+														if ($total_score == $old_totalscore) {
+															$duplicate = $duplicate + 1;
+														} else {
+															$old_rank = $old_rank + 1 + $duplicate;
+															$duplicate = 0;
+														}
+				
+														$stringBgResult = ' ';
+														if ($total_score >= $rs['passScore']) {
+															$count_pass++;
+															if ($rs['sex'] == 2) {
+																$pass_female = $pass_female + 1;
+															} //femail
+														} else {
+															$stringBgResult = ' background: #fdbdbd; border-bottom: #fdbdbd solid 1px;border-right: #fdbdbd solid 1px;';
+															$count_fail++;
+															if ($rs['sex'] == 2) {
+																$fail_female = $fail_female + 1;
+															}
+														}
+				
+														?>
+														<td align="center">
+															<?php
+															echo $total_score;
+															?>
+														</td>
+														<td align="center"><?php echo number_format($rs['total_avg'], 2); ?></td>
+														<td class="red bold" align="center"><label id="record<?php echo $i; ?>"></label><?php echo $old_rank; ?></td>
+														<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i; ?>" id="rank<?php echo $i; ?>" value="<?php echo $old_rank; ?>" />
+														<td class="red border-right-none" align="center" style=" <?php echo $stringBgResult; ?>">
+															<?php echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['totalMaxScore']); ?>
+														</td>
+														<td class="border-right-none" align="center" style="white-space:nowrap; style=" <?php echo $stringBgResult; ?>">
+															<?php echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['totalMaxScore']); ?>
+														</td>
+														<td class="border-right-none" align="center" style="white-space:nowrap; <?php echo $stringBgResult; ?>">
+															<?php echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['totalMaxScore']); ?>
+														</td>
+													</tr>
+													<?php
+													$old_totalscore = $total_score;
+													$old_groupid = $rs['group_id']; ?>
+											<?php }
+									} ?>
+													</table>
+												</td>
+											</tr>
+							</table>
+							<?php if (!empty($this->studentScoreResult)) { ?>
+								<table cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px;font-family:'Khmer OS Fasthand';font-size: 12px;color:#4839bd;">
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT"); ?> : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+											<?php if ($i > 0) {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $i));
+												} else {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $i));
+												}
+												echo " " . $tr->translate("STUDENT_UNIT"); ?></span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+											<?php if ($i - $f > 0) {
+												echo $dbgb->getNumberInkhmer(sprintf("%02d", $i - $f));
+											} else {
+												echo $dbgb->getNumberInkhmer(sprintf("%02d", $i - $f));
+											}
+											echo " " . $tr->translate("STUDENT_UNIT"); ?></span>
+											<span style="display: inline-block; width: 15%;"></span>
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+											<?php if ($f > 0) {
+												echo $dbgb->getNumberInkhmer(sprintf("%02d", $f));
+											} else {
+												echo $dbgb->getNumberInkhmer(sprintf("%02d", $f));
+											}
+											echo " " . $tr->translate("STUDENT_UNIT"); ?></span> &nbsp;
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;">សិស្សជាប់មធ្យមភាគ : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+											<?php if ($count_pass > 0) {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass));
+												} else {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass));
+												}
+												echo " " . $tr->translate("STUDENT_UNIT"); ?></span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+											<?php if ($count_pass - $pass_female > 0) {
+												echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass - $pass_female));
+											} else {
+												echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass - $pass_female));
+											}
+											echo " " . $tr->translate("STUDENT_UNIT"); ?></span>
+											<span style="display: inline-block; width: 15%;"></span>
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+											<?php if ($pass_female > 0) {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female));
+												} else {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female));
+												}
+												echo " " . $tr->translate("STUDENT_UNIT"); ?></span>&nbsp;
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;">សិស្សក្រោមមធ្យមភាគ : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+											<?php if ($count_fail > 0) {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail));
+												} else {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail));
+												}
+												echo " " . $tr->translate("STUDENT_UNIT"); ?></span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap;" valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;"> 
+											<?php if ($count_fail - $fail_female > 0) {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail - $fail_female));
+												} else {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail - $fail_female));
+												}
+												echo " " . $tr->translate("STUDENT_UNIT"); ?></span>&nbsp;
+											<span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style="display: inline-block; width: 10%; text-align: right;">
+											<?php if ($fail_female > 0) {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female));
+												} else {
+													echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female));
+												}
+												echo " " . $tr->translate("STUDENT_UNIT"); ?></span>&nbsp;
+										</td>
+									</tr>
 								</table>
-							</div>
-						</div>
-				   </div>
-				   <div class="clearfix"></div>
-					 <div class="card-box mt-20">
-						<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-							<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" label="រក្សាទុក/Save" dojoType="dijit.form.Button" />
-						</div>
-					 </div>
-				</form>
+							<?php } ?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <style>
+body.externalTemplate tr.odd{
+	background: #b9bbdd7a;
+}
+body.externalTemplate tr.regurlar{
+	background: #337ab74d;
+}
+
+.commentType{
+	background:#b9bbdd !important;
+}
 ul.optListRow.gradingInfo li {
     font-size: 11px;
     padding: 0;
@@ -240,8 +816,7 @@ dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.ready(function(){
 	duplicationRecord();
-	
-filterStudent();
+	filterStudent();
 });
 
 
@@ -253,7 +828,7 @@ function filterStudent(){
 	$('#identity').val('');
 	dojo.query("#table_row").append("");
 	loadingBlock();
-	
+
 	currentID = dijit.byId('id').get('value');
 	groupId = dijit.byId('groupId').get('value');
 	sortStundent = dijit.byId('sortStundent').get('value');
@@ -279,6 +854,8 @@ function filterStudent(){
 				
 				inx=data.keyIndex;
 				$("#identity").val(data.identity);
+				$("#identityComment").val(data.identityComment);
+				
 				
 				dojo.html.set(dojo.byId("studentList"),data.contentHtml , {
 					parseContent: true,
@@ -296,6 +873,7 @@ function filterStudent(){
 		   HideloadingBlock();	
 	   },		
 	    error: function(err) {
+			alert(err);
 			HideloadingBlock();
 	    }
 	});
@@ -310,15 +888,19 @@ function checkExamType(){
 		dijit.byId('forMonth').set("readOnly",true);
 	}
 }
+function copyPreviousData(row,column,ratingId){
+	dijit.byId("rating_id_"+row+'_'+column).attr("value",ratingId);
+}
 
 var urlDuplicationRecord= '<?php echo $this->url(array('module'=>'default','controller'=>'assessment','action'=>'checking-duplicate')); ?>';
 function duplicationRecord(){
-	
+
 	currentId = dijit.byId('id').get('value');
 	groupId = dijit.byId('groupId').get('value');
 	examType = dijit.byId('examType').get('value');
 	forSemester = dijit.byId('forSemester').get('value');
 	forMonth = dijit.byId('forMonth').get('value');
+	scoreId = dijit.byId('scoreId').get('value');
 	
 	if(groupId==''){
 		return false;
@@ -331,11 +913,11 @@ function duplicationRecord(){
 			,'examType':examType
 			,'forSemester':forSemester
 			,'forMonth':forMonth
+			,'scoreId':scoreId
 			
 		},				    
 	   handleAs:"json", 
 	   load: function(data) {
-		 
 	       if(data==1){
 				isDuplicate=1;
 				var msgTitle = $( '.msgTitle' ).html();
@@ -357,8 +939,8 @@ function duplicationRecord(){
 	
 }
 
-
 </script>
+
 <?php 
 	echo $this->render('externalFoot.phtml');
 ?>

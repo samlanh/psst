@@ -147,7 +147,7 @@ $frm =  $this->form_search;
 																<?php }else{ ?>
 																	<li>
 																		<div class="form-group">
-																			<a  class="mini-button-edit" href="<?php echo $this->baseUrl()."/assessment/edit/id/".$row['IsAssesment'];?>">
+																			<a  class="mini-button-edit" href="<?php echo $this->baseUrl()."/assessment/edit/id/".$row['IsAssesment']."/groupId/".$row['groupId']."/scoreId/".$row['scoreId'];?>">
 																				<i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo $tr->translate('EDIT_STUDENT_ASSESSMENT');?>
 																			</a>
 																		</div>

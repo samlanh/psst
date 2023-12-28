@@ -1294,6 +1294,19 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$sql.=" WHERE 1 ";
 		$sql.=$sqlWhereC;
 		$sql.="
+				AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = sttD.criteriaId LIMIT 1) 
+					>= CASE 
+						WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = g.`gradingId` AND sttDi.subjectId =  ".$subjectId."  ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+						ELSE '0'
+					END 
+				AND sttD.isNotEnteryCri = CASE 
+					WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = g.`gradingId` AND sttDi.subjectId =  ".$subjectId."  ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+					ELSE '0'
+					END 
+			";
+		$sql.="
 				
 				AND g.is_use=1 
 				AND g.id = ".$groupId." 
@@ -1664,6 +1677,22 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
+	function getGradingScoreInfomation($_data){
+		$db = $this->getAdapter();
+		$gradingScoreId = empty($_data['gradingId'])?0:$_data['gradingId'];
+		$sql="
+			SELECT 
+				grS.* 
+				,g.`gradingId` AS gradingSettingId
+
+			FROM 
+				`rms_grading` AS grS
+				LEFT JOIN  `rms_group` AS g ON g.id = grS.`groupId`
+			WHERE grs.id =$gradingScoreId
+		";
+		$sql.=" LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	function getGroupMonthlyScoreDetail($_data){
 		$_db = $this->getAdapter();
 		try{
@@ -1744,6 +1773,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$order_by = " ORDER BY grdT.`totalAverage` DESC,s.`stu_code` ASC ";
 			$row =  $_db->fetchAll($sql.$where.$order_by);
+			
+			$scoreGrading = $this->getGradingScoreInfomation($_data);
+			$_data['subjectId'] = empty($scoreGrading["subjectId"]) ? 0 : $scoreGrading["subjectId"];
+			$_data['gradingSettingId'] = empty($scoreGrading["gradingSettingId"]) ? 0 : $scoreGrading["gradingSettingId"];
 			
 			$gradingSystem = $this->getGradingSystemInfo($_data);
 			$criteriaInfoList = $this->groupGradingDetail($_data);
@@ -1835,7 +1868,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	
 	function getGradingSystemInfo($_data){
 		$db = $this->getAdapter();
-		$gradingId = empty($_data['gradingId'])?0:$_data['gradingId'];
+		$gradingSettingId = empty($_data['gradingSettingId'])?0:$_data['gradingSettingId'];
+		$subjectId = empty($_data['subjectId'])?0:$_data['subjectId'];
 		$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 		$colunmName='title_en';
 		if ($currentLang==1){
@@ -1857,12 +1891,29 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			";
 		$sql.="
 			WHERE gSet.`id` = gSetD.`score_setting_id`
-				AND gSet.id = 3
-				ORDER BY 
+				AND gSet.id = $gradingSettingId
+				
+			";
+			
+		$sql.="
+				AND cri.`criteriaType`
+					>= CASE 
+						WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = gSet.id AND sttDi.subjectId =  ".$subjectId."  ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+						ELSE '0'
+					END 
+				AND gSetD.isNotEnteryCri = CASE 
+					WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = gSet.id AND sttDi.subjectId =  ".$subjectId."  ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+					ELSE '0'
+					END 
+			";
+		$sql.="
+			GROUP BY gSetD.`criteriaId` 
+			ORDER BY 
 				cri.`criteriaType` ASC
 				,cri.id ASC
-			";
-		
+		";
 		return $db->fetchAll($sql);
 	}
 	

@@ -250,6 +250,23 @@ function getSubjectOpt(){
 	});
 }
 
+
+	function isNotEnteryCriFunction(rowIndex){
+		if($("#isNotEnteryCri"+rowIndex).is(':checked')){
+			dijit.byId('percentage'+rowIndex).set('value',100);
+			dijit.byId('percentage'+rowIndex).set('readOnly',true);
+			dijit.byId('timeInput'+rowIndex).set('value',1);
+			dijit.byId('timeInput'+rowIndex).set('readOnly',true);
+			dijit.byId('subjectId'+rowIndex).set('required',true);
+		}else{
+			dijit.byId('subjectId'+rowIndex).reset();
+			dijit.byId('percentage'+rowIndex).set('value',0);
+			dijit.byId('percentage'+rowIndex).set('readOnly',false);
+			dijit.byId('timeInput'+rowIndex).set('value',1);
+			dijit.byId('timeInput'+rowIndex).set('readOnly',false);
+			dijit.byId('subjectId'+rowIndex).set('required',false);
+		}
+	}
 	var template = '';
 	var branch_name = '<?php echo $this->branch_name; ?>';
 	var col = 0;
@@ -278,6 +295,14 @@ function getSubjectOpt(){
 				template+='<td data-label="<?php echo $tr->translate("CRITERIAL_NAME");?>" >';	
 						
 				template+=examtype_label+'<input class="fullside" type="hidden" value="'+examtype_items+'" required="true" name="examtype_name_'+col+'" id="examtype_name_'+col+'" dojoType="dijit.form.TextBox" />';			
+				
+				template+='<div class="form-group"><div class="col-md-6 col-sm-6 col-xs-12">';
+					template+='<div class="custom-control custom-checkbox "><input onClick="isNotEnteryCriFunction('+col+');" type="checkbox" class="custom-control-input" name="isNotEnteryCri'+col+'" id="isNotEnteryCri'+col+'"  >';
+					template+='<label class="custom-control-label" for="isNotEnteryCri'+col+'" >';
+					template+='<?php echo $tr->translate('NOT_ENTER_CRITERIA');?>';
+					template+='</label>';
+				template+='</div></div></div>';	
+				
 				template+='</td>';			
 				template+='<td data-label="<?php echo $tr->translate("PERCENTAGE");?>" > <input class="fullside" type="text" onKeyup="totalPercent()" required="true" name="percentage'+col+'" id="percentage'+col+'" dojoType="dijit.form.NumberTextBox" /></td>';
 				template+='<td data-label="<?php echo $tr->translate("TIME_INPUT");?>" >';
@@ -342,17 +367,29 @@ function getSubjectOpt(){
 	 }
 	 
 	 function forSubject(rowIndex){
-		 	subjectId = dijit.byId('subjectId'+rowIndex).get('value');
+		subjectId = dijit.byId('subjectId'+rowIndex).get('value');
+		if(subjectId>0){
+			dijit.byId('timeInput'+rowIndex).set('value',1);
+			dijit.byId('timeInput'+rowIndex).set('readOnly',true);
+		  }else{
+			dijit.byId('timeInput'+rowIndex).set('value',1);
+			dijit.byId('timeInput'+rowIndex).set('readOnly',false); 
+		}
 		
-			  if(subjectId>0){
-				dijit.byId('timeInput'+rowIndex).set('value',1);
-				dijit.byId('timeInput'+rowIndex).set('readOnly',true);
-			  }else{
-				dijit.byId('timeInput'+rowIndex).set('value',1);
-				dijit.byId('timeInput'+rowIndex).set('readOnly',false); 
-			} 
-				
-			 if($("#forExamType"+rowIndex).is(':checked') && subjectId>0){
+		if($("#isNotEnteryCri"+rowIndex).is(':checked')){
+			
+			if($("#forExamType"+rowIndex).is(':checked') && subjectId>0){
+				dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',false); 
+				dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',false);
+			}
+			
+			if($("#forMonth"+rowIndex).is(':checked') && subjectId>0){
+				dijit.byId('subCriterialTitleKhMonth'+rowIndex).set('readOnly',false); 
+				dijit.byId('subCriterialTitleEngMonth'+rowIndex).set('readOnly',false);
+			}
+			
+		}else{
+			if($("#forExamType"+rowIndex).is(':checked') && subjectId>0){
 				
 				dijit.byId('subCriterialTitleKh'+rowIndex).set('readOnly',false); 
 				dijit.byId('subCriterialTitleEng'+rowIndex).set('readOnly',false); 
@@ -379,6 +416,10 @@ function getSubjectOpt(){
 				 dijit.byId('subCriterialTitleKhMonth'+rowIndex).set('required',false);
 				 dijit.byId('subCriterialTitleEngMonth'+rowIndex).set('required',false);
 			}
+		}
+
+			
+			 
 	 }
 				
 	 function totalPercent(){

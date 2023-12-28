@@ -119,7 +119,7 @@ class Issuesetting_GradingsystemController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::Sucessfull("NO_RECORD", self::REDIRECT_URL."/index");
     		exit();
     	}
-    	
+    	$this->view->row = $row;
     	$this->view->detail = $db->getGradingDetail($id);
     	$frm = new Issuesetting_Form_FrmScoreSetting();
     	$frm->FrmAddScoreSetting($row);

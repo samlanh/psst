@@ -154,7 +154,7 @@ class GradingController extends Zend_Controller_Action
 				$dbexnternal->reloadPageTecherExpireSession();
 				exit();
 			}
-			
+
 			try{
 				$rs = $db->UpdateScoreGradingByClass($_data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");				
@@ -172,15 +172,15 @@ class GradingController extends Zend_Controller_Action
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/grading/index");
 		}
 	
-		// $rscoreType = $dbg->checkScoreType($resultRecord);
-		// if(!empty($rscoreType)){
-		// 	if($rscoreType['isLock']==1){
-		// 		Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
-		// 	}elseif($resultRecord['criteriaType'] != 2 ){
-		// 		Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
-		// 	}
+		$rscoreType = $dbg->checkScoreType($resultRecord);
+		if(!empty($rscoreType)){
+			if($rscoreType['isLock']==1){
+				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+			}elseif($resultRecord['criteriaType'] != 2 ){
+				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+			}
 			
-		// }
+		}
 
 		$this->view->resultRecord = $resultRecord;
 		$this->view->gradingRowId = $gradingRowId;

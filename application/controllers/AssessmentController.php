@@ -39,7 +39,7 @@ class AssessmentController extends Zend_Controller_Action
 		$this->view->search = $search;
 		
 		$db = new Application_Model_DbTable_DbAssessment();
-		$row = $db->getAllIssueAssessmentByClass($search);
+		$row = $db->getAllScoreResult($search);
 		$this->view->row = $row;
 
 		$form=new Application_Form_FrmSearchGlobal();
@@ -53,15 +53,19 @@ class AssessmentController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		
 		$db = new Application_Model_DbTable_DbAssessment();
+		$dbexnternal = new Application_Model_DbTable_DbExternal();
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+			//check Session
+			$checkTeachSesion=  $dbexnternal->checkSessionTeacherExpireBeforeSubmit();
+			if(empty($checkTeachSesion)){
+				$dbexnternal->reloadPageTecherExpireSession();
+				exit();
+			}
 			try{
 				$rs = $db->addStudentAssessment($_data);
-				if(isset($_data['save_new'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/add");
-				}else {
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/index");
-				}
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment");
+				exit();
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -79,16 +83,9 @@ class AssessmentController extends Zend_Controller_Action
 		}
 		$this->view-> month = $dbExternal->getAllMonth();
 		
-// 		$data = array(
-// 				'groupId'=>'6',
-// 				'sortStundent'=>'0',
-// 				'degree'=>'3',
-// 				'keyIndex'=>1);
-// 		$rs =$db->getSecondFormatStudentForAssessment($data); // format 2
-		
-// 		print_r($rs);exit();
-		$scoreId = $dbExternal->getLatestScoreByGroup($id);
+		$scoreId =$this->getRequest()->getParam("scoreId");
 		$scoreId = empty($scoreId)?0:$scoreId;
+		$this->view->scoreId = $scoreId; 
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		$row = $db->getScoreExamByID($scoreId);
 		if(!empty($row)){
@@ -135,8 +132,17 @@ class AssessmentController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 
 		$db = new Application_Model_DbTable_DbAssessment();
+		$dbexnternal = new Application_Model_DbTable_DbExternal();
+		
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+
+			$checkTeachSesion=  $dbexnternal->checkSessionTeacherExpireBeforeSubmit();
+			if(empty($checkTeachSesion)){
+				$dbexnternal->reloadPageTecherExpireSession();
+				exit();
+			}
+
 			try {
 				$rs =  $db->updateAssessmentByClass($_data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/assessment/index");

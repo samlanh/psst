@@ -19,7 +19,7 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 		s.title,
 		CASE
 			WHEN s.examType = 1 THEN '$monthly'
-			WHEN s.examType = 1 THEN '$semester'
+			WHEN s.examType = 2 THEN '$semester'
 		END AS examType,
 		s.examFromDate,s.`examEndDate`,s.fromDate,s.`endDate`,s.description, s.createDate ";
     	$sql.=$dbp->caseStatusShowImage("s.status");

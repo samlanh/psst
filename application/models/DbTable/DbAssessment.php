@@ -40,8 +40,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		END AS forMonthTitle,
 		(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName,
 		(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear,
-		COALESCE((SELECT a.id FROM `rms_studentassessment` AS a WHERE s.`id`=a.scoreId LIMIT 1),0) AS IsAssesment,
-		(SELECT a.isLock FROM `rms_studentassessment` AS a WHERE s.`id`=a.scoreId LIMIT 1) AS islisLock
+		COALESCE((SELECT a.id FROM `rms_studentassessment` AS a WHERE s.`id`=a.scoreId AND a.forMonth=s.for_month AND a.groupId=s.group_id LIMIT 1),0) AS IsAssesment,
+		(SELECT a.isLock FROM `rms_studentassessment` AS a WHERE s.`id`=a.scoreId AND a.forMonth=s.for_month AND a.groupId=s.group_id LIMIT 1) AS islisLock
 		
 		";
 		

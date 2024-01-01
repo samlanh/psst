@@ -582,7 +582,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 
 						JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1
 						
-						LEFT JOIN ( `rms_scoreengsettingdetail` AS sttD JOIN `rms_scoreengsetting` AS stt ON stt.id = sttD.score_setting_id ) ON stt.degreeId = g.degree AND stt.id = g.gradingId 
+						LEFT JOIN ( `rms_scoreengsettingdetail` AS sttD JOIN `rms_scoreengsetting` AS stt ON stt.id = sttD.score_setting_id ) ON stt.degreeId = g.degree AND stt.id = g.gradingId AND sttD.forExamType=sett.`examType` 
 							AND (sttD.subjectId =gsjb.subject_id OR sttD.subjectId=0) 
 						LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs ON aTs.teacherId = gsjb.teacher AND g.id = aTs.group AND FIND_IN_SET(gsjb.subject_id,(aTs.subjectId)) AND aTs.endDate > sett.examEndDate
 				";
@@ -1219,6 +1219,13 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$groupId = empty($_data['groupId'])?0:$_data['groupId'];
 		$subjectId = empty($_data['subjectId'])?0:$_data['subjectId'];
 		$settingEntryId = empty($_data['settingEntryId'])?0:$_data['settingEntryId'];
+		
+		$sqlGrad="
+			SELECT entSett.*  FROM rms_score_entry_setting AS entSett WHERE  entSett.id = $settingEntryId LIMIT 1
+		";
+		$entrySetting = $db->fetchRow($sqlGrad);
+		$examType = empty($entrySetting["examType"]) ? 0 : $entrySetting["examType"];
+		
 		$colunmName='title_en';
 		if ($currentLang==1){
 			$colunmName='title';
@@ -1291,7 +1298,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				LEFT JOIN (`rms_grading_detail_tmp` AS tmpD JOIN `rms_grading_tmp` AS tmp ON tmp.id =tmpD.gradingId )  ON  tmp.settingEntryId =".$settingEntryId." AND gds.stu_id = tmpD.studentId AND g.id = tmp.groupId
 			
 			";
-		$sql.=" WHERE 1 ";
+		
+		
+		
+		$sql.=" WHERE 1 AND sttD.forExamType=$examType ";
 		$sql.=$sqlWhereC;
 		$sql.="
 				AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = sttD.criteriaId LIMIT 1) 

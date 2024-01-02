@@ -186,9 +186,9 @@
 								<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo $row['note'];?></td>
 								<td data-label="<?php echo $tr->translate("STATUS");?>" >
 									<?php if($row['is_current']==1){
-										echo $tr->translate("PAID");
-									} else{
 										echo $tr->translate("REMAIN_BALANCE");
+									} else{
+										echo $tr->translate("PAID");
 									}
 									?>
 								</td>

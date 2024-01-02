@@ -1123,6 +1123,7 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				dijit.byId('remark'+col).attr('value','Previous Balance');
 				dijit.byId('date_start_'+col).set('readOnly',true);
 				dijit.byId('validate_'+col).set('readOnly',true);
+				netTotal();
 			}else{
 				if(dataRow.endDate=!''){
 					dijit.byId('date_start_'+col).attr('value',dataRow.endDate);

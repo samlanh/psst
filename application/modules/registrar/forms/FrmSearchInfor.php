@@ -586,8 +586,9 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				));
 		$_b_status_opt = array(
 				-1=>$this->tr->translate("ALL_STATUS"),
-				1=>$this->tr->translate("PAID"),
-				0=>$this->tr->translate("REMAIN_BALANCE"));
+				0=>$this->tr->translate("PAID"),
+				1=>$this->tr->translate("REMAIN_BALANCE")
+			);
 		$_is_current->setMultiOptions($_b_status_opt);
 		$_is_current->setValue($request->getParam("is_current"));
 		

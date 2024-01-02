@@ -294,6 +294,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				
 				$this->_name='rms_student_payment';
 				
+				$arr = array(
+						'is_current'=>0//update old receipt
+				);
+				$where="student_id=".$data['old_stu'];
+				$this->update($arr,$where);
+				
+				
 				$arr=array(
 					'branch_id'		=> $data['branch_id'],
 					'revenue_type'  => $data['customer_type'],

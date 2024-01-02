@@ -88,6 +88,7 @@ class AssessmentController extends Zend_Controller_Action
 		$this->view->scoreId = $scoreId; 
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		$row = $db->getScoreExamByID($scoreId);
+		$this->view-> scoreInfo =$row ;
 		if(!empty($row)){
 			$search = array(
 					'group' => $row['group_id'],
@@ -203,26 +204,6 @@ class AssessmentController extends Zend_Controller_Action
 		
 		$row = $db->getAssessmentByID($id);
 		$this->view->rowAss = $row;	
-		
-		// if(empty($row)){
-		// 	Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment");
-		// }
-		// if (empty($row)){
-		// 	Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment/index");
-		// }
-		// if ($row['isLock']==1){
-		// 	Application_Form_FrmMessage::Sucessfull("RECORD_LOCKED_CAN_NOT_EDIT","/assessment/index");
-		// }
-		// if ($row['is_pass']==1){
-		// 	Application_Form_FrmMessage::Sucessfull("CLASS_COMPLETED_CAN_NOT_EDIT","/assessment/index");
-		// }
-		// if ($row['status']==0){
-		// 	Application_Form_FrmMessage::Sucessfull("SCORE_DEACTIVE_CAN_NOT_EDIT","/assessment/index");
-		// }
-		
-	
-		// $dbExternal = new Application_Model_DbTable_DbExternal();
-		// $this->view-> month = $dbExternal->getAllMonth();
 		
 	}
 	

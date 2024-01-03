@@ -8,11 +8,10 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Issue_Model_DbTable_DbScore();
+			$db = new Issue_Model_DbTable_DbSchSetup();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
-			}
-			else{
+			}else{
 				$search = array(
 						'adv_search'=>'',
 						'branch_id' => '',

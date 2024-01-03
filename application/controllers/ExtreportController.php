@@ -176,8 +176,11 @@ class ExtreportController extends Zend_Controller_Action
     	$assessmentID=$this->getRequest()->getParam("id");
     	$assessmentID =empty($assessmentID)?0:$assessmentID;
 		
+		$fullControlID=$this->getRequest()->getParam("fullcontrol");
+    	$fullControlID =empty($fullControlID)?0:$fullControlID;
+		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
-		$row = $dbExternal->getClassAssessmentById($assessmentID);
+		$row = $dbExternal->getClassAssessmentById($assessmentID,$fullControlID);
 		if (empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/assessment/index");
 		}

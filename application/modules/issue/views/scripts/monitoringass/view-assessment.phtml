@@ -1,0 +1,333 @@
+<?php
+
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$pageTitle = $tr->translate("STUDENT_ASSESSMENT");
+	echo $this->headTitle($pageTitle);
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$month = array(
+		"01"=>"មករា",
+		"02"=>"កុម្ភៈ",
+		"03"=>"មីនា",
+		"04"=>"មេសា",
+		"05"=>"ឧសភា",
+		"06"=>"មិថុនា",
+		"07"=>"កក្កដា",
+		"08"=>"សីហា",
+		"09"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+	$monthKH = array(
+		"1"=>"មករា",
+		"2"=>"កុម្ភៈ",
+		"3"=>"មីនា",
+		"4"=>"មេសា",
+		"5"=>"ឧសភា",
+		"6"=>"មិថុនា",
+		"7"=>"កក្កដា",
+		"8"=>"សីហា",
+		"9"=>"កញ្ញា",
+		"10"=>"តុលា",
+		"11"=>"វិច្ឆិកា",
+		"12"=>"ធ្នូ"
+	);
+	$monthENG = array("1"=>"January","2"=>"February","3"=>"March","4"=>"April","5"=>"May","6"=>"June","7"=>"July","8"=>"August","9"=>"September","10"=>"October","11"=>"November","12"=>"December"
+	);
+	$rs = $this->rs;
+?>
+<style>
+	.row.dashboard {
+		margin: 0;
+	}
+	div#submitApproveChecking {
+		position: fixed;
+		bottom: 20px;
+		background: #fff;
+		text-align: center;
+		width: 82% !important;
+		padding: 10px 0;
+		margin: 0 10px;
+	}
+</style>
+	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
+	
+	<form id="submitApprove" name="submitApprove" action="" dojoType="dijit.form.Form" method="post">		
+		<div class="card mb-1 ">
+			<div class="reportblog">
+				<div id="divPrint">
+					<style type="text/css">
+						.headReportRespone{
+							display:none;
+						}
+						table ,
+						table tr td,
+						table tr td span{
+							color: #002c7b;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+							    font-size: 10px;
+							line-height: 16px;
+						}
+						table tr td small {
+							font-size: 9px;
+							white-space: normal;
+						}
+						table.content-data{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							width: 100%;
+						}
+						table.content-data thead tr.style {
+							line-height: 16px; 
+							padding:1px 0px; 
+							white-space: nowrap;height: 22px; 
+							background: #3c4b76;
+							font-weight:600;
+						}
+						table.content-data thead tr.style td,
+						table.content-data thead tr.style td span{
+							line-height: 16px; 
+							font-weight:600;
+							color: #ffffff;
+						}
+						table.content-data thead tr.style td {
+							padding:2px 0;
+						}
+						table.tb-footer{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						table.tb-footer tr{
+						 line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
+						}
+						table tr td{
+							padding:0 2px;
+						}
+						span.khmerLabel,
+						span.englishLabel{
+							display:block;
+						}
+						span.khmerName, span.englishName {
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							white-space: nowrap;
+							padding: 0 3px;
+						}
+						tr.style span.khmerName {
+							font-size:12px;
+						}
+						tr.style span.englishName {
+							font-size:11px;
+						}
+						span.valueAmount {
+							font-weight: 600;
+							color: #002c7b;
+						}
+						ul.scoreTitle {
+							padding: 0;
+							margin: 0;
+							list-style: none;
+							font-size: inherit;
+							margin-top: -15px;
+						}
+						ul.scoreTitle li {
+							line-height: 18px;
+							color:#002c7b;
+							list-style-type:none !important;
+						}
+						@media print {
+							ul.printInfo {
+								position: absolute;
+								left: 0;
+								bottom: 5px;
+								list-style: none;
+								margin: 0;
+								padding: 0;
+								visibility: visible;
+							}
+							ul.printInfo li {
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size: 8px;
+								text-align: left;
+								line-height:12px;
+								color: #002c7b;
+							}
+						}
+						
+						td.titleComment {
+							min-width:80px;
+							white-space:normal;
+							
+						}
+						tr.rowValue td {
+							padding:2px;
+						}
+						tr.rowValue td, tr.rowValue td span {
+							line-height: 12px;
+							vertical-align: top;
+						}
+						ul.commentNote {
+							margin: 0;
+							padding: 0;
+							padding-left: 20px;
+							list-style: circle;
+						}
+						@media print{
+							@page {
+								page:A4;
+								margin: 0.8cm;
+							}
+						}
+					</style>
+						<table style="width:100%;background:#fff; margin: 0 auto; font-family: 'Times New Roman','Khmer OS Battambang'; ">
+							<tr >
+								<td colspan="3" align="center" >
+									<?php echo $this->headerScore;?>
+									
+								</td>
+							</tr>
+							
+							<?php 
+							$i=0; 
+							
+							$countPass=0;
+							$countFail=0; 
+							$passFemale=0;
+							$failFemale=0;
+							if($rs['forType']==1){
+								$monthChar = empty($monthKH[$rs['forMonth']])?"":$monthKH[$rs['forMonth']];
+								$titleKh='ការវាយតម្លៃការសិក្សាប្រចាំខែ'.$monthChar;
+								$monthCharEn = empty($monthENG[$rs['forMonth']])?"":$monthENG[$rs['forMonth']];
+								$titleENG=$monthCharEn." STUDENT ASSESSMENT";
+							}else{
+								$arrRomanNum = array(1=>"I",2=>"II");
+								$romanNumber = empty($arrRomanNum[$rs['forSemester']])?"":$arrRomanNum[$rs['forSemester']];
+								$titleKh='ការវាយតម្លៃការសិក្សាប្រចាំឆមាសទី'.$dbgb->getNumberInkhmer($rs['forSemester']);
+								$titleENG="SEMESTER ".$romanNumber." STUDENT ASSESSMENT";
+							}
+							?>
+							<tr>
+								<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
+									<ul class="scoreTitle">
+										<li style="font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+										<?php echo $titleKh;?>
+										</li>
+										<li style="font-size:12px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+											<?php echo $titleENG;?>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											ថ្នាក់ទី / GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['groupCode'];?></span>
+										</li>
+										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+											ឆ្នាំសិក្សា / ACADEMIC YEAR: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academicYearTitle'];?></span>
+										</li>
+									</ul>
+								</td>
+								<td align="center" valign="top"></td>
+							</tr>
+							<tr>
+								<td colspan="3" id="exportExcel" valign="top">
+									
+									<table class="content-data"  cellpadding="2" border="1" >
+										<thead>
+											
+											<tr class="style" align="center" >
+												<td	scope="col" >
+													<span class="khmerLabel">ល.រ</span>
+													<span class="englishLabel">N<sup>o</sup></span>
+												</td>
+												<td scope="col" >
+													<span class="khmerLabel">អត្តលេខ</span>
+													<span class="englishLabel">ID</span>
+												</td>
+												<td scope="col" colspan="2">
+													<span class="khmerLabel">គោត្តនាម-នាម</span>
+													<span class="englishLabel">Student Name</span>
+												</td>
+												<td scope="col" >
+													<span class="khmerLabel">ភេទ</span>
+													<span class="englishLabel">Sex</span>
+												</td>
+												<td scope="col" width="50%"  >
+													<span class="khmerLabel"><?php echo "មតិយោបល់របស់គ្រូ ";?></span>
+													<span class="englishLabel"><?php echo "Teacher Comment";?></span>
+												</td>
+											</tr>
+											
+										</thead>
+										
+										<?php 
+										$i=0; 
+										$m=0;$f=0;
+										
+										$identity = ""; 
+										
+										if(!empty($this->students)) foreach($this->students as $key => $student){ 
+											$i++;
+											if($student['sex']==1){ 
+												$sex = $tr->translate("MALE_SHORT");$m = $m+1;
+											}else{
+												$sex = $tr->translate("FEMALE_SHORT");$f=$f+1;
+											}
+											$rowIndex = $key+1;
+											if (empty($identity)){ 
+												$identity = $rowIndex;
+											}else{
+												$identity = $identity.",".$rowIndex;
+											}
+										
+										?>
+										<tr  class="rowValue">
+											<td data-label="ល.រ/No" align="center"><?php echo $i;?></td>
+											<td data-label="អត្តលេខ/ID" align="center" style="white-space:nowrap;">
+												<?php echo $student['stuCode'];?>
+											</td>
+											<td data-label="គោត្តនាម-នាម" style="min-width:100px;">
+												<span class="khmerName"><?php echo trim($student['stuKhName']);?></span>
+											</td>
+											<td data-label="Student Name" style="min-width:100px;">
+												<span class="englishName"><?php echo empty(trim($student['stuEnName']))?"":trim($student['stuEnName']);?></span>
+											</td>
+											<td data-label="ភេទ/Sex" align="center" class="bg_<?php echo $student['sex'];?>"><?php echo $sex;?></td>
+											<td data-label="មតិយោបល់របស់គ្រូ/Teacher Comment" align="left" >
+												<input class="fullside" type="hidden"  name="studentId<?php echo $rowIndex;?>" id="studentId<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo $student['studentId'];?>"/>
+												<input class="fullside" type="hidden"  name="detailId<?php echo $rowIndex;?>" id="detailId<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo $student['detailId'];?>"/>
+												<input class="fullside" type="text" style="line-height: 16px; font-size:12px;  min-height:80px !important;"  name="teacherComment<?php echo $rowIndex;?>" id="teacherComment<?php echo $rowIndex;?>" dojoType="dijit.form.Textarea" value="<?php echo $student['teacherComment'];?>" />
+												
+											
+											</td>
+										</tr>
+										<?php } ?>
+									</table>
+									
+								</td>
+							</tr>
+						</table>
+						<div style="height:50px;">
+						
+						</div>
+						
+						
+						<div class="footPrintDate"></div>
+					
+					
+				</div>
+			</div>
+		</div>
+		
+		<div id="submitApproveChecking" class="col-md-12 col-sm-12 col-xs-12 text-center"> 
+			<input type="hidden" id="identity" name="identity" value="<?php echo $identity;?>"  dojoType="dijit.form.TextBox" />
+			<input type="hidden" id="assessmentId" name="assessmentId" value="<?php echo $rs["assessmentId"];?>"  dojoType="dijit.form.TextBox" />
+			<button class="button-class button-success" iconClass="glyphicon glyphicon-floppy-disk" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("APPROVED");?></button>
+		</div>
+		
+		</form>
+		
+<script type="text/javascript">
+    dojo.require("dijit.form.Textarea");
+</script>

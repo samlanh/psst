@@ -922,7 +922,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			ORDER BY commentType DESC , c.id ASC ";
 		return $db->fetchAll($sql);
 	}
-	function getClassAssessmentById($assessmentID){
+	function getClassAssessmentById($assessmentID,$fullControlID){
 		$db=$this->getAdapter();
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -972,7 +972,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
 		
 		$where ='';
-		$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		if(empty($fullControlID)){
+			$where.=' AND grd.teacherId='.$this->getUserExternalId();
+		}
 		$where.=' AND grd.id='.$assessmentID;
 		$where.=' LIMIT 1 ';
 

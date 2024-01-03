@@ -1,0 +1,313 @@
+<?php
+
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$pageTitle = $tr->translate("MONITORING_ASSESSMENT");
+	echo $this->headTitle($pageTitle);
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm =  $this->form_search;
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$isLockType = $this->search['isLockType'];
+	$evaluationStatus = $this->search['evaluationStatus'];
+?>
+<style>
+	.row.dashboard {
+		margin: 0;
+	}
+	div.selectd-record {
+		background: #fffee3;
+		border-bottom-right-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+	div#submitApproveChecking {
+		position: fixed;
+		bottom: 20px;
+		background: #fff;
+		text-align: center;
+		width: 82% !important;
+		padding: 10px 0;
+	}
+</style>
+	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
+	<div class="row"> 
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="card mb-1 pb-3 ">
+				<div class="card-header pb-1"> 
+					<h3 class="card-title mb-1 "><?php echo $tr->translate("MONITORING_ASSESSMENT"); ?></h3> 
+				</div>
+				<div class="card-content">
+					<div class="card-body">
+						<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+							<script type="dojo/method" event="onSubmit">			
+								if(this.validate()) {
+									academic_year=dijit.byId('academic_year').get('value');
+									if(academic_year=='' || academic_year==0){
+										alert('<?php echo $tr->translate('PLEASE_SELECT_YEAR');?>!');
+										dijit.byId('academic_year').focus(); 
+										return false;
+									}
+									exam_type=dijit.byId('exam_type').get('value');
+									if(exam_type==2){
+										for_semester=dijit.byId('for_semester').get('value');
+										if(for_semester=='' || for_semester==0){
+											alert('<?php echo $tr->translate('SELECT_SEMESTER');?>!');
+											dijit.byId('for_semester').focus(); 
+											return false;
+										}
+									}else if(exam_type==1){
+										for_month=dijit.byId('for_month').get('value');
+										if(for_month=='' || for_month==0){
+											alert('<?php echo $tr->translate('CHOOSE_MONTH');?>!');
+											dijit.byId('for_month').focus(); 
+											return false;
+										}
+									}
+									loadingBlock();
+									return true;
+								}else {
+									return false;
+								}
+							</script>
+							<div class="form-group">
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("adv_search");?>
+								</div>
+								
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("academic_year");?>
+							   </div>
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("degree");?>
+							   </div>
+							   <div class="col-md-2 col-sm-2 col-xs-12">
+									<input id="grade" />
+							   </div>
+							   <div class="col-md-2 col-sm-3 col-xs-12">
+									<?php echo $frm->getElement("exam_type");?>
+								</div>
+						   </div>
+							<div class="form-group"> 
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("for_semester");?>
+								</div>
+								
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("for_month");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="evaluationStatus" name="evaluationStatus"  >
+										<option value='0' <?php if($evaluationStatus==0){echo "selected";} ?> ><?php echo $tr->translate("All"); ?></option>
+										<option value='1' <?php if($evaluationStatus==1){echo "selected";} ?> ><?php echo $tr->translate("EVALUATED"); ?></option>
+										<option value='2' <?php if($evaluationStatus==2){echo "selected";} ?> ><?php echo $tr->translate("NOT_YET_EVALUATION"); ?></option>
+									</select>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<select dojoType="dijit.form.FilteringSelect" queryExpr="*${0}*" autoComplete="false" class="fullside" id="isLockType" name="isLockType"  >
+										<option value='0' <?php if($isLockType==0){echo "selected";} ?> ><?php echo $tr->translate("STATUS"); ?></option>
+										<option value='1' <?php if($isLockType==1){echo "selected";} ?> ><?php echo $tr->translate("APPROVED"); ?></option>
+										<option value='2' <?php if($isLockType==2){echo "selected";} ?> ><?php echo $tr->translate("PENDING"); ?></option>
+									</select>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+								</div>
+							</div>
+					   </form>
+				   </div>
+			   </div>
+			   <div class="row dashboard"> 
+				<?php $identityCheck = "";  if(!empty($this->row)) {?>
+				<form id="submitApprove" name="submitApprove" action="<?php echo $this->url(array('module'=>'issue','controller'=>'monitoringass','action'=>'approve-assessment')); ?>" dojoType="dijit.form.Form" method="post">
+					<div class="col-md-12 col-sm-12 col-xs-12"> 
+						<div class="custom-control custom-checkbox ">
+							<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >
+							<label class="custom-control-label" for="check_all">
+								<?php echo $tr->translate('CHECK_ALL');?>
+							</label>
+						</div>
+						<input type="hidden" id="identityCheck" name="identityCheck" value="" />
+					</div>
+					<?php  foreach($this->row as $row){ 
+						$cardClass = "border-top-primary border-top-darken-1";
+						$bgClass = "border-primary bg-gradient-directional-primary";
+						if($row['examType']==2){
+							$cardClass = "border-top-warnings border-top-darken-1";
+							$bgClass = "border-warnings bg-gradient-directional-warnings";
+						}
+					?>
+					<div class="col-md-3 col-sm-3 col-xs-12"> 
+						<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
+							<div class="card-content">
+								<div class="row d-flex">
+									<div class="col-xs-4 pr-0">
+										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
+											<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-1 text-center">
+												<?php echo $row['groupCode']; ?>
+												<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-blackboard"></i> <?php echo $row['roomName']; ?></small>
+											</span>
+										</div>
+									</div>
+									<div id="assessment-css<?php echo $row['assessmentId'];?>" class="col-xs-8 pl-0 <?php if($row['assessmentId']>0){ echo "assessment"; }?>">
+										<?php if($row['assessmentId']>0){?>
+										<ul class="nav navbar-right panel_toolbox stusearch">
+										  <li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<?php 
+													$linkAss = $this->baseUrl()."/issue/monitoringass/view-assessment/id/";
+													$fullControl = "";
+													if($row['isLockAssessment']==1){
+														$linkAss = $this->baseUrl()."/extreport/rpt-assessment-list/id/";
+														$fullControl = "?fullcontrol=1";
+													}
+													?>
+													<a target="_blank" href="<?php echo $linkAss.$row['assessmentId'].$fullControl;?>"><?php echo $tr->translate('VIEW_ASSESSMENT');?></a>
+												</li>
+											</ul>
+										  </li>
+										</ul>
+										<?php }?>
+										<div class="p-1">
+											<?php if($row['assessmentId']>0 AND $row['isLockAssessment']==0){
+												
+													if (empty($identityCheck)){ 
+														$identityCheck = $row['assessmentId'];
+													}else{
+														$identityCheck = $identityCheck.",".$row['assessmentId'];
+													}
+														
+												?>
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="checkbox custom-control-input" id="assessmentId<?php echo $row['assessmentId'];?>" value="<?php echo $row['assessmentId'];?>"  name="selector[]" onchange="checkall(<?php echo $row['assessmentId'];?>);" >
+													<label class="custom-control-label" for="assessmentId<?php echo $row['assessmentId'];?>">
+														<?php echo $tr->translate('APPROVED');?>
+													</label>
+												</div>
+											<?php }else{?>
+											<label class="custom-control" >&nbsp;</label>
+											<?php }?>
+											<div class="text-left">
+												<strong><p class="mb-0 text-primary"><?php if(!empty($row['note'])){ echo  "( ".$row['note']." )";}  ?></p></strong>
+												<h4 class="counting-num mr-1"><strong> <?php echo $row['scoreType']; ?></strong></h4>
+												<p class="mb-0"><?php echo $row['acadmicYearTitle']; ?></p>
+												<?php if($row['assessmentId']>0){?>
+												<p class="mb-0 text-success"><?php echo $tr->translate('EVALUATED');?></p>
+												<?php }else{?>
+												<p class="mb-0 text-primary"><?php echo $tr->translate('NOT_YET_EVALUATION');?></p>
+												<?php }?>
+												<?php if($row['isLockAssessment']==1){?>
+												<p class="mb-0 text-success"><?php echo $tr->translate('APPROVED');?> <i class=" text-success glyphicon glyphicon-ok-sign"></i></p>
+												<?php }else{?>
+												<p class="mb-0 text-warning"><?php echo $tr->translate('PENDING');?> <i class="text-warning glyphicon glyphicon-erase"></i></p>
+												<?php }?>
+											
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php } ?>
+					<div id="submitApproveChecking" style="display:none;" class="col-md-12 col-sm-12 col-xs-12 text-center"> 
+						<button class="button-class button-success" iconClass="glyphicon glyphicon-floppy-disk" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("APPROVED");?></button>
+					</div>
+				</form>
+				<?php } ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+dojo.require('dijit.form.DateTextBox');
+
+function checkall(index=0){
+	if(index==0){
+			if($('#check_all').is(":checked")){
+				$(".col-xs-8.pl-0.assessment").addClass("selectd-record");
+				$(".checkbox").prop('checked', true);
+			}else{
+				$(".col-xs-8.pl-0.assessment").removeClass("selectd-record");
+				$(".checkbox").prop('checked', false);
+			}
+	}else{
+		$(".col-xs-8.pl-0.assessment").removeClass("selectd-record");
+		 var identity = [];
+	     $('.checkbox:checked').each(function(i){
+	    	 identity[i] = $(this).val();
+			 $("#assessment-css"+identity[i]).addClass("selectd-record");
+	     });
+		var allidentity = $("#identityCheck").val();
+		if(identity == allidentity ){
+			$('#check_all').prop('checked', true); // checks it
+		}else{
+			$('#check_all').prop('checked', false); // Unchecks it
+		}
+	}
+	checkingControl();
+}
+
+function checkingControl(){
+	var checkedValue = $('.checkbox:checked').val();
+	$("#submitApproveChecking").css("display", "none");
+	if(typeof checkedValue !== "undefined")
+	{
+		$("#submitApproveChecking").css("display", "block");
+	}
+}
+
+
+// $( document ).ready(function() {
+//    setPageTitle('<?php echo $pageTitle; ?>');
+// });
+
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.ready(function(){
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false, 
+		required: false,
+		id: "grade",
+		name: "grade",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
+		}
+	}, "grade");
+	
+	getallGrade();
+	<?php if(!empty($this->search['academic_year'])){?>
+	 dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year'];?>'); 
+	<?php } ?>
+	$("#identityCheck").val('<?php echo $identityCheck;?>');
+	
+});
+
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				dijit.byId('grade').attr('value','');
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store); 
+			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');    
+			},
+			error: function(err) {
+			}
+		});
+}
+</script>
+<?php 
+	//echo $this->render('externalFoot.phtml');
+?>

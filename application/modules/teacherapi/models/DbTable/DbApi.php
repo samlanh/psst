@@ -553,7 +553,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sett.title AS settingTitle
 					,gsjb.group_id AS groupId
 					,gsjb.subject_id as subjectIdValue
-					,gsjb.max_score as maxScoreSubject
+					,CASE WHEN sett.examType = 2
+								THEN gsjb.semester_max_score
+							ELSE gsjb.max_score
+					END AS maxScoreSubject
 					,sttD.criteriaId
 					,sttD.timeInput
 					,sttD.pecentage_score AS percentageScore

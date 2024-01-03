@@ -77,6 +77,11 @@ public function indexAction()
 		
 		$row = $db->getAssessmentInfo($assessmentID);
 		$this->view->rs = $row;
+		if(empty($row)){
+			$sms="NO_RECORD";
+			Application_Form_FrmMessage::Sucessfull($sms, "/issue/monitoringass");
+			exit();
+		}
 		
 		$students = $db->getAssessmentDetailList($assessmentID);
 		$this->view->students = $students;

@@ -115,7 +115,7 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 			JOIN `rms_group` AS g ON g.`id` = ass.`groupId`
 		";
 		
-		$where =" WHERE ass.status = 1 ";
+		$where =" WHERE ass.status = 1 AND ass.isLock = 0 ";
 		$where.=" AND ass.`id` = ".$assessmentId;
 		$where.=$dbp->getAccessPermission('ass.branchId');
 		$where.=" LIMIT 1 ";

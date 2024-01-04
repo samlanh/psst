@@ -603,7 +603,7 @@ table#table tbody tr:hover {
     color: #337ab7 !important;
 }
 .text-success {
-    color: #24d5b8 !important;
+    color: #0ca01e !important;
 }
 .text-danger {
     color: #f34343 !important;
@@ -615,7 +615,7 @@ table#table tbody tr:hover {
     color: #f74f75 !important;
 }
 .text-warning {
-    color: rgba(255,193,7,1)!important;
+    color: rgb(236 177 0)!important;
 }
 
 .mb-auto, .my-auto {

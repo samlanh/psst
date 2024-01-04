@@ -8,7 +8,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	}
 	public function indexAction(){
 		try{
-			$db = new Issue_Model_DbTable_DbSchSetup();
+			$db = new Issue_Model_DbTable_DbScore();
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
 			}else{
@@ -116,6 +116,10 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 		if ($row['is_pass']==1){
 			Application_Form_FrmMessage::MessageBacktoOldHistory("CLASS_COMPLETED_CAN_NOT_EDIT");
+			exit();
+		}
+		if ($row['status']==0){
+			Application_Form_FrmMessage::MessageBacktoOldHistory("Score Already Void, Can't Edit !");
 			exit();
 		}
 		$this->view->score = $row;

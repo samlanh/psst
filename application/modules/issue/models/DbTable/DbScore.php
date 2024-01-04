@@ -190,7 +190,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
-			
+			$status = $_data['status'];
 			$_arr = array(
 				'branch_id'=>$_data['branch_id'],
 				'title_score'=>$_data['title'],
@@ -203,21 +203,22 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'for_academic_year'=>$year_study,
 				'for_semester'=>$_data['for_semester'],
 				'for_month'=>$_data['for_month'],
-				'status'=>$_data['status'],
+				'status'=> $status ,
 			);
 		$where="id=".$_data['score_id'];
 		$this->update($_arr, $where);
-		
-		$id=$_data['score_id'];
-		$this->_name='rms_score_detail';
-		$this->delete("score_id=".$_data['score_id']);
-		
-		$this->_name='rms_score_monthly';
-		$this->delete("score_id=".$_data['score_id']);
-		$old_studentid = 0;
-		
-		$dbpush = new Application_Model_DbTable_DbGlobal();
-		$dbpush->pushNotification(null,$_data['group'],2,4);
+
+		if($status==1){
+			$id=$_data['score_id'];
+			$this->_name='rms_score_detail';
+			$this->delete("score_id=".$_data['score_id']);
+			
+			$this->_name='rms_score_monthly';
+			$this->delete("score_id=".$_data['score_id']);
+			$old_studentid = 0;
+			
+			$dbpush = new Application_Model_DbTable_DbGlobal();
+			$dbpush->pushNotification(null,$_data['group'],2,4);
 
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
@@ -357,7 +358,25 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 				}
 			}
-		  $db->commit();
+
+		}else{  // Void Score
+
+			$this->_name='rms_grading';
+			$where='groupId='.$_data['group'].'  AND examType ='.$_data['exam_type'];
+			if($_data['exam_type']==1){
+				$where.=' AND formonth='.$_data['for_month'];
+			}else{
+				$where.=' AND forSemester='.$_data['for_semester'];
+			}
+			$arr = array(
+				'isLock'=>0,
+				'lockBy'=>$this->getUserId()
+			);
+			$this->update($arr, $where);
+
+		}
+
+		$db->commit();
 		}catch (Exception $e){
 			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -18,6 +18,13 @@
 		border-bottom-right-radius: 10px;
 		border-top-right-radius: 10px;
 	}
+	p.teacherName {
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
 	div#submitApproveChecking {
 		position: fixed;
 		bottom: 20px;
@@ -190,6 +197,7 @@
 												<strong><p class="mb-0 text-primary"><?php if(!empty($row['note'])){ echo  "( ".$row['note']." )";}  ?></p></strong>
 												<h4 class="counting-num mr-1"><strong> <?php echo $row['scoreType']; ?></strong></h4>
 												<p class="mb-0"><?php echo $row['acadmicYearTitle']; ?></p>
+												<p class="mb-0 teacherName"><?php echo $row['teacherNameKh']; if(!empty($row['teacherNameEng'])){ echo " ".$row['teacherNameEng']; } ?></p>
 												<?php if($row['assessmentId']>0){?>
 												<p class="mb-0 text-success"><?php echo $tr->translate('EVALUATED');?></p>
 												<?php }else{?>

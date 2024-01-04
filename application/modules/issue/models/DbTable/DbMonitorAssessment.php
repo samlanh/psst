@@ -202,5 +202,68 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
    }
+   
+   function getAssessmentDetailListByStudent($data){
+		$db = $this->getAdapter();
+		$assessmentId = empty($data["assessmentId"]) ? 0 : $data["assessmentId"];
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$sql="
+			SELECT 
+				assd.id AS detailId
+				,assd.`assessmentId`
+				,assd.`studentId`
+				,assd.`teacherComment`
+				,cmt.`commentType` AS commentType
+				,(SELECT CONCAT(COALESCE(TRIM(v.name_kh),''),' / ',COALESCE(TRIM(v.name_en),''))  FROM `rms_view` AS v WHERE v.type =36 AND v.key_code =cmt.`commentType` LIMIT 1 ) AS commentTypeTitle
+				,cmt.comment AS commentTitle
+				,assd.`ratingId`
+				,(SELECT rt.`rating` FROM `rms_rating` AS rt WHERE rt.id =assd.`ratingId` LIMIT 1) AS ratingTitle
+		";
+		$sql.="
+			FROM 
+				`rms_studentassessment_detail` AS assd 
+				JOIN `rms_studentassessment` AS ass ON ass.`id`= assd.`assessmentId`
+				LEFT JOIN `rms_comment` AS cmt ON cmt.id = assd.`commentId`
+		";
+		
+		$where =" WHERE ass.status = 1 ";
+		$where.=" AND assd.`assessmentId` = ".$assessmentId;
+		$where.=" AND assd.`studentId` = ".$studentId;
+		$order =" ORDER BY assd.`studentId` ASC
+						,cmt.`commentType` ASC
+						,assd.`commentId`  ASC 
+				" ;
+		$row = $db->fetchAll($sql.$where.$order);
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$pageTitle = $tr->translate("STUDENT_ASSESSMENT");
+		$string="";
+		if(!empty($row)){
+			$commentType="";
+			$string.=' <ul class="sub_list">';
+			$i=0;
+			foreach($row as $key => $rs){
+				$className = ($key%2)==0 ? 'bg-color':'bg';
+				if($key == 0 || $commentType != $rs["commentType"]){
+					$commentTypeTitle = empty($rs["commentTypeTitle"]) ? $pageTitle : $rs["commentTypeTitle"];
+					$string.='<li class="commentTypeHead">'.$commentTypeTitle;
+					$string.='</li>';
+					$i=0;
+				}
+				$i++;
+				$string.='<li class="'.$className.'">';
+					$string.='<div class="commentInfo">'.$i.".) ".$rs["commentTitle"].'</div>';
+					$string.='<div class="ratingValue">'.$rs["ratingTitle"].'</div>';
+				$string.='</li>';
+				$commentType=$rs["commentType"];
+			}
+			$string.="</ul>";
+		}
+		$string.='<div style="clear:both;"></div>';
+		$array = array(
+			'commentListContent' => $string
+		);
+		
+		return $array;
+	}
 	
 }

@@ -91,4 +91,14 @@ public function indexAction()
     	$this->view->header = $frm->getHeaderReceipt($branch_id);
     	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
 	}
+	
+	function getEvaluationStudentAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbMonitorAssessment();
+			$data=$db->getAssessmentDetailListByStudent($data);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
 }	

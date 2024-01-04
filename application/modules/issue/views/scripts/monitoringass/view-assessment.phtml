@@ -50,6 +50,48 @@
 		padding: 10px 0;
 		margin: 0 10px;
 	}
+	div#bodyPopup {
+		padding: 0;
+	}
+	div#bodyPopup ul.sub_list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	li.bg-color {
+		background: #fafafa;
+	}
+
+	div#bodyPopup ul.sub_list li div.commentInfo {
+		display: inline-block;
+		width: 80%;
+		vertical-align: top;
+	}
+
+	div#bodyPopup ul.sub_list li div.ratingValue {
+		display: inline-block;
+		width: 19%;
+		color: #c50000;
+		vertical-align: top;
+		text-align: right;
+		font-weight: bold;
+		font-size: 11px;
+	}
+
+	div#bodyPopup ul.sub_list li {
+		padding: 5px 10px;
+		vertical-align: top;
+	}
+
+	div#bodyPopup ul.sub_list li.commentTypeHead {
+		font-size: 14px;
+		padding: 5px;
+		text-align: center;
+		color: #000f60;
+	}
 </style>
 	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
 	
@@ -257,6 +299,8 @@
 													<span class="khmerLabel"><?php echo "មតិយោបល់របស់គ្រូ ";?></span>
 													<span class="englishLabel"><?php echo "Teacher Comment";?></span>
 												</td>
+												<td scope="col" >
+												</td>
 											</tr>
 											
 										</thead>
@@ -282,13 +326,18 @@
 											}
 										
 										?>
-										<tr  class="rowValue">
-											<td data-label="ល.រ/No" align="center"><?php echo $i;?></td>
+										<tr  class="rowValue"  >
+											<td data-label="ល.រ/No" align="center">
+											<?php echo $i;?>
+											
 											<td data-label="អត្តលេខ/ID" align="center" style="white-space:nowrap;">
 												<?php echo $student['stuCode'];?>
 											</td>
 											<td data-label="គោត្តនាម-នាម" style="min-width:100px;">
 												<span class="khmerName"><?php echo trim($student['stuKhName']);?></span>
+												<input class="fullside" type="hidden"  name="stuKhName<?php echo $rowIndex;?>" id="stuKhName<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo trim($student['stuKhName']);?>"/>
+												<input class="fullside" type="hidden"  name="stuEnName<?php echo $rowIndex;?>" id="stuEnName<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo trim($student['stuEnName']);?>"/>
+												
 											</td>
 											<td data-label="Student Name" style="min-width:100px;">
 												<span class="englishName"><?php echo empty(trim($student['stuEnName']))?"":trim($student['stuEnName']);?></span>
@@ -298,8 +347,13 @@
 												<input class="fullside" type="hidden"  name="studentId<?php echo $rowIndex;?>" id="studentId<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo $student['studentId'];?>"/>
 												<input class="fullside" type="hidden"  name="detailId<?php echo $rowIndex;?>" id="detailId<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo $student['detailId'];?>"/>
 												<input class="fullside" type="text" style="line-height: 16px; font-size:12px;  min-height:80px !important;"  name="teacherComment<?php echo $rowIndex;?>" id="teacherComment<?php echo $rowIndex;?>" dojoType="dijit.form.Textarea" value="<?php echo $student['teacherComment'];?>" />
-												
-											
+
+											</td>
+											<td align="center" style="vertical-align: middle;">
+												<button type="button" class="btn btn-sm" onClick="getEvaluationInfo(<?php echo $rowIndex;?>);">
+													<i class="fa fa-indent text-primary" aria-hidden="true"></i>
+												</button>
+											</td>
 											</td>
 										</tr>
 										<?php } ?>
@@ -326,8 +380,59 @@
 			<button class="button-class button-success" iconClass="glyphicon glyphicon-floppy-disk" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("APPROVED");?></button>
 		</div>
 		
-		</form>
-		
+	</form>
+<!-- Pop Up Body -->
+<div class="modal fade" id="modal-evaluation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<button  type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span class="text-danger" aria-hidden="true">&times;</span>
+			</button>
+			<h4 class="modal-title text-primary" id="studentNamePop"></h4>
+			&nbsp;
+			<h5 class="modal-title" id="exampleModalLongTitle"><?php echo $titleKh;?> / <?php echo $titleENG;?></h5>
+		</div>
+		<div id="bodyPopup" class="modal-body">
+			
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		</div>
+		</div>
+	</div>
+</div>
+<!-- end -->		
 <script type="text/javascript">
-    dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.Textarea");
+	
+var urlGetEvaluationStudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'monitoringass','action'=>'get-evaluation-student')); ?>';
+function getEvaluationInfo(rowIndex){
+	assessmentId = dijit.byId('assessmentId').get('value');
+	studentId = dijit.byId('studentId'+rowIndex).get('value');
+	stuKhName = dijit.byId('stuKhName'+rowIndex).get('value');
+	stuEnName = dijit.byId('stuEnName'+rowIndex).get('value');
+	stuEnName = stuEnName ? ' '+stuEnName : '';
+	$("#bodyPopup").html("");
+	if(studentId==''){return false;}
+	
+	$("#studentNamePop").html(stuKhName+stuEnName);
+	
+		dojo.xhrPost({
+			url: urlGetEvaluationStudent,
+			content:{
+				'assessmentId':assessmentId,
+				'studentId':studentId,
+				},
+			handleAs:"json",
+			load: function(data) {
+				if(data !="" ){
+					$("#bodyPopup").html(data.commentListContent);
+					$('#modal-evaluation').modal('show');
+				}
+			},
+			error: function(err) {
+			}
+		});
+}
 </script>

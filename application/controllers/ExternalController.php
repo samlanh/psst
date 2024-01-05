@@ -140,7 +140,8 @@ class ExternalController extends Zend_Controller_Action
 		$this->view->search = $search;
 		
 		$dbExternal=new Application_Model_DbTable_DbExternal();
-		$this->view->allClass = $dbExternal->getAllClassByUser($search);
+		//$this->view->allClass = $dbExternal->getAllClassByUser($search);
+		$this->view->allClass = $dbExternal->getAllClassForIssueScore($search);
 			
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();

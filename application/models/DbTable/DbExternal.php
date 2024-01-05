@@ -1182,18 +1182,204 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$gradingId = empty($data['gradingId'])?0:$data['gradingId'];
 		$sql="SELECT 
-				s.*
+				s.*,
+				COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id AND sttDi.subjectId =  ".$data['subjectId']." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') AS isNotEntryCr
 				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
 				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
 				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
 			FROM `rms_scoreengsettingdetail` AS s 
 			WHERE s.score_setting_id=$gradingId 
-			AND s.subjectId =0
+			AND (s.subjectId =0 OR s.subjectId=".$data['subjectId'].")
 		";
-		$sql.=" ORDER BY criteriaType ASC, s.criteriaId ASC ";
+
+		if(!empty($data['examType'])){
+			$sql.=' AND s.forExamType='.$data['examType'];
+		}
+		$sql.=" AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = s.criteriaId LIMIT 1)
+				 > CASE 
+			WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id 
+			AND sttDi.subjectId =  ".$data['subjectId']." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+						ELSE '0'
+					END 
+				AND s.isNotEnteryCri = CASE 
+					WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id 
+			AND sttDi.subjectId =  ".$data['subjectId']." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+					ELSE '0'
+			END  ";
+		$sql.=" ORDER BY criteriaType ASC, s.criteriaId ASC, s.`subjectId` DESC ";
 		$db = $this->getAdapter();
-		$Row = $db->fetchAll($sql);
-		return $Row;
+		 $row = $db->fetchAll($sql);
+
+		if(!empty($row)){ 
+			$newArray = array();
+			$criteriaId = "";
+			foreach($row as $criteria){
+				if( ($criteriaId != $criteria["criteriaId"]) ){
+					array_push($newArray, $criteria);
+				}
+				$criteriaId = $criteria["criteriaId"];
+			}
+			$row = $newArray;
+		}
+		$row = empty($row) ? array() : $row;
+		return $row;
+	}
+
+	function getAllClassForIssueScore($search){
+		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentTeacher = $this->getUserExternalId();
+		$currentDate =  date('Y-m-d');
+		
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
+		$subjectTitle='subject_titleen';
+		if ($currentLang==1){
+			$colunmname='title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
+			$subjectTitle='subject_titlekh';
+		}
+		$sql="SELECT 
+			sett.`id`
+			,sett.`title`
+			,sett.`examType`
+			,sett.`fromDate`
+			,sett.`endDate`
+			,sett.`examFromDate`
+			,CASE
+				WHEN aTs.endDate  IS NOT NULL THEN aTs.endDate 
+				ELSE sett.examEndDate
+			END AS examEndDate
+			,g.`group_code` 
+			,g.`id` as groupId
+			,g.`gradingId` as gradingId
+			,gsjb.`subject_id` as subjectId
+			,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=sett.branchId LIMIT 1) As branchName
+			,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =sett.examType LIMIT 1) as forTypeTitle
+			,CASE
+				WHEN sett.examType = 2 THEN sett.forSemester
+				ELSE (SELECT $month FROM `rms_month` WHERE id=sett.forMonth  LIMIT 1) 
+			END AS forMonthTitle
+			,(SELECT subj.subject_titleen FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleEng
+			,(SELECT subj.subject_titlekh FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleKh
+			,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
+			,COALESCE(gd.gradingTmpId,'0') AS IsExam
+			,COALESCE(gd.isLock,'0') AS isLock
+		FROM 
+			`rms_group_subject_detail` AS gsjb
+			JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 
+			JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1
+			LEFT JOIN `rms_grading` AS gd ON gd.groupId= g.`id`  AND gd.subjectId = gsjb.subject_id AND gd.settingEntryId= sett.`id`  AND gd.teacherId= gsjb.teacher
+			LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs ON aTs.teacherId = gsjb.teacher AND g.id = aTs.group AND FIND_IN_SET(gsjb.subject_id,(aTs.subjectId)) AND aTs.endDate > sett.examEndDate
+			";
+
+		$where =" WHERE g.`gradingId` !=0 AND g.is_pass !=3 ";
+		$where.=" AND gsjb.teacher =".$currentTeacher;
+
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[]	="	`g`.`group_code` LIKE '%{$s_search}%'";
+			$s_where[]	="	(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]	="	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]	=" `g`.`semester` LIKE '%{$s_search}%'";
+			
+			$s_where[]	="	(SELECT i.title FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[]	="	(SELECT i.title_en FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) LIKE '%{$s_search}%'";
+			
+			$s_where[] 	="	(SELECT id.title FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] 	="	(SELECT id.title_en FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) LIKE '%{$s_search}%'";
+			
+			$s_where[] 	="	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`)) LIKE '%{$s_search}%'";
+			
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		}
+		if(!empty($search['academic_year'])){
+			$where.=' AND g.academic_year='.$search['academic_year'];
+		}
+		if(!empty($search['degree'])){
+			$where.=' AND `g`.`degree`='.$search['degree'];
+		}
+		if(!empty($search['grade'])){
+			$where.=' AND g.grade='.$search['grade'];
+		}
+		if(!empty($search['is_pass']) AND $search['is_pass']>-1){
+			$where.=' AND g.is_pass='.$search['is_pass'];
+		}
+$where.="	AND sett.fromDate <= '".$currentDate."' 
+		AND CASE 
+			WHEN aTs.endDate IS NOT NULL
+			THEN aTs.endDate
+			ELSE sett.examEndDate
+		END >='".$currentDate."'";
+$groupby="	GROUP BY 
+			sett.id,
+			gsjb.group_id,
+			gsjb.subject_id ";
+
+$orderby="	ORDER BY 
+			sett.id DESC,
+			g.group_code ASC  
+			,gsjb.subject_id ASC
+		";
+		return $db->fetchAll($sql.$where.$groupby.$orderby);
+		
+	}
+
+	function checkTecherEntrySetting($data){
+		$currentDate =  date('Y-m-d');
+		$criterialType = $data['criterialType'];
+		if($criterialType==2){
+			$fromDate = "st.examFromDate";
+			$endDate = "st.examEndDate";
+		}else{
+			$fromDate = "st.fromDate";
+			$endDate = "st.endDate";
+		}
+		$db = $this->getAdapter();
+		$sql="SELECT 
+			st.id,
+			st.fromDate,
+			st.endDate,
+			st.examFromDate,
+			st.examEndDate,
+			st.title,
+			st.degreeId  ";
+		if($criterialType==2){
+			$sql.="
+			,att.subjectId,
+			CASE 
+				WHEN att.endDate IS NOT NULL 
+				THEN att.endDate
+				ELSE ".$endDate."
+			END AS endDateExam   ";
+		}
+	$sql.="	FROM `rms_score_entry_setting` as st ";
+		if($criterialType==2){
+			$sql.=" LEFT JOIN `rms_allowed_teacher_score_setting` as att ON att.`teacherId`=".$data['teacherId']." AND att.group=".$data['groupId']." AND att.status=1	AND FIND_IN_SET( ".$data['subjectId'].",att.`subjectId`) AND att.endDate > ".$endDate;
+			$sql.=" WHERE st.status=1 AND '".$currentDate."'>=".$fromDate;
+			$sql.="	AND CASE 
+				WHEN att.endDate IS NOT NULL
+				THEN att.endDate ELSE ".$endDate." END >= '".$currentDate."' ";
+		}else{
+			$sql.= " WHERE st.status=1  AND st.fromDate <= '".$currentDate."' AND st.endDate >='".$currentDate."' ";
+		}
+		if(!empty($data['degreeId'])){
+			$sql.=" AND  FIND_IN_SET( ".$data['degreeId'].", st.degreeId )";
+		}
+		$sql.=" ORDER BY st.id DESC LIMIT 1 ";
+		// if($criterialType==2){
+		// 	echo $sql;
+		// }
+		return $db->fetchRow($sql);
 	}
 	
 }

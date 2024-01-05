@@ -43,6 +43,36 @@
     width: 70px  !important;
     display: block;
 	}
+	a.mini-button-class-edit {
+    padding: 3px;
+    font-size: 10px;
+	color: #ffffff;
+    background-color: #d1a00c;
+    border-color: #004b9c;
+    border-radius: 6px;
+    width: 70px  !important;
+    display: block;
+	}
+	span.mini-button-class-success {
+    padding: 3px;
+    font-size: 10px;
+    color: #fff;
+    background-color: green;
+    border-color: #004b9c;
+    border-radius: 6px;
+    width: 70px  !important;
+    display: block;
+	}
+	span.mini-button-class-loading {
+    padding: 3px;
+    font-size: 10px;
+    color: #fff;
+    background-color: #313b4e;
+    border-color: #004b9c;
+    border-radius: 6px;
+    width: 70px  !important;
+    display: block;
+	}
 </style>
 	
 	<div class="row"> 
@@ -84,13 +114,13 @@
 			   </div>
 			   
 			   <div class="row"> 
-					<?php if(!empty($this->allClass)) foreach($this->allClass as $row){ 
+					<?php 
+					//print_r($this->allClass);
+				
+					if(!empty($this->allClass)) foreach($this->allClass as $row){ 
 						$cardClass = "border-top-primary border-top-darken-1";
 						$bgClass = "border-primary bg-gradient-directional-primary";
-						if($row['is_pass']==4){
-							$cardClass = "border-top-success border-top-darken-1";
-							$bgClass = "border-success bg-gradient-directional-success";
-						}else if($row['is_pass']==0){
+						if($row['examType']==2){
 							$cardClass = "border-top-warnings border-top-darken-1";
 							$bgClass = "border-warnings bg-gradient-directional-warnings";
 						}
@@ -106,78 +136,91 @@
 										</div>
 									</div>
 									<div class="col-xs-7 pl-0">
-										<ul class="nav navbar-right panel_toolbox stusearch">
-										  <li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-											<ul class="dropdown-menu" role="menu">
-												<!-- <li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/grading/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_SCORE');?></a>
-												</li> -->
-												<?php if(!empty($row['mainTeacher'])){ ?>
-												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/assessment/add/id/".$row['id'];?>"><?php echo $tr->translate('ISSUE_STUDENT_ASSESSMENT');?></a>
-												</li>
-												<?php } ?>
-												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-student-list/id/".$row['id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
-												</li>
-											</ul>
-										  </li>
-										</ul>
 										<div class="col-md-12 col-sm-12 col-xs-12 ">
-											<h4 class="mb-0"><?php echo $row['subjectName']; ?></h4>
-											<p class="mb-0 mt-0"><small class="text-muted float-right"><?php echo $row['branchName']; ?></small></p>
-											<p class="mb-0"><?php echo $row['academicYear']; ?></p>
-											<p class="mb-0"><?php echo $row['groupStatus']; ?></p>
-											<h3 class="mb-0 mt-0 p-relative">
-												<span class="counting-num mr-1"><?php echo sprintf('%02d',$row['amountStudent']); ?></span>
-												<span class="adjustLineHeight material-icons-outlined">groups</span> 
-											</h3>
+											<h4 class="mb-0 text-primary"><?php echo $row['title']; ?></h4>
+											<h4 class="mb-1 text-warning"><?php echo $row['subjectTitleKh']; ?>/<?php echo $row['subjectTitleEng']; ?></h4>
+										
+											<p class="mb-0 mt-0"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>&nbsp;<?php echo $row['branchName']; ?></p>
+											<p class="mb-0"><i class="glyphicon glyphicon-education" aria-hidden="true"></i>&nbsp;<?php echo $row['academicYear']; ?></p>
+											<p class="mb-0 "><i class="fa fa-file-text-o" aria-hidden="true"></i>&nbsp;<?php echo $row['forTypeTitle']."  ".$row['forMonthTitle']; ?></p>
+											<p class="mb-0 "><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>&nbsp;<?php echo $row['fromDate']." / ".$row['endDate']; ?></p>
+										
+											
 										</div>
 									</div>
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 ">
 									<?php   
-										$dbg = new Application_Model_DbTable_DbGlobal();
+										// $dbg = new Application_Model_DbTable_DbGlobal();
 									
 										$dbExternal = new Application_Model_DbTable_DbExternal;
 										$gradingId= $row['gradingId'];
+										$examType= $row['examType'];
+										$subjectId= $row['subjectId'];
 										$data = array(
-											'gradingId' => $gradingId,
+											'gradingId' => $gradingId
+											,'examType' => $examType
+											,'subjectId' => $subjectId
 										);
 										$criterial = $dbExternal -> getCriterialByGrading($data);
 										$no =0;
 										if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
-											if($rsCriterial['criteriaType']!=0){
-
-											$no++;
-
-											$degreeId = $row['degreeId'];
-											$subjectId = $row['subjectId'];
-											$teacherId = $row['teacherId'];
-											$scoreSetting= array(
-												'degreeId'  	=> $degreeId,
-												'subjectId' 	=> $subjectId,
-												'teacherId' 	=> $teacherId,
-												'groupId' 		=> $row['id'],
-												'criterialType' => $rsCriterial['criteriaType'],
-											);
-											$rsEntrySetting = $dbg->checkTecherEntrySetting($scoreSetting);
-										//	print_r($rsEntrySetting);
+											 $no++;
 										?>
 										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
-											<li style="width: 75%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']." / ".$rsCriterial['criterialTitleEng']; ?></li>
-											<?php if(!empty($rsEntrySetting)){ ?>
+											
+											<?php 
+												$currentDate = date('Y-m-d');
+												if($rsCriterial['criteriaType']==2){ ?>
+
+													<li style="width: 75%;" >
+													<?php echo $no.". ".$rsCriterial['criterialTitle']." / ".$rsCriterial['criterialTitleEng']; ?> <br>
+														<small class="text-primary">&nbsp; &nbsp; &nbsp; <i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>&nbsp; <?php echo $row['examFromDate']." / ".$row['examEndDate']; ?></small>
+													</li>
+
+												<?php 	
+												if( $currentDate >= $row['examFromDate'] AND $currentDate <= $row['examEndDate']){
+														if($row['IsExam']>0 AND $row['isLock'] ==0) {
+														?>
+
+														<li style="width: 25%; text-align:center;" >
+															<a target="_blank" class="mini-button-class-edit" href="<?php echo $this->baseUrl()."/grading/edit/id/".$row['groupId'].'/gradingRowId/'.$row['IsExam'];?>">
+																<i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo $tr->translate('EDIT');?>
+															</a>
+														</i>
+
+													<?php }elseif($row['IsExam']>0 AND $row['isLock'] ==1){   ?>
+
+														<li style="width: 25%; text-align:center;" >
+															<span class="mini-button-class-success" >
+																<i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> <?php echo $tr->translate('Completed');?>
+															</span>
+														</i>
+
+												<?php	}else{  ?>
+
+														<li style="width: 25%; text-align:center;" >
+																<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
+																		<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
+																</a>
+															</i>
+													<?php }	
+											}else{ ?>
+														<li style="width: 25%; text-align:center;" >
+															<span class="mini-button-class-loading" >
+																<i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i> <?php echo $tr->translate('Not Allowed');?>
+															</span>
+														</i>
+												<?php	}}else{ ?>
+												<li style="width: 75%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']." / ".$rsCriterial['criterialTitleEng']; ?></li>
 												<li style="width: 25%; text-align:center;" >
-													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['id']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$rsEntrySetting['id'];?>">
-														<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
+													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
+														<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 													</a>
-												</li>	
-											<?php }else{ ?>	
-												<li style="width: 25%; text-align:center;" ><i class="text-info fa fa-toggle-off" aria-hidden="true"></i>
-											<?php }?>	
+												</i>
+											<?php } ?>
 										</ul>
-									<?php } }?>
+									<?php  } ?>
 									<div style="clear:both;"></div>
 								</div>
 

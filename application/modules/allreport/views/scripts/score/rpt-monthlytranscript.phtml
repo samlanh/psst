@@ -292,11 +292,20 @@
 											</tr>
 											<tr class="style hover">
 												<td colspan="5" align="center" class=" ">&nbsp;
-													មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
+													មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Ranks
 												</td>
 												<td align="center">
 													<strong>
 														<?php
+
+														if($degreeId==2 OR $degreeId==3 ){
+															if($scoreInfo['exam_type'] == 1){
+																$totalmultiSubSubject=$totalSubMaxScore/100;
+															}else{
+																$totalmultiSubSubject=$totalSubMaxScore/50;
+															}
+														}
+
 														$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
 														echo number_format($totalKhmerAverage, 2); ?>
 													</strong>
@@ -389,6 +398,15 @@
 								<td align="center">
 									<strong>
 										<?php
+
+										if($degreeId==2 OR $degreeId==3 ){
+											if($scoreInfo['exam_type'] == 1){
+												$totalmultiSubSubject=$totalSubMaxScore/100;
+											}else{
+												$totalmultiSubSubject=$totalSubMaxScore/50;
+											}
+										}
+									
 										$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
 										echo number_format($totalKhmerAverage, 2); ?>
 									</strong>

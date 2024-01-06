@@ -1180,13 +1180,24 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	}
 	function getCriterialByGrading($data){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentTeacher = $this->getUserExternalId();
+		$currentDate =  date('Y-m-d');
+		
+		$currentLang = $dbp->currentlang();
+		$title='title_en';
+		if ($currentLang==1){
+			$title='title';
+		}
+
 		$gradingId = empty($data['gradingId'])?0:$data['gradingId'];
 		$sql="SELECT 
 				s.*,
 				COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id AND sttDi.subjectId =  ".$data['subjectId']." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') AS isNotEntryCr
 				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
-				,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle 
-				,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitleEng 
+				,(SELECT es.$title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle
+				,(SELECT COUNT(gd.id) FROM `rms_grading_tmp` AS gd WHERE gd.criteriaId = s.criteriaId AND gd.subjectId= ".$data['subjectId']." AND gd.settingEntryId= ".$data['settingEntryId']." AND gd.groupId=".$data['groupId']." AND gd.examType=".$data['examType']." LIMIT 1) AS timeInput 
 			FROM `rms_scoreengsettingdetail` AS s 
 			WHERE s.score_setting_id=$gradingId 
 			AND (s.subjectId =0 OR s.subjectId=".$data['subjectId'].")
@@ -1268,8 +1279,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				WHEN sett.examType = 2 THEN sett.forSemester
 				ELSE (SELECT $month FROM `rms_month` WHERE id=sett.forMonth  LIMIT 1) 
 			END AS forMonthTitle
-			,(SELECT subj.subject_titleen FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleEng
-			,(SELECT subj.subject_titlekh FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleKh
+			,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitle
 			,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
 			,COALESCE(gd.gradingTmpId,'0') AS IsExam
 			,COALESCE(gd.isLock,'0') AS isLock

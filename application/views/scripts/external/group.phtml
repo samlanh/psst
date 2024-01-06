@@ -33,6 +33,11 @@
 		padding: 3px;
 		border-radius: 3px;
 	}
+	ul.bg-head li{
+		background-color: #575f69;
+		padding: 4px;
+		border-radius: 3px;
+	}
 	a.mini-button-class {
     padding: 3px;
     font-size: 10px;
@@ -138,7 +143,7 @@
 									<div class="col-xs-7 pl-0">
 										<div class="col-md-12 col-sm-12 col-xs-12 ">
 											<h4 class="mb-0 text-primary"><?php echo $row['title']; ?></h4>
-											<h4 class="mb-1 text-warning"><?php echo $row['subjectTitleKh']; ?>/<?php echo $row['subjectTitleEng']; ?></h4>
+											<h4 class="mb-1 text-warning"><?php echo $row['subjectTitle']; ?></h4>
 										
 											<p class="mb-0 mt-0"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>&nbsp;<?php echo $row['branchName']; ?></p>
 											<p class="mb-0"><i class="glyphicon glyphicon-education" aria-hidden="true"></i>&nbsp;<?php echo $row['academicYear']; ?></p>
@@ -150,17 +155,26 @@
 									</div>
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 ">
+									<ul class="sub_list bg-head">
+										<li style="width: 55%; color:azure; text-align:center; "><?php echo $tr->translate("CRITERIAL_NAME"); ?></li>
+										<li style="width: 20%; color:azure; text-align:center;"><?php echo $tr->translate("AMOUNT"); ?></li>
+										<li style="width: 25%; color:azure; "><?php echo $tr->translate("INPUT_SCORE"); ?></li>
+									</ul>
 									<?php   
 										// $dbg = new Application_Model_DbTable_DbGlobal();
 									
 										$dbExternal = new Application_Model_DbTable_DbExternal;
 										$gradingId= $row['gradingId'];
+										$settingEntryId= $row['id'];
 										$examType= $row['examType'];
 										$subjectId= $row['subjectId'];
+										$groupId= $row['groupId'];
 										$data = array(
-											'gradingId' => $gradingId
-											,'examType' => $examType
-											,'subjectId' => $subjectId
+											'gradingId' 	  => $gradingId
+											,'examType' 	  => $examType
+											,'subjectId' 	  => $subjectId
+											,'groupId' 		  => $groupId
+											,'settingEntryId' => $settingEntryId
 										);
 										$criterial = $dbExternal -> getCriterialByGrading($data);
 										$no =0;
@@ -168,14 +182,16 @@
 											 $no++;
 										?>
 										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
-											
 											<?php 
 												$currentDate = date('Y-m-d');
 												if($rsCriterial['criteriaType']==2){ ?>
 
-													<li style="width: 75%;" >
-													<?php echo $no.". ".$rsCriterial['criterialTitle']." / ".$rsCriterial['criterialTitleEng']; ?> <br>
+													<li style="width: 55%;" >
+													<?php echo $no.". ".$rsCriterial['criterialTitle']; ?> <br>
 														<small class="text-primary">&nbsp; &nbsp; &nbsp; <i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>&nbsp; <?php echo $row['examFromDate']." / ".$row['examEndDate']; ?></small>
+													</li>
+													<li style="width: 20%; text-align:center;" >
+														<span class="text-primary"><?php echo $rsCriterial['timeInput']; ?> <?php echo $tr->translate('Times');?></span>
 													</li>
 
 												<?php 	
@@ -212,7 +228,10 @@
 															</span>
 														</i>
 												<?php	}}else{ ?>
-												<li style="width: 75%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']." / ".$rsCriterial['criterialTitleEng']; ?></li>
+												<li style="width: 55%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>
+												<li style="width: 20%; text-align:center;"  >
+													<span class="text-primary"><?php echo $rsCriterial['timeInput']; ?> <?php echo $tr->translate('Times');?></span>
+												</li>
 												<li style="width: 25%; text-align:center;" >
 													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
 														<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>

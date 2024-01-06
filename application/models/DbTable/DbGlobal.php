@@ -4237,6 +4237,48 @@ function getAllgroupStudyNotPass($action=null){
 	 $sql.=" ORDER BY id DESC limit 1 ";
 		return $this->getAdapter()->fetchRow($sql);
 	}
+	
+	function getUserProfile(){
+		$userID = $this->getUserId();
+		$db = $this->getAdapter();
+		$sql="SELECT u.* FROM rms_users AS u WHERE u.id=".$userID;
+		return $db->fetchRow($sql);
+	}
+	function getAllDegreeOption($_data){
+		$db = $this->getAdapter();
+		$currentLang = $this->currentlang();
+		$columnName="title";
+		if($currentLang==2){
+			$columnName="title_en";
+		}
+		$this->_name = "rms_items";
+		$sql="
+			SELECT 
+				deg.`id` AS id
+				,CONCAT('(',COALESCE(deg.`shortcut`,''),')',' ',COALESCE(deg.".$columnName.",'')) AS `name`
+			FROM $this->_name AS deg 
+			WHERE 
+				deg.`status`=1
+				AND deg.`type`=1
+			
+		";
+		$user = $this->getUserProfile();
+		$level = $user['user_type'];
+		if (!empty($_data['schooloptoncheck'])){
+			$s_where = array();
+			foreach ($_data['schooloptoncheck'] as $ss){
+				$s_where[] = "(FIND_IN_SET('".$ss."', deg.schoolOption) ) ";
+			}
+			$sql.=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		
+		$sql.="
+			ORDER BY 
+				deg.`ordering` ASC
+				,deg.id ASC
+		";
+		return $db->fetchAll($sql);
+	  }
    
 }
 ?>

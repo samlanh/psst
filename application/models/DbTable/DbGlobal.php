@@ -879,7 +879,7 @@ function getAllgroupStudyNotPass($action=null){
 		$stringCondiction = "";
 		if($level!=1){
 			$degreeList = $user['degreeList'];
-			$stringCondiction = " AND $degreeStr IN ($degreeList)"
+			$stringCondiction = " AND $degreeStr IN ($degreeList)";
 		}
 		return $stringCondiction;
    }

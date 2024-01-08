@@ -76,6 +76,64 @@ ul.optListRow {
 			</script>
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("USER_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LAST_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['last_name'];?>"
+															class='fullside'/>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FIRST_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['first_name'];?>"
+															 class='fullside'/>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="user_type" />
+									   </div>
+									</div>
+									<!-- 
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("BRANCH");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<select name="branch_id" <?php //if ($branch_id!=1){ echo 'readonly="readonly"';}?> class='fullside' required="true" id="branch_id" 
+											 missingMessage="អ្នក​ភ្លេច​បំពេញ​  សាខា" dojoType="dijit.form.FilteringSelect"> 
+												<?php //foreach ($this->rs_branch as $key => $rs) : ?>
+													<option value="<?php //echo $rs["id"];?>" <?php //if($this->user_edit['branch_id']==$rs["id"]) echo 'selected'?> ><?php //echo $rs['name'];?></option>
+												<?php //endforeach;?>																					
+											</select> 
+									   </div>
+									</div>
+									 -->
+					 
+								</div>
+							</div>
+						</div>
+					</div>
+					
 	        		<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -133,65 +191,7 @@ ul.optListRow {
 						</div>
 					</div>
 	             </div>
-	             <div class="col-md-4 col-sm-4 col-xs-12">
-	             	<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("USER_INFO");?></p>
-										</div> 
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LAST_NAME");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
-															dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['last_name'];?>"
-															class='fullside'/>
-									   </div>
-									</div>
-									
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FIRST_NAME");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
-															dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->user_edit['first_name'];?>"
-															 class='fullside'/>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="user_type" />
-									   </div>
-									</div>
-									<!-- 
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php //echo $tr->translate("BRANCH");?>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<select name="branch_id" <?php //if ($branch_id!=1){ echo 'readonly="readonly"';}?> class='fullside' required="true" id="branch_id" 
-											 missingMessage="អ្នក​ភ្លេច​បំពេញ​  សាខា" dojoType="dijit.form.FilteringSelect"> 
-												<?php //foreach ($this->rs_branch as $key => $rs) : ?>
-													<option value="<?php //echo $rs["id"];?>" <?php //if($this->user_edit['branch_id']==$rs["id"]) echo 'selected'?> ><?php //echo $rs['name'];?></option>
-												<?php //endforeach;?>																					
-											</select> 
-									   </div>
-									</div>
-									 -->
-					 
-								</div>
-							</div>
-						</div>
-					</div>
-	             </div>
+	             
 	             <div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
@@ -253,7 +253,35 @@ ul.optListRow {
 							</div>
 						</div>
 					</div>
-	            
+	             </div>
+				 <div class="col-md-4 col-sm-4 col-xs-12">
+	             	<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input"  name="checkAllDegree" id="checkAllDegree" value="all" OnChange="CheckAllTotalDegree(0);"  >
+										<label class="custom-control-label" for="checkAllDegree">
+											<?php echo $tr->translate('CHECK_ALL');?>
+										</label>
+									</div>
+									<div class="form-group">
+										<ul class="optListRow" id="degreeCheck">
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 	             </div>
 	         </div>
 	         <div class="clearfix"></div>
@@ -389,7 +417,7 @@ function Checkchange(){
 		  dijit.byId('con_password').set('readOnly',true); 
 	  }
 }
-var oldschoolOption = '<?php echo $this->user_edit['schoolOption'];?>';
+var oldSchoolOption = '<?php echo $this->user_edit['schoolOption'];?>';
 var url_getoptionSchool = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"getschooloptionbybranchlist")); ?>';
 function getSchoolOption(){
 	dojo.query("#lbl_checkoption").append('');
@@ -402,8 +430,8 @@ function getSchoolOption(){
 			for(var i=0;i<data.length;i++) {
 				
 				var checkedlabel="";	
-					if(oldschoolOption!=''){ 
-						var rowIDArray = oldschoolOption.split(',');
+					if(oldSchoolOption!=''){ 
+						var rowIDArray = oldSchoolOption.split(',');
 						for(var n = 0; n < rowIDArray.length; n++){
 							if(data[i].id==rowIDArray[n]){
 								checkedlabel="checked";	
@@ -412,18 +440,17 @@ function getSchoolOption(){
 						}
 					}
 					temp+='<li class="opt-items">';
-					
-								temp+='<div class="custom-control custom-checkbox">';
-										temp+='<input type="checkbox" '+checkedlabel+' class="schoptcheck custom-control-input" id="schoolOption'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" >';
-										temp+='<label class="custom-control-label" for="schoolOption'+data[i].id+'">';
-											temp+=data[i].name;
-										temp+='</label>';
-									temp+='</div>';
-						
-						temp+='</li>';
+							temp+='<div class="custom-control custom-checkbox">';
+								temp+='<input type="checkbox" '+checkedlabel+' onChange="getDegreeOption();" class="schoptcheck custom-control-input" id="schoolOption'+data[i].id+'"  type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" >';
+								temp+='<label class="custom-control-label" for="schoolOption'+data[i].id+'">';
+									temp+=data[i].name;
+								temp+='</label>';
+							temp+='</div>';
+					temp+='</li>';
 						
 			}
-				dojo.query("#lbl_checkoption").append(temp);
+			dojo.query("#lbl_checkoption").append(temp);
+			getDegreeOption();
 			
 		},
 		error: function(err) {
@@ -456,5 +483,62 @@ function CheckAllTotal(index){
 		}
 	}
 	getSchoolOption();
+	getDegreeOption();
+}
+var oldDegreeList = '<?php echo $this->user_edit['degreeList'];?>';
+function getDegreeOption(){
+	var urlGetDegreeUrl = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"get-degree-list")); ?>';
+	dojo.query("#degreeCheck").append('');
+	dojo.xhrPost({
+		url: urlGetDegreeUrl,
+		form: dojo.byId("frmUser"),
+		handleAs:"json",
+		load: function(data) {
+			temp='';
+			for(var i=0;i<data.length;i++) {
+				var checkedlabel="";	
+				if(oldDegreeList!=''){ 
+					var rowIDArray = oldDegreeList.split(',');
+					for(var n = 0; n < rowIDArray.length; n++){
+						if(data[i].id==rowIDArray[n]){
+							checkedlabel="checked";	
+							break;
+						}
+					}
+				}
+				temp+='<li class="opt-items">';
+					temp+='<div class="custom-control custom-checkbox">';
+						temp+='<input type="checkbox" class="degreeCheckbox custom-control-input" id="degreeOptionList'+data[i].id+'" '+checkedlabel+' type="checkbox" value="'+data[i].id+'" name="degreeSelector[]"  >';
+						temp+='<label class="custom-control-label" for="degreeOptionList'+data[i].id+'">';
+							temp+=data[i].name;
+						temp+='</label>';
+					temp+='</div>';
+				temp+='</li>';
+			}
+			dojo.query("#degreeCheck").append(temp);
+		},
+		error: function(err) {
+		}
+	});
+}
+
+function CheckAllTotalDegree(index){
+	if(index==0){
+		if($('#checkAllDegree').is(":checked")){
+			$('.degreeCheckbox').each(function() { //loop through each checkbox
+				this.checked = true;  
+			});
+		}else{
+			$('.degreeCheckbox').each(function() { //loop through each checkbox
+				this.checked = false;  
+			});
+		}
+	}else{
+		var a = $("input:checked").val();
+		 var identity = [];
+	     $('.degreeCheckbox:checked').each(function(i){
+	    	 identity[i] = $(this).val();
+	     });
+	}
 }
 </script>

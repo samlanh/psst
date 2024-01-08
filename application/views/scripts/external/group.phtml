@@ -59,7 +59,7 @@
     display: block;
 	}
 	span.mini-button-class-success {
-    padding: 3px;
+    padding: 4px;
     font-size: 10px;
     color: #fff;
     background-color: green;
@@ -69,7 +69,7 @@
     display: block;
 	}
 	span.mini-button-class-loading {
-    padding: 3px;
+    padding: 4px;
     font-size: 10px;
     color: #fff;
     background-color: #313b4e;
@@ -77,6 +77,21 @@
     border-radius: 6px;
     width: 70px  !important;
     display: block;
+	}
+	span.buttonTitle {
+    line-height: 18px;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+ul.criteria_list li{
+		
+		list-style: none;
+		width: 100%;
 	}
 </style>
 	
@@ -155,11 +170,13 @@
 									</div>
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 ">
+									
 									<ul class="sub_list bg-head">
 										<li style="width: 55%; color:azure; text-align:center; "><?php echo $tr->translate("CRITERIAL_NAME"); ?></li>
 										<li style="width: 20%; color:azure; text-align:center;"><?php echo $tr->translate("AMOUNT"); ?></li>
 										<li style="width: 25%; color:azure; "><?php echo $tr->translate("INPUT_SCORE"); ?></li>
 									</ul>
+									
 									<?php   
 										// $dbg = new Application_Model_DbTable_DbGlobal();
 									
@@ -223,8 +240,8 @@
 													<?php }	
 											}else{ ?>
 														<li style="width: 25%; text-align:center;" >
-															<span class="mini-button-class-loading" >
-																<i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i> <?php echo $tr->translate('Not Allowed');?>
+															<span class="mini-button-class-loading buttonTitle" >
+																<i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i> <?php echo $tr->translate('UNAVAILABLE');?>
 															</span>
 														</i>
 												<?php	}}else{ ?>

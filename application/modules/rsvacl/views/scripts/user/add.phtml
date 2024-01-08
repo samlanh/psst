@@ -72,6 +72,49 @@ ul.optListRow {
 								<div class="col-md-12 col-sm-12 col-xs-12"> 
 									<div class="d-flex"> 
 										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("USER_INFO");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LAST_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FIRST_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
+															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
+									   </div>
+									</div>
+									
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="user_type" />
+									   </div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
 											<i class="glyphicon glyphicon-log-in" aria-hidden="true"></i>
 										</div> 
 										<div class="col-md-10 col-sm-10 col-xs-12"> 
@@ -110,73 +153,9 @@ ul.optListRow {
 						</div>
 					</div>
 	             </div>
+	            
 	             <div class="col-md-4 col-sm-4 col-xs-12">
 	             	
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("USER_INFO");?></p>
-										</div> 
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LAST_NAME");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="text" required="true" name="last_name" id="last_name" placeholder="<?php echo $tr->translate("LAST_NAME");?>" 
-															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-									   </div>
-									</div>
-									
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FIRST_NAME");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input type="text" required="true" name="first_name" id="first_name" placeholder="<?php echo $tr->translate("FIRST_NAME");?>" 
-															dojoType="dijit.form.ValidationTextBox" class='fullside'/>
-									   </div>
-									</div>
-									
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_TYPE");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="user_type" />
-									   </div>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-	             </div>
-	             <div class="col-md-4 col-sm-4 col-xs-12">
-	             	<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("School Option");?></p>
-										</div> 
-									</div>
-									<br />
-									<div class="form-group">
-										<ul class="optListRow" id="lbl_checkoption">
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 					<div class="card-blogform">
 						<div class="card-body"> 
 							<div class="row"> 
@@ -216,6 +195,58 @@ ul.optListRow {
 							</div>
 						</div>
 					</div>
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("School Option");?></p>
+										</div> 
+									</div>
+									<br />
+									
+									<div class="form-group">
+										<ul class="optListRow" id="lbl_checkoption">
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	             </div>
+				  <div class="col-md-4 col-sm-4 col-xs-12">
+	             	<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input" checked="checked"  name="checkAllDegree" id="checkAllDegree" value="all" OnChange="CheckAllTotalDegree(0);"  >
+										<label class="custom-control-label" for="checkAllDegree">
+											<?php echo $tr->translate('CHECK_ALL');?>
+										</label>
+									</div>
+									<div class="form-group">
+										<ul class="optListRow" id="degreeCheck">
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
 	             </div>
 	             <div class="clearfix"></div>
 				    <div class="card-box">
@@ -329,7 +360,7 @@ function getSchoolOption(){
 					temp+='<li class="opt-items">';
 					
 								temp+='<div class="custom-control custom-checkbox">';
-										temp+='<input type="checkbox" class="schoptcheck custom-control-input" id="schoolOption'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" id="schooloptoncheck[]" >';
+										temp+='<input type="checkbox" onChange="getDegreeOption();" class="schoptcheck custom-control-input" id="schoolOption'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="schooloptoncheck[]" >';
 										temp+='<label class="custom-control-label" for="schoolOption'+data[i].id+'">';
 											temp+=data[i].name;
 										temp+='</label>';
@@ -346,15 +377,15 @@ function getSchoolOption(){
 }
 function CheckAllTotal(index){
 	if(index==0){
-			if($('#check_all').is(":checked")){
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = true;  
-				});
-			}else{
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = false;  
-				});
-			}
+		if($('#check_all').is(":checked")){
+			$('.checkbox').each(function() { //loop through each checkbox
+				this.checked = true;  
+			});
+		}else{
+			$('.checkbox').each(function() { //loop through each checkbox
+				this.checked = false;  
+			});
+		}
 	}else{
 		var a = $("input:checked").val();
 		 var identity = [];
@@ -363,5 +394,51 @@ function CheckAllTotal(index){
 	     });
 	}
 	getSchoolOption();
+	getDegreeOption();
+}
+
+function getDegreeOption(){
+	var urlGetDegreeUrl = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"get-degree-list")); ?>';
+	dojo.query("#degreeCheck").append('');
+	dojo.xhrPost({
+		url: urlGetDegreeUrl,
+		form: dojo.byId("frmUser"),
+		handleAs:"json",
+		load: function(data) {
+			temp='';
+			for(var i=0;i<data.length;i++) {
+				temp+='<li class="opt-items">';
+					temp+='<div class="custom-control custom-checkbox">';
+						temp+='<input type="checkbox" class="degreeCheckbox custom-control-input" id="degreeOptionList'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="degreeSelector[]"  >';
+						temp+='<label class="custom-control-label" for="degreeOptionList'+data[i].id+'">';
+							temp+=data[i].name;
+						temp+='</label>';
+					temp+='</div>';
+				temp+='</li>';
+			}
+			dojo.query("#degreeCheck").append(temp);
+		},
+		error: function(err) {
+		}
+	});
+}
+function CheckAllTotalDegree(index){
+	if(index==0){
+		if($('#checkAllDegree').is(":checked")){
+			$('.degreeCheckbox').each(function() { //loop through each checkbox
+				this.checked = true;  
+			});
+		}else{
+			$('.degreeCheckbox').each(function() { //loop through each checkbox
+				this.checked = false;  
+			});
+		}
+	}else{
+		var a = $("input:checked").val();
+		 var identity = [];
+	     $('.degreeCheckbox:checked').each(function(i){
+	    	 identity[i] = $(this).val();
+	     });
+	}
 }
 </script>

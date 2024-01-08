@@ -208,15 +208,16 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	function getUserEdit($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT 
-					u.`first_name`, 
-					u.`last_name`, 
-					u.`user_name`, 
-					u.`user_type`, 
-					u.`active`, 
-					u.branch_id,
-					u.branch_list,
-					u.`id`,
-					u.schoolOption 
+					u.`first_name` 
+					,u.`last_name`
+					,u.`user_name`
+					,u.`user_type` 
+					,u.`active`
+					,u.branch_id
+					,u.branch_list
+					,u.`id`
+					,u.schoolOption 
+					,u.degreeList 
 					
 				FROM `rms_users` AS u
 				WHERE u.id = ".$id;	
@@ -273,6 +274,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 					return -1;
 				}
 			$schooloption= implode(',', $data['schooloptoncheck']);
+			$degreeSelector= implode(',', $data['degreeSelector']);
 			$_user_data = array(
 		    	'last_name'=>$data['last_name'],
 				'first_name'=>$data['first_name'],
@@ -281,6 +283,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 				'user_type'=> $data['user_type'],
 				'branch_list'=>$branchList,
 				'schoolOption'=>$schooloption,
+				'degreeList'=>$degreeSelector,
 				'active'=> 1			
 		    ); 
 			return $this->insert($_user_data);
@@ -304,6 +307,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		}
 		
 		$schooloption= implode(',', $data['schooloptoncheck']);
+		$degreeSelector= implode(',', $data['degreeSelector']);
 		$status = empty($data['active'])?0:1;
 		$_user_data=array(
 	    	'last_name'=>$data['last_name'],
@@ -314,6 +318,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 // 			'branch_id'=>$data['branch_id'],
 			'branch_list'=>$branchList,
 			'schoolOption'=>$schooloption,
+			'degreeList'=>$degreeSelector,
 			'active'=> $status		
 	    );    	   
 		if (!empty($data['check_change'])){

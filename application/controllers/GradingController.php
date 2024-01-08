@@ -132,11 +132,13 @@ class GradingController extends Zend_Controller_Action
 
 		$gradingId = $row['gradingId'];
 		$array = array(
-				'gradingId'=>$gradingId
+				'gradingId'=>$gradingId,
+				'subjectId'=>$subjectId
 				);
 		$result = $dbExternal->getGradingCriteriaItems($array);
 
 		$this->view->criteria = $result;
+
 	}
 	public function editAction()
 	{

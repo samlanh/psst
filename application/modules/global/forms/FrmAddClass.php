@@ -1,12 +1,13 @@
-<?php 
-Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
+<?php
+class Global_Form_FrmAddClass extends Zend_Dojo_Form
+{
 	protected $tr;
-	protected $tvalidate ;//text validate
+	protected $tvalidate; //text validate
 	protected $filter;
 	protected $t_date;
 	protected $t_num;
 	protected $text;
-	protected $textarea=null;
+	protected $textarea = null;
 	//protected $check;
 	public function init()
 	{
@@ -19,258 +20,292 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 		$this->textarea = 'dijit.form.Textarea';
 		//$this->check='dijit.form.CheckBox';
 	}
-	public function FrmAddClass($data=null){
-		$request=Zend_Controller_Front::getInstance()->getRequest();
+	public function FrmAddClass($data = null)
+	{
+		$request = Zend_Controller_Front::getInstance()->getRequest();
 		$_classname = new Zend_Dojo_Form_Element_TextBox('classname');
-		$_classname->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
-		
+		$_classname->setAttribs(array('dojoType' => $this->tvalidate, 'required' => 'true', 'class' => 'fullside',));
+
 		$_floor = new Zend_Dojo_Form_Element_TextBox('floor');
-		$_floor->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
-		
+		$_floor->setAttribs(array('dojoType' => $this->tvalidate, 'class' => 'fullside',));
+
 		$_student = new Zend_Dojo_Form_Element_TextBox('max_student');
-		$_student->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
-		
-		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_student->setAttribs(array('dojoType' => $this->tvalidate, 'class' => 'fullside',));
+
+		$_status =  new Zend_Dojo_Form_Element_FilteringSelect('status');
+		$_status->setAttribs(array('dojoType' => $this->filter, 'class' => 'fullside',));
 		$_status_opt = array(
-				 1=>$this->tr->translate("ACTIVE"),
-				 0=>$this->tr->translate("DACTIVE"));
+			1 => $this->tr->translate("ACTIVE"),
+			0 => $this->tr->translate("DACTIVE")
+		);
 		$_status->setMultiOptions($_status_opt);
-		
+
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
-		$_branch_id->setAttribs(array('dojoType'=>$this->filter,
+		$_branch_id->setAttribs(array(
+			'dojoType' => $this->filter,
 			//	'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
+			'class' => 'fullside',
+			'autoComplete' => "false",
+			'queryExpr' => '*${0}*',
+			'required' => false
 		));
 		$_branch_id->setValue($request->getParam("branch_id"));
 		$db = new Application_Model_DbTable_DbGlobal();
-		$rows= $db->getAllBranch();
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_BRANCH")));
-		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$rows = $db->getAllBranch();
+		array_unshift($rows, array('id' => '', 'name' => $this->tr->translate("SELECT_BRANCH")));
+		$opt = array();
+		if (!empty($rows)) foreach ($rows as $row) $opt[$row['id']] = $row['name'];
 		$_branch_id->setMultiOptions($opt);
-			
+
 		$_submit = new Zend_Dojo_Form_Element_SubmitButton('submit');
-		$_submit->setLabel("save"); 
-		if(!empty($data)){
+		$_submit->setLabel("save");
+		if (!empty($data)) {
 			$_classname->setValue($data['room_name']);
 			$_branch_id->setValue($data['branch_id']);
 			$_student->setValue($data['max_std']);
-			$_floor->setValue($data['floor']);			
+			$_floor->setValue($data['floor']);
 			$_status->setValue($data['is_active']);
 		}
-		$this->addElements(array($_branch_id,$_floor,$_classname,$_status,$_submit,$_student));		
-		return $this;		
+		$this->addElements(array($_branch_id, $_floor, $_classname, $_status, $_submit, $_student));
+		return $this;
 	}
-	public function FrmAddGroup($data=null){
+	public function FrmAddGroup($data = null)
+	{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$request=Zend_Controller_Front::getInstance()->getRequest();
-		
+		$request = Zend_Controller_Front::getInstance()->getRequest();
+
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$_arr_opt_branch = array("" => $this->tr->translate("PLEASE_SELECT"));
 		$optionBranch = $_dbgb->getAllBranch();
-		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		if (!empty($optionBranch)) foreach ($optionBranch as $row) $_arr_opt_branch[$row['id']] = $row['name'];
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
 		$_branch_id->setMultiOptions($_arr_opt_branch);
-		$_branch_id->setAttribs(array(
-			'dojoType'=>'dijit.form.FilteringSelect',
-			'required'=>'true',
-			'missingMessage'=>'Invalid Module!',
-			'queryExpr'=>'*${0}*',
-			'autoComplete'=>'false',
-			'class'=>'fullside height-text',)
+		$_branch_id->setAttribs(
+			array(
+				'dojoType' => 'dijit.form.FilteringSelect',
+				'required' => 'true',
+				'missingMessage' => 'Invalid Module!',
+				'queryExpr' => '*${0}*',
+				'autoComplete' => 'false',
+				'class' => 'fullside height-text',
+			)
 		);
-		
+
 		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
-		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
-		
+		$_goup->setAttribs(array('dojoType' => $this->tvalidate, 'required' => 'true', 'class' => 'fullside',));
+
 		$_time = new Zend_Dojo_Form_Element_TextBox('time');
-		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
-	
+		$_time->setAttribs(array('dojoType' => $this->tvalidate, 'class' => 'fullside',));
+
 		$_note = new Zend_Dojo_Form_Element_Textarea('notes');
-		$_note->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:40px;',));
-		
+		$_note->setAttribs(array('dojoType' => $this->textarea, 'class' => 'fullside', 'style' => 'min-height:40px;',));
+
 		$_reason = new Zend_Dojo_Form_Element_Textarea('reason');
-		$_reason->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
-		
-		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_reason->setAttribs(array('dojoType' => $this->textarea, 'class' => 'fullside', 'style' => 'min-height:80px;',));
+
+		$_status =  new Zend_Dojo_Form_Element_FilteringSelect('status');
+		$_status->setAttribs(array('dojoType' => $this->filter, 'class' => 'fullside',));
 		$_status_opt = array(
-				1=>$this->tr->translate("ACTIVE"),
-				0=>$this->tr->translate("DACTIVE"));
+			1 => $this->tr->translate("ACTIVE"),
+			0 => $this->tr->translate("DACTIVE")
+		);
 		$_status->setMultiOptions($_status_opt);
-		
+
 		$degree =  new Zend_Dojo_Form_Element_FilteringSelect('degree');
 		$degree->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
+			'dojoType' => 'dijit.form.FilteringSelect',
+			'class' => 'fullside',
+			'onChange' => 'getallGrade();getStudentNo()',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
 		));
 		$rs_degree = $_dbgb->getAllFecultyName();
 		$arr_opt = array();
-		if(!empty($rs_degree))foreach($rs_degree AS $row) $arr_opt[$row['id']]=$row['name'];
+		if (!empty($rs_degree)) foreach ($rs_degree as $row) $arr_opt[$row['id']] = $row['name'];
 		$degree->setMultiOptions($arr_opt);
-		
+
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
-		$_academic->setAttribs(array('dojoType'=>$this->filter,
-				'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'required'=>false,
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
+		$_academic->setAttribs(array(
+			'dojoType' => $this->filter,
+			'placeholder' => $this->tr->translate("SERVIC"),
+			'class' => 'fullside',
+			'required' => false,
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
 		));
-		
+
 		$_academic->setValue($request->getParam("academic_year"));
 		$rows =  $_dbgb->getAllAcademicYear();
 
-		$opt=array();
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
-		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$opt = array();
+		array_unshift($rows, array('id' => '', 'name' => $this->tr->translate("SELECT_YEAR")));
+		if (!empty($rows)) foreach ($rows as $row) $opt[$row['id']] = $row['name'];
 		$_academic->setMultiOptions($opt);
-		
+
 		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
-		$_type->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'required'=>false,
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
+		$_type->setAttribs(array(
+			'dojoType' => $this->filter,
+			'class' => 'fullside',
+			'required' => false,
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
 		));
-		
+
 		$_type->setValue($request->getParam("type"));
 		$db = new Foundation_Model_DbTable_DbStudentDrop();
-		$rows= $db->getAllDropType();
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_TYPE")));
-		$opt=array();
-		if(!empty($rows))foreach($rows As $row)
-			{
-				$opt[$row['id']]=$row['name'];
-			}
+		$rows = $db->getAllDropType();
+		array_unshift($rows, array('id' => '', 'name' => $this->tr->translate("SELECT_TYPE")));
+		$opt = array();
+		if (!empty($rows)) foreach ($rows as $row) {
+			$opt[$row['id']] = $row['name'];
+		}
 		$_type->setMultiOptions($opt);
-		
+
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');
 		$room->setAttribs(array(
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
-		
+			'dojoType' => 'dijit.form.FilteringSelect',
+			'class' => 'fullside',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+
 		));
 		$rs_roow = $_dbgb->getAllRoom();
-		$arr_room = array(-1=>$tr->translate("SELECT_ROOM"));
-		if(!empty($rs_roow))foreach($rs_roow AS $row) $arr_room[$row['id']]=$row['name'];
+		$arr_room = array(-1 => $tr->translate("SELECT_ROOM"));
+		if (!empty($rs_roow)) foreach ($rs_roow as $row) $arr_room[$row['id']] = $row['name'];
 		$room->setMultiOptions($arr_room);
-		
+
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
-		$session->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
-				));
-		$opt_sesion=$_dbgb->getSession();
-		$opt_session = array(''=>$this->tr->translate("SELECT_SESSION"));
-		if(!empty($opt_sesion))foreach ($opt_sesion As $rs)$opt_session[$rs['key_code']]=$rs['view_name'];
+		$session->setAttribs(array(
+			'dojoType' => $this->filter,
+			'class' => 'fullside',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+		));
+		$opt_sesion = $_dbgb->getSession();
+		$opt_session = array('' => $this->tr->translate("SELECT_SESSION"));
+		if (!empty($opt_sesion)) foreach ($opt_sesion as $rs) $opt_session[$rs['key_code']] = $rs['view_name'];
 		$session->setMultiOptions($opt_session);
 		$session->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',));
-		
+			'dojoType' => $this->filter,
+			'required' => 'true',
+			'class' => 'fullside',
+		));
+
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('gender');
-		$_sex->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',));
+		$_sex->setAttribs(array(
+			'dojoType' => $this->filter,
+			'class' => 'fullside',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+		));
 		$sex_opt = array(
-				1=>$tr->translate("MALE"),
-				2=>$tr->translate("FEMALE"));
+			1 => $tr->translate("MALE"),
+			2 => $tr->translate("FEMALE")
+		);
 		$_sex->setMultiOptions($sex_opt);
-		
-		
+
+
 		$_calture = new Zend_Dojo_Form_Element_FilteringSelect('calture');
-		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'missingMessage'=>'Invalid Module!',
-				'required'=>false
+		$_calture->setAttribs(array(
+			'dojoType' => $this->filter, 'class' => 'fullside',
+			'placeholder' => $this->tr->translate("SERVIC"),
+			'class' => 'fullside',
+			'autoComplete' => "false",
+			'queryExpr' => '*${0}*',
+			'missingMessage' => 'Invalid Module!',
+			'required' => false
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
-		
-		$calture_opt = array(""=>$this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
-		$optionDegree = $_dbgb->getAllDegreeMent(21);//Education Level
-		if(!empty($optionDegree))foreach($optionDegree AS $row) $calture_opt[$row['id']]=$row['name'];
+
+		$calture_opt = array("" => $this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
+		$optionDegree = $_dbgb->getAllDegreeMent(21); //Education Level
+		if (!empty($optionDegree)) foreach ($optionDegree as $row) $calture_opt[$row['id']] = $row['name'];
 		$_calture->setMultiOptions($calture_opt);
-		
+
 		$is_pass = new Zend_Dojo_Form_Element_FilteringSelect('is_pass');
-		$is_pass->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SERVIC"),
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'missingMessage'=>'Invalid Module!',
-				'required'=>false
+		$is_pass->setAttribs(array(
+			'dojoType' => $this->filter, 'class' => 'fullside',
+			'placeholder' => $this->tr->translate("SERVIC"),
+			'class' => 'fullside',
+			'autoComplete' => "false",
+			'queryExpr' => '*${0}*',
+			'missingMessage' => 'Invalid Module!',
+			'required' => false
 		));
-		$opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$opt = array("" => $this->tr->translate("PLEASE_SELECT"));
 		$rs = $db->getViewById(9);
-		if(!empty($rs))foreach($rs AS $row) $opt[$row['id']]=$row['name'];
+		if (!empty($rs)) foreach ($rs as $row) $opt[$row['id']] = $row['name'];
 		$is_pass->setMultiOptions($opt);
-		
-		
-		
+
+
+
 		$total_max_score = new Zend_Dojo_Form_Element_NumberTextBox('total_max_score');
-		$total_max_score->setAttribs(array('dojoType'=>$this->t_num,
-				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("MONTH_COVERTED_SCORED"),
-				'onkeyup'=>'CulculateAverage();',
-				'required'=>true));
-		
+		$total_max_score->setAttribs(array(
+			'dojoType' => $this->t_num,
+			'class' => 'fullside',
+			'placeholder' => $this->tr->translate("MONTH_COVERTED_SCORED"),
+			'onkeyup' => 'CulculateAverage();',
+			'required' => true
+		));
+
 		$max_avg = new Zend_Dojo_Form_Element_NumberTextBox('max_average');
-		$max_avg->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("MONTH_AVERAGE_SCORE"),
-				'required'=>true,
-				'readOnly'=>true));
-		
+		$max_avg->setAttribs(array(
+			'dojoType' => $this->t_num, 'class' => 'fullside',
+			'placeholder' => $this->tr->translate("MONTH_AVERAGE_SCORE"),
+			'required' => true,
+			'readOnly' => true
+		));
+
 		$divide_subject = new Zend_Dojo_Form_Element_NumberTextBox('divide_subject');
-		$divide_subject->setAttribs(array('dojoType'=>$this->t_num,
-				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("MONTH_SUBJECT_COEFFECTION"),
-				'onkeyup'=>'CulculateAverage();',
-				'required'=>true));
+		$divide_subject->setAttribs(array(
+			'dojoType' => $this->t_num,
+			'class' => 'fullside',
+			'placeholder' => $this->tr->translate("MONTH_SUBJECT_COEFFECTION"),
+			'onkeyup' => 'CulculateAverage();',
+			'required' => true
+		));
 
 		$semesterTotalScore = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalScore');
-		$semesterTotalScore->setAttribs(array('dojoType'=>$this->t_num,
-				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SEM_CONVERTED_SCORED"),
-				'onkeyup'=>'CulculateSemesterAverage();',
-				'required'=>true));
-		
-		$semesterTotalSubject = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalSubject');
-		$semesterTotalSubject->setAttribs(array('dojoType'=>$this->t_num,'class'=>'fullside',
-				'required'=>true,
-				'placeholder'=>$this->tr->translate("SEM_COEFFECTION"),
-				'onkeyup'=>'CulculateSemesterAverage();',
-				));
-		
-		$semesterTotalAverage = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalAverage');
-		$semesterTotalAverage->setAttribs(array('dojoType'=>$this->t_num,
-				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("SEM_AVR_SCORED"),
-				'readOnly'=>true,
-				'required'=>true));
+		$semesterTotalScore->setAttribs(array(
+			'dojoType' => $this->t_num,
+			'class' => 'fullside',
+			'placeholder' => $this->tr->translate("SEM_CONVERTED_SCORED"),
+			'onkeyup' => 'CulculateSemesterAverage();',
+			'required' => true
+		));
 
-				
-			
+		$semesterTotalSubject = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalSubject');
+		$semesterTotalSubject->setAttribs(array(
+			'dojoType' => $this->t_num, 'class' => 'fullside',
+			'required' => true,
+			'placeholder' => $this->tr->translate("SEM_COEFFECTION"),
+			'onkeyup' => 'CulculateSemesterAverage();',
+		));
+
+		$semesterTotalAverage = new Zend_Dojo_Form_Element_NumberTextBox('semesterTotalAverage');
+		$semesterTotalAverage->setAttribs(array(
+			'dojoType' => $this->t_num,
+			'class' => 'fullside',
+			'placeholder' => $this->tr->translate("SEM_AVR_SCORED"),
+			'readOnly' => true,
+			'required' => true
+		));
+
+		$_semesterPercentage =  new Zend_Dojo_Form_Element_FilteringSelect('semesterPercentage');
+		$_semesterPercentage->setAttribs(array('dojoType' => $this->filter, 'class' => 'fullside',));
+		$_percentage_opt = array(
+			1 => $this->tr->translate("100%"),
+			2 => $this->tr->translate("50%")
+		);
+		$_semesterPercentage->setMultiOptions($_percentage_opt);
+
+
+
 		$id = new Zend_Form_Element_hidden('id');
-		if($data!=null){
+		if ($data != null) {
 			$id->setValue($data['id']);
 			$_branch_id->setValue($data['branch_id']);
- 			$_goup->setValue($data['group_code']);
+			$_goup->setValue($data['group_code']);
 			$session->setValue($data['session']);
 			$_calture->setValue($data['calture']);
 			$_time->setValue($data['time']);
@@ -283,6 +318,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$semesterTotalScore->setValue($data['semesterTotalScore']);
 			$semesterTotalSubject->setValue($data['semesterTotalSubject']);
 			$semesterTotalAverage->setValue($data['semesterTotalAverage']);
+			$_semesterPercentage->setValue($data['semesterPercentage']);
 		}
 		$this->addElements(array(
 			$total_max_score,
@@ -306,152 +342,170 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$_goup,
 			$semesterTotalScore,
 			$semesterTotalSubject,
-			$semesterTotalAverage
+			$semesterTotalAverage,
+			$_semesterPercentage
 
 		));
 		return $this;
 	}
-	
-	public function FrmAddDrup($data=null){
+
+	public function FrmAddDrup($data = null)
+	{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$request=Zend_Controller_Front::getInstance()->getRequest();
-	
+		$request = Zend_Controller_Front::getInstance()->getRequest();
+
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
-		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		$_arr_opt_branch = array("" => $this->tr->translate("PLEASE_SELECT"));
 		$optionBranch = $_dbgb->getAllBranch();
-		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		if (!empty($optionBranch)) foreach ($optionBranch as $row) $_arr_opt_branch[$row['id']] = $row['name'];
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
 		$_branch_id->setMultiOptions($_arr_opt_branch);
-		$_branch_id->setAttribs(array('readOnly'=>'readOnly',
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'missingMessage'=>'Invalid Module!',
-				'class'=>'fullside height-text',));
-	
+		$_branch_id->setAttribs(array(
+			'readOnly' => 'readOnly',
+			'dojoType' => 'dijit.form.FilteringSelect',
+			'required' => 'true',
+			'missingMessage' => 'Invalid Module!',
+			'class' => 'fullside height-text',
+		));
+
 		$_goup = new Zend_Dojo_Form_Element_TextBox('group_code');
-		$_goup->setAttribs(array('dojoType'=>$this->tvalidate,'required'=>'true','class'=>'fullside',));
-	
+		$_goup->setAttribs(array('dojoType' => $this->tvalidate, 'required' => 'true', 'class' => 'fullside',));
+
 		$_time = new Zend_Dojo_Form_Element_TextBox('time');
-		$_time->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside',));
-	
+		$_time->setAttribs(array('dojoType' => $this->tvalidate, 'class' => 'fullside',));
+
 		$_note = new Zend_Dojo_Form_Element_Textarea('notes');
-		$_note->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
-	
+		$_note->setAttribs(array('dojoType' => $this->textarea, 'class' => 'fullside', 'style' => 'min-height:80px;',));
+
 		$_reason = new Zend_Dojo_Form_Element_Textarea('reason');
-		$_reason->setAttribs(array('dojoType'=>$this->textarea,'class'=>'fullside','style'=>'min-height:80px;',));
-	
-		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',));
+		$_reason->setAttribs(array('dojoType' => $this->textarea, 'class' => 'fullside', 'style' => 'min-height:80px;',));
+
+		$_status =  new Zend_Dojo_Form_Element_FilteringSelect('status');
+		$_status->setAttribs(array(
+			'dojoType' => $this->filter,
+			'class' => 'fullside',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+		));
 		$_status_opt = array(
-				1=>$this->tr->translate("ACTIVE"),
-				0=>$this->tr->translate("DACTIVE"));
+			1 => $this->tr->translate("ACTIVE"),
+			0 => $this->tr->translate("DACTIVE")
+		);
 		$_status->setMultiOptions($_status_opt);
-	
+
 		$degree =  new Zend_Dojo_Form_Element_FilteringSelect('degree');
-		$degree->setAttribs(array('readOnly'=>'readOnly',
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'onChange'=>'getallGrade();getStudentNo()',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
-	
+		$degree->setAttribs(array(
+			'readOnly' => 'readOnly',
+			'dojoType' => 'dijit.form.FilteringSelect',
+			'class' => 'fullside',
+			'onChange' => 'getallGrade();getStudentNo()',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+
 		));
 		$rs_degree = $_dbgb->getAllFecultyName();
 		$arr_opt = array();
-		if(!empty($rs_degree))foreach($rs_degree AS $row) $arr_opt[$row['id']]=$row['name'];
+		if (!empty($rs_degree)) foreach ($rs_degree as $row) $arr_opt[$row['id']] = $row['name'];
 		$degree->setMultiOptions($arr_opt);
-	
+
 		$_academic = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
-		$_academic->setAttribs(array('dojoType'=>$this->filter,'readOnly'=>'readOnly',
-				'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
-				'class'=>'fullside',
-				'required'=>false,
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
+		$_academic->setAttribs(array(
+			'dojoType' => $this->filter, 'readOnly' => 'readOnly',
+			'placeholder' => $this->tr->translate("ACADEMIC_YEAR"),
+			'class' => 'fullside',
+			'required' => false,
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
 		));
-	
+
 		$_academic->setValue($request->getParam("academic_year"));
 		$rows =  $_dbgb->getAllAcademicYear();
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
-		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		array_unshift($rows, array('id' => '', 'name' => $this->tr->translate("SELECT_YEAR")));
+		$opt = array();
+		if (!empty($rows)) foreach ($rows as $row) $opt[$row['id']] = $row['name'];
 		$_academic->setMultiOptions($opt);
-	
+
 		$_type = new Zend_Dojo_Form_Element_FilteringSelect('type');
-		$_type->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'required'=>false,
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
+		$_type->setAttribs(array(
+			'dojoType' => $this->filter,
+			'class' => 'fullside',
+			'required' => false,
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
 		));
-	
+
 		$_type->setValue($request->getParam("type"));
 		$db = new Foundation_Model_DbTable_DbStudentDrop();
-		$rows= $db->getAllDropType();
-		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_TYPE")));
-		$opt=array();
-		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$rows = $db->getAllDropType();
+		array_unshift($rows, array('id' => '', 'name' => $this->tr->translate("SELECT_TYPE")));
+		$opt = array();
+		if (!empty($rows)) foreach ($rows as $row) $opt[$row['id']] = $row['name'];
 		$_type->setMultiOptions($opt);
-	
+
 		$room =  new Zend_Dojo_Form_Element_FilteringSelect('room');
-		$room->setAttribs(array('readOnly'=>'readOnly',
-				'dojoType'=>'dijit.form.FilteringSelect',
-				'class'=>'fullside',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',
-	
+		$room->setAttribs(array(
+			'readOnly' => 'readOnly',
+			'dojoType' => 'dijit.form.FilteringSelect',
+			'class' => 'fullside',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+
 		));
 		$rs_roow = $_dbgb->getAllRoom();
-		$arr_room = array(-1=>$tr->translate("SELECT_ROOM"));
-		if(!empty($rs_roow))foreach($rs_roow AS $row) $arr_room[$row['id']]=$row['name'];
+		$arr_room = array(-1 => $tr->translate("SELECT_ROOM"));
+		if (!empty($rs_roow)) foreach ($rs_roow as $row) $arr_room[$row['id']] = $row['name'];
 		$room->setMultiOptions($arr_room);
-	
+
 		$session = new Zend_Dojo_Form_Element_FilteringSelect("session");
-		$session->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside','readOnly'=>'readOnly',
-				'queryExpr'=>'*${0}*',
-				'autoComplete'=>'false',));
+		$session->setAttribs(array(
+			'dojoType' => $this->filter,
+			'class' => 'fullside', 'readOnly' => 'readOnly',
+			'queryExpr' => '*${0}*',
+			'autoComplete' => 'false',
+		));
 		$opt_session = array(
-				1=>$tr->translate('MORNING'),
-				2=>$tr->translate('AFTERNOON'),
-				3=>$tr->translate('EVERNING'),
-				4=>$tr->translate('WEEKEND'),
+			1 => $tr->translate('MORNING'),
+			2 => $tr->translate('AFTERNOON'),
+			3 => $tr->translate('EVERNING'),
+			4 => $tr->translate('WEEKEND'),
 		);
-	
+
 		$session->setMultiOptions($opt_session);
 		$session->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'required'=>'true',
-				'class'=>'fullside',));
+			'dojoType' => $this->filter,
+			'required' => 'true',
+			'class' => 'fullside',
+		));
 		$_sex =  new Zend_Dojo_Form_Element_FilteringSelect('gender');
-		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',
-				'readOnly'=>'readOnly'));
+		$_sex->setAttribs(array(
+			'dojoType' => $this->filter, 'class' => 'fullside',
+			'readOnly' => 'readOnly'
+		));
 		$sex_opt = array(
-				1=>$tr->translate("MALE"),
-				2=>$tr->translate("FEMALE"));
+			1 => $tr->translate("MALE"),
+			2 => $tr->translate("FEMALE")
+		);
 		$_sex->setMultiOptions($sex_opt);
-	
-	
+
+
 		$_calture = new Zend_Dojo_Form_Element_FilteringSelect('calture');
-		$_calture->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside','readOnly'=>'readOnly',
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'missingMessage'=>'Invalid Module!',
-				'required'=>false
+		$_calture->setAttribs(array(
+			'dojoType' => $this->filter, 'class' => 'fullside', 'readOnly' => 'readOnly',
+			'class' => 'fullside',
+			'autoComplete' => "false",
+			'queryExpr' => '*${0}*',
+			'missingMessage' => 'Invalid Module!',
+			'required' => false
 		));
 		$db = new Application_Model_DbTable_DbGlobal();
-	
-		$calture_opt = array(""=>$this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
-		$optionDegree = $_dbgb->getAllDegreeMent(21);//Education Level
-		if(!empty($optionDegree))foreach($optionDegree AS $row) $calture_opt[$row['id']]=$row['name'];
+
+		$calture_opt = array("" => $this->tr->translate("PLEASE_SELECT_EDUCATION_LEVEL"));
+		$optionDegree = $_dbgb->getAllDegreeMent(21); //Education Level
+		if (!empty($optionDegree)) foreach ($optionDegree as $row) $calture_opt[$row['id']] = $row['name'];
 		$_calture->setMultiOptions($calture_opt);
-			
+
 		$id = new Zend_Form_Element_hidden('id');
-		if($data!=null){
+		if ($data != null) {
 			$id->setValue($data['id']);
 			$_branch_id->setValue($data['branch_id']);
 			$_type->setValue($data['type']);
@@ -465,7 +519,7 @@ Class Global_Form_FrmAddClass extends Zend_Dojo_Form {
 			$room->setValue($data['room']);
 			$_reason->setValue($data['reason']);
 		}
-		$this->addElements(array($id,$degree,$_status,$_sex,$_reason,$_type,$room,$_branch_id,$_academic,$_time,$_note,$session,$_calture,$_goup));
+		$this->addElements(array($id, $degree, $_status, $_sex, $_reason, $_type, $room, $_branch_id, $_academic, $_time, $_note, $session, $_calture, $_goup));
 		return $this;
 	}
 }

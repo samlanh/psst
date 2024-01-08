@@ -145,7 +145,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 			$this->_name='rms_grading_tmp';		
 			$id=$this->insert($_arr);
 			
-			$criteriaSubmitSettingId=9;//for final score submit
+			$criteriaSubmitSettingId=EXAM_CRITERIA_ID;//for final score submit
 			
 			$arrSearch  = array(
 					'gradingId'=>$gradingSettingId
@@ -237,7 +237,6 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 									}
 									
 									$score = $_data['score_'.$i.'_'.$criterialId.'_'.$indexSub];
-									
 									if($criterialId==$_data['criteriaId']){
 										$arr=array(
 											'gradingId'				=> $id,
@@ -278,7 +277,43 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 									$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
 									$totalScoreAverage = $totalScoreAverage+$totalGrading;
 								}
+							}else{
+
+								$totalGrading=0;
+								$examScoreValue=$_data['score_'.$i.'_'.$criterialId];
+								$arr=array(
+									'gradingId'			=> $id,
+									'studentId'			=> $old_studentid,
+									'note'				=> $_data['note_'.$i],
+									'totalGrading'		=> $examScoreValue,
+								);
+									
+								$this->_name='rms_grading_detail_tmp';
+								$this->insert($arr);
+
+								$totalGrading = $examScoreValue;
+										
+								$arr=array(
+									'gradingId'			=> $idGrading,
+									'gradingTmpId'		=>$id,
+									'studentId'			=> $old_studentid,
+									'subjectId'			=> $subjectId,
+									'criteriaId'		=> $criterialId,
+									'criteriaAmount'	=> 1,
+									'totalGrading'		=> $totalGrading,
+									'percentage'		=> $pecentageScore,
+									'dateInput'			=>date("Y-m-d"),
+								);
+									
+								$this->_name='rms_grading_detail';
+								$this->insert($arr);
+								if($_data['criteriaId']==$criteriaSubmitSettingId){
+									$subcriteriaAmount= 1;
+									$totalGrading = ($totalGrading/1)*($pecentageScore/100);
+									$totalScoreAverage = $totalScoreAverage+$totalGrading;
+								}
 								
+
 							}
 						}else{
 							
@@ -410,7 +445,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		
    		
    			
-   		$criteriaSubmitSettingId=9;//for final score submit
+   		$criteriaSubmitSettingId=EXAM_CRITERIA_ID;//for final score submit
    			
    		$arrSearch  = array(
    				'gradingId'=>$gradingSettingId
@@ -543,7 +578,42 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    								$totalGrading = ($totalGrading/$subcriteriaAmount)*($pecentageScore/100);
    								$totalScoreAverage = $totalScoreAverage+$totalGrading;
    							}
-   						}
+   						}else{
+
+							$totalGrading=0;
+							$examScoreValue=$_data['score_'.$i.'_'.$criterialId];
+							$arr=array(
+								'gradingId'			=> $recordId,
+								'studentId'			=> $old_studentid,
+								'note'				=> $_data['note_'.$i],
+								'totalGrading'		=> $examScoreValue,
+							);
+								
+							$this->_name='rms_grading_detail_tmp';
+							$this->insert($arr);
+
+							$totalGrading = $examScoreValue;
+									
+							$arr=array(
+								'gradingId'			=> $idGrading,
+   								'gradingTmpId'		=>$recordId,
+								'studentId'			=> $old_studentid,
+								'subjectId'			=> $subjectId,
+								'criteriaId'		=> $criterialId,
+								'criteriaAmount'	=> 1,
+								'totalGrading'		=> $totalGrading,
+								'percentage'		=> $pecentageScore,
+								'dateInput'			=>date("Y-m-d"),
+							);
+								
+							$this->_name='rms_grading_detail';
+							$this->insert($arr);
+							if($_data['criteriaId']==$criteriaSubmitSettingId){
+								$subcriteriaAmount= 1;
+								$totalGrading = ($totalGrading/1)*($pecentageScore/100);
+								$totalScoreAverage = $totalScoreAverage+$totalGrading;
+							}
+						}
    					}else{
    							
    						$idCriterials = explode(',', $_data['criteriaList_'.$i.'_'.$criterialId]);
@@ -750,12 +820,13 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	$dbExternal = new Application_Model_DbTable_DbExternal();
    	$students = $dbExternal->getStudentByGroupExternal($data);
    	 
-   	if(!empty($data['criteriaId']) AND $data['criteriaId']==9){
+   	if(!empty($data['criteriaId']) AND $data['criteriaId']==EXAM_CRITERIA_ID){
    		unset($data['criteriaId']);
    		$data['getExistingData']=1;
    	}
+	
    	$criterial = $dbExternal->getGradingCriteriaItems($data);
-   	
+   	// print_r($criterial);exit();
    	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
    	$db=$this->getAdapter();
    	 
@@ -765,7 +836,8 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	 
    	$identity="";
    	$arrClassCol = array(
-   			2=>"col-md-6 col-sm-6 col-xs-12"
+			1=>"col-md-12 col-sm-12 col-xs-12"
+			,2=>"col-md-6 col-sm-6 col-xs-12"
    			,3=>"col-md-4 col-sm-4 col-xs-12"
    			,4=>"col-md-3 col-sm-3 col-xs-12"
    			,5=>"col-md-2 col-sm-2 col-xs-12"
@@ -781,10 +853,12 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	$string.='<th scope="col" >ភេទ<small class="lableEng" >Gender</small></td>';
    	 
    	if(!empty($criterial)) foreach($criterial AS $rowCri){
+
+		
    		$criterialId=$rowCri['criteriaId'];
    		$string.='<th class="criterialTitle" scope="col" >'.$rowCri['criterialTitle'].'<small class="lableEng" >'.$rowCri['criterialTitleEng'].'</small>';
    		$classCol = "col-md-12 col-sm-12 col-xs-12";
-   		 
+		   
    		if(!empty($rowCri['subjectId'])){//for subject
    			if(!empty($rowCri['subCriterialTitleKh'])){
    				$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
@@ -808,7 +882,13 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					 
    					$string.='</div>';
    				}
-   			}
+   			}else{
+				
+				$string.='<div class="'.$classCol.'">';
+				$string.='<strong  >'.$maxSubjectScore.'</strong>';
+				$string.='</div>';
+				
+			}
    		}else{
    				
    			//$classCol = empty($arrClassCol[$rowCri['timeInput']])?$classCol:$arrClassCol[$rowCri['timeInput']];
@@ -827,7 +907,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	$string.='';
    	$string.='</tr>';
    	$string.='</thead>';
-   	
+  
    	$resultScoreAtt = $dbExternal->getAttScoreSetting($data['gradingId']);
 
    	if(!empty($students)) foreach($students AS $key => $stu){
@@ -864,7 +944,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		 
    		 
    		if(!empty($criterial)) foreach($criterial AS $rowCri){
-   
+			
    			$rsScore = array();
    			if(!empty($data['gradingRowId'])){
    				$gradingId = $data['gradingId'];
@@ -882,6 +962,8 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    				
    			$string.='<td data-label="'.$rowCri['criterialTitle'].'" >';
    			$string.='<div class="form-group">';
+
+			   $criterialList='';
    			if(!empty($rowCri['subjectId'])){
    					
    				if(!empty($rowCri['subCriterialTitleKh'])){
@@ -889,7 +971,6 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					$coutnSubCriterial = count($subCriterial);
    					$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
    					$indexSub=0;
-   
    					if(!empty($rsScore)){
    						foreach($rsScore AS $score){
    							$indexSub++;
@@ -905,7 +986,12 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    							$string.='</div>';
    						}
    					}
-   				}
+   				}else{
+					$resultScore = empty($rsScore)?0:$rsScore[0]['totalGrading'];
+					$string.='<div class="'.$classCol.'">';
+   					$string.='<input value="'.$resultScore.'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" name="score_'.$keyIndex.'_'.$criterialId.'"  id="score_'.$keyIndex.'_'.$criterialId.'" />';
+   					$string.='</div>';
+				}
    			}else{
    				
    				$param  = array(
@@ -922,7 +1008,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    				$count = ($count==0)?1:$count;
    				
    				$classCol = empty($arrClassCol[$count])?$classCol:$arrClassCol[$count];
-   				$criterialList='';
+   				
    				for ($x = 1; $x <= $count; $x++) {
    					if($x==1){
    						$criterialList=$x;
@@ -947,7 +1033,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					$string.='</div>';
    				}
    				
-   				}
+			}
    			$string.='</div>';
    			$string.='<input dojoType="dijit.form.TextBox" class="fullside" name="criteriaList_'.$keyIndex.'_'.$criterialId.'"  value="'.$criterialList.'" type="hidden" >';
    			
@@ -962,6 +1048,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    	 
    	$string.='';
    	$string.='</table>';
+
    	$htmlGradingInfo='';
    	$htmlGradingInfo.='<div class="card-info bg-gradient-directional-notice">';
    	$htmlGradingInfo.='<div class="card-content">';

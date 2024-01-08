@@ -199,4 +199,14 @@ class RsvAcl_UserController extends Zend_Controller_Action
 			exit();
 		}
 	}
+	
+	function getDegreeListAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Application_Model_DbTable_DbGlobal();
+			$gty= $db->getAllDegreeOption($data);
+			print_r(Zend_Json::encode($gty));
+			exit();
+		}
+	}
 }

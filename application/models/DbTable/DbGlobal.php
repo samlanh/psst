@@ -872,6 +872,18 @@ function getAllgroupStudyNotPass($action=null){
 	   	return $sql;
    }
    
+   public function getDegreePermission($degreeStr='degree'){
+	   
+		$user = $this->getUserProfile();
+		$level = $user['user_type'];
+		$stringCondiction = "";
+		if($level!=1){
+			$degreeList = $user['degreeList'];
+			$stringCondiction = " AND $degreeStr IN ($degreeList)"
+		}
+		return $stringCondiction;
+   }
+   
    public function getUserAccessPermission($user_id='user_id'){
 	   	$user = $this->getUserId();
 	   	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -4278,7 +4290,7 @@ function getAllgroupStudyNotPass($action=null){
 				,deg.id ASC
 		";
 		return $db->fetchAll($sql);
-	  }
+	}
    
 }
 ?>

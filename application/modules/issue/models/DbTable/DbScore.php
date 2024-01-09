@@ -17,7 +17,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year']) ? 0 : $group_info['academic_year'];
-
+			$scale = empty($group_info['semesterTotalAverage']) ? 50 : $group_info['semesterTotalAverage'];
 			$_arr = array(
 				'branch_id' => $_data['branch_id'],
 				'title_score' => $_data['title'],
@@ -44,14 +44,27 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$total_score = 0;
 				$totalMutiAll = 0;
 				$totalMaxScore = 0;
+				$subjectLandList = '';
+				$strMonthlySemesterLangAvg = '';
+				$monthlySemesterAvg = 0;
+				$overallAssessmentSemester = 0;
 				if (!empty($ids)) foreach ($ids as $keyValue => $i) {
 
 					foreach ($rssubject as $subject) {
 						if ($total_score > 0 and $old_studentid != $_data['student_id' . $i]) {
 							if ($_data['exam_type'] == 2) { //semester exam
-								$totalMutiAll = $totalMaxScore / 50;
+								$totalMutiAll = $totalMaxScore / $scale;
+
+								$dataparam = array(
+									'groupId'      => $_data['group'],
+									'acadmicYear' => $year_study,
+									'forSemester' => $_data['for_semester'],
+									'studentId'   => $old_studentid
+								);
+								$rsMonthlysemesterAvg = $this->getMonthlySemesterAvg($dataparam);
 							}
 							$avg = $total_score / $totalMutiAll;
+
 							$arr = array(
 								'score_id' => $id,
 								'student_id' => $old_studentid,
@@ -61,9 +74,32 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'total_avg' => $avg,
 
 								'totalMaxScore' => $totalMaxScore,
+								'monthlySemesterAvg'  => $monthlySemesterAvg,
+
 							);
+							if ($_data['exam_type'] == 2) {
+								if (!empty($rsMonthlysemesterAvg)) {
+
+									$strMonthlySemesterLangAvg = $rsMonthlysemesterAvg["semesterAvgMonthLangKH"];
+									if ($strMonthlySemesterLangAvg != '') {
+										if (!empty($rsMonthlysemesterAvg["semesterAvgMonthLangEng"])) {
+											$semesterAvgMonthLangEng = "," . $rsMonthlysemesterAvg["semesterAvgMonthLangEng"];
+										}
+										$strMonthlySemesterLangAvg = $strMonthlySemesterLangAvg . $semesterAvgMonthLangEng;
+									} else {
+										$strMonthlySemesterLangAvg = $rsMonthlysemesterAvg["semesterAvgMonthLangEng"];
+									}
+
+									$overallAssessmentSemester = ($avg + $monthlySemesterAvg) / 2;
+
+									$arr["strMonthlySemesterLang"] = $rsMonthlysemesterAvg["subjectLandList"];
+									$arr["strMonthlySemesterLangAvg"] = $strMonthlySemesterLangAvg;
+									$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
+								}
+							}
 							$this->_name = 'rms_score_monthly';
 							$this->insert($arr);
+
 							$total_score = 0;
 							$totalMutiAll = 0;
 							$totalMaxScore = 0;
@@ -74,6 +110,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						}
 
 						$old_studentid = $_data['student_id' . $i];
+						$monthlySemesterAvg = $_data['monthlySemesterAvg' . $i];
 
 						$dataScore = array(
 							'groupId' => $_data['group'],
@@ -97,6 +134,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						);
 
 						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param); //// call cut score
+
+
 
 						if ($_data['exam_type'] == 1) { //month
 							$maxScore = $rsGroupSubject['maxScoreMonth'];
@@ -125,19 +164,19 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						$totalMutiAll = $totalMutiAll + $totalMulti;
 
 						$arr = array(
-							'score_id' => $id,
-							'group_id' => $_data['group'],
+							'score_id' 		 => $id,
+							'group_id'		 => $_data['group'],
 							'gradingTotalId' => $gradingId,
-							'student_id' => $_data['student_id' . $i],
-							'subject_id' => $subject,
+							'student_id'     => $_data['student_id' . $i],
+							'subject_id'     => $subject,
 
-							'orgScore' => $_data["score_" . $i . "_" . $subject],
-							'subjectExam' => $_data['amount_subject' . $i],
+							'orgScore'       => $_data["score_" . $i . "_" . $subject],
+							'subjectExam'    => $_data['amount_subject' . $i],
 
-							'score' => $totalMulti * $_data["score_" . $i . "_" . $subject],
+							'score'          => $totalMulti * $_data["score_" . $i . "_" . $subject],
 							'amount_subject' => $totalMulti,
-							'score_cut' => $score_cut,
-							'status' => 1,
+							'score_cut'      => $score_cut,
+							'status'         => 1,
 						);
 						$this->_name = 'rms_score_detail';
 						$this->insert($arr);
@@ -146,19 +185,58 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 
 				if (!empty($ids)) {
 					if ($total_score > 0) {
+
 						if ($_data['exam_type'] == 2) { //semester exam
-							$totalMutiAll = $totalMaxScore / 50;
+							$totalMutiAll = $totalMaxScore / $scale;
+
+							$dataparam = array(
+								'groupId'      => $_data['group'],
+								'acadmicYear' => $year_study,
+								'forSemester' => $_data['for_semester'],
+								'studentId'   => $old_studentid
+							);
+							$rsMonthlysemesterAvg = $this->getMonthlySemesterAvg($dataparam); //get from view
 						}
 						$avg = $total_score / $totalMutiAll;
-						$arr = array(
-							'score_id' => $id,
-							'student_id' => $old_studentid,
 
-							'total_score' => $total_score,
+
+
+						$arr = array(
+							'score_id'       => $id,
+							'student_id'     => $old_studentid,
+
+							'total_score'    => $total_score,
 							'amount_subject' => $totalMutiAll,
-							'total_avg' => $avg,
-							'totalMaxScore' => $totalMaxScore,
+							'total_avg'      => $avg,
+							'totalMaxScore'  => $totalMaxScore,
+							'monthlySemesterAvg'  => $monthlySemesterAvg,
+
 						);
+
+						// Insert Monthly Semester Average
+
+						if ($_data['exam_type'] == 2) {
+							if (!empty($rsMonthlysemesterAvg)) {
+
+								$strMonthlySemesterLangAvg = $rsMonthlysemesterAvg["semesterAvgMonthLangKH"];
+								if ($strMonthlySemesterLangAvg != '') {
+									if (!empty($rsMonthlysemesterAvg["semesterAvgMonthLangEng"])) {
+										$semesterAvgMonthLangEng = "," . $rsMonthlysemesterAvg["semesterAvgMonthLangEng"];
+									}
+									$strMonthlySemesterLangAvg = $strMonthlySemesterLangAvg . $semesterAvgMonthLangEng;
+								} else {
+									$strMonthlySemesterLangAvg = $rsMonthlysemesterAvg["semesterAvgMonthLangEng"];
+								}
+
+								$overallAssessmentSemester = ($avg + $monthlySemesterAvg) / 2;
+
+								$arr["strMonthlySemesterLang"] = $rsMonthlysemesterAvg["subjectLandList"];
+								$arr["strMonthlySemesterLangAvg"] = $strMonthlySemesterLangAvg;
+								$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
+							}
+						}
+						//--------
+
 						$this->_name = 'rms_score_monthly';
 						$this->insert($arr);
 					}
@@ -379,10 +457,22 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$db->commit();
 		} catch (Exception $e) {
 			echo $e->getMessage();
-			exit();
+			$db->rollback();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
+	}
+
+	function getMonthlySemesterAvg($data)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT * FROM `v_monthly_semester_avg_lang` AS vms WHERE 1 ";
+		$sql .= " AND vms.`groupId`     =" . $data['groupId'];
+		$sql .= " AND vms.`acadmicYear` =" . $data['acadmicYear'];
+		$sql .= " AND vms.`forSemester` =" . $data['forSemester'];
+		$sql .= " AND vms.`studentId`   =" . $data['studentId'];
+
+		return $db->fetchRow($sql);
 	}
 
 	function getAllScore($search = null)
@@ -519,15 +609,15 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					AND sgh.stop_type=0
 					and sgh.`group_id` = " . $group_id;
 		$order = " ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-		// if (!empty($data['sortStundent'])) {
-		// 	if ($data['sortStundent'] == 1) {
-		// 		$order = " ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-		// 	} else if ($data['sortStundent'] == 2) {
-		// 		$order = " ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-		// 	} else if ($data['sortStundent'] == 3) {
-		// 		$order = " ORDER BY (SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-		// 	}
-		// }
+		if (!empty($data['sortStundent'])) {
+			if ($data['sortStundent'] == 1) {
+				$order = " ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			} else if ($data['sortStundent'] == 2) {
+				$order = " ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			} else if ($data['sortStundent'] == 3) {
+				$order = " ORDER BY (SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+			}
+		}
 
 		$studentResult =  $db->fetchAll($sql . $order);
 		if (!empty($data['groupId'])) {

@@ -982,4 +982,19 @@ a.small-button-class:hover {
     background: #010069;
 }
 
+.max-one-line-string {
+	text-overflow: ellipsis;
+	display: -webkit-box !important;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.max-two-line-string {
+	text-overflow: ellipsis;
+	display: -webkit-box !important;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
 

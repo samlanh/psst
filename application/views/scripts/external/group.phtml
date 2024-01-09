@@ -10,88 +10,111 @@
 	echo $this->render('externalHead.phtml');
 ?>
 <style>
-	ul {
-	display: inline;
-	margin: 0;
-	padding: 0;
-	}
-	ul.sub_list li:hover{
-		background-color: #cccccc;
-	}
-	ul.sub_list li{
-		float: left;
-		
+	
+	ul.sub_list {
+		padding: 0;
+		margin: 0 auto;
 		list-style: none;
 	}
-	ul.bg-color li{
-		background-color: #cccccc;
-		padding: 3px;
-		border-radius: 3px;
+	ul.sub_list li.head-list {
+		background: #e6e6e6;
+		padding: 3px 2px;
+		text-align: center;
+		font-weight: bold;
+		margin-bottom: 3px;
+		border-radius: 5px;
 	}
-	ul.bg li{
-		background-color: white;
-		padding: 3px;
-		border-radius: 3px;
+	ul.sub_list li.head-list .row-li {
+		vertical-align: middle;
 	}
+	ul.sub_list li .row-li {
+		    display: inline-block;
+		    font-size: 12px;
+		    line-height: 14px;
+		    vertical-align: top;
+	}
+	ul.sub_list li .row-li.titleLable {
+		width: 55%;
+	}
+	ul.sub_list li .row-li.counting {
+		width: 10%;
+	}
+
+	ul.sub_list li .row-li.buttonBlog {
+		width: 30%;
+		text-align: center;
+	}
+	.bg-color{
+		background-color: #f7f7f7;
+	}
+	small.validateStr {
+		display: block;
+		color: #595959;
+		font-style: italic;
+	}
+
 	ul.bg-head li{
 		background-color: #575f69;
 		padding: 4px;
 		border-radius: 3px;
 	}
 	a.mini-button-class {
-    padding: 3px;
-    font-size: 10px;
-    color: #fff;
-    background-color: #0150a6;
-    border-color: #004b9c;
-    border-radius: 6px;
-    width: 70px  !important;
-    display: block;
-	}
+		padding: 2px;
+		font-size: 10px;
+		line-height: 14px;
+		color: #fff;
+		background-color: #0150a6;
+		border-color: #004b9c;
+		border-radius: 5px;
+		text-align: center;
+		display: block;
+		margin: 1px 0;
+	 }
 	a.mini-button-class-edit {
-    padding: 3px;
-    font-size: 10px;
-	color: #ffffff;
-    background-color: #d1a00c;
-    border-color: #004b9c;
-    border-radius: 6px;
-    width: 70px  !important;
-    display: block;
+		padding: 2px;
+		font-size: 10px;
+		line-height: 14px;
+		color: #ffffff;
+		background-color: #d1a00c;
+		border-color: #004b9c;
+		border-radius: 5px;
+		display: block;
+	}
+	a.mini-button-class-edit:hover,
+	a.mini-button-class:hover {
+		background: #009688;
 	}
 	span.mini-button-class-success {
-    padding: 4px;
-    font-size: 10px;
-    color: #fff;
-    background-color: green;
-    border-color: #004b9c;
-    border-radius: 6px;
-    width: 70px  !important;
-    display: block;
+		padding: 2px;
+		font-size: 10px;
+		color: #fff;
+		background-color: green;
+		border-color: #004b9c;
+		border-radius: 10px;
+		display: block;
 	}
 	span.mini-button-class-loading {
-    padding: 4px;
-    font-size: 10px;
-    color: #fff;
-    background-color: #313b4e;
-    border-color: #004b9c;
-    border-radius: 6px;
-    width: 70px  !important;
-    display: block;
+		padding: 2px;
+		color: #7c7c7c;
+		background-color: #fbfbfb;
+		border-color: #004b9c;
+		border-radius: 10px;
+		border: solid 1px #eee;
+		display: block;
+		font-size: 10px;
+		line-height: 14px;
 	}
-	span.buttonTitle {
-    line-height: 18px;
-    font-size: 10px;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-ul.criteria_list li{
-		
-		list-style: none;
-		width: 100%;
+	.oneLineTitle {
+		text-overflow: ellipsis;
+		display: -webkit-box !important;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	h4 {
+		line-height: 24px;
+		font-size: 16px;
+		margin: 0;
 	}
 </style>
 	
@@ -150,36 +173,41 @@ ul.criteria_list li{
 							<div class="card-content">
 								<div class="row d-flex mb-1">
 									<div class="col-xs-5 pr-0">
+									
 										<div class="d-flex align-items-center h-100 text-white  <?php echo $bgClass; ?>">
-											<i class="mt-0 mb-0 mr-auto ml-auto glyphicon glyphicon-education icon-opacity text-white font-large-4"></i>
-											<strong><?php echo $row['group_code']; ?></strong>
+											<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-1 text-center">
+												<?php echo $row['group_code']; ?>
+												<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-education font-large-4"></i> </small>
+											</span>
 										</div>
 									</div>
 									<div class="col-xs-7 pl-0">
-										<div class="col-md-12 col-sm-12 col-xs-12 ">
-											<h4 class="mb-0 text-primary"><?php echo $row['title']; ?></h4>
-											<h4 class="mb-1 text-warning"><?php echo $row['subjectTitle']; ?></h4>
+										<div class="col-md-12 col-sm-12 col-xs-12 pt-1">
+											<h4 class="text-primary"><?php echo $row['title']; ?></h4>
+											<h4 class="text-warning oneLineTitle"><?php echo $row['subjectTitle']; ?></h4>
 										
 											<p class="mb-0 mt-0"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>&nbsp;<?php echo $row['branchName']; ?></p>
 											<p class="mb-0"><i class="glyphicon glyphicon-education" aria-hidden="true"></i>&nbsp;<?php echo $row['academicYear']; ?></p>
 											<p class="mb-0 "><i class="fa fa-file-text-o" aria-hidden="true"></i>&nbsp;<?php echo $row['forTypeTitle']."  ".$row['forMonthTitle']; ?></p>
 											<p class="mb-0 "><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>&nbsp;<?php echo $row['fromDate']." / ".$row['endDate']; ?></p>
 										
-											
 										</div>
 									</div>
 								</div>
 								<div class="col-md-12 col-sm-12 col-xs-12 ">
-									
-									<ul class="sub_list bg-head">
-										<li style="width: 55%; color:azure; text-align:center; "><?php echo $tr->translate("CRITERIAL_NAME"); ?></li>
-										<li style="width: 20%; color:azure; text-align:center;"><?php echo $tr->translate("AMOUNT"); ?></li>
-										<li style="width: 25%; color:azure; "><?php echo $tr->translate("INPUT_SCORE"); ?></li>
-									</ul>
-									
+									<ul class="sub_list">
+										<li class="head-list">
+											<div class="row-li titleLable">
+												<?php echo $tr->translate("CRITERIAL_NAME"); ?>
+											</div>
+											<div class="row-li counting">
+												<?php echo $tr->translate("AMOUNT"); ?>
+											</div>
+											<div class="row-li buttonBlog">
+												<?php echo $tr->translate("INPUT_SCORE"); ?>
+											</div>
+										</li>
 									<?php   
-										// $dbg = new Application_Model_DbTable_DbGlobal();
-									
 										$dbExternal = new Application_Model_DbTable_DbExternal;
 										$gradingId= $row['gradingId'];
 										$settingEntryId= $row['id'];
@@ -198,65 +226,56 @@ ul.criteria_list li{
 										if(!empty($criterial)) foreach($criterial as $key => $rsCriterial){ 
 											 $no++;
 										?>
-										<ul class="sub_list <?php echo ($key%2)==0?'bg-color':'bg';?>">
-											<?php 
+											<li class="<?php echo ($key%2)==1?'bg-color':'bg';?>">
+												<?php 
 												$currentDate = date('Y-m-d');
-												if($rsCriterial['criteriaType']==2){ ?>
-
-													<li style="width: 55%;" >
-													<?php echo $no.". ".$rsCriterial['criterialTitle']; ?> <br>
-														<small class="text-primary">&nbsp; &nbsp; &nbsp; <i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>&nbsp; <?php echo $row['examFromDate']." / ".$row['examEndDate']; ?></small>
-													</li>
-													<li style="width: 20%; text-align:center;" >
-														<span class="text-primary"><?php echo $rsCriterial['timeInput']; ?> <?php echo $tr->translate('Times');?></span>
-													</li>
-
-												<?php 	
-												if( $currentDate >= $row['examFromDate'] AND $currentDate <= $row['examEndDate']){
-														if($row['IsExam']>0 AND $row['isLock'] ==0) {
-														?>
-
-														<li style="width: 25%; text-align:center;" >
-															<a target="_blank" class="mini-button-class-edit" href="<?php echo $this->baseUrl()."/grading/edit/id/".$row['groupId'].'/gradingRowId/'.$row['IsExam'];?>">
-																<i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo $tr->translate('EDIT');?>
-															</a>
-														</i>
-
-													<?php }elseif($row['IsExam']>0 AND $row['isLock'] ==1){   ?>
-
-														<li style="width: 25%; text-align:center;" >
-															<span class="mini-button-class-success" >
-																<i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> <?php echo $tr->translate('Completed');?>
-															</span>
-														</i>
-
-												<?php	}else{  ?>
-
-														<li style="width: 25%; text-align:center;" >
-																<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
-																		<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
-																</a>
-															</i>
-													<?php }	
-											}else{ ?>
-														<li style="width: 25%; text-align:center;" >
-															<span class="mini-button-class-loading buttonTitle" >
-																<i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i> <?php echo $tr->translate('UNAVAILABLE');?>
-															</span>
-														</i>
-												<?php	}}else{ ?>
-												<li style="width: 55%;" ><?php echo $no.". ".$rsCriterial['criterialTitle']; ?></li>
-												<li style="width: 20%; text-align:center;"  >
+												$stringValidDate="";
+												if($rsCriterial['criteriaType']==2){
+													$stringValidDate='
+													<small class="validateStr"><strong >'.$tr->translate('VALIDATE').'</strong> :
+													'.$row['examFromDate']." ".$tr->translate('TO')." ".$row['examEndDate'].'
+													</small>';
+												}
+												?>
+													
+												<div class="row-li titleLable"><?php echo $no.". ".$rsCriterial['criterialTitle'].$stringValidDate; ?></div>
+												<div class="row-li counting">
 													<span class="text-primary"><?php echo $rsCriterial['timeInput']; ?> <?php echo $tr->translate('Times');?></span>
-												</li>
-												<li style="width: 25%; text-align:center;" >
-													<a target="_blank" class="mini-button-class" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
-														<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
-													</a>
-												</i>
-											<?php } ?>
-										</ul>
+												</div>
+												<div class="row-li buttonBlog">
+												<?php 	
+													if($rsCriterial['criteriaType']==2){
+														if( $currentDate >= $row['examFromDate'] AND $currentDate <= $row['examEndDate']){
+															if($row['IsExam']>0 AND $row['isLock'] ==0) {
+															?>
+																<a target="_blank" class="mini-button-class-edit oneLineTitle" href="<?php echo $this->baseUrl()."/grading/edit/id/".$row['groupId'].'/gradingRowId/'.$row['IsExam'];?>">
+																	<i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo $tr->translate('EDIT');?>
+																</a>
+
+															<?php }elseif($row['IsExam']>0 AND $row['isLock'] ==1){   ?>
+																<span class="mini-button-class-success oneLineTitle" >
+																	<i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> <?php echo $tr->translate('Completed');?>
+																</span>
+														<?php }else{?>
+															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
+																	<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
+															</a>
+															<?php }	?>
+														<?php }else{?>
+																<span class="mini-button-class-loading oneLineTitle" >
+																	<i class="glyphicon glyphicon-hourglass" aria-hidden="true"></i> <?php echo $tr->translate('UNAVAILABLE');?>
+																</span>
+															<?php }	?>
+												<?php }else{?>
+														<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
+															<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
+														</a>
+													
+												<?php }	?>
+												</div>
+											</li>
 									<?php  } ?>
+									</ul>
 									<div style="clear:both;"></div>
 								</div>
 

@@ -842,6 +842,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    			,4=>"col-md-3 col-sm-3 col-xs-12"
    			,5=>"col-md-2 col-sm-2 col-xs-12"
    			,6=>"col-md-2 col-sm-2 col-xs-12"
+   			,7=>"col-md-3 col-sm-3 col-xs-12"
    	);
    	$string='';
    	$string.='<table class="collape responsiveTable" id="table" >';
@@ -968,22 +969,49 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					
    				if(!empty($rowCri['subCriterialTitleKh'])){
    					$subCriterial = explode(',', $rowCri['subCriterialTitleKh']);
+					$subCriterialEng = explode(',', $rowCri['subCriterialTitleEng']);
    					$coutnSubCriterial = count($subCriterial);
    					$classCol = empty($arrClassCol[$coutnSubCriterial])?$classCol:$arrClassCol[$coutnSubCriterial];
    					$indexSub=0;
    					if(!empty($rsScore)){
    						foreach($rsScore AS $score){
+							$classShowTitle="";
+							if($coutnSubCriterial>2){
+								$classShowTitle="criteria-info";
+							}
+							$subCriterialKh = $score["subCriterialTitleKh"];
+							$subCriterialTitleEng = $score["subCriterialTitleEng"];
    							$indexSub++;
    							$string.='<div class="'.$classCol.'">';
-   							$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'"  name="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'" />';
+								$string.='<div class="'.$classShowTitle.'">';
+									if($coutnSubCriterial>3){
+										$string.='<span class="criteriaTitle khTitle">'.$subCriterialKh.'</span>';
+										$string.='<span class="criteriaTitle engTitle">'.$subCriterialTitleEng.'</span>';
+									}
+									$string.='<input value="'.$score['totalGrading'].'" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'"  name="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'" />';
+								$string.='</div>';
    							$string.='</div>';
    						}
    					}else{
-   						foreach($subCriterial as $subCriTitle){
+						
+   						foreach($subCriterial AS $keyV => $subCriTitle){
+							
+							$classShowTitle="";
+							if($coutnSubCriterial>2){
+								$classShowTitle="criteria-info";
+							}
+							$subCriterialKh = $subCriTitle;
+							$subCriterialTitleEng = $subCriterialEng[$keyV];
    							$indexSub++;
-   							$string.='<div class="'.$classCol.'">';
-   							$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'"  name="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'" />';
-   							$string.='</div>';
+							$string.='<div class="'.$classCol.'">';
+								$string.='<div class="'.$classShowTitle.'">';
+									if($coutnSubCriterial>2){
+										$string.='<span class="criteriaTitle khTitle">'.$subCriterialKh.'</span>';
+										$string.='<span class="criteriaTitle engTitle">'.$subCriterialTitleEng.'</span>';
+									}
+									$string.='<input value="0" data-dojo-props="constraints:{min:0,max:'.$maxSubjectScore.'},'.$invalidesms.'" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" onKeyup="calculateAverage('.$keyIndex.')" id="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'"  name="score_'.$keyIndex.'_'.$criterialId.'_'.$indexSub.'" />';
+								$string.='</div>';
+							$string.='</div>';
    						}
    					}
    				}else{

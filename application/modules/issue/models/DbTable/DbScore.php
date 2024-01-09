@@ -2,404 +2,406 @@
 
 class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'rms_score';
-    public function getUserId(){
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	return $session_user->user_id;
-    }
-    
-	public function addStudentScore($_data){
+	protected $_name = 'rms_score';
+	public function getUserId()
+	{
+		$session_user = new Zend_Session_Namespace(SYSTEM_SES);
+		return $session_user->user_id;
+	}
+
+	public function addStudentScore($_data)
+	{
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		try{
+		try {
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			$group_info = $dbGroup->getGroupById($_data['group']);
-			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
-			
+			$year_study = empty($group_info['academic_year']) ? 0 : $group_info['academic_year'];
+
 			$_arr = array(
-					'branch_id'=>$_data['branch_id'],
-					'title_score'=>$_data['title'],
-					'title_score_en'=>$_data['title_en'],
-					'group_id'=>$_data['group'],
-			        'exam_type'=>$_data['exam_type'],
-					'date_input'=>date("Y-m-d"),
-					'note'=>$_data['note'],
-					'user_id'=>$this->getUserId(),
-					'for_academic_year'=>$year_study,
-					'for_semester'=>$_data['for_semester'],
-					'for_month'=>$_data['for_month'],
-					'score_option'=>$_data['score_option'],
+				'branch_id' => $_data['branch_id'],
+				'title_score' => $_data['title'],
+				'title_score_en' => $_data['title_en'],
+				'group_id' => $_data['group'],
+				'exam_type' => $_data['exam_type'],
+				'date_input' => date("Y-m-d"),
+				'note' => $_data['note'],
+				'user_id' => $this->getUserId(),
+				'for_academic_year' => $year_study,
+				'for_semester' => $_data['for_semester'],
+				'for_month' => $_data['for_month'],
+				'score_option' => $_data['score_option'],
 			);
-			$id=$this->insert($_arr);
+			$id = $this->insert($_arr);
 			$scoreId = $id;
 			$dbpush = new Application_Model_DbTable_DbGlobal();
-			$dbpush->pushNotification(null,$_data['group'],2,4);
-			
+			$dbpush->pushNotification(null, $_data['group'], 2, 4);
+
 			$old_studentid = 0;
-			if(!empty($_data['identity'])){
+			if (!empty($_data['identity'])) {
 				$ids = explode(',', $_data['identity']);
 				$rssubject = $_data['selector'];
 				$total_score = 0;
-				$totalMutiAll=0;
-				$totalMaxScore=0;
-				if(!empty($ids))foreach ($ids as $keyValue => $i){
-					
-					foreach ($rssubject as $subject){
-						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
-							if($_data['exam_type']==2){//semester exam
-								$totalMutiAll = $totalMaxScore/50;
+				$totalMutiAll = 0;
+				$totalMaxScore = 0;
+				if (!empty($ids)) foreach ($ids as $keyValue => $i) {
+
+					foreach ($rssubject as $subject) {
+						if ($total_score > 0 and $old_studentid != $_data['student_id' . $i]) {
+							if ($_data['exam_type'] == 2) { //semester exam
+								$totalMutiAll = $totalMaxScore / 50;
 							}
-							$avg = $total_score/$totalMutiAll;
+							$avg = $total_score / $totalMutiAll;
 							$arr = array(
-								'score_id'=>$id,
-								'student_id'=>$old_studentid,
-									
-								'total_score'=>$total_score,
-								'amount_subject'=>$totalMutiAll,
-								'total_avg' =>$avg,
-									
-								'totalMaxScore' =>$totalMaxScore,
+								'score_id' => $id,
+								'student_id' => $old_studentid,
+
+								'total_score' => $total_score,
+								'amount_subject' => $totalMutiAll,
+								'total_avg' => $avg,
+
+								'totalMaxScore' => $totalMaxScore,
 							);
-							$this->_name='rms_score_monthly';
+							$this->_name = 'rms_score_monthly';
 							$this->insert($arr);
 							$total_score = 0;
-							$totalMutiAll=0;
-							$totalMaxScore=0;
-						}else if($keyValue>0 AND $old_studentid!=$_data['student_id'.$i]){ // Check ករណីសិស្សដែលបានបញ្ចូលពិន្ទុ 0 គ្រប់មុខវិជ្ជាដោយមិន លុបឬដក Student ចេញ
+							$totalMutiAll = 0;
+							$totalMaxScore = 0;
+						} else if ($keyValue > 0 and $old_studentid != $_data['student_id' . $i]) { // Check ករណីសិស្សដែលបានបញ្ចូលពិន្ទុ 0 គ្រប់មុខវិជ្ជាដោយមិន លុបឬដក Student ចេញ
 							$total_score = 0;
-							$totalMutiAll=0;
-							$totalMaxScore=0;
+							$totalMutiAll = 0;
+							$totalMaxScore = 0;
 						}
-						
-						$old_studentid=$_data['student_id'.$i];
-						
+
+						$old_studentid = $_data['student_id' . $i];
+
 						$dataScore = array(
-								'groupId'=>$_data['group'],
-								'examType'=>$_data['exam_type'],
-								'forMonth'=>$_data['for_month'],
-								'forSemester'=>$_data['for_semester'],
-								'subjectId'=>$subject,
-								'studentId'=>$_data['student_id'.$i],
-								);
-						
-						$resultScore = $this->getGradingScoreData($dataScore);
-						
-						$gradingId='';
-						if(!empty($resultScore)){
-							$gradingId=$resultScore['gradingId'];
-						}
-						
-						$param =array(
-								'groupId'=>$_data['group'],
-								'subjectId'=>$subject,
+							'groupId' => $_data['group'],
+							'examType' => $_data['exam_type'],
+							'forMonth' => $_data['for_month'],
+							'forSemester' => $_data['for_semester'],
+							'subjectId' => $subject,
+							'studentId' => $_data['student_id' . $i],
 						);
-						
-						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param);//// call cut score
-						
-						if($_data['exam_type']==1){//month
+
+						$resultScore = $this->getGradingScoreData($dataScore);
+
+						$gradingId = '';
+						if (!empty($resultScore)) {
+							$gradingId = $resultScore['gradingId'];
+						}
+
+						$param = array(
+							'groupId' => $_data['group'],
+							'subjectId' => $subject,
+						);
+
+						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param); //// call cut score
+
+						if ($_data['exam_type'] == 1) { //month
 							$maxScore = $rsGroupSubject['maxScoreMonth'];
 							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
-							$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
+							$total_score = $total_score + ($_data["score_" . $i . "_" . $subject] * $totalMulti);
 							$score_cut = 0;
-						}else{//semester
+						} else { //semester
 							$maxScore = $rsGroupSubject['maxScoreSemester'];
-							$totalMulti = 1;//$rsGroupSubject['totalSubjectSemester'];
-							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
-								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
+							$totalMulti = 1; //$rsGroupSubject['totalSubjectSemester'];
+							if ($rsGroupSubject['score_short'] <= 0) { //=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
+								$total_score = $total_score + ($_data["score_" . $i . "_" . $subject] * $totalMulti);
 								$score_cut = 0;
-							}else{
-								if(($_data["score_".$i."_".$subject]-$rsGroupSubject['score_short'])<=0){
+							} else {
+								if (($_data["score_" . $i . "_" . $subject] - $rsGroupSubject['score_short']) <= 0) {
 									$score = 0;
-								}else{
-									$score = $_data["score_".$i."_".$subject] - $rsGroupSubject['score_short'];
+								} else {
+									$score = $_data["score_" . $i . "_" . $subject] - $rsGroupSubject['score_short'];
 								}
-								$total_score = $total_score+($score*$totalMulti);
+								$total_score = $total_score + ($score * $totalMulti);
 								$score_cut = $rsGroupSubject['score_short'];
 							}
 						}
-						
-						$totalMaxScore = $totalMaxScore+($maxScore*$totalMulti);
-						
-						$totalMutiAll=$totalMutiAll +$totalMulti;
-						
-						$arr=array(
-							'score_id'=>$id,
-							'group_id'=>$_data['group'],
-							'gradingTotalId'=>$gradingId,
-							'student_id'=>$_data['student_id'.$i],
-							'subject_id'=> $subject,
-								
-							'orgScore'=>$_data["score_".$i."_".$subject],
-							'subjectExam'=>$_data['amount_subject'.$i],
-								
-							'score'=> $totalMulti*$_data["score_".$i."_".$subject],
-							'amount_subject'=>$totalMulti,
-							'score_cut'=> $score_cut,
-							'status'=>1,
+
+						$totalMaxScore = $totalMaxScore + ($maxScore * $totalMulti);
+
+						$totalMutiAll = $totalMutiAll + $totalMulti;
+
+						$arr = array(
+							'score_id' => $id,
+							'group_id' => $_data['group'],
+							'gradingTotalId' => $gradingId,
+							'student_id' => $_data['student_id' . $i],
+							'subject_id' => $subject,
+
+							'orgScore' => $_data["score_" . $i . "_" . $subject],
+							'subjectExam' => $_data['amount_subject' . $i],
+
+							'score' => $totalMulti * $_data["score_" . $i . "_" . $subject],
+							'amount_subject' => $totalMulti,
+							'score_cut' => $score_cut,
+							'status' => 1,
 						);
-						$this->_name='rms_score_detail';
+						$this->_name = 'rms_score_detail';
 						$this->insert($arr);
-						
 					}
 				}
-				
-				if(!empty($ids)){
-					if($total_score>0){
-						if($_data['exam_type']==2){//semester exam
-							$totalMutiAll = $totalMaxScore/50;
+
+				if (!empty($ids)) {
+					if ($total_score > 0) {
+						if ($_data['exam_type'] == 2) { //semester exam
+							$totalMutiAll = $totalMaxScore / 50;
 						}
-						$avg = $total_score/$totalMutiAll;
-							$arr = array(
-								'score_id'=>$id,
-								'student_id'=>$old_studentid,
-									
-								'total_score'=>$total_score,
-								'amount_subject'=>$totalMutiAll,
-								'total_avg' =>$avg,
-								'totalMaxScore' =>$totalMaxScore,
-							);
-						$this->_name='rms_score_monthly';
+						$avg = $total_score / $totalMutiAll;
+						$arr = array(
+							'score_id' => $id,
+							'student_id' => $old_studentid,
+
+							'total_score' => $total_score,
+							'amount_subject' => $totalMutiAll,
+							'total_avg' => $avg,
+							'totalMaxScore' => $totalMaxScore,
+						);
+						$this->_name = 'rms_score_monthly';
 						$this->insert($arr);
 					}
 				}
-				$this->_name='rms_grading';
-				foreach ($rssubject as $subject){
-					$where='groupId='.$_data['group'].' AND subjectId='.$subject.' AND forSemester='.$_data['for_semester'].' AND examType ='.$_data['exam_type'];
-					if($_data['exam_type']==1){
-						$where.=' AND formonth='.$_data['for_month'];
+				$this->_name = 'rms_grading';
+				foreach ($rssubject as $subject) {
+					$where = 'groupId=' . $_data['group'] . ' AND subjectId=' . $subject . ' AND forSemester=' . $_data['for_semester'] . ' AND examType =' . $_data['exam_type'];
+					if ($_data['exam_type'] == 1) {
+						$where .= ' AND formonth=' . $_data['for_month'];
 					}
 					$arr = array(
-							'isLock'=>1,
-							'lockBy'=>$this->getUserId()
-							);
+						'isLock' => 1,
+						'lockBy' => $this->getUserId()
+					);
 					$this->update($arr, $where);
 				}
 			}
-		  $db->commit();
-		  return $scoreId;
-		}catch (Exception $e){
-			echo $e->getMessage();exit();
+			$db->commit();
+			return $scoreId;
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-   }
-   public function updateStudentScore($_data){
+	}
+	public function updateStudentScore($_data)
+	{
 		$db = $this->getAdapter();
 		$db->beginTransaction();
-		try{		
+		try {
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			$group_info = $dbGroup->getGroupById($_data['group']);
-			$year_study = empty($group_info['academic_year'])?0:$group_info['academic_year'];
+			$year_study = empty($group_info['academic_year']) ? 0 : $group_info['academic_year'];
 			$status = $_data['status'];
 			$_arr = array(
-				'branch_id'=>$_data['branch_id'],
-				'title_score'=>$_data['title'],
-				'title_score_en'=>$_data['title_en'],
-				'group_id'=>$_data['group'],
-		        'exam_type'=>$_data['exam_type'],
-				'date_input'=>date("Y-m-d"),
-				'note'=>$_data['note'],
-				'user_id'=>$this->getUserId(),
-				'for_academic_year'=>$year_study,
-				'for_semester'=>$_data['for_semester'],
-				'for_month'=>$_data['for_month'],
-				'status'=> $status ,
+				'branch_id' => $_data['branch_id'],
+				'title_score' => $_data['title'],
+				'title_score_en' => $_data['title_en'],
+				'group_id' => $_data['group'],
+				'exam_type' => $_data['exam_type'],
+				'date_input' => date("Y-m-d"),
+				'note' => $_data['note'],
+				'user_id' => $this->getUserId(),
+				'for_academic_year' => $year_study,
+				'for_semester' => $_data['for_semester'],
+				'for_month' => $_data['for_month'],
+				'status' => $status,
 			);
-		$where="id=".$_data['score_id'];
-		$this->update($_arr, $where);
+			$where = "id=" . $_data['score_id'];
+			$this->update($_arr, $where);
 
-		if($status==1){
-			$id=$_data['score_id'];
-			$this->_name='rms_score_detail';
-			$this->delete("score_id=".$_data['score_id']);
-			
-			$this->_name='rms_score_monthly';
-			$this->delete("score_id=".$_data['score_id']);
-			$old_studentid = 0;
-			
-			$dbpush = new Application_Model_DbTable_DbGlobal();
-			$dbpush->pushNotification(null,$_data['group'],2,4);
+			if ($status == 1) {
+				$id = $_data['score_id'];
+				$this->_name = 'rms_score_detail';
+				$this->delete("score_id=" . $_data['score_id']);
 
-			if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				$rssubject = $_data['selector'];
-				$total_score = 0;
-				$totalMutiAll=0;
-				$totalMaxScore=0;
-				if(!empty($ids))foreach ($ids as $keyValue => $i){
-					foreach ($rssubject as $subject){
-						if($total_score>0 AND $old_studentid!=$_data['student_id'.$i]){
-							if($_data['exam_type']==2){//semester exam
-								$totalMutiAll = $totalMaxScore/50;
-							}
-							$avg = $total_score/$totalMutiAll;
-							$arr = array(
-								'score_id'=>$id,
-								'student_id'=>$old_studentid,
-									
-								'total_score'=>$total_score,
-								'amount_subject'=>$totalMutiAll,
-								'total_avg' =>$avg,
-									
-								'totalMaxScore' =>$totalMaxScore,
-							);
-							$this->_name='rms_score_monthly';
-							$this->insert($arr);
-							$total_score = 0;
-							$totalMutiAll=0;
-							$totalMaxScore=0;
-						}else if($keyValue>0 AND $old_studentid!=$_data['student_id'.$i]){ // Check ករណីសិស្សដែលបានបញ្ចូលពិន្ទុ 0 គ្រប់មុខវិជ្ជាដោយមិន លុបឬដក Student ចេញ
-							$total_score = 0;
-							$totalMutiAll=0;
-							$totalMaxScore=0;
-						}
-						
-						$old_studentid=$_data['student_id'.$i];
-						
-						$dataScore = array(
-								'groupId'=>$_data['group'],
-								'examType'=>$_data['exam_type'],
-								'forMonth'=>$_data['for_month'],
-								'forSemester'=>$_data['for_semester'],
-								'subjectId'=>$subject,
-								'studentId'=>$_data['student_id'.$i],
-								);
-						
-						$resultScore = $this->getGradingScoreData($dataScore);
-						
-						$gradingId='';
-						if(!empty($resultScore)){
-							$gradingId=$resultScore['gradingId'];
-						}
-						
-						$param =array(
-								'groupId'=>$_data['group'],
-								'subjectId'=>$subject,
-						);
-						
-						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param);//// call cut score
-						
-						if($_data['exam_type']==1){//month
-							$maxScore = $rsGroupSubject['maxScoreMonth'];
-							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
-							$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
-							$score_cut = 0;
-						}else{//semester
-							$maxScore = $rsGroupSubject['maxScoreSemester'];
-							$totalMulti = 1;//$rsGroupSubject['totalSubjectSemester'];
-							if($rsGroupSubject['score_short']<=0){//=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
-								$total_score = $total_score+($_data["score_".$i."_".$subject]*$totalMulti);
-								$score_cut = 0;
-							}else{
-								if(($_data["score_".$i."_".$subject]-$rsGroupSubject['score_short'])<=0){
-									$score = 0;
-								}else{
-									$score = $_data["score_".$i."_".$subject] - $rsGroupSubject['score_short'];
+				$this->_name = 'rms_score_monthly';
+				$this->delete("score_id=" . $_data['score_id']);
+				$old_studentid = 0;
+
+				$dbpush = new Application_Model_DbTable_DbGlobal();
+				$dbpush->pushNotification(null, $_data['group'], 2, 4);
+
+				if (!empty($_data['identity'])) {
+					$ids = explode(',', $_data['identity']);
+					$rssubject = $_data['selector'];
+					$total_score = 0;
+					$totalMutiAll = 0;
+					$totalMaxScore = 0;
+					if (!empty($ids)) foreach ($ids as $keyValue => $i) {
+						foreach ($rssubject as $subject) {
+							if ($total_score > 0 and $old_studentid != $_data['student_id' . $i]) {
+								if ($_data['exam_type'] == 2) { //semester exam
+									$totalMutiAll = $totalMaxScore / 50;
 								}
-								$total_score = $total_score+($score*$totalMulti);
-								$score_cut = $rsGroupSubject['score_short'];
+								$avg = $total_score / $totalMutiAll;
+								$arr = array(
+									'score_id' => $id,
+									'student_id' => $old_studentid,
+
+									'total_score' => $total_score,
+									'amount_subject' => $totalMutiAll,
+									'total_avg' => $avg,
+
+									'totalMaxScore' => $totalMaxScore,
+								);
+								$this->_name = 'rms_score_monthly';
+								$this->insert($arr);
+								$total_score = 0;
+								$totalMutiAll = 0;
+								$totalMaxScore = 0;
+							} else if ($keyValue > 0 and $old_studentid != $_data['student_id' . $i]) { // Check ករណីសិស្សដែលបានបញ្ចូលពិន្ទុ 0 គ្រប់មុខវិជ្ជាដោយមិន លុបឬដក Student ចេញ
+								$total_score = 0;
+								$totalMutiAll = 0;
+								$totalMaxScore = 0;
 							}
-						}
-						
-						$totalMaxScore = $totalMaxScore+($maxScore*$totalMulti);
-						
-						$totalMutiAll=$totalMutiAll +$totalMulti;
-						
-						$arr=array(
-							'score_id'=>$id,
-							'group_id'=>$_data['group'],
-							'gradingTotalId'=>$gradingId,
-							'student_id'=>$_data['student_id'.$i],
-							'subject_id'=> $subject,
-								
-							'orgScore'=>$_data["score_".$i."_".$subject],
-							'subjectExam'=>$_data['amount_subject'.$i],
-								
-							'score'=> $totalMulti*$_data["score_".$i."_".$subject],
-							'amount_subject'=>$totalMulti,
-							'score_cut'=> $score_cut,
-							'status'=>1,
-						);
-						$this->_name='rms_score_detail';
-						$this->insert($arr);
-						
-					}
-				}
-				
-				if(!empty($ids)){
-					if($total_score>0){
-						if($_data['exam_type']==2){//semester exam
-							$totalMutiAll = $totalMaxScore/50;
-						}
-						$avg = $total_score/$totalMutiAll;
+
+							$old_studentid = $_data['student_id' . $i];
+
+							$dataScore = array(
+								'groupId' => $_data['group'],
+								'examType' => $_data['exam_type'],
+								'forMonth' => $_data['for_month'],
+								'forSemester' => $_data['for_semester'],
+								'subjectId' => $subject,
+								'studentId' => $_data['student_id' . $i],
+							);
+
+							$resultScore = $this->getGradingScoreData($dataScore);
+
+							$gradingId = '';
+							if (!empty($resultScore)) {
+								$gradingId = $resultScore['gradingId'];
+							}
+
+							$param = array(
+								'groupId' => $_data['group'],
+								'subjectId' => $subject,
+							);
+
+							$rsGroupSubject = $dbpush->getGroupSubjectDetail($param); //// call cut score
+
+							if ($_data['exam_type'] == 1) { //month
+								$maxScore = $rsGroupSubject['maxScoreMonth'];
+								$totalMulti = $rsGroupSubject['totalSubjectMonth'];
+								$total_score = $total_score + ($_data["score_" . $i . "_" . $subject] * $totalMulti);
+								$score_cut = 0;
+							} else { //semester
+								$maxScore = $rsGroupSubject['maxScoreSemester'];
+								$totalMulti = 1; //$rsGroupSubject['totalSubjectSemester'];
+								if ($rsGroupSubject['score_short'] <= 0) { //=មិនកាត់ពិន្ទុតាមមុខវិជ្ជា
+									$total_score = $total_score + ($_data["score_" . $i . "_" . $subject] * $totalMulti);
+									$score_cut = 0;
+								} else {
+									if (($_data["score_" . $i . "_" . $subject] - $rsGroupSubject['score_short']) <= 0) {
+										$score = 0;
+									} else {
+										$score = $_data["score_" . $i . "_" . $subject] - $rsGroupSubject['score_short'];
+									}
+									$total_score = $total_score + ($score * $totalMulti);
+									$score_cut = $rsGroupSubject['score_short'];
+								}
+							}
+
+							$totalMaxScore = $totalMaxScore + ($maxScore * $totalMulti);
+
+							$totalMutiAll = $totalMutiAll + $totalMulti;
+
 							$arr = array(
-								'score_id'=>$id,
-								'student_id'=>$old_studentid,
-									
-								'total_score'=>$total_score,
-								'amount_subject'=>$totalMutiAll,
-								'total_avg' =>$avg,
-								'totalMaxScore' =>$totalMaxScore,
+								'score_id' => $id,
+								'group_id' => $_data['group'],
+								'gradingTotalId' => $gradingId,
+								'student_id' => $_data['student_id' . $i],
+								'subject_id' => $subject,
+
+								'orgScore' => $_data["score_" . $i . "_" . $subject],
+								'subjectExam' => $_data['amount_subject' . $i],
+
+								'score' => $totalMulti * $_data["score_" . $i . "_" . $subject],
+								'amount_subject' => $totalMulti,
+								'score_cut' => $score_cut,
+								'status' => 1,
 							);
-						$this->_name='rms_score_monthly';
-						$this->insert($arr);
+							$this->_name = 'rms_score_detail';
+							$this->insert($arr);
+						}
+					}
+
+					if (!empty($ids)) {
+						if ($total_score > 0) {
+							if ($_data['exam_type'] == 2) { //semester exam
+								$totalMutiAll = $totalMaxScore / 50;
+							}
+							$avg = $total_score / $totalMutiAll;
+							$arr = array(
+								'score_id' => $id,
+								'student_id' => $old_studentid,
+
+								'total_score' => $total_score,
+								'amount_subject' => $totalMutiAll,
+								'total_avg' => $avg,
+								'totalMaxScore' => $totalMaxScore,
+							);
+							$this->_name = 'rms_score_monthly';
+							$this->insert($arr);
+						}
+					}
+					$this->_name = 'rms_grading';
+					foreach ($rssubject as $subject) {
+						$where = 'groupId=' . $_data['group'] . ' AND subjectId=' . $subject . ' AND forSemester=' . $_data['for_semester'] . ' AND examType =' . $_data['exam_type'];
+						if ($_data['exam_type'] == 1) {
+							$where .= ' AND formonth=' . $_data['for_month'];
+						}
+						$arr = array(
+							'isLock' => 1,
+							'lockBy' => $this->getUserId()
+						);
+						$this->update($arr, $where);
 					}
 				}
-				$this->_name='rms_grading';
-				foreach ($rssubject as $subject){
-					$where='groupId='.$_data['group'].' AND subjectId='.$subject.' AND forSemester='.$_data['for_semester'].' AND examType ='.$_data['exam_type'];
-					if($_data['exam_type']==1){
-						$where.=' AND formonth='.$_data['for_month'];
-					}
-					$arr = array(
-							'isLock'=>1,
-							'lockBy'=>$this->getUserId()
-							);
-					$this->update($arr, $where);
+			} else {  // Void Score
+
+				$this->_name = 'rms_grading';
+				$where = 'groupId=' . $_data['group'] . '  AND examType =' . $_data['exam_type'];
+				if ($_data['exam_type'] == 1) {
+					$where .= ' AND formonth=' . $_data['for_month'];
+				} else {
+					$where .= ' AND forSemester=' . $_data['for_semester'];
 				}
+				$arr = array(
+					'isLock' => 0,
+					'lockBy' => $this->getUserId()
+				);
+				$this->update($arr, $where);
 			}
 
-		}else{  // Void Score
-
-			$this->_name='rms_grading';
-			$where='groupId='.$_data['group'].'  AND examType ='.$_data['exam_type'];
-			if($_data['exam_type']==1){
-				$where.=' AND formonth='.$_data['for_month'];
-			}else{
-				$where.=' AND forSemester='.$_data['for_semester'];
-			}
-			$arr = array(
-				'isLock'=>0,
-				'lockBy'=>$this->getUserId()
-			);
-			$this->update($arr, $where);
-
-		}
-
-		$db->commit();
-		}catch (Exception $e){
-			echo $e->getMessage();exit();
+			$db->commit();
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
-   }
-	
-	function getAllScore($search=null){
-		$db=$this->getAdapter();
-		
+	}
+
+	function getAllScore($search = null)
+	{
+		$db = $this->getAdapter();
+
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
-		$colunmname='title_en';
+		$colunmname = 'title_en';
 		$label = 'name_en';
 		$branch = "branch_nameen";
 		$month = "month_en";
-		if ($currentLang==1){
-			$colunmname='title';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 			$label = 'name_kh';
 			$branch = "branch_namekh";
 			$month = "month_kh";
 		}
-		$sql="SELECT s.id,
+		$sql = "SELECT s.id,
 			(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
 			s.title_score,
 			CONCAT(COALESCE(`title_score`,''),' ',COALESCE(`title_score_en`,'')) AS title_score,
@@ -420,140 +422,156 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name
 		";
 		//s.max_score,
-		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id ";//AND s.status=1
-		
-		$where ='';
-		$from_date =(empty($search['start_date']))? '1': " s.date_input >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " s.date_input <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;
-		
-		if(!empty($search['adv_search'])){
+		$sql .= $dbp->caseStatusShowImage("s.status");
+		$sql .= " FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id "; //AND s.status=1
+
+		$where = '';
+		$from_date = (empty($search['start_date'])) ? '1' : " s.date_input >= '" . $search['start_date'] . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : " s.date_input <= '" . $search['end_date'] . " 23:59:59'";
+		$where = " AND " . $from_date . " AND " . $to_date;
+
+		if (!empty($search['adv_search'])) {
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[]=" s.title_score LIKE '%{$s_search}%'";
-			$s_where[]=" s.note LIKE '%{$s_search}%'";
-			$where .=' AND ( '.implode(' OR ',$s_where).')';
+			$s_where[] = " s.title_score LIKE '%{$s_search}%'";
+			$s_where[] = " s.note LIKE '%{$s_search}%'";
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
-		if($search['degree']>0){
-			$where.= " AND g.degree =".$search['degree'];
+		if ($search['degree'] > 0) {
+			$where .= " AND g.degree =" . $search['degree'];
 		}
-		if(!empty($search['academic_year'])){
-			$where.=" AND g.academic_year =".$search['academic_year'];
+		if (!empty($search['academic_year'])) {
+			$where .= " AND g.academic_year =" . $search['academic_year'];
 		}
-		if(!empty($search['grade'])){
-			$where.=" AND `g`.`grade` =".$search['grade'];
+		if (!empty($search['grade'])) {
+			$where .= " AND `g`.`grade` =" . $search['grade'];
 		}
-		if(!empty($search['group'])){
-			$where.=" AND `s`.`group_id` =".$search['group'];
+		if (!empty($search['group'])) {
+			$where .= " AND `s`.`group_id` =" . $search['group'];
 		}
-		if(!empty($search['branch_id'])){
-			$where.=" AND `s`.`branch_id` =".$search['branch_id'];
+		if (!empty($search['branch_id'])) {
+			$where .= " AND `s`.`branch_id` =" . $search['branch_id'];
 		}
-		if($search['for_month']>0){
-			$where.=" AND s.for_month =".$search['for_month'];
+		if ($search['for_month'] > 0) {
+			$where .= " AND s.for_month =" . $search['for_month'];
 		}
-		if($search['exam_type']>0){
-			$where.= " AND s.exam_type =".$search['exam_type'];
+		if ($search['exam_type'] > 0) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
 		}
-		if($search['for_semester']>0){
-			$where.= " AND s.for_semester =".$search['for_semester'];
+		if ($search['for_semester'] > 0) {
+			$where .= " AND s.for_semester =" . $search['for_semester'];
 		}
-		$where.=$dbp->getAccessPermission('s.branch_id');
-		$order=" ORDER BY id DESC ";
-		return $db->fetchAll($sql.$where.$order);
+		$where .= $dbp->getAccessPermission('s.branch_id');
+		$order = " ORDER BY id DESC ";
+		return $db->fetchAll($sql . $where . $order);
 	}
-	
-	function getScoreById($score_id){
-		$db=$this->getAdapter();
-		$sql="SELECT s.*,
+
+	function getScoreById($score_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT s.*,
 				(SELECT g.is_pass 
 					FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) as is_pass 
 			FROM rms_score AS s 
 			WHERE s.id=$score_id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql .= $dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
 
-	function getStudentByGroup($group_id,$data=array()){
-		$db=$this->getAdapter();
-		
+	function getStudentByGroup($group_id, $data = array())
+	{
+		$db = $this->getAdapter();
+
 		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$examType = empty($data['examType']) ? 1 : $data['examType'];
+
 		$currentLang = $dbp->currentlang();
-		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
-		$studentEnName=$studentName;
-		
-		if ($currentLang==1){
-			$studentName='s.stu_khname';
+		$studentName = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		$studentEnName = $studentName;
+
+		if ($currentLang == 1) {
+			$studentName = 's.stu_khname';
 		}
-		
-		$sql="SELECT
+
+		$sql = "SELECT
 					sgh.`stu_id`,
 					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_code,
-					(SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
+					(SELECT " . $studentName . " FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stu_name,
 					(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName,
-					(SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName,
-					(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
-				FROM 
-					`rms_group_detail_student` AS sgh
+					(SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName,
+					(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex ";
+		$sqlstr =	" , 0 AS monthlySemesterAvg ";
+		if ($examType == 2) {
+			$sqlstr =	" ,COALESCE( FORMAT((SELECT SUM(sm.total_avg)/COUNT(sm.total_avg)/g.`semesterPercentage` FROM `rms_score_monthly` AS sm 
+						INNER JOIN `rms_score` AS s  ON s.`id` =sm.`score_id` 
+						WHERE sm.`student_id` = sgh.`stu_id` 
+						AND s.for_semester=" . $data['forSemester'] . "
+						AND s.exam_type=1 
+						AND s.group_id=sgh.group_id LIMIT 1 ),2), 0) AS monthlySemesterAvg ";
+		}
+		$sql .=	$sqlstr;
+		$sql .=	" FROM `rms_group_detail_student` AS sgh 
+					INNER JOIN `rms_group` AS g ON sgh.`group_id`=g.`id`
 				WHERE 
 					sgh.itemType=1 
 					AND sgh.stop_type=0
-					and sgh.`group_id` = ".$group_id;
-		$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-		if(!empty($data['sortStundent'])){
-			if($data['sortStundent']==1){
-				$order=" ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-			}else if($data['sortStundent']==2){
-				$order=" ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-			}else if($data['sortStundent']==3){
-				$order=" ORDER BY (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
-			}
-		}
-			
-		$studentResult =  $db->fetchAll($sql.$order);
-		if(!empty($data['groupId'])){
+					and sgh.`group_id` = " . $group_id;
+		$order = " ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		// if (!empty($data['sortStundent'])) {
+		// 	if ($data['sortStundent'] == 1) {
+		// 		$order = " ORDER BY (SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		// 	} else if ($data['sortStundent'] == 2) {
+		// 		$order = " ORDER BY (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		// 	} else if ($data['sortStundent'] == 3) {
+		// 		$order = " ORDER BY (SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) ASC ";
+		// 	}
+		// }
+
+		$studentResult =  $db->fetchAll($sql . $order);
+		if (!empty($data['groupId'])) {
 			$groupId = $data['groupId'];
 		}
-		if(!empty($data['examType'])){
+		if (!empty($data['examType'])) {
 			$examType = $data['examType'];
 		}
-		$resultSubject = $this->getSubjectByGroupScore($data['groupId'],null,$examType);
+		$resultSubject = $this->getSubjectByGroupScore($data['groupId'], null, $examType);
 		$results = array();
-		if(!empty($studentResult)){
-			foreach($studentResult as $key=>$rs){
+		if (!empty($studentResult)) {
+			foreach ($studentResult as $key => $rs) {
 				$results[$key]['stu_id'] = $rs['stu_id'];
 				$results[$key]['stu_code'] = $rs['stu_code'];
 				$results[$key]['stu_name'] = $rs['stu_name'];
 				$results[$key]['stuKhName'] = $rs['stuKhName'];
 				$results[$key]['stuEnName'] = $rs['stuEnName'];
 				$results[$key]['sex'] = $rs['sex'];
-				$results[$key]['sex'] = $rs['sex'];
-				
-				$data['studentId']=$rs['stu_id'];
+				$results[$key]['monthlySemesterAvg'] = $rs['monthlySemesterAvg'];
+
+				$data['studentId'] = $rs['stu_id'];
 				$gradingScore = array();
-				if(!empty($resultSubject)){
-					foreach ($resultSubject as $index=> $rsGroup){
-						$data['subjectId']=$rsGroup['subject_id'];
-						$gradingScore[$index] =$this->getGradingScoreData($data);
+				if (!empty($resultSubject)) {
+					foreach ($resultSubject as $index => $rsGroup) {
+						$data['subjectId'] = $rsGroup['subject_id'];
+						$gradingScore[$index] = $this->getGradingScoreData($data);
 					}
 				}
-				$results[$key]['gradingScore']=$gradingScore;
+				$results[$key]['gradingScore'] = $gradingScore;
 			}
 		}
-		return $results ;
+		return $results;
 	}
-	function getSubjectByGroupScore($groupId,$teacher_id=null,$exam_type=1){
-		$db=$this->getAdapter();
-		
-			$dbgb = new Application_Model_DbTable_DbGlobal();
-			$currentLang = $dbgb->currentlang();
-			$colunmname='subject_titleen';
-			if ($currentLang==1){
-				$colunmname='subject_titlekh';
-			}
-		$sql="SELECT 
+	function getSubjectByGroupScore($groupId, $teacher_id = null, $exam_type = 1)
+	{
+		$db = $this->getAdapter();
+
+		$dbgb = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbgb->currentlang();
+		$colunmname = 'subject_titleen';
+		if ($currentLang == 1) {
+			$colunmname = 'subject_titlekh';
+		}
+		$sql = "SELECT 
 				gsjd.*,
 				gsjd.subject_id,
 				CASE
@@ -580,42 +598,42 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		 		rms_group as g
 			WHERE 
 				g.id = gsjd.group_id
-				and gsjd.group_id = ".$groupId;
-	
-			if($teacher_id!=null){
-				$sql.=" AND gsjd.teacher = ".$teacher_id;
-			}
-			if($exam_type==1){//for month
-				$sql.=" AND gsjd.amount_subject >0 ";
-			}else{//for semester
-				$sql.=" AND gsjd.amount_subject_sem >0 ";
-			}
-			$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
+				and gsjd.group_id = " . $groupId;
+
+		if ($teacher_id != null) {
+			$sql .= " AND gsjd.teacher = " . $teacher_id;
+		}
+		if ($exam_type == 1) { //for month
+			$sql .= " AND gsjd.amount_subject >0 ";
+		} else { //for semester
+			$sql .= " AND gsjd.amount_subject_sem >0 ";
+		}
+		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
 						s.id=gsjd.subject_id LIMIT 1) ";
-						
-			$sql.=" ORDER BY $strSubjectLange ASC ,gsjd.id ASC ";
-			
-			return $db->fetchAll($sql);
-	 	    
+
+		$sql .= " ORDER BY $strSubjectLange ASC ,gsjd.id ASC ";
+
+		return $db->fetchAll($sql);
 	}
-	
-	
-	function getStudentSccoreforEdit($score_id){
+
+
+	function getStudentSccoreforEdit($score_id)
+	{
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
-		$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
-		$studentEnName=$studentName;
-		
-		if ($currentLang==1){
-			$studentName='s.stu_khname';
+		$studentName = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		$studentEnName = $studentName;
+
+		if ($currentLang == 1) {
+			$studentName = 's.stu_khname';
 		}
-		
-		$sql="SELECT 
+
+		$sql = "SELECT 
 			  sd.student_id,
-			 (SELECT ".$studentName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS student_name,
+			 (SELECT " . $studentName . " FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS student_name,
 			 (SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuKhName,
-			 (SELECT ".$studentEnName." FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuEnName,
+			 (SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = sd.`student_id` LIMIT 1) AS stuEnName,
 			  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
 			  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
 			  score,note,
@@ -624,21 +642,23 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	 	 	rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 
 			GROUP BY sd.`student_id` order by 
-			(SELECT ".$studentEnName." FROM `rms_student`AS s 
+			(SELECT " . $studentEnName . " FROM `rms_student`AS s 
 			WHERE s.`stu_id`=sd.`student_id`) ASC ";
 		return $db->fetchAll($sql);
 	}
-	
-	
-	function getGroupStudent($id){
-		$db=$this->getAdapter();
-		$sql="SELECT id,group_id,status FROM rms_score WHERE id=$id LIMIT 1";
+
+
+	function getGroupStudent($id)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT id,group_id,status FROM rms_score WHERE id=$id LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	
-	function checkSubjectScore($score_id,$subject){
+
+	function checkSubjectScore($score_id, $subject)
+	{
 		$db = $this->getAdapter();
-		$sql=" SELECT
+		$sql = " SELECT
 			sd.student_id,	
 			sd.subject_id,
 			(SELECT `subject_titleen` FROM `rms_subject` AS s WHERE s.`id`=sd.`subject_id`) AS subject_titleen,
@@ -651,13 +671,14 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			GROUP BY sd.`subject_id` LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	
-	function getStudentScoreBySubjectID($score_id,$student_id,$suj_id){
-		if($student_id==null){
+
+	function getStudentScoreBySubjectID($score_id, $student_id, $suj_id)
+	{
+		if ($student_id == null) {
 			return false;
 		}
 		$db = $this->getAdapter();
-		$sql="SELECT
+		$sql = "SELECT
 			sd.student_id,
 			(SELECT CONCAT(s.`stu_khname`,'-',`stu_enname`) FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS student_name,
 			(SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
@@ -676,46 +697,48 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		AND sd.`student_id`= $student_id ORDER BY sd.subject_id ASC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	function getGradingScoreData($data){
-		$sql="SELECT 
+	function getGradingScoreData($data)
+	{
+		$sql = "SELECT 
 				gt.gradingId,
 				gt.totalAverage 
 				FROM `rms_grading_total` gt,
 					`rms_grading` gd
 				 WHERE gd.id=gt.gradingId ";
-		if(!empty($data['groupId'])){
-			$sql.=" AND gd.groupId=".$data['groupId'];
+		if (!empty($data['groupId'])) {
+			$sql .= " AND gd.groupId=" . $data['groupId'];
 		}
-		if(!empty($data['examType'])){
-			if($data['examType']==1){//month
-				if(!empty($data['forMonth'])){
-					$sql.=" AND gd.formonth= ".$data['forMonth'];
+		if (!empty($data['examType'])) {
+			if ($data['examType'] == 1) { //month
+				if (!empty($data['forMonth'])) {
+					$sql .= " AND gd.formonth= " . $data['forMonth'];
 				}
 			}
-			$sql.=" ANd gd.examType = ".$data['examType'];
+			$sql .= " ANd gd.examType = " . $data['examType'];
 		}
-		if(!empty($data['forSemester'])){
-			$sql.=" AND gd.forSemester = ".$data['forSemester'];
+		if (!empty($data['forSemester'])) {
+			$sql .= " AND gd.forSemester = " . $data['forSemester'];
 		}
-		if(!empty($data['subjectId'])){
-			$sql.=" AND gd.subjectId = ".$data['subjectId'];
+		if (!empty($data['subjectId'])) {
+			$sql .= " AND gd.subjectId = " . $data['subjectId'];
 		}
-		if(!empty($data['studentId'])){
-			$sql.=" AND gt.studentId = ".$data['studentId'];
+		if (!empty($data['studentId'])) {
+			$sql .= " AND gt.studentId = " . $data['studentId'];
 		}
-		if(isset($data['isLock'])){
-			$sql.=" AND gd.isLock = ".$data['isLock'];
+		if (isset($data['isLock'])) {
+			$sql .= " AND gd.isLock = " . $data['isLock'];
 		}
-		$sql.=" ORDER BY gd.subjectId ASC ";
+		$sql .= " ORDER BY gd.subjectId ASC ";
 		return $this->getAdapter()->fetchRow($sql);
 	}
-	function getSubjectScoreByGroup($data){
-		
+	function getSubjectScoreByGroup($data)
+	{
+
 		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE
 		s.id=gsjd.subject_id LIMIT 1) ";
-		
-		$db=$this->getAdapter();
-		$sql="SELECT
+
+		$db = $this->getAdapter();
+		$sql = "SELECT
 			gsjd.*,
 			g.amount_subject AS amount_subjectdivide,
 			gsjd.max_score AS max_subjectscore,
@@ -736,21 +759,21 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		WHERE
 		g.id = gsjd.group_id
 		";
-		if(!empty($data['group_id'])){
-			$sql.=" and gsjd.group_id = ".$data['group_id'];
+		if (!empty($data['group_id'])) {
+			$sql .= " and gsjd.group_id = " . $data['group_id'];
 		}
-		if(!empty($data['teacher_id'])){
-			$sql.=" AND gsjd.teacher = ".$data['teacher_id'];
+		if (!empty($data['teacher_id'])) {
+			$sql .= " AND gsjd.teacher = " . $data['teacher_id'];
 		}
-		if(!empty($data['teacher_id'])){
-			$sql.=" AND gsjd.teacher = ".$data['teacher_id'];
+		if (!empty($data['teacher_id'])) {
+			$sql .= " AND gsjd.teacher = " . $data['teacher_id'];
 		}
-		if(!empty($data['exam_type'])){
-			$sql.=" AND gsjd.amount_subject > 0 ";
-		}else{
-			$sql.=" AND gsjd.amount_subject_sem > 0 ";
+		if (!empty($data['exam_type'])) {
+			$sql .= " AND gsjd.amount_subject > 0 ";
+		} else {
+			$sql .= " AND gsjd.amount_subject_sem > 0 ";
 		}
-		$sql.=" ORDER  BY $strSubjectLange ";
+		$sql .= " ORDER  BY $strSubjectLange ";
 		return $db->fetchAll($sql);
 	}
 }

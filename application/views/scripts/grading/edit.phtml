@@ -237,6 +237,34 @@ span.titleSubCriterial {
     line-height: 12px;
     font-weight: 600;
 }
+
+tr.rowData td {
+    vertical-align: top;
+}
+.criteria-info {
+    padding: 2px 3px !important;
+    background: #f3f3f3;
+    margin: 0px;
+    text-align: center;
+    border-radius: 5px;
+    margin-right: 5px;
+    border: solid 1px #d4d4d4;
+}
+span.criteriaTitle {
+    line-height: 12px;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+span.criteriaTitle.khTitle {
+    color: #00137f;
+    font-weight: bold;
+    line-height: 16px;
+}
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">

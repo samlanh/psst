@@ -66,7 +66,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 			$isgetId = null;
 		} else {
-			$isgetId = $id ;
+			$isgetId = $id;
 			$row = $db->getScoreExamByID($id);
 			$search = array(
 				'group' => $row['group_id'],
@@ -79,11 +79,10 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'degree' => '',
 				'session' => '',
 			);
-			
 		}
 		$result = $db->getStudentScoreResult($search, $isgetId, 1);
 		$this->view->studentScoreResult = $result;
-		
+
 		$this->view->scoreId = $id;
 
 		$this->view->search = $search;
@@ -102,9 +101,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$this->view->month = $db->getAllMonth();
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$dregreeId= empty($result[0]['degree_id'])?0:$result[0]['degree_id'];
-		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
-		$this->view->academicStaffInfo = $dbSetting->getDutyByDegree($dregreeId,2);
+		$dregreeId = empty($result[0]['degree_id']) ? 0 : $result[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
+		$this->view->academicStaffInfo = $dbSetting->getDutyByDegree($dregreeId, 2);
 	}
 	function rptScoreDetailAction()
 	{ //តាមមុខវិជ្ជាលម្អិត
@@ -151,9 +150,8 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		// $this->view->principalInfo = $dbSetting->getDutyById($principalId);
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$dregreeId= empty($resultScore[0]['degree_id'])?0:$resultScore[0]['degree_id'];
-		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
-	
+		$dregreeId = empty($resultScore[0]['degree_id']) ? 0 : $resultScore[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
 	}
 
 	function rptMonthlytranscriptAction()
@@ -162,20 +160,42 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$scoreId = $this->getRequest()->getParam("id");
 		$stu_id = $this->getRequest()->getParam("stu_id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		
+
 		$search = array(
-				'scoreId'=>empty($scoreId)?0:$scoreId
+			'scoreId' => empty($scoreId) ? 0 : $scoreId
 		);
-		if(!empty($stu_id)){
-			$search['stu_id']=$stu_id;
+		if (!empty($stu_id)) {
+			$search['stu_id'] = $stu_id;
 		}
-		
+
 		$result = $db->getAllStudentIdByScoreResult($search, $scoreId, 1);
 		$this->view->studentScoreResult = $result;
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
-// 		$this->view->grading =array();// $db->getGradingSystem(@$result[0]['degree_id']);
+		// 		$this->view->grading =array();// $db->getGradingSystem(@$result[0]['degree_id']);
+	}
+
+	function rptSemestertranscriptAction()
+	{
+
+		$scoreId = $this->getRequest()->getParam("id");
+		$stu_id = $this->getRequest()->getParam("stu_id");
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+
+		$search = array(
+			'scoreId' => empty($scoreId) ? 0 : $scoreId
+		);
+		if (!empty($stu_id)) {
+			$search['stu_id'] = $stu_id;
+		}
+
+		$result = $db->getAllStudentIdBySemesterResult($search, $scoreId, 1);
+		$this->view->studentScoreResult = $result;
+
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->month = $db->getAllMonth();
+		// 		$this->view->grading =array();// $db->getGradingSystem(@$result[0]['degree_id']);
 	}
 
 	function certificateLetterofpraisenewAction()
@@ -230,7 +250,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$frm = new Application_Form_FrmGlobal();
 		$branch_id = empty($studentgroup[0]['branch_id']) ? 1 : $studentgroup[0]['branch_id'];
 		$this->view->logoleft = $frm->getLeftLogo($branch_id);
-		
+
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->branchInfo = $db->getBranchInfo($branch_id);
 
@@ -239,9 +259,8 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		// $this->view->principalInfo = $dbSetting->getDutyById($principalId);
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$dregreeId= empty($studentgroup[0]['degree_id'])?0:$studentgroup[0]['degree_id'];
-		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
-		
+		$dregreeId = empty($studentgroup[0]['degree_id']) ? 0 : $studentgroup[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
 	}
 	function monthlyOutstandingStudentNophotoAction()
 	{
@@ -307,7 +326,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
 	}
-	
+
 	function rptResultbysemesterAction()
 	{
 		$group_id = $this->getRequest()->getParam("id");
@@ -522,7 +541,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$forms = $form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
-		
+
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
 		$this->view->principalInfo = $dbSetting->getDutyById(1);
 	}
@@ -982,26 +1001,26 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	public function rptScoreStatisticAction()
 	{
 		if ($this->getRequest()->isPost()) {
-			
+
 			$search = $this->getRequest()->getPost();
-			
+
 			$db = new Allreport_Model_DbTable_DbRptStudentScore();
 			$rs = $db->getScoreStatistic($search);
 		} else {
-			$rs=array();
+			$rs = array();
 			$search = array(
-					'branch_id' 	=> "",
-					'academic_year'	=> "",
-					'group' 		=> "",
-					'grade' 		=> "",
-					'degree' 		=> "",
-					'exam_type' 	=> 0,
-					'for_semester' 	=> 0,
-					'for_month' 	=> 0,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
-					'sort_degree'=>''
-				);
+				'branch_id' 	=> "",
+				'academic_year'	=> "",
+				'group' 		=> "",
+				'grade' 		=> "",
+				'degree' 		=> "",
+				'exam_type' 	=> 0,
+				'for_semester' 	=> 0,
+				'for_month' 	=> 0,
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d'),
+				'sort_degree' => ''
+			);
 		}
 		$this->view->rs = $rs;
 		$this->view->search = $search;

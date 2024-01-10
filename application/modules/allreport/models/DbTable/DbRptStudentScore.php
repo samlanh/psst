@@ -3,39 +3,44 @@
 class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 {
 
-    protected $_name = 'rms_student';
-    public function getUserId(){
-    	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
-    	return $session_user->user_id;
-    }
-    function getAllMonth(){
+	protected $_name = 'rms_student';
+	public function getUserId()
+	{
+		$session_user = new Zend_Session_Namespace(SYSTEM_SES);
+		return $session_user->user_id;
+	}
+	function getAllMonth()
+	{
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
-		if($lang==1){// khmer
+		if ($lang == 1) { // khmer
 			$month = "month_kh";
-		}else{ // English
+		} else { // English
 			$month = "month_en";
 		}
-		$sql="select id , $month as month from rms_month where status=1 ";
+		$sql = "select id , $month as month from rms_month where status=1 ";
 		return $db->fetchAll($sql);
-	}	
-    function getAllSession(){
-    	$db=$this->getAdapter();
-    	$sql="select key_code,name_en from rms_view where type=4";
-    	return $db->fetchAll($sql);
-    }
-    
-   
-   function getSubjectdByParent(){
-   	$db=$this->getAdapter();
-   		$sql="SELECT subject_id,parent_id,(SELECT subject_titleen FROM rms_subject WHERE rms_subject.id=rms_score.subject_id) AS subject_name 
+	}
+	function getAllSession()
+	{
+		$db = $this->getAdapter();
+		$sql = "select key_code,name_en from rms_view where type=4";
+		return $db->fetchAll($sql);
+	}
+
+
+	function getSubjectdByParent()
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT subject_id,parent_id,(SELECT subject_titleen FROM rms_subject WHERE rms_subject.id=rms_score.subject_id) AS subject_name 
           FROM rms_score WHERE `status`=1 GROUP BY academic_id,session_id,group_id,parent_id,subject_id ,term_id";
-    return $db->fetchAll($sql);
-   }   
-   function getAllSubjectByStudent(){
-   		$db=$this->getAdapter();
-   		$sql="SELECT
+		return $db->fetchAll($sql);
+	}
+	function getAllSubjectByStudent()
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT
 				  stu_id,
 				  stu_enname,
 				  stu_code,
@@ -57,56 +62,60 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				    AND sd.score_id = sc.id
 				GROUP BY sc.subject_id,stu_id
 				ORDER BY stu_id";
-   		return $db->fetchAll($sql);
-   }
-   function getAcademic(){
-   	    $db=$this->getAdapter();
-   	    $sql=" SELECT id,(SELECT CONCAT(from_academic,'-',to_academic)  FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_score.academic_id) AS academic_id,
+		return $db->fetchAll($sql);
+	}
+	function getAcademic()
+	{
+		$db = $this->getAdapter();
+		$sql = " SELECT id,(SELECT CONCAT(from_academic,'-',to_academic)  FROM rms_tuitionfee WHERE rms_tuitionfee.id=rms_score.academic_id) AS academic_id,
                      session_id,group_id,subject_id,term_id FROM  rms_score";
-   	    return $db->fetchAll($sql);
-   }
-   function getStudenetGroupSubject(){
-   		$db=$this->getAdapter();
-   		$sql="SELECT s.stu_id,s.stu_enname,s.stu_code,g.*,g.id as group_id,
+		return $db->fetchAll($sql);
+	}
+	function getStudenetGroupSubject()
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT s.stu_id,s.stu_enname,s.stu_code,g.*,g.id as group_id,
    		   (SELECT subject_titleen FROM rms_subject AS sj WHERE sj.id=gsd.subject_id LIMIT 1) AS subject_name,
    		    gsd.subject_id 
 	 		FROM rms_student AS s,rms_group AS g,rms_group_detail_student AS gd,rms_group_subject_detail AS gsd
 	 		WHERE gd.itemType=1 AND s.stu_id=gd.stu_id AND  g.id=gd.group_id AND gsd.group_id=g.id  ORDER BY g.id,gsd.subject_id,s.stu_id";
-   		return $db->fetchAll($sql);
-   }
-   function getScoreByGroupId($student_id,$subject_id,$group_id){
-   	$db = $this->getAdapter();
-   			$sql = "select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name,
+		return $db->fetchAll($sql);
+	}
+	function getScoreByGroupId($student_id, $subject_id, $group_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name,
             SUM(sd.score) As total_score from rms_score as s,rms_score_detail as sd,rms_student as st
            where  s.id=sd.score_id and sd.student_id=st.stu_id and s.group_id=$group_id and s.parent_id=$subject_id GROUP BY s.subject_id ";
-   	return $db->fetchAll($sql);
-   	
-   }
-   function getSubjectItem($subject_id,$group_id){
-   	$db = $this->getAdapter();
-   	$sql = " select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name
+		return $db->fetchAll($sql);
+	}
+	function getSubjectItem($subject_id, $group_id)
+	{
+		$db = $this->getAdapter();
+		$sql = " select (select subject_titleen from rms_subject where rms_subject.id=s.subject_id) as subject_name
     		from rms_score as s,rms_score_detail as sd
    			where s.id=sd.score_id and s.group_id=$group_id and s.parent_id=$subject_id GROUP BY s.subject_id ";
-   	return $db->fetchAll($sql);
-   }
-   public function getStundetScoreGroup($search){ // List លទ្ធផលដែលបានបញ្ចូលទាំងអស់មក
-   	$db = $this->getAdapter();
-   	$_db = new Application_Model_DbTable_DbGlobal();
-   	$lang = $_db->currentlang();
-   	if($lang==1){// khmer
-   		$label = "name_kh";
-   		$grade = "rms_itemsdetail.title";
-   		$degree = "rms_items.title";
-   		$month = "month_kh";
-   		$branch = "branch_namekh";
-   	}else{ // English
-   		$label = "name_en";
-   		$grade = "rms_itemsdetail.title_en";
-   		$degree = "rms_items.title_en";
-   		$month = "month_en";
-   		$branch = "branch_nameen";
-   	}
-   	$sql="SELECT 
+		return $db->fetchAll($sql);
+	}
+	public function getStundetScoreGroup($search)
+	{ // List លទ្ធផលដែលបានបញ្ចូលទាំងអស់មក
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$month = "month_kh";
+			$branch = "branch_namekh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$month = "month_en";
+			$branch = "branch_nameen";
+		}
+		$sql = "SELECT 
    				s.`id`,
    				s.`group_id`,
    				g.`group_code`,
@@ -135,71 +144,72 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    			WHERE 
    				g.`id`=s.`group_id` 
    				AND s.status = 1 ";
-   		
-   		$where='';
-	   	if(!empty($search['adv_search'])){
-   			$s_where=array();
-   			$s_search=addslashes(trim($search['adv_search']));
-   			$s_where[]= " s.title_score LIKE '%{$s_search}%'";
-   			$s_where[]=" g.group_code LIKE '%{$s_search}%'";
-   			$s_where[]=" s.note LIKE '%{$s_search}%'";
-   			$s_where[]=" s.for_semester LIKE '%{$s_search}%'";
-   			$where.=' AND ('.implode(' OR ', $s_where).')';
-	   	}
-	   	if(!empty($search['branch_id'])){
-	   		$where.= " AND s.branch_id =".$search['branch_id'];
-	   	}
-	   	if(!empty($search['group'])){
-	   		$where.= " AND g.id =".$search['group'];
-	   	}
-	   	if(!empty($search['academic_year'])){
-	   		$where.=" AND s.for_academic_year =".$search['academic_year'];
-	   	}
-	   	if($search['degree']>0){
-	   		$where.=" AND `g`.`degree` =".$search['degree'];
-	   	}
-	   	if($search['for_month']>0){
-	   		$where.=" AND s.for_month =".$search['for_month'];
-	   	}
-	   	if($search['grade']>0){
-	   		$where.=" AND `g`.`grade` =".$search['grade'];
-	   	}
-	   	if($search['session']>0){
-	   		$where.=" AND `g`.`session` =".$search['session'];
-	   	}
-	   	if($search['room']>0){
-	   		$where.=" AND `g`.`room_id` =".$search['room'];
-	   	}
-	   	if($search['exam_type']>0){
-	   		$where.= " AND s.exam_type =".$search['exam_type'];
-	   	}
-	   	if($search['for_semester']>0){
-	   		$where.= " AND s.for_semester =".$search['for_semester'];
-	   	}
-	   	$dbp = new Application_Model_DbTable_DbGlobal();
-	   	$where.=$dbp->getAccessPermission('s.branch_id');
-	   	
-   		$order = " ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
-   		return $db->fetchAll($sql.$where.$order);
-   }
-   public function getStundetScoreDetailGroup($search,$id=null,$limit){ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា//តារាងកិត្តិយសមានរូបថត និង​អត់រូបថត(២action)
-   	$db = $this->getAdapter();
-   	$_db = new Application_Model_DbTable_DbGlobal();
-   	$lang = $_db->currentlang();
-   	if($lang==1){// khmer
-   		$label = "name_kh";
-   		$grade = "rms_itemsdetail.title";
-   		$degree = "rms_items.title";
-   		$branch = "b.branch_namekh";
-   		$month = "month_kh";
-   	}else{ // English
-   		$label = "name_en";
-   		$grade = "rms_itemsdetail.title_en";
-   		$degree = "rms_items.title_en";
-   		$branch = "b.branch_nameen";
-   		$month = "month_en";
-   	}
-   	$sql="SELECT
+
+		$where = '';
+		if (!empty($search['adv_search'])) {
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[] = " s.title_score LIKE '%{$s_search}%'";
+			$s_where[] = " g.group_code LIKE '%{$s_search}%'";
+			$s_where[] = " s.note LIKE '%{$s_search}%'";
+			$s_where[] = " s.for_semester LIKE '%{$s_search}%'";
+			$where .= ' AND (' . implode(' OR ', $s_where) . ')';
+		}
+		if (!empty($search['branch_id'])) {
+			$where .= " AND s.branch_id =" . $search['branch_id'];
+		}
+		if (!empty($search['group'])) {
+			$where .= " AND g.id =" . $search['group'];
+		}
+		if (!empty($search['academic_year'])) {
+			$where .= " AND s.for_academic_year =" . $search['academic_year'];
+		}
+		if ($search['degree'] > 0) {
+			$where .= " AND `g`.`degree` =" . $search['degree'];
+		}
+		if ($search['for_month'] > 0) {
+			$where .= " AND s.for_month =" . $search['for_month'];
+		}
+		if ($search['grade'] > 0) {
+			$where .= " AND `g`.`grade` =" . $search['grade'];
+		}
+		if ($search['session'] > 0) {
+			$where .= " AND `g`.`session` =" . $search['session'];
+		}
+		if ($search['room'] > 0) {
+			$where .= " AND `g`.`room_id` =" . $search['room'];
+		}
+		if ($search['exam_type'] > 0) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
+		}
+		if ($search['for_semester'] > 0) {
+			$where .= " AND s.for_semester =" . $search['for_semester'];
+		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where .= $dbp->getAccessPermission('s.branch_id');
+
+		$order = " ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
+		return $db->fetchAll($sql . $where . $order);
+	}
+	public function getStundetScoreDetailGroup($search, $id = null, $limit)
+	{ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា//តារាងកិត្តិយសមានរូបថត និង​អត់រូបថត(២action)
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+			$month = "month_kh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+			$month = "month_en";
+		}
+		$sql = "SELECT
 		   	s.`id`,
 		   	g.`branch_id`,
 			(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
@@ -249,98 +259,129 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND g.`id` = s.`group_id`
 		   	AND s.`id`=sd.`score_id`
 		   	AND s.status = 1 ";
-   	if (!empty($id)){
-   		$sql.=" AND s.id = $id ";
-   	}
-   	$where='';
-   	if (!empty($search['branch_id'])){
-   		$where.= " AND g.`branch_id` =".$search['branch_id'];
-   	} 
-   	if(!empty($search['study_year'])){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
-   	}
-   	if(!empty($search['group'])){
-   		$where.= " AND s.group_id =".$search['group'];
-   	}
-   	if(!empty($search['exam_type'])){
-   		$where.= " AND s.exam_type =".$search['exam_type'];
-   		if ($search['exam_type']==1){
-   			if(!empty($search['for_month'])){
-   				$where.= " AND s.for_month =".$search['for_month'];
-   			}
-   		}else if ($search['exam_type']==2){
-   			if(!empty($search['for_semester'])){
-   				$where.= " AND s.for_semester =".$search['for_semester'];
-   			}
-   		}
-   	}
-   	if(!empty($search['degree'])){
-   		$where.=" AND `g`.`degree` =".$search['degree'];
-   	}
-   	if(!empty($search['grade'])){
-   		$where.=" AND `g`.`grade` =".$search['grade'];
-   	}
-   	if(!empty($search['session'])){
-   		$where.=" AND `g`.`session` =".$search['session'];
-   	}
-   	$where.= $_db->getAccessPermission('s.branch_id');
-   	
-   	$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` 
+		if (!empty($id)) {
+			$sql .= " AND s.id = $id ";
+		}
+		$where = '';
+		if (!empty($search['branch_id'])) {
+			$where .= " AND g.`branch_id` =" . $search['branch_id'];
+		}
+		if (!empty($search['study_year'])) {
+			$where .= " AND s.for_academic_year =" . $search['study_year'];
+		}
+		if (!empty($search['group'])) {
+			$where .= " AND s.group_id =" . $search['group'];
+		}
+		if (!empty($search['exam_type'])) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
+			if ($search['exam_type'] == 1) {
+				if (!empty($search['for_month'])) {
+					$where .= " AND s.for_month =" . $search['for_month'];
+				}
+			} else if ($search['exam_type'] == 2) {
+				if (!empty($search['for_semester'])) {
+					$where .= " AND s.for_semester =" . $search['for_semester'];
+				}
+			}
+		}
+		if (!empty($search['degree'])) {
+			$where .= " AND `g`.`degree` =" . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= " AND `g`.`grade` =" . $search['grade'];
+		}
+		if (!empty($search['session'])) {
+			$where .= " AND `g`.`session` =" . $search['session'];
+		}
+		$where .= $_db->getAccessPermission('s.branch_id');
+
+		$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` 
    		ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
-   	if($limit==2){
-   		$limit = " LIMIT 5 ";
-   	}else{
-   		$limit = " ";
-   	}
-   	return $db->fetchAll($sql.$where.$order.$limit);
-   }
-   public function getAllStudentIdByScoreResult($search,$scoreId=null,$limit=0){ // rptMonthlytranscript
-	   	$db = $this->getAdapter();
-	   
-	   	$sql="SELECT
+		if ($limit == 2) {
+			$limit = " LIMIT 5 ";
+		} else {
+			$limit = " ";
+		}
+		return $db->fetchAll($sql . $where . $order . $limit);
+	}
+	public function getAllStudentIdByScoreResult($search, $scoreId = null, $limit = 0)
+	{ // rptMonthlytranscript
+		$db = $this->getAdapter();
+
+		$sql = "SELECT
 		   	sm.`student_id` AS stu_id,
 		   	sm.score_id AS id
 	   	FROM
 		   	`rms_score_monthly` AS sm
 	   	WHERE 1 ";
-	   
-	   	if (!empty($scoreId)){
-	   		$sql.=" AND sm.score_id = $scoreId ";
-	    }
-	    if(!empty($search['stu_id'])){
-	   		$sql.=" AND sm.`student_id` IN (".$search['stu_id'].")";
-	    }
-	   	$order = "  GROUP BY 
+
+		if (!empty($scoreId)) {
+			$sql .= " AND sm.score_id = $scoreId ";
+		}
+		if (!empty($search['stu_id'])) {
+			$sql .= " AND sm.`student_id` IN (" . $search['stu_id'] . ")";
+		}
+		$order = "  GROUP BY 
 	   						sm.score_id,
 	   						sm.`student_id`
 					   		ORDER BY total_score DESC ";
-	   			if($limit==2){
-	   				$limit = " limit 5";
-			   	}else{
-			   		$limit = " ";
-			  	}
-   			return $db->fetchAll($sql.$order.$limit);
-   }
-   public function getStudentScoreResult($search,$id=null,$limit=0){ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
-   	//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/
-   	$db = $this->getAdapter();
-   	$_db = new Application_Model_DbTable_DbGlobal();
-   	$lang = $_db->currentlang();
-   	if($lang==1){// khmer
-   		$label = "name_kh";
-   		$grade = "rms_itemsdetail.title";
-   		$degree = "rms_items.title";
-   		$branch = "b.branch_namekh";
-   		$month = "month_kh";
-   	}else{ // English
-   		$label = "name_en";
-   		$grade = "rms_itemsdetail.title_en";
-   		$degree = "rms_items.title_en";
-   		$branch = "b.branch_nameen";
-   		$month = "month_en";
-   	}
+		if ($limit == 2) {
+			$limit = " limit 5";
+		} else {
+			$limit = " ";
+		}
+		return $db->fetchAll($sql . $order . $limit);
+	}
 
-   	$sql="SELECT
+	public function getAllStudentIdBySemesterResult($search, $scoreId = null, $limit = 0)
+	{ // rptSemestertranscript
+		$db = $this->getAdapter();
+
+		$sql = "SELECT
+			sm.`student_id` AS stu_id,
+			sm.score_id AS id
+		FROM
+			`rms_score_monthly` AS sm
+		WHERE 1 ";
+
+		if (!empty($scoreId)) {
+			$sql .= " AND sm.score_id = $scoreId ";
+		}
+		if (!empty($search['stu_id'])) {
+			$sql .= " AND sm.`student_id` IN (" . $search['stu_id'] . ")";
+		}
+		$order = "  GROUP BY 
+						sm.score_id,
+						sm.`student_id`
+						ORDER BY total_score DESC ";
+		if ($limit == 2) {
+			$limit = " limit 5";
+		} else {
+			$limit = " ";
+		}
+		return $db->fetchAll($sql . $order . $limit);
+	}
+	public function getStudentScoreResult($search, $id = null, $limit = 0)
+	{ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
+		//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+			$month = "month_kh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+			$month = "month_en";
+		}
+
+		$sql = "SELECT
 		   	
 		   	(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
@@ -401,61 +442,62 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND g.`id` = s.`group_id`
 		   	AND s.`id`=sm.`score_id`
 		   	AND s.status = 1 ";
-   	
-	   	
-   	if (!empty($id)){
-   		$sql.=" AND s.id = $id ";
-   	}
-   	$where='';
-   	if (!empty($search['branch_id'])){
-   		$where.= " AND g.`branch_id` =".$search['branch_id'];
-   	} 
-   	if(!empty($search['study_year'])){
-   		$where.=" AND s.for_academic_year =".$search['study_year'];
-   	}
-   	if(!empty($search['group'])){
-   		$where.= " AND s.group_id =".$search['group'];
-   	}
-   	if(!empty($search['exam_type'])){
-   		$where.= " AND s.exam_type =".$search['exam_type'];
-   		if ($search['exam_type']==1){
-   			if(!empty($search['for_month'])){
-   				$where.= " AND s.for_month =".$search['for_month'];
-   			}
-   		}else if ($search['exam_type']==2){
-   			if(!empty($search['for_semester'])){
-   				$where.= " AND s.for_semester =".$search['for_semester'];
-   			}
-   		}
-   	}
-   	if(!empty($search['degree'])){
-   		$where.=" AND `g`.`degree` =".$search['degree'];
-   	}
-   	if(!empty($search['grade'])){
-   		$where.=" AND `g`.`grade` =".$search['grade'];
-   	}
-   	if(!empty($search['session'])){
-   		$where.=" AND `g`.`session` =".$search['session'];
-   	}
-	   if(!empty($search['stu_id'])){
-		$where.=" AND 	st.`stu_id` IN (".$search['stu_id'].")";
-	}
-	   
-   	$where.= $_db->getAccessPermission('s.branch_id');
-   	
-   	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
+
+
+		if (!empty($id)) {
+			$sql .= " AND s.id = $id ";
+		}
+		$where = '';
+		if (!empty($search['branch_id'])) {
+			$where .= " AND g.`branch_id` =" . $search['branch_id'];
+		}
+		if (!empty($search['study_year'])) {
+			$where .= " AND s.for_academic_year =" . $search['study_year'];
+		}
+		if (!empty($search['group'])) {
+			$where .= " AND s.group_id =" . $search['group'];
+		}
+		if (!empty($search['exam_type'])) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
+			if ($search['exam_type'] == 1) {
+				if (!empty($search['for_month'])) {
+					$where .= " AND s.for_month =" . $search['for_month'];
+				}
+			} else if ($search['exam_type'] == 2) {
+				if (!empty($search['for_semester'])) {
+					$where .= " AND s.for_semester =" . $search['for_semester'];
+				}
+			}
+		}
+		if (!empty($search['degree'])) {
+			$where .= " AND `g`.`degree` =" . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= " AND `g`.`grade` =" . $search['grade'];
+		}
+		if (!empty($search['session'])) {
+			$where .= " AND `g`.`session` =" . $search['session'];
+		}
+		if (!empty($search['stu_id'])) {
+			$where .= " AND 	st.`stu_id` IN (" . $search['stu_id'] . ")";
+		}
+
+		$where .= $_db->getAccessPermission('s.branch_id');
+
+		$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
    				ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,
    				s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
-   	if($limit==2){
-   		$limit = " limit 5";
-   	}else{
-   		$limit = " ";
-   	}
-   	return $db->fetchAll($sql.$where.$order.$limit);
-   }
-   public function getStundetScorebySemester($group_id,$semester){ // សម្រាប់ លទ្ធផលឆមាសទី១ និង 
-   			$db = $this->getAdapter();
-			   	$sql=" SELECT
+		if ($limit == 2) {
+			$limit = " limit 5";
+		} else {
+			$limit = " ";
+		}
+		return $db->fetchAll($sql . $where . $order . $limit);
+	}
+	public function getStundetScorebySemester($group_id, $semester)
+	{ // សម្រាប់ លទ្ធផលឆមាសទី១ និង 
+		$db = $this->getAdapter();
+		$sql = " SELECT
 			   	st.`stu_code`,
 			   	st.`stu_enname`,
 			   	st.`last_name`,
@@ -515,16 +557,17 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 					gs.itemType=1 
 					AND st.`stu_id` = gs.`stu_id`
 				   	AND g.`id`= gs.`group_id`
-				   	AND g.id = $group_id ";//only month
-			   	$sql.=" AND gs.`stop_type`=0 ";
-   	
-   	$where='';
-   	$order = "GROUP BY gs.`stu_id` ORDER BY ((avg_forsemester+avg_formonth)/2) DESC,g.academic_year,g.semester ASC ";
-   	return $db->fetchAll($sql.$where.$order);
-   }
-   public function getStundetScorebyYear($group_id){ // score result for yearly
-   		$db = $this->getAdapter();
-			   	$sql=" SELECT
+				   	AND g.id = $group_id "; //only month
+		$sql .= " AND gs.`stop_type`=0 ";
+
+		$where = '';
+		$order = "GROUP BY gs.`stu_id` ORDER BY ((avg_forsemester+avg_formonth)/2) DESC,g.academic_year,g.semester ASC ";
+		return $db->fetchAll($sql . $where . $order);
+	}
+	public function getStundetScorebyYear($group_id)
+	{ // score result for yearly
+		$db = $this->getAdapter();
+		$sql = " SELECT
 			   	st.`stu_code`,
 			   	st.`stu_enname`,
 			   	st.`last_name`,
@@ -606,15 +649,16 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 					AND st.`stu_id` = gs.`stu_id`
 				   	AND g.`id`= gs.`group_id`
 				   	AND g.id = $group_id ";
-			   	$sql.=" AND gs.`stop_type`=0 ";
-   		$where='';
-   		$order = "GROUP BY gs.`stu_id` ORDER BY ((((avg_forsemester1+avg_formonthsemester1)/2)+((avg_forsemester2+avg_formonthsemester2)/2))/2) DESC,g.academic_year,g.semester ASC ";
-   	
-   		return $db->fetchAll($sql.$where.$order);
-   }
-   public function getAcadimicByStudentHeader($group_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ក្បាល I+II
-   	$db = $this->getAdapter();
-   	$sql="
+		$sql .= " AND gs.`stop_type`=0 ";
+		$where = '';
+		$order = "GROUP BY gs.`stu_id` ORDER BY ((((avg_forsemester1+avg_formonthsemester1)/2)+((avg_forsemester2+avg_formonthsemester2)/2))/2) DESC,g.academic_year,g.semester ASC ";
+
+		return $db->fetchAll($sql . $where . $order);
+	}
+	public function getAcadimicByStudentHeader($group_id, $student_id)
+	{ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា ក្បាល I+II
+		$db = $this->getAdapter();
+		$sql = "
 	   	SELECT
 	   	s.`id`,
 	   	sd.`group_id`,
@@ -646,13 +690,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   	AND s.status = 1
 	   	AND g.id= $group_id
 	   	AND sd.student_id=$student_id ";
-   	$where='';
-   	$order = " GROUP BY sd.subject_id ORDER BY s.for_semester ASC,sd.subject_id,s.for_academic_year,s.for_semester ASC ";
-   	return $db->fetchAll($sql.$where.$order);
-   }
-   public function getAcadimicByStudentSubject($group_id,$semester_id,$subject_id,$student_id){ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា I+II លម្អិត
-   	$db = $this->getAdapter();
-	   		$sql="SELECT 
+		$where = '';
+		$order = " GROUP BY sd.subject_id ORDER BY s.for_semester ASC,sd.subject_id,s.for_academic_year,s.for_semester ASC ";
+		return $db->fetchAll($sql . $where . $order);
+	}
+	public function getAcadimicByStudentSubject($group_id, $semester_id, $subject_id, $student_id)
+	{ // fro ព្រឹត្តប័ត្រពិន្ទុឆ្នាំសិក្សា I+II លម្អិត
+		$db = $this->getAdapter();
+		$sql = "SELECT 
 	   			score,
 				sum(score) as total_score,
 	   			 FIND_IN_SET( score, (    
@@ -679,11 +724,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				   	AND sd.student_id= $student_id
 				   	AND s.exam_type=2
 					GROUP BY sd.subject_id ";
-	   	$where=' ';
-   	return $db->fetchRow($sql.$where);
-}
-function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំណាត់ថ្នាក់ប្រឡង ឆមាសទី១/២ តាមសិស្ស(transcript)
-	$sql="SELECT 
+		$where = ' ';
+		return $db->fetchRow($sql . $where);
+	}
+	function getRankStudentbyGroupSemester($group_id, $semester, $student_id)
+	{ //ចំណាត់ថ្នាក់ប្រឡង ឆមាសទី១/២ តាមសិស្ស(transcript)
+		$sql = "SELECT 
 			SUM(score) AS total_score,
    			 FIND_IN_SET( score, (    
 			SELECT GROUP_CONCAT( score
@@ -723,12 +769,13 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		//          ORDER BY score DESC
 		//          ) AA LEFT JOIN (SELECT SUM(score) AS score,score_id,group_id,student_id FROM `rms_score_detail` WHERE score_id=2 GROUP BY student_id) BB USING (score) WHERE score_id=2 
 		//          ) A WHERE student_id=3';//return 
-	$db = $this->getAdapter();
-	return $db->fetchRow($sql);
-}
-   public function getStundetExamById($group_id,$semester,$student_id){ // ប្រើសំរាប់រកមធ្យមភាគ សម្រាប់សិស្ស ១ ប្រើព្រឹត្តប័ត្រពិន្ទុឆ្នាំ
-   	$db = $this->getAdapter();
-   	$sql="
+		$db = $this->getAdapter();
+		return $db->fetchRow($sql);
+	}
+	public function getStundetExamById($group_id, $semester, $student_id)
+	{ // ប្រើសំរាប់រកមធ្យមភាគ សម្រាប់សិស្ស ១ ប្រើព្រឹត្តប័ត្រពិន្ទុឆ្នាំ
+		$db = $this->getAdapter();
+		$sql = "
 	   	SELECT
 		   	s.`id`,
 		   	sd.`group_id`,
@@ -759,14 +806,15 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		   	AND s.for_semester=$semester
 		   	AND sd.student_id=$student_id
 		   	AND s.exam_type=1 ";
-	   	$where='';
-	   		$order = " GROUP BY sd.`student_id`,s.for_semester ORDER BY sd.`student_id`";
-// 	   		echo $sql.$where.$order;exit();
-   		return $db->fetchRow($sql.$where.$order);
-   }
-   function getRankingSemesterByStudent($group_id,$semester_id,$student_id){//ចំណាត់ថ្នាក់សំរាប់ឆមាសនីមួយៗ
+		$where = '';
+		$order = " GROUP BY sd.`student_id`,s.for_semester ORDER BY sd.`student_id`";
+		// 	   		echo $sql.$where.$order;exit();
+		return $db->fetchRow($sql . $where . $order);
+	}
+	function getRankingSemesterByStudent($group_id, $semester_id, $student_id)
+	{ //ចំណាត់ថ្នាក់សំរាប់ឆមាសនីមួយៗ
 
-		$sql="SELECT 
+		$sql = "SELECT 
    			 FIND_IN_SET( total_score, (    
 			SELECT GROUP_CONCAT( total_score
 			ORDER BY total_score DESC ) 
@@ -790,21 +838,23 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 			   	AND sd.student_id= $student_id
 			   	AND s.exam_type=2
 				GROUP BY sd.student_id ";
-	   	return $this->getAdapter()->fetchRow($sql);
-   }
-   public function getSubjectScoreGroup($group_id,$teacher_id=null,$exam_type=1){
-   	$db = new Issue_Model_DbTable_DbScore();
-   	$data= array(
-   			'group_id'=>$group_id,
-   			'teacher_id'=>$teacher_id,
-   			'exam_type'=>$exam_type
-   			);
-   	return $db->getSubjectScoreByGroup($data);
-   }
-   
-   public function getScoreBySubjectTranscript($score_id,$student_id,$subject_id){
-   	$db = $this->getAdapter();
-   	$sql="SELECT
+		return $this->getAdapter()->fetchRow($sql);
+	}
+	public function getSubjectScoreGroup($group_id, $teacher_id = null, $exam_type = 1)
+	{
+		$db = new Issue_Model_DbTable_DbScore();
+		$data = array(
+			'group_id' => $group_id,
+			'teacher_id' => $teacher_id,
+			'exam_type' => $exam_type
+		);
+		return $db->getSubjectScoreByGroup($data);
+	}
+
+	public function getScoreBySubjectTranscript($score_id, $student_id, $subject_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT
 	     sd.`score`,
 	     sd.score_cut,
 	     sd.`subject_id`
@@ -813,21 +863,23 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	 	WHERE sd.`score_id`=$score_id 
    		AND sd.`student_id`=$student_id  
    		AND sd.`subject_id`=$subject_id ";
-   	return $db->fetchRow($sql);
-   }
-   function getAllgroupStudyNotPass(){
-	   	$db = $this->getAdapter();
-	   	$sql ="SELECT 
+		return $db->fetchRow($sql);
+	}
+	function getAllgroupStudyNotPass()
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT 
 	   		`g`.`id` as id, CONCAT(`g`.`group_code`,' ',
 	   		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)) AS name
 	   	FROM `rms_group` AS `g` WHERE g.status =1 ";
-	   	return $db->fetchAll($sql);
-   }
+		return $db->fetchAll($sql);
+	}
 
-   //---------------gep score report
-   public function getSubjectScoreGroupGEP($group_id,$type_score=null){// for gep
-	   	$db = $this->getAdapter();
-	   	$sql = "SELECT
+	//---------------gep score report
+	public function getSubjectScoreGroupGEP($group_id, $type_score = null)
+	{ // for gep
+		$db = $this->getAdapter();
+		$sql = "SELECT
 	   	s.`id`,sd.`group_id`,sd.`student_id`,sj.`subject_titlekh`,sd.`score`,s.`reportdate`,sd.`subject_id`
 	   	FROM `rms_score` AS s,
 	   	`rms_score_detail` AS sd,
@@ -836,27 +888,29 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 	   	AND sj.`id`=sd.`subject_id`
 	   	AND sd.`group_id`=$group_id
 	   	";
-	   	if($type_score==2 || $type_score==3){
-	   		$sql.=" AND sd.`subject_id` !=9";
-	   	}
-	   	$sql.=' GROUP BY sd.`subject_id`';
-   	return $db->fetchAll($sql);
-   }
-   
-   
-   function getAmountWeeklyscoreByGroup($group_id,$monthly_score){
-   	$db = $this->getAdapter();
-   	$sql= "SELECT COUNT(s.id) AS amount_weeklyscore
+		if ($type_score == 2 || $type_score == 3) {
+			$sql .= " AND sd.`subject_id` !=9";
+		}
+		$sql .= ' GROUP BY sd.`subject_id`';
+		return $db->fetchAll($sql);
+	}
+
+
+	function getAmountWeeklyscoreByGroup($group_id, $monthly_score)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT COUNT(s.id) AS amount_weeklyscore
 	 FROM  	`rms_score` AS s 
-	 WHERE s.`group_id`=$group_id  AND DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$monthly_score','%Y-%m')"; 
-   	return $db->fetchOne($sql);
-   }
-   
-   
-   
-   public function getStundentEnglishSemesterScore($search){ // for rpt-semester-evaluation
-   	$db = $this->getAdapter();
-   	$sql="SELECT
+	 WHERE s.`group_id`=$group_id  AND DATE_FORMAT(s.`reportdate`,'%Y-%m')=DATE_FORMAT('$monthly_score','%Y-%m')";
+		return $db->fetchOne($sql);
+	}
+
+
+
+	public function getStundentEnglishSemesterScore($search)
+	{ // for rpt-semester-evaluation
+		$db = $this->getAdapter();
+		$sql = "SELECT
    	s.`id`,sd.`group_id`,g.`group_code`,
    	(SELECT CONCAT(from_academic,'-',to_academic) FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation) AS academic_year,
    	(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`)  AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
@@ -875,34 +929,35 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
    	WHERE s.`id`=sd.`score_id` AND st.`stu_id`=sd.`student_id`
    	AND g.`id`=sd.`group_id` AND s.status = 1  AND `g`.`degree` NOT IN (1,2)
    	";
-   	$where='';
-   	$from_date =(empty($search['start_date']))? '1': " s.reportdate >= '".$search['start_date']." 00:00:00'";
-   	$to_date = (empty($search['end_date']))? '1': " s.reportdate <= '".$search['end_date']." 23:59:59'";
-   	$where = " AND ".$from_date." AND ".$to_date;
-   	 
-   	if(!empty($search['group_name'])){
-   		$where.= " AND sd.group_id =".$search['group_name'];
-   	}
-   	if(!empty($search['degree_english'])){
-   		$where.=" AND `g`.`degree` =".$search['degree_english'];
-   	}
-   	if(!empty($search['study_year'])){
-   		$where.=" AND g.academic_year =".$search['study_year'];
-   	}
-   	if(!empty($search['grade_english'])){
-   		$where.=" AND `g`.`grade` =".$search['grade_english'];
-   	}
-   	if(!empty($search['session'])){
-   		$where.=" AND `g`.`session` =".$search['session'];
-   	}
-   	$order = "  GROUP BY sd.`student_id` ORDER BY s.`reportdate`,sd.`group_id`,sd.`student_id` ASC";
-   	return $db->fetchAll($sql.$where.$order);
-   }
-   
-  
-   function getSubjectScorebystudentandgroup($group_id,$student_id){//certificate of foundation year
-   	$db = $this->getAdapter();
-   	$sql ="SELECT
+		$where = '';
+		$from_date = (empty($search['start_date'])) ? '1' : " s.reportdate >= '" . $search['start_date'] . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : " s.reportdate <= '" . $search['end_date'] . " 23:59:59'";
+		$where = " AND " . $from_date . " AND " . $to_date;
+
+		if (!empty($search['group_name'])) {
+			$where .= " AND sd.group_id =" . $search['group_name'];
+		}
+		if (!empty($search['degree_english'])) {
+			$where .= " AND `g`.`degree` =" . $search['degree_english'];
+		}
+		if (!empty($search['study_year'])) {
+			$where .= " AND g.academic_year =" . $search['study_year'];
+		}
+		if (!empty($search['grade_english'])) {
+			$where .= " AND `g`.`grade` =" . $search['grade_english'];
+		}
+		if (!empty($search['session'])) {
+			$where .= " AND `g`.`session` =" . $search['session'];
+		}
+		$order = "  GROUP BY sd.`student_id` ORDER BY s.`reportdate`,sd.`group_id`,sd.`student_id` ASC";
+		return $db->fetchAll($sql . $where . $order);
+	}
+
+
+	function getSubjectScorebystudentandgroup($group_id, $student_id)
+	{ //certificate of foundation year
+		$db = $this->getAdapter();
+		$sql = "SELECT
 			 	s.`id`,
 			 	st.stu_enname,
 				st.stu_khname,
@@ -932,12 +987,13 @@ function getRankStudentbyGroupSemester($group_id,$semester,$student_id){//ចំ
 		 		AND st.`stu_id`=$student_id 
 		   ORDER BY 
 		   		s.`for_semester` ASC ";
-   	return $db->fetchAll($sql);
-   }
-   
-function getExamByExamIdAndStudent($data){
-    	$db = $this->getAdapter();
-    	$sql="
+		return $db->fetchAll($sql);
+	}
+
+	function getExamByExamIdAndStudent($data)
+	{
+		$db = $this->getAdapter();
+		$sql = "
     	SELECT
 	    	s.`id`,
 	    	(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
@@ -996,31 +1052,32 @@ function getExamByExamIdAndStudent($data){
     	AND s.status = 1
     	
     	";
-    	if (!empty($data['group_id'])){
-    		$sql.=" AND gds.`group_id`=".$data['group_id'];
-    	}
-    	if (!empty($data['stu_id'])){
-    		$sql.=" AND vst.`stu_id`=".$data['stu_id'];
-    	}
-    	if (!empty($data['exam_type'])){
-    		$sql.=" AND s.exam_type=".$data['exam_type'];
-    
-    		if ($data['exam_type']==1){
-    			if (!empty($data['for_month'])){
-    				$sql.=" AND s.`for_month`=".$data['for_month'];
-    			}
-    		}else if ($data['exam_type']==2){
-    			if (!empty($data['for_semester'])){
-    				$sql.=" AND s.`for_semester`=".$data['for_semester'];
-    			}
-    		}
-    	}
-    	$sql.=" ORDER BY s.id DESC LIMIT 1";
-    	return $db->fetchRow($sql);
-    }
-   function getRankSubjectMonthlyExam($group_id,$stu_id,$subject_id,$formonth){
-   		$db = $this->getAdapter();
-   		$sql="
+		if (!empty($data['group_id'])) {
+			$sql .= " AND gds.`group_id`=" . $data['group_id'];
+		}
+		if (!empty($data['stu_id'])) {
+			$sql .= " AND vst.`stu_id`=" . $data['stu_id'];
+		}
+		if (!empty($data['exam_type'])) {
+			$sql .= " AND s.exam_type=" . $data['exam_type'];
+
+			if ($data['exam_type'] == 1) {
+				if (!empty($data['for_month'])) {
+					$sql .= " AND s.`for_month`=" . $data['for_month'];
+				}
+			} else if ($data['exam_type'] == 2) {
+				if (!empty($data['for_semester'])) {
+					$sql .= " AND s.`for_semester`=" . $data['for_semester'];
+				}
+			}
+		}
+		$sql .= " ORDER BY s.id DESC LIMIT 1";
+		return $db->fetchRow($sql);
+	}
+	function getRankSubjectMonthlyExam($group_id, $stu_id, $subject_id, $formonth)
+	{
+		$db = $this->getAdapter();
+		$sql = "
    			SELECT 
 				score,
 				SUM(score) AS total_score,
@@ -1050,11 +1107,12 @@ function getExamByExamIdAndStudent($data){
 					AND s.for_month=$formonth
 			ORDER BY s.id DESC
    		";
-   		return $db->fetchRow($sql);
-   }
-   function getAverageMonthlyForSemester($group_id,$semester,$stu_id){
-   		$db = $this->getAdapter();
-   		$sql="
+		return $db->fetchRow($sql);
+	}
+	function getAverageMonthlyForSemester($group_id, $semester, $stu_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "
 	   		SELECT 
 				v.*,
 				FIND_IN_SET( total_avg, (    
@@ -1071,11 +1129,12 @@ function getExamByExamIdAndStudent($data){
 				AND v.stu_id=$stu_id
 				AND v.for_semester =$semester
    		";
-   		return $db->fetchRow($sql);
-   }
-   function getAverageSemesterFull($group_id,$semester,$stu_id){
-   		$db = $this->getAdapter();
-   		$sql="SELECT v.*,
+		return $db->fetchRow($sql);
+	}
+	function getAverageSemesterFull($group_id, $semester, $stu_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT v.*,
 			FIND_IN_SET( average_semester_score, (    
 			SELECT GROUP_CONCAT( average_semester_score
 			ORDER BY average_semester_score DESC ) 
@@ -1089,11 +1148,12 @@ function getExamByExamIdAndStudent($data){
 			AND v.group_id =$group_id
 			AND v.stu_id = $stu_id
 			LIMIT 1";
-   		return $db->fetchRow($sql);
-   }
-   function countStudentAttendenceBYtype($group_id,$student,$attendence_status,$monthly=null,$for_semester=null,$data=null){
-   		$db = $this->getAdapter();
-   		$sql="SELECT 
+		return $db->fetchRow($sql);
+	}
+	function countStudentAttendenceBYtype($group_id, $student, $attendence_status, $monthly = null, $for_semester = null, $data = null)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT 
 				COUNT(satd.id) AS attendence
 			FROM 
 				`rms_student_attendence` AS sat,
@@ -1104,37 +1164,38 @@ function getExamByExamIdAndStudent($data){
 				AND sat.group_id =$group_id
 				AND satd.attendence_status=$attendence_status
 			   		";
-   		if (!empty($for_semester)){
-   			$sql.= " AND sat.for_semester=".$for_semester;
-   		}
-   		
-   		if(!empty($data['semester'])){
-   			$sql.=" AND sat.for_semester=".$data['semester'];
-   		}
-   		if(!empty($data['studentId'])){
-   			$sql.=" AND satd.stu_id=".$data['studentId'];
-   		}
-   		if(!empty($data['groupId'])){
-   			$sql.=" AND satd.group_id=".$data['groupId'];
-   		}
-   		if(!empty($data['attStatus'])){
-   			$sql.=" AND satd.attendence_status=".$data['attStatus'];
-   		}
-   		if(!empty($data['forMonth'])){
-   			$sql.=" AND EXTRACT(MONTH FROM sat.date_attendence)=".$data['forMonth'];
-   		}
-   		
-   		if (!empty($monthly)){
-   			$sql.= " AND EXTRACT(MONTH FROM sat.date_attendence)=".$monthly;
-   		}
-   		
-   		$sql.=" LIMIT 1";
-   		return $db->fetchOne($sql);
-   }
-   
-   function getAllGroupOfStudent($stu_id){
-   		$db = $this->getAdapter();
-   		$sql="
+		if (!empty($for_semester)) {
+			$sql .= " AND sat.for_semester=" . $for_semester;
+		}
+
+		if (!empty($data['semester'])) {
+			$sql .= " AND sat.for_semester=" . $data['semester'];
+		}
+		if (!empty($data['studentId'])) {
+			$sql .= " AND satd.stu_id=" . $data['studentId'];
+		}
+		if (!empty($data['groupId'])) {
+			$sql .= " AND satd.group_id=" . $data['groupId'];
+		}
+		if (!empty($data['attStatus'])) {
+			$sql .= " AND satd.attendence_status=" . $data['attStatus'];
+		}
+		if (!empty($data['forMonth'])) {
+			$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
+		}
+
+		if (!empty($monthly)) {
+			$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $monthly;
+		}
+
+		$sql .= " LIMIT 1";
+		return $db->fetchOne($sql);
+	}
+
+	function getAllGroupOfStudent($stu_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "
    			SELECT 
 				g.id,
 				CONCAT(g.group_code,' (',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1),')' ) AS `name`
@@ -1147,37 +1208,39 @@ function getExamByExamIdAndStudent($data){
 				AND g.status=1
 				AND gds.stu_id =$stu_id
    		";
-   		return $db->fetchAll($sql);
-   }
-   
-   //for get score by id
-   function getScoreExamByID($score_id){
-	   	$db = $this->getAdapter();
-	   	$sql="SELECT
+		return $db->fetchAll($sql);
+	}
+
+	//for get score by id
+	function getScoreExamByID($score_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT
 	   	s.* FROM
 	   	`rms_score` AS s
 	   	WHERE s.id = $score_id
 	    LIMIT 1";
-	   	return $db->fetchRow($sql);
-   }
-   
-   
-   function getAllStudentPassed($search){
-	   	$db= $this->getAdapter();
-	   	$_db = new Application_Model_DbTable_DbGlobal();
-	   	$lang = $_db->currentlang();
-	   	if($lang==1){// khmer
-	   		$label = "name_kh";
-	   		$grade = "rms_itemsdetail.title";
-	   		$degree = "rms_items.title";
-	   		$branch = "b.branch_namekh";
-	   	}else{ // English
-	   		$label = "name_en";
-	   		$grade = "rms_itemsdetail.title_en";
-	   		$degree = "rms_items.title_en";
-	   		$branch = "b.branch_nameen";
-	   	}
-	   	$sql="SELECT
+		return $db->fetchRow($sql);
+	}
+
+
+	function getAllStudentPassed($search)
+	{
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+		}
+		$sql = "SELECT
 				   	gds.`stu_id`,
 				   	gscg.`from_group`,
 				   	gscg.`to_group`,
@@ -1213,62 +1276,63 @@ function getExamByExamIdAndStudent($data){
 				   	and gds.stu_id=st.stu_id
 				   	and gscg.change_type=2
 	   		";
-	   		
-	   	$order=" ORDER BY gscg.`id` ASC ";
-	   		
-	   	//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
-	   	$where  = '';
-	   	//echo $sql;exit();
-	   	if(empty($search)){
-	   		return $db->fetchAll($sql.$order);
-	   	}
-	   		
-	   	if(!empty($search['adv_search'])){
-		   	$s_where = array();
-		   	$s_search = addslashes(trim($search['adv_search']));
-		   	$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
-		   	$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
-		   	$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
-		   	$where .=' AND ( '.implode(' OR ',$s_where).')';
-	   	}
-	   	if(!empty($search['branch_id'])){
-	   		$where.=' AND st.branch_id='.$search['branch_id'];
-	   	}
-	   	if(!empty($search['academic_year'])){
-	   		$where.=' AND g.academic_year='.$search['academic_year'];
-	   	}
-	   	if(!empty($search['grade_bac'])){
-	   		$where.=' AND g.grade='.$search['grade_bac'];
-	   	}
-	   	if(!empty($search['session'])){
-	   		$where.=' AND g.session='.$search['session'];
-	   	}
-	   	if(!empty($search['change_id'])){
-	   		$where.=' AND gscg.id='.$search['change_id'];
-	   	}
-	   	
-	   	$row = $db->fetchAll($sql.$where.$order);
-	   	if($row){
-	   		return $row;
-   		}
-   	}
-   
-   	function getAllStudentFailed($search,$from_group){
-   		$db= $this->getAdapter();
-   		$_db = new Application_Model_DbTable_DbGlobal();
-   		$lang = $_db->currentlang();
-   		if($lang==1){// khmer
-   			$label = "name_kh";
-   			$grade = "rms_itemsdetail.title";
-   			$degree = "rms_items.title";
-   			$branch = "b.branch_namekh";
-   		}else{ // English
-   			$label = "name_en";
-   			$grade = "rms_itemsdetail.title_en";
-   			$degree = "rms_items.title_en";
-   			$branch = "b.branch_nameen";
-   		}
-   		$sql="SELECT
+
+		$order = " ORDER BY gscg.`id` ASC ";
+
+		//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
+		$where  = '';
+		//echo $sql;exit();
+		if (empty($search)) {
+			return $db->fetchAll($sql . $order);
+		}
+
+		if (!empty($search['adv_search'])) {
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
+		}
+		if (!empty($search['branch_id'])) {
+			$where .= ' AND st.branch_id=' . $search['branch_id'];
+		}
+		if (!empty($search['academic_year'])) {
+			$where .= ' AND g.academic_year=' . $search['academic_year'];
+		}
+		if (!empty($search['grade_bac'])) {
+			$where .= ' AND g.grade=' . $search['grade_bac'];
+		}
+		if (!empty($search['session'])) {
+			$where .= ' AND g.session=' . $search['session'];
+		}
+		if (!empty($search['change_id'])) {
+			$where .= ' AND gscg.id=' . $search['change_id'];
+		}
+
+		$row = $db->fetchAll($sql . $where . $order);
+		if ($row) {
+			return $row;
+		}
+	}
+
+	function getAllStudentFailed($search, $from_group)
+	{
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+		}
+		$sql = "SELECT
 			   		gds.`stu_id`,
 			   		gscg.`from_group`,
 			   		st.stu_code,
@@ -1291,43 +1355,44 @@ function getExamByExamIdAndStudent($data){
 			   		and gds.is_pass=0
 			   		and stop_type=0
    			";
-   	
-   		$order=" ORDER BY gscg.`id` ASC";
-   	
-   		//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
-   		$where  = '';
-   		//echo $sql;exit();
-   		if(empty($search)){
-	   		return $db->fetchAll($sql.$order);
-	   	}
-   	
-   		if(!empty($search['adv_search'])){
-	   		$s_where = array();
-	   		$s_search = addslashes(trim($search['adv_search']));
-	   		$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
-	   		$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
-	   		$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
-	   		$where .=' AND ( '.implode(' OR ',$s_where).')';
-   		}
-   		if(!empty($search['branch_id'])){
-   			$where.=' AND st.branch_id='.$search['branch_id'];
-   		}
-   		if(!empty($search['academic_year'])){
-	   		$where.=' AND g.academic_year='.$search['academic_year'];
-	   	}
-   		if(!empty($search['change_id'])){
-	   		$where.=' AND gscg.id='.$search['change_id'];
-	   	}
-   		//echo $sql.$where.$order;exit();
-   		$row = $db->fetchAll($sql.$where.$order);
-   		if($row){
-   			return $row;
-   		}
-   	}
-   
-   	function getStudentEvaluationBYId($data){
-   		$db = $this->getAdapter();
-   		$sql="SELECT e.*,
+
+		$order = " ORDER BY gscg.`id` ASC";
+
+		//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
+		$where  = '';
+		//echo $sql;exit();
+		if (empty($search)) {
+			return $db->fetchAll($sql . $order);
+		}
+
+		if (!empty($search['adv_search'])) {
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[] = " (select CONCAT(from_academic,'-',to_academic,' ',generation) from rms_tuitionfee where rms_tuitionfee.id=g.academic_year) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (select name_en from rms_view where rms_view.type=4 and rms_view.key_code=g.session) LIKE '%{$s_search}%'";
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
+		}
+		if (!empty($search['branch_id'])) {
+			$where .= ' AND st.branch_id=' . $search['branch_id'];
+		}
+		if (!empty($search['academic_year'])) {
+			$where .= ' AND g.academic_year=' . $search['academic_year'];
+		}
+		if (!empty($search['change_id'])) {
+			$where .= ' AND gscg.id=' . $search['change_id'];
+		}
+		//echo $sql.$where.$order;exit();
+		$row = $db->fetchAll($sql . $where . $order);
+		if ($row) {
+			return $row;
+		}
+	}
+
+	function getStudentEvaluationBYId($data)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT e.*,
    		e.for_type AS exam_type,
    		(SELECT month_kh FROM rms_month WHERE rms_month.id = e.for_month LIMIT 1) AS for_month,
 		(SELECT month_en FROM rms_month WHERE rms_month.id = e.for_month LIMIT 1) AS for_monthen,
@@ -1342,31 +1407,32 @@ function getExamByExamIdAndStudent($data){
 			vst.stu_id = e.student_id
 			AND
 			 e.status=1";
-   		if (!empty($data['group_id'])){
-   			$sql.=" AND e.group_id=".$data['group_id'];
-   		}
-   		if (!empty($data['stu_id'])){
-   			$sql.=" AND e.student_id=".$data['stu_id'];
-   		}
-   		if (!empty($data['exam_type'])){
-   			$sql.=" AND e.for_type=".$data['exam_type'];
-   		
-   			if ($data['exam_type']==1){
-   				if (!empty($data['for_month'])){
-   					$sql.=" AND e.for_month=".$data['for_month'];
-   				}
-   			}else if ($data['exam_type']==2){
-   				if (!empty($data['for_semester'])){
-   					$sql.=" AND e.for_semester=".$data['for_semester'];
-   				}
-   			}
-   		}
-   		$sql.=" ORDER BY e.id DESC";
-   		return $db->fetchRow($sql);
-   	}
-   	function getStudentEvaluation($data){
-   		$db = $this->getAdapter();
-   		$sql="SELECT ed.*,
+		if (!empty($data['group_id'])) {
+			$sql .= " AND e.group_id=" . $data['group_id'];
+		}
+		if (!empty($data['stu_id'])) {
+			$sql .= " AND e.student_id=" . $data['stu_id'];
+		}
+		if (!empty($data['exam_type'])) {
+			$sql .= " AND e.for_type=" . $data['exam_type'];
+
+			if ($data['exam_type'] == 1) {
+				if (!empty($data['for_month'])) {
+					$sql .= " AND e.for_month=" . $data['for_month'];
+				}
+			} else if ($data['exam_type'] == 2) {
+				if (!empty($data['for_semester'])) {
+					$sql .= " AND e.for_semester=" . $data['for_semester'];
+				}
+			}
+		}
+		$sql .= " ORDER BY e.id DESC";
+		return $db->fetchRow($sql);
+	}
+	function getStudentEvaluation($data)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT ed.*,
 			(SELECT cm.comment FROM `rms_comment` AS cm WHERE cm.id = ed.comment_id LIMIT 1) AS comments,
 			e.issue_date,
 			e.return_date,
@@ -1377,47 +1443,48 @@ function getExamByExamIdAndStudent($data){
 			e.id = ed.evaluation_id 
 			AND e.status=1
    		";
-   		if (!empty($data['group_id'])){
-   			$sql.=" AND e.group_id=".$data['group_id'];
-   		}
-   		if (!empty($data['stu_id'])){
-   			$sql.=" AND e.student_id=".$data['stu_id'];
-   		}
-   		if (!empty($data['exam_type'])){
-   			$sql.=" AND e.for_type=".$data['exam_type'];
-   	
-   			if ($data['exam_type']==1){
-   				if (!empty($data['for_month'])){
-   					$sql.=" AND e.for_month=".$data['for_month'];
-   				}
-   			}else if ($data['exam_type']==2){
-   				if (!empty($data['for_semester'])){
-   					$sql.=" AND e.for_semester=".$data['for_semester'];
-   				}
-   			}
-   		}
-   		$sql.=" ORDER BY e.id DESC";
-   		return $db->fetchAll($sql);
-   	}
-   	
-   	function getStudentGroupScoreEn($id,$search){
-   		$session_lang=new Zend_Session_Namespace('lang');
-		$lang_id=$session_lang->lang_id;
-			$gender_str = 'name_en';
-			$str_village='village_name';
-			$str_commune='commune_name';
-			$str_district='district_name';
-			$str_province='province_en_name';
-		if($lang_id==1){//for kh
-			$gender_str = 'name_kh';
-			$str_village='village_namekh';
-			$str_commune='commune_namekh';
-			$str_district='district_namekh';
-			$str_province='province_kh_name';
+		if (!empty($data['group_id'])) {
+			$sql .= " AND e.group_id=" . $data['group_id'];
 		}
-		
-	   	$db = $this->getAdapter();
-   		$sql="SELECT 
+		if (!empty($data['stu_id'])) {
+			$sql .= " AND e.student_id=" . $data['stu_id'];
+		}
+		if (!empty($data['exam_type'])) {
+			$sql .= " AND e.for_type=" . $data['exam_type'];
+
+			if ($data['exam_type'] == 1) {
+				if (!empty($data['for_month'])) {
+					$sql .= " AND e.for_month=" . $data['for_month'];
+				}
+			} else if ($data['exam_type'] == 2) {
+				if (!empty($data['for_semester'])) {
+					$sql .= " AND e.for_semester=" . $data['for_semester'];
+				}
+			}
+		}
+		$sql .= " ORDER BY e.id DESC";
+		return $db->fetchAll($sql);
+	}
+
+	function getStudentGroupScoreEn($id, $search)
+	{
+		$session_lang = new Zend_Session_Namespace('lang');
+		$lang_id = $session_lang->lang_id;
+		$gender_str = 'name_en';
+		$str_village = 'village_name';
+		$str_commune = 'commune_name';
+		$str_district = 'district_name';
+		$str_province = 'province_en_name';
+		if ($lang_id == 1) { //for kh
+			$gender_str = 'name_kh';
+			$str_village = 'village_namekh';
+			$str_commune = 'commune_namekh';
+			$str_district = 'district_namekh';
+			$str_province = 'province_kh_name';
+		}
+
+		$db = $this->getAdapter();
+		$sql = "SELECT 
 				(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name,
 				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gr.academic_year LIMIT 1) AS academic_yeartitle,
 				(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_logo,
@@ -1468,42 +1535,42 @@ function getExamByExamIdAndStudent($data){
 				
 				
    		";
-   		if (!empty($id)){
-   			$sql.=' AND se.group_id='.$id;
-   		}
-   		if(!empty($search['branch_id'])){
-   			$sql.=' AND se.branch_id = '.$search['branch_id'];
-   		}
-   		if(!empty($search['academic_year'])){
-   			$sql.=' AND gr.academic_year = '.$search['academic_year'];
-   		}
-   		if(!empty($search['group'])){
-   			$sql.=' AND gr.id = '.$search['group'];
-   		}
-   		$dbp = new Application_Model_DbTable_DbGlobal();
-   		$sql.=$dbp->getAccessPermission("se.branch_id");
-   		$sql.=" GROUP BY sed.student_id
+		if (!empty($id)) {
+			$sql .= ' AND se.group_id=' . $id;
+		}
+		if (!empty($search['branch_id'])) {
+			$sql .= ' AND se.branch_id = ' . $search['branch_id'];
+		}
+		if (!empty($search['academic_year'])) {
+			$sql .= ' AND gr.academic_year = ' . $search['academic_year'];
+		}
+		if (!empty($search['group'])) {
+			$sql .= ' AND gr.id = ' . $search['group'];
+		}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql .= $dbp->getAccessPermission("se.branch_id");
+		$sql .= " GROUP BY sed.student_id
 				ORDER BY SUM(sed.score) DESC";
-   		
-   		return $db->fetchAll($sql);
-   		
-   	}
-	   function getScoreStatistic($search){//using
-    	$db = $this->getAdapter();
-    	$_db  = new Application_Model_DbTable_DbGlobal();
-    	$lang = $_db->currentlang();
-    	if($lang==1){// khmer
-    		$label = "name_kh";
-    		$branch = "branch_namekh";
-    		$grade = "rms_itemsdetail.title";
-    		$degree = "rms_items.title";
-    	}else{ // English
-    		$label = "name_en";
-    		$branch = "branch_nameen";
-    		$grade = "rms_itemsdetail.title_en";
-    		$degree = "rms_items.title_en";
-    	}
-    	$sql="SELECT s.id,s.title_score,s.title_score_en, 
+
+		return $db->fetchAll($sql);
+	}
+	function getScoreStatistic($search)
+	{ //using
+		$db = $this->getAdapter();
+		$_db  = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+		} else { // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+		}
+		$sql = "SELECT s.id,s.title_score,s.title_score_en, 
     			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academicYear,
     			g.group_code, g.grade, g.degree,g.branch_id,
 				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
@@ -1513,127 +1580,125 @@ function getExamByExamIdAndStudent($data){
 			FROM `rms_score` AS s  
 			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
     	";
-		
-    	$where=' WHERE 1 ';
-    	if(($search['branch_id'])>0){
-    		$where.=' AND s.branch_id='.$search['branch_id'];
-    	}
-    	if(!empty($search['group'])){
-    		$where.=' AND s.group_id='.$search['group'];
-    	}
-		if(!empty($search['academic_year'])){
-    		$where.=' AND g.academic_year='.$search['academic_year'];
-    	}
-    	if(!empty($search['degree'])){
-    		$where.=' AND g.degree='.$search['degree'];
-    	}
-    	if(!empty($search['grade'])){
-    		$where.=' AND g.grade='.$search['grade'];
-    	}
-		if(!empty($search['exam_type'])){
-    		$where.=' AND s.exam_type='.$search['exam_type'];
-    	}
-		if(!empty($search['for_semester'])){
-    		$where.=' AND s.for_semester='.$search['for_semester'];
-    	}
-		if(!empty($search['for_month'])){
-    		$where.=' AND s.for_month='.$search['for_month'];
-    	}
-		if(!empty($search['sort_degree'])){
-    		$where.=' AND g.degree in('.$search['sort_degree'].')';
-    	}
-    	
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission("s.branch_id");
-    	
-		$orderBy ="  ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
-		$scoreInfo = $db->fetchAll($sql.$where.$orderBy);
+
+		$where = ' WHERE 1 ';
+		if (($search['branch_id']) > 0) {
+			$where .= ' AND s.branch_id=' . $search['branch_id'];
+		}
+		if (!empty($search['group'])) {
+			$where .= ' AND s.group_id=' . $search['group'];
+		}
+		if (!empty($search['academic_year'])) {
+			$where .= ' AND g.academic_year=' . $search['academic_year'];
+		}
+		if (!empty($search['degree'])) {
+			$where .= ' AND g.degree=' . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= ' AND g.grade=' . $search['grade'];
+		}
+		if (!empty($search['exam_type'])) {
+			$where .= ' AND s.exam_type=' . $search['exam_type'];
+		}
+		if (!empty($search['for_semester'])) {
+			$where .= ' AND s.for_semester=' . $search['for_semester'];
+		}
+		if (!empty($search['for_month'])) {
+			$where .= ' AND s.for_month=' . $search['for_month'];
+		}
+		if (!empty($search['sort_degree'])) {
+			$where .= ' AND g.degree in(' . $search['sort_degree'] . ')';
+		}
+
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where .= $dbp->getAccessPermission("s.branch_id");
+
+		$orderBy = "  ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
+		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
 
 		$resultInfo = array();
-		if(!empty($scoreInfo)){
-			foreach($scoreInfo as $key=>$rs){
-				$resultInfo[$key]['title_score']=$rs['title_score'];
-				$resultInfo[$key]['title_score_en']=$rs['title_score_en'];
-				$resultInfo[$key]['academicYear']=$rs['academicYear'];
-				$resultInfo[$key]['group_code']=$rs['group_code'];
-				$resultInfo[$key]['grade']=$rs['grade'];
-				$resultInfo[$key]['degree']=$rs['degree'];
-				$resultInfo[$key]['branch_id']=$rs['branch_id'];
-				$resultInfo[$key]['branch_name']=$rs['branch_name'];
-				
-				$resultInfo[$key]['degree_name']=$rs['degree_name'];
-				$resultInfo[$key]['grade_name']=$rs['grade_name'];
-				$resultInfo[$key]['TotaStudent']=$rs['TotaStudent'];
-				
-				$resultInfo[$key]['Total_A']=0;
-				$resultInfo[$key]['Total_B']=0;
-				$resultInfo[$key]['Total_C']=0;
-				$resultInfo[$key]['Total_D']=0;
-				$resultInfo[$key]['Total_E']=0;
-				$resultInfo[$key]['Total_F']=0;
-				
-				$search['degree']=$rs['degree'];
-				$search['scoreId']=$rs['id'];
-				
-				$rsMention=$this->getCountStudentScore($search);
-				if(!empty($rsMention))foreach ($rsMention as $rsGrade){
-					$resultInfo[$key]['Total_A']=!empty($rsGrade['Total_A'])?$rsGrade['Total_A']:0;
-					$resultInfo[$key]['Total_B']=!empty($rsGrade['Total_B'])?$rsGrade['Total_B']:0;
-					$resultInfo[$key]['Total_C']=!empty($rsGrade['Total_C'])?$rsGrade['Total_C']:0;
-					$resultInfo[$key]['Total_D']=!empty($rsGrade['Total_D'])?$rsGrade['Total_D']:0;
-					$resultInfo[$key]['Total_E']=!empty($rsGrade['Total_E'])?$rsGrade['Total_E']:0;
-					$resultInfo[$key]['Total_F']=!empty($rsGrade['Total_F'])?$rsGrade['Total_F']:0;
+		if (!empty($scoreInfo)) {
+			foreach ($scoreInfo as $key => $rs) {
+				$resultInfo[$key]['title_score'] = $rs['title_score'];
+				$resultInfo[$key]['title_score_en'] = $rs['title_score_en'];
+				$resultInfo[$key]['academicYear'] = $rs['academicYear'];
+				$resultInfo[$key]['group_code'] = $rs['group_code'];
+				$resultInfo[$key]['grade'] = $rs['grade'];
+				$resultInfo[$key]['degree'] = $rs['degree'];
+				$resultInfo[$key]['branch_id'] = $rs['branch_id'];
+				$resultInfo[$key]['branch_name'] = $rs['branch_name'];
+
+				$resultInfo[$key]['degree_name'] = $rs['degree_name'];
+				$resultInfo[$key]['grade_name'] = $rs['grade_name'];
+				$resultInfo[$key]['TotaStudent'] = $rs['TotaStudent'];
+
+				$resultInfo[$key]['Total_A'] = 0;
+				$resultInfo[$key]['Total_B'] = 0;
+				$resultInfo[$key]['Total_C'] = 0;
+				$resultInfo[$key]['Total_D'] = 0;
+				$resultInfo[$key]['Total_E'] = 0;
+				$resultInfo[$key]['Total_F'] = 0;
+
+				$search['degree'] = $rs['degree'];
+				$search['scoreId'] = $rs['id'];
+
+				$rsMention = $this->getCountStudentScore($search);
+				if (!empty($rsMention)) foreach ($rsMention as $rsGrade) {
+					$resultInfo[$key]['Total_A'] = !empty($rsGrade['Total_A']) ? $rsGrade['Total_A'] : 0;
+					$resultInfo[$key]['Total_B'] = !empty($rsGrade['Total_B']) ? $rsGrade['Total_B'] : 0;
+					$resultInfo[$key]['Total_C'] = !empty($rsGrade['Total_C']) ? $rsGrade['Total_C'] : 0;
+					$resultInfo[$key]['Total_D'] = !empty($rsGrade['Total_D']) ? $rsGrade['Total_D'] : 0;
+					$resultInfo[$key]['Total_E'] = !empty($rsGrade['Total_E']) ? $rsGrade['Total_E'] : 0;
+					$resultInfo[$key]['Total_F'] = !empty($rsGrade['Total_F']) ? $rsGrade['Total_F'] : 0;
 				}
 			}
 		}
 		return $resultInfo;
-    	
-    }
-	function getCountStudentScore($search){//using
-    	$db = $this->getAdapter();
+	}
+	function getCountStudentScore($search)
+	{ //using
+		$db = $this->getAdapter();
 
-		$sqlMention ="SELECT 
+		$sqlMention = "SELECT 
 								md.`max_score`, 
 								md.`metion_grade` FROM 
 								`rms_metionscore_setting` AS m 
 									INNER JOIN `rms_metionscore_setting_detail` AS md 
 						ON m.`id`=md.`metion_score_id` 
-						WHERE m.`degree`= ".$search['degree']." ORDER BY md.`max_score` DESC";
+						WHERE m.`degree`= " . $search['degree'] . " ORDER BY md.`max_score` DESC";
 		$mentionResult = $db->fetchAll($sqlMention);
-		$mentionResultArr=array(
-			"0"=> 0,
-			"1"=> 0,
-			"2"=> 0,
-			"3"=> 0,
-			"4"=> 0,
-			"5"=> 0,
+		$mentionResultArr = array(
+			"0" => 0,
+			"1" => 0,
+			"2" => 0,
+			"3" => 0,
+			"4" => 0,
+			"5" => 0,
 		);
 
-		if(!empty($mentionResult)){
-			foreach($mentionResult as $key => $row){
+		if (!empty($mentionResult)) {
+			foreach ($mentionResult as $key => $row) {
 				$mentionResultArr[$key] = $row["max_score"];
 			}
 		}
 
-    	$sql="SELECT  
+		$sql = "SELECT  
 		 s.id,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['0']."'   , sm.total_score, NULL)) AS Total_A,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['1']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['0']."'  , sm.total_score, NULL)) AS Total_B,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['2']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['1']."'  , sm.total_score, NULL)) AS Total_C,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['3']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['2']."'  , sm.total_score, NULL)) AS Total_D,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '".$mentionResultArr['4']."' AND sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['3']."'  , sm.total_score, NULL)) AS Total_E,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 < '".$mentionResultArr['4']."'  , sm.total_score, NULL)) AS Total_F
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['0'] . "'   , sm.total_score, NULL)) AS Total_A,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['1'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['0'] . "'  , sm.total_score, NULL)) AS Total_B,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['2'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['1'] . "'  , sm.total_score, NULL)) AS Total_C,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['3'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['2'] . "'  , sm.total_score, NULL)) AS Total_D,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['4'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['3'] . "'  , sm.total_score, NULL)) AS Total_E,
+		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['4'] . "'  , sm.total_score, NULL)) AS Total_F
 		   
 		 FROM `rms_score` AS s  ,
 			`rms_score_monthly` AS sm  
 		WHERE s.`id` = sm.`score_id` ";
-    	$where=' ';
-    	if(($search['scoreId'])>0){
-    		$where.=' AND s.id='.$search['scoreId'];
-    	}
-		$where.=" GROUP BY sm.`score_id`";
-		return $db->fetchAll($sql.$where);
-
-    }
-
+		$where = ' ';
+		if (($search['scoreId']) > 0) {
+			$where .= ' AND s.id=' . $search['scoreId'];
+		}
+		$where .= " GROUP BY sm.`score_id`";
+		return $db->fetchAll($sql . $where);
+	}
 }

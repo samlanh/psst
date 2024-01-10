@@ -17,7 +17,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year']) ? 0 : $group_info['academic_year'];
-			$scale = empty($group_info['semesterTotalAverage']) ? 50 : $group_info['semesterTotalAverage'];
+			$scale_for_month =  $group_info['max_average'];
+			$scale_for_semester = empty($group_info['semesterTotalAverage']) ? 100 : $group_info['semesterTotalAverage'];
 			$_arr = array(
 				'branch_id' => $_data['branch_id'],
 				'title_score' => $_data['title'],
@@ -53,7 +54,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					foreach ($rssubject as $subject) {
 						if ($total_score > 0 and $old_studentid != $_data['student_id' . $i]) {
 							if ($_data['exam_type'] == 2) { //semester exam
-								$totalMutiAll = $totalMaxScore / $scale;
+								$totalMutiAll = $totalMaxScore / $scale_for_semester;
 
 								$dataparam = array(
 									'groupId'      => $_data['group'],
@@ -62,6 +63,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									'studentId'   => $old_studentid
 								);
 								$rsMonthlysemesterAvg = $this->getMonthlySemesterAvg($dataparam);
+
+							}else{
+
+								if(!empty($scale_for_month)) {
+									$totalMutiAll = $totalMaxScore / $scale_for_month;
+								}
 							}
 							$avg = $total_score / $totalMutiAll;
 
@@ -187,7 +194,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					if ($total_score > 0) {
 
 						if ($_data['exam_type'] == 2) { //semester exam
-							$totalMutiAll = $totalMaxScore / $scale;
+							$totalMutiAll = $totalMaxScore / $scale_for_semester;
 
 							$dataparam = array(
 								'groupId'      => $_data['group'],
@@ -196,6 +203,11 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'studentId'   => $old_studentid
 							);
 							$rsMonthlysemesterAvg = $this->getMonthlySemesterAvg($dataparam); //get from view
+						}else{ // for month
+
+							if(!empty($scale_for_month)) {
+								$totalMutiAll = $totalMaxScore / $scale_for_month;
+							}
 						}
 						$avg = $total_score / $totalMutiAll;
 

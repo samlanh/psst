@@ -339,7 +339,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		$branch = "b.branch_nameen";
    		$month = "month_en";
    	}
-
+	$search['exam_type'] = empty($search['exam_type']) ? 1 : $search['exam_type'];
    	$sql="SELECT
 		   	
 		   	(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
@@ -391,7 +391,29 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		    sm.totalMaxScore,
 		    (sm.totalMaxScore/2) as passScore
 		    
-   		FROM
+   		 ";
+	if ($search['exam_type']==2){
+		$sql.="
+			,g.semesterTotalAverage as semesterScal
+			,(g.semesterTotalAverage/2) as passAverage
+			,sm.strMonthlySemesterLang
+			,sm.strMonthlySemesterLangAvg
+			,sm.monthlySemesterAvg
+			,sm.overallAssessmentSemester
+			,FIND_IN_SET( 
+				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
+				(    
+					SELECT 
+						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
+					FROM rms_score_monthly AS dd 
+					WHERE  dd.`score_id`= s.id
+				)
+			) AS ranking
+		";
+	}
+   	
+	
+	$sql.=" FROM
 		   	`rms_score` AS s,
 		   	`rms_score_monthly` AS sm,
 		   	`rms_student` AS st,
@@ -401,7 +423,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	AND g.`id` = s.`group_id`
 		   	AND s.`id`=sm.`score_id`
 		   	AND s.status = 1 ";
-   	
 	   	
    	if (!empty($id)){
    		$sql.=" AND s.id = $id ";
@@ -443,9 +464,20 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	   
    	$where.= $_db->getAccessPermission('s.branch_id');
    	
-   	$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
-   				ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,
-   				s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
+   	$order = "  GROUP BY 
+					s.id
+					,sm.`student_id`
+					,sm.score_id
+					,s.`reportdate`
+   				 
+   				";
+	$order.="ORDER BY ";
+	if ($search['exam_type']==2){
+		$order.=" (SELECT sm.overallAssessmentSemester FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.overallAssessmentSemester limit 1) DESC ";
+	}else{
+		$order.=" (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+	}
+	$order.=",s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
    	if($limit==2){
    		$limit = " limit 5";
    	}else{

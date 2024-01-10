@@ -1016,4 +1016,53 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
 	}
+	
+	function rptScoreResultSemesterAction()
+	{ 
+		$id = $this->getRequest()->getParam("id");
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		if ($this->getRequest()->isPost()) {
+			$search = $this->getRequest()->getPost();
+			$isgetId = null;
+		} else {
+			$isgetId = $id ;
+			$row = $db->getScoreExamByID($id);
+			$search = array(
+				'group' => $row['group_id'],
+				'study_year' => $row['for_academic_year'],
+				'exam_type' => $row['exam_type'],
+				'branch_id' => $row['branch_id'],
+				'for_month' => $row['for_month'],
+				'for_semester' => $row['for_semester'],
+				'grade' => '',
+				'degree' => '',
+				'session' => '',
+			);
+			
+		}
+		$result = $db->getStudentScoreResult($search, $isgetId, 1);
+		$this->view->studentScoreResult = $result;
+		
+		$this->view->scoreId = $id;
+
+		$this->view->search = $search;
+
+		$form = new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search = $form;
+
+		$frm = new Application_Form_FrmGlobal();
+		$branch_id = empty($result[0]['branch_id']) ? 1 : $result[0]['branch_id'];
+		$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
+
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->branchInfo = $db->getBranchInfo($branch_id);
+		$this->view->month = $db->getAllMonth();
+
+		$dbSetting = new Setting_Model_DbTable_Dbduty();
+		$dregreeId= empty($result[0]['degree_id'])?0:$result[0]['degree_id'];
+		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId,1);
+		$this->view->academicStaffInfo = $dbSetting->getDutyByDegree($dregreeId,2);
+	}
 }

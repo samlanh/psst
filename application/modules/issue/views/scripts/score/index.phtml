@@ -5,6 +5,7 @@
 	$urlOutStanding = $this->baseUrl()."/allreport/score/monthly-outstanding-student/id/";
 	$urlOutStandingNoPhoto = $this->baseUrl()."/allreport/score/monthly-outstanding-student-nophoto/id/";
 	$urlScoreResult = $this->baseUrl()."/allreport/score/rpt-score-result/id/";
+	$urlScoreResultSemester = $this->baseUrl()."/allreport/score/rpt-score-result-semester/id/";
 	$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
 ?>	
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -173,9 +174,10 @@
 		dijit.byId('recordcopy').attr('value',recordcopy);
 	}
 
+	
 	var row=0;
 	var url="";
-	$(function(){
+	disabled = true;
 		$.contextMenu({
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
@@ -188,23 +190,53 @@
 					url='<?php echo $urlScoreResult;?>';
 				}else if(key=="scoredetail"){
 					url='<?php echo $urlScoreDetail;?>';
+				}else if(key=="scoreresultSemester"){
+					url='<?php echo $urlScoreResultSemester;?>';
 				}
 				gotoAction();
 			},
 			items: {
-				"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
-				"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
-				"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
-				"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
-			}
+					"scoreresultSemester": { name: "<?php echo $tr->translate("SCORE_RESULT_SEMESTER");?>", icon: "fa-file-text-o",disabled: function() {
+                    return disabled;
+                }},
+					"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
+					"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
+					"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
+					"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
+				}
 		});
-	});
+		
 	function setrowdata(index){
 		row = index;
+		checkSemsesterRecord(index);
 	}
 	var recordid ='';
 	function gotoAction(){
 		window.open(url+row, '_blank');
 	}
+	function checkSemsesterRecord(index){
+		urlIsSemester = '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-issemster'));?>';
+		dojo.xhrPost({
+			url: urlIsSemester,
+			content:{
+				'scoreId':index,
+			},
+			handleAs:"json",
+			load: function(dataEE) {
+			    if(dataEE==true){
+					disabled = false;
+				}else{
+					disabled = true;
+				}
+				$.contextMenu('update');
+				
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+	
+	
 	
 </script>

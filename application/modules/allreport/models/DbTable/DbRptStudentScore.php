@@ -338,11 +338,11 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 
 		$sql = "SELECT
-			sm.`student_id` AS stu_id,
-			sm.score_id AS id
-		FROM
-			`rms_score_monthly` AS sm
-		WHERE 1 ";
+		   	sm.`student_id` AS stu_id,
+		   	sm.score_id AS id
+	   	FROM
+		   	`rms_score_monthly` AS sm
+	   	WHERE 1 ";
 
 		if (!empty($scoreId)) {
 			$sql .= " AND sm.score_id = $scoreId ";
@@ -351,9 +351,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$sql .= " AND sm.`student_id` IN (" . $search['stu_id'] . ")";
 		}
 		$order = "  GROUP BY 
-						sm.score_id,
-						sm.`student_id`
-						ORDER BY total_score DESC ";
+	   						sm.score_id,
+	   						sm.`student_id`
+					   		ORDER BY total_score DESC ";
 		if ($limit == 2) {
 			$limit = " limit 5";
 		} else {
@@ -432,7 +432,29 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		    sm.totalMaxScore,
 		    (sm.totalMaxScore/2) as passScore
 		    
-   		FROM
+   		 ";
+		if ($search['exam_type'] == 2) {
+			$sql .= "
+			,g.semesterTotalAverage as semesterScal
+			,(g.semesterTotalAverage/2) as passAverage
+			,sm.strMonthlySemesterLang
+			,sm.strMonthlySemesterLangAvg
+			,sm.monthlySemesterAvg
+			,sm.overallAssessmentSemester
+			,FIND_IN_SET( 
+				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
+				(    
+					SELECT 
+						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
+					FROM rms_score_monthly AS dd 
+					WHERE  dd.`score_id`= s.id
+				)
+			) AS ranking
+		";
+		}
+
+
+		$sql .= " FROM
 		   	`rms_score` AS s,
 		   	`rms_score_monthly` AS sm,
 		   	`rms_student` AS st,

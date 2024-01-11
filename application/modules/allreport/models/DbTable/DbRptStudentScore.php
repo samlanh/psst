@@ -351,35 +351,35 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 		}
+		$search['exam_type']	= empty($search['exam_type']) ? 0 : $search['exam_type'];
+		$sql = "
+			SELECT
+				(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
+				(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
+				(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh,
+				(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameEng,
+				
+				g.`branch_id`,
+				g.`group_code`,
+				`g`.`degree` as degree_id,
+				`g`.`semester` AS `semester`,
+				
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
+				(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS start_year,
+				(SELECT ac.toYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS end_year,
+				(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+				(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+				(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+				(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
 
-		$sql = "SELECT
-		   	
-		   	(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
-			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
-			(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh,
-			(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameEng,
-			
-		    g.`branch_id`,
-		   	g.`group_code`,
-		   	`g`.`degree` as degree_id,
-		   	`g`.`semester` AS `semester`,
-			
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
-			(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS start_year,
-			(SELECT ac.toYear FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS end_year,
-			(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-		   	(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
-		   	(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
-
-		   	
-		   	CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,
-		   	st.`stu_id`,
-		   	st.`sex`,
-		   	st.photo,
-		   	st.`stu_code`,
-		   	st.stu_khname,
-		   	st.last_name,
+				
+				CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,
+				st.`stu_id`,
+				st.`sex`,
+				st.photo,
+				st.`stu_code`,
+				st.stu_khname,
+				st.last_name,
 		 
 		   	
 			   	s.`id`,
@@ -401,9 +401,29 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	sm.total_score,
 		    sm.total_avg,
 		    sm.totalMaxScore,
-		    (sm.totalMaxScore/2) as passScore
-		    
-   		FROM
+		    (sm.totalMaxScore/2) as passScore";
+		if ($search['exam_type'] == 2) {
+			$sql .= "
+			,g.semesterTotalAverage as semesterScal
+			,(g.semesterTotalAverage/2) as passAverage
+			,sm.strMonthlySemesterLang
+			,sm.strMonthlySemesterLangAvg
+			,sm.monthlySemesterAvg
+			,sm.overallAssessmentSemester
+			,FIND_IN_SET( 
+				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
+				(    
+					SELECT 
+						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
+					FROM rms_score_monthly AS dd 
+					WHERE  dd.`score_id`= s.id
+				)
+			) AS ranking
+			";
+		}
+
+
+		$sql .= " FROM
 		   	`rms_score` AS s,
 		   	`rms_score_monthly` AS sm,
 		   	`rms_student` AS st,
@@ -455,9 +475,16 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 
 		$where .= $_db->getAccessPermission('s.branch_id');
 
-		$order = "  GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
-   				ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC  ,
-   				s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC	";
+		$order = "  
+					GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
+   				ORDER BY ";
+		if($search['exam_type']==2){
+			$order.=" sm.overallAssessmentSemester DESC";
+		}else{
+			$order.=" (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+		}
+		$order.=" ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC ";
+		
 		if ($limit == 2) {
 			$limit = " limit 5";
 		} else {

@@ -129,9 +129,13 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									$arr["monthlySemesterAvg"] = $monthlySemesterAvg;
 									$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
 
-									$arr["totalKhAvg"] = $monthlySemesterAvgKh;
-									$arr["totalEnAvg"] = $monthlySemesterAvgEn;
-									$arr["totalChAvg"] = $monthlySemesterAvgCh;
+									$arr["totalKhAvg"] = $totalKhAvg;
+									$arr["totalEnAvg"] = $totalEnAvg;
+									$arr["totalChAvg"] = $totalChAvg;
+
+									$arr["OveralAvgKh"] = $monthlySemesterAvgKh;
+									$arr["OveralAvgEng"] = $monthlySemesterAvgEn;
+									$arr["OveralAvgCh"] = $monthlySemesterAvgCh;
 									
 								}
 							}else{
@@ -230,15 +234,15 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 
 						if($_data['subject_lang' .$subject]==1){
 							$totalScoreKh = $totalScoreKh+ ($_data["score_" . $i . "_" . $subject]*$totalMulti);
-							$totalMaxScoreKh = $totalMaxScoreKh+ $maxScore;
+							$totalMaxScoreKh = $totalMaxScoreKh+ ($maxScore*$totalMulti);
 							$totalAmountSubjectKh = $totalAmountSubjectKh + $totalMulti;
 						}else if($_data['subject_lang' .$subject]==2){
 							$totalScoreEng = $totalScoreEng+ ($_data["score_" . $i . "_" . $subject]*$totalMulti);
-							$totalMaxScoreEng = $totalMaxScoreEng+ $maxScore;
+							$totalMaxScoreEng = $totalMaxScoreEng+ ($maxScore*$totalMulti);
 							$totalAmountSubjectEng = $totalAmountSubjectEng + $totalMulti;
 						}else if($_data['subject_lang' .$subject]==3){
 							$totalScoreCh = $totalScoreCh+($_data["score_" . $i . "_" . $subject]*$totalMulti);
-							$totalMaxScoreCh = $totalMaxScoreCh+ $maxScore;
+							$totalMaxScoreCh = $totalMaxScoreCh+ ($maxScore*$totalMulti);
 							$totalAmountSubjectCh = $totalAmountSubjectCh + $totalMulti;
 						}
 
@@ -326,9 +330,13 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									$arr["monthlySemesterAvg"] = $monthlySemesterAvg;
 									$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
 
-									$arr["totalKhAvg"] = $monthlySemesterAvgKh;
-									$arr["totalEnAvg"] = $monthlySemesterAvgEn;
-									$arr["totalChAvg"] = $monthlySemesterAvgCh;
+									$arr["totalKhAvg"] = $totalKhAvg;
+									$arr["totalEnAvg"] = $totalEnAvg;
+									$arr["totalChAvg"] = $totalChAvg;
+
+									$arr["OveralAvgKh"] = $monthlySemesterAvgKh;
+									$arr["OveralAvgEng"] = $monthlySemesterAvgEn;
+									$arr["OveralAvgCh"] = $monthlySemesterAvgCh;
 									
 								}
 							}else{

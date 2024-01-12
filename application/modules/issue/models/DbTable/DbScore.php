@@ -960,4 +960,5 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql .= " ORDER  BY $strSubjectLange ";
 		return $db->fetchAll($sql);
 	}
+	
 }

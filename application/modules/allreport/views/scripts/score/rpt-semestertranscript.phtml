@@ -224,7 +224,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				$forSemester = $scoreInfo['for_semester'];
 				$degreeId = $scoreInfo['degreeId'];
 
-				$semesterScale = (!empty($scoreInfo['semesterTotalAverage'])) ? 50 : $$scoreInfo['semesterTotalAverage'];
+				$semesterScale = (empty($scoreInfo['semesterTotalAverage'])) ? 50 : $scoreInfo['semesterTotalAverage'];
 
 				
 

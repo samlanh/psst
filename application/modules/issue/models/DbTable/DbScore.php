@@ -54,24 +54,22 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$strMonthlySemesterLangAvg = '';
 				$monthlySemesterAvg = 0;
 				$overallAssessmentSemester = 0;
+				
+				$totalScoreKh = 0;
+				$totalScoreEng = 0;
+				$totalScoreCh = 0;
+
+				$totalMaxScoreKh = 0;
+				$totalMaxScoreEng = 0;
+				$totalMaxScoreCh = 0;
+
+				$totalAmountSubjectKh = 0;
+				$totalAmountSubjectEng = 0;
+				$totalAmountSubjectCh = 0;
+					
 				if (!empty($ids)) foreach ($ids as $keyValue => $i) {
 
-					$totalScoreKh = 0;
-					$totalScoreEng = 0;
-					$totalScoreCh = 0;
-
-					$totalMaxScoreKh = 0;
-					$totalMaxScoreEng = 0;
-					$totalMaxScoreCh = 0;
-
-					$totalAmountSubjectKh = 0;
-					$totalAmountSubjectEng = 0;
-					$totalAmountSubjectCh = 0;
-
-
-
 					foreach ($rssubject as $subject) {
-
 						
 						if ($total_score > 0 and $old_studentid != $_data['student_id' . $i]) {
 							if ($_data['exam_type'] == 2) { //semester exam
@@ -144,15 +142,40 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$this->_name = 'rms_score_monthly';
 							$this->insert($arr);
 
+							//Reset Variable
 							$total_score = 0;
 							$totalMutiAll = 0;
 							$totalMaxScore = 0;
+							
+							$totalScoreKh = 0;
+							$totalScoreEng = 0;
+							$totalScoreCh = 0;
+
+							$totalMaxScoreKh = 0;
+							$totalMaxScoreEng = 0;
+							$totalMaxScoreCh = 0;
+
+							$totalAmountSubjectKh = 0;
+							$totalAmountSubjectEng = 0;
+							$totalAmountSubjectCh = 0;
 
 
 						} else if ($keyValue > 0 and $old_studentid != $_data['student_id' . $i]) { // Check ករណីសិស្សដែលបានបញ្ចូលពិន្ទុ 0 គ្រប់មុខវិជ្ជាដោយមិន លុបឬដក Student ចេញ
 							$total_score = 0;
 							$totalMutiAll = 0;
 							$totalMaxScore = 0;
+							
+							$totalScoreKh = 0;
+							$totalScoreEng = 0;
+							$totalScoreCh = 0;
+
+							$totalMaxScoreKh = 0;
+							$totalMaxScoreEng = 0;
+							$totalMaxScoreCh = 0;
+
+							$totalAmountSubjectKh = 0;
+							$totalAmountSubjectEng = 0;
+							$totalAmountSubjectCh = 0;
 						}
 
 						$old_studentid = $_data['student_id' . $i];

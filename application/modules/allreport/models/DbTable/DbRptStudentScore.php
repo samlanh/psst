@@ -406,8 +406,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$sql .= "
 			,g.semesterTotalAverage as semesterScal
 			,(g.semesterTotalAverage/2) as passAverage
-			,sm.strMonthlySemesterLang
-			,sm.strMonthlySemesterLangAvg
+			,sm.totalKhAvg
+			,sm.totalEnAvg
+			,sm.totalChAvg
+			,sm.OveralAvgKh
+			,sm.OveralAvgEng
+			,sm.OveralAvgCh
 			,sm.monthlySemesterAvg
 			,sm.overallAssessmentSemester
 			,FIND_IN_SET( 

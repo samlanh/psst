@@ -226,25 +226,12 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 
 				$semesterScale = (!empty($scoreInfo['semesterTotalAverage'])) ? 50 : $$scoreInfo['semesterTotalAverage'];
 
-				$strMonthlySemesterLangAvg = $scoreInfo['strMonthlySemesterLangAvg'];
-				$MonthlySemesterLangAvg = explode(",", $strMonthlySemesterLangAvg);
+				
 
-				$SemesterKhAvg = 0;
-				$SemesterEnAvg = 0;
-				$SemesterChAvg = 0;
-				if (!empty($MonthlySemesterLangAvg)) {
-					if (count($MonthlySemesterLangAvg) == 1) {
-
-						$SemesterKhAvg =	$MonthlySemesterLangAvg[0];
-					} elseif (count($MonthlySemesterLangAvg) == 2) {
-						$SemesterKhAvg =	$MonthlySemesterLangAvg[0];
-						$SemesterEnAvg =	$MonthlySemesterLangAvg[1];
-					} else {
-						$SemesterKhAvg =	$MonthlySemesterLangAvg[0];
-						$SemesterEnAvg =	$MonthlySemesterLangAvg[1];
-						$SemesterChAvg =	$MonthlySemesterLangAvg[2];
-					}
-				}
+				$SemesterKhAvg = $scoreInfo['totalKhAvg'];
+				$SemesterEnAvg = $scoreInfo['totalEnAvg'];
+				$SemesterChAvg = $scoreInfo['totalChAvg'];
+				
 				//	print_r($scoreInfo);
 
 				$break_page = "pages-break";

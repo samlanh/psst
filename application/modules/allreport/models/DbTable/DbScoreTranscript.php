@@ -442,10 +442,30 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalMaxScore,
 
 
-				 (SELECT sm.strMonthlySemesterLangAvg 
+				 (SELECT sm.totalKhAvg 
 				 		FROM rms_score_monthly sm WHERE 
 				 		sm.score_id=s.id 
-				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS strMonthlySemesterLangAvg,
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalKhAvg,
+				(SELECT sm.totalEnAvg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalEnAvg,
+				(SELECT sm.totalChAvg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalChAvg,
+				(SELECT sm.OveralAvgKh 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS OveralAvgKh,
+				(SELECT sm.OveralAvgEng 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS OveralAvgEng,
+				(SELECT sm.OveralAvgCh 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS OveralAvgCh,		
 
 				 (SELECT sm.monthlySemesterAvg 
 				 		FROM rms_score_monthly sm WHERE 

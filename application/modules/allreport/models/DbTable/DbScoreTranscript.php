@@ -379,6 +379,36 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 							s.`id`=dd.`score_id`
 						)
 				) AS rankOverall,	
+
+				FIND_IN_SET( 
+					COALESCE((SELECT ms.OveralAvgKh FROM rms_score_monthly AS ms WHERE ms.score_id = s.`id` AND ms.student_id = " . $data['studentId'] . " LIMIT 1),'0'), 
+					(    
+					  SELECT 
+						GROUP_CONCAT( dd.OveralAvgKh ORDER BY dd.OveralAvgKh DESC ) 
+					  FROM rms_score_monthly AS dd 
+					  WHERE  dd.score_id= s.`id`
+					)
+				  ) AS rankOverallKh,
+
+			   FIND_IN_SET((SELECT sm.OveralAvgEng FROM rms_score_monthly sm WHERE 
+			   sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+				  (SELECT GROUP_CONCAT(OveralAvgEng ORDER BY OveralAvgEng DESC)
+					  FROM 
+						  rms_score_monthly AS dd 
+					  WHERE
+						  s.`id`=dd.`score_id`
+					  )
+			  ) AS rankOverallEng,	
+
+			  FIND_IN_SET((SELECT sm.OveralAvgCh FROM rms_score_monthly sm WHERE 
+			  sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+				 (SELECT GROUP_CONCAT(OveralAvgCh ORDER BY OveralAvgCh DESC)
+					 FROM 
+						 rms_score_monthly AS dd 
+					 WHERE
+						 s.`id`=dd.`score_id`
+					 )
+			 ) AS rankOverallCh,	
 				 
 				 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
 				 	 sd.`score_id`=$scoreId  

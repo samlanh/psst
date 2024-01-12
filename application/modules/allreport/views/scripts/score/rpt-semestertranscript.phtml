@@ -218,6 +218,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 				$scoreSubjectList = $resultData['scoreSubjectInfo'];
 				$evalueationList = $resultData['EvalueationList'];
 				$scoreInfo = $resultData['scoreInfo'];
+			
 				$groupId = $scoreInfo['group_id'];
 				$forMonthId = $scoreInfo['for_month'];
 				$academicId = $scoreInfo['academicYearId'];
@@ -356,9 +357,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 														<td align="center">
 															<strong>
 																<?php
-																if ($resultScore['subjectLang'] == 1) {
+																if ($currentLang == 1) {
 																	$rankLang = $scoreInfo['rankingInKhmer'];
-																} elseif ($resultScore['subjectLang'] == 2) {
+																} elseif ($currentLang == 2) {
 																	$rankLang = $scoreInfo['rankingInEnglish'];
 																} else {
 																	$rankLang = $scoreInfo['rankingInChinese'];
@@ -403,7 +404,20 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 														</td>
 														<td colspan="3" align="center"></td>
 														<td align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($overalSemesterLangAvg, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?></strong>&nbsp;</td>
-														<td align="center"> <strong><?php echo $scoreInfo['rank']; ?></strong></td>
+														<td align="center"> 
+															<strong>
+															<?php
+																if ($currentLang == 1) {
+																	$rankLangOverlal = $scoreInfo['rankOverallKh'];
+																} elseif ($currentLang == 2) {
+																	$rankLangOverlal = $scoreInfo['rankOverallEng'];
+																} else {
+																	$rankLangOverlal = $scoreInfo['rankOverallCh'];
+																}
+																echo $rankLangOverlal;
+																?>
+															</strong>
+														</td>
 													</tr>
 												<?php
 													$totalAveragescore = 0;
@@ -507,9 +521,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										<td align="center">
 											<strong>
 												<?php
-												if ($resultScore['subjectLang'] == 1) {
+												if ($currentLang == 1) {
 													$rankLang = $scoreInfo['rankingInKhmer'];
-												} elseif ($resultScore['subjectLang'] == 2) {
+												} elseif ($currentLang == 2) {
 													$rankLang = $scoreInfo['rankingInEnglish'];
 												} else {
 													$rankLang = $scoreInfo['rankingInChinese'];
@@ -554,7 +568,24 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										</td>
 										<td colspan="3" align="center"></td>
 										<td align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($overalSemesterLangAvg, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?></strong>&nbsp;</td>
-										<td align="center"> <strong><?php echo $scoreInfo['rank']; ?></strong></td>
+										<td align="center"> 
+											<strong>
+												<?php
+													if ($currentLang == 1) {
+														
+														$rankLangOverlal = $scoreInfo['rankOverallKh'];
+													} elseif ($currentLang== 2) {
+
+														$rankLangOverlal = $scoreInfo['rankOverallEng'];
+
+													} else {
+
+														$rankLangOverlal = $scoreInfo['rankOverallCh'];
+													}
+													echo $rankLangOverlal;
+												?>
+											</strong>
+										</td>
 									</tr>
 
 									<tr class="style hover doubleBorder " style=" font-size:13px;">

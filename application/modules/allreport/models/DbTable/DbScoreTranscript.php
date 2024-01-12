@@ -136,6 +136,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 			}
 		}
 		$arreValue = array(
+			'scoreId' => $scoreId,
 			'studentId' => $studentId,
 			'groupId' => $scoreInfo['group_id'],
 			'forType' => $scoreInfo['exam_type'],
@@ -502,6 +503,9 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 				WHERE smd.assessmentId=sm.id ";
 		if (!empty($data['studentId'])) {
 			$sql .= " AND smd.studentId=" . $data['studentId'];
+		}
+		if (!empty($data['scoreId'])) {
+			$sql .= " AND sm.scoreId=" . $data['scoreId'];
 		}
 		if (!empty($data['groupId'])) {
 			$sql .= " AND sm.groupId=" . $data['groupId'];

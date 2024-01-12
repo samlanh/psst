@@ -50,8 +50,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$total_score = 0;
 				$totalMutiAll = 0;
 				$totalMaxScore = 0;
-				$subjectLandList = '';
-				$strMonthlySemesterLangAvg = '';
+			
 				$monthlySemesterAvg = 0;
 				$overallAssessmentSemester = 0;
 				
@@ -208,8 +207,6 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 
 						$rsGroupSubject = $dbpush->getGroupSubjectDetail($param); //// call cut score
 
-
-
 						if ($_data['exam_type'] == 1) { //month
 							$maxScore = $rsGroupSubject['maxScoreMonth'];
 							$totalMulti = $rsGroupSubject['totalSubjectMonth'];
@@ -360,12 +357,23 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					);
 					$this->update($arr, $where);
 				}
+
+				// is combine
+
+				$this->_name = 'rms_score';
+				if ($_data['exam_type'] == 2) {
+					$where = 'group_id=' . $_data['group'] . '  AND for_semester=' . $_data['for_semester'] . ' AND exam_type = 1 ';
+					$arr = array(
+						'isCombineSemester' => 1,
+					);
+					$this->update($arr, $where);
+				}
+				
 			}
 			$db->commit();
 			return $scoreId;
 		} catch (Exception $e) {
 			echo $e->getMessage();
-			exit();
 			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -586,7 +594,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = "SELECT 
 
-		ROUND( SUM(sm.`totalKhAvg`)/ COUNT(sm.`totalKhAvg`),2)AS totalKhAvg,
+		ROUND( SUM(sm.`totalKhAvg`)/ COUNT(sm.`totalKhAvg`),2) AS totalKhAvg,
 		ROUND(SUM(sm.`totalEnAvg`)/COUNT(sm.`totalEnAvg`),2)  AS totalEnAvg,
 		ROUND(SUM(sm.`totalChAvg`)/COUNT(sm.`totalChAvg`),2) AS totalChAvg
 		
@@ -852,7 +860,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			  (SELECT s.`stu_code` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS stu_code,
 			  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
 			  score,note,
-			  (SELECT amount_subject FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS amount_subject
+			  (SELECT amount_subject FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS amount_subject,
+			  (SELECT monthlySemesterAvg FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS monthlySemesterAvg
 		FROM
 	 	 	rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 

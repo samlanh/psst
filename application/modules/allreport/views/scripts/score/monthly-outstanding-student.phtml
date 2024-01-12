@@ -1,7 +1,7 @@
 <?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
-// $this->headTitle($tr->translate("តារាងកិត្តិយស"));
-// echo $this->headTitle();
+$this->headTitle($tr->translate("តារាងកិត្តិយស"));
+echo $this->headTitle();
 $frm =  $this->form_search;
 $base_url = Application_Form_FrmMessage::getUrl("/");
 $db = new Allreport_Model_DbTable_DbRptStudentScore();
@@ -262,10 +262,17 @@ white-space:nowrap;
 					<tr>
 						<td colspan="3" align="center" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size: 18px;">
 							<?php
-							$monthChar = empty($monthKH[$this->studentgroup[0]['for_month_id']]) ? "" : $monthKH[$this->studentgroup[0]['for_month_id']];
-							$titleKh = 'តារាងកិត្តិយសប្រចាំខែ' . $monthChar;
-							$monthCharEn = empty($monthENG[$this->studentgroup[0]['for_month_id']]) ? "" : $monthENG[$this->studentgroup[0]['for_month_id']];
-							$titleENG = "Honorable Table For " . $monthCharEn;
+							if ($rs['exam_type'] == 1) {
+								$monthChar = empty($monthKH[$this->studentgroup[0]['for_month_id']]) ? "" : $monthKH[$this->studentgroup[0]['for_month_id']];
+								$titleKh = 'តារាងកិត្តិយសប្រចាំខែ' . $monthChar;
+								$monthCharEn = empty($monthENG[$this->studentgroup[0]['for_month_id']]) ? "" : $monthENG[$this->studentgroup[0]['for_month_id']];
+								$titleENG = "Honorable Table For " . $monthCharEn;
+							}else{
+								$arrRomanNum = array(1 => "I", 2 => "II");
+								$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
+								$titleKh = 'តារាងកិត្តិយសឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
+								$titleENG = "Honorable Table For Semester " . $romanNumber;
+							}
 							?>
 							<ul class="scoreTitle">
 								<li style="font-size:16px;">

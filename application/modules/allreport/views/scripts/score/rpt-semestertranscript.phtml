@@ -20,6 +20,22 @@ $month = array(
 	"12" => "ធ្នូ"
 );
 $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" => "មីនា", "04" => "មេសា", "05" => "ឧសភា", "06" => "មិថុនា", "07" => "កក្កដា", "08" => "សីហា", "09" => "កញ្ញា", "10" => "តុលា", "11" => "វិច្ឆិកា", "12" => "ធ្នូ",);
+
+ function getCountSubjectLang($subjectArray,$subjectLang){
+	if($subjectLang==1){
+		$arrFilter = array_filter($subjectArray, function($subjectArray) {
+			return $subjectArray['subjectLang'] == 1;
+		});
+		return count($arrFilter);
+	}else if($subjectLang==2){
+		$arrFilter = array_filter($subjectArray, function($subjectArray) {
+			return $subjectArray['subjectLang'] == 2;
+		});
+		return count($arrFilter);
+	}else{
+		return 0;
+	}
+}
 ?>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");
@@ -115,6 +131,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 
 			.fontBold {
 				font-weight: bold;
+			}
+			.textCenter {
+				text-align:center;
 			}
 
 			.colorRed {
@@ -264,7 +283,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										<td align="right" width="25%">គោត្តនាម និងនាម : </td>
 										<td align="left" width="23%" class="khmerBoldFont"> &nbsp;<?php echo $studentInfo['stu_khname'] ?></td>
 										<td width="4%">&nbsp;</td>
-										<td align="right" width="25%">ថ្នាក់ទី​ : </td>
+										<td align="right" width="25%">ថ្នាក់ទី : </td>
 										<td class="bold" align="left" width="23%"> &nbsp;<?php echo $scoreInfo['groupCode']; ?></td>
 									</tr>
 									<tr>
@@ -302,7 +321,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 						</tr>
 						<tr>
 							<td colspan="3" id="exportExcel" valign="top">
-								<table class="header" cellpadding="2" ​ border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
+								<table class="header" cellpadding="2" border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
 									<tr class="style hover">
 										<td colspan="9" align="center" class=" khmerBoldFont doubleBorder">
 											<div class="khmerBoldFont" style="color:#000;line-height:20px; font-size:12px;margin: 0;">
@@ -435,13 +454,16 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 											$totalmultiAllSubject = $totalmultiAllSubject + $resultScore['multiSubject'];
 											$totalAveragescore = $totalAveragescore + $resultScore['totalAverage'];
 											if ($resultScore['innerSubject'] == 0) {
-
 											?>
 												<tr class="hover blackColor">
 													<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
 													<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 													<td align="left">&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
-													<td class=""></td>
+													<?php if($i==1){
+														$coountingSubject = getCountSubjectLang($scoreSubjectList,$currentLang);
+														?>
+													<td rowspan="<?php echo $coountingSubject;?>"></td>
+													<?php } ?>
 													<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
 													<td class="border-right-none"></td>
 													<td align="center"><?php echo $resultScore['totalAverage']; ?></td>
@@ -548,10 +570,15 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										<td align="center"> <strong><?php echo $scoreInfo['rank']; ?></strong></td>
 									</tr>
 
-									<tr class="style hover doubleBorder" style=" font-size:13px;">
-										<td colspan="9" align="center" class="khmerBoldFont">
-											ពិន្ទុសរុបកម្មវិធីខ្មែរ និងអង់គ្លេស Overall Grade Point for Khmer and English Programs
+									<tr class="style hover doubleBorder " style=" font-size:13px;">
+										<td colspan="3" align="center" class="khmerBoldFont">
+											ទាំងពីរកម្មវិធី <strong>Both Programs</strong>
 										</td>
+										<td class="fontBold textCenter">មធ្យមភាគ <br />Average Score </td>
+										<td class="fontBold textCenter">ពិន្ទុអតិបរមា <br />Maximum Score </td>
+										<td colspan="2" class="fontBold textCenter" >ពិន្ទុ<br />Score</td>
+										<td class="fontBold textCenter">និទ្ទេស<br />Grade</td>
+										<td class="fontBold textCenter">ចំណាត់ថ្នាក់<br />Rank</td>
 									</tr>
 									<tr class="style hover">
 										<td colspan="3" align="center" class=" khmerBoldFont">
@@ -603,7 +630,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										</td>
 									</tr>
 									<tr class="style hover">
-										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់​ Days of Excused Absence&nbsp;</td>
+										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days of Excused Absence&nbsp;</td>
 										<td colspan="1" align="center">&nbsp;<?php
 																				$data = array(
 																					'groupId' => $groupId,
@@ -620,7 +647,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 																				echo $dbAttendance->countDisplineTranscript($data) ?>&nbsp;</td>
 									</tr>
 									<tr class="style hover">
-										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់​ Days of Unexcused Absence&nbsp;</td>
+										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days of Unexcused Absence&nbsp;</td>
 										<td colspan="1" align="center" class="">&nbsp;<?php
 																						$data['attStatus'] = 2;
 																						echo count($dbAttendance->countAttendenceTranscript($data)) ?>&nbsp;</td>
@@ -647,9 +674,9 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 						<tr class="khmerBoldFont " align="center">
 							<td colspan="2">របាយការណ៍សម្រាប់<br />REPORT FOR</td>
-							<td>ឆមាសទី១​ <br />FIRST SEMESTER</td>
+							<td>ឆមាសទី១<br />FIRST SEMESTER</td>
 							<td>ឆមាសទី២ <br />SECOND SEMESTER</td>
-							<td>ប្រចាំឆ្នាំ​ <br />ANNUAL</td>
+							<td>ប្រចាំឆ្នាំ<br />ANNUAL</td>
 							<td>លទ្ធផល <br />ANNUAL</td>
 						</tr>
 						<tr class="khmerBoldFont " align="center">
@@ -668,7 +695,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							<td></td>
 						</tr>
 						<tr class="khmerBoldFont " align="center">
-							<td colspan="2">និទ្ទេស​ និងចំណាត់ថ្នាក់<br />Letter Grade And Rang</td>
+							<td colspan="2">និទ្ទេសនិងចំណាត់ថ្នាក់<br />Letter Grade And Rang</td>
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> <?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							<td></td>
 							<td></td>
@@ -762,7 +789,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							<td class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
 						</tr>
 						<tr>
-							<td colspan="6">&nbsp;<span class="">សេចក្តីសង្កេតទូទៅរបស់គ្រូបន្ទុកថ្នាក់​ TEACHER'S GENERAL COMMENT:</span>
+							<td colspan="6">&nbsp;<span class="">សេចក្តីសង្កេតទូទៅរបស់គ្រូបន្ទុកថ្នាក់ TEACHER'S GENERAL COMMENT:</span>
 								<div class="teacherComment">
 									<?php echo $teacherComment; ?>
 								</div>

@@ -464,9 +464,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						ELSE '0'
 					END AS isIssuedMonthly
 					,COALESCE(tmp.id,'0') AS gradingTmpId
-					,if(COALESCE(tmp.id,'0')>0, (SELECT gr.isLock FROM rms_grading AS gr WHERE gr.gradingTmpId = COALESCE(tmp.id,'0') LIMIT 1 ),0) isLockGrading
+					,if(COALESCE(tmp.id,'0')>0, (SELECT gr.isLock FROM rms_grading AS gr WHERE gr.gradingTmpId = COALESCE(tmp.id,'0') LIMIT 1 ),0) AS isLockGrading
 					
-					
+					,COALESCE((SELECT vSt.`keyValue` FROM `rms_setting` AS vSt WHERE vSt.`keyName`='criteriaLimitation' LIMIT 1),0) AS criteriaLimitSetting
 			";
 			
 			$sql.=" FROM 

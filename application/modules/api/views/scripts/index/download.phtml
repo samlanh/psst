@@ -594,7 +594,7 @@ $html='<html>
 														  មធ្យមភាគពិន្ទុខែប្រចាំឆមាស Semester Monthly Average Score
 													</td>
 													
-													<td align="center">&nbsp;<strong>'.number_format($overalSemesterLangAvg,2).'</strong>&nbsp;</td>
+													<td align="center">&nbsp;<strong>'.number_format($semesterMonthlyAvgLang,2).'</strong>&nbsp;</td>
 													<td colspan="4" align="center" class="blue ">
 													</td>
 												</tr>
@@ -603,7 +603,7 @@ $html='<html>
 														រង្វាយតម្លៃជារួមប្រចាំឆមាស Overall Assessment of the Semester
 													</td>
 													<td align="center">
-														<strong>'.number_format($totalAveragescore/$totalmultiSubSubject,2).'
+														<strong>'.number_format($overalSemesterLangAvg,2).'
 														</strong>
 													</td>
 													<td colspan="2">
@@ -724,8 +724,8 @@ $html='<html>
 			 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
 										<td class="" align="center">&nbsp;<strong class="colorRed">'.$rankOverall.'</strong>&nbsp;</td>
 									</tr>
-			 						<tr class="style hover doubleBorder" >
-			 							<td colspan="3" align="center" class="blue khmerBoldFont">
+			 						<tr class="style hover doubleBorder  cheader backGround" >
+			 							<td colspan="3" align="center" >
 			 								ទាំងពីរកម្មវិធី Both Programs
 			 							</td>
 										<td align="center">មធ្យមភាគ <br />Average Score </td>
@@ -761,11 +761,14 @@ $html='<html>
 			 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId,$scoreInfo['degreeId'],1,null,$semesterScale).'</strong>&nbsp;</td>
 										<td class="" align="center">&nbsp;<strong class="colorRed">'.$scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent'].'</strong>&nbsp;</td>
 									</tr>
-			 						<tr class="doubleBorder">
-			 							<td colspan="3" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+								</table>
+								<br />
+								<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:25px;">
+			 						<tr class="doubleBorder backGround">
+			 							<td colspan="2" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
 											អវត្តមាន ABSENCE RECORD
 										</td>
-										<td colspan="5" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+										<td colspan="2" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
 											កិច្ចការវិន័យ DISCIPLINE RECORD
 										</td>
 			 						</tr>';
@@ -793,22 +796,22 @@ $html='<html>
 									$major=$db->countDisplineTranscript($data);
 									
 			 						$html.='<tr class="style hover" >
-			 							<td  colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days Excused absences&nbsp;</td>
-			 							<td colspan="1" align="center">'.$attStutus3.'&nbsp;</td>
-										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
-										<td colspan="3" align="center">&nbsp;'.$minor.'&nbsp;</td>
+			 							<td width="30%" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days Excused absences&nbsp;</td>
+			 							<td width="20%" align="center">'.$attStutus3.'&nbsp;</td>
+										<td width="30%" align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
+										<td width="20%" align="center">&nbsp;'.$minor.'&nbsp;</td>
 			 						</tr>
 			 						<tr class="style hover" >
-			 							<td  colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days Unxcused absences&nbsp;</td>
-			 							<td colspan="1" align="center" class="">'.$attStutus2.'</td>
-										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
-										<td colspan="3" align="center">&nbsp;'.$moderate.'&nbsp;</td>
+			 							<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days Unxcused absences&nbsp;</td>
+			 							<td align="center" class="">'.$attStutus2.'</td>
+										<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
+										<td align="center">&nbsp;'.$moderate.'&nbsp;</td>
 			 						</tr>
 			 						<tr class="style hover" >
-			 							<td  colspan="2" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
-			 							<td colspan="1" align="center" class="">'.$attStutus4.'&nbsp;</td>
-										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
-										<td colspan="3" align="center">&nbsp;'.$major.'&nbsp;</td>
+			 							<td  align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
+			 							<td  align="center" class="">'.$attStutus4.'&nbsp;</td>
+										<td  align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
+										<td  align="center">&nbsp;'.$major.'&nbsp;</td>
 			 						</tr>
 								</table>
 								
@@ -817,16 +820,16 @@ $html='<html>
 					</table>
 					';
 					$html.='
-					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:25px;" >
+					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:20px;" >
 						<tr class="khmerBoldFont  backGround" align="center">
-							<td class="khmerBoldFont blue" colspan="2" align="center">របាយការណ៍សម្រាប់<br />REPORT FOR</td>
-							<td class="khmerBoldFont blue" align="center">ឆមាសទី១<br />FIRST SEMESTER</td>
-							<td class="khmerBoldFont blue" align="center">ឆមាសទី២ <br />SECOND SEMESTER</td>
-							<td class="khmerBoldFont blue" align="center">ប្រចាំឆ្នាំ<br />ANNUAL</td>
-							<td class="khmerBoldFont blue" align="center">លទ្ធផល <br />ANNUAL</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">របាយការណ៍សម្រាប់<br />REPORT FOR</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">ឆមាសទី១<br />FIRST SEMESTER</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">ឆមាសទី២ <br />SECOND SEMESTER</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">ប្រចាំឆ្នាំ<br />ANNUAL</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">លទ្ធផល <br />ANNUAL</td>
 						</tr>
-						<tr class="khmerBoldFont " align="center">
-							<td class=" blue" colspan="2">ពិន្ទុសរុប<br />Total Score</td>
+						<tr class=" " align="center">
+							<td class=" " >ពិន្ទុសរុប<br />Total Score</td>
 							<td align="center"><strong>'.$scoreInfo['totalScoreAvg'].'</strong></td>
 							<td></td>
 							<td></td>
@@ -834,14 +837,14 @@ $html='<html>
 
 						</tr>
 						<tr class=" " align="center">
-							<td class="khmerBoldFont blue" colspan="2">មធ្យមភាគពិន្ទុ<br />Average Score</td>
+							<td class=" " >មធ្យមភាគពិន្ទុ<br />Average Score</td>
 							<td align="center"><strong>'.$scoreInfo['overallAssessmentSemester'].'</strong></td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr class=" " align="center">
-							<td class="khmerBoldFont blue" colspan="2">និទ្ទេសនិងចំណាត់ថ្នាក់<br />Letter Grade And Rang</td>
+							<td class=" " >និទ្ទេសនិងចំណាត់ថ្នាក់<br />Letter Grade And Rang</td>
 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale).' '.$scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent'].'</strong>&nbsp;</td>
 							<td></td>
 							<td></td>
@@ -852,9 +855,9 @@ $html='<html>
 					<br>
 					';
 					$html.='
-						<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:25px;" >
+						<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:20px;" >
 							<tr>
-								<td colspan="6" class="blue khmerBoldFont doubleBorder backGround">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+								<td colspan="6"  align="center" class="blue khmerBoldFont doubleBorder backGround">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 							</tr>
 							<tr class="khmerBoldFont blue">
 								<td colspan="2" align="center">របបពិន្ទុ<br />GRADING CRITERIA</td>

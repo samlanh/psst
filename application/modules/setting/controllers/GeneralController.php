@@ -14,6 +14,7 @@ public function init()
 		if($this->getRequest()->isPost()){
 			try{
 				$data = $this->getRequest()->getPost();
+				
 				$db_gs->updateWebsitesetting($data);
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS", "/setting/general");
 			}catch (Exception $e){
@@ -62,6 +63,8 @@ public function init()
 		$row['teacher_doc'] = $db_gs->geLabelByKeyName('teacher_doc');
 		$row['payment_date'] = $db_gs->geLabelByKeyName('payment_date');
 		$row['studyday_schedule'] = $db_gs->geLabelByKeyName('studyday_schedule');
+		
+		$row['criteriaLimitation'] = $db_gs->geLabelByKeyName('criteriaLimitation');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

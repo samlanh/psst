@@ -307,6 +307,18 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'studyday_schedule'";
 				$this->update($arr, $where);
 			}
+			
+			$rows = $this->geLabelByKeyName('criteriaLimitation');
+			if (empty($rows)){
+				$value = empty($data['criteriaLimitation']) ? 0 : 1;
+				$arr = array('keyValue'=>$value,'keyName'=>'criteriaLimitation','note'=>"0=បញ្ចូលដោយមិនគិតលើចំនួនដងកំណត់  , 1=យកតាមចំនួនដងកំណត់ ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$value = empty($data['criteriaLimitation']) ? 0 : 1;
+				$arr = array('keyValue'=>$value);
+				$where=" keyName= 'criteriaLimitation'";
+				$this->update($arr, $where);
+			}
 	
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){
@@ -323,6 +335,9 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 					//}
 				}
 			}
+			
+			
+			
 			
 			$valid_formats = array("jpg", "png", "gif", "bmp","jpeg","ico");
 			$part= PUBLIC_PATH.'/images/logo/';

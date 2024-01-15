@@ -2719,6 +2719,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$month = "month_en";
 			$teacherName= "teacher_name_en";
 			$mentionGradeTitle= "mention_in_english";
+			$titleScore= "title_score_en";
+			
 			if($currentLang==1){// khmer
 				$teacherName = "teacher_name_kh";
 				$label = "name_kh";
@@ -2727,9 +2729,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$branch = "b.branch_namekh";
 				$month = "month_kh";
 				$mentionGradeTitle= "metion_in_khmer";
+				$titleScore= "title_score";
 			}
 			$sql="SELECT
 					s.*
+					,s.$titleScore AS title_score
 					,st.`stu_id`
 					,g.`branch_id`
 					,(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchName
@@ -2771,9 +2775,46 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sm.total_score AS totalScore
 					,sm.total_avg AS totalAvg
 					,g.max_average/2 AS passAvrage
+					,g.semesterTotalAverage AS semesterMaxAverage
+					,g.semesterPercentage AS semesterScal
+					
+					,sm.totalKhAvg AS totalKhAvg
+					,sm.totalEnAvg AS totalEnAvg
+					,sm.totalChAvg AS totalChAvg
+					
+					,sm.OveralAvgKh AS overallAvgKh
+					,sm.OveralAvgEng AS overallAvgEng
+					,sm.OveralAvgCh AS overallAvgCh
+					
+					,sm.monthlySemesterAvg AS monthlySemesterAvg
+					,sm.overallAssessmentSemester AS overallAssessmentSemester
+					
 					,(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubject
 					,(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubjectsem
 					,(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as averagePass
+					,CASE 
+						WHEN s.exam_type = 2 THEN  
+							FIND_IN_SET( 
+								sm.overallAssessmentSemester, 
+								(
+									SELECT GROUP_CONCAT( smSecond.overallAssessmentSemester ORDER BY overallAssessmentSemester DESC )
+									FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+									sSecond.`id`=smSecond.`score_id`
+									AND sSecond.group_id= s.`group_id`
+									AND sSecond.id=s.`id`
+								)
+							)
+						ELSE FIND_IN_SET( 
+								sm.total_avg, 
+								(
+									SELECT GROUP_CONCAT( smSecond.total_avg ORDER BY total_avg DESC )
+									FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+									sSecond.`id`=smSecond.`score_id`
+									AND sSecond.group_id= s.`group_id`
+									AND sSecond.id=s.`id`
+								)
+							)
+					END AS rank
 					,FIND_IN_SET( 
 						sm.total_avg, 
 						(
@@ -2783,30 +2824,60 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							AND sSecond.group_id= s.`group_id`
 							AND sSecond.id=s.`id`
 						)
-					) AS rank
+					) AS examRanking
 					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
-					,(SELECT 
-						mstd.$mentionGradeTitle
-						FROM `rms_metionscore_setting_detail` AS mstd,
-							`rms_metionscore_setting` AS mst 
-						WHERE mst.id = mstd.metion_score_id
-							AND mst.academic_year=g.academic_year
-							AND mst.degree = g.degree 
-							AND mst.status = 1 
-							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
-						ORDER BY mstd.max_score DESC LIMIT 1
-					) AS mentionGradeTitle
-					,(SELECT 
-						mstd.metion_grade
-						FROM `rms_metionscore_setting_detail` AS mstd,
-							`rms_metionscore_setting` AS mst 
-						WHERE mst.id = mstd.metion_score_id
-							AND mst.academic_year=g.academic_year
-							AND mst.degree = g.degree 
-							AND mst.status = 1 
-							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
-						ORDER BY mstd.max_score DESC LIMIT 1
-					) AS mentionGradeTitleLabel
+					
+					,CASE 
+						WHEN s.exam_type = 2 THEN  
+							(SELECT 
+								mstd.$mentionGradeTitle
+								FROM `rms_metionscore_setting_detail` AS mstd,
+									`rms_metionscore_setting` AS mst 
+								WHERE mst.id = mstd.metion_score_id
+									AND mst.academic_year=g.academic_year
+									AND mst.degree = g.degree 
+									AND mst.status = 1 
+									AND ((sm.overallAssessmentSemester/COALESCE(g.semesterTotalAverage,10))*100) >= mstd.max_score
+								ORDER BY mstd.max_score DESC LIMIT 1
+							)
+						ELSE (SELECT 
+								mstd.$mentionGradeTitle
+								FROM `rms_metionscore_setting_detail` AS mstd,
+									`rms_metionscore_setting` AS mst 
+								WHERE mst.id = mstd.metion_score_id
+									AND mst.academic_year=g.academic_year
+									AND mst.degree = g.degree 
+									AND mst.status = 1 
+									AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+								ORDER BY mstd.max_score DESC LIMIT 1
+							)
+					END AS mentionGradeTitle
+					,CASE 
+						WHEN s.exam_type = 2 THEN  
+							(SELECT 
+								mstd.metion_grade
+								FROM `rms_metionscore_setting_detail` AS mstd,
+									`rms_metionscore_setting` AS mst 
+								WHERE mst.id = mstd.metion_score_id
+									AND mst.academic_year=g.academic_year
+									AND mst.degree = g.degree 
+									AND mst.status = 1 
+									AND ((sm.overallAssessmentSemester/COALESCE(g.semesterTotalAverage,10))*100) >= mstd.max_score
+								ORDER BY mstd.max_score DESC LIMIT 1
+							)
+						ELSE (SELECT 
+								mstd.metion_grade
+								FROM `rms_metionscore_setting_detail` AS mstd,
+									`rms_metionscore_setting` AS mst 
+								WHERE mst.id = mstd.metion_score_id
+									AND mst.academic_year=g.academic_year
+									AND mst.degree = g.degree 
+									AND mst.status = 1 
+									AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
+								ORDER BY mstd.max_score DESC LIMIT 1
+							)
+					END AS mentionGradeTitleLabel
+					
 			FROM
 				`rms_score` AS s,
 				`rms_score_monthly` AS sm,
@@ -2893,6 +2964,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$month = "month_en";
 			$teacherName= "teacher_name_en";
 			$mentionGradeTitle= "mention_in_english";
+			$titleScore= "title_score_en";
 			if($currentLang==1){// khmer
 				$teacherName = "teacher_name_kh";
 				$label = "name_kh";
@@ -2901,11 +2973,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$branch = "b.branch_namekh";
 				$month = "month_kh";
 				$mentionGradeTitle= "metion_in_khmer";
+				$titleScore= "title_score";
 			}
 			
 			$strSubLang=" (SELECT subject_lang FROM `rms_subject` sub WHERE sub.id=sd.subject_id LIMIT 1) ";
 			$sql="SELECT
 				s.*
+				,s.$titleScore AS title_score
 				,g.`branch_id`
 				,(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchName
 				,(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branchLogo
@@ -2937,9 +3011,49 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,sm.total_score AS totalScore
 				,sm.total_avg AS totalAvg
 				,g.max_average/2 AS passAvrage
+				
+				,g.semesterTotalAverage AS semesterMaxAverage
+				,g.semesterPercentage AS semesterScal
+				
+				,sm.totalKhAvg AS totalKhAvg
+				,sm.totalEnAvg AS totalEnAvg
+				,sm.totalChAvg AS totalChAvg
+				
+				,sm.OveralAvgKh AS overallAvgKh
+				,sm.OveralAvgEng AS overallAvgEng
+				,sm.OveralAvgCh AS overallAvgCh
+				
+				,sm.monthlySemesterAvg AS monthlySemesterAvg
+				,sm.overallAssessmentSemester AS overallAssessmentSemester
+					
 				,(SELECT SUM(amount_subject) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubject
 				,(SELECT SUM(amount_subject_sem) FROM `rms_group_subject_detail` WHERE rms_group_subject_detail.group_id=g.`id` LIMIT 1) AS amountSubjectsem
 				,(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as averagePass
+				
+				,CASE 
+					WHEN s.exam_type = 2 THEN  
+						FIND_IN_SET( 
+							sm.overallAssessmentSemester, 
+							(
+								SELECT GROUP_CONCAT( smSecond.overallAssessmentSemester ORDER BY overallAssessmentSemester DESC )
+								FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+								sSecond.`id`=smSecond.`score_id`
+								AND sSecond.group_id= s.`group_id`
+								AND sSecond.id=s.`id`
+							)
+						)
+					ELSE FIND_IN_SET( 
+							sm.total_avg, 
+							(
+								SELECT GROUP_CONCAT( smSecond.total_avg ORDER BY total_avg DESC )
+								FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+								sSecond.`id`=smSecond.`score_id`
+								AND sSecond.group_id= s.`group_id`
+								AND sSecond.id=s.`id`
+							)
+						)
+				END AS rank
+					
 				,FIND_IN_SET( 
 					sm.total_avg, 
 					(
@@ -2949,7 +3063,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND sSecond.group_id= s.`group_id`
 						AND sSecond.id=s.`id`
 					)
-				) AS rank
+				) AS examRanking
 				
 				,COALESCE(FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
 				 	 sd.`score_id`=$scoreId  
@@ -3018,6 +3132,36 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							AND ((sm.total_score/sm.totalMaxScore)*100) >= mstd.max_score
 						ORDER BY mstd.max_score DESC LIMIT 1
 					) AS mentionGradeTitleLabel
+				,FIND_IN_SET( 
+					sm.OveralAvgKh, 
+					(
+						SELECT GROUP_CONCAT( smSecond.OveralAvgKh ORDER BY OveralAvgKh DESC )
+						FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+						sSecond.`id`=smSecond.`score_id`
+						AND sSecond.group_id= s.`group_id`
+						AND sSecond.id=s.`id`
+					)
+				) AS overallSemesterKhRank
+				,FIND_IN_SET( 
+					sm.OveralAvgEng, 
+					(
+						SELECT GROUP_CONCAT( smSecond.OveralAvgEng ORDER BY OveralAvgEng DESC )
+						FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+						sSecond.`id`=smSecond.`score_id`
+						AND sSecond.group_id= s.`group_id`
+						AND sSecond.id=s.`id`
+					)
+				) AS overallSemesterEngRank
+				,FIND_IN_SET( 
+					sm.OveralAvgCh, 
+					(
+						SELECT GROUP_CONCAT( smSecond.OveralAvgCh ORDER BY OveralAvgCh DESC )
+						FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+						sSecond.`id`=smSecond.`score_id`
+						AND sSecond.group_id= s.`group_id`
+						AND sSecond.id=s.`id`
+					)
+				) AS overallSemesterChRank
 			FROM
 				`rms_score` AS s,
 				`rms_score_monthly` AS sm,

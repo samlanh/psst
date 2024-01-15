@@ -386,6 +386,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 			$group_info = $dbGroup->getGroupById($_data['group']);
 			$year_study = empty($group_info['academic_year']) ? 0 : $group_info['academic_year'];
+			$scale_for_month =  $group_info['max_average'];
+			$scale_for_semester = empty($group_info['semesterTotalAverage']) ? 100 : $group_info['semesterTotalAverage'];
+			$semesterPercentage = empty($group_info['semesterPercentage']) ? 1 : $group_info['semesterPercentage'];
+		
 			$status = $_data['status'];
 			$_arr = array(
 				'branch_id' => $_data['branch_id'],
@@ -404,7 +408,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$where = "id=" . $_data['score_id'];
 			$this->update($_arr, $where);
 
-			if ($status == 1) {
+			if($status == 1) {
 				$id = $_data['score_id'];
 				$this->_name = 'rms_score_detail';
 				$this->delete("score_id=" . $_data['score_id']);
@@ -419,39 +423,144 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				if (!empty($_data['identity'])) {
 					$ids = explode(',', $_data['identity']);
 					$rssubject = $_data['selector'];
+					
 					$total_score = 0;
 					$totalMutiAll = 0;
 					$totalMaxScore = 0;
+				
+					$monthlySemesterAvg = 0;
+					$overallAssessmentSemester = 0;
+					
+					$totalScoreKh = 0;
+					$totalScoreEng = 0;
+					$totalScoreCh = 0;
+	
+					$totalMaxScoreKh = 0;
+					$totalMaxScoreEng = 0;
+					$totalMaxScoreCh = 0;
+	
+					$totalAmountSubjectKh = 0;
+					$totalAmountSubjectEng = 0;
+					$totalAmountSubjectCh = 0;
+						
 					if (!empty($ids)) foreach ($ids as $keyValue => $i) {
+	
 						foreach ($rssubject as $subject) {
+							
 							if ($total_score > 0 and $old_studentid != $_data['student_id' . $i]) {
 								if ($_data['exam_type'] == 2) { //semester exam
-									$totalMutiAll = $totalMaxScore / 50;
+									$totalMutiAll = $totalMaxScore / $scale_for_semester;
+									$totalAmountSubjectKh = $totalMaxScoreKh / $scale_for_semester;
+									$totalAmountSubjectEng = $totalMaxScoreEng / $scale_for_semester;
+									$totalAmountSubjectCh = $totalMaxScoreCh / $scale_for_semester;
+	
+									$dataparam = array(
+										'groupId'      => $_data['group'],
+										'acadmicYear' => $year_study,
+										'forSemester' => $_data['for_semester'],
+										'studentId'   => $old_studentid
+									);
+									$rsMonthlysemesterAvg = $this->getMonthlySemesterAvg($dataparam);
+	
+									$totalKhAvg = $rsMonthlysemesterAvg['totalKhAvg'] / $semesterPercentage;
+									$totalEnAvg = $rsMonthlysemesterAvg['totalEnAvg'] / $semesterPercentage;
+									$totalChAvg = $rsMonthlysemesterAvg['totalChAvg'] / $semesterPercentage;
+	
+								}else{
+	
+									if(!empty($scale_for_month)) {
+										$totalMutiAll = $totalMaxScore / $scale_for_month;
+										$totalAmountSubjectKh = $totalMaxScoreKh / $scale_for_month;
+										$totalAmountSubjectEng = $totalMaxScoreEng / $scale_for_month;
+										$totalAmountSubjectCh = $totalMaxScoreCh / $scale_for_month;
+									}
+									
+									
 								}
 								$avg = $total_score / $totalMutiAll;
+								$avgkh = $totalScoreKh / $totalAmountSubjectKh;
+								$avgeEn = $totalAmountSubjectEng > 0 ? ($totalScoreEng / $totalAmountSubjectEng) : 0; 
+								$avgCh = $totalAmountSubjectCh > 0 ? ($totalScoreCh / $totalAmountSubjectCh) : 0;
+						
 								$arr = array(
 									'score_id' => $id,
 									'student_id' => $old_studentid,
-
+	
 									'total_score' => $total_score,
 									'amount_subject' => $totalMutiAll,
 									'total_avg' => $avg,
-
+	
 									'totalMaxScore' => $totalMaxScore,
+	
 								);
+								if ($_data['exam_type'] == 2) {
+									if (!empty($rsMonthlysemesterAvg)) {
+	
+										$overallAssessmentSemester = ($avg + $monthlySemesterAvg) / 2;
+	
+										$monthlySemesterAvgKh = ($avgkh + $totalKhAvg) / 2;
+										$monthlySemesterAvgEn = ($avgeEn + $totalEnAvg) / 2;
+										$monthlySemesterAvgCh = ($avgCh + $totalChAvg) / 2;
+	
+										$arr["monthlySemesterAvg"] = $monthlySemesterAvg;
+										$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
+	
+										$arr["totalKhAvg"] = $totalKhAvg;
+										$arr["totalEnAvg"] = $totalEnAvg;
+										$arr["totalChAvg"] = $totalChAvg;
+	
+										$arr["OveralAvgKh"] = $monthlySemesterAvgKh;
+										$arr["OveralAvgEng"] = $monthlySemesterAvgEn;
+										$arr["OveralAvgCh"] = $monthlySemesterAvgCh;
+										
+									}
+								}else{
+									$arr["totalKhAvg"] = $avgkh;
+									$arr["totalEnAvg"] = $avgeEn;
+									$arr["totalChAvg"] = $avgCh;
+								}
 								$this->_name = 'rms_score_monthly';
 								$this->insert($arr);
+	
+								//Reset Variable
 								$total_score = 0;
 								$totalMutiAll = 0;
 								$totalMaxScore = 0;
+								
+								$totalScoreKh = 0;
+								$totalScoreEng = 0;
+								$totalScoreCh = 0;
+	
+								$totalMaxScoreKh = 0;
+								$totalMaxScoreEng = 0;
+								$totalMaxScoreCh = 0;
+	
+								$totalAmountSubjectKh = 0;
+								$totalAmountSubjectEng = 0;
+								$totalAmountSubjectCh = 0;
+	
+	
 							} else if ($keyValue > 0 and $old_studentid != $_data['student_id' . $i]) { // Check ករណីសិស្សដែលបានបញ្ចូលពិន្ទុ 0 គ្រប់មុខវិជ្ជាដោយមិន លុបឬដក Student ចេញ
 								$total_score = 0;
 								$totalMutiAll = 0;
 								$totalMaxScore = 0;
+								
+								$totalScoreKh = 0;
+								$totalScoreEng = 0;
+								$totalScoreCh = 0;
+	
+								$totalMaxScoreKh = 0;
+								$totalMaxScoreEng = 0;
+								$totalMaxScoreCh = 0;
+	
+								$totalAmountSubjectKh = 0;
+								$totalAmountSubjectEng = 0;
+								$totalAmountSubjectCh = 0;
 							}
-
+	
 							$old_studentid = $_data['student_id' . $i];
-
+							$monthlySemesterAvg = empty($_data['monthlySemesterAvg' . $i]) ? 0 : $_data['monthlySemesterAvg' . $i];
+	
 							$dataScore = array(
 								'groupId' => $_data['group'],
 								'examType' => $_data['exam_type'],
@@ -460,21 +569,21 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'subjectId' => $subject,
 								'studentId' => $_data['student_id' . $i],
 							);
-
+	
 							$resultScore = $this->getGradingScoreData($dataScore);
-
+	
 							$gradingId = '';
 							if (!empty($resultScore)) {
 								$gradingId = $resultScore['gradingId'];
 							}
-
+	
 							$param = array(
 								'groupId' => $_data['group'],
 								'subjectId' => $subject,
 							);
-
+	
 							$rsGroupSubject = $dbpush->getGroupSubjectDetail($param); //// call cut score
-
+	
 							if ($_data['exam_type'] == 1) { //month
 								$maxScore = $rsGroupSubject['maxScoreMonth'];
 								$totalMulti = $rsGroupSubject['totalSubjectMonth'];
@@ -496,48 +605,119 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									$score_cut = $rsGroupSubject['score_short'];
 								}
 							}
-
+	
+							if($_data['subject_lang' .$subject]==1){
+								$totalScoreKh = $totalScoreKh+ ($_data["score_" . $i . "_" . $subject]*$totalMulti);
+								$totalMaxScoreKh = $totalMaxScoreKh+ ($maxScore*$totalMulti);
+								$totalAmountSubjectKh = $totalAmountSubjectKh + $totalMulti;
+							}else if($_data['subject_lang' .$subject]==2){
+								$totalScoreEng = $totalScoreEng+ ($_data["score_" . $i . "_" . $subject]*$totalMulti);
+								$totalMaxScoreEng = $totalMaxScoreEng+ ($maxScore*$totalMulti);
+								$totalAmountSubjectEng = $totalAmountSubjectEng + $totalMulti;
+							}else if($_data['subject_lang' .$subject]==3){
+								$totalScoreCh = $totalScoreCh+($_data["score_" . $i . "_" . $subject]*$totalMulti);
+								$totalMaxScoreCh = $totalMaxScoreCh+ ($maxScore*$totalMulti);
+								$totalAmountSubjectCh = $totalAmountSubjectCh + $totalMulti;
+							}
+	
 							$totalMaxScore = $totalMaxScore + ($maxScore * $totalMulti);
-
+	
 							$totalMutiAll = $totalMutiAll + $totalMulti;
-
+	
 							$arr = array(
-								'score_id' => $id,
-								'group_id' => $_data['group'],
+								'score_id' 		 => $id,
+								'group_id'		 => $_data['group'],
 								'gradingTotalId' => $gradingId,
-								'student_id' => $_data['student_id' . $i],
-								'subject_id' => $subject,
-
-								'orgScore' => $_data["score_" . $i . "_" . $subject],
-								'subjectExam' => $_data['amount_subject' . $i],
-
-								'score' => $totalMulti * $_data["score_" . $i . "_" . $subject],
+								'student_id'     => $_data['student_id' . $i],
+								'subject_id'     => $subject,
+	
+								'orgScore'       => $_data["score_" . $i . "_" . $subject],
+								'subjectExam'    => $_data['amount_subject' . $i],
+	
+								'score'          => $totalMulti * $_data["score_" . $i . "_" . $subject],
 								'amount_subject' => $totalMulti,
-								'score_cut' => $score_cut,
-								'status' => 1,
+								'score_cut'      => $score_cut,
+								'status'         => 1,
 							);
 							$this->_name = 'rms_score_detail';
 							$this->insert($arr);
 						}
 					}
-
+	
 					if (!empty($ids)) {
 						if ($total_score > 0) {
+	
 							if ($_data['exam_type'] == 2) { //semester exam
-								$totalMutiAll = $totalMaxScore / 50;
-							}
-							$avg = $total_score / $totalMutiAll;
-							$arr = array(
-								'score_id' => $id,
-								'student_id' => $old_studentid,
-
-								'total_score' => $total_score,
-								'amount_subject' => $totalMutiAll,
-								'total_avg' => $avg,
-								'totalMaxScore' => $totalMaxScore,
-							);
-							$this->_name = 'rms_score_monthly';
-							$this->insert($arr);
+									$totalMutiAll = $totalMaxScore / $scale_for_semester;
+									$totalAmountSubjectKh = $totalMaxScoreKh / $scale_for_semester;
+									$totalAmountSubjectEng = $totalMaxScoreEng / $scale_for_semester;
+									$totalAmountSubjectCh = $totalMaxScoreCh / $scale_for_semester;
+	
+									$dataparam = array(
+										'groupId'      => $_data['group'],
+										'acadmicYear' => $year_study,
+										'forSemester' => $_data['for_semester'],
+										'studentId'   => $old_studentid
+									);
+									$rsMonthlysemesterAvg = $this->getMonthlySemesterAvg($dataparam);
+	
+									$totalKhAvg = $rsMonthlysemesterAvg['totalKhAvg'] / $semesterPercentage;
+									$totalEnAvg = $rsMonthlysemesterAvg['totalEnAvg'] / $semesterPercentage;
+									$totalChAvg = $rsMonthlysemesterAvg['totalChAvg'] / $semesterPercentage;
+	
+								}else{
+									
+									if(!empty($scale_for_month)) {
+										$totalMutiAll = $totalMaxScore / $scale_for_month;
+										$totalAmountSubjectKh = $totalMaxScoreKh / $scale_for_month;
+										$totalAmountSubjectEng = $totalMaxScoreEng / $scale_for_month;
+										$totalAmountSubjectCh = $totalMaxScoreCh / $scale_for_month;
+									}
+								}
+								$avg = $total_score / $totalMutiAll;
+								$avgkh = $totalScoreKh / $totalAmountSubjectKh;
+								$avgeEn = $totalAmountSubjectEng > 0 ? ($totalScoreEng / $totalAmountSubjectEng) : 0; 
+								$avgCh = $totalAmountSubjectCh > 0 ? ($totalScoreCh / $totalAmountSubjectCh) : 0;
+						
+								$arr = array(
+									'score_id' => $id,
+									'student_id' => $old_studentid,
+	
+									'total_score' => $total_score,
+									'amount_subject' => $totalMutiAll,
+									'total_avg' => $avg,
+	
+									'totalMaxScore' => $totalMaxScore,
+	
+								);
+								if ($_data['exam_type'] == 2) {
+									if (!empty($rsMonthlysemesterAvg)) {
+	
+										$overallAssessmentSemester = ($avg + $monthlySemesterAvg) / 2;
+	
+										$monthlySemesterAvgKh = ($avgkh + $totalKhAvg) / 2;
+										$monthlySemesterAvgEn = ($avgeEn + $totalEnAvg) / 2;
+										$monthlySemesterAvgCh = ($avgCh + $totalChAvg) / 2;
+	
+										$arr["monthlySemesterAvg"] = $monthlySemesterAvg;
+										$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
+	
+										$arr["totalKhAvg"] = $totalKhAvg;
+										$arr["totalEnAvg"] = $totalEnAvg;
+										$arr["totalChAvg"] = $totalChAvg;
+	
+										$arr["OveralAvgKh"] = $monthlySemesterAvgKh;
+										$arr["OveralAvgEng"] = $monthlySemesterAvgEn;
+										$arr["OveralAvgCh"] = $monthlySemesterAvgCh;
+										
+									}
+								}else{
+									$arr["totalKhAvg"] = $avgkh;
+									$arr["totalEnAvg"] = $avgeEn;
+									$arr["totalChAvg"] = $avgCh;
+								}
+								$this->_name = 'rms_score_monthly';
+								$this->insert($arr);
 						}
 					}
 					$this->_name = 'rms_grading';
@@ -552,6 +732,18 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						);
 						$this->update($arr, $where);
 					}
+	
+					// is combine
+	
+					$this->_name = 'rms_score';
+					if ($_data['exam_type'] == 2) {
+						$where = 'group_id=' . $_data['group'] . '  AND for_semester=' . $_data['for_semester'] . ' AND exam_type = 1 ';
+						$arr = array(
+							'isCombineSemester' => 1,
+						);
+						$this->update($arr, $where);
+					}
+					
 				}
 			} else {  // Void Score
 
@@ -567,8 +759,16 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					'lockBy' => $this->getUserId()
 				);
 				$this->update($arr, $where);
-			}
 
+				$this->_name = 'rms_score';
+				if ($_data['exam_type'] == 2) {
+					$where = 'group_id=' . $_data['group'] . '  AND for_semester=' . $_data['for_semester'] . ' AND exam_type = 1 ';
+					$arr = array(
+						'isCombineSemester' => 0,
+					);
+					$this->update($arr, $where);
+				}
+			}
 			$db->commit();
 		} catch (Exception $e) {
 			echo $e->getMessage();

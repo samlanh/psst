@@ -118,7 +118,7 @@
 							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="exam_type" name="exam_type" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
+									<select id="exam_type" name="exam_type" readonly="readonly" class="fullside" onchange="checkExamType();"  dojoType="dijit.form.FilteringSelect" >
 										<option value="1" <?php if($this->score['exam_type']==1){echo "selected";} ?>><?php echo $tr->translate("MONTHLY");?></option>
 										<option value="2" <?php if($this->score['exam_type']==2){echo "selected";} ?>><?php echo $tr->translate("SEMESTER");?></option>
 									</select>
@@ -127,7 +127,7 @@
 							<div class="form-group examtype_display">
 								<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
+									<select dojoType="dijit.form.FilteringSelect" readonly="readonly" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">								
 										<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 											<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->score['for_month']){echo "selected='selected'";}?>><?php echo $month['name']?></option>
 										<?php }}?>
@@ -137,7 +137,7 @@
 							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select dojoType="dijit.form.FilteringSelect" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
+									<select dojoType="dijit.form.FilteringSelect" readonly="readonly" required="true" class="fullside" id="for_semester" name="for_semester" type="text">								
 										<option value="1" <?php if ($this->score['for_semester']==1){ echo "Selected='selected'";}?>><?php echo $tr->translate("SEMESTER1");?></option>
 										<option value="2" <?php if ($this->score['for_semester']==2){ echo "Selected='selected'";}?>><?php echo $tr->translate("SEMESTER2");?></option>
 									</select>
@@ -273,6 +273,9 @@ function filterStudentOld(){
 	dojo.query("#table_row").append("");
 	$('#identity').val("");
 	loadingBlock();
+
+	examType = dijit.byId('exam_type').get('value');
+
 	num =0;
 	title=0;
 	temp='';
@@ -294,7 +297,10 @@ function filterStudentOld(){
 			  ?>
 		      temp+='<td class="tdheader verites-col" title="'+stringsname+'"><span class="verites">&nbsp;'+no+'-'+stringsname+'&nbsp;</span></td>'; 
 		<?php }?>
-		 temp+='<td class="tdheader header"><?php echo $tr->translate('AMOUNT_SUBJECT');?></td>';
+		 temp+='<td class="tdheader verites-col criterialTitle"><span class="rotate"><?php echo $tr->translate('AMOUNT_SUBJECT');?></span></td>';
+		 if (examType == 2) {
+			temp += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG'); ?></span></td>';
+		}
 		 temp+='<td class=" tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
 		  temp+='<tr style="border:1px solid #000;">';
 			  temp+='<td class="tdheader">&nbsp;</td>';
@@ -309,7 +315,7 @@ function filterStudentOld(){
 					  <?php 
 					  $result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"],null);
 					  ?>
-				      temp+='<td class="tdheader" title="'+stringsname+'"><input <?php if (!empty($result_score)){?>checked="checked"<?php }?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/></td>';
+				      temp+='<td class="tdheader" title="'+stringsname+'"><input <?php if (!empty($result_score)){?>checked="checked"<?php }?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/><input id="subject_lang<?php echo $subj["subject_id"]; ?>"  name="subject_lang<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subjectLang"]; ?>" type="hidden" ></td>';
 			             
 				<?php }?>
 			  temp+='<td class="tdheader">&nbsp;</td>';
@@ -341,6 +347,9 @@ function filterStudentOld(){
 					temp += '<td id="score_<?php echo $index;?>"><input required="true" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['orgScore'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
 				<?php }?>
 				temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php echo $rs["amount_subject"]; ?>" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
+				if (examType == 2) {
+				temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php echo $rs["monthlySemesterAvg"]; ?>" id="monthlySemesterAvg' + inx + '"  name="monthlySemesterAvg' + inx + '" ></td>';
+				}
 				temp += '<td><input dojoType="dijit.form.TextBox" class="fullside" name="note_'+inx+'"  value="<?php echo $rs["note"]; ?>" type="text" ></td>';
 				temp+= '</tr>';
 				if($("#identity").val()!="") {

@@ -1362,7 +1362,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript'));
+    		$url_all_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-semestertranscript'));
     	?>
     	 scoreId = <?php echo $this->scoreId ?> ;
 		 if(scoreId!=''){
@@ -1376,7 +1376,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    		$url_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-monthlytranscript'));
+    		$url_transcript =$this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-semestertranscript'));
     	?>
     	 id_selected = dijit.byId('id_selected').get('value');
 		 if(id_selected!=''){

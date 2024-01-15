@@ -114,6 +114,10 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::MessageBacktoOldHistory("NO_RECORD");
 			exit();
 		}
+		if ($row['isCombineSemester']==1){
+			Application_Form_FrmMessage::MessageBacktoOldHistory("Can't Edit, Already Comibine");
+			exit();
+		}
 		if ($row['is_pass']==1){
 			Application_Form_FrmMessage::MessageBacktoOldHistory("CLASS_COMPLETED_CAN_NOT_EDIT");
 			exit();

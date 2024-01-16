@@ -209,9 +209,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 		}
+
+		$exam_type = empty($search['exam_type']) ? 0 : $search['exam_type'];
+
 		$sql = "SELECT
 		   	s.`id`,
 		   	g.`branch_id`,
+			g.semesterTotalAverage,
 			(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
 			(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh,
@@ -297,8 +301,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		}
 		$where .= $_db->getAccessPermission('s.branch_id');
 
-		$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` 
-   		ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
+		$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` ";
+		if($exam_type==1){
+			$order .=" ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+		}else{
+			$order .=" ORDER BY (SELECT sm.overallAssessmentSemester FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+		}
+		$order .=" ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
 		if ($limit == 2) {
 			$limit = " LIMIT 5 ";
 		} else {

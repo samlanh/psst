@@ -596,6 +596,22 @@ tbody#table_row tr {
 					text-align: center;
 				}
 
+				tr.chheaderwidth td {
+					
+					color: #002c7b;
+					font-size: 10px;
+					font-family: 'Times New Roman', 'Khmer OS Muol Light';
+					padding: 5px 1px;
+					text-align: center;
+				}
+				tr.chheaderwidth td span.khmerLabel,
+				tr.chheaderwidth td span.englishLabel {
+					color: inherit;
+					line-height: 16px;
+					padding: 0;
+					margin: 0;
+				}
+
 				tr.cheader td span.khmerLabel,
 				tr.cheader td span.englishLabel {
 					color: inherit;
@@ -851,7 +867,7 @@ tbody#table_row tr {
 													<span class="englishLabel">Gender</span>
 											</td>
 											
-											<td colspan="3">
+											<td colspan="3" width="20%">
 												<span class="khmerLabel"><?php echo $tr->translate("AVERAGE"); ?>
 												<br />
 												<span class="englishLabel">Average Score</span>
@@ -867,21 +883,21 @@ tbody#table_row tr {
 												<span class="englishLabel">Letter Grade & Comment</span>
 											</td>
 										</tr>
-										<tr class="cheader" align="center">
-											<td >
-												<span class="khmerLabel">មធ្យមភាគប្រឡង</span>
+										<tr class="chheaderwidth" align="center">
+											<td width="33.3%">
+												<span class="khmerLabel">ពិន្ទុមធ្យមភាគប្រឡង</span>
 												<br />
-												<span class="englishLabel">Average Of Examination</span>
+												<span class="englishLabel">Semester Average Score</span>
 											</td>
-											<td >
+											<td width="33.3%">
 												<span class="khmerLabel">មធ្យមភាគខែប្រចាំឆមាស</span>
 												<br />
-												<span class="englishLabel">Semester Monthly Average Score</span>
+												<span class="englishLabel">Monthly Semester Average</span>
 											</td>
-											<td >
-												<span class="khmerLabel">មធ្យមភាគរូមប្រចាំឆមាស</span>
+											<td width="33.3%">
+												<span class="khmerLabel">មធ្យមភាគរួមប្រចាំឆមាស</span>
 												<br />
-												<span class="englishLabel">Overall Average of the Semester</span>
+												<span class="englishLabel">Overall Semester Average</span>
 											</td>
 										</tr>
 									<?php }
@@ -895,10 +911,10 @@ tbody#table_row tr {
 										<td align="center" style="white-space:nowrap;">
 											<a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/id/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>"><?php echo $rs['stu_code']; ?></a>
 										</td>
-										<td style="min-width:100px;">
+										<td style=" width: 150px;  min-width:100px;">
 											<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span>
 										</td>
-										<td style="min-width:100px;">
+										<td style="width: 150px; min-width:100px;">
 											<span class=" englishName"><?php echo trim($rs['last_name'])." ".trim($rs['stu_enname']); ?></span>
 										</td>
 										<td align="center" class="bg_<?php echo $rs['sex']; ?>">&nbsp;<?php echo $sex; ?>&nbsp;</td>

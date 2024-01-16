@@ -145,10 +145,6 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data = $key->getKeyCodeMiniInv(TRUE);
 
-		// $dbSetting = new Setting_Model_DbTable_Dbduty();
-		// $principalId = empty($resultScore[0]['principalId']) ? 0 : $resultScore[0]['principalId'];
-		// $this->view->principalInfo = $dbSetting->getDutyById($principalId);
-
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
 		$dregreeId = empty($resultScore[0]['degree_id']) ? 0 : $resultScore[0]['degree_id'];
 		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
@@ -221,21 +217,27 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	}
 	function monthlyOutstandingStudentAction()
 	{
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		$id = $this->getRequest()->getParam("id");
 		if ($this->getRequest()->isPost()) {
 			$search = $this->getRequest()->getPost();
 		} else {
+			
+			$row = $db->getScoreExamByID($id);
 			$search = array(
-				'group_name' => '',
-				'study_year' => '',
-				'grade_bac' => '',
-				'degree_bac' => '',
+				'group' => $row['group_id'],
+				'study_year' => $row['for_academic_year'],
+				'exam_type' => $row['exam_type'],
+				'branch_id' => $row['branch_id'],
+				'for_month' => $row['for_month'],
+				'for_semester' => $row['for_semester'],
+				'grade' => '',
+				'degree' => '',
 				'session' => '',
-				'for_month' => '',
 			);
 		}
 		$this->view->search = $search;
-		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		
 		$studentgroup = $db->getStudentScoreResult($search, $id);
 		$this->view->studentgroup = $studentgroup;
 

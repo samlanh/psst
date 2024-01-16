@@ -9,6 +9,9 @@ $lang_id = $session_lang->lang_id;
 $frm =  $this->form_search;
 $db = new Allreport_Model_DbTable_DbRptStudentScore();
 $dbgb = new Application_Model_DbTable_DbGlobal();
+
+//print_r($this->studentgroup);
+
 $month = array(
 	"01" => "មករា",
 	"02" => "កុម្ភៈ",
@@ -391,19 +394,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 							<td align="center" valign="top"></td>
 						</tr>
 						
-						<!-- <tr>
-							<td align="center" class="khmerBold" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
-							<strong style="color:#4839bd;">
-								<?php if ($rs['exam_type'] != 2) { ?>
-									<?php echo $rs['group_code'] ?> <?php echo $rs['title_score_en']; ?> Result<?php } ?>
-								</strong>
-								<br />
-								<strong style="color:#4839bd;">
-									Academic Year: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['academic_year']; ?></span>
-								</strong>
-							</td>
-							<td align="center" valign="top"></td>
-						</tr> -->
+						
 						<tr>
 							<?php
 							$colspan = 1;
@@ -421,9 +412,20 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td colspan="<?php echo count($subj); ?>"><?php echo $tr->translate("SUBJECT"); ?></td>
 										<?php } ?>
 										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("TOTAL_SCORE"); ?></td>
-										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("AVERAGE"); ?></td>
+										<?php if ($rs['exam_type'] == 1){?>
+											<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("AVERAGE"); ?></td>
+											<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MENTION_AND_COMENT") ?></td>
+											<td style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RANK"); ?></td>
+										<?php }else{ ?>
+
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("EXAM_AVG_SCORE"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MONTHLY_AVG_SCORE"); ?></td>
+										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("SEMESTER_AVG_SCORE"); ?></td>
 										<td colspan="3" style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MENTION_AND_COMENT") ?></td>
 										<td style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RANK"); ?></td>
+
+										<?php } ?>
+										
 										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RESULT"); ?></td>
 									</tr>
 									<?php
@@ -509,8 +511,12 @@ $link = "/allreport/score/rpt-monthlytranscript";
 									</td>
 									<?php
 									$average = $rs['average'];
+									$smester_average = $rs['monthlySemesterAvg'];
+									$overal_semester_avg = $rs['overallAssessmentSemester'];
 									?>
 									<td align="center"><?php echo number_format($average, 2); ?></td>
+									<td align="center"><?php echo number_format($smester_average, 2); ?></td>
+									<td align="center"><?php echo number_format($overal_semester_avg, 2); ?></td>
 									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 										<?php
 											if($rs['totalMaxScore']>0){

@@ -379,14 +379,7 @@ function getCountSubjectLang($subjectArray,$subjectLang){
 												<td colspan="3" align="center">&nbsp;
 													<strong>ការវាយតម្លៃជារួមលើការប្រឡង / Overall Assessment of the Examination</strong>
 												</td>
-												<td align="center"><strong>
-													<?php
-													$totalmultiSubSubject = $totalSubMaxScore / $semesterScale;
-													$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-													echo number_format($totalKhmerAverage, 2);
-												 	 ?>
-												  </strong>
-												</td>
+												<td align="center"><strong><?php $totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject; echo number_format($totalKhmerAverage, 2); ?></strong></td>
 												<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
 												
 												<td colspan="2" align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>
@@ -511,13 +504,7 @@ function getCountSubjectLang($subjectArray,$subjectLang){
 								<td colspan="3" align="center">&nbsp;
 									<strong>ការវាយតម្លៃជារួមលើការប្រឡង / Overall Assessment of the Examination</strong>
 								</td>
-								<td align="center"><strong>
-									<?php
-										$totalmultiSubSubject = $totalSubMaxScore / $semesterScale;
-										$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-										echo number_format($totalKhmerAverage, 2);
-									 ?>
-								</td>
+								<td align="center"><strong><?php $totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject; echo number_format($totalKhmerAverage, 2); ?></strong></td>
 								<td align="center"><strong><?php echo $totalSubMaxScore; ?></strong></td>
 												
 								<td colspan="2" align="center">&nbsp;<strong><?php echo number_format($totalAveragescore, 2); ?></strong>&nbsp;</td>

@@ -178,6 +178,8 @@
 						$forSemester = $scoreInfo['for_semester'];
 						$degreeId = $scoreInfo['degreeId'];
 
+						$monthlyScale = (empty($scoreInfo['max_average'])) ? 100 : $scoreInfo['max_average'];
+
 						$break_page = "pages-break";
 					
 						//$title= $titleNum;
@@ -297,15 +299,7 @@
 												<td align="center">
 													<strong>
 														<?php
-
-														if($degreeId==2 OR $degreeId==3 ){
-															if($scoreInfo['exam_type'] == 1){
-																$totalmultiSubSubject=$totalSubMaxScore/100;
-															}else{
-																$totalmultiSubSubject=$totalSubMaxScore/50;
-															}
-														}
-
+														$totalmultiSubSubject=$totalSubMaxScore/$monthlyScale;
 														$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
 														echo number_format($totalKhmerAverage, 2); ?>
 													</strong>
@@ -399,14 +393,7 @@
 									<strong>
 										<?php
 
-										if($degreeId==2 OR $degreeId==3 ){
-											if($scoreInfo['exam_type'] == 1){
-												$totalmultiSubSubject=$totalSubMaxScore/100;
-											}else{
-												$totalmultiSubSubject=$totalSubMaxScore/50;
-											}
-										}
-									
+										$totalmultiSubSubject=$totalSubMaxScore/$monthlyScale;
 										$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
 										echo number_format($totalKhmerAverage, 2); ?>
 									</strong>

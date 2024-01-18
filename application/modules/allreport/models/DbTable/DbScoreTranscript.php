@@ -163,9 +163,13 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 				FROM `rms_grading_detail` gd
 				WHERE 
 					gd.subCriterialTitleEng IS NOT NULL ";
+		/*
 		if (!empty($data['gradingId'])) {
 			$sql .= " AND gd.gradingId=" . $data['gradingId'];
 		}
+		*/
+		$data['gradingId'] = empty($data['gradingId']) ? 0 : $data['gradingId'];
+		$sql .= " AND gd.gradingId=" . $data['gradingId'];
 		if (!empty($data['studentId'])) {
 			$sql .= " AND gd.studentId=" . $data['studentId'];
 		}

@@ -249,6 +249,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		$strSubLang = " (SELECT subject_lang FROM `rms_subject` sub WHERE sub.id=sd.subject_id LIMIT 1) ";
 		$sql = "SELECT 
 					g.degree AS degreeId,
+					g.max_average AS max_average,
 					g.group_code AS groupCode,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) as academicYearLabel,
 					g.academic_year as academicYearId,

@@ -214,13 +214,13 @@
 							
 							if($rs['examType']==1){
 								$monthChar = empty($monthKH[$rs['forMonth']])?"":$monthKH[$rs['forMonth']];
-								$titleKh='ប្រព័ន្ធដាក់ពិន្ទុខែ '.$monthChar;
+								$titleKh='ប្រព័ន្ធដាក់ពិន្ទុប្រចាំខែ '.$monthChar;
 								$monthCharEn = empty($monthENG[$rs['forMonth']])?"":$monthENG[$rs['forMonth']];
 								$titleENG=$monthCharEn." GRADING";
 							}else{
 								$arrRomanNum = array(1=>"I",2=>"II");
 								$romanNumber = empty($arrRomanNum[$rs['forSemester']])?"":$arrRomanNum[$rs['forSemester']];
-								$titleKh='ប្រព័ន្ធដាក់ពិន្ទុ'.$dbgb->getNumberInkhmer($rs['forSemester']);
+								$titleKh='ប្រព័ន្ធដាក់ពិន្ទុប្រចាំឆមាសទី'.$dbgb->getNumberInkhmer($rs['forSemester']);
 								$titleENG="GRADING SEMESTER ".$romanNumber." RESULT";
 							}
 							?>

@@ -13,6 +13,7 @@
 	$criteriaId = $this->criteriaId;
 	$subjectId = $this->subjectId;
 	$settingEntryId = $this->settingEntryId;
+	$examType = $this->examType;
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -91,8 +92,8 @@
 															</label>
 															<div class="col-md-7 col-sm-7 col-xs-12">
 																<select id="examType" name="examType" class="fullside" onchange="checkExamType(); getAllSubject();"  dojoType="dijit.form.FilteringSelect" >
-																	<option value="1">ប្រចាំខែ/Monthly Exam</option>
-																	<option value="2">ប្រចាំឆមាស/Semester Exam</option>
+																	<option value="1" <?php if(1==$examType ){echo "selected='selected'";}?>>ប្រចាំខែ/Monthly Exam</option>
+																	<option value="2" <?php if(2==$examType ){echo "selected='selected'";}?>>ប្រចាំឆមាស/Semester Exam</option>
 																</select>
 															</div>
 														</div>

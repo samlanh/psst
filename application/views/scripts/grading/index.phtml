@@ -9,6 +9,7 @@
 	$criteriaId =  $this->criteriaId;
 	$subjectId =  $this->subjectId;
 	$settingEntryId = $this->settingEntryId;
+	$examType = $this->examType;
 	$frm =  $this->form_search;
 ?>	
 <?php 
@@ -34,7 +35,7 @@
 						<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<a  class="mini-button-class " href="<?php echo $this->baseUrl()."/grading/add/id/".$groupId."/criteriaId/".$criteriaId."/subjectId/".$subjectId."/settingEntryId/".$settingEntryId;?>">
+						<a  class="mini-button-class " href="<?php echo $this->baseUrl()."/grading/add/id/".$groupId."/criteriaId/".$criteriaId."/subjectId/".$subjectId."/settingEntryId/".$settingEntryId."/examType/".$examType;?>">
 							<i class="glyphicon glyphicon-plus-sign" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('INPUT_SCORE');?>
 						</a>
 					</div>
@@ -220,6 +221,9 @@ dojo.ready(function(){
 
 	<?php if(!empty($criteriaId)){?>
 	 dijit.byId('criteriaId').attr('value','<?php echo $criteriaId;?>'); 
+	<?php } ?>
+	<?php if(!empty($examType)){?>
+	 dijit.byId('exam_type').attr('value','<?php echo $examType;?>'); 
 	<?php } ?>
 });
 

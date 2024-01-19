@@ -597,7 +597,10 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameKh
 				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = g.teacher_id LIMIT 1 ) AS mainTeaccherNameEng
 				
-				,(SELECT gsjd.max_score FROM rms_group_subject_detail AS gsjd WHERE g.id = gsjd.group_id AND gsjd.subject_id =grd.subjectId LIMIT 1 ) AS maxSubjectscore
+				,CASE
+					WHEN grd.examType = 2 THEN (SELECT gsjd.semester_max_score FROM rms_group_subject_detail AS gsjd WHERE g.id = gsjd.group_id AND gsjd.subject_id =grd.subjectId LIMIT 1 )
+					ELSE (SELECT gsjd.max_score FROM rms_group_subject_detail AS gsjd WHERE g.id = gsjd.group_id AND gsjd.subject_id =grd.subjectId LIMIT 1 )
+				END AS maxSubjectscore
 				
 				,(SELECT te.signature from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teacherSigature
 				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = grd.teacherId LIMIT 1 ) AS teaccherNameKh

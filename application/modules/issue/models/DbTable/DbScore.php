@@ -345,18 +345,23 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							$this->insert($arr);
 					}
 				}
-				$this->_name = 'rms_grading';
-				foreach ($rssubject as $subject) {
-					$where = 'groupId=' . $_data['group'] . ' AND subjectId=' . $subject . ' AND forSemester=' . $_data['for_semester'] . ' AND examType =' . $_data['exam_type'];
-					if ($_data['exam_type'] == 1) {
-						$where .= ' AND formonth=' . $_data['for_month'];
+			
+				if($_data['score_option']== 1 ){
+					$this->_name = 'rms_grading';
+					foreach ($rssubject as $subject) {
+						$where = 'groupId=' . $_data['group'] . ' AND subjectId=' . $subject . ' AND forSemester=' . $_data['for_semester'] . ' AND examType =' . $_data['exam_type'];
+						if ($_data['exam_type'] == 1) {
+							$where .= ' AND formonth=' . $_data['for_month'];
+						}
+						$arr = array(
+							'isLock' => 1,
+							'lockBy' => $this->getUserId()
+						);
+						$this->update($arr, $where);
 					}
-					$arr = array(
-						'isLock' => 1,
-						'lockBy' => $this->getUserId()
-					);
-					$this->update($arr, $where);
+
 				}
+				
 
 				// is combine
 

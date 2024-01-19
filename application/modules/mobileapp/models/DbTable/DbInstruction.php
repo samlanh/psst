@@ -16,7 +16,8 @@ class Mobileapp_Model_DbTable_DbInstruction extends Zend_Db_Table_Abstract
 		
 		$from_date =(empty($search['start_date']))? '1': "mba.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "mba.create_date <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;	
+		//$where = " AND ".$from_date." AND ".$to_date;	
+		$where="";
 		$sql="SELECT mba.id,
 		(SELECT ad.title FROM `moble_instruction_detail` AS ad WHERE ad.instruction_id = mba.`id` AND ad.lang=$lang LIMIT 1) AS title,
 		mba.create_date,mba.status as status FROM $this->_name AS mba WHERE 1";

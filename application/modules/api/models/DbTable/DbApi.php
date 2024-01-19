@@ -3012,6 +3012,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,sm.total_avg AS totalAvg
 				,g.max_average/2 AS passAvrage
 				
+				,g.max_average AS monthlyMaxAverage
 				,g.semesterTotalAverage AS semesterMaxAverage
 				,g.semesterPercentage AS semesterScal
 				

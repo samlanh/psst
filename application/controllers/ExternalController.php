@@ -9,6 +9,7 @@ class ExternalController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');  
+		defined('CRITERIA_LIMIT_SETTING') || define('CRITERIA_LIMIT_SETTING', Setting_Model_DbTable_DbGeneral::geValueByKeyName('criteriaLimitation'));
     }
 
     public function indexAction()

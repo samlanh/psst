@@ -34,6 +34,10 @@ class GradingController extends Zend_Controller_Action
 
 		$settingEntryId=$this->getRequest()->getParam("settingEntryId");
 		$this->view->settingEntryId = $settingEntryId;
+
+		$examType=$this->getRequest()->getParam("examType");
+		$examType = empty($examType)?0:$examType;
+		$this->view->examType = $examType;
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -45,7 +49,7 @@ class GradingController extends Zend_Controller_Action
 				'adv_search'=>'',
 				'externalAuth'=>1,//for teacher access
 				'academic_year'=> $currentAcademic,
-				'exam_type'=>-1,
+				'exam_type'=>$examType,
 				'for_semester'=>-1,
 				'for_month'=>'',
 				'degree'=>0,
@@ -109,6 +113,9 @@ class GradingController extends Zend_Controller_Action
 
 		$settingEntryId=$this->getRequest()->getParam("settingEntryId");
 		$this->view->settingEntryId = $settingEntryId;
+
+		$examType=$this->getRequest()->getParam("examType");
+		$this->view->examType = $examType;
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getGroupDetailByIDExternal($id,1);

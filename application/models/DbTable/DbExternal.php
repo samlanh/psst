@@ -1213,6 +1213,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 	}
 	function getCriterialByGrading($data){
+
+		defined('CRITERIA_LIMIT_SETTING') || define('CRITERIA_LIMIT_SETTING', Setting_Model_DbTable_DbGeneral::geValueByKeyName('criteriaLimitation'));
+		
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 
@@ -1228,6 +1231,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$gradingId = empty($data['gradingId'])?0:$data['gradingId'];
 		$sql="SELECT 
 				s.*,
+				s.timeInput AS timeInputSetting,
 				COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id AND sttDi.subjectId =  ".$data['subjectId']." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') AS isNotEntryCr
 				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
 				,(SELECT es.$title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle

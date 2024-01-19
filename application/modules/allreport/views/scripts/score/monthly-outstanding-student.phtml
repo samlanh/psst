@@ -87,7 +87,7 @@ $branchInfo = $this->branchInfo;
 
 			.backgroundOutStanding {
 				background-image: url('<?php echo $backgroundImage; ?>');
-				background-size: contain;
+				background-size: 100%;
 				background-repeat: no-repeat;
 				position: relative;
 				display: inline-block;
@@ -113,7 +113,7 @@ $branchInfo = $this->branchInfo;
 
 			.number {
 				color: red;
-white-space:nowrap;
+				white-space:nowrap;
 			}
 
 			.studentname {
@@ -146,11 +146,13 @@ white-space:nowrap;
 			ul.scoreTitle li {
 				line-height: 26px;
 			}
-
-			@page {
-				page: A4;
-				margin: 0.2cm;
-				pading: 0.2cm;
+			@media print{
+				@page {
+					page: A4;
+					size: portrait;;
+					margin: 0.2cm;
+					pading: 0.2cm;
+				}
 			}
 		</style>
 		<div class="backgroundOutStanding" style="margin: 0 auto;">

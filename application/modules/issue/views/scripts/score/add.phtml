@@ -396,7 +396,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						temp += '<td style="text-align:left;">&nbsp;' + data[i].stu_code + '<input dojoType="dijit.form.TextBox" name="student_id' + inx + '" value="' + data[i].stu_id + '" type="hidden" ></td>';
 						temp += '<td style="min-width:100px; text-align:left; padding:0 1px;">' + data[i].stuKhName + '<br />' + data[i].stuEnName + '</td>';
 						temp += '<td>&nbsp;' + gender(data[i].sex) + '&nbsp;</td>';
-						temp+='<td style="width:80px;"><select placeHolder="<?php echo $tr->translate('TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="type'+inx+'" name="type'+inx+'" >';
+						temp+='<td style="width:80px;"><select placeHolder="<?php echo $tr->translate('TYPE');?>" class="fullside" required="false" onChange="checkStudentType('+inx+');" dojoType="dijit.form.FilteringSelect" id="type'+inx+'" name="type'+inx+'" >';
 							temp+='<option value="1"><?php echo $tr->translate('EXAM');?></option>';	
 							temp+='<option value="2"><?php echo $tr->translate('NOT_EXAM');?></option>';	
 						temp+='</select>';
@@ -411,7 +411,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									totalAverage = data[i].gradingScore[j].totalAverage;
 								}
 							}
-							temp += '<td id="score_' + j + '"><input value="' + subjectList[j].max_subjectscore + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
+							temp += '<td id="score_' + j + '"><input value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
 						}
 
 						temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + inx + '"  name="amount_subject' + inx + '" ></td>';
@@ -443,6 +443,24 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			error: function(err) {}
 		});
 		HideloadingBlock();
+	}
+
+	
+
+	function checkStudentType(index) {
+		type = dijit.byId("type"+index).get("value");
+		if( type==2){
+			for (var i = 0; i < subjectList.length; i++) {
+				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).set('disabled', false);
+				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).attr('value', 1);
+				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).set('required', false);
+			}
+		}else{
+			for (var i = 0; i < subjectList.length; i++) {
+				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).reset();
+				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).set('required', true);
+			}
+		}
 	}
 
 	function CheckSubjectExam(subject_id) {

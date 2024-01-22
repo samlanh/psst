@@ -197,6 +197,23 @@
 									<input class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->score['note'];?>" type="text" style=" height: 120px !important;"  >
 								</div>
 							</div>
+							<div class="form-group">
+								<div class="d-flex">
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+									</div>
+									<div class="col-md-10 col-sm-10 col-xs-12">
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("APP_NOTIFICATION"); ?></p>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="custom-switch"> 
+										<input type="checkbox"   id="push_notify" name="push_notify"  class="custom-switch-input" > 
+										<span class="custom-switch-indicator custom-radius"></span> 
+										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION')?></a> 
+								</label>
+							</div>
 						</div>
 					 </div>
 		         </div>
@@ -287,6 +304,7 @@ function filterStudentOld(){
 		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_ID');?></td>'
 		+'<td class="tdheader header" style="width:100px;"><?php echo $tr->translate('STUDENT_NAME');?></td>'
 		+'<td class="tdheader header"><?php echo $tr->translate('SEX');?></td>'
+		+'<td class="tdheader header" style="width:80px;"><?php echo $tr->translate('TYPE');?></td>'
 		+'';
 	no=0;
 		<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ ?>
@@ -303,6 +321,7 @@ function filterStudentOld(){
 		}
 		 temp+='<td class=" tdheader text-center">&nbsp;<?php echo $tr->translate('NOTE');?></td>'+'</tr>';
 		  temp+='<tr style="border:1px solid #000;">';
+			  temp+='<td class="tdheader">&nbsp;</td>';
 			  temp+='<td class="tdheader">&nbsp;</td>';
 			  temp+='<td class="tdheader">&nbsp;</td>';
 			  temp+='<td class="tdheader">&nbsp;</td>';
@@ -341,6 +360,11 @@ function filterStudentOld(){
 				temp +='<td>&nbsp;<?php echo $rs["stu_code"]; ?></td>';
 				temp +='<td style="min-width:100px; text-align:left; padding:0 1px;">'+'<?php echo $rs["stuKhName"]."<br />".$rs["stuEnName"]; ?><input type="hidden" name="student_id'+inx+'" id="student_id'+inx+'" value="<?php echo $rs["student_id"] ?>"/></td>';
 				temp +='<td>&nbsp;'+gender('<?php echo $rs["sex"];?>')+'&nbsp;</td>';
+				temp+='<td style="width:80px;"><select placeHolder="<?php echo $tr->translate('TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="type'+inx+'" name="type'+inx+'" >';
+					temp+='<option value="1" <?php if($rs["type"]==1){ echo "selected"; } ?> ><?php echo $tr->translate('EXAM');?></option>';	
+					temp+='<option value="2" <?php if($rs["type"]==2){ echo "selected"; } ?> ><?php  echo $tr->translate('NOT_EXAM');?></option>';	
+				temp+='</select>';
+				temp+='</td>';
 				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ 
 					$result_score = $db_score->getStudentScoreBySubjectID($this->score_id, $rs["student_id"],$subj['subject_id']);
 					?>

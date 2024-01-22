@@ -253,7 +253,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		    (SELECT sm.total_avg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS average,
 			(SELECT sm.monthlySemesterAvg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS monthlySemesterAvg,
 			(SELECT sm.overallAssessmentSemester FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS overallAssessmentSemester,
- 			(SELECT sm.totalMaxScore FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS totalMaxScore
+ 			(SELECT sm.totalMaxScore FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS totalMaxScore,
+			 (SELECT sm.type FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS type
 		    
    		FROM 
    			`rms_score` AS s,
@@ -447,7 +448,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   	st.`stu_id`=sm.`student_id`
 		   	AND g.`id` = s.`group_id`
 		   	AND s.`id`=sm.`score_id`
-		   	AND s.status = 1 ";
+		   	AND s.status = 1 
+		 	AND sm.type = 1 ";
 
 
 		if (!empty($id)) {

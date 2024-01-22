@@ -38,8 +38,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			);
 			$id = $this->insert($_arr);
 			$scoreId = $id;
-			$dbpush = new Application_Model_DbTable_DbGlobal();
-			$dbpush->pushNotification(null, $_data['group'], 2, 4);
+
+			 $dbpush = new Application_Model_DbTable_DbGlobal();
 
 			$old_studentid = 0;
 
@@ -112,8 +112,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'total_score' => $total_score,
 								'amount_subject' => $totalMutiAll,
 								'total_avg' => $avg,
-
 								'totalMaxScore' => $totalMaxScore,
+								'type' => $type ,
 
 							);
 							if ($_data['exam_type'] == 2) {
@@ -183,6 +183,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 
 						$old_studentid = $_data['student_id' . $i];
 						$monthlySemesterAvg = empty($_data['monthlySemesterAvg' . $i]) ? 0 : $_data['monthlySemesterAvg' . $i];
+						$type = $_data['type' . $i];
 
 						$dataScore = array(
 							'groupId' => $_data['group'],
@@ -311,8 +312,10 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'total_score' => $total_score,
 								'amount_subject' => $totalMutiAll,
 								'total_avg' => $avg,
-
 								'totalMaxScore' => $totalMaxScore,
+								
+								'type' => $type ,
+								
 
 							);
 							if ($_data['exam_type'] == 2) {
@@ -421,9 +424,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				$this->_name = 'rms_score_monthly';
 				$this->delete("score_id=" . $_data['score_id']);
 				$old_studentid = 0;
-
+				$type=1;
 				$dbpush = new Application_Model_DbTable_DbGlobal();
-				$dbpush->pushNotification(null, $_data['group'], 2, 4);
+				// $dbpush->pushNotification(null, $_data['group'], 2, 4);
 
 				if (!empty($_data['identity'])) {
 					$ids = explode(',', $_data['identity']);
@@ -496,7 +499,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									'total_avg' => $avg,
 	
 									'totalMaxScore' => $totalMaxScore,
-	
+									'type' => $type ,
 								);
 								if ($_data['exam_type'] == 2) {
 									if (!empty($rsMonthlysemesterAvg)) {
@@ -565,6 +568,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	
 							$old_studentid = $_data['student_id' . $i];
 							$monthlySemesterAvg = empty($_data['monthlySemesterAvg' . $i]) ? 0 : $_data['monthlySemesterAvg' . $i];
+							$type = $_data['type' . $i];
 	
 							$dataScore = array(
 								'groupId' => $_data['group'],
@@ -691,8 +695,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 									'total_score' => $total_score,
 									'amount_subject' => $totalMutiAll,
 									'total_avg' => $avg,
-	
 									'totalMaxScore' => $totalMaxScore,
+									'type' => $type ,
 	
 								);
 								if ($_data['exam_type'] == 2) {
@@ -1066,13 +1070,14 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			  (SELECT s.`sex` FROM `rms_student`AS s WHERE s.`stu_id`=sd.`student_id`) AS sex,
 			  score,note,
 			  (SELECT amount_subject FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS amount_subject,
-			  (SELECT monthlySemesterAvg FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS monthlySemesterAvg
+			  (SELECT monthlySemesterAvg FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS monthlySemesterAvg,
+			  (SELECT type FROM `rms_score_monthly` WHERE score_id=sd.score_id AND student_id=sd.student_id LIMIT 1) AS type
 		FROM
 	 	 	rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 
-			GROUP BY sd.`student_id` order by 
+			GROUP BY sd.`student_id` order by type ASC,
 			(SELECT " . $studentEnName . " FROM `rms_student`AS s 
-			WHERE s.`stu_id`=sd.`student_id`) ASC ";
+			WHERE s.`stu_id`=sd.`student_id`) ASC  ";
 		return $db->fetchAll($sql);
 	}
 

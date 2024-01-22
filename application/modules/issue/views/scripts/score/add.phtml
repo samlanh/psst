@@ -233,6 +233,23 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									<input class="fullside" dojoType="dijit.form.Textarea" id="note" name="note" value="" type="text" style=" height: 120px !important;">
 								</div>
 							</div>
+							<div class="form-group">
+								<div class="d-flex">
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+									</div>
+									<div class="col-md-10 col-sm-10 col-xs-12">
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("APP_NOTIFICATION"); ?></p>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="custom-switch"> 
+										<input type="checkbox"   id="push_notify" name="push_notify"  class="custom-switch-input" > 
+										<span class="custom-switch-indicator custom-radius"></span> 
+										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION')?></a> 
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -332,7 +349,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						'<td rowspan="2" class="tdheader" ><?php echo $tr->translate('NO'); ?></td>' +
 						'<td rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID'); ?></td>' +
 						'<td rowspan="2" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME'); ?></td>' +
-						'<td rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></td>';
+						'<td rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></td>'+
+						'<td rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('TYPE'); ?></td>';
 
 
 					no = 0;
@@ -342,7 +360,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						amtsubject = subjectList[j].amount_subjectdivide;
 						stringsname = subjectList[j].name;
 						subLangId = subjectList[j].subjectLang;
-						temp += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname +'-'+ subLangId+'</span> <input id="subject_lang'+subjectList[j].subject_id +'"  name="subject_lang'+subjectList[j].subject_id +'" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
+						temp += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname +'</span> <input id="subject_lang'+subjectList[j].subject_id +'"  name="subject_lang'+subjectList[j].subject_id +'" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
 					}
 					temp += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('AMOUNT_SUBJECT'); ?></span></td>';
 
@@ -378,6 +396,12 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						temp += '<td style="text-align:left;">&nbsp;' + data[i].stu_code + '<input dojoType="dijit.form.TextBox" name="student_id' + inx + '" value="' + data[i].stu_id + '" type="hidden" ></td>';
 						temp += '<td style="min-width:100px; text-align:left; padding:0 1px;">' + data[i].stuKhName + '<br />' + data[i].stuEnName + '</td>';
 						temp += '<td>&nbsp;' + gender(data[i].sex) + '&nbsp;</td>';
+						temp+='<td style="width:80px;"><select placeHolder="<?php echo $tr->translate('TYPE');?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="type'+inx+'" name="type'+inx+'" >';
+							temp+='<option value="1"><?php echo $tr->translate('EXAM');?></option>';	
+							temp+='<option value="2"><?php echo $tr->translate('NOT_EXAM');?></option>';	
+						temp+='</select>';
+						temp+='</td>';
+
 						for (j = 0; j < subjectList.length; j++) {
 							maxValue = "'The value maximumn " + subjectList[j].max_subjectscore + "'";
 							invalidesms = "rangeMessage:" + maxValue;
@@ -387,7 +411,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									totalAverage = data[i].gradingScore[j].totalAverage;
 								}
 							}
-							temp += '<td id="score_' + j + '"><input value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
+							temp += '<td id="score_' + j + '"><input value="' + subjectList[j].max_subjectscore + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
 						}
 
 						temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + inx + '"  name="amount_subject' + inx + '" ></td>';

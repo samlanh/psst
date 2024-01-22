@@ -302,6 +302,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 			$fail_female = 0;
 			if (!empty($this->studentgroup)) {
 				foreach ($this->studentgroup as $key => $rs) {
+					if($rs['type'] == 2){
+						break;
+					}
 					if ($rs['sex'] == 1) {
 						$sex = $tr->translate("MALE_SHORT");
 						$m = $m + 1;

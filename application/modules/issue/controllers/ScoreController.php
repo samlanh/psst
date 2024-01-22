@@ -65,7 +65,9 @@ class Issue_ScoreController extends Zend_Controller_Action {
 						"groupId" => $_data["group"],
 						"typeNotify" => "studentScoreTranscript",
 					);
-				$dbPushNoti->pushNotificationAPI($notify);
+					if(!empty($_data["push_notify"])){
+						$dbPushNoti->pushNotificationAPI($notify);
+					}
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/score/add");
 				}else {
@@ -94,7 +96,9 @@ class Issue_ScoreController extends Zend_Controller_Action {
 						"groupId" => $_data["group"],
 						"typeNotify" => "studentScoreTranscript",
 					);
-					$dbPushNoti->pushNotificationAPI($notify);
+					if(!empty($_data["push_notify"])){
+						$dbPushNoti->pushNotificationAPI($notify);
+					}
 		
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/score");
 				}

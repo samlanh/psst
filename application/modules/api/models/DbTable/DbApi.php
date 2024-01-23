@@ -17,8 +17,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				s.last_name AS stuLastName,
 				s.photo
 			FROM
-				rms_student AS s
-			WHERE s.status = 1 AND s.customer_type =1 ";
+				rms_student AS s,
+				`rms_group_detail_student` AS gd
+			WHERE s.status = 1 AND s.customer_type =1 
+			AND gd.`stu_id` = s.`stu_id` 
+			AND gd.`is_maingrade` =	1
+			AND gd.`is_current` = 1 
+			AND gd.`stop_type` != 1 
+			";
 			$sql.= " AND ".$db->quoteInto('s.stu_code=?', $_data['studentCode']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
 			$row = $db->fetchRow($sql);

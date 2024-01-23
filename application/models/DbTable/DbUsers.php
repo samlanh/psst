@@ -354,7 +354,7 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		$sql = "SELECT aa.module, aa.controller, aa.action,aa.label FROM rms_acl_user_access AS ua  INNER JOIN rms_acl_acl AS aa
 		ON (ua.acl_id=aa.acl_id) WHERE ua.user_type_id='".$user_type_id."'
 		GROUP BY  aa.module ,aa.controller,aa.action
-		ORDER BY aa.module ,aa.is_menu ASC ,aa.rank ASC ";
+		ORDER BY aa.module ,aa.rank ASC,aa.is_menu ASC  ";
 		$rows = $db->fetchAll($sql);
 		return $rows;
 	}

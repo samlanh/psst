@@ -266,7 +266,7 @@
 																	<i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> <?php echo $tr->translate('Completed');?>
 																</span>
 														<?php }else{?>
-															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id']."/examType/".$examType;?>">
+															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
 																	<i class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 															</a>
 															<?php }	?>
@@ -279,7 +279,7 @@
 														<?php if(CRITERIA_LIMIT_SETTING==1){ 
 															if($rsCriterial['timeInput'] < $rsCriterial['timeInputSetting'] ){
 																?>
-															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id']."/examType/".$examType;?>">
+															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
 																<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 															</a>
 														<?php }else{ ?>
@@ -290,7 +290,7 @@
 														<?php } 
 													}else{ ?>
 
-															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id']."/examType/".$examType;?>">
+															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
 																<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
 															</a>
 

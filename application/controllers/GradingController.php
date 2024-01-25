@@ -35,9 +35,20 @@ class GradingController extends Zend_Controller_Action
 		$settingEntryId=$this->getRequest()->getParam("settingEntryId");
 		$this->view->settingEntryId = $settingEntryId;
 
-		$examType=$this->getRequest()->getParam("examType");
-		$examType = empty($examType)?0:$examType;
-		$this->view->examType = $examType;
+		$examType = 0;
+		$forMonth = 0;
+		$forSemester = 0;
+        if(!empty($settingEntryId)){ 
+			$dbScoreSetting = new Issuesetting_Model_DbTable_DbScoreEntrySetting();
+    		$rs = $dbScoreSetting->getScoreEntrySettingById($settingEntryId);
+			if(!empty($rs)){
+				$examType = $rs["examType"];
+				$forMonth = $rs["forMonth"];
+				$forSemester = $rs["forSemester"];
+			}
+			$this->view->settingEntryRow= $rs;
+		}
+		
 		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -50,8 +61,8 @@ class GradingController extends Zend_Controller_Action
 				'externalAuth'=>1,//for teacher access
 				'academic_year'=> $currentAcademic,
 				'exam_type'=>$examType,
-				'for_semester'=>-1,
-				'for_month'=>'',
+				'for_semester'=>$forSemester ,
+				'for_month'=>$forMonth,
 				'degree'=>0,
 				'grade'=> 0,
 				'group'=> $groupId ,
@@ -113,14 +124,16 @@ class GradingController extends Zend_Controller_Action
 
 		$settingEntryId=$this->getRequest()->getParam("settingEntryId");
 		$this->view->settingEntryId = $settingEntryId;
-
-		$examType=$this->getRequest()->getParam("examType");
-		$this->view->examType = $examType;
+		if(!empty($settingEntryId)){
+			$dbScoreSetting = new Issuesetting_Model_DbTable_DbScoreEntrySetting();
+			$rs = $dbScoreSetting->getScoreEntrySettingById($settingEntryId);
+			$this->view->settingEntryRow= $rs;
+		}
 		
 		$dbExternal = new Application_Model_DbTable_DbExternal();
 		$row = $dbExternal->getGroupDetailByIDExternal($id,1);
 		
-		if(empty($row)){
+		if(empty($settingEntryId)){
 			$this->_redirect("/external/group");
 		}
 		
@@ -129,14 +142,7 @@ class GradingController extends Zend_Controller_Action
 			$this->_redirect("/external/group");
 		}
 		$this->view-> month = $dbExternal->getAllMonth();
-		
-		//$dbg = new Application_Model_DbTable_DbGlobal();
-		// $entrySetting = $dbg->checkEntryScoreSetting($degreeId);
-		// $this->view->entrySetting = $entrySetting;
-		// if(empty($entrySetting)){
-		// 	Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
-		// }
-
+	
 		$gradingId = $row['gradingId'];
 		$array = array(
 				'gradingId'=>$gradingId,

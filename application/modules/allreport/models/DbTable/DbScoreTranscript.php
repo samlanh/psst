@@ -641,8 +641,10 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		if(!empty($entrySetting)){
 			$sql.=" AND sat.`date_attendence` >='".$entrySetting["fromDate"]."' AND sat.`date_attendence` <= '".$entrySetting["endDate"]."' ";
 		}else{
-			if (!empty($data['forMonth'])) {
-				$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
+			if($examType==1){
+				if (!empty($data['forMonth'])) {
+					$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
+				}
 			}
 		}
 		
@@ -686,8 +688,10 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		if(!empty($entrySetting)){
 			$sql.=" AND sat.`date_attendence` >='".$entrySetting["fromDate"]."' AND sat.`date_attendence` <= '".$entrySetting["endDate"]."' ";
 		}else{
-			if (!empty($data['forMonth'])) {
-				$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
+			if($examType==1){
+				if (!empty($data['forMonth'])) {
+					$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
+				}
 			}
 		}
 		$sql .= " LIMIT 1";

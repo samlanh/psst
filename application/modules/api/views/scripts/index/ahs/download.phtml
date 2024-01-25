@@ -10,6 +10,7 @@ $groupId = $scoreInfo['group_id'];
 $forMonthId = $scoreInfo['for_month'];
 $academicId = $scoreInfo['academicYearId'];
 $forSemester= $scoreInfo['for_semester'];
+$degreeId= $scoreInfo['degreeId'];
 $examType = $scoreInfo['exam_type'];
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
@@ -399,6 +400,7 @@ $html='<html>
 		
 		$data = array(
 			'groupId' => $groupId,
+			'degree' => $degreeId,
 			'semesterId' => $forSemester,
 			'studentId' => $studentInfo['student_id'],
 			'forMonth' => $forMonthId,

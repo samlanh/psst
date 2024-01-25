@@ -844,5 +844,40 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
+	
+	function getCountAttendanceByStudent($_data){
+		$db = $this->getAdapter();
+		$attendenceStatus = empty($_data["attendenceStatus"]) ? 0 : $_data["attendenceStatus"];
+		$studentId = empty($_data["studentId"]) ? 0 : $_data["studentId"];
+		$groupId = empty($_data["groupId"]) ? 0 : $_data["groupId"];
+		$forSemester = empty($_data["forSemester"]) ? 1 : $_data["forSemester"];
+		$sql="
+			SELECT 
+				satd.attendence_id,
+				satd.attendence_status
+			FROM 
+				`rms_student_attendence` AS sat ,
+				`rms_student_attendence_detail` AS satd
+					
+			WHERE 
+				sat.`id`= satd.`attendence_id`
+				AND sat.status = 1
+				AND satd.attendence_status = $attendenceStatus
+				AND sat.for_semester = $forSemester
+				AND satd.stu_id = $studentId
+				AND sat.group_id = $groupId
+				
+			";
+		$sql.="
+				GROUP BY satd.attendence_id,satd.attendence_status
+				ORDER BY satd.attendence_status DESC
+		";
+		$rs = $db->fetchAll($sql);
+		$restult = "0";
+		if(!empty($rs)){
+			return $restult = "".COUNT($rs)."";
+		}
+		return $restult;
+	}
 }
 

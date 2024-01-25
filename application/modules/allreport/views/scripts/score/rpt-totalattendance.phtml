@@ -151,23 +151,48 @@
 								?>
 							</td>
 							<?php 
-								$attentenceStatus = $db->getSumStatusAttendence($row['stu_id'], $row['group_id']);
+								$arrAtt = array(
+									"studentId" 		=> $row['stu_id'],
+									"groupId" 			=> $row['group_id'],
+									"forSemester" 		=> 1,
+									"attendenceStatus" 	=> 2, // Absent
+									"studentId" 	=> $row['stu_id'],
+								);
+								$totalASemester1 = $db->getCountAttendanceByStudent($arrAtt);
+								$arrAtt["attendenceStatus"]=3;
+								$totalPSemester1 = $db->getCountAttendanceByStudent($arrAtt);
+								$arrAtt["attendenceStatus"]=4;
+								$totalLSemester1 = $db->getCountAttendanceByStudent($arrAtt);
+								$arrAtt["attendenceStatus"]=5;
+								$totalELSemester1 = $db->getCountAttendanceByStudent($arrAtt);
 								
-								$totalLate = $attentenceStatus['totalLSemester1']+$attentenceStatus['totalLSemester2'];
-								$totalEarlyLate = $attentenceStatus['totalELSemester1']+$attentenceStatus['totalELSemester2'];
+								$arrAtt["forSemester"]=2;
+								$arrAtt["attendenceStatus"]=2;
+								$totalASemester2 = $db->getCountAttendanceByStudent($arrAtt);
+								$arrAtt["attendenceStatus"]=3;
+								$totalPSemester2 = $db->getCountAttendanceByStudent($arrAtt);
+								$arrAtt["attendenceStatus"]=4;
+								$totalLSemester2 = $db->getCountAttendanceByStudent($arrAtt);
+								$arrAtt["attendenceStatus"]=5;
+								$totalELSemester2 = $db->getCountAttendanceByStudent($arrAtt);
+								
+								$totalA = $totalASemester1+$totalASemester2;
+								$totalP = $totalPSemester1+$totalPSemester2;
+								$totalLate = $totalLSemester1+$totalLSemester2;
+								$totalEarlyLate = $totalELSemester1+$totalELSemester2;
 							?>
-							<td align="center"><?php echo $attentenceStatus['totalASemester1'];?></td>
-							<td align="center"><?php echo $attentenceStatus['totalPSemester1'];?></td>
-							<td align="center"><?php echo $attentenceStatus['totalLSemester1'];?></td>
-							<td align="center"><?php echo $attentenceStatus['totalELSemester1'];?></td>
+							<td align="center"><?php echo $totalASemester1;//$attentenceStatus['totalASemester1'];?></td>
+							<td align="center"><?php echo $totalPSemester1;//$attentenceStatus['totalPSemester1'];?></td>
+							<td align="center"><?php echo $totalLSemester1;//$attentenceStatus['totalLSemester1'];?></td>
+							<td align="center"><?php echo $totalELSemester1;//$attentenceStatus['totalELSemester1'];?></td>
 							
-							<td align="center" class="pink"><?php echo $attentenceStatus['totalASemester2'];?></td>
-							<td align="center" class="pink"><?php echo $attentenceStatus['totalPSemester2'];?></td>
-							<td align="center" class="pink"><?php echo $attentenceStatus['totalLSemester2'];?></td>
-							<td align="center" class="pink"><?php echo $attentenceStatus['totalELSemester2'];?></td>
+							<td align="center" class="pink"><?php echo $totalASemester2;//$attentenceStatus['totalASemester2'];?></td>
+							<td align="center" class="pink"><?php echo $totalPSemester2;//$attentenceStatus['totalPSemester2'];?></td>
+							<td align="center" class="pink"><?php echo $totalLSemester2;//$attentenceStatus['totalLSemester2'];?></td>
+							<td align="center" class="pink"><?php echo $totalELSemester2;//$attentenceStatus['totalELSemester2'];?></td>
 							
-							<td align="center"><?php echo $attentenceStatus['totalASemester1']+$attentenceStatus['totalASemester2'];?></td>
-							<td align="center"><?php echo $attentenceStatus['totalPSemester1']+$attentenceStatus['totalPSemester2'];?></td>
+							<td align="center"><?php echo $totalA;?></td>
+							<td align="center"><?php echo $totalP;?></td>
 							
 							<td align="center"><?php echo $totalLate;?></td>
 							<td align="center"><?php echo $totalEarlyLate;?></td>

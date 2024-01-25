@@ -583,9 +583,38 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		$sql .= " ORDER BY (SELECT `commentType` FROM `rms_comment` cm WHERE cm.id=commentId LIMIT 1) ASC,smd.id ASC ";
 		return $db->fetchAll($sql);
 	}
+	
+	function getScoreEntrySettingInfo($data){ // for get validation date of monthly result for counting attendence and discipline In Monthly period
+		$db = $this->getAdapter();
+		$forSemester = empty($data["semesterId"]) ? "0" : $data["semesterId"];
+		$forMonth = empty($data["forMonth"]) ? "0" : $data["forMonth"];
+		$degree = empty($data["degree"]) ? "0" : $data["degree"];
+		$examType = !empty($data['examType'])?$data['examType']:1;
+		$sqlGrad="
+			SELECT 
+				stt.*  
+			FROM rms_score_entry_setting AS stt 
+			WHERE  stt.`status` =1 
+				AND stt.`forSemester` = ".$forSemester."
+				AND stt.`forMonth` = ".$forMonth." 
+				AND stt.`examType` = ".$examType."
+				AND FIND_IN_SET('".$degree."',stt.degreeId) 
+			ORDER BY stt.id DESC 
+			LIMIT 1
+		";
+		 return $db->fetchRow($sqlGrad);
+	}
 	function countAttendenceTranscript($data = null)
 	{
+		
 		$db = $this->getAdapter();
+		
+		$examType = !empty($data['examType'])?$data['examType']:1;
+		$entrySetting = array();
+		if($examType==1){
+			$entrySetting = $this->getScoreEntrySettingInfo($data);
+		}
+		
 		$sql = "SELECT
 			COUNT(satd.id) AS attendence
 		FROM
@@ -601,28 +630,35 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		if (!empty($data['studentId'])) {
 			$sql .= " AND satd.stu_id=" . $data['studentId'];
 		}
-		$examType = !empty($data['examType'])?$data['examType']:1;
-		if($examType == 2) {
-			
+		
+		if (!empty($data['semesterId'])) {
+			$sql .= " AND sat.for_semester=" . $data['semesterId'];
+		}
+		if (!empty($data['attStatus'])) {
+			$sql .= " AND satd.attendence_status=" . $data['attStatus'];
+		}
+		
+		if(!empty($entrySetting)){
+			$sql.=" AND sat.`date_attendence` >='".$entrySetting["fromDate"]."' AND sat.`date_attendence` <= '".$entrySetting["endDate"]."' ";
 		}else{
 			if (!empty($data['forMonth'])) {
 				$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
 			}
 		}
-		if (!empty($data['semesterId'])) {
-			$sql .= " AND sat.for_semester=" . $data['semesterId'];
-		}
 		
-		if (!empty($data['attStatus'])) {
-			$sql .= " AND satd.attendence_status=" . $data['attStatus'];
-		}
-		$sql .= " GROUP BY sat.date_attendence";
-	//	echo $sql; 
+		$sql .= " GROUP BY sat.date_attendence ORDER BY satd.attendence_status DESC";
+		
 		return $db->fetchAll($sql);
 	}
 	function countDisplineTranscript($data = null)
 	{
 		$db = $this->getAdapter();
+		$examType = !empty($data['examType'])?$data['examType']:1;
+		$entrySetting = array();
+		if($examType==1){
+			$entrySetting = $this->getScoreEntrySettingInfo($data);
+		}
+		
 		$sql = "SELECT
 			COUNT(satd.id) AS attendence
 		FROM
@@ -639,15 +675,6 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		if (!empty($data['studentId'])) {
 			$sql .= " AND satd.stu_id=" . $data['studentId'];
 		}
-	
-		$examType = !empty($data['examType'])?$data['examType']:1;
-		if($examType == 2) {
-			
-		}else{
-			if (!empty($data['forMonth'])) {
-				$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
-			}
-		}
 		if (!empty($data['semesterId'])) {
 			$sql .= " AND sat.for_semester=" . $data['semesterId'];
 		}
@@ -655,7 +682,16 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		if (!empty($data['attStatus'])) {
 			$sql .= " AND satd.attendence_status=" . $data['attStatus'];
 		}
+		
+		if(!empty($entrySetting)){
+			$sql.=" AND sat.`date_attendence` >='".$entrySetting["fromDate"]."' AND sat.`date_attendence` <= '".$entrySetting["endDate"]."' ";
+		}else{
+			if (!empty($data['forMonth'])) {
+				$sql .= " AND EXTRACT(MONTH FROM sat.date_attendence)=" . $data['forMonth'];
+			}
+		}
 		$sql .= " LIMIT 1";
+		
 		return $db->fetchOne($sql);
 	}
 }

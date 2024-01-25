@@ -9,8 +9,8 @@ $scoreInfo = $this->resultData['scoreInfo'];
 $groupId = $scoreInfo['group_id'];
 $forMonthId = $scoreInfo['for_month'];
 $academicId = $scoreInfo['academicYearId'];
+$degreeId= $scoreInfo['degreeId'];
 $forSemester= $scoreInfo['for_semester'];
-$examType = $scoreInfo['exam_type'];
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
 $db = new Allreport_Model_DbTable_DbScoreTranscript();
@@ -20,34 +20,14 @@ $stringSubjectType = array(
 		'1'=>'កម្មវិធីខ្មែរ Khmer Program',
 		'2'=>'កម្មវិធីអង់គ្លេស English Program'
 		);
-		
-		
-
-$branchId = $scoreInfo['branch_id'];
-$branchId = empty($branchId)?1:$branchId;
-$headerScore = getHeaderReportPDF($branchId);	
-	
-$subjectProgram= array(
-					1=>'កម្មវិធីសិក្សាជាភាសាខ្មែរ Khmer Program',
-					2=>'កម្មវិធីសិក្សាជាភាសាអង់គ្លេស English Program',
-					3=>'កម្មវិធីភាសាចិន Chinese Program',
-				);
-$bgProgramColor= array(
-					1=>'bg-blue',
-					2=>'bg-yellow',
-					3=>'bg-red',
-				);
-			
 $sexkh="ប្រុស";
 $sexen="Male";
 if ($studentInfo['sex']==2){
 	$sexkh="ស្រី";
 	$sexen="Female";
 }
-$logo=$this->baseUrl()."/images/logo.png";
 $imageBackground=$this->baseUrl()."/images/logo.png";
 $shortCutIco=$this->baseUrl()."/images/icon.ico";
-$signCambo=$this->baseUrl()."/images/agreementsign.jpg";
 
 if($scoreInfo['exam_type']==1){
 $html='<html>
@@ -56,524 +36,391 @@ $html='<html>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<link rel="shortcut icon" href="'.$shortCutIco.'" type="image/x-icon" />
 			<style type="text/css">
-			
-			body{
-			    min-height: 100vh;
-			    display: flex;
-			    flex-direction: column;
-			}
-			footer{
-			    margin-top: auto;
-			}
-			table,
-			table.khmerFont,
-			table.studentInfo {
-				page-break-inside:avoid;
-				autosize : true;
-				font-family: khmeros !important;
+				table.header,table.studentInfo{ 
+				font-family:khmeros;
 				font-size: 12px !important;
 			}
-
-			.cheader {
-				line-height: 20px;
-				white-space: nowrap;
-				color:#000;
-				font-weight: normal;
-				font-family: '."'Times New Roman'".', khmermoullight;
+			.header tr{ page-break-inside:avoid; page-break-after:auto;line-height:22px; }
+			#header {
+			   display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
 			}
-			.cheader td {
-				line-height: 20px;
-				white-space: nowrap;
-				color:#000;
-				font-weight: normal;
+			.cheader{line-height:22px;white-space: nowrap;
+				color:#4839bd;font-weight:bold;
 				text-align:center;
-				font-family: '."'Times New Roman'".', khmermoullight;
 			}
-			.hover:hover {
-				background: #ccc;
+			.hover:hover{background: #ccc;}
+			.blue{
+			    color: #0D47A1;
 			}
-			
-			.blue {
-				color: #4839bd;
+			.border-right-none{
+    			border-right: #fff solid 1px;
 			}
-
-			.border-right-none {
-				border-right: #fff solid 1px;
-			}
-
-			.borderBottom {
-				border-bottom: 1px dashed #000 !important;
+			.borderBottom{
+				border-bottom:1px dashed #000 !important;
 				border-right: 1px solid #fff;
 				border-left: 1px solid #fff;
 			}
-
-			.borderSolidBottom {
-				border-bottom: 2px solid #000 !important;
-			}
-
-			.teacherComment {
-				min-height: 80px;
-				border:1px solid #000;
-			}
-			.SingleBorder{
-				border:1px solid #000;
-			}
-
-			.border-none {
-				border: 1px solid #fff;
-			}
-
-			.fontBold {
-				font-weight: bold;
-			}
-
-			.colorRed {
-				color: #ff0000 !important;
-				font-weight: bold;
-				font-size: 14px;
-			}
-
-			.khmerBoldFont {
-				font-family: '."'Times New Roman'".', khmermoullight;
-			}
-
-			.doubleBorder {
-				border: 2px solid #000;
-			}
-
-			.circleHeader {
-				padding: 5px;
-				display: block;
-			}
-			.circleHeader-eng{
-				text-transform: uppercase;
-			}
-
-			table tr {
-				line-height: 22px;
-			}
-			.separateColumn{
-				font-weight: bold;
-				white-space: nowrap;
-				color:red;
-				font-size:14px;
-				text-align: center;
-				
-			}
-			#footer {
-			   position:absolute;
-			   bottom:0;
-			   width:100%;
-			   height:60px;   /* Height of the footer */
-			   background:#6cf;
-			}
-
-			@media print {
+			.borderSolidBottom{border-bottom:2px solid #000 !important;}
+			.teacherComment{min-height: 50px;}
+			.border-none{border:1px solid #fff;}
+			.fontBold{font-weight: bold;}
+			.colorRed{color:red !important;}
+			.khmerBoldFont{font-family:khmermoullight;}
+			.doubleBorder{border:1px solid #000;}
+			
+			table tr{line-height: 35px !important;}
+			.khmermoullight{font-family:khmermoullight;}
+			.khmeros{font-family:khmeros;}
+			.backGround{background:#ECEFF1;}
+			@media print{
 				@page {
 					page: A4;
-					size: portrait;
-					;
+					size: portrait;;
 					margin: 0.8cm 0.8cm 0.2cm 0.8cm;
 				}
 			}
-			.bg-grey{
-				background: #b1c1ff !important;
-			}
-			.bg-blue{
-				background: #2facff !important;
-			}
-			.bg-yellow{
-				background: #fffb3b;
-			}
-			.bg-red{
-				background: #ff4646!important;
-			}
-			.bg-grey-light{
-				background: #d7d9db !important;
-			}
 			</style>
 		</head>';
-
+		
 		$scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] : "SEMESTER " . $scoreInfo['for_semester']; 
-		$resultTitleKh=(!empty($scoreInfo['title_score']))?$scoreInfo['title_score'] :$scoreTitle;
+		$resultTitleKh=(!empty($scoreInfo['forMonthKhLabel']))?$scoreInfo['title_score'] :$scoreTitle;
 									
 		$scoreTitle = ($scoreInfo['exam_type'] == 1) ? ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
-		$resultTitleEn=(!empty($scoreInfo['title_score_en']))? strtoupper($scoreInfo['title_score_en']) :$scoreTitle;
-		$html.='<body>';
-		
-		$html.='
-			<table class="pages-break" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
-					<tr >
-						<td align="center" colspan="3">'.$headerScore.'</td>
-					</tr>
-					<tr style="height: 5px;">
-						<td align="center" colspan="3">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="3" align="center">
-							<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:16px;margin-bottom:10px;">
-								<span class="circleHeader">របាយការណ៍ប្រចាំខែ '.$resultTitleKh.'</span><br />
-								<strong class="circleHeader-eng">REPORT FOR '.$resultTitleEn.'</strong>
+		$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))? ucfirst($scoreInfo['title_score_en']) :$scoreTitle;
+		$html.='<body>
+			 <table style="width:100%;margin: 0 auto;font-size:14px;page-break-after:always;">
+				<tr style="height: 100px;">
+					<td align="center" colspan="3"></td>
+				</tr>
+				<tr>
+					<td colspan="3"  align="center">
+						   <div class="khmerBoldFont" style="line-height:22px; margin-bottom:20;font-size:14px;">
+								<span style="border-radius:10px;" class="blue circleHeader khmermoullight">របាយការណ៍ការវិវឌ្ឍ <strong>PROGRESS REPORT</strong></span>
 							</div>
-							<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;">
+							<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;" >
 								<tr>
-									<td width="20%">អត្តលេខ / ID : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['stu_code'].'</td>
+									<td align="right" width="25%" class="">គោត្តនាម និងនាម : </td>
+									<td class="khmerBoldFont" align="left" width="23%"> &nbsp;'.$studentInfo['stu_khname'].'</td>
 									<td width="4%">&nbsp;</td>
-									<td  width="25%">ថ្ងៃខែឆ្នាំកំណើត : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['dob'].'</td>
+									<td align="right" width="30%">ថ្នាក់ទី / Grade : </td>
+									<td class="bold" align="left" width="25%">&nbsp;'.$scoreInfo['groupCode'].'</td>
 								</tr>
 								<tr>
-									<td>ឈ្មោះសិស្ស : </td>
-									<td  align="left" width="23%" class="khmerBoldFont"> &nbsp;'.$studentInfo['stu_khname'].'</td>
-									<td>&nbsp;</td>
-									<td  width="25%">ថ្នាក់ទី : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$scoreInfo['groupCode'].'</td>
+									<td align="right" width="25%">Student name in Latin : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['last_name'].' '.$studentInfo['stu_enname'].'</td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%">សម្រាប់ខែ : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$resultTitleKh.'</td>
 								</tr>
 								<tr>
-									<td>'."Student's name in Latin".' : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'].'</td>
-									<td>&nbsp;</td>
-									<td>ឆ្នាំសិក្សា / Academic Year : </td>
+									<td align="right" width="25%">អត្តលេខ / ID : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['stu_code'].'</td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%">For : </td>
+									<td class="bold" align="left" width="23%">&nbsp;'.$resultTitle.'</td>
+								</tr>
+								<tr>
+									<td align="right" width="25%">ភេទ / Gender : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$sexkh.'-'.$sexen.'</td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
 									<td class="bold" align="left" width="23%">&nbsp;'.$scoreInfo['academicYearLabel'].'</td>
-								</tr>
-								<tr>
-									<td>ភេទ / Gender : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$sexkh . '-' . $sexen.'</td>
-									<td>&nbsp;</td>
-									<td></td>
-									<td class="bold" align="left" width="23%">&nbsp;</td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-		';
-		$html.='<tr>
-					<td colspan="3" id="exportExcel" valign="top">
-						<table class="header" border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
-				';
-				$totalAveragescore = 0;
-				$totalMaxScore = 0;
-				$totalSubMaxScore = 0;
-				$totalmultiAllSubject = 0;
-				$totalmultiSubSubject = 0;
-				$i = 0;
-				$currentLang = 0;
-				if (!empty($scoreSubjectList)) {
-					foreach ($scoreSubjectList as $keyLang => $resultScore) {
-						$i++;
-						$maxScore = $resultScore['maxScore'] * $resultScore['multiSubject'];
-
-						$totalMaxScore = $totalMaxScore + $maxScore;
-
-						$grade = $dbgb->getMentionScore($resultScore['totalAverage'], $academicId, $scoreInfo['degreeId'], 1, null, $maxScore);
-						if ($currentLang != $resultScore['subjectLang']) {
-							if ($keyLang > 0) {
-								$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-								$mentionGrade = $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore);
-								$currentRanking = getRankingBySubjectLangId($scoreInfo,$currentLang);
-								$currentRanking = empty($currentRanking) ? 0 : $currentRanking;
-								$html.='
-									<tr class="style hover">
-										<td colspan="3" align="center">&nbsp;
-											<strong>ការវាយតម្លៃរួម / Overall Assessment</strong>
-										</td>
-										<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
-										
-										<td colspan="2" align="center">&nbsp;<strong>'.number_format($totalAveragescore, 2).'</strong>&nbsp;</td>
-										<td colspan="2" align="center" class="bg-grey-light">
-											<span class="separateColumn">'.number_format($totalKhmerAverage, 2).'&nbsp;&nbsp;</span>
-											<span class="separateColumn">'.$currentRanking.'&nbsp;&nbsp;</span>
-											<span class="separateColumn">'.$mentionGrade.'</span>
-										</td>
-									</tr>
-								';
-								
-								
-								
-								$totalAveragescore = 0;
-								$totalSubMaxScore = 0;
-								$totalmultiSubSubject = 0;
-								$i = 1;
-							}
-							if($scoreInfo['degreeId']==1){
-								$html.=' 
-									<tr class="cheader '.@$bgProgramColor[$resultScore['subjectLang']].' " align="center">
-										<td>ល.រ<br />No.</td>
-										<td colspan="2">'.@$subjectProgram[$resultScore['subjectLang']].'</td>
-										<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-										<td colspan="2">ពិន្ទុ<br />Score</td>
-										<td>និទ្ទេស<br />Grade</td>
-										<td>ចំណាត់ថ្នាក់<br />Rank</td>
-									</tr>
-								';
-							}else{
-								$html.='
-									<tr class="cheader '.@$bgProgramColor[$resultScore['subjectLang']].' " align="center">
-										<td >ល.រ<br />No.</td>
-										<td colspan="2">'.@$subjectProgram[$resultScore['subjectLang']].'</td>
-										<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-										<td colspan="2">ពិន្ទុ<br />Total Score</td>
-										<td>និទ្ទេស<br />Grade</td>
-										<td>ចំណាត់ថ្នាក់<br />Rank</td>
-									</tr>
-								';
-							}
-						}
-						
-						$currentLang = $resultScore['subjectLang'];
-
-						$totalmultiSubSubject = $totalmultiSubSubject + $resultScore['multiSubject']; //មេគុណសរុប
-						$totalSubMaxScore = $totalSubMaxScore + $maxScore;
-
-						$totalmultiAllSubject = $totalmultiAllSubject + $resultScore['multiSubject'];
-						$totalAveragescore = $totalAveragescore + $resultScore['totalAverage'];
-						
-						if ($resultScore['innerSubject'] == 0) {
-							$html.='
-								<tr class="hover blackColor">
-									<td align="center">&nbsp;'.$i.'&nbsp;</td>
-									<td align="left">&nbsp;'.$resultScore['sub_name'].'&nbsp;</td>
-									<td align="left">&nbsp;'.$resultScore['sub_name_en'].'&nbsp;</td>
-									<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
-									<td colspan="2"  align="center">'.$resultScore['totalAverage'].'</td>
-									<td align="center" class="colorRed">'.$grade.'</td>
-									<td align="center">'.$resultScore['rankingSubject'].'</td>
-								</tr>
-							';
-						} else {
-							$issetMerge = 0;
-							$rowspan = $resultScore['innerSubject'];
-							foreach ($resultScore['innerSubjectList'] as $resultSubList) {
-								$i++;
-								$html.='<tr class="hover blackColor">
-											<td align="center">&nbsp;'.$i.'&nbsp;</td>
-											<td align="left">&nbsp;'.$resultSubList['subCriterialTitleKh'].'&nbsp;</td>
-											<td align="left">&nbsp;'.$resultSubList['subCriterialTitleEng'].'&nbsp;</td>
-											<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
-											<td align="center">'.$resultSubList['totalGrading'].'</td>
-											';
-									if ($issetMerge == 0) {
-										$html.='
-											<td rowspan="'.$rowspan.'" align="center">'.$resultScore['totalAverage'].'</td>
-											<td class="colorRed" rowspan="'.$rowspan.'" align="center">'.$grade.'</td>
-											<td align="center" rowspan="'.$rowspan.'">'.$resultScore['rankingSubject'].'</td>
-										';
-									}
-								$html.='</tr>';
-								$issetMerge = 1;
-							}
-						}
-					}
-				}
-				$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-				$mentionGrade = $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore);
-				$currentRanking = getRankingBySubjectLangId($scoreInfo,$currentLang);
-				$currentRanking = empty($currentRanking) ? 0 : $currentRanking;
-				$html.='
-					<tr class="style hover">
-						<td colspan="3" align="center">&nbsp;
-							<strong>ការវាយតម្លៃរួម / Overall Assessment</strong>
-						</td>
-						<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
-						
-						<td  colspan="2" align="center">&nbsp;<strong>'.number_format($totalAveragescore, 2).'</strong>&nbsp;</td>
-						<td colspan="2" align="center">
-							<span class="separateColumn">'.number_format($totalKhmerAverage, 2).'&nbsp;&nbsp;</span>
-							<span class="separateColumn">'.$currentRanking.'&nbsp;&nbsp;</span>
-							<span class="separateColumn">'.$mentionGrade.'</span>
-						</td>
-					</tr>
-					<tr class="style hover bg-blue" style=" height: 40px;">
-						<td rowspan="2" colspan="4" align="center" class="cheader">
-							ពិន្ទុសរុប មធ្យមភាគ និងចំណាត់ថ្នាក់ Total Score Average  Rank
-						</td>
-						<td rowspan="2"  align="center" class="colorRed">&nbsp;'.$scoreInfo['totalScoreAvg'].'&nbsp;</td>
-						<td rowspan="2" align="center" class="colorRed">&nbsp;'.$scoreInfo['totalAvg'].'&nbsp;</td>
-						<td rowspan="2" align="center" class="colorRed">&nbsp;'.$dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore).'&nbsp;</td>
-						<td rowspan="2"  align="center" class="colorRed">&nbsp;'.$scoreInfo['rank'] . '/' . $scoreInfo['amountStudent'].'&nbsp;</td>
-					</tr>
-				';
-		$html.='</table>';
-		$html.='<br />';
-		
-		$data = array(
-			'groupId' => $groupId,
-			'semesterId' => $forSemester,
-			'studentId' => $studentInfo['student_id'],
-			'forMonth' => $forMonthId,
-			'attStatus' => 3,
-		);
-		$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
-		$permission = count($dbAttendance->countAttendenceTranscript($data));
-		$data['attStatus'] = 2;
-		$absent = count($dbAttendance->countAttendenceTranscript($data));
-		$data['attStatus'] = 4;
-		$late = count($dbAttendance->countAttendenceTranscript($data));
-		
-		$data['attStatus'] = 1;
-		$minor = $dbAttendance->countDisplineTranscript($data);
-		$data['attStatus'] = 2;
-		$moderate = $dbAttendance->countDisplineTranscript($data);
-		$data['attStatus'] = 3;
-		$major = $dbAttendance->countDisplineTranscript($data);
-									
-		$html.='<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-					<tr class="cheader bg-blue">
-						<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-							អវត្តមាន ABSENCE RECORD
-						</td>
-						<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-							កិច្ចការវិន័យ DISCIPLINE RECORD
-						</td>
-					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days of Excused Absence&nbsp;</td>
-						<td  align="center">&nbsp;'.$permission.'&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
-						<td  align="center">&nbsp;'.$minor.'&nbsp;</td>
-					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days of Unexcused Absence&nbsp;</td>
-						<td align="center" class="">&nbsp;'.$absent.'&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
-						<td  align="center">&nbsp;'.$moderate.'&nbsp;</td>
-					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
-						<td align="center" class="">&nbsp;'.$late.'&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
-						<td  align="center">&nbsp;'.$major.'&nbsp;</td>
-					</tr>
-				</table>
-			';
-		$html.='<br />';
-		$html.='
-			<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-				<tr>
-					<td align="center" colspan="5" class="khmerBoldFont  bg-blue">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
-				</tr>
-				<tr class="khmerBoldFont " align="center">
-					<td align="center" colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
-					<td align="center">ភាគរយ<br />PERCENTAGE</td>
-					<td align="center" colspan="2">កម្រិតនិទ្ទេស <br />LETTER GRADE</td>
-				</tr>
-		';
-				$ismergRow=0;
-					$reGradingResult  = $dbgb->getGradingSystem($degreeId);
-					if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) { 
-						$html.='<tr align="center">';
-						if(empty($rsgd['criteria']) AND $ismergRow==0){
-							$ismergRow=1;
-							$html.='<td align="left" colspan="2" rowspan="2" ></td>';
-							
-						}else if($ismergRow==0){
-							$html.='
-								<td align="left">&nbsp;'.$rsgd['criteria'].'</td>
-								<td align="center" width="100px">'.$rsgd['percent'].'</td>
-								';
-						}
-						$html.='<td align="center" width="100px">'.$rsgd['percentage'].'</td>
-								<td align="center" width="100px">'.$rsgd['grade'].'</td>
-								<td>'.$rsgd['interpretation'].'</td>
-							';
-						$html.='</tr>';
-					}
-			$html.='<tr class="" align="center">
-						<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
-						<td align="center">100%</td>
-						<td colspan="2"></td>
-					</tr>';
-					
-					
-				$teacherComment = '';
-				$commentType = '';
-				if (!empty($evalueationList)) foreach ($evalueationList as $keycom => $rsComment) {
-					if ($teacherComment == '') {
-						$teacherComment = $rsComment['teacherComment'];
-					}
-					if ($commentType != $rsComment['commentType']) {
-						$html.='
-							<tr align="center">
-								<td colspan="5" class=" doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
-							</tr>';
-						
-					}
-					$commentType = $rsComment['commentType'];
-					$html.='
-						<tr>
-							<td align="left" colspan="4" class="">&nbsp;'.$rsComment['commentLabel'].'</td>
-							<td align="center">'.$rsComment['ratingLabel'].'</td>
-						</tr>';
-				}
-		$html.='</table>';
-		$teacherComment = empty($teacherComment) ? "&nbsp;<br />&nbsp;" : $teacherComment;
-		$html.='<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-				<tr class="SingleBorder cheader  bg-blue">
-					<td colspan="6" align="center">&nbsp;<span >'."មតិយោបល់របស់គ្រូ និងសំណូមពរ / TEACHER'S COMMENTS AND SUGESTION".'</span>
-					</td>
-				</tr>
-				<tr >
-					<td colspan="6" align="left" class="teacherComment">
-						'.$teacherComment.'
-					</td>
-				</tr>
-				<tr align="left">
-					<td colspan="6" class=" khmerBoldFont">&nbsp;'."មតិយោបល់របស់មាតាបិតា និងសំណូមពរ /PARENT'S COMMENT AND SUGGESTION:".'</td>
-				</tr>';
-				for ($i = 0; $i <= 2; $i++) {
-				$html.='
-					<tr class="borderBottom">
-						<td colspan="6" class="borderBottom">&nbsp;</td>
-					</tr>
-				';
-				}	
-			$html.='<tr>
-					<td class="" width="30%">&nbsp;</td>
-					<td colspan="4">&nbsp;</td>
-					<td class="" width="30%">&nbsp;</td>
-				</tr>
-				<tr>
-					<td>&nbsp;កាលបរិច្ឆេទ / Date:......./......./.......</td>
-					<td colspan="4" class="">&nbsp;</td>
-					<td>&nbsp;កាលបរិច្ឆេទ / Date:......./......./.......</td>
-				</tr>
-				<tr height="100px;">
-					<td class="borderSolidBottom ">&nbsp;</td>
-					<td colspan="4">&nbsp;</td>
-					<td class="borderSolidBottom ">&nbsp;</td>
-				</tr>
-				<tr height="40px;">
-					<td valign="top">&nbsp; '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
-					<td colspan="4">&nbsp;</td>
-					<td valign="top">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
-				</tr>
-				<tr height="130px;">
-					<td valign="top" class="borderSolidBottom khmerBoldFont">&nbsp;បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
-					<td colspan="4">&nbsp;</td>
-					<td valign="top" class="borderSolidBottom ">&nbsp;<strong>បានពិនិត្យត្រឹមត្រូវ / Checked</strong></td>
-				</tr>
-				<tr >
-					<td>&nbsp;នាយករង / VICE PRINCIPLE</td>
-					<td colspan="4">&nbsp;</td>
-					<td>&nbsp;ការិយាល័យសិក្សា / Academic Office</td>
-				</tr>
-				<tfoot>
 					<tr>
-						<td>
-							
-						</td>
-					</tr>
-				</tfoot>
-			</table>';
-		
-		
-		
-		$html.='
-				</td>
-			</tr>
-		</table>';
-		$html.='
+						<td colspan="3" id="exportExcel" valign="top">
+							  <table class="header"  cellpadding="2" border="1"  style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;line-height:19px;" >
+								 <tr class="style hover">
+									<td colspan="8" align="center" style="background:#ECEFF1;" class="blue khmerBoldFont doubleBorder">
+										<div class="khmerBoldFont" style="line-height:20px; font-size:12px;margin: 0;">
+											ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>'."STUDENT'S PROGRESS IN BASIC SKILLS".'</strong>
+										</div>
+									</td>
+								</tr>';
+									$totalAveragescore=0;
+									$totalMaxScore=0;
+									$totalSubMaxScore=0;
+									$totalmultiAllSubject=0;
+									$totalmultiSubSubject=0;
+									$i=0;
+									$currentLang = 0;
+									
+									if (!empty($scoreSubjectList)){ 
+										foreach ($scoreSubjectList as $keyLang => $resultScore){
+											$i++;
+											$maxScore=$resultScore['maxScore']*$resultScore['multiSubject'];
+											
+											$totalMaxScore = $totalMaxScore+$maxScore;
+											
+											$grade = $dbgb->getMentionScore($resultScore['totalAverage'],$academicId,$scoreInfo['degreeId'],1,null,$maxScore);
+											if($currentLang!=$resultScore['subjectLang']){
+											 if($keyLang>0){	
+												$html.='<tr class="style hover">
+													<td colspan="3" align="center" class="blue ">&nbsp;
+														 ពិន្ទុសរុប Total Grade Point
+													</td>
+													<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
+													<td align="center">&nbsp;<strong>'.number_format($totalAveragescore,2).'</strong>&nbsp;</td>
+													<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+													<td align="center"><strong>'.$scoreInfo['rankingInKhmer'].'</strong></td>
+												</tr>
+												<tr class="style hover">
+													<td colspan="5" align="center" class="blue ">&nbsp;
+														មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
+													</td>
+													<td align="center">
+														<strong>'.number_format($totalAveragescore/$totalmultiSubSubject,2).'
+														</strong>
+													</td>
+													<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+												</tr>';
+												$totalAveragescore=0;
+												$totalSubMaxScore=0;
+												$totalmultiSubSubject=0;
+												$i=1;
+											}
+												
+												$html.='<tr class="cheader backGround" align="center">
+													<td align="center">ល.រ<br />No.</td>
+													<td colspan="2" align="center">'.$stringSubjectType[$resultScore['subjectLang']].'</td>
+													<td align="center">ពិន្ទុអតិបរមា <br />Maximum Score </td>
+													<td align="center">ពិន្ទុ<br />score</td>
+													<td align="center">និទ្ទេស<br />Grade</td>
+													<td align="center">ចំណាត់ថ្នាក់<br />Rank</td>
+												</tr>';
+										 }
+										    $currentLang = $resultScore['subjectLang'];
+											
+											$totalmultiSubSubject = $totalmultiSubSubject+$resultScore['multiSubject'];
+											$totalSubMaxScore=$totalSubMaxScore+$maxScore;
+											
+											$totalmultiAllSubject = $totalmultiAllSubject+$resultScore['multiSubject'];
+											$totalAveragescore = $totalAveragescore+$resultScore['totalAverage'];
+											if($resultScore['innerSubject']==0){
+												
+											$html.='<tr class="hover blackColor" >
+														<td align="center">&nbsp;'.$i.'&nbsp;</td>
+														<td align="left">&nbsp;'.$resultScore['sub_name'].'&nbsp;</td>
+														<td align="left" >&nbsp;'.$resultScore['sub_name_en'].'&nbsp;</td>
+														<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
+														
+														<td align="center">'.$resultScore['totalAverage'].'</td>
+														<td align="center" class="colorRed">'.$grade.'</td>
+														<td align="center">'.$resultScore['rankingSubject'].'</td>
+												</tr>';
+											}else{ 
+												$issetMerge=0;
+												$rowspan=$resultScore['innerSubject'];
+												foreach($resultScore['innerSubjectList'] as $resultSubList){
+												$i++;
+											$html.='<tr class="hover blackColor" >
+														<td align="center">&nbsp;'.$i.'&nbsp;</td>
+														<td align="left">&nbsp;'.$resultSubList['subCriterialTitleKh'].'&nbsp;</td>
+														<td align="left" >&nbsp;'.$resultSubList['subCriterialTitleEng'].'&nbsp;</td>
+														<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
+														<td align="center">'.$resultSubList['totalGrading'].'</td>';
+												if($issetMerge==0){
+												$html.='<td rowspan="'.$rowspan.'" align="center">'.$resultScore['totalAverage'].'</td>
+													<td class="colorRed" rowspan="'.$rowspan.'"  align="center">'.$grade.'</td>
+													<td align="center">'.$resultScore['rankingSubject'].'</td>';
+												 }
+											$html.='</tr>';
+											$issetMerge=1;
+										      }
+											}
+										}
+									 }
+									 
+									 $html.='<tr class="style hover">
+											<td colspan="3" align="center" class="blue ">&nbsp;
+											  ពិន្ទុសរុប Total Grade Point
+											</td>
+											<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
+				 							<td align="center">&nbsp;<strong>'.number_format($totalAveragescore,2).'</strong>&nbsp;</td>
+				 							<td></td>
+				 							<td align="center">'.$scoreInfo['rankingInEnglish'].'</td>
+			 						</tr>
+			 						<tr class="style hover">
+			 							<td colspan="5" align="center" class="blue ">&nbsp;
+			 								មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
+			 							</td>
+			 							<td align="center">
+			 								<strong>'.number_format($totalAveragescore/$totalmultiSubSubject,2)
+			 								.'</strong>
+			 							</td>
+			 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+			 						</tr>
+			 						<tr class="style hover doubleBorder" >
+			 							<td colspan="7" align="center" class="blue khmerBoldFont">
+			 								ពិន្ទុសរុបកម្មវិធីខ្មែរ និងអង់គ្លេស Overall Grade Point for Khmer and English Programs
+			 							</td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td colspan="5" align="center" class="blue">
+			 								 ពិន្ទុសរុប Total Grade Point
+			 							</td>
+			 							<td class="" align="center">&nbsp;<strong>'.$scoreInfo['totalScoreAvg'].'</strong>&nbsp;</td>
+			 							<td align="left"></td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td colspan="5" align="center" class="blue">
+			 								មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
+			 							</td>
+			 							<td class="" align="center">&nbsp;<strong>'.$scoreInfo['totalAvg'].'</strong>&nbsp;</td>
+			 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId,$scoreInfo['degreeId'],1,null,$totalMaxScore).'&nbsp;&nbsp;&nbsp;'.$scoreInfo['rank'].'/'.$scoreInfo['amountStudent'].'</strong>&nbsp;</td>
+			 						</tr>
+			 						<tr class="doubleBorder">
+			 							<td colspan="3" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+											អវត្តមាន ABSENCE RECORD
+										</td>
+										<td colspan="5" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+											កិច្ចការវិន័យ DISCIPLINE RECORD
+										</td>
+			 						</tr>';
+									 
+									 $data = array(
+									 		'groupId'=>$groupId,
+											'degree' => $degreeId,
+									 		'semesterId'=>$forSemester,
+									 		'studentId'=>$studentInfo['student_id'],
+									 		'forMonth'=>$forMonthId,
+									 		'attStatus' => 3,
+									 );
+									 $attStutus3=count($db->countAttendenceTranscript($data));
+									 	
+									 $data['attStatus']=2;
+									 $attStutus2=count($db->countAttendenceTranscript($data));
+									 	
+									 $data['attStatus'] = 4;
+									 $attStutus4=count($db->countAttendenceTranscript($data));
+									 
+									$data['attStatus'] = 1;
+									$minor=$db->countDisplineTranscript($data);
+									$data['attStatus'] = 2;
+									$moderate=$db->countDisplineTranscript($data);
+									$data['attStatus'] = 3;
+									$major=$db->countDisplineTranscript($data);
+									
+			 						$html.='<tr class="style hover" >
+			 							<td  colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days Excused absences&nbsp;</td>
+			 							<td colspan="1" align="center">'.$attStutus3.'&nbsp;</td>
+										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
+										<td colspan="3" align="center">&nbsp;'.$minor.'&nbsp;</td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td  colspan="2" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days Unxcused absences&nbsp;</td>
+			 							<td colspan="1" align="center" class="">'.$attStutus2.'</td>
+										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
+										<td colspan="3" align="center">&nbsp;'.$moderate.'&nbsp;</td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td  colspan="2" align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
+			 							<td colspan="1" align="center" class="">'.$attStutus4.'&nbsp;</td>
+										<td colspan="2" align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
+										<td colspan="3" align="center">&nbsp;'.$major.'&nbsp;</td>
+			 						</tr>
+								</table>
+								
+							</td>
+						</tr>
+				</table>
+			 	<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:25px;" >
+ 						<tr>
+ 							<td colspan="6" class="blue khmerBoldFont doubleBorder backGround">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+ 						</tr>
+ 						<tr class="khmerBoldFont blue">
+	 						<td colspan="2" align="center">របបពិន្ទុ<br />GRADING CRITERIA</td>
+	 						<td align="center">ភាគរយ<br />PERCENTAGE</td>
+	 						<td align="center">កម្រិត <br />GRADE</td>
+	 						<td align="center">និទ្ទេស<br />INTERPRETATION</td>
+	 						<td align="center"><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
+ 						</tr>
+ 						';
+
+						 $ismergRow=0;
+						 if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
+							 $html.='<tr class="blue" align="center">';
+							  if(empty($rsgd['criteria']) AND $ismergRow==0){
+								 $ismergRow=1;
+								 $html.=' <td align="left" colspan="2" rowspan="2" ></td>';
+							  }else if($ismergRow==0){ 
+								$html.='<td align="left">&nbsp;'.$rsgd['criteria'].'</td>
+								 <td align="center">'. $rsgd['percent'].'</td> ';
+							  }
+							  $html.='<td align="center">'.$rsgd['percentage'].'</td>
+								 <td align="center">'.$rsgd['grade'].'</td>
+								 <td align="center">'.$rsgd['interpretation'].'</td>
+								 <td>'. $rsgd['achievment'].'</td>
+							 </tr>';
+						 } 
+						 $html.='<tr class="blue" align="center">
+									<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
+									<td align="center" >100%</td>
+									<td colspan="3"></td>
+								</tr>';
+	 						$teacherComment='';
+	 						$commentType='';
+	 						if(!empty($evalueationList))foreach($evalueationList as $keycom => $rsComment){
+	 							if($keycom==0){
+	 								$teacherComment=$rsComment['teacherComment'];
+	 							}
+	 							   if($commentType!=$rsComment['commentType']){
+ 									$html.='<tr align="center">
+ 												<td colspan="6" align="center" class="blue doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
+ 											</tr>';
+	 								} 
+	 								$commentType = $rsComment['commentType'];
+	 								$html.='<tr>
+	 											<td align="left" colspan="5" class="">&nbsp;'.$rsComment['commentLabel'].'</td>
+	 											<td align="center">'.$rsComment['ratingLabel'].'</td>
+	 										</tr>';
+	 					}
+	 			$html.='</table>
+	 			<table class="header" border="1px"  width="100%" style="width:100%; border-collapse:collapse;line-height:25px;" >
+				<tr  align="left">
+					<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT COMMENT AND SUGGESTION:</td>
+				</tr>';
+				for($i=0;$i<=3;$i++){
+					$html.='<tr class="borderBottom">
+						<td colspan="6" class="borderBottom">&nbsp;</td>
+					</tr>';
+					}
+				$html.='<tr>
+					<td class="borderSolidBottom" width="30%">&nbsp;</td>
+					<td colspan="4">&nbsp;</td>
+					<td class="borderSolidBottom" width="30%">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="borderSolidBottom blue">&nbsp;ហត្ថលេខមាតាបិតា Parent Signature</td>
+					<td colspan="4" class="borderSolidBottom">&nbsp;</td>
+					<td class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
+				</tr>
+				<tr>
+					<td colspan="6">&nbsp;<span class="blue">សេចក្តីសង្កេតទូទៅ GENERAL COMMENTS:</span>
+						<div class="teacherComment">'.$teacherComment.'
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="borderSolidBottom blue" style="height:100px;">&nbsp;</td>
+					<td colspan="4" >&nbsp;</td>
+					<td class="borderSolidBottom blue">&nbsp;</td>
+				</tr>
+				<tr >
+					<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Teacher in Charge</td>
+					<td colspan="4" >&nbsp;</td>
+					<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
+				</tr>
+				<tr >
+					<td class=" blue">&nbsp;នាយកស្តីទី Interim Principal</td>
+					<td colspan="4" >&nbsp;</td>
+					<td class=" blue">&nbsp;កាលបរិច្ឆេទ Date</td>
+				</tr>
+			</table>
+			</div>
 			</body>
 		</html>';
 }else {
@@ -583,653 +430,534 @@ $html='<html>
 	$SemesterEnAvg = $scoreInfo['totalEnAvg'];
 	$SemesterChAvg = $scoreInfo['totalChAvg'];
 				
-	$html='<html>
-		<head>
+	$html='
+		<html>
+			<head>
 			<meta charset="UTF-8">
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<link rel="shortcut icon" href="'.$shortCutIco.'" type="image/x-icon" />
 			<style type="text/css">
-			
-			body{
-			    min-height: 100vh;
-			    display: flex;
-			    flex-direction: column;
-			}
-			footer{
-			    margin-top: auto;
-			}
-			table,
-			table.khmerFont,
-			table.studentInfo {
-				page-break-inside:avoid;
-				autosize : true;
-				font-family: khmeros !important;
+				table.header,table.studentInfo{ 
+				font-family:khmeros;
 				font-size: 12px !important;
 			}
-
-			.cheader {
-				line-height: 20px;
-				white-space: nowrap;
-				color:#000;
-				font-weight: normal;
-				font-family: '."'Times New Roman'".', khmermoullight;
+			.header tr{ page-break-inside:avoid; page-break-after:auto;line-height:22px; }
+			#header {
+			   display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
 			}
-			.cheader td {
-				line-height: 20px;
-				white-space: nowrap;
-				color:#000;
-				font-weight: normal;
+			.cheader{line-height:22px;white-space: nowrap;
+				color:#4839bd;font-weight:bold;
 				text-align:center;
-				font-family: '."'Times New Roman'".', khmermoullight;
 			}
-			.hover:hover {
-				background: #ccc;
+			.hover:hover{background: #ccc;}
+			.blue{
+			    color: #0D47A1;
 			}
-			
-			.blue {
-				color: #4839bd;
+			.border-right-none{
+    			border-right: #fff solid 1px;
 			}
-
-			.border-right-none {
-				border-right: #fff solid 1px;
-			}
-
-			.borderBottom {
-				border-bottom: 1px dashed #000 !important;
+			.borderBottom{
+				border-bottom:1px dashed #000 !important;
 				border-right: 1px solid #fff;
 				border-left: 1px solid #fff;
 			}
-
-			.borderSolidBottom {
-				border-bottom: 2px solid #000 !important;
-			}
-
-			.teacherComment {
-				min-height: 80px;
-				border:1px solid #000;
-			}
-			.SingleBorder{
-				border:1px solid #000;
-			}
-
-			.border-none {
-				border: 1px solid #fff;
-			}
-
-			.fontBold {
-				font-weight: bold;
-			}
-
-			.colorRed {
-				color: #ff0000 !important;
-				font-weight: bold;
-				font-size: 14px;
-			}
-
-			.khmerBoldFont {
-				font-family: '."'Times New Roman'".', khmermoullight;
-			}
-
-			.doubleBorder {
-				border: 2px solid #000;
-			}
-
-			.circleHeader {
-				padding: 5px;
-				display: block;
-			}
-			.circleHeader-eng{
-				text-transform: uppercase;
-			}
-
-			table tr {
-				line-height: 22px;
-			}
-			.separateColumn{
-				font-weight: bold;
-				white-space: nowrap;
-				color:red;
-				font-size:14px;
-				text-align: center;
-				
-			}
-			#footer {
-			   position:absolute;
-			   bottom:0;
-			   width:100%;
-			   height:60px;   /* Height of the footer */
-			   background:#6cf;
-			}
-
-			@media print {
+			.borderSolidBottom{border-bottom:2px solid #000 !important;}
+			.teacherComment{min-height: 50px;}
+			.border-none{border:1px solid #fff;}
+			.fontBold{font-weight: bold;}
+			.colorRed{color:red !important;}
+			.khmerBoldFont{font-family:khmermoullight;}
+			.doubleBorder{border:1px solid #000;}
+			
+			table tr{line-height: 35px !important;}
+			.khmermoullight{font-family:khmermoullight;}
+			.khmeros{font-family:khmeros;}
+			.backGround{background:#ECEFF1;}
+			@media print{
 				@page {
 					page: A4;
-					size: portrait;
-					;
+					size: portrait;;
 					margin: 0.8cm 0.8cm 0.2cm 0.8cm;
 				}
 			}
-			.bg-grey{
-				background: #b1c1ff !important;
-			}
-			.bg-blue{
-				background: #2facff !important;
-			}
-			.bg-yellow{
-				background: #fffb3b;
-			}
-			.bg-red{
-				background: #ff4646!important;
-			}
-			.bg-grey-light{
-				background: #d7d9db !important;
-			}
 			</style>
-		</head>';
-		$scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] : "SEMESTER " . $scoreInfo['for_semester']; 
-		$resultTitleKh=(!empty($scoreInfo['title_score']))?$scoreInfo['title_score'] :$scoreTitle;
+		</head>
+	';
+	
+		$arrRomanNum = array(1 => "I", 2 => "II");
+		$romanNumber = empty($arrRomanNum[$scoreInfo['for_semester']]) ? "I" : $arrRomanNum[$scoreInfo['for_semester']];
+		$resultTitleKh =  "ឆមាសទី " . $dbgb->getNumberInkhmer($scoreInfo['for_semester']); 
+		$resultTitleEn= "SEMESTER ". $romanNumber;
 									
 		$scoreTitle = ($scoreInfo['exam_type'] == 1) ? ucfirst($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
-		$resultTitleEn=(!empty($scoreInfo['title_score_en']))? strtoupper($scoreInfo['title_score_en']) :$scoreTitle;
-		$html.='<body>';
-		$html.='
-			<table style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
-					<tr >
-						<td align="center" colspan="3">'.$headerScore.'</td>
-					</tr>
-					<tr style="height: 5px;">
-						<td align="center" colspan="3">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="3" align="center">
-							<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:16px;margin-bottom:10px;">
-								<span class="circleHeader">របាយការណ៍ប្រចាំខែ '.$resultTitleKh.'</span><br />
-								<strong class="circleHeader-eng">REPORT FOR '.$resultTitleEn.'</strong>
+		$resultTitle=(!empty($scoreInfo['forMonthKhLabel']))? ucfirst($scoreInfo['title_score_en']) :$scoreTitle;
+		$html.='<body>
+			 <table style="width:100%;margin: 0 auto;font-size:14px;page-break-after:always;">
+				<tr style="height: 100px;">
+					<td align="center" colspan="3"></td>
+				</tr>
+				<tr>
+					<td colspan="3"  align="center">
+						   <div class="khmerBoldFont" style="line-height:22px; margin-bottom:20;font-size:14px;">
+								<span style="border-radius:10px;" class="blue circleHeader khmermoullight">របាយការណ៍ការវិវឌ្ឍ <strong>PROGRESS REPORT</strong></span>
 							</div>
-							<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;">
+							<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;" >
 								<tr>
-									<td width="20%">អត្តលេខ / ID : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['stu_code'].'</td>
+									<td align="right" width="25%" class="">គោត្តនាម និងនាម : </td>
+									<td class="khmerBoldFont" align="left" width="23%"> &nbsp;'.$studentInfo['stu_khname'].'</td>
 									<td width="4%">&nbsp;</td>
-									<td  width="25%">ថ្ងៃខែឆ្នាំកំណើត : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['dob'].'</td>
+									<td align="right" width="30%">ថ្នាក់ទី / Grade : </td>
+									<td class="bold" align="left" width="25%">&nbsp;'.$scoreInfo['groupCode'].'</td>
 								</tr>
 								<tr>
-									<td>ឈ្មោះសិស្ស : </td>
-									<td  align="left" width="23%" class="khmerBoldFont"> &nbsp;'.$studentInfo['stu_khname'].'</td>
-									<td>&nbsp;</td>
-									<td  width="25%">ថ្នាក់ទី : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$scoreInfo['groupCode'].'</td>
+									<td align="right" width="25%">Student name in Latin : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['last_name'].' '.$studentInfo['stu_enname'].'</td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%">សម្រាប់ខែ : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$resultTitleKh.'</td>
 								</tr>
 								<tr>
-									<td>'."Student's name in Latin".' : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'].'</td>
-									<td>&nbsp;</td>
-									<td>ឆ្នាំសិក្សា / Academic Year : </td>
+									<td align="right" width="25%">អត្តលេខ / ID : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$studentInfo['stu_code'].'</td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%">For : </td>
+									<td class="bold" align="left" width="23%">&nbsp;'.$resultTitleEn.'</td>
+								</tr>
+								<tr>
+									<td align="right" width="25%">ភេទ / Gender : </td>
+									<td class="bold" align="left" width="23%"> &nbsp;'.$sexkh.'-'.$sexen.'</td>
+									<td >&nbsp;</td>
+									<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
 									<td class="bold" align="left" width="23%">&nbsp;'.$scoreInfo['academicYearLabel'].'</td>
-								</tr>
-								<tr>
-									<td>ភេទ / Gender : </td>
-									<td class="bold" align="left" width="23%"> &nbsp;'.$sexkh . '-' . $sexen.'</td>
-									<td>&nbsp;</td>
-									<td></td>
-									<td class="bold" align="left" width="23%">&nbsp;</td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-		';
-		$html.='<tr>
-					<td colspan="3" valign="top">
-						<table class="khmerFont" border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
-				';
-				$totalAveragescore = 0;
-				$totalMaxScore = 0;
-				$totalSubMaxScore = 0;
-				$totalmultiAllSubject = 0;
-				$totalmultiSubSubject = 0;
-				$i = 0;
-				$currentLang = 0;
-				if (!empty($scoreSubjectList)) {
-					foreach ($scoreSubjectList as $keyLang => $resultScore) {
-						$i++;
-						$maxScore = $resultScore['maxScore'] * $resultScore['multiSubject'];
-
-						$totalMaxScore = $totalMaxScore + $maxScore;
-
-						$grade = $dbgb->getMentionScore($resultScore['totalAverage'], $academicId, $scoreInfo['degreeId'], 1, null, $maxScore);
-						if ($currentLang != $resultScore['subjectLang']) {
-							if ($keyLang > 0) {
-								$totalmultiSubSubject = $totalSubMaxScore / $semesterScale;
-								$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-								$mentionGrade = $dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore);
-								$currentRanking = getRankingBySubjectLangId($scoreInfo,$currentLang);
-								$currentRanking = empty($currentRanking) ? 0 : $currentRanking;
-								
-								$semesterMonthlyAvgLang = 0;
-								if ($currentLang == 1) {
-									$semesterMonthlyAvgLang = $SemesterKhAvg;
-								} elseif ($currentLang == 2) {
-									$semesterMonthlyAvgLang = $SemesterEnAvg;
-								} else {
-									$semesterMonthlyAvgLang = $SemesterChAvg;
-								}
-								
-								$rankLangOverlal=0;
-								if ($currentLang == 1) {
-									$rankLangOverlal = $scoreInfo['rankOverallKh'];
-								} elseif ($currentLang == 2) {
-									$rankLangOverlal = $scoreInfo['rankOverallEng'];
-								} else {
-									$rankLangOverlal = $scoreInfo['rankOverallCh'];
-								}
-								$overalSemesterLangAvg = ($semesterMonthlyAvgLang + $totalKhmerAverage) / 2;
-								$html.='
-									<tr class="style hover">
-										<td colspan="3" align="center">&nbsp;
-											<strong>ការវាយតម្លៃជារួមលើការប្រឡង / Overall Assessment of the Examination</strong>
-										</td>
-										<td align="center"><strong>'.number_format($totalKhmerAverage, 2).'</strong>
-										</td>
-										<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
-										
-										<td colspan="2" align="center">&nbsp;<strong>'.number_format($totalAveragescore, 2).'</strong>&nbsp;</td>
-										<td align="center" class="colorRed"><strong>'.$mentionGrade.'</strong></td>
-										<td align="center"><strong>'.$currentRanking.'</strong></td>
+					<tr>
+						<td colspan="3" id="exportExcel" valign="top">
+							  <table class="header"  cellpadding="2" border="1"  style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;line-height:19px;" >
+								 <tr class="style hover">
+									<td colspan="8" align="center" style="background:#ECEFF1;" class="blue khmerBoldFont doubleBorder">
+										<div class="khmerBoldFont" style="line-height:20px; font-size:12px;margin: 0;">
+											ការវិវឌ្ឍរបស់សិស្សលើមុខវិជ្ជាមូលដ្ឋាន <strong>'."STUDENT'S PROGRESS IN BASIC SKILLS".'</strong>
+										</div>
+									</td>
+								</tr>';
+									$totalAveragescore=0;
+									$totalMaxScore=0;
+									$totalSubMaxScore=0;
+									$totalmultiAllSubject=0;
+									$totalmultiSubSubject=0;
+									$i=0;
+									$currentLang = 0;
 									
-									</tr>
-									<tr class="style hover">
-										<td colspan="3" align="center">&nbsp;
-											<strong>មធ្យមភាគពិន្ទុខែប្រចាំឆមាស / Semester Monthly Average Score</strong>
+									if (!empty($scoreSubjectList)){ 
+										foreach ($scoreSubjectList as $keyLang => $resultScore){
+											$i++;
+											$maxScore=$resultScore['maxScore']*$resultScore['multiSubject'];
+											
+											$totalMaxScore = $totalMaxScore+$maxScore;
+											
+											$grade = $dbgb->getMentionScore($resultScore['totalAverage'],$academicId,$scoreInfo['degreeId'],1,null,$maxScore);
+											if($currentLang!=$resultScore['subjectLang']){
+											 if($keyLang>0){	
+											 
+												$totalmultiSubSubject = $totalSubMaxScore / $semesterScale;
+												$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
+												
+												$rankOverall = 0;
+												$semesterMonthlyAvgLang = 0;
+												if ($currentLang == 1) {
+													$semesterMonthlyAvgLang = $SemesterKhAvg;
+													$rankOverall = $scoreInfo['rankOverallKh'];
+												} elseif ($currentLang == 2) {
+													$semesterMonthlyAvgLang = $SemesterEnAvg;
+													$rankOverall = $scoreInfo['rankOverallEng'];
+												} else {
+													$semesterMonthlyAvgLang = $SemesterChAvg;
+													$rankOverall = $scoreInfo['rankOverallCh'];
+												}
+												$overalSemesterLangAvg = ($semesterMonthlyAvgLang + $totalKhmerAverage) / 2;
+																
+												$html.='
+												<tr class="style hover">
+													<td colspan="3" align="center" class="blue ">&nbsp;
+														  រង្វាយតម្លៃជារួមលើការប្រឡង Overall Assessment of the Examination
+													</td>
+													<td align="center"><strong>'.number_format($totalKhmerAverage,2).'</strong></td>
+													<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
+													<td align="center">&nbsp;<strong>'.number_format($totalAveragescore,2).'</strong>&nbsp;</td>
+													<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+													<td align="center"><strong>'.$scoreInfo['rankingInKhmer'].'</strong></td>
+												</tr>
+												<tr class="style hover">
+													<td colspan="3" align="center" class="blue ">&nbsp;
+														  មធ្យមភាគពិន្ទុខែប្រចាំឆមាស Semester Monthly Average Score
+													</td>
+													
+													<td align="center">&nbsp;<strong>'.number_format($semesterMonthlyAvgLang,2).'</strong>&nbsp;</td>
+													<td colspan="4" align="center" class="blue ">
+													</td>
+												</tr>
+												<tr class="style hover">
+													<td colspan="3" align="center" class="blue ">&nbsp;
+														រង្វាយតម្លៃជារួមប្រចាំឆមាស Overall Assessment of the Semester
+													</td>
+													<td align="center">
+														<strong>'.number_format($overalSemesterLangAvg,2).'
+														</strong>
+													</td>
+													<td colspan="2">
+													</td>
+													<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+													<td class="" align="center">&nbsp;<strong class="colorRed">'.$rankOverall.'</strong>&nbsp;</td>
+												</tr>';
+												$totalAveragescore=0;
+												$totalSubMaxScore=0;
+												$totalmultiSubSubject=0;
+												$i=1;
+											}
+												
+												$html.='<tr class="cheader backGround" align="center">
+													<td align="center">ល.រ<br />No.</td>
+													<td colspan="2" align="center">'.$stringSubjectType[$resultScore['subjectLang']].'</td>
+													<td align="center">មធ្យមភាគ <br />Average Score</td>
+													<td align="center">ពិន្ទុអតិបរមា <br />Maximum Score</td>
+													<td align="center">ពិន្ទុ<br />score</td>
+													<td align="center">និទ្ទេស<br />Grade</td>
+													<td align="center">ចំណាត់ថ្នាក់<br />Rank</td>
+												</tr>';
+										 }
+										    $currentLang = $resultScore['subjectLang'];
+											
+											$totalmultiSubSubject = $totalmultiSubSubject+$resultScore['multiSubject'];
+											$totalSubMaxScore=$totalSubMaxScore+$maxScore;
+											
+											$totalmultiAllSubject = $totalmultiAllSubject+$resultScore['multiSubject'];
+											$totalAveragescore = $totalAveragescore+$resultScore['totalAverage'];
+											if($resultScore['innerSubject']==0){
+												
+											$html.='<tr class="hover blackColor" >
+														<td align="center">&nbsp;'.$i.'&nbsp;</td>
+														<td align="left">&nbsp;'.$resultScore['sub_name'].'&nbsp;</td>
+														<td align="left" >&nbsp;'.$resultScore['sub_name_en'].'&nbsp;</td>
+														
+													';
+											if($i==1){
+											$coountingSubject = getCountSubjectLang($scoreSubjectList,$currentLang);
+											$html.='<td rowspan="'.$coountingSubject.'"></td>';
+											}
+											$html.='	<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
+														<td align="center">'.$resultScore['totalAverage'].'</td>
+														<td align="center" class="colorRed">'.$grade.'</td>
+														<td align="center">'.$resultScore['rankingSubject'].'</td>
+												</tr>';
+											}else{ 
+												$issetMerge=0;
+												$rowspan=$resultScore['innerSubject'];
+												foreach($resultScore['innerSubjectList'] as $resultSubList){
+												$i++;
+											$html.='<tr class="hover blackColor" >
+														<td align="center">&nbsp;'.$i.'&nbsp;</td>
+														<td align="left">&nbsp;'.$resultSubList['subCriterialTitleKh'].'&nbsp;</td>
+														<td align="left" >&nbsp;'.$resultSubList['subCriterialTitleEng'].'&nbsp;</td>
+														<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
+														<td align="center">'.$resultSubList['totalGrading'].'</td>';
+												if($issetMerge==0){
+												$html.='<td rowspan="'.$rowspan.'" align="center">'.$resultScore['totalAverage'].'</td>
+													<td class="colorRed" rowspan="'.$rowspan.'"  align="center">'.$grade.'</td>
+													<td align="center">'.$resultScore['rankingSubject'].'</td>';
+												 }
+											$html.='</tr>';
+											$issetMerge=1;
+										      }
+											}
+										}
+									 }
+									 
+									$rankOverall = 0;
+									$semesterMonthlyAvgLang = 0;
+									if ($currentLang == 1) {
+										$semesterMonthlyAvgLang = $SemesterKhAvg;
+										$rankOverall = $scoreInfo['rankOverallKh'];
+									} elseif ($currentLang == 2) {
+										$semesterMonthlyAvgLang = $SemesterEnAvg;
+										$rankOverall = $scoreInfo['rankOverallEng'];
+									} else {
+										$semesterMonthlyAvgLang = $SemesterChAvg;
+										$rankOverall = $scoreInfo['rankOverallCh'];
+									}
+									$totalmultiSubSubject = $totalSubMaxScore / $semesterScale;
+									$totalCurrentLangAverage = $totalAveragescore / $totalmultiSubSubject;
+												
+									$overalSemesterLangAvg = ($semesterMonthlyAvgLang + $totalCurrentLangAverage) / 2;
+												
+												
+									 $html.='
+									 <tr class="style hover">
+											<td colspan="3" align="center" class="blue ">&nbsp;
+											   រង្វាយតម្លៃជារួមលើការប្រឡង Overall Assessment of the Examination
+											</td>
+											<td align="center"><strong>'.number_format($totalCurrentLangAverage,2).'</strong></td>
+											<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
+				 							<td align="center">&nbsp;<strong>'.number_format($totalAveragescore,2).'</strong>&nbsp;</td>
+				 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+				 							<td align="center">'.$scoreInfo['rankingInEnglish'].'</td>
+			 						</tr>
+									 <tr class="style hover">
+											<td colspan="3" align="center" class="blue ">&nbsp;
+											   មធ្យមភាគពិន្ទុខែប្រចាំឆមាស Semester Monthly Average Score
+											</td>
+											<td align="center"><strong>'.$semesterMonthlyAvgLang.'</strong></td>
+											<td colspan="4">
+											</td>
+			 						</tr>
+			 						<tr class="style hover">
+			 							<td colspan="3" align="center" class="blue ">&nbsp;
+			 								 រង្វាយតម្លៃជារួមប្រចាំឆមាស Overall Assessment of the Semester
+			 							</td>
+			 							<td align="center">
+			 								<strong>'.number_format($overalSemesterLangAvg,2)
+			 								.'</strong>
+			 							</td>
+										<td colspan="2">
 										</td>
-										<td align="center">
-											<strong>'.$semesterMonthlyAvgLang.'</strong>
-										</td>
-										<td align="center" colspan="5" ></td>
+			 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($totalAveragescore, $academicId,$scoreInfo['degreeId'],1,null,$totalSubMaxScore).'</strong>&nbsp;</td>
+										<td class="" align="center">&nbsp;<strong class="colorRed">'.$rankOverall.'</strong>&nbsp;</td>
 									</tr>
-									<tr class="style hover">
-										<td colspan="3" align="center">&nbsp;
-											<strong>ការវាយតម្លៃជារួមប្រចាំឆមាស / Overall Assessment of the Semester</strong>
-										</td>
-										<td align="center">
-											<strong>'.number_format($overalSemesterLangAvg, 2).'</strong>
-										</td>
-										<td colspan="3" align="center"></td>
-										<td align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($overalSemesterLangAvg, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale).'</strong>&nbsp;</td>
-										<td align="center"> 
-											<strong>'.$rankLangOverlal.'</strong>
-										</td>
+			 						<tr class="style hover doubleBorder  cheader backGround" >
+			 							<td colspan="3" align="center" >
+			 								ទាំងពីរកម្មវិធី Both Programs
+			 							</td>
+										<td align="center">មធ្យមភាគ <br />Average Score </td>
+										<td align="center">ពិន្ទុអតិបរមា <br />Maximum Score </td>
+										<td align="center" >ពិន្ទុ<br />Score</td>
+										<td align="center">និទ្ទេស<br />Grade</td>
+										<td align="center">ចំណាត់ថ្នាក់<br />Rank</td>
+			 						</tr>
+									<tr class="style hover" >
+			 							<td colspan="3" align="center" class="blue">
+			 								រង្វាយតម្លៃជារួមលើការប្រឡង Overall Assessment of the Examination
+			 							</td>
+			 							
+			 							<td class="" align="center">&nbsp;<strong>'.$scoreInfo['totalAvg'].'</strong>&nbsp;</td>
+			 							<td class="" align="center">&nbsp;<strong>'.$totalMaxScore.'</strong>&nbsp;</td>
+			 							<td class="" align="center">&nbsp;<strong>'.$scoreInfo['totalScoreAvg'].'</strong>&nbsp;</td>
+										<td align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore).'</strong>&nbsp;</td>
+										<td class="" align="center">&nbsp;<strong class="colorRed">'.$scoreInfo['rank'].'</strong>&nbsp;</td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td colspan="3" align="center" class="blue">
+			 								មធ្យមភាគពិន្ទុខែប្រចាំឆមាស Semester Monthly Average Score
+			 							</td>
+			 							<td class="" align="center">&nbsp;<strong>'.$scoreInfo['monthlySemesterAvg'].'</strong>&nbsp;</td>
+			 							<td align="left" colspan="4"></td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td colspan="3" align="center" class="blue">
+											រង្វាយតម្លៃជារួមប្រចាំឆមាស Overall Assessment of the Semester
+			 							</td>
+			 							<td class="" align="center">&nbsp;<strong>'.$scoreInfo['overallAssessmentSemester'].'</strong>&nbsp;</td>
+										<td class="" colspan="2"></td>
+			 							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId,$scoreInfo['degreeId'],1,null,$semesterScale).'</strong>&nbsp;</td>
+										<td class="" align="center">&nbsp;<strong class="colorRed">'.$scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent'].'</strong>&nbsp;</td>
 									</tr>
-								';
-								$totalAveragescore = 0;
-								$totalSubMaxScore = 0;
-								$totalmultiSubSubject = 0;
-								$i = 1;
-							}
-							
-							if($scoreInfo['degreeId']==1){
-								$html.='
-									<tr class="cheader '.@$bgProgramColor[$resultScore['subjectLang']].' " align="center">
-										<td>ល.រ<br />No.</td>
-										<td colspan="2">'.@$subjectProgram[$resultScore['subjectLang']].'</td>
-										<td>ពិន្ទុមធ្យមភាគ <br />Average Score </td>
-										<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-										<td colspan="2">ពិន្ទុ<br />Score</td>
-										<td>និទ្ទេស<br />Grade</td>
-										<td>ចំណាត់ថ្នាក់<br />Rank</td>
-									</tr>
-								';
-							}else{
-								$html.='
-									<tr class="cheader '.@$bgProgramColor[$resultScore['subjectLang']].' " align="center">
-										<td>ល.រ<br />No.</td>
-										<td colspan="2">'.@$subjectProgram[$resultScore['subjectLang']].'</td>
-										<td>ពិន្ទុមធ្យមភាគ <br />Average Score </td>
-										<td>ពិន្ទុអតិបរមា <br />Maximum Score </td>
-										<td colspan="2">ពិន្ទុ<br />Total Score</td>
-										<td>និទ្ទេស<br />Grade</td>
-										<td>ចំណាត់ថ្នាក់<br />Rank</td>
-									</tr>
-								';
-							}
-						}
-						
-						
-						$currentLang = $resultScore['subjectLang'];
+								</table>
+								<br />
+								<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:25px;">
+			 						<tr class="doubleBorder backGround">
+			 							<td colspan="2" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+											អវត្តមាន ABSENCE RECORD
+										</td>
+										<td colspan="2" class="blue khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
+											កិច្ចការវិន័យ DISCIPLINE RECORD
+										</td>
+			 						</tr>';
+									 
+									 $data = array(
+									 		'groupId'=>$groupId,
+									 		'semesterId'=>$forSemester,
+									 		'studentId'=>$studentInfo['student_id'],
+									 		'forMonth'=>$forMonthId,
+									 		'attStatus' => 3,
+									 );
+									 $attStutus3=count($db->countAttendenceTranscript($data));
+									 	
+									 $data['attStatus']=2;
+									 $attStutus2=count($db->countAttendenceTranscript($data));
+									 	
+									 $data['attStatus'] = 4;
+									 $attStutus4=count($db->countAttendenceTranscript($data));
+									 
+									$data['attStatus'] = 1;
+									$minor=$db->countDisplineTranscript($data);
+									$data['attStatus'] = 2;
+									$moderate=$db->countDisplineTranscript($data);
+									$data['attStatus'] = 3;
+									$major=$db->countDisplineTranscript($data);
+									
+			 						$html.='<tr class="style hover" >
+			 							<td width="30%" align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days Excused absences&nbsp;</td>
+			 							<td width="20%" align="center">'.$attStutus3.'&nbsp;</td>
+										<td width="30%" align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
+										<td width="20%" align="center">&nbsp;'.$minor.'&nbsp;</td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days Unxcused absences&nbsp;</td>
+			 							<td align="center" class="">'.$attStutus2.'</td>
+										<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
+										<td align="center">&nbsp;'.$moderate.'&nbsp;</td>
+			 						</tr>
+			 						<tr class="style hover" >
+			 							<td  align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Number Of Time Tardy&nbsp;</td>
+			 							<td  align="center" class="">'.$attStutus4.'&nbsp;</td>
+										<td  align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
+										<td  align="center">&nbsp;'.$major.'&nbsp;</td>
+			 						</tr>
+								</table>
+								
+							</td>
+						</tr>
+					</table>
+					';
+					$html.='
+					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:20px;" >
+						<tr class="khmerBoldFont  backGround" align="center">
+							<td width="20%" class="khmerBoldFont blue" align="center">របាយការណ៍សម្រាប់<br />REPORT FOR</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">ឆមាសទី១<br />FIRST SEMESTER</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">ឆមាសទី២ <br />SECOND SEMESTER</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">ប្រចាំឆ្នាំ<br />ANNUAL</td>
+							<td width="20%" class="khmerBoldFont blue" align="center">លទ្ធផល <br />ANNUAL</td>
+						</tr>
+						<tr class=" " align="center">
+							<td class=" " >ពិន្ទុសរុប<br />Total Score</td>
+							<td align="center"><strong>'.$scoreInfo['totalScoreAvg'].'</strong></td>
+							<td></td>
+							<td></td>
+							<td></td>
 
-						$totalmultiSubSubject = $totalmultiSubSubject + $resultScore['multiSubject']; //មេគុណសរុប
-						$totalSubMaxScore = $totalSubMaxScore + $maxScore;
+						</tr>
+						<tr class=" " align="center">
+							<td class=" " >មធ្យមភាគពិន្ទុ<br />Average Score</td>
+							<td align="center"><strong>'.$scoreInfo['overallAssessmentSemester'].'</strong></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr class=" " align="center">
+							<td class=" " >និទ្ទេសនិងចំណាត់ថ្នាក់<br />Letter Grade And Rang</td>
+							<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale).' '.$scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent'].'</strong>&nbsp;</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
 
-						$totalmultiAllSubject = $totalmultiAllSubject + $resultScore['multiSubject'];
-						$totalAveragescore = $totalAveragescore + $resultScore['totalAverage'];
-						
-						$html.='
-							<tr class="hover blackColor">
-								<td align="center">&nbsp;'.$i.'&nbsp;</td>
-								<td align="left">&nbsp;'.$resultScore['sub_name'].'&nbsp;</td>
-								<td align="left">&nbsp;'.$resultScore['sub_name_en'].'&nbsp;</td>
-							';
-							if($i==1){
-								$coountingSubject = getCountSubjectLang($scoreSubjectList,$currentLang);
-								$html.='<td rowspan="'.$coountingSubject.'"></td>';
-							}
-						$html.='<td class="" align="center" style="white-space:nowrap;">&nbsp;'.$maxScore.'&nbsp;</td>
-								<td colspan="2"  align="center">'.$resultScore['totalAverage'].'</td>
-								<td align="center" class="colorRed">'.$grade.'</td>
-								<td align="center">'.$resultScore['rankingSubject'].'</td>
+					</table>
+					<br>
+					';
+					$html.='
+						<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;line-height:20px;" >
+							<tr>
+								<td colspan="6"  align="center" class="blue khmerBoldFont doubleBorder backGround">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 							</tr>
-						
-						';
-					}
-				}
-				
-				$totalmultiSubSubject = $totalSubMaxScore / $semesterScale;
-				$totalKhmerAverage = $totalAveragescore / $totalmultiSubSubject;
-				
-				$semesterMonthlyAvgLang = 0;
-				if ($currentLang == 1) {
-					$semesterMonthlyAvgLang = $SemesterKhAvg;
-				} elseif ($currentLang == 2) {
-					$semesterMonthlyAvgLang = $SemesterEnAvg;
-				} else {
-					$semesterMonthlyAvgLang = $SemesterChAvg;
-				}
-				$overalSemesterLangAvg = ($semesterMonthlyAvgLang + $totalKhmerAverage) / 2;
-				
-				$rankLangOverlal=0;
-				if ($currentLang == 1) {
-					$rankLangOverlal = $scoreInfo['rankOverallKh'];
-				} elseif ($currentLang == 2) {
-					$rankLangOverlal = $scoreInfo['rankOverallEng'];
-				} else {
-					$rankLangOverlal = $scoreInfo['rankOverallCh'];
-				}
-				$html.='
-					<tr class="style hover">
-						<td colspan="3" align="center">&nbsp;
-							<strong>ការវាយតម្លៃជារួមលើការប្រឡង / Overall Assessment of the Examination</strong>
-						</td>
-						<td align="center"><strong>'.number_format($totalKhmerAverage, 2).'</strong></td>
-						<td align="center"><strong>'.$totalSubMaxScore.'</strong></td>
-										
-						<td colspan="2" align="center">&nbsp;<strong>'.number_format($totalAveragescore, 2).'</strong>&nbsp;</td>
-						<td align="center" class="colorRed"><strong>'.$dbgb->getMentionScore($totalAveragescore, $academicId, $scoreInfo['degreeId'], 1, null, $totalSubMaxScore).'</strong></td>
-						<td align="center"><strong>'.getRankingBySubjectLangId($scoreInfo,$currentLang).'</strong></td>		
-					</tr>
-					<tr class="style hover">
-						<td colspan="3" align="center">&nbsp;
-							<strong>មធ្យមភាគពិន្ទុខែប្រចាំឆមាស / Semester Monthly Average Score</strong>
-						</td>
-						<td align="center">
-							<strong>'.$semesterMonthlyAvgLang.'</strong>
-						</td>
-						<td align="center" colspan="5" ></td>
-					</tr>
-					<tr class="style hover">
-						<td colspan="3" align="center">&nbsp;
-							<strong>ការវាយតម្លៃជារួមប្រចាំឆមាស / Overall Assessment of the Semester</strong>
-						</td>
-						<td align="center">
-							<strong>'.number_format($overalSemesterLangAvg, 2).'</strong>
-						</td>
-						<td colspan="3" align="center"></td>
-						<td align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($overalSemesterLangAvg, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale).'</strong>&nbsp;</td>
-						<td align="center"> 
-							<strong>'.$rankLangOverlal.'</strong>
-						</td>
+							<tr class="khmerBoldFont blue">
+								<td colspan="2" align="center">របបពិន្ទុ<br />GRADING CRITERIA</td>
+								<td align="center">ភាគរយ<br />PERCENTAGE</td>
+								<td align="center">កម្រិត <br />GRADE</td>
+								<td align="center">និទ្ទេស<br />INTERPRETATION</td>
+								<td align="center"><label style="white-space: nowrap;">ការសម្រេចផលនិងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND AFFORT</td>
+							</tr>
+							';
+
+							 $ismergRow=0;
+							 if (!empty($this->grading)) foreach ($this->grading as $keygd => $rsgd) { 
+								 $html.='<tr class="blue" align="center">';
+								 if($keygd==0){
+								 $html.='<td align="center" colspan="2" rowspan="'.count($this->grading).'" class="khmerBoldFont">
+										<span>Semester <sub>Avg</sub> = </span>
+										<div class="frac">
+											<span>Monthly <sub>Avg</sub> + Exam <sub>Avg</sub></span>
+											<span class="symbol">/</span>
+											<span class="bottom">2</span>
+
+										</div>
+									</td>';
+								 }
+								  $html.='<td align="center">'.$rsgd['percentage'].'</td>
+									 <td align="center">'.$rsgd['grade'].'</td>
+									 <td align="center">'.$rsgd['interpretation'].'</td>
+									 <td>'. $rsgd['achievment'].'</td>
+								 </tr>';
+							 } 
+							 $html.='<tr class="blue" align="center">
+										<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
+										<td align="center" >100%</td>
+										<td colspan="3"></td>
+									</tr>';
+								$teacherComment='';
+								$commentType='';
+								if(!empty($evalueationList))foreach($evalueationList as $keycom => $rsComment){
+									if($keycom==0){
+										$teacherComment=$rsComment['teacherComment'];
+									}
+									   if($commentType!=$rsComment['commentType']){
+										$html.='<tr align="center">
+													<td colspan="6" align="center" class="blue doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
+												</tr>';
+										} 
+										$commentType = $rsComment['commentType'];
+										$html.='<tr>
+													<td align="left" colspan="5" class="">&nbsp;'.$rsComment['commentLabel'].'</td>
+													<td align="center">'.$rsComment['ratingLabel'].'</td>
+												</tr>';
+							}
+					$html.='</table>
+					<table class="header" border="1px"  width="100%" style="width:100%; border-collapse:collapse;line-height:25px;" >
+					<tr  align="left">
+						<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT COMMENT AND SUGGESTION:</td>
 					</tr>';
-					
-				$html.='<tr class="style hover bg-grey-light" style=" height: 40px;">
-						<td  colspan="3" align="center" class="cheader">
-							ការវាយតម្លៃជារួមលើការប្រឡង Overall Assessment of the Examination
-						</td>
-						<td  align="center" class="colorRed">&nbsp;'.$scoreInfo['totalAvg'].'&nbsp;</td>
-						<td  align="center" class="colorRed">&nbsp;'.$totalMaxScore.'&nbsp;</td>
-						<td  colspan="2"  align="center" class="colorRed">&nbsp;'.$scoreInfo['totalScoreAvg'].'&nbsp;</td>
-						<td  align="center" class="colorRed">&nbsp;'.$dbgb->getMentionScore($scoreInfo['totalScoreAvg'], $academicId, $scoreInfo['degreeId'], 1, null, $totalMaxScore).'&nbsp;</td>
-						<td   align="center" class="colorRed">&nbsp;'.$scoreInfo['rank'] . '/' . $scoreInfo['amountStudent'].'&nbsp;</td>
+					for($i=0;$i<=3;$i++){
+						$html.='<tr class="borderBottom">
+							<td colspan="6" class="borderBottom">&nbsp;</td>
+						</tr>';
+						}
+					$html.='<tr>
+						<td class="borderSolidBottom" width="30%">&nbsp;</td>
+						<td colspan="4">&nbsp;</td>
+						<td class="borderSolidBottom" width="30%">&nbsp;</td>
 					</tr>
-					<tr></tr>
-					<tr class="style hover bg-grey-light" style=" height: 40px;">
-						<td colspan="3" align="center" class="cheader bg-grey-light">
-							មធ្យមភាគពិន្ទុខែប្រចាំឆមាស Semester Monthly Average Score
-						</td>
-						<td align="center" class="colorRed bg-grey-light">'.$scoreInfo['monthlySemesterAvg'].'</td>
-						<td colspan="5"  align="center" ></td>
+					<tr>
+						<td class="borderSolidBottom blue">&nbsp;ហត្ថលេខមាតាបិតា Parent Signature</td>
+						<td colspan="4" class="borderSolidBottom">&nbsp;</td>
+						<td class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
 					</tr>
-					<tr></tr>
-					<tr class="style hover bg-blue" style=" height: 40px;">
-						<td rowspan="2" colspan="3" align="center" class="cheader">
-							ការវាយតម្លៃជារួមប្រចាំឆមាស Overall Assessment of the Semester
-						</td>
-						<td align="center" class="colorRed">&nbsp;'.$scoreInfo['overallAssessmentSemester'].'&nbsp;</td>
-						<td colspan="3"  align="center" ></td>
-						<td align="center" class="colorRed">'.$dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale).'</td>
-						<td  align="center" class="colorRed">'.$scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent'].'</td>
-					</tr> 
-					<tr></tr>
-				';
-				$html.='</table>';
-				
-				$html.='<br />';
-		
-		$data = array(
-			'groupId' => $groupId,
-			'semesterId' => $forSemester,
-			'studentId' => $studentInfo['student_id'],
-			'forMonth' => $forMonthId,
-			'examType' => $examType,
-			'attStatus' => 3,
-		);
-		$dbAttendance = new Allreport_Model_DbTable_DbScoreTranscript();
-		$permission = count($dbAttendance->countAttendenceTranscript($data));
-		$data['attStatus'] = 2;
-		$absent = count($dbAttendance->countAttendenceTranscript($data));
-		$data['attStatus'] = 4;
-		$late = count($dbAttendance->countAttendenceTranscript($data));
-		
-		$data['attStatus'] = 1;
-		$minor = $dbAttendance->countDisplineTranscript($data);
-		$data['attStatus'] = 2;
-		$moderate = $dbAttendance->countDisplineTranscript($data);
-		$data['attStatus'] = 3;
-		$major = $dbAttendance->countDisplineTranscript($data);
-									
-		$html.='<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-					<tr class="cheader bg-blue">
-						<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-							អវត្តមាន ABSENCE RECORD
-						</td>
-						<td colspan="2" class="khmerBoldFont" style=" text-align:center; border: solid 2px #000;">&nbsp;
-							កិច្ចការវិន័យ DISCIPLINE RECORD
+					<tr>
+						<td colspan="6">&nbsp;<span class="blue">សេចក្តីសង្កេតទូទៅ GENERAL COMMENTS:</span>
+							<div class="teacherComment">'.$teacherComment.'
+							</div>
 						</td>
 					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់មានច្បាប់ Days of Excused Absence&nbsp;</td>
-						<td  align="center">&nbsp;'.$permission.'&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;ស្រាល Minor&nbsp;</td>
-						<td  align="center">&nbsp;'.$minor.'&nbsp;</td>
+					<tr>
+						<td class="borderSolidBottom blue" style="height:100px;">&nbsp;</td>
+						<td colspan="4" >&nbsp;</td>
+						<td class="borderSolidBottom blue">&nbsp;</td>
 					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ថ្ងៃឈប់ឥតច្បាប់ Days of Unexcused Absence&nbsp;</td>
-						<td align="center" class="">&nbsp;'.$absent.'&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;មធ្យម Moderate&nbsp;</td>
-						<td  align="center">&nbsp;'.$moderate.'&nbsp;</td>
+					<tr >
+						<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Teacher in Charge</td>
+						<td colspan="4" >&nbsp;</td>
+						<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
 					</tr>
-					<tr class="style hover">
-						<td align="left" style="white-space:nowrap;">&nbsp;ចំនួនពេលមកយឺត Times of Tardiness&nbsp;</td>
-						<td align="center" class="">&nbsp;'.$late.'&nbsp;</td>
-						<td align="left" style="white-space:nowrap;">&nbsp;ធ្ងន់ Major&nbsp;</td>
-						<td  align="center">&nbsp;'.$major.'&nbsp;</td>
+					<tr >
+						<td class=" blue">&nbsp;នាយកស្តីទី Interim Principal</td>
+						<td colspan="4" >&nbsp;</td>
+						<td class=" blue">&nbsp;កាលបរិច្ឆេទ Date</td>
 					</tr>
 				</table>
-			';
-		$html.='<br />';
-		$html.='
-			<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-				<tr class="khmerBoldFont bg-blue " align="center">
-					<td class="khmerBoldFont " align="center" width="20%" colspan="2">របាយការណ៍សម្រាប់<br />REPORT FOR</td>
-					<td class="khmerBoldFont " align="center" width="20%">ឆមាសទី១<br />FIRST SEMESTER</td>
-					<td class="khmerBoldFont " align="center" width="20%">ឆមាសទី២ <br />SECOND SEMESTER</td>
-					<td class="khmerBoldFont " align="center" width="20%">ប្រចាំឆ្នាំ<br />ANNUAL</td>
-					<td class="khmerBoldFont " align="center" width="20%">លទ្ធផល <br />RESULT</td>
-				</tr>
-				<tr class="khmerBoldFont " align="center">
-					<td class="khmerBoldFont " colspan="2">ពិន្ទុសរុប<br />Total Score</td>
-					<td><strong>'.$scoreInfo['totalScoreAvg'].'</strong></td>
-					<td align="center">'.$scoreInfo['totalScoreAvg'].'</td>
-					<td></td>
-					<td></td>
-
-				</tr>
-				<tr class="khmerBoldFont " align="center">
-					<td class="khmerBoldFont "colspan="2">មធ្យមភាគពិន្ទុ<br />Average Score</td>
-					<td align="center"><strong>'.$scoreInfo['overallAssessmentSemester'].'</strong></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr  align="center">
-					<td class="khmerBoldFont " colspan="2">និទ្ទេស និងចំណាត់ថ្នាក់<br />Letter Grade And Rank</td>
-					<td class="" align="center">&nbsp;<strong class="colorRed">'.$dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale).' &nbsp;&nbsp; '.$scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent'].'</strong>&nbsp;</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-
-			</table>
-			';
-		$html.='
-			<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-				<tr align="center">
-					<td align="center" colspan="6" class=" khmerBoldFont bg-blue">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
-				</tr>
-				<tr class="khmerBoldFont " align="center">
-					<td align="center" colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
-					<td align="center">ភាគរយ<br />PERCENTAGE</td>
-					<td align="center">កម្រិត <br />GRADE</td>
-					<td align="center">និទ្ទេស<br />INTERPRETATION</td>
-					<td align="center"><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND EFFORT</td>
-				</tr>
-		';
-				$ismergRow=0;
-					$reGradingResult  = $dbgb->getGradingSystem($degreeId);
-					if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) { 
-						$html.='<tr align="center">';
-						
-						if ($keygd == 0) {
-							$html.='
-								<td align="center" colspan="2" rowspan="'.count($reGradingResult).'" class="khmerBoldFont">
-									<span>Semester <sub>Avg</sub> = </span>
-									<div class="frac">
-										<span>Monthly <sub>Avg</sub> + Exam <sub>Avg</sub></span>
-										<span class="symbol">/</span>
-										<span class="bottom">2</span>
-									</div>
-								</td>
-							';
-						}
-						
-						$html.='<td align="center">'.$rsgd['percentage'].'</td>
-								<td align="center">'.$rsgd['grade'].'</td>
-								<td align="center">'.$rsgd['interpretation'].'</td>
-								<td>'.$rsgd['achievment'].'</td>
-							';
-						$html.='</tr>';
-					}
-			$html.='<tr class="" align="center">
-						<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
-						<td align="center">100%</td>
-						<td colspan="2"></td>
-					</tr>';
+					';
 					
-					
-				$teacherComment = '';
-				$commentType = '';
-				if (!empty($evalueationList)) foreach ($evalueationList as $keycom => $rsComment) {
-					if ($teacherComment == '') {
-						$teacherComment = $rsComment['teacherComment'];
-					}
-					if ($commentType != $rsComment['commentType']) {
-						$html.='
-							<tr align="center">
-								<td colspan="5" class=" doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
-							</tr>';
-						
-					}
-					$commentType = $rsComment['commentType'];
-					$html.='
-						<tr>
-							<td align="left" colspan="4" class="">&nbsp;'.$rsComment['commentLabel'].'</td>
-							<td align="center">'.$rsComment['ratingLabel'].'</td>
-						</tr>';
-				}
-		$html.='</table>';
-		$teacherComment = empty($teacherComment) ? "&nbsp;<br />&nbsp;" : $teacherComment;
-		$html.='<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-				<tr class="SingleBorder cheader  bg-blue">
-					<td colspan="6" align="center">&nbsp;<span >'."មតិយោបល់របស់គ្រូ និងសំណូមពរ / TEACHER'S COMMENTS AND SUGESTION".'</span>
-					</td>
-				</tr>
-				<tr >
-					<td colspan="6" align="left" class="teacherComment">
-						'.$teacherComment.'
-					</td>
-				</tr>
-				<tr align="left">
-					<td colspan="6" class=" khmerBoldFont">&nbsp;'."មតិយោបល់របស់មាតាបិតា និងសំណូមពរ /PARENT'S COMMENT AND SUGGESTION:".'</td>
-				</tr>';
-				for ($i = 0; $i <= 2; $i++) {
-				$html.='
-					<tr class="borderBottom">
-						<td colspan="6" class="borderBottom">&nbsp;</td>
-					</tr>
-				';
-				}	
-			$html.='<tr>
-					<td class="" width="30%">&nbsp;</td>
-					<td colspan="4">&nbsp;</td>
-					<td class="" width="30%">&nbsp;</td>
-				</tr>
-				<tr>
-					<td>&nbsp;កាលបរិច្ឆេទ / Date:......./......./.......</td>
-					<td colspan="4" class="">&nbsp;</td>
-					<td>&nbsp;កាលបរិច្ឆេទ / Date:......./......./.......</td>
-				</tr>
-				<tr height="100px;">
-					<td class="borderSolidBottom ">&nbsp;</td>
-					<td colspan="4">&nbsp;</td>
-					<td class="borderSolidBottom ">&nbsp;</td>
-				</tr>
-				<tr height="40px;">
-					<td valign="top">&nbsp; '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
-					<td colspan="4">&nbsp;</td>
-					<td valign="top">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
-				</tr>
-				<tr height="130px;">
-					<td valign="top" class="borderSolidBottom khmerBoldFont">&nbsp;បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
-					<td colspan="4">&nbsp;</td>
-					<td valign="top" class="borderSolidBottom ">&nbsp;<strong>បានពិនិត្យត្រឹមត្រូវ / Checked</strong></td>
-				</tr>
-				<tr >
-					<td>&nbsp;នាយករង / VICE PRINCIPLE</td>
-					<td colspan="4">&nbsp;</td>
-					<td>&nbsp;ការិយាល័យសិក្សា / Academic Office</td>
-				</tr>
-				<tfoot>
-					<tr>
-						<td>
-							
-						</td>
-					</tr>
-				</tfoot>
-			</table>';
-			
-		$html.='
-				</td>
-			</tr>
-		</table>';				
 	$html.="
+			
 		</body>
 	</html>";
 }
@@ -1247,111 +975,18 @@ $html='<html>
 	
 	
 	function getCountSubjectLang($subjectArray,$subjectLang){
-		if($subjectLang==1){
-			$arrFilter = array_filter($subjectArray, function($subjectArray) {
-				return $subjectArray['subjectLang'] == 1;
-			});
-			return count($arrFilter);
-		}else if($subjectLang==2){
-			$arrFilter = array_filter($subjectArray, function($subjectArray) {
-				return $subjectArray['subjectLang'] == 2;
-			});
-			return count($arrFilter);
-		}else{
-			return 0;
-		}
+	if($subjectLang==1){
+		$arrFilter = array_filter($subjectArray, function($subjectArray) {
+			return $subjectArray['subjectLang'] == 1;
+		});
+		return count($arrFilter);
+	}else if($subjectLang==2){
+		$arrFilter = array_filter($subjectArray, function($subjectArray) {
+			return $subjectArray['subjectLang'] == 2;
+		});
+		return count($arrFilter);
+	}else{
+		return 0;
 	}
-	
-	
-	function getRankingBySubjectLangId($ResultData,$subjectLangId){
-		$indexResult = array(
-				1=>'rankingInKhmer',
-				2=>'rankingInEnglish',
-				3=>'rankingInChinese',
-				);
-		$resultValue = $indexResult[$subjectLangId];
-		return $ResultData[$resultValue];
-	}
-	
-	 function getHeaderReportPDF($branch_id = null, $forGenerate = 0)
-	{
-		$key = new Application_Model_DbTable_DbKeycode();
-		$setting = $key->getKeyCodeMiniInv(TRUE);
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$str = "";
-
-		if ($forGenerate == 1) {
-			$baseUrl = PUBLIC_PATH;
-			$styleLogo = "width:120px;";
-		} else {
-			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-			$styleLogo = "max-width: 98%;max-height:90px;min-height:50px;";
-		}
-
-		$logo = $baseUrl . '/images/Logo/Logo.png';
-		if (!empty($setting['logo'])) {
-			if (file_exists(PUBLIC_PATH . "/images/logo/" . $setting['logo'])) {
-				$logo = $baseUrl . '/images/logo/' . $setting['logo'];
-			}
-		}
-
-		$school_khname = $tr->translate('SCHOOL_NAME');
-		$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
-		$address = $tr->translate('CUSTOMER_ADDRESS');
-		$tel = $tr->translate('CUSTOMER_TEL');
-		$email =  $tr->translate('CUSTOMER_EMAIL');
-		$website = $tr->translate('CUSTOMER_WEBSITE');
-		if ($branch_id == null) {
-
-			$school_khname = $tr->translate('SCHOOL_NAME');
-			$school_name = $tr->translate('CUSTOMER_BRANCH_EN');
-			$address = $tr->translate('CUSTOMER_ADDRESS');
-			$tel = $tr->translate('CUSTOMER_TEL');
-			$email =  $tr->translate('CUSTOMER_EMAIL');
-			$website = $tr->translate('CUSTOMER_WEBSITE');
-		} else {
-			$db = new Application_Model_DbTable_DbGlobal();
-			$rs = $db->getBranchInfo($branch_id);
-			if (!empty($rs)) {
-
-				if (!empty($rs['photo'])) {
-					if (file_exists(PUBLIC_PATH . "/images/logo/" . $rs['photo'])) {
-						$logo = $baseUrl . '/images/logo/' . $rs['photo'];
-					}
-				}
-
-				$school_khname = $rs['school_namekh'];
-				$school_name = $rs['school_nameen'];
-
-				$address = $rs['br_address'];
-				$tel = $rs['branch_tel'];
-				$email = $rs['email'];
-				$website = $rs['website'];
-			}
-		}
-
-		$imgSing = "agreementsign.jpg";
-		$str = '
-		<table width="100%" style="white-space:nowrap;">
-			<tbody>
-				<tr>
-					<td width="35%" valign="top"  style="text-align: left; font-family: ' . "'Times New Roman'" . ',' . "'Khmer OS Muol Light'" . ';">
-						<img style="' . $styleLogo . ' margin-top:30px;" src="' . $logo . '">
-					</td>
-					<td width="30%" valign="top" style="font-size:11px;line-height: 18px;font-family: Khmer OS Battambang;">
-					</td>
-					<td width="35%" valign="top" style="font-family: ' . "'Times New Roman'" . ',' . "khmermoullight,'Khmer OS Muol Light'" . ';">
-						<span style="font-size: 14px; color: #002c7b;">ព្រះរាជាណាចក្រកម្ពុជា</span><br />
-						<span><span style="margin:0;padding:0;font-weight: 600; color: #002c7b; font-size: 12px;">KINGDOM OF CAMBODIA</span></span><br />
-						<span style="font-size: 12px; color: #002c7b;">ជាតិ សាសនា ព្រះមហាក្សត្រ</span><br />
-						<span><span style=" margin:0; padding:0; font-weight: 600; color: #002c7b;font-size: 10px; ">NATION RELIGION KING</span></span><br />
-						<span><img style=" height: 12px; " src="' . $baseUrl . '/images/' . $imgSing . '"></span>
-						
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		';
-		return $str;
-	}
+}
 ?>

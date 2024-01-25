@@ -9,6 +9,7 @@ $scoreInfo = $this->resultData['scoreInfo'];
 $groupId = $scoreInfo['group_id'];
 $forMonthId = $scoreInfo['for_month'];
 $academicId = $scoreInfo['academicYearId'];
+$degreeId= $scoreInfo['degreeId'];
 $forSemester= $scoreInfo['for_semester'];
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
@@ -282,6 +283,7 @@ $html='<html>
 									 
 									 $data = array(
 									 		'groupId'=>$groupId,
+											'degree' => $degreeId,
 									 		'semesterId'=>$forSemester,
 									 		'studentId'=>$studentInfo['student_id'],
 									 		'forMonth'=>$forMonthId,

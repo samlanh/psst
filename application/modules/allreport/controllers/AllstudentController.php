@@ -73,6 +73,8 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	public function studentGroupAction()
 	{
+		
+		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			$search['issetGroup']=0;
@@ -91,6 +93,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_status'=>-1,
 					'issetGroup'=>0,
 			);
+			$dbGb = new Application_Model_DbTable_DbGlobal();
+			$last = $dbGb->getLatestAcadmicYear();
+			if(!empty($last)){
+				$search["academic_year"] = empty($last["id"]) ? 0 : $last["id"];
+			}
 		}
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$this->view->rs = $db->getGroupDetailReport($search);

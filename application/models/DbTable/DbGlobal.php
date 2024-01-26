@@ -4291,6 +4291,19 @@ function getAllgroupStudyNotPass($action=null){
 		";
 		return $db->fetchAll($sql);
 	}
+	
+	function getLatestAcadmicYear(){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT 
+				ac.* 
+				FROM `rms_academicyear` AS  ac 
+			WHERE ac.`status` = 1 
+			ORDER BY ac.`id` DESC 
+			LIMIT 1
+		";
+		return $db->fetchRow($sql);
+	}
    
 }
 ?>

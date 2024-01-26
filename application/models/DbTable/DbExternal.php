@@ -498,14 +498,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$sql.=" AND s.criteriaId =".$data['criteriaId'];
 		}
 
-		$sql.=" AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = s.criteriaId LIMIT 1)
-				 > CASE 
-			WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id 
-			AND sttDi.subjectId =  ".$subjectId." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
-						THEN '1' 
-						ELSE '0'
-					END 
-				AND s.isNotEnteryCri = CASE 
+		$sql.=" AND s.isNotEnteryCri = CASE 
 					WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id 
 			AND sttDi.subjectId =  ".$subjectId." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
 						THEN '1' 
@@ -535,14 +528,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$sql.=" AND s.criteriaId =".$data['criteriaId'];
 		}
 
-		$sql.=" AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = s.criteriaId LIMIT 1)
-				 > CASE 
-			WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id 
-			AND sttDi.subjectId =  ".$subjectId." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
-						THEN '1' 
-						ELSE '0'
-					END 
-				AND s.isNotEnteryCri = CASE 
+		$sql.="	AND s.isNotEnteryCri = CASE 
 					WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id =s.score_setting_id 
 			AND sttDi.subjectId =  ".$subjectId." ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
 						THEN '1' 
@@ -550,6 +536,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			END  ";
 
 		$sql.=" ORDER BY criteriaType ASC, s.criteriaId ASC ";
+	//	echo 	$sql; exit();
 		$rRow = $db->fetchAll($sql);
 
 		if(!empty($row)){

@@ -11,6 +11,7 @@ $forMonthId = $scoreInfo['for_month'];
 $academicId = $scoreInfo['academicYearId'];
 $degreeId= $scoreInfo['degreeId'];
 $forSemester= $scoreInfo['for_semester'];
+$examType = $scoreInfo['exam_type'];
 
 $dbgb = new Application_Model_DbTable_DbGlobal();
 $db = new Allreport_Model_DbTable_DbScoreTranscript();
@@ -780,6 +781,7 @@ $html='<html>
 									 		'semesterId'=>$forSemester,
 									 		'studentId'=>$studentInfo['student_id'],
 									 		'forMonth'=>$forMonthId,
+											'examType' => $examType,
 									 		'attStatus' => 3,
 									 );
 									 $attStutus3=count($db->countAttendenceTranscript($data));

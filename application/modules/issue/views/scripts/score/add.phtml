@@ -287,6 +287,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.ready(function() {
 		var subjectList = [];
+		var dataStuList = [];
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,
@@ -339,6 +340,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				tem = "";
 				temp = '';
 				if (data != "") {
+					dataStuList = data;
 					title = 0;
 					temp = '';
 					str = '';
@@ -411,7 +413,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									totalAverage = data[i].gradingScore[j].totalAverage;
 								}
 							}
-							temp += '<td id="score_' + j + '"><input value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
+							temp += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + inx + ',' + j + ')" value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
 						}
 
 						temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + inx + '"  name="amount_subject' + inx + '" ></td>';
@@ -601,4 +603,52 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			return false;
 		}
 	});
+	
+	
+	function keyPressed(TB, e,row,sujIndex) 
+    {
+		if (e.keyCode == 40 || e.keyCode == 13) { // arrow down
+            if (row < inx){
+				document.getElementById('score_'+eval(row + '+1') + '_' + TB.split("_").pop()).focus();
+            }else if (row == inx){
+				var firstRecord = eval(inx-dataStuList.length)+1;
+				document.getElementById('score_'+firstRecord+ '_' + TB.split("_").pop()).focus();         
+			}
+        }
+		if (e.keyCode == 38) { // arrow up
+			var firstRecord = eval(inx-dataStuList.length)+1;
+            if(row > firstRecord){
+				document.getElementById('score_'+eval(row + '-1') + '_' + TB.split("_").pop()).focus();
+            }else if (row == firstRecord){
+				document.getElementById('score_'+inx+ '_' + TB.split("_").pop()).focus();
+			}
+        }
+		if (e.keyCode == 39) { // arrow right
+			var maxCol = subjectList.length;
+			var currentKey = eval(sujIndex+1);
+            if( currentKey < maxCol){
+				var nextIndex = eval(sujIndex + '+1');
+				var nextSub = subjectList[nextIndex].subject_id;
+				document.getElementById('score_'+row+ '_' + nextSub).focus();
+			}else if ( currentKey == maxCol){
+				var nextSub = subjectList[0].subject_id;
+				document.getElementById('score_'+row+ '_' + nextSub).focus();
+			}
+				
+        }
+		if (e.keyCode == 37) { // arrow left
+			var currentCol = TB.split("_").pop();
+			var currentKey = eval(sujIndex+1);
+            if(currentKey > 1) {
+				var previousIndex = eval(sujIndex + '-1');
+				var previousSub = subjectList[previousIndex].subject_id;
+				document.getElementById('score_'+row+ '_' + previousSub).focus();        
+            }else if (currentKey == 1){
+				var maxCol = subjectList.length;
+				var thisIndex = (maxCol - 1)
+				var previousSub = subjectList[thisIndex].subject_id;
+				document.getElementById('score_'+row+ '_' + previousSub).focus();
+			}		
+        }		
+    }
 </script>

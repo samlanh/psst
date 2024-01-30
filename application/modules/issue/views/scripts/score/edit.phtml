@@ -153,6 +153,17 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="sortStundent" name="sortStundent" class="fullside" onchange="reloadOrder();" dojoType="dijit.form.FilteringSelect">
+										<option value="0" <?php if ($this->sortType==0){ echo "Selected='selected'";}?>><?php echo $tr->translate("DEFAULT"); ?></option>
+										<option value="1" <?php if ($this->sortType==1){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
+										<option value="2" <?php if ($this->sortType==2){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
+										<option value="3" <?php if ($this->sortType==3){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
 								<div class="card-blogform">
 									<div class="introduction">
 										<div class="d-flex"> 
@@ -270,6 +281,16 @@ dojo.require("dijit.form.Textarea");
 		getAllGroupByBranch();
 		
 });
+
+function reloadOrder(){
+		<?php 
+			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+    	?>
+		 sortStundent = dijit.byId('sortStundent').get('value');
+    	 score_id = dijit.byId('score_id').get('value');
+		 window.location.href = '<?php echo $this->baseUrl(); ?>/issue/score/edit/id/'+score_id+'/sortType/'+sortStundent+' '; 
+		 
+	}
 
 function gender(sex){
 	if(sex==1){

@@ -92,8 +92,8 @@ table.tb-footer tr.style-head {
 					<td width="20%" align="right"></td>
 				</tr>
 			<style>
-				.style{
-						line-height: 20px;font-size: 12px !important;
+					.style{
+						line-height: 16px; font-size: 11px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.hideblog{display: none;}
@@ -129,7 +129,7 @@ table.tb-footer tr.style-head {
 				
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 20px; font-size:11px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
@@ -177,12 +177,26 @@ table.tb-footer tr.style-head {
 							size:A4 portrait;
 						}
 					}
+					.normal-wrap {
+						white-space: pre-line !important;
+						line-height: 16px;
+						text-align: left;
+						width: 120px;
+					}
+					span.note{
+						font-size:10px !important;
+						line-height:12px !important;
+						max-width: 330px; display: block; 
+						white-space: pre-line; 
+						overflow-wrap: break-word;
+						padding: 0 1px;
+					}
 			
 			</style>
 				<tr>
 					<td colspan="3">
 						<div id="exportExcel">
-							<table class="content-data" cellpadding="4"​   border="1" >
+							<table class="content-data" cellpadding="4" border="1" >
 								<thead>
 									<tr class="style"  align="center">
 										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
@@ -214,19 +228,29 @@ table.tb-footer tr.style-head {
 									  <tr class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center"  >
 											<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
 											<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $rs['serial']; ?><br /><?php echo $rs['stu_code']; ?></td>
-											<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left"  ><?php echo $rs['stu_khname']; ?><br /><?php echo $rs['last_name']." ".$rs['stu_enname']; ?></td>
+											<td data-label="<?php echo $tr->translate("STUDENT_NAMEKHMER");?>" align="left"  >
+											<?php echo $rs['stu_khname']; ?>
+											<br />
+											<?php echo $rs['last_name']." ".$rs['stu_enname']; ?>
+											</td>
 											<td data-label="<?php echo $tr->translate("SEX");?>" align="center" valign="center"><?php echo $rs['sex']; ?></td>
-											<td data-label="<?php echo $tr->translate("PHONE");?>"><?php echo $rs['tel']; ?></td>
+											<td class="normal-wrap" data-label="<?php echo $tr->translate("PHONE");?>"><?php echo $rs['tel']; ?></td>
 											<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"><?php echo $rs['academic']; ?></td>
 											<td data-label="<?php echo $tr->translate("TEST_DATE");?>" valign="top" style="padding: 2px;"><?php echo date('d-M-Y', strtotime($rs['create_date_exam'])); ?><br /><?php echo $rs['study_term'];?></td>
-											<td data-label="<?php echo $tr->translate("DEGREE");?>" valign="top"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?><?php if ($rs['updated_result_de']==1){ echo "<br />".$rs['grade_result_title']; }?></td>
+											<td data-label="<?php echo $tr->translate("DEGREE");?>" valign="top"><?php if ($rs['updated_result_de']==1){ echo $rs['degree_result_title']; }?>
+											
+											<?php if ($rs['updated_result_de']==1){ echo "<br /><strong>".$rs['grade_result_title']."</strong>"; }?>
+											<?php if (!empty($rs['partTimeTitle'])){ echo "<br />".$rs['partTimeTitle']; }?>
+											
+											</td>
 											<td data-label="<?php echo $tr->translate("RESULT_DATE");?>" style="padding: 2px;"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
 											<td data-label="<?php echo $tr->translate("RESULT_BY");?>" valign="top">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
-											<td data-label="<?php echo $tr->translate("NOTE");?>" align="left" valign="top"><span style="max-width: 330px; display: block; white-space: pre-line; line-height: 16px; overflow-wrap: break-word;padding: 0 1px;" ><?php echo $rs['note_result']; ?></span></td>
+											<td  data-label="<?php echo $tr->translate("NOTE");?>" align="left" valign="top"><span class="note" style="" ><?php echo $rs['note_result']; ?></span></td>
 											<td data-label="<?php echo $tr->translate("USER");?>" valign="center"><?php echo $rs['user_id'];?></td>								    
 											<td data-label="<?php echo $tr->translate("RESULT");?>" style=" <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
 											<td data-label="<?php echo $tr->translate("STATUS");?>" style=" <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?></td>							    
 									  </tr>
+
 									  <?php 
 										if($rs['updated_result_de']==1){
 											$updated_result = $updated_result + 1;

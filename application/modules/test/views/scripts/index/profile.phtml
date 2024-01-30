@@ -363,7 +363,7 @@
 				                				<td align="left" class="<?php if($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo empty($record['result_date'])?"":date("d/M/Y",strtotime($record['result_date']));?>&nbsp;</td>
-				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_result_title'];?>&nbsp;</td>
+				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['degree_result_title']; echo empty($record['partTimeTitle']) ? "" : "<br />".$record['partTimeTitle']; ?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['grade_result_title'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['score'];?>&nbsp;</td>
 				                				<td align="center" class="<?php if ($counts==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $record['comment_title'];?>&nbsp;</td>

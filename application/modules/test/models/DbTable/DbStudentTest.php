@@ -684,9 +684,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
 			(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
 			(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
-			FROM
+			,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
+		FROM
 			`rms_student_test_result` AS str
-			WHERE 
+		WHERE 
 			str.stu_test_id = $stu_id ";
 		if (!empty($type)){
 			$sql.=" AND str.test_type = $type";

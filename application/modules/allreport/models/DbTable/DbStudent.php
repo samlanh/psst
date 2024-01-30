@@ -337,6 +337,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					str.updated_result AS updated_result_de,
 					str.note AS note_result,
 					str.is_registered
+					,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
 				FROM 
 					`rms_student` AS st,
 					`rms_student_test_result` AS str

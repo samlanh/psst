@@ -283,6 +283,7 @@ dojo.require("dijit.form.Textarea");
 });
 
 function reloadOrder(){
+		loadingBlock();
 		<?php 
 			defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
     	?>
@@ -389,7 +390,7 @@ function filterStudentOld(){
 				<?php if (!empty($this->subjectGroup)) foreach ($this->subjectGroup as $index => $subj){ 
 					$result_score = $db_score->getStudentScoreBySubjectID($this->score_id, $rs["student_id"],$subj['subject_id']);
 					?>
-					temp += '<td id="score_<?php echo $index;?>"><input required="true" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['orgScore'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
+					temp += '<td id="score_<?php echo $index;?>"><input onkeydown="keyPressed(this.id,event,' + inx + ',<?php echo $index;?>)" required="true" <?php if (empty($result_score)){?>disabled="disabled"<?php }?>  class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php if (!empty($result_score)){ echo $result_score['orgScore'];}else{ echo '0';}?>" id="score_'+inx+'_<?php echo $subj["subject_id"]; ?>"  name="score_'+inx+'_<?php echo $subj["subject_id"]; ?>" /></td>';
 				<?php }?>
 				temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="<?php echo $rs["amount_subject"]; ?>" id="amount_subject'+inx+'"  name="amount_subject'+inx+'" ></td>';
 				if (examType == 2) {
@@ -541,4 +542,49 @@ $('body').on('keydown', 'input, select', function(e) {
         return false;
     }
 });
+var subjectList = <?php echo  Zend_Json::encode($this->subjectGroup); ?>;
+var dataStuList = <?php echo  Zend_Json::encode($student); ?>;
+function keyPressed(TB, e,row,sujIndex) 
+    {
+		if (e.keyCode == 40 || e.keyCode == 13) { // arrow down
+            if (row < inx){
+				document.getElementById('score_'+eval(row + '+1') + '_' + TB.split("_").pop()).focus();
+            }else if (row == inx){
+				var firstRecord = eval(inx-dataStuList.length)+1;
+				document.getElementById('score_'+firstRecord+ '_' + TB.split("_").pop()).focus();         
+			}
+        }else if (e.keyCode == 38) { // arrow up
+			var firstRecord = eval(inx-dataStuList.length)+1;
+            if(row > firstRecord){
+				document.getElementById('score_'+eval(row + '-1') + '_' + TB.split("_").pop()).focus();
+            }else if (row == firstRecord){
+				document.getElementById('score_'+inx+ '_' + TB.split("_").pop()).focus();
+			}
+        }else if (e.keyCode == 39) { // arrow right
+			var maxCol = subjectList.length;
+			var currentKey = eval(sujIndex+1);
+            if( currentKey < maxCol){
+				var nextIndex = eval(sujIndex + '+1');
+				var nextSub = subjectList[nextIndex].subject_id;
+				document.getElementById('score_'+row+ '_' + nextSub).focus();
+			}else if ( currentKey == maxCol){
+				var nextSub = subjectList[0].subject_id;
+				document.getElementById('score_'+row+ '_' + nextSub).focus();
+			}
+				
+        }else if (e.keyCode == 37) { // arrow left
+			var currentCol = TB.split("_").pop();
+			var currentKey = eval(sujIndex+1);
+            if(currentKey > 1) {
+				var previousIndex = eval(sujIndex + '-1');
+				var previousSub = subjectList[previousIndex].subject_id;
+				document.getElementById('score_'+row+ '_' + previousSub).focus();        
+            }else if (currentKey == 1){
+				var maxCol = subjectList.length;
+				var thisIndex = (maxCol - 1)
+				var previousSub = subjectList[thisIndex].subject_id;
+				document.getElementById('score_'+row+ '_' + previousSub).focus();
+			}		
+        }		
+    }
 </script> 

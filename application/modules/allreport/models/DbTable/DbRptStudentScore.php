@@ -138,6 +138,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			 	s.for_semester,
 			  	s.reportdate,
 				s.date_input
+				,s.isPublic
+				,(SELECT first_name FROM rms_users as u where u.id = s.publicBy LIMIT 1) as publicByUserName
    			FROM 
    				`rms_score` AS s,
    				`rms_group` AS g 

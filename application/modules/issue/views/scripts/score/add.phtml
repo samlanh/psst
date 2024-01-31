@@ -84,9 +84,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				}
 			</script>
 			<div class="card-box">
-				<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-5 col-sm-5 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body">
+							<div class="form-group">
+								<div class="d-flex">
+									<div class="settings-main-icon ">
+										<i class="fa fa-list-ol" aria-hidden="true"></i>
+									</div>
+									<div class="col-md-10 col-sm-10 col-xs-12">
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCORE_INFO"); ?></p>
+									</div>
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH"); ?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
@@ -98,99 +108,74 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="exam_type" name="exam_type" class="fullside" onchange="getInfoData(); checkExamType();" dojoType="dijit.form.FilteringSelect">
+										<option value="1"><?php echo $tr->translate("MONTHLY"); ?></option>
+										<option value="2"><?php echo $tr->translate("SEMESTER"); ?></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group examtype_display">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select dojoType="dijit.form.FilteringSelect" onchange="getInfoData();" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">
+										<?php if (!empty($this->month)) {
+											foreach ($this->month as $month) { ?>
+												<option value="<?php echo $month['id'] ?>" <?php if ($month['id'] == $current_month) {
+																								echo "selected='selected'";
+																							} ?>><?php echo $month['name'] ?></option>
+										<?php }
+										} ?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select dojoType="dijit.form.FilteringSelect" onchange="getInfoData();" required="true" class="fullside" id="for_semester" name="for_semester" queryExpr="*${0}*" autoComplete="false">
+										<option value="1"><?php echo $tr->translate("SEMESTER1"); ?></option>
+										<option value="2"><?php echo $tr->translate("SEMESTER2"); ?></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE"); ?>(Optional)</label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<input type="text" placeHolder="Khmer title" name="title" id="title" class="fullside" dojoType="dijit.form.TextBox" />
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<input type="text" placeHolder="English title" name="title_en" id="title_en" class="fullside" dojoType="dijit.form.TextBox" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
 								<div class="card-blogform">
-									<div class="card-body">
-										<div class="form-group">
-											<div class="d-flex">
-												<div class="settings-main-icon ">
-													<i class="fa fa-list-ol" aria-hidden="true"></i>
-												</div>
-												<div class="col-md-10 col-sm-10 col-xs-12">
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCORE_INFO"); ?></p>
-												</div>
+									<div class="introduction">
+										<div class="d-flex">
+											<div class="settings-main-icon ">
+												<i class="fa fa-info-circle" aria-hidden="true"></i>
+											</div>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<p class="tx-20 font-weight-semibold d-flex ">ការណែនាំ</p>
 											</div>
 										</div>
-										<div class="form-group">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE"); ?> <span class="required">*</span></label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-												<select id="exam_type" name="exam_type" class="fullside" onchange="getInfoData(); checkExamType();" dojoType="dijit.form.FilteringSelect">
-													<option value="1"><?php echo $tr->translate("MONTHLY"); ?></option>
-													<option value="2"><?php echo $tr->translate("SEMESTER"); ?></option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group examtype_display">
-											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH"); ?> <span class="required">*</span></label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-												<select dojoType="dijit.form.FilteringSelect" onchange="getInfoData();" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">
-													<?php if (!empty($this->month)) {
-														foreach ($this->month as $month) { ?>
-															<option value="<?php echo $month['id'] ?>" <?php if ($month['id'] == $current_month) {
-																											echo "selected='selected'";
-																										} ?>><?php echo $month['name'] ?></option>
-													<?php }
-													} ?>
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER"); ?> <span class="required">*</span></label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-												<select dojoType="dijit.form.FilteringSelect" onchange="getInfoData();" required="true" class="fullside" id="for_semester" name="for_semester" queryExpr="*${0}*" autoComplete="false">
-													<option value="1"><?php echo $tr->translate("SEMESTER1"); ?></option>
-													<option value="2"><?php echo $tr->translate("SEMESTER2"); ?></option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE"); ?>(Optional)</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-												<div class="col-md-6 col-sm-6 col-xs-12">
-													<input type="text" placeHolder="Khmer title" name="title" id="title" class="fullside" dojoType="dijit.form.TextBox" />
-												</div>
-												<div class="col-md-6 col-sm-6 col-xs-12">
-													<input type="text" placeHolder="English title" name="title_en" id="title_en" class="fullside" dojoType="dijit.form.TextBox" />
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<div class="card-blogform">
-												<div class="introduction">
-													<div class="d-flex">
-														<div class="settings-main-icon ">
-															<i class="fa fa-info-circle" aria-hidden="true"></i>
-														</div>
-														<div class="col-md-10 col-sm-10 col-xs-12">
-															<p class="tx-20 font-weight-semibold d-flex ">ការណែនាំ</p>
-														</div>
-													</div>
-													<label class="control-label bold col-md-12 col-sm-12 col-xs-12">1.ពិន្ទុទាញពី</label>
-													<ul>
-														<li>ទាញពីការដាក់ពិន្ទុរបស់គ្រូ : ដើម្បីទាញពិន្ទុពីការបញ្ចូលរបស់គ្រូ</li>
-														<li>យោងលើការបញ្ចូល : ដើម្បីបញ្ចូលពិន្ទុដោយខ្លួនឯង</li>
-													</ul>
-													<label class="control-label bold col-md-12 col-sm-12 col-xs-12">2.ដកធិក(Untick)លើមុខវិជា្ជណាមួយករណីមុខវិជា្ជនោះមិនត្រូវបានចាត់ចូលក្នុងការប្រឡង</label>
-												</div>
-											</div>
-										</div>
+										<label class="control-label bold col-md-12 col-sm-12 col-xs-12">1.ពិន្ទុទាញពី</label>
+										<ul>
+											<li>ទាញពីការដាក់ពិន្ទុរបស់គ្រូ : ដើម្បីទាញពិន្ទុពីការបញ្ចូលរបស់គ្រូ</li>
+											<li>យោងលើការបញ្ចូល : ដើម្បីបញ្ចូលពិន្ទុដោយខ្លួនឯង</li>
+										</ul>
+										<label class="control-label bold col-md-12 col-sm-12 col-xs-12">2.ដកធិក(Untick)លើមុខវិជា្ជណាមួយករណីមុខវិជា្ជនោះមិនត្រូវបានចាត់ចូលក្នុងការប្រឡង</label>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-5 col-sm-5 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body">
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_FROM"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="score_option" name="score_option" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
-										<option value="1"><?php echo $tr->translate("FROM_GRADING_SYSTEM"); ?></option>
-										<option value="2"><?php echo $tr->translate("ACCORDING_ENTRY"); ?></option>
-									</select>
-								</div>
-							</div>
 							<div class="form-group">
 								<div class="d-flex">
 									<div class="settings-main-icon ">
@@ -199,6 +184,15 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									<div class="col-md-10 col-sm-10 col-xs-12">
 										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_INFO"); ?></p>
 									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_FROM"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="score_option" name="score_option" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
+										<option value="1"><?php echo $tr->translate("FROM_GRADING_SYSTEM"); ?></option>
+										<option value="2"><?php echo $tr->translate("ACCORDING_ENTRY"); ?></option>
+									</select>
 								</div>
 							</div>
 							<div class="form-group">
@@ -218,7 +212,6 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									</select>
 								</div>
 							</div>
-							<div id="gr-info" style="min-height:90px; background: #3b7acc2b;padding: 10px;border-radius: 5px;border: 1px solid #3b7accc4;padding:10px;border-radius:5px;"></div>
 							<input class="fullside" dojoType="dijit.form.TextBox" id="year_study" name="year_study" value="" type="hidden">
 							<input class="fullside" dojoType="dijit.form.TextBox" id="degree" name="degree" value="" type="hidden">
 							<input class="fullside" dojoType="dijit.form.TextBox" id="grade" name="grade" value="" type="hidden">
@@ -233,6 +226,15 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									<input class="fullside" dojoType="dijit.form.Textarea" id="note" name="note" value="" type="text" style=" height: 120px !important;">
 								</div>
 							</div>
+							
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div id="gr-info" style="min-height:90px; background: #3b7acc2b;padding: 10px;border-radius: 5px;border: 1px solid #3b7accc4;padding:10px;border-radius:5px;"></div>
+							<br />
 							<div class="form-group">
 								<div class="d-flex">
 									<div class="settings-main-icon ">
@@ -243,11 +245,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									</div>
 								</div>
 							</div>
+							
 							<div class="form-group">
 								<label class="custom-switch"> 
-										<input type="checkbox"   id="push_notify" name="push_notify"  class="custom-switch-input" > 
+										<input type="checkbox" onChange="pushFucntionCheck();" id="push_notify" name="push_notify"  class="custom-switch-input" > 
 										<span class="custom-switch-indicator custom-radius"></span> 
 										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION')?></a> 
+								</label>
+							</div>
+							<div class="form-group">
+								<label class="custom-switch"> 
+										<input type="checkbox"   id="publicNow" name="publicNow"  class="custom-switch-input" > 
+										<span class="custom-switch-indicator custom-radius"></span> 
+										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('publicNow')?></a> 
 								</label>
 							</div>
 						</div>
@@ -413,7 +423,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									totalAverage = data[i].gradingScore[j].totalAverage;
 								}
 							}
-							temp += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + inx + ',' + j + ')" value="' + subjectList[j].max_subjectscore + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
+							temp += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + inx + ',' + j + ')" value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
 						}
 
 						temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + inx + '"  name="amount_subject' + inx + '" ></td>';
@@ -649,4 +659,10 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
         }	
 		updateTimeOut();	
     }
+	
+	function pushFucntionCheck(){
+		if ($('#push_notify').is(':checked')) {
+			$('#publicNow').prop('checked', true);
+		}
+	}
 </script>

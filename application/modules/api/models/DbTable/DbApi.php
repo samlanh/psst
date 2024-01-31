@@ -2893,7 +2893,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				st.`stu_id`=sm.`student_id`
 				AND g.`id` = s.`group_id`
 				AND s.`id`=sm.`score_id`
-				AND s.status = 1 ";
+				AND s.status = 1 
+				AND s.isPublic = 1 
+			";
 			
 			$sql.=" AND st.stu_id=".$studentId;
 			

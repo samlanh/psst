@@ -68,9 +68,19 @@
   				 }
 			</script>
 			<div class="card-box">
-				<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-5 col-sm-5 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body">
+							<div class="form-group">
+								<div class="d-flex"> 
+									<div class="settings-main-icon ">
+										<i class="fa fa-list-ol" aria-hidden="true"></i>
+									</div> 
+									<div class="col-md-10 col-sm-10 col-xs-12"> 
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCORE_INFO");?></p>
+									</div> 
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
@@ -80,27 +90,6 @@
 										<option value="<?php echo $row['id'];?>" <?php if($this->score['branch_id']==$row['id']){echo "selected";} ?>><?php echo $row['name']?></option>
 										<?php }?>
 									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input id="group" />
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-12 col-sm-12 col-xs-12">
-									&nbsp;
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="d-flex"> 
-									<div class="settings-main-icon ">
-										<i class="fa fa-list-ol" aria-hidden="true"></i>
-									</div> 
-									<div class="col-md-10 col-sm-10 col-xs-12"> 
-										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SCORE_INFO");?></p>
-									</div> 
 								</div>
 							</div>
 							<div class="form-group">
@@ -153,17 +142,6 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="sortStundent" name="sortStundent" class="fullside" onchange="reloadOrder();" dojoType="dijit.form.FilteringSelect">
-										<option value="0" <?php if ($this->sortType==0){ echo "Selected='selected'";}?>><?php echo $tr->translate("DEFAULT"); ?></option>
-										<option value="1" <?php if ($this->sortType==1){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
-										<option value="2" <?php if ($this->sortType==2){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
-										<option value="3" <?php if ($this->sortType==3){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
 								<div class="card-blogform">
 									<div class="introduction">
 										<div class="d-flex"> 
@@ -186,8 +164,9 @@
 						</div>
 					</div>
 		         </div>
-		         <div class="col-md-6 col-sm-6 col-xs-12">
+		         <div class="col-md-4 col-sm-4 col-xs-12">
 					 <div class="card-blogform">
+						<div class="card-body">
 							 <div class="form-group">
 								<div class="d-flex"> 
 									<div class="settings-main-icon ">
@@ -198,8 +177,23 @@
 									</div> 
 								</div>
 							</div>
-							<div class="card-body"></div>
-							<div id="gr-info" style="min-height:90px; background: #3b7acc2b;padding: 10px;border-radius: 5px;border: 1px solid #3b7accc4;padding:10px;border-radius:5px;"></div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP");?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input id="group" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="sortStundent" name="sortStundent" class="fullside" onchange="reloadOrder();" dojoType="dijit.form.FilteringSelect">
+										<option value="0" <?php if ($this->sortType==0){ echo "Selected='selected'";}?>><?php echo $tr->translate("DEFAULT"); ?></option>
+										<option value="1" <?php if ($this->sortType==1){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
+										<option value="2" <?php if ($this->sortType==2){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
+										<option value="3" <?php if ($this->sortType==3){ echo "Selected='selected'";}?>><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
+									</select>
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="control-label col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 							</div>
@@ -208,6 +202,15 @@
 									<input class="fullside" dojoType="dijit.form.Textarea"  id="note" name="note" value="<?php echo $this->score['note'];?>" type="text" style=" height: 120px !important;"  >
 								</div>
 							</div>
+							
+						</div>
+					</div>
+				 </div>
+				 <div class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div id="gr-info" style="min-height:90px; background: #3b7acc2b;padding: 10px;border-radius: 5px;border: 1px solid #3b7accc4;padding:10px;border-radius:5px;"></div>
+							<br />
 							<div class="form-group">
 								<div class="d-flex">
 									<div class="settings-main-icon ">
@@ -225,9 +228,17 @@
 										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION')?></a> 
 								</label>
 							</div>
+							<div class="form-group">
+								<label class="custom-switch"> 
+										<input type="checkbox"  <?php if ($this->score['isPublic']==1){ echo "checked";}?>   id="publicNow" name="publicNow"  class="custom-switch-input" > 
+										<span class="custom-switch-indicator custom-radius"></span> 
+										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('publicNow')?></a> 
+								</label>
+							</div>
 						</div>
-					 </div>
-		         </div>
+					</div>
+				</div>
+			 </div>
 		      <div class="card-box">
 				<div class="col-md-12 col-sm-12 col-xs-12">
 		    		<div class="form-group">

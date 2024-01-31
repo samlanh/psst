@@ -36,6 +36,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'for_month' => $_data['for_month'],
 				'score_option' => $_data['score_option'],
 			);
+			
+			$_data['publicNow'] = empty($_data['publicNow']) ? 0 : 1;
+			$_arr["isPublic"] = $_data['publicNow'];
+			$_arr["publicBy"] = ($_data['publicNow']==1) ? $this->getUserId() : 0;
+			$_arr["publicDate"] = ($_data['publicNow']==1) ? date("Y-m-d H:i:s") : "";
+			
 			$id = $this->insert($_arr);
 			$scoreId = $id;
 
@@ -413,6 +419,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'for_month' => $_data['for_month'],
 				'status' => $status,
 			);
+			
+			$_data['publicNow'] = empty($_data['publicNow']) ? 0 : 1;
+			$_arr["isPublic"] = $_data['publicNow'];
+			$_arr["publicBy"] = ($_data['publicNow']==1) ? $this->getUserId() : 0;
+			$_arr["publicDate"] = ($_data['publicNow']==1) ? date("Y-m-d H:i:s") : "";
+			
 			$where = "id=" . $_data['score_id'];
 			$this->update($_arr, $where);
 

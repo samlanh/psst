@@ -125,6 +125,8 @@ public function init()
 		$db = new Allreport_Model_DbTable_DbRptAllStaff();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
+			
+			$row = $db->getTeacherScheduleGroupAndStudent($search);
 		}else{
 			$search = array(
 						'branch_id' => '',
@@ -134,9 +136,10 @@ public function init()
 						'end_date'		=> date('Y-m-d',strtotime('+1 month')),
 					);
 			$search["teacherId"] = $id;
+			$row= array();
+			
 		}
 		
-		$row = $db->getTeacherScheduleGroupAndStudent($search);
 		if(empty($search["teacherId"])){
 			//$row= array();
 		}
@@ -147,8 +150,6 @@ public function init()
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		$this->view->search = $search;
-		
-		
 		
 	}
 }

@@ -109,8 +109,12 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 		$id=$this->getRequest()->getParam('id');
 		$id = empty($id)?0:$id;
+
+		$sortType=$this->getRequest()->getParam('sortType');
+		$sortType = empty($sortType)?0:$sortType;
 		
 		$this->view->score_id = $id;
+		$this->view->sortType = $sortType;
 		
 		$_model = new Issue_Model_DbTable_DbScore();
 		$row = $_model->getScoreById($id);
@@ -132,7 +136,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 		}
 		$this->view->score = $row;
 		
-		$this->view->student= $_model->getStudentSccoreforEdit($id);
+		$this->view->student= $_model->getStudentSccoreforEdit($id,$sortType);
 		$this->view->row_g=$_model->getGroupStudent($id);
 		$this->view->subjectGroup = $_model->getSubjectByGroupScore($row['group_id'],null,$row['exam_type']);
 		

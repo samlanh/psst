@@ -138,7 +138,7 @@ public function init()
 		
 		$row = $db->getTeacherScheduleGroupAndStudent($search);
 		if(empty($search["teacherId"])){
-			$row= array();
+			//$row= array();
 		}
 		$this->view->rs = $row;
 		

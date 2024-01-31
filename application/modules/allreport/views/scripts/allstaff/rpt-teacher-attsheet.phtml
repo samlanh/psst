@@ -74,11 +74,20 @@ table.tb-footer tr.style-head {
 					dijit.byId('branch_id').focus(); 
 					return false;
 				}
+				academic_year=dijit.byId('academic_year').get('value');
+				if(academic_year=='' || academic_year==0){
+					alert('<?php echo $tr->translate('PLEASE_SELECT_ACADEMIC');?>!');
+					dijit.byId('academic_year').focus(); 
+					return false;
+				}
 				teacherId=dijit.byId('teacherId').get('value');
 				if(teacherId=='' || teacherId==0){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_TEACHER');?>!');
-					dijit.byId('teacherId').focus(); 
-					return false;
+					department=dijit.byId('department').get('value');
+					if(department=='' || department==0){
+						alert('<?php echo $tr->translate('PLEASE_SELECT_DEPARTMENT');?>!');
+						dijit.byId('department').focus(); 
+						return false;
+					}
 				}
                 loadingBlock();
 				return true;
@@ -108,6 +117,9 @@ table.tb-footer tr.style-head {
 									</div>
 									<div class="col-md-2 col-sm-2 col-xs-12">
 										<input id="teacherId" />
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+										<?php echo $frm->getElement("department");?>
 									</div>
 								</div>
 								<div class="form-group">

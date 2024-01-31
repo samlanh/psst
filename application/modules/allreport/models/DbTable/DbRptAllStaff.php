@@ -320,8 +320,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				LEFT JOIN `rms_teacher` AS t ON t.id  = schDetail.techer_id
 				LEFT JOIN rms_subject AS subj ON subj.id  = schDetail.subject_id
 			WHERE 
-				schDetail.techer_id =$teacherId 
-				AND g.status =1
+				 g.status =1
 				AND g.is_use =1
 				AND g.is_pass =2
 			 ";
@@ -338,8 +337,14 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 		if(!empty($search['group'])){
     		$sql.=' AND sch.group_id='.$search['group'];
     	}
+		if(!empty($teacherId)){
+    		$sql.=' AND schDetail.techer_id = '.$teacherId;
+    	}
+		if(!empty($search['department'])){
+    		$sql.=' AND t.department= '.$search['department'];
+    	}
     	$order=" 
-				GROUP BY sch.group_id,schDetail.subject_id,gsd.stu_id ORDER BY sch.group_id ASC,schDetail.subject_id ASC
+				GROUP BY sch.group_id,schDetail.techer_id,schDetail.subject_id,gsd.stu_id ORDER BY sch.group_id ASC,schDetail.techer_id,schDetail.subject_id ASC
 			";
 			
 		$stuOrderBy = empty($search['stuOrderBy'])?0:$search['stuOrderBy'];

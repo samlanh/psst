@@ -580,6 +580,21 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_stuOrderBy->setValue($request->getParam("stuOrderBy"));
 		
 		
+		$dbTeacher = new Global_Model_DbTable_DbTeacher();
+		$rowDept = $dbTeacher->getAllDepartment();
+		$optDeptpartment = array(''=>$this->tr->translate("PLEASE_SELECT_DEPARTMENT"));
+		if(!empty($rowDept))foreach ($rowDept As $rs)$optDeptpartment[$rs['id']]=$rs['name'];
+		$_department=  new Zend_Dojo_Form_Element_FilteringSelect('department');
+		$_department->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("DEPARTMENT"),
+		));
+		$_department->setMultiOptions($optDeptpartment);
+		$_department->setValue($request->getParam("department"));
+		
+		
 		$this->addElements(array(
 				$_type,
 				$adv_search,
@@ -617,7 +632,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_cut_stock_type,
 				$_sort_degree,
 				$_criteriaId,
-				$_stuOrderBy
+				$_stuOrderBy,
+				$_department
 				)
 			);
 		return $this;

@@ -614,16 +614,14 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				var firstRecord = eval(inx-dataStuList.length)+1;
 				document.getElementById('score_'+firstRecord+ '_' + TB.split("_").pop()).focus();         
 			}
-        }
-		if (e.keyCode == 38) { // arrow up
+        }else if (e.keyCode == 38) { // arrow up
 			var firstRecord = eval(inx-dataStuList.length)+1;
             if(row > firstRecord){
 				document.getElementById('score_'+eval(row + '-1') + '_' + TB.split("_").pop()).focus();
             }else if (row == firstRecord){
 				document.getElementById('score_'+inx+ '_' + TB.split("_").pop()).focus();
 			}
-        }
-		if (e.keyCode == 39) { // arrow right
+        }else if (e.keyCode == 39) { // arrow right
 			var maxCol = subjectList.length;
 			var currentKey = eval(sujIndex+1);
             if( currentKey < maxCol){
@@ -635,8 +633,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				document.getElementById('score_'+row+ '_' + nextSub).focus();
 			}
 				
-        }
-		if (e.keyCode == 37) { // arrow left
+        }else if (e.keyCode == 37) { // arrow left
 			var currentCol = TB.split("_").pop();
 			var currentKey = eval(sujIndex+1);
             if(currentKey > 1) {

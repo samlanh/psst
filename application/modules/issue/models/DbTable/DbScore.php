@@ -1049,7 +1049,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	}
 
 
-	function getStudentSccoreforEdit($score_id)
+	function getStudentSccoreforEdit($score_id,$sort=null)
 	{
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -1075,8 +1075,19 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		FROM
 	 	 	rms_score_detail AS sd 
 		WHERE sd.score_id =$score_id 
-			GROUP BY sd.`student_id` order by type ASC,
-			(SELECT " . $studentEnName . " FROM `rms_student`AS s 
+			GROUP BY sd.`student_id` ";
+	if(!empty($sort)){
+		if($sort==1){
+			$sql .= " order by stu_code ASC";
+		}elseif($sort==2){
+			$sql .= " order by stuKhName ASC";
+		}elseif($sort==3){
+			$sql .= " order by stuEnName ASC";
+		}
+	}else{
+		$sql .= " order by stu_code ASC";
+	}	
+	$sql .= " ,(SELECT " . $studentEnName . " FROM `rms_student`AS s 
 			WHERE s.`stu_id`=sd.`student_id`) ASC  ";
 		return $db->fetchAll($sql);
 	}

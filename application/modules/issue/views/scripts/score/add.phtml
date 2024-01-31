@@ -413,7 +413,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									totalAverage = data[i].gradingScore[j].totalAverage;
 								}
 							}
-							temp += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + inx + ',' + j + ')" value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
+							temp += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + inx + ',' + j + ')" value="' + subjectList[j].max_subjectscore + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
 						}
 
 						temp += '<td><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + inx + '"  name="amount_subject' + inx + '" ></td>';
@@ -646,6 +646,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				var previousSub = subjectList[thisIndex].subject_id;
 				document.getElementById('score_'+row+ '_' + previousSub).focus();
 			}		
-        }		
+        }	
+		updateTimeOut();	
     }
 </script>

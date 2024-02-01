@@ -1698,15 +1698,22 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				$mentionResultArr[$key] = $row["max_score"];
 			}
 		}
+		if($search['exam_type']==1){
+				$totalScore = "sm.total_score";
+				$totalMaxScore = "sm.totalMaxScore";
+		}else{
+			$totalScore = "sm.overallAssessmentSemester";
+			$totalMaxScore = "(SELECT  g.semesterTotalAverage FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 )";
+		}
 
 		$sql = "SELECT  
 		 s.id,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['0'] . "'   , sm.total_score, NULL)) AS Total_A,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['1'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['0'] . "'  , sm.total_score, NULL)) AS Total_B,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['2'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['1'] . "'  , sm.total_score, NULL)) AS Total_C,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['3'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['2'] . "'  , sm.total_score, NULL)) AS Total_D,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 >= '" . $mentionResultArr['4'] . "' AND sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['3'] . "'  , sm.total_score, NULL)) AS Total_E,
-		  COUNT(IF( sm.total_score/sm.`totalMaxScore`*100 < '" . $mentionResultArr['4'] . "'  , sm.total_score, NULL)) AS Total_F
+		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['0'] . "'   , ".$totalScore.", NULL)) AS Total_A,
+		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['1'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['0'] . "'  , ".$totalScore.", NULL)) AS Total_B,
+		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['2'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['1'] . "'  , ".$totalScore.", NULL)) AS Total_C,
+		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['3'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['2'] . "'  , ".$totalScore.", NULL)) AS Total_D,
+		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['4'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['3'] . "'  , ".$totalScore.", NULL)) AS Total_E,
+		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['4'] . "'  , ".$totalScore.", NULL)) AS Total_F
 		   
 		 FROM `rms_score` AS s  ,
 			`rms_score_monthly` AS sm  

@@ -599,4 +599,10 @@ function keyPressed(TB, e,row,sujIndex)
         }	
 		updateTimeOut();		
     }
+	
+	function pushFucntionCheck(){
+		if ($('#push_notify').is(':checked')) {
+			$('#publicNow').prop('checked', true);
+		}
+	}
 </script> 

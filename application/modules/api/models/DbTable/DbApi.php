@@ -2831,7 +2831,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							AND sSecond.id=s.`id`
 						)
 					) AS examRanking
-					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.stop_type NOT IN (1,2) AND gds.is_maingrade=1 LIMIT 1) AS amountStudent
 					
 					,CASE 
 						WHEN s.exam_type = 2 THEN  

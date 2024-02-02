@@ -1593,7 +1593,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
 				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
-				(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id) TotaStudent
+				(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id AND sm.type=1 ) TotaStudent
 			FROM `rms_score` AS s  
 			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
     	";
@@ -1717,7 +1717,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		   
 		 FROM `rms_score` AS s  ,
 			`rms_score_monthly` AS sm  
-		WHERE s.`id` = sm.`score_id` ";
+		WHERE s.`id` = sm.`score_id`  AND sm.`type` = 1 ";
 		$where = ' ';
 		if (($search['scoreId']) > 0) {
 			$where .= ' AND s.id=' . $search['scoreId'];

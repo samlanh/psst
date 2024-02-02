@@ -61,6 +61,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 			}
 		}
 		$arreValue = array(
+			'scoreId' => $scoreId,
 			'studentId' => $studentId,
 			'groupId' => $scoreInfo['group_id'],
 			'forType' => $scoreInfo['exam_type'],

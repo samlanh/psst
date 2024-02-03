@@ -1226,10 +1226,12 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$sql .= " AND gsjd.teacher = " . $data['teacher_id'];
 		}
 		if (!empty($data['exam_type'])) {
-			$sql .= " AND gsjd.amount_subject > 0 ";
-		} else {
-			$sql .= " AND gsjd.amount_subject_sem > 0 ";
-		}
+			if($data['exam_type']==1){
+				$sql .= " AND gsjd.amount_subject > 0 ";
+			}else{
+				$sql .= " AND gsjd.amount_subject_sem > 0 ";
+			}
+		} 
 		$sql .= " ORDER  BY $strSubjectLange ";
 		return $db->fetchAll($sql);
 	}

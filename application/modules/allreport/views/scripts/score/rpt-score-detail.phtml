@@ -303,7 +303,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 			if (!empty($this->studentgroup)) {
 				foreach ($this->studentgroup as $key => $rs) {
 					if($rs['type'] == 2){
-						break;
+						continue;
 					}
 					if ($rs['sex'] == 1) {
 						$sex = $tr->translate("MALE_SHORT");
@@ -571,7 +571,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										</td>
 										<td align="center" class="red"><label id="record<?php echo $i; ?>"></label><?php if($rs['totalMaxScore']>0){ echo $old_rank; }else{ echo "-"; }  ?></td>
 										<td align="center" <?php  if ($total_score < ($rs['totalMaxScore'] / 2)) {
-																echo 'style=" background: #fdbdbd;"';
+																echo '';
 															} ?>>
 											<?php
 											if($rs['totalMaxScore']>0){
@@ -627,7 +627,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										</td>
 										<td align="center" class="red"><label id="record<?php echo $i; ?>"></label><?php if($rs['totalMaxScore']>0){ echo $old_rank; }else{ echo "-"; }  ?></td>
 										<td align="center" <?php  if ($overal_semester_avg < ($rs['semesterTotalAverage'] / 2)) {
-																echo 'style=" background: #fdbdbd;"';
+																echo '';
 															} ?>>
 											<?php
 											if($rs['semesterTotalAverage']>0){

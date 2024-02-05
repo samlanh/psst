@@ -138,8 +138,9 @@ table.tb-footer tr.style-head {
 					   white-space: nowrap;
 						
 					}
-					
-					
+					table.content-data thead tr.style td {
+						vertical-align: middle;
+					}
 					table.tb-footer{
 						border-collapse:collapse;
 						border:1px solid #000; 
@@ -163,7 +164,8 @@ table.tb-footer tr.style-head {
 						color: #f80000;
 					}
 					table.content-data tr td{
-						padding: 1px;
+						padding: 2px 5px;
+						vertical-align: top;
 					}
 					@media print{
 						@page{
@@ -174,7 +176,6 @@ table.tb-footer tr.style-head {
 							-ms-transform: scale(0.5);   /* IE 9 */
 							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
 							transform: scale(0.5);
-							size:A4 portrait;
 						}
 					}
 					.normal-wrap {
@@ -186,7 +187,8 @@ table.tb-footer tr.style-head {
 					span.note{
 						font-size:10px !important;
 						line-height:12px !important;
-						max-width: 330px; display: block; 
+						max-width: 200px; display: block; 
+						width: 200px; display: block; 
 						white-space: pre-line; 
 						overflow-wrap: break-word;
 						padding: 0 1px;
@@ -199,24 +201,33 @@ table.tb-footer tr.style-head {
 							<table class="content-data" cellpadding="4" border="1" >
 								<thead>
 									<tr class="style"  align="center">
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("N_O"); ?>&nbsp;</td>
-										<td scope="col" style="padding: 2px;overflow-wrap: break-word;" rowspan="2">&nbsp;
-										<?php echo $tr->translate("SERIAL"); ?>/<br /><?php echo $tr->translate("STUDENT_ID"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("STUDENT_NAMEKHMER"); ?><br /><?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("SEX"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("PHONE"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("TEST_DATE"); ?>/<?php echo $tr->translate("TEST_TERM");?>&nbsp;</td>
-										<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NOTE"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("USER"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("RESULT"); ?>&nbsp;</td>
-										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
+										<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
+										<td scope="col" colspan="4"><?php echo $tr->translate("STUDENT_INFO"); ?></td>
+										<td scope="col" colspan="2"><?php echo $tr->translate("STUDY_INFO"); ?></td>
+										<td scope="col" colspan="4"><?php echo $tr->translate("RESULT"); ?></td>
+										
+										
+										<td scope="col" colspan="3"><?php echo $tr->translate("STATUS"); ?></td>
 									  </tr>
 									 <tr class="style"  align="center">
-										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE"); ?><br /><?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
-										<td scope="col">&nbsp;<?php echo $tr->translate("RESULT_DATE"); ?>&nbsp;</td>
-										<td scope="col" style="line-height: 18px; padding: 2px;">&nbsp;<?php echo $tr->translate("RESULT_BY"); ?>&nbsp;</td>
+										<td scope="col" style="padding: 2px;overflow-wrap: break-word;" >
+										<?php echo $tr->translate("SERIAL"); ?>/<br /><?php echo $tr->translate("STUDENT_ID"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("STUDENT_NAMEKHMER"); ?><br /><?php echo $tr->translate("NAME_ENGLISH"); ?>&nbsp;</td>
+										<td scope="col" ><?php echo $tr->translate("SEX"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("PHONE"); ?></td>
+										
+										<td scope="col" ><?php echo $tr->translate("ACADEMIC_YEAR"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("TEST_DATE"); ?>/<?php echo $tr->translate("TEST_TERM");?></td>
+										
+										
+										<td scope="col"><?php echo $tr->translate("DEGREE"); ?><br /><?php echo $tr->translate("GRADE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("RESULT_DATE"); ?></td>
+										<td scope="col" style="line-height: 18px; padding: 2px;"><?php echo $tr->translate("RESULT_BY"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("NOTE"); ?></td>
+									 
+										<td scope="col" ><?php echo $tr->translate("USER"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("RESULT"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("RIGISTER"); ?></td>
 									 </tr>
 									
 								</thead>
@@ -244,11 +255,11 @@ table.tb-footer tr.style-head {
 											
 											</td>
 											<td data-label="<?php echo $tr->translate("RESULT_DATE");?>" style="padding: 2px;"><?php if ($rs['updated_result_de']==1){ echo date('d-M-Y', strtotime($rs['result_date'])); }?></td>
-											<td data-label="<?php echo $tr->translate("RESULT_BY");?>" valign="top">&nbsp;<?php echo $rs['result_by'];?>&nbsp;</td>	
+											<td data-label="<?php echo $tr->translate("RESULT_BY");?>" valign="top"><?php echo $rs['result_by'];?></td>	
 											<td  data-label="<?php echo $tr->translate("NOTE");?>" align="left" valign="top"><span class="note" style="" ><?php echo $rs['note_result']; ?></span></td>
 											<td data-label="<?php echo $tr->translate("USER");?>" valign="center"><?php echo $rs['user_id'];?></td>								    
 											<td data-label="<?php echo $tr->translate("RESULT");?>" style=" <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
-											<td data-label="<?php echo $tr->translate("STATUS");?>" style=" <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("Not Yet Register");}?></td>							    
+											<td data-label="<?php echo $tr->translate("STATUS");?>" style=" <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("PENDING");}?></td>							    
 									  </tr>
 
 									  <?php 

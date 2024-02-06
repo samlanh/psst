@@ -182,23 +182,38 @@ table.tb-footer tr.style-head {
 									<td scope="col"><?php echo $tr->translate("CREATE_DATE");?></td>
 									<td scope="col"><?php echo $tr->translate("BY_USER");?></td>
 									<td scope="col"><?php echo $tr->translate("NOTE");?></td>
-									<td class="hidden" scope="col">
-										<?php echo $tr->translate("PUBLIC");?>
-										<input type="checkBox" onclick="checkResult('<?php echo count($this->studentgroup);?>');" name="checkall" id="checkall" />
-										<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+									<td  scope="col">
+										<div class="custom-control custom-checkbox ">
+											<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >
+											<label class="custom-control-label" for="check_all">
+												<?php echo $tr->translate("PUBLIC");?>
+											</label>
+										</div>				
 									</td>
+									<td scope="col"><?php echo $tr->translate("Notify");?></td>
 								  </tr>
 							  </thead>
 						
 							<?php
+							//print_r($this->studentgroup);
+							$identity="";
 							 $old_groupid=0; $i=0; $count_fail=0; $count=0; $old_average = 0; $old_rank=0;
 							 if (!empty($this->studentgroup)){ foreach($this->studentgroup as $key=> $rs){ $i++;
+								if(empty($identity)){
+									$identity = $rs['id'];
+								}else{
+									$identity =$identity .",". $rs['id'];
+								}
+								
 							?>
 							<tr class="style-rowdata hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" align="center" >
 							    <td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
 							    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
 							    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" ><?php echo $rs['academic_year']; ?></td>
-							    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left"><?php echo $rs['group_code']; ?></td>
+							    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left">
+									<input type="hidden" name="groupId<?php echo $rs['id'];?>" id="groupId<?php echo $rs['id'];?>" value="<?php echo $rs['group_id'];?>" dojoType="dijit.form.TextBox" />
+									<?php echo $rs['group_code']; ?>
+								</td>
 								<td data-label="<?php echo $tr->translate("SESSION");?>" ><?php echo $rs['session']; ?></td>
 							    <td data-label="<?php echo $tr->translate("CLASSES");?>"  align="left"><?php echo $rs['room_name']; ?></td>
 							    <td data-label="<?php echo $tr->translate("EXAM_TYPE");?>"  align="left"><?php echo $rs['examtype']; ?></td>
@@ -210,8 +225,13 @@ table.tb-footer tr.style-head {
 							    <td data-label="<?php echo $tr->translate("NOTE");?>"  align="left"><?php echo $rs['note']; ?></td>
 								<td class="" align="center">
 									<label class="custom-switch"> 
-										<input type="checkbox"  id="publicNow<?php echo $i?>" name="publicNow<?php echo $i?>" onClick="checked_id(<?php echo $i?>)"  class="custom-switch-input" <?php if($rs['isPublic']==1){ echo "checked"; }else{ echo ""; } ?>> 
-										<input type="hidden" name="result_id<?php echo $i;?>" id="result_id<?php echo $i;?>" value="<?php echo $rs['id'];?>" dojoType="dijit.form.TextBox" />
+										<input type="checkbox"  id="publicNow<?php echo $rs['id'];?>" name="publicNow<?php echo $rs['id'];?>" onClick="checkall(<?php echo $rs['id'];?>)"  class=" checkbox custom-switch-input" <?php if($rs['isPublic']==1){ echo "checked"; }else{ echo ""; } ?>> 
+										<span class="custom-switch-indicator custom-switch-small custom-radius"></span> 
+									</label>
+								</td>
+								<td class="" align="center">
+									<label class="custom-switch"> 
+										<input type="checkbox"  id="push_notify<?php echo $rs['id'];?>" name="push_notify<?php echo $rs['id'];?>"  class=" checkbox custom-switch-input" > 
 										<span class="custom-switch-indicator custom-switch-small custom-radius"></span> 
 									</label>
 								</td>
@@ -232,6 +252,7 @@ table.tb-footer tr.style-head {
 		<table width="100%">
 			<tr>
 				<td align="center">
+					<input type="hidden" name="identity" id="identity" value="<?php echo $identity;?>" dojoType="dijit.form.TextBox" />
 					<button class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SAVE");?></button>
 				</td>
 			</tr>
@@ -317,7 +338,7 @@ dojo.ready(function(){
 		}
 	}, "grade");
 	getallGrade();
-	ALLSelect(<?php $this->studentgroup ?>);
+	
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllGroup();
@@ -405,42 +426,31 @@ function setValue(index){
 	}
 }
 
-
-function checkResult(array_length){
-
-		dijit.byId('id_selected').attr('value','');
-		if(dojo.byId('checkall').checked){
-			for(var j=1;j<=array_length;j++){
-				$("#publicNow"+j).attr('checked', 'checked');
-				checked_id(j);
-			}
-		}else{
-			for(var j=1;j<=array_length;j++){
-				$("#publicNow"+j).removeAttr("checked");
-				checked_id(j);
-			}
-		}
-	}
-	function checked_id(index){
-		result_id = dijit.byId('result_id'+index).get('value');
-		
-		if(dojo.byId('publicNow'+index).checked){
-			if($("#id_selected").val()!="") {
-				var identity = $("#id_selected").val();
-				$("#id_selected").val(identity+','+result_id);
+function checkall(index=0){
+	if(index==0){
+			if($('#check_all').is(":checked")){
+				$(".checkbox").prop('checked', true);
 			}else{
-				$("#id_selected").val(result_id);
+				$(".checkbox").prop('checked', false);
 			}
-			
+	}else{
+		
+		var identity = [];
+		var allidentity = $("#identity").val();
+		if(identity == allidentity ){
+			$('#check_all').prop('checked', true); // checks it
 		}else{
-			
-			var identity = $('#id_selected').val();
-			var arrays = identity.split(',');
-			for(var i=0;i<arrays.length;i++) {
-			if(arrays[i] == result_id) arrays.splice(i,1);
-			}
-			var strings = arrays.join(',');
-			$('#id_selected').val(strings);
+			$('#check_all').prop('checked', false); // Unchecks it
+		}
+		pushNotify(index);
+	}
+	
+}
+function pushNotify(index){
+		if($('#publicNow'+index+'').is(":checked")){
+			$("#push_notify"+index+"").prop('checked', true);
+		}else{
+			$("#push_notify"+index+"").prop('checked', false);
 		}
 	}
 </script> 

@@ -194,7 +194,7 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	public	function publicScoreAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-			//print_r($_data); exit();
+		//	print_r($_data); exit();
 			try {
 				//$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
 				$dbs = new Issue_Model_DbTable_DbScore();//by subject

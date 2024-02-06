@@ -1239,16 +1239,28 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 	public function publicAllResult($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
+		$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
 		try{
-			
 			$this->_name='rms_score';
 			// print_r($_data);
 			// exit();
-	    	if (!empty($_data['id_selected'])) {
-				$ids = explode(',', $_data['id_selected']);
+	    	if (!empty($_data['identity'])) {
+				$ids = explode(',', $_data['identity']);
 				foreach ($ids as $rs){
+
+					if(!empty($_data['push_notify'.$rs])){
+						$notify = array(
+							"optNotification" => 2,
+							"notificationId" => $rs,
+							"groupId" => $_data["groupId".$rs],
+							"typeNotify" => "studentScoreTranscript",
+						);
+						$dbPushNoti->pushNotificationAPI($notify);
+					}
+
+					$public = empty($_data['publicNow'.$rs])?0:1;
 					$_arr = array(
-						'isPublic'	 	=>1,
+						'isPublic'	 	=> $public,
 						'publicDate'	=>date("Y-m-d"),
 						'publicBy'		=>$this->getUserId(),
 						);

@@ -1235,5 +1235,32 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$sql .= " ORDER  BY $strSubjectLange ";
 		return $db->fetchAll($sql);
 	}
+
+	public function publicAllResult($_data){
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+		try{
+			
+			$this->_name='rms_score';
+			// print_r($_data);
+			// exit();
+	    	if (!empty($_data['id_selected'])) {
+				$ids = explode(',', $_data['id_selected']);
+				foreach ($ids as $rs){
+					$_arr = array(
+						'isPublic'	 	=>1,
+						'publicDate'	=>date("Y-m-d"),
+						'publicBy'		=>$this->getUserId(),
+						);
+					$where = " id = ".$rs;
+					$this->update($_arr, $where);
+				}
+			}
+		  $db->commit();
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+		}
+   }
 	
 }

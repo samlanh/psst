@@ -578,7 +578,20 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			);
 		$_stuOrderBy->setMultiOptions($_order_opt);
 		$_stuOrderBy->setValue($request->getParam("stuOrderBy"));
-		
+
+		$_score_result_status=  new Zend_Dojo_Form_Element_FilteringSelect('score_result_status');
+		$_score_result_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("STATUS"),
+		));
+		$_rs_opt = array(
+				0=>$this->tr->translate("Unpublished"),
+				1=>$this->tr->translate("Published"),
+			);
+		$_score_result_status->setMultiOptions($_rs_opt);
+		$_score_result_status->setValue($request->getParam("score_result_status"));
 		
 		$dbTeacher = new Global_Model_DbTable_DbTeacher();
 		$rowDept = $dbTeacher->getAllDepartment();
@@ -633,7 +646,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_sort_degree,
 				$_criteriaId,
 				$_stuOrderBy,
-				$_department
+				$_department,
+				$_score_result_status,
 				)
 			);
 		return $this;

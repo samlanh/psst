@@ -1,6 +1,6 @@
 <?php 
 
-	$xml=simplexml_load_file(PUBLIC_PATH."/xml/schedulev3.xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+	$xml=simplexml_load_file(PUBLIC_PATH."/xml/Schedulev4.xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
 	$dbxml = new Issue_Model_DbTable_DbImportxml;
 	$array = json_decode(json_encode((array)$xml), TRUE);
 
@@ -19,55 +19,55 @@
 // }
 
 
-// function getTableData($tableName, $rowName){
-// 	print_r($array["$tableName"]["@attributes"]["columns"]);
-// 	$tableData = $array["daysdefs"]["daysdef"];
-// 	$periodsColumn = $array["$tableName"]["@attributes"]["columns"];
-// 	$columnList = explode(',', $periodsColumn);
-// }
+ /*function getTableData($tableName, $rowName){
+ 	print_r($array["$tableName"]["@attributes"]["columns"]);
+ 	$tableData = $array["daysdefs"]["daysdef"];
+ 	$periodsColumn = $array["$tableName"]["@attributes"]["columns"];
+ 	$columnList = explode(',', $periodsColumn);
+ }*/
 
 
 
 $tableData = $array["subjects"]["subject"];
 $periodsColumn = $array["subjects"]["@attributes"]["columns"];
 $columnList = explode(',', $periodsColumn);
-// if(!empty($tableData)) foreach($tableData as $row){
+ if(!empty($tableData)) foreach($tableData as $row){//use
 
-// 	$subjectTitle =null;//$row["@attributes"]['name'];
-// 	$strId =$row["@attributes"]['id'];
-// 	$shortcut =$row["@attributes"]['short'];
-// 	$Subject = $dbxml->getSubjectId($subjectTitle,$strId,$shortcut);
-// }
+ 	$subjectTitle =null;//$row["@attributes"]['name'];
+ 	$strId =$row["@attributes"]['id'];
+ 	$shortcut =$row["@attributes"]['short'];
+ 	$Subject = $dbxml->getSubjectId($subjectTitle,$strId,$shortcut);
+ }
 
 $tableData = $array["teachers"]["teacher"];
 $periodsColumn = $array["teachers"]["@attributes"]["columns"];
 $columnList = explode(',', $periodsColumn);
-// if(!empty($tableData)) foreach($tableData as $row){
+ if(!empty($tableData)) foreach($tableData as $row){//use
 
-// 	$teacherTitle =null;//$row["@attributes"]['name'];
-// 	$strId =$row["@attributes"]['id'];
-// 	$gender =$row["@attributes"]['gender'];
-// 	$shortcut = $row['@attributes']['short'];
-// 	$teacher = $dbxml->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
-// }
+ 	$teacherTitle =null;//$row["@attributes"]['name'];
+ 	$strId =$row["@attributes"]['id'];
+ 	$gender =$row["@attributes"]['gender'];
+ 	$shortcut = $row['@attributes']['short'];
+ 	$teacher = $dbxml->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
+ }
 
 $tableData = $array["classes"]["class"];
 $periodsColumn = $array["classes"]["@attributes"]["columns"];
 $columnList = explode(',', $periodsColumn);
 
-// if(!empty($tableData)) foreach($tableData as $row){
-// 	$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
-// 	$strId =$row["@attributes"]['id'];
-// 	$groupId = $dbxml->getGroupId($groupCode,$strId);
-// }
+ if(!empty($tableData)) foreach($tableData as $row){//use
+ 	$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
+ 	$strId =$row["@attributes"]['id'];
+ 	$groupId = $dbxml->getGroupId($groupCode,$strId);
+ }
 
-// $tableData = $array["cards"]["card"];
-// if(!empty($tableData)) foreach($tableData as $row){
-// 	$lessionId = $row["@attributes"]['lessonid'];
-// 	$period = $row["@attributes"]['period'];
-// 	$days = $row["@attributes"]['days'];
-// 	$dbxml->addcard($lessionId,$period,$days);
-// }
+ $tableData = $array["cards"]["card"];
+ if(!empty($tableData)) foreach($tableData as $row){//use
+ 	$lessionId = $row["@attributes"]['lessonid'];
+ 	$period = $row["@attributes"]['period'];
+ 	$days = $row["@attributes"]['days'];
+ 	$dbxml->addcard($lessionId,$period,$days);
+ }
 
 $tableData = $array["lessons"]["lesson"];
 $periodsColumn = $array["classes"]["@attributes"]["columns"];

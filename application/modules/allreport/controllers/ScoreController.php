@@ -22,11 +22,13 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'exam_type' => -1,
 				'for_semester' => -1,
 				'group' => '',
+				
 				'academic_year' => '',
 				'grade' => 0,
 				'degree' => 0,
 				'session' => 0,
 				'for_month' => date('m'),
+				'score_result_status' => 0,
 			);
 		}
 

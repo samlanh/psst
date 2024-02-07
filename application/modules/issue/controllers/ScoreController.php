@@ -194,22 +194,11 @@ class Issue_ScoreController extends Zend_Controller_Action {
 	public	function publicScoreAction(){
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
-		//	print_r($_data); exit();
 			try {
-				//$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
 				$dbs = new Issue_Model_DbTable_DbScore();//by subject
 				$rs =  $dbs->publicAllResult($_data);
-					// $notify = array(
-					// 	"optNotification" => 2,
-					// 	"notificationId" => $_data["score_id"],
-					// 	"groupId" => $_data["group"],
-					// 	"typeNotify" => "studentScoreTranscript",
-					// );
-					// if(!empty($_data["push_notify"])){
-					// 	$dbPushNoti->pushNotificationAPI($notify);
-					// }
-					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/allreport/score/rpt-score");
-					exit();
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/allreport/score/rpt-score");
+				exit();
 				
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");

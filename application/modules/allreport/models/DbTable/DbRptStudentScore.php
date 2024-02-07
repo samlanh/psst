@@ -187,6 +187,9 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		if ($search['for_semester'] > 0) {
 			$where .= " AND s.for_semester =" . $search['for_semester'];
 		}
+		if ($search['score_result_status'] > -1) {
+			$where .= " AND s.isPublic =" . $search['score_result_status'];
+		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbp->getAccessPermission('s.branch_id');
 

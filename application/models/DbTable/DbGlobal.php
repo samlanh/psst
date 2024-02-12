@@ -4304,6 +4304,20 @@ function getAllgroupStudyNotPass($action=null){
 		";
 		return $db->fetchRow($sql);
 	}
+	
+	function getAllPartTimeList($degreeId){
+		$db = $this->getAdapter();
+		$branch_id = $this->getAccessPermission("pt.`branchId`");
+		$sql="	SELECT 
+					pt.* 
+					,pt.id AS `id`
+					,pt.`title` AS `name`
+				FROM `rms_parttime_list` AS pt
+				WHERE pt.`status` =1 $branch_id   ";
+		$sql.=" AND FIND_IN_SET($degreeId,pt.`degreeId`) ";
+		$sql.=" ORDER BY pt.`title` ASC ";
+		return $db->fetchAll($sql);
+   }
    
 }
 ?>

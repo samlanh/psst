@@ -1304,4 +1304,18 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		}
 		
 	}
+	function updatevalidateAction(){
+    	$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
+     	if($this->getRequest()->isPost()){
+    		$_data = $this->getRequest()->getPost();
+     		try{
+    			$result = $db->updateValidate($_data);
+    			print_r(Zend_Json::encode($result));
+    			exit();
+     		} catch (Exception $e) {
+     			Application_Form_FrmMessage::message("UPDATE_FAIL");
+     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+     		}
+     	}
+    }
 }

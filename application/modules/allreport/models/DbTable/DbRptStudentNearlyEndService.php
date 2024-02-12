@@ -30,6 +30,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	}
     	
     	$sql="SELECT 
+				 spd.`id` AS payment_id_detail,
     		     (SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				 s.stu_code AS stu_code,
 				 s.stu_khname AS stu_khname,
@@ -66,18 +67,8 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	$to_date = (empty($search['end_date']))? '1': "spd.validate <= '".$search['end_date']." 23:59:59'";
      	
      	$where .= " AND ".$to_date;
-     	if($search['item']>0){
-//      		$where .=" and spd.itemdetail_id=".$search['item'];
-//      		$where .=" and (SELECT $item FROM `rms_items` WHERE rms_items.id=".$search['service'].")";
-     	}
-     	if(!empty($search['service'])){
-     		$where .=" AND spd.itemdetail_id=".$search['service'];
-     	}
- 
-     	if(($search['branch_id']>0)){
-     		$where.= " AND sp.branch_id = ".$search['branch_id'];
-     	}
-    	if(!empty($search['adv_search'])){
+
+		 if(!empty($search['adv_search'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['adv_search']));
     		$s_where[] = " sp.receipt_number LIKE '%{$s_search}%'";
@@ -86,9 +77,50 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		$s_where[] = " s.stu_enname LIKE '%{$s_search}%'";
     		$s_where[] = " s.last_name LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}    
+    	}  
+
+     	if($search['item']>0){
+//      		$where .=" and spd.itemdetail_id=".$search['item'];
+//      		$where .=" and (SELECT $item FROM `rms_items` WHERE rms_items.id=".$search['service'].")";
+     	}
+
+     	if(!empty($search['service'])){
+     		$where .=" AND spd.itemdetail_id=".$search['service'];
+     	}
+ 
+     	if(($search['branch_id']>0)){
+     		$where.= " AND sp.branch_id = ".$search['branch_id'];
+     	}
+		
+     	if(($search['branch_id']>0)){
+			$where.= " AND sp.branch_id = ".$search['branch_id'];
+		}
     		
-    	$order=" ORDER by spd.itemdetail_id ASC ";
+    	$order="  GROUP BY spd.`id`  ORDER by spd.itemdetail_id ASC ";
+		// echo $sql.$where.$order;
+		// exit();
     	return $db->fetchAll($sql.$where.$order);
     }
+
+	function updateValidate($data){
+		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
+		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
+			try{
+				
+				$payment_id = $data['id'];
+				$this->_name='rms_student_paymentdetail';
+					$arra=array(
+							'start_date'=>$data['start_date'],
+							'validate'=>$data['validate'],
+					);
+				$where = " id = ".$payment_id;
+				$this->update($arra, $where);
+				$db->commit();
+				return 1;
+			}catch (Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::message("UPDATE_FAIL");
+				$db->rollBack();
+			}
+	}
 } 

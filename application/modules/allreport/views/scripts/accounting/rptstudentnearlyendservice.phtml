@@ -187,9 +187,9 @@
 									<td scope="col"><?php echo $tr->translate("DETAIL"); ?></td>
 								</tr>
 							</thead>
-						<?php $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
+						<?php  $i=0;$totalpaid=0;$totalbalance=0; if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
 						?>
-							<tr  class="style hover"  style="white-space:nowrap;">
+							<tr  class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['payment_id_detail'];?>);return false;"  style="white-space:nowrap;">
 								<td data-label="<?php echo $tr->translate("N_O");?>"  ><?php echo $i;?></td>
 								<td data-label="<?php echo $tr->translate("BRANCH");?>"  >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" >&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
@@ -201,8 +201,8 @@
 								<td data-label="<?php echo $tr->translate("SERVICE_NAME");?>"  align="left" >&nbsp;<?php  echo $row['service_name'];?></td>
 								<td data-label="<?php echo $tr->translate("PAID_DATE");?>"  >&nbsp;<?php echo date("d-m-Y",strtotime($row['create_date']));?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"  align="left">&nbsp;<a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$row['payment_id']))?>"><?php echo $row['receipt'];?></a></td>
-								<td data-label="<?php echo $tr->translate("START_DATE");?>" >&nbsp;<?php echo date("d-m-Y",strtotime($row['start_date']));?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("VALIDATE");?>">&nbsp;<?php echo date("d-m-Y",strtotime($row['end_date']));?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("START_DATE");?>" >&nbsp;<?php echo date("d-m-Y",strtotime($row['start_date']));?>&nbsp;  <input type="hidden" dojoType="dijit.form.TextBox" name="start_date_<?php echo $row['payment_id_detail']; ?>" id="start_date_<?php echo $row['payment_id_detail']; ?>" value="<?php echo $row['start_date'];?>" /></td>
+								<td data-label="<?php echo $tr->translate("VALIDATE");?>">&nbsp;<?php echo date("d-m-Y",strtotime($row['end_date']));?>&nbsp;  <input type="hidden" dojoType="dijit.form.TextBox" name="validate_<?php echo $row['payment_id_detail']; ?>" id="validate_<?php echo $row['payment_id_detail']; ?>" value="<?php echo $row['end_date'];?>" /></td>
 								<?php 
 									$end_dat=$row['end_date'];
 									$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
@@ -230,6 +230,39 @@
 		</table>		
 	</div>		
 </div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate('EDIT_VALIDATE');?>'"  id="updateForm" style="width:350px;" >
+		<div class="card pb-10 pt-10 pl-10 pr-10">
+			<form id="validateFormInfo"  name="data" action="" dojoType="dijit.form.Form" method="post">
+				<div class="card-box">
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate('START_DATE');?> :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input  class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="start_date" id="start_date" placeholder="<?php echo $tr->translate("START_DATE");?>" />
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate('VALIDATE');?> :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input  class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="validate" id="validate" placeholder="<?php echo $tr->translate("VALIDATE");?>" />
+					   </div>
+					   <input type="hidden" dojoType="dijit.form.TextBox" name="id" id="id"  />
+					</div>
+				
+					<div class="form-group">
+						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<input onclick="updateValidate();" type="button" value="1" label="<?php echo $tr->translate('EDIT');?>" id="busyButton" dojoType="dijit.form.Button" 
+								class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" /> 
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
@@ -340,6 +373,9 @@ function getAllGroupByBranch(){
 </script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dijit.form.DateTextBox");
 	
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
@@ -401,4 +437,66 @@ function getgradebyDegree(){
 			}
 	});
 }
+
+
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				dijit.byId('id').set('value',row);
+				var oldStartDate = dijit.byId("start_date_"+row).get("value");
+				var oldValidate = dijit.byId("validate_"+row).get("value");
+				dijit.byId('start_date').set('value',oldStartDate);
+				dijit.byId('validate').set('value',oldValidate);
+				dijit.byId('updateForm').show();
+			}
+		},
+		items: {
+			"edit": {name: "<?php echo $tr->translate("EDIT_VALIDATE");?>", icon: "fa-calendar"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+
+var recordid ='';
+function gotoAction(){
+	window.open(url+row);
+}
+var voidReciept = '<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'updatevalidate')); ?>';
+	function updateValidate(){
+		if(dijit.byId('validateFormInfo').validate()){
+			if(confirm("<?php echo $tr->translate("Do you want to edit validate");?>")){
+		}else{
+			dijit.byId('validateFormInfo').reset();
+			dijit.byId('updateForm').hide();
+			return false;
+		}
+			loadingBlock();
+			dojo.xhrPost({
+				url: voidReciept,
+				form: dojo.byId("validateFormInfo"),
+				handleAs:"json",
+				load: function(data){
+					dijit.byId('validateFormInfo').reset();
+					dijit.byId('updateForm').hide();
+					if(data==1){
+						alert("<?php echo $tr->translate("SUCCESS");?>");
+					}
+					location.reload();
+					HideloadingBlock();
+				},
+				error: function(err){
+					dijit.byId('validateFormInfo').reset();
+					dijit.byId('updateForm').hide();
+					HideloadingBlock();
+				}
+			});
+		}
+	}
 </script>

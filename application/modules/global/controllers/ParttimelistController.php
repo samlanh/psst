@@ -135,5 +135,17 @@ class Global_ParttimelistController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
     }
+	
+	function getParttimeAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$_dbgb = new Application_Model_DbTable_DbGlobal();
+			$data['degree'] = empty($data['degree']) ? 0 : $data['degree'];
+			$grade = $_dbgb->getAllPartTimeList($data);
+			array_unshift($grade, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_PARTTIME_SHIFT")));
+			print_r(Zend_Json::encode($grade));
+			exit();
+		}
+	}
   
 }

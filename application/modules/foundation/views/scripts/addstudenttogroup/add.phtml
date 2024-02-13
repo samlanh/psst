@@ -118,6 +118,15 @@ a.btnstyle:hover{color:#eee;}
 					                </div>
 								</div>
 								<div class="form-group">
+									<div class="form-group">
+					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SESSION");?>  :
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input id="partTime" />
+					                   </div>
+					                </div>
+								</div>
+								<div class="form-group">
 					                <label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
 					                <div class="col-md-7 col-sm-7 col-xs-12">
 					                	<select id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
@@ -329,6 +338,19 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "grade");
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false, 
+		required: false,
+		id: "partTime",
+		name: "partTime",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_PARTTIME_SHIFT");?>",          
+		onChange: function() {  
+		}
+	}, "partTime");
+	
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllGroup();
@@ -337,6 +359,7 @@ dojo.ready(function(){
 	 var degree = dijit.byId('degree');
 	 degree.on('change', function(evt) {
 		 getAllGroup();
+		 getAllPartTimeList();
   	});
 
 	 var grade = dijit.byId('grade');
@@ -472,6 +495,36 @@ function getAllGroup(){
 		load: function(data) {
 		    group_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('group').set('store',group_store);   
+		},
+		error: function(err) {
+		}
+	});
+}
+
+urlGetPartTimeShift = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime'));?>';
+function getAllPartTimeList(){
+	dijit.byId('partTime').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var partTimeStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('group').set('store',partTimeStore);  
+		dijit.byId('partTime').focus();
+		return false;
+	}
+	degree = dijit.byId('degree').get('value');
+	if(degree=='' || degree==-1){
+		degree ="";
+	}
+	dojo.xhrPost({
+		url: urlGetPartTimeShift,
+		content:{
+			'branchId':branch_id,
+			'degree':degree,
+		},
+		handleAs:"json",
+		load: function(data) {
+		    partTimeStore  = getDataStorefromJSON('id','name', data);
+		    dijit.byId('partTime').set('store',partTimeStore);   
 		},
 		error: function(err) {
 		}

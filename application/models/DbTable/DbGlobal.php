@@ -975,13 +975,24 @@ function getAllgroupStudyNotPass($action=null){
 	   	}else{ // English
 	   		$label = "title_eng";
 	   	}
+		$titleQuery="
+		CONCAT(
+			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1), 
+		   	( SELECT $label FROM rms_studytype AS st WHERE st.id =rms_tuitionfee.term_study LIMIT 1 )
+		   	,'(',generation,')'
+			)
+		";
+		if(!empty($data['shortTitle'])){
+	   		$titleQuery="
+			CONCAT(
+				COALESCE(( SELECT $label FROM rms_studytype AS st WHERE st.id =rms_tuitionfee.term_study LIMIT 1 ),'')
+						,'(',generation,')'
+			)
+			";
+	   	}
+		
 	   	$sql = "SELECT id,
-		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1), 
-		   	( SELECT $label
-		   			FROM
-		   				rms_studytype AS st
-		   				WHERE st.id =rms_tuitionfee.term_study LIMIT 1 )
-		   	,'(',generation,')') AS name,
+		   	$titleQuery AS name,
 		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'',generation,'') AS years
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1

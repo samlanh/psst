@@ -251,6 +251,13 @@ table.history-record tbody tr td {
 				                   		<input id="grade" />
 				                   </div>
 				                </div>
+								<div class="form-group">
+				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PART_TIME_LIST");?>
+				                     </label>
+				                    <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="part_time_list" />
+				                   </div>
+				                </div>
 				                <div class="form-group">
 				                	 <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
 				                     </label>
@@ -378,7 +385,7 @@ dojo.require("dojo.NodeList-manipulate");
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
-
+var part_time_list_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		store: grade_store,
@@ -392,9 +399,57 @@ dojo.ready(function(){
 		onChange:function(){  
 		}
 	}, "grade");
+
+	new dijit.form.FilteringSelect({
+		store: part_time_list_store,
+		autoComplete: false,
+		queryExpr:'*${0}*',                        
+		required: false,
+		id: "part_time_list",
+		name: "part_time_list",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('SELECT_PARTTIME_SHIFT');?>",          
+		onChange: function() {  
+		}
+	}, "part_time_list");
+
+	var degree = dijit.byId('degree');
+	degree.on('change', function(evt) {
+		 getPartTimeListByDregree();
+ 	 });
+
 	getAllGrade();	
+	getPartTimeListByDregree();
 	initailize();
 });
+
+var url_get_parttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';
+function getPartTimeListByDregree(part_time=0){
+	dijit.byId('part_time_list').set('value',''); 
+	degree = dijit.byId('degree').get('value');
+	branchId = dijit.byId('branch_id').get('value');
+	if(degree==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_get_parttime,
+		content:{
+			'degree':degree,
+			'branchId':branchId,
+			},
+		handleAs:"json",
+		load: function(data) {
+			part_time_list_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('part_time_list').set('store',part_time_list_store);  
+			if(part_time>0){
+				part_time = dijit.byId('part_time_list').attr("value",part_time);  
+			}
+		},
+		error: function(err) {
+		}
+	});
+}
+
 var url_get_grade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getAllGrade(grade_id=0){
 	dijit.byId('grade').set('value',''); 
@@ -434,6 +489,7 @@ function addRow(){
 	tel_stu = dijit.byId('tel_stu').get('value');
 
 	degree = dijit.byId('degree').get('value');
+	part_time = dijit.byId('part_time_list').get('value');
 	if(degree==''){
 		dijit.byId('degree').focus();
 		return false;
@@ -446,6 +502,7 @@ function addRow(){
 	
 	degreelabel = dijit.byId("degree").attr('displayedValue');
 	gradelabel = dijit.byId("grade").attr('displayedValue');
+	parttimelabel = dijit.byId("part_time_list").attr('displayedValue');
 	sex_stulabel = dijit.byId("sex_stu").attr('displayedValue');
 	if(kh_name_stu==""){
 		alert("<?php echo $tr->translate("Please Enter Name Kh");?>");
@@ -480,7 +537,8 @@ function addRow(){
 		template+='<td>&nbsp;<input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="gender_'+col+'" id="gender_'+col+'" value="'+sex_stu+'" type="hidden">'+sex_stulabel+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="'+age_stu+'" type="hidden">'+age_stu+'&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+tel_stu+'" type="hidden">'+tel_stu+'&nbsp;</td>';
-		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="'+degree+'" type="hidden">'+degreelabel+'&nbsp;<br>';
+			template+='<input style="width:100%;" placeholder="<?php echo $tr->translate("PART_TIME");?>" dojoType="dijit.form.TextBox" class="fullside" name="part_time_list_'+col+'" id="part_time_list_'+col+'" value="'+part_time+'" type="hidden"><label class="text-primary">'+parttimelabel+'</label></td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="'+grade+'" type="hidden">'+gradelabel+'&nbsp;</td>';
 		template+='<td width="4%"align="center"><img style="width:15px;" onclick="editStudent('+col+');deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/edit.jpg"></td>';
 	tmp='<tr id="row'+col+'">';
@@ -502,6 +560,7 @@ function addRow(){
 	age_stu = dijit.byId('age_stu').set('value','');
 	age_stu = dijit.byId('tel_stu').set('value','');
 	grade = dijit.byId('grade').set('value','');
+	part_time = dijit.byId('part_time_list').set('value','');
 }
 function initailize(){
 	<?php if (!empty($this->rowdetail)) foreach ($this->rowdetail as $rs){?>
@@ -530,7 +589,8 @@ function initailize(){
 		template+='<td>&nbsp;<input style="width:100%;" dojoType="dijit.form.TextBox" class="fullside" name="gender_'+col+'" id="gender_'+col+'" value="<?php echo $rs['sex'];?>" type="hidden"><?php echo $rs['sextitle'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("AGE");?>" dojoType="dijit.form.TextBox" class="fullside" name="age_'+col+'" id="age_'+col+'" value="<?php echo $rs['age'];?>" type="hidden"><?php echo $rs['age'];?>&nbsp;</td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("PHONE");?>" dojoType="dijit.form.TextBox" class="fullside" name="tel_'+col+'" id="tel_'+col+'" value="'+'<?php echo $rs['tel'];?>'+'" type="hidden">'+'<?php echo $rs['tel'];?>'+'&nbsp;</td>';
-		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="<?php echo $rs['crm_degree'];?>" type="hidden"><?php echo $rs['degree_title'];?>&nbsp;</td>';
+		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("DEGREE");?>" dojoType="dijit.form.TextBox" class="fullside" name="degree_'+col+'" id="degree_'+col+'" value="<?php echo $rs['crm_degree'];?>" type="hidden"><?php echo $rs['degree_title'];?>&nbsp;<br>';
+		template+='<input style="width:100%;" placeholder="<?php echo $tr->translate("PART_TIME");?>" dojoType="dijit.form.TextBox" class="fullside" name="part_time_list_'+col+'" id="part_time_list_'+col+'" value="<?php echo $rs['crm_partime_id'];?>" type="hidden"><label class="text-primary"><?php echo $rs['parttime_title'];?></label></td>';
 		template+='<td>&nbsp;<input style="width:100%;" placeholder="<?php echo $tr->translate("GRADE");?>" dojoType="dijit.form.TextBox" class="fullside" name="grade_'+col+'" id="grade_'+col+'" value="<?php echo $rs['crm_grade'];?>" type="hidden"><?php echo $rs['grade_title'];?>&nbsp;<input dojoType="dijit.form.TextBox" class="fullside" name="detailid'+col+'" id="detailid'+col+'" value="<?php echo $rs['stu_id'];?>" type="hidden"></td>';
 		template+='<td width="4%"align="center"><?php if ($rs['customer_type']==3){?><img style="width:15px;" onclick="editStudent('+col+');deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/edit.jpg"><?php }?></td>';
 	tmp='<tr id="row'+col+'">';
@@ -565,6 +625,7 @@ function editStudent(index) {
 	tel = dijit.byId('tel_'+index).get("value");
 	degree = dijit.byId('degree_'+index).get("value");
 	grade = dijit.byId('grade_'+index).get("value");
+	part_time = dijit.byId('part_time_list_'+index).get("value");
 	
 	dijit.byId("kh_name_stu").attr("value",kh_name);
 	dijit.byId("last_name_stu").attr("value",last_name);
@@ -574,7 +635,8 @@ function editStudent(index) {
 	dijit.byId("tel_stu").attr("value",tel);
 	dijit.byId("degree").attr("value",degree);
 	getAllGrade(grade);
-	//dijit.byId("grade").attr("value",grade);
+	getPartTimeListByDregree(part_time);
+	
 }
 
 </script>

@@ -150,6 +150,7 @@
 							'tel'=> $_data['tel_'.$i],
 							'crm_degree'=> $_data['degree_'.$i],
 							'crm_grade'=> $_data['grade_'.$i],
+							'crm_partime_id'=> $_data['part_time_list_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
 							'from_school'=> $_data['old_school'],
@@ -168,6 +169,7 @@
 							'group_id'			=>0,
 							'degree'			=>$_data['degree_'.$i],
 							'grade'				=>$_data['grade_'.$i],
+							'partTimeId'		=>$_data['part_time_list_'.$i],
 							'school_option'		=>$school_option,
 							'is_current'		=>1,
 							'is_setgroup'		=>0,
@@ -285,6 +287,7 @@
 							'tel'=> $_data['tel_'.$i],
 							'crm_degree'=> $_data['degree_'.$i],
 							'crm_grade'=> $_data['grade_'.$i],
+							'crm_partime_id'=> $_data['part_time_list_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
 							'from_school'=> $_data['old_school'],
@@ -303,6 +306,7 @@
 								'school_option'		=>$school_option,
 								'degree'			=>$_data['degree_'.$i],
 								'grade'				=>$_data['grade_'.$i],
+								'partTimeId'		=>$_data['part_time_list_'.$i],
 								'is_current'		=>1,
 								'is_setgroup'		=>0,
 								'is_maingrade'		=>1,
@@ -329,6 +333,7 @@
 							'tel'=> $_data['tel_'.$i],
 							'crm_degree'=> $_data['degree_'.$i],
 							'crm_grade'=> $_data['grade_'.$i],
+							'crm_partime_id'=> $_data['part_time_list_'.$i],
 							'age'=> $_data['age_'.$i],
 							'user_id'	  => $this->getUserId(),
 							'from_school'=> $_data['old_school'],
@@ -349,6 +354,7 @@
 								'school_option'		=>$school_option,
 								'degree'			=>$_data['degree_'.$i],
 								'grade'				=>$_data['grade_'.$i],
+								'partTimeId'		=>$_data['part_time_list_'.$i],
 								'is_current'		=>1,
 								'is_setgroup'		=>0,
 								'is_maingrade'		=>1,
@@ -419,6 +425,7 @@
 				WHEN  st.sex = 1 THEN '".$tr->translate("MALE")."'
 				WHEN  st.sex = 2 THEN '".$tr->translate("FEMALE")."'
 				END AS sextitle,
+				(SELECT p.title FROM `rms_parttime_list` AS p WHERE p.id = st.crm_partime_id  LIMIT 1) AS parttime_title,
 				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = st.crm_degree AND i.type=1 LIMIT 1) AS degree_title,
 				(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = st.crm_grade AND idd.items_type=1 LIMIT 1) AS grade_title
 		FROM `rms_student` AS st WHERE st.crm_id = $id  ";

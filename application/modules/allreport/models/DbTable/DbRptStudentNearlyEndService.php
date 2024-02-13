@@ -92,13 +92,11 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      		$where.= " AND sp.branch_id = ".$search['branch_id'];
      	}
 		
-     	if(($search['branch_id']>0)){
-			$where.= " AND sp.branch_id = ".$search['branch_id'];
+     	if(!empty($search['study_year'])){
+			$where.= " AND gd.academic_year = ".$search['study_year'];
 		}
-    		
     	$order="  GROUP BY spd.`id`  ORDER by spd.itemdetail_id ASC ";
-		// echo $sql.$where.$order;
-		// exit();
+		// echo $sql.$where.$order; exit();
     	return $db->fetchAll($sql.$where.$order);
     }
 

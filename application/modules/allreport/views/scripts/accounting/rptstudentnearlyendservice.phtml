@@ -193,12 +193,12 @@
 								<td data-label="<?php echo $tr->translate("N_O");?>"  ><?php echo $i;?></td>
 								<td data-label="<?php echo $tr->translate("BRANCH");?>"  >&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" >&nbsp;<?php echo $row['stu_code'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"  >&nbsp;<?php echo $row['stu_khname']." ".$row['last_name']." ".$row['first_name'];?></td>	
+								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"  class="stuName_<?php echo $row['payment_id_detail'];?>" ><?php echo $row['stu_khname']." ".$row['last_name']." ".$row['first_name'];?></td>	
 								<td data-label="<?php echo $tr->translate("SEX");?>"  align="left" >&nbsp;<?php echo $row['sex'];?></td>
 								<td data-label="<?php echo $tr->translate("PHONE");?>"  align="left" >&nbsp;<?php echo $row['tel'];?></td>
 								<td data-label="<?php echo $tr->translate("STUDY_INFO");?>"  align="left" >&nbsp;<?php //echo $row['group_name'].'/'.$row['grade'].'/'.$row['session'];?></td>
 								<td data-label="<?php echo $tr->translate("SERVICE_TYPE");?>"  align="left" >&nbsp;<?php echo $row['category_name'];?></td>
-								<td data-label="<?php echo $tr->translate("SERVICE_NAME");?>"  align="left" >&nbsp;<?php  echo $row['service_name'];?></td>
+								<td data-label="<?php echo $tr->translate("SERVICE_NAME");?>" class="serviceName_<?php echo $row['payment_id_detail'];?>"  align="left" >&nbsp;<?php  echo $row['service_name'];?></td>
 								<td data-label="<?php echo $tr->translate("PAID_DATE");?>"  >&nbsp;<?php echo date("d-m-Y",strtotime($row['create_date']));?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"  align="left">&nbsp;<a target="_blank" href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rptreceiptdetail','id'=>$row['payment_id']))?>"><?php echo $row['receipt'];?></a></td>
 								<td data-label="<?php echo $tr->translate("START_DATE");?>" >&nbsp;<?php echo date("d-m-Y",strtotime($row['start_date']));?>&nbsp;  <input type="hidden" dojoType="dijit.form.TextBox" name="start_date_<?php echo $row['payment_id_detail']; ?>" id="start_date_<?php echo $row['payment_id_detail']; ?>" value="<?php echo $row['start_date'];?>" /></td>
@@ -235,6 +235,17 @@
 		<div class="card pb-10 pt-10 pl-10 pr-10">
 			<form id="validateFormInfo"  name="data" action="" dojoType="dijit.form.Form" method="post">
 				<div class="card-box">
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12 text-center bg-primary border rounded">
+					  		<h5 class="card-title" id ="serviceName" ></h5>
+							<h5 class="card-title" id ="stuName" ></h5>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12 ">
+							&nbsp;
+						</div>
+					</div>
 					<div class="form-group">
 					   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate('START_DATE');?> :
 					   </label>
@@ -448,6 +459,12 @@ $(function(){
 			var m = "clicked: " + key;
 			if(key=="edit"){
 				dijit.byId('id').set('value',row);
+
+				var stuname = $(".stuName_"+row).html();
+				var serviceName = $(".serviceName_"+row).html();
+		
+				document.getElementById('stuName').innerHTML = stuname;
+				document.getElementById('serviceName').innerHTML = serviceName;
 				var oldStartDate = dijit.byId("start_date_"+row).get("value");
 				var oldValidate = dijit.byId("validate_"+row).get("value");
 				dijit.byId('start_date').set('value',oldStartDate);

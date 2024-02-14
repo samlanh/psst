@@ -502,11 +502,15 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					);
 					$check  = $this->checkStudentInGroupDetail($data);
 					if (!empty($check)){
+
+						$_arr['partTimeId']=$data['part_time_list'];
+
 						$where = "stu_id=".$data['stu_test_id'];
 						$where.=" AND test_restult_id = $test ";
 						$this->_name="rms_group_detail_student";
 						$this->update($_arr, $where);
 					}else{
+						$_arr['partTimeId']=$data['part_time_list'];
 						$_arr['branch_id']=$data['branch_id'];
 						$_arr['entryFrom']=6;
 						$this->_name="rms_group_detail_student";
@@ -549,6 +553,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						);
 				$check  = $this->checkStudentInGroupDetail($arrCheck);
 				if (!empty($check)){
+
+					$_arr['partTimeId']=$data['part_time_list'];
+
 					$where = "stu_id=".$data['stu_test_id'];
 					$degreeUp = empty($check['degree'])?$data['degree']:$check['degree'];
 					$where.=" AND degree = ".$degreeUp;
@@ -556,9 +563,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$this->update($_arr, $where);
 				}else{
 					$schoolOption = empty($data['schoolOption'])?1:$check['schoolOption'];
-					$_arr['school_option']=$schoolOption;
-					$_arr['branch_id']=$data['branch_id'];
-					$_arr['entryFrom']=6;
+					$_arr['partTimeId']    =$data['part_time_list'];
+					$_arr['school_option'] =$schoolOption;
+					$_arr['branch_id']     =$data['branch_id'];
+					$_arr['entryFrom']     =6;
 					
 					$this->_name="rms_group_detail_student";
 					$this->insert($_arr);
@@ -772,6 +780,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		
 		$sql="SELECT
 		str.*,
+		(SELECT sd.partTimeId  FROM `rms_group_detail_student` AS sd WHERE sd.stu_id = str.stu_test_id AND sd.test_restult_id=str.id LIMIT 1) AS part_time_id,
+		(SELECT sd.feeId  FROM `rms_group_detail_student` AS sd WHERE sd.stu_id = str.stu_test_id AND sd.test_restult_id=str.id LIMIT 1) AS feeId,
 		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,

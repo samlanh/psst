@@ -415,11 +415,13 @@ dojo.ready(function(){
 	getallGrade();
 	getAllGroup();
 	getAllAcademicBy();
+	getAllPartTimeList();
 	<?php if(!empty($this->search['study_year'])){ ?>
 		setTimeout(function() {
 			dijit.byId('study_year').attr('value','<?php echo $this->search['study_year']?>');
 		}, 1000);
 	<?php } ?>	
+	
 });
 
 
@@ -557,7 +559,10 @@ function getAllPartTimeList(){
 		handleAs:"json",
 		load: function(data) {
 		    partTimeStore  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('partTime').set('store',partTimeStore);   
+		    dijit.byId('partTime').set('store',partTimeStore);  
+			<?php if(!empty($this->search['partTime'])){ ?>
+				dijit.byId('partTime').attr('value','<?php echo $this->search['partTime']?>');
+			<?php } ?>	 
 		},
 		error: function(err) {
 		}

@@ -363,6 +363,7 @@ span.custom-switch-indicator{line-height: 20px;}
 				                        	<span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span id="lbl_degree" class="inf-value" ></span>
 				                        	<span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span id="lbl_grade" class="inf-value" ></span>
 				                        	<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span id="lbl_group" class="inf-value" ></span>
+											<span class="title-info"><?php echo $tr->translate('PART_TIME_LIST');?></span> : <span id="lbl_part_time" class="inf-value" ></span>
 					                    </p>
 				                    </div>
 			                        <div style="clear: both;"></div>
@@ -1443,6 +1444,8 @@ function printSave(){
 
 		academicYearLabel=dijit.byId('study_year').attr("displayedValue");
 		dojo.byId("lb_academic_year").innerHTML = academicYearLabel;
+
+		dojo.byId("lb_part_time").innerHTML = dojo.byId("lbl_part_time").innerHTML;;
 		
 		let bankName = (dijit.byId("bank_name").get('value')==0)?'':dijit.byId("bank_name").attr('displayedValue');
 

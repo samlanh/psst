@@ -212,6 +212,12 @@
 										<input id="grade_result" />
 								</div>
 							</div>
+							<div class="form-group">
+				            	<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PART_TIME_LIST");?></label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                   	<input id="part_time_list" />
+				                </div>
+				            </div>
 						</div>
 					</div>
 	             </div>
@@ -333,6 +339,7 @@ var grade_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::en
 var grade_result_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var student_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+var part_time_list_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 require(["dojo/ready"], function(ready){
 	dojo.ready(function(){
 		new dijit.form.FilteringSelect({
@@ -388,8 +395,22 @@ require(["dojo/ready"], function(ready){
 				fee_id = dijit.byId('fee_id').get('value');
 			}
 		}, "fee_id");
-	    
+
+	    new dijit.form.FilteringSelect({
+			store: part_time_list_store,
+			autoComplete: false,
+			queryExpr:'*${0}*',                        
+			required: false,
+			id: "part_time_list",
+			name: "part_time_list",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate('SELECT_PARTTIME_SHIFT');?>",          
+			onChange: function() {  
+			}
+		}, "part_time_list");
+
 		getAllGrade();	
+		getPartTimeListByDregree();
 		getAllGradeResult();
 		getAllAcademicByBranch();
 		getAllTermStudy();
@@ -443,7 +464,9 @@ url_getFeee = '<?php echo $this->url(array('module'=>'accounting','controller'=>
 			load: function(data){
 				academic_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('fee_id').set('store',academic_store);  
-				dijit.byId('fee_id').attr("value","<?php echo $this->currentFee['fee_id'];?>");
+				<?php if (!empty($this->detailscore['feeId'])){?>
+					dijit.byId('fee_id').set('value',<?php echo $this->detailscore['feeId'];?>);
+				<?php }?>
 			},
 			error: function(err) {
 				alter(err);
@@ -503,6 +526,35 @@ function getAllTermStudy(){
 		},
 		error: function(err) {
 			alert(err);
+		}
+	});
+}
+
+var url_get_parttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';
+function getPartTimeListByDregree(){
+	degree = dijit.byId('degree').get('value');
+	branchId = dijit.byId('branch_id').get('value');
+	if(degree==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_get_parttime,
+		content:{
+			'degree':degree,
+			'branchId':branchId,
+			},
+		handleAs:"json",
+		load: function(data) {
+			part_time_list_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('part_time_list').set('store',part_time_list_store);  
+
+			<?php if (!empty($this->detailscore['part_time_id'])){?>
+				dijit.byId('part_time_list').set('value',<?php echo $this->detailscore['part_time_id'];?>);
+			<?php }else if (!empty($this->rs['crm_partime_id'])){?>
+				dijit.byId('part_time_list').set('value',<?php echo $this->rs['crm_partime_id'];?>);
+			<?php }?>
+		},
+		error: function(err) {
 		}
 	});
 }

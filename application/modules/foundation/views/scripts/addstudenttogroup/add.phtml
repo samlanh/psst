@@ -91,6 +91,15 @@ a.btnstyle:hover{color:#eee;}
 					                 </div>
 				                </div>
 								<div class="form-group">
+									 <div class="form-group">
+					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
+					                   </label>
+					                   <div class="col-md-7 col-sm-7 col-xs-12">
+					                   		<input id="study_year" />
+					                   </div>
+					                </div>
+								</div>
+								<div class="form-group">
 				                	<div class="form-group">
 					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?>  :
 					                   </label>
@@ -351,6 +360,18 @@ dojo.ready(function(){
 		}
 	}, "partTime");
 	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false, 
+		required: false,
+		id: "study_year",
+		name: "study_year",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_TYPE");?>",          
+		onChange: function() {  
+		}
+	}, "study_year");
+	
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllGroup();
@@ -365,6 +386,11 @@ dojo.ready(function(){
 	 var grade = dijit.byId('grade');
 	 grade.on('change', function(evt) {
 		 getAllGroup();
+  	});
+	
+	 var academicYearControl = dijit.byId('academic_year');
+	 academicYearControl.on('change', function(evt) {
+		 getAllAcademicBy();
   	});
 	
 	new dijit.form.FilteringSelect({
@@ -388,6 +414,12 @@ dojo.ready(function(){
 	}, "group");
 	getallGrade();
 	getAllGroup();
+	getAllAcademicBy();
+	<?php if(!empty($this->search['study_year'])){ ?>
+		setTimeout(function() {
+			dijit.byId('study_year').attr('value','<?php echo $this->search['study_year']?>');
+		}, 1000);
+	<?php } ?>	
 });
 
 
@@ -436,6 +468,7 @@ function getallGrade(){
 		});
 }
 </script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 var url_to_group = '<?php echo $this->url(array('module'=>'foundation','controller'=>'studentchangegroup','action'=>'get-to-group')); ?>';
 function getGroupDetail(){
@@ -529,5 +562,25 @@ function getAllPartTimeList(){
 		error: function(err) {
 		}
 	});
+}
+
+function getAllAcademicBy(){
+	
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	academicYear = dijit.byId('academic_year').get('value');
+	let url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
+	contentData = {
+		'branch_id':branch_id,
+		'academicYear':academicYear,
+		'shortTitle':1,
+		'isFinished':0
+	}
+	getAllAcademicByBranch(url_getacademic,contentData);
+	
+	
 }
 </script>

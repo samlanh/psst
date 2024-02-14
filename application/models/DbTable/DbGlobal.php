@@ -975,13 +975,24 @@ function getAllgroupStudyNotPass($action=null){
 	   	}else{ // English
 	   		$label = "title_eng";
 	   	}
+		$titleQuery="
+		CONCAT(
+			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1), 
+		   	( SELECT $label FROM rms_studytype AS st WHERE st.id =rms_tuitionfee.term_study LIMIT 1 )
+		   	,'(',generation,')'
+			)
+		";
+		if(!empty($data['shortTitle'])){
+	   		$titleQuery="
+			CONCAT(
+				COALESCE(( SELECT $label FROM rms_studytype AS st WHERE st.id =rms_tuitionfee.term_study LIMIT 1 ),'')
+						,'(',generation,')'
+			)
+			";
+	   	}
+		
 	   	$sql = "SELECT id,
-		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1), 
-		   	( SELECT $label
-		   			FROM
-		   				rms_studytype AS st
-		   				WHERE st.id =rms_tuitionfee.term_study LIMIT 1 )
-		   	,'(',generation,')') AS name,
+		   	$titleQuery AS name,
 		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'',generation,'') AS years
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
@@ -4308,8 +4319,7 @@ function getAllgroupStudyNotPass($action=null){
 	function getAllPartTimeList($data){
 		$db = $this->getAdapter();
 		$degreeId = empty($data["degree"]) ? 0 : $data["degree"];
-		$branchId = empty($data["branchId"]) ? 0 : $data["branchId"];
-		
+		$branchId = $data["branchId"];
 		$branchIdStr = $this->getAccessPermission("pt.`branchId`");
 		$sql="	SELECT 
 					pt.* 
@@ -4318,7 +4328,10 @@ function getAllgroupStudyNotPass($action=null){
 				FROM `rms_parttime_list` AS pt
 				WHERE pt.`status` =1 $branchIdStr   ";
 		$sql.=" AND FIND_IN_SET($degreeId,pt.`degreeId`) ";
-		$sql.=" AND pt.`branchId` =$branchId ";
+
+		if(!empty($branchId)){
+			$sql.=" AND pt.`branchId` =$branchId ";
+		}
 		$sql.=" ORDER BY pt.`title` ASC ";
 		return $db->fetchAll($sql);
    }

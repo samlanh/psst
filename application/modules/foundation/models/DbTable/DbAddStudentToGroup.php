@@ -176,7 +176,12 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			if(!empty($search['branch_id'])){
 				$sql.=" AND s.branch_id =".$search['branch_id'];
 			}
-			
+			if(!empty($search['partTime'])){
+				$sql.=' AND sd.partTimeId='.$search['partTime'];
+			}
+			if(!empty($search['study_year'])){ // filter by currtent feeid of student 
+				$sql.=' AND sd.feeId='.$search['study_year'];
+			}
 			$sql.=" GROUP BY s.stu_id,sd.degree,sd.grade";
 			
 			$studentName="CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";

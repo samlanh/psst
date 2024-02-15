@@ -1008,8 +1008,8 @@ class Application_Form_FrmGlobal
 						<tr>
 							<td>លេខទូរសព្ទ/Tel</td>
 							<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
-							<td>ប្រភេទ/Type </td>
-							<td> : &nbsp;<label id='lb_sesiontype' class='one'>&nbsp;</label></td>
+							<td>វេនសិក្សាក្រៅម៉ោង/Part Time List </td>
+							<td> : &nbsp;<label id='lb_part_time' class='one'>&nbsp;</label></td>
 						</tr>
 					<tr>
 						<td colspan='5'><div id='t_amountmoneytype'></div></td>

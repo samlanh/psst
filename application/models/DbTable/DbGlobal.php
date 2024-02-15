@@ -1251,6 +1251,7 @@ function getAllgroupStudyNotPass($action=null){
 	   	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
 	   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
 		(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
+		(SELECT p.`title`  FROM `rms_parttime_list` AS p WHERE p.`id` = (SELECT sd.`partTimeId` FROM `rms_group_detail_student` AS sd WHERE sd.`stu_id` =s.stu_id AND sd.`test_restult_id`= t.id  LIMIT 1 ) LIMIT 1) as parttime_label,
 		t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
 		'N/A' AS status_student,
 		t.id,
@@ -2631,6 +2632,7 @@ function getAllgroupStudyNotPass($action=null){
 				             <span class="title-info">'.$tr->translate('DEGREE').'</span> : <span id="lbl_degree" class="inf-value">'.$rs['degree_label'].'</span>
 				             <span class="title-info">'.$tr->translate('GRADE').'</span> : <span id="lbl_grade" class="inf-value">'.$rs['grade_label'].'</span>
 				             <span class="title-info groupinfo">'.$tr->translate('GROUP').'</span> : <span id="lbl_group" class="inf-value groupinfo">'.$rs['group_name'].'</span>
+							 <span class="title-info">'.$tr->translate('PART_TIME_LIST').'</span> : <span id="lbl_part_time" class="inf-value">'.$rs['parttime_label'].'</span>
 					    </p>';
   			         	$strStatus=($rs['is_newstudent']==1)?'New Student':'Old Student';
   			         	$studentStatus='<span class="user-badge bg-warning">'.$strStatus.'</span>';

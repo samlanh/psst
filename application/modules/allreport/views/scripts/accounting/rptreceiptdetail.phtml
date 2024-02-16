@@ -4,6 +4,7 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$result = $this->rr;
 	$receiptType = RECEIPT_TYPE;
+
 ?>
 <style>
 	#footer{display: none;}
@@ -71,7 +72,7 @@ function setDatatoReceipt(){
 
 		dojo.byId("lb_grade").innerHTML = '<?php echo empty($result['grade'])?"&nbsp;":$result['grade']; echo empty($result['group_name'])?"":" (".$result['group_name'].")";?>';
 		dojo.byId("lb_academic_year").innerHTML = '<?php echo empty($result['academic_year'])?"&nbsp;":$result['academic_year'];echo empty($result['session_type'])?"&nbsp;":$result['session_type'];?>';
-		dojo.byId("lb_sesiontype").innerHTML = '<?php //echo empty($result['session_type'])?"&nbsp;":$result['session_type'];?>';
+		dojo.byId("lb_part_time").innerHTML = '<?php echo empty($result['parttimeTitle'])?"&nbsp;":$result['parttimeTitle'];?>';
 		dojo.byId("lb_group").innerHTML = '<?php echo empty($result['group_id'])?"&nbsp;":$result['group_name'];?>';
 
 		<?php if($receiptType==4){?>

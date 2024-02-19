@@ -522,13 +522,17 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		exam_type = dijit.byId("exam_type").get("value");
 		dijit.byId('for_month').set("readOnly", false);
 		dijit.byId('for_semester').set("readOnly", false);
+		dijit.byId('for_month').reset();
+		dijit.byId('for_semester').reset();
+
 		$(".examtype_display").css("display", "flow-root");
 		$(".annaul_exam_display").css("display", "flow-root");
 		if (exam_type == 2) {
 			dijit.byId('for_month').set("readOnly", true);
 			$(".examtype_display").css("display", "none");
 		}else if(exam_type == 3){
-			
+			dijit.byId('for_month').attr("value", '');
+			dijit.byId('for_semester').attr("value", '');
 			dijit.byId('for_month').set("readOnly", true);
 			dijit.byId('for_semester').set("readOnly", true);
 			$(".annaul_exam_display").css("display", "none");

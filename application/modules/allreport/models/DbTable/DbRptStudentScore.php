@@ -441,6 +441,23 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				)
 			) AS ranking
 			";
+		}else if ($search['exam_type'] == 3) {
+			$sql .= "
+			,g.semesterTotalAverage as semesterScale
+			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1
+			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`   LIMIT 1) AS overalSemester2
+			,(g.semesterTotalAverage/2) as passAverage
+			,sm.overallAssessmentSemester
+			,FIND_IN_SET( 
+				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
+				(    
+					SELECT 
+						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
+					FROM rms_score_monthly AS dd 
+					WHERE  dd.`score_id`= s.id
+				)
+			) AS ranking
+			";
 		}
 
 
@@ -500,7 +517,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$order = "  
 					GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
    				ORDER BY ";
-		if($search['exam_type']==2){
+		if($search['exam_type']==2 OR $search['exam_type']==3){
 			$order.=" sm.overallAssessmentSemester DESC";
 		}else{
 			$order.=" (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
@@ -512,6 +529,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		} else {
 			$limit = " ";
 		}
+	//	echo $sql . $where . $order . $limit;
 		return $db->fetchAll($sql . $where . $order . $limit);
 	}
 	public function getStundetScorebySemester($group_id, $semester)

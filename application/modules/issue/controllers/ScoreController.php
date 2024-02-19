@@ -177,6 +177,44 @@ class Issue_ScoreController extends Zend_Controller_Action {
 			
 			if(!empty($row)){
 				if($row["exam_type"]==2){
+					$arr= array(
+						"semester" => true
+						,"annual" => false
+					);
+					print_r(Zend_Json::encode($arr));
+					exit();
+				}else if($row["exam_type"]==3){
+					$arr= array(
+						"semester" => false
+						,"annual" => true
+					);
+					print_r(Zend_Json::encode($arr));
+					exit();
+				}else{
+					$arr= array(
+						"semester" => false
+						,"annual" => false
+					);
+					print_r(Zend_Json::encode($arr));
+					exit();
+				}
+			}else{
+				print_r(Zend_Json::encode(false));
+				exit();
+			}
+			
+		}
+	}
+	function getIsannaulAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbScore();
+			$scoreId = empty($data['scoreId']) ? 0 : $data['scoreId'];
+			
+			$row = $db->getScoreById($scoreId);
+			
+			if(!empty($row)){
+				if($row["exam_type"]==3){
 					print_r(Zend_Json::encode(true));
 					exit();
 				}else{

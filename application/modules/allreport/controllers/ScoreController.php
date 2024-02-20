@@ -1140,7 +1140,6 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$scoreId = $this->getRequest()->getParam("id");
 		$stu_id = $this->getRequest()->getParam("stu_id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-
 		$search = array(
 			'scoreId' => empty($scoreId) ? 0 : $scoreId
 		);
@@ -1153,6 +1152,5 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
-		// 		$this->view->grading =array();// $db->getGradingSystem(@$result[0]['degree_id']);
 	}
 }

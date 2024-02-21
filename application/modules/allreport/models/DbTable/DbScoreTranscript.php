@@ -595,7 +595,29 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 				(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1,
 				(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`   LIMIT 1) AS overalSemester2,
 				(SELECT ml.total_score FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`  LIMIT 1) AS totalScoreSemester1,
-				(SELECT ml.total_score FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`   LIMIT 1) AS totalScoreSemester2
+				(SELECT ml.total_score FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`   LIMIT 1) AS totalScoreSemester2,
+
+				FIND_IN_SET((SELECT sm.overallAssessmentSemester FROM rms_score_monthly sm INNER JOIN rms_score AS d ON d.`id` = sm.score_id WHERE 
+				d.exam_type=2 AND d.`for_semester`=1 AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+					(SELECT GROUP_CONCAT(overallAssessmentSemester ORDER BY overallAssessmentSemester DESC)
+						FROM 
+							rms_score_monthly AS dd 
+							 INNER JOIN  rms_score AS d ON d.`id` = dd.score_id
+						WHERE
+						d.exam_type=2  AND d.`for_semester`=1 AND d.group_id=s.group_id
+						)
+				) AS rankSemester1,
+
+				FIND_IN_SET((SELECT sm.overallAssessmentSemester FROM rms_score_monthly sm INNER JOIN rms_score AS d ON d.`id` = sm.score_id WHERE 
+				d.exam_type=2 AND d.`for_semester`=2 AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+					(SELECT GROUP_CONCAT(overallAssessmentSemester ORDER BY overallAssessmentSemester DESC)
+						FROM 
+							rms_score_monthly AS dd 
+							 INNER JOIN  rms_score AS d ON d.`id` = dd.score_id
+						WHERE
+						d.exam_type=2  AND d.`for_semester`=2 AND d.group_id=s.group_id
+						)
+				) AS rankSemester2
 
 			FROM 
 				rms_score AS s,

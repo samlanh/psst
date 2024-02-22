@@ -293,6 +293,8 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	
 	function getAllStudentTest($search=null){
 		try{
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = $_db->getAccessPermission('st.branch_id');
 			$lang = $_db->currentlang();
@@ -338,6 +340,10 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					str.note AS note_result,
 					str.is_registered
 					,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
+					,CASE 
+						WHEN str.resultStatus = 2 THEN '".$tr->translate("Unqualified")."'
+						ELSE '".$tr->translate("Qualified")."'
+					END AS resultStatusTitle
 				FROM 
 					`rms_student` AS st,
 					`rms_student_test_result` AS str
@@ -393,6 +399,13 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if($search['register_status']!=''){
 				$where .= " AND str.is_registered = ".$search['register_status'];
 			}
+			if(!empty($search['resultStatus'])){
+				$where .= " AND str.resultStatus = ".$search['resultStatus'];
+			}
+			if(!empty($search['partTimeList'])){
+				$where .= " AND COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') = ".$search['partTimeList'];
+			}
+			
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$where.=$dbp->getAccessPermission("st.branch_id");
 			$sql.= $dbp->getSchoolOptionAccess('str.test_type');

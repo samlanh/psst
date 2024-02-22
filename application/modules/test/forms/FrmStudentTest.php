@@ -1237,6 +1237,17 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
 				'onChange'=>'addNewTerm();',
     			'queryExpr'=>'*${0}*',));
     	$term->setValue($request->getParam("term_test"));
+		
+		$_arrResultStatus = array(1=>$this->tr->translate("Qualified"),2=>$this->tr->translate("Unqualified"));
+    	$_resultStatus = new Zend_Dojo_Form_Element_FilteringSelect("resultStatus");
+    	$_resultStatus->setMultiOptions($_arrResultStatus);
+    	$_resultStatus->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
     	
     	if (!empty($detailscore)){
     		$_score->setValue($detailscore['score']);
@@ -1260,6 +1271,11 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     				'required'=>'true',
     		));
     		$_comment->setValue($detailscore['comment']);
+			
+			if(!empty($detailscore['resultStatus'])){
+				$_resultStatus->setValue($detailscore['resultStatus']);
+			}
+    		
     		
     	}
     	$this->addElements(array(
@@ -1274,7 +1290,8 @@ class Test_Form_FrmStudentTest extends Zend_Dojo_Form
     			$_degree_result,
     			$_comment,
     			$note,
-    			$id
+    			$id,
+				$_resultStatus
     	));
     	return $this;
     }

@@ -470,6 +470,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				'note'		    => $data['note'],
 				'modify_date'   => date("Y-m-d H:i:s"),
 				'user_id'	    => $this->getUserId(),
+				'resultStatus'	=> $data['resultStatus'],
 			);
 			if (!empty($data['degree_result']) AND !empty($data['grade_result'])){
 				$array['score']=$data['score'];
@@ -480,7 +481,15 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$array['updated_result']=1;
 				$array['is_current']=1;
 				$array['result_by']=$this->getUserId();
+			}else{
+				$array['score']=0;
+				$array['degree_result']=empty($data['degree_result']) ?0:$data['degree_result'];
+				$array['grade_result']=empty($data['grade_result']) ?0:$data['grade_result'];
+				$array['is_current']=1;
+				$array['updated_result']=0;
 			}
+			
+			
 			$data['test_restult_id']=$test;
 			if (!empty($data['id'])){
 				if($test!=null){
@@ -557,8 +566,9 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$_arr['partTimeId']=$data['part_time_list'];
 
 					$where = "stu_id=".$data['stu_test_id'];
-					$degreeUp = empty($check['degree'])?$data['degree']:$check['degree'];
-					$where.=" AND degree = ".$degreeUp;
+					//$degreeUp = empty($check['degree'])?$data['degree']:$check['degree'];
+					//$where.=" AND degree = ".$degreeUp;
+					$where.=" AND itemType = 1";
 					$this->_name="rms_group_detail_student";
 					$this->update($_arr, $where);
 				}else{
@@ -639,13 +649,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 
 		if(!empty($_data['test_restult_id'])){
 			$sql.=" AND sd.test_restult_id= ".$_data['test_restult_id'];
-		}else{
-			if(!empty($_data['degree_result'])){
-				$degree = empty($_data['degree_result'])?0:$_data['degree_result'];
-				$sql.=" AND sd.degree=$degree ";
-			}
 		}
-		
+		$sql.=" AND sd.itemType=1 ";
 		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);
 	}

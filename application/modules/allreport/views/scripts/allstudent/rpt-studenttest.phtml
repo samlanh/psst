@@ -40,6 +40,7 @@ table.tb-footer tr.style-head {
                    		<?php echo $frm->getElement("degree");?>
                    </div>
 				   <div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="partTimeList" />
                    </div>
                   
                 </div>
@@ -54,6 +55,9 @@ table.tb-footer tr.style-head {
     	               	<?php echo $frm->getElement("province_search");?>
                    </div>
 				   <div class="col-md-2 col-sm-2 col-xs-12">
+    	               	<?php echo $frm->getElement("resultStatus");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
     	               	<?php echo $frm->getElement("result_status");?>
                    </div>
 				   <div class="col-md-2 col-sm-2 col-xs-12">
@@ -63,6 +67,7 @@ table.tb-footer tr.style-head {
                    </div>
                 </div>
 				<div class="form-group">
+					
                    <div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("start_date");?>
                    </div>
@@ -331,11 +336,29 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "term_test");
+	
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr:'*${0}*',                        
+		required: false,
+		id: "partTimeList",
+		name: "partTimeList",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('SELECT_PARTTIME_SHIFT');?>",          
+		onChange: function() {  
+		}
+	}, "partTimeList");
+		
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllTermStudy();
     });
+	var degree = dijit.byId('degree');
+	 degree.on('change', function(evt) {
+		 getPartTimeListByDregree();
+    });
 
+	getPartTimeListByDregree();
 });
 
 var url_term_study = '<?php echo $this->url(array('module'=>'test','controller'=>'index','action'=>'gettermstudy'));?>';
@@ -364,6 +387,34 @@ function getAllTermStudy(){
 			alert(err);
 		}
 	});
+}
+
+var urlGetParttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';
+function getPartTimeListByDregree(){
+	degree = dijit.byId('degree').get('value');
+	branchId = dijit.byId('branch_id').get('value');
+	if(degree==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url: urlGetParttime,
+		content:{
+			'degree':degree,
+			'branchId':branchId,
+			},
+		handleAs:"json",
+		load: function(data) {
+			partTimeListStore  = getDataStorefromJSON('id','name', data);
+			dijit.byId('partTimeList').set('store',partTimeListStore);  
+			<?php if (!empty($this->search['partTimeList'])){?>
+				dijit.byId('partTimeList').set('value',<?php echo $this->search['partTimeList'];?>);
+			<?php }?>
+		},
+		error: function(err) {
+		}
+	});
+}
+function getallGrade(){
 }
 
 var row=0;

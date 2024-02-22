@@ -607,7 +607,18 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$_department->setMultiOptions($optDeptpartment);
 		$_department->setValue($request->getParam("department"));
 		
-		
+		$_arrResultStatus = array(""=>$this->tr->translate("PLEASE_SELECT"),1=>$this->tr->translate("Qualified"),2=>$this->tr->translate("Unqualified"));
+    	$_resultStatus = new Zend_Dojo_Form_Element_FilteringSelect("resultStatus");
+    	$_resultStatus->setMultiOptions($_arrResultStatus);
+    	$_resultStatus->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			
+    			'class'=>'fullside height-text',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',));
+			$_resultStatus->setValue($request->getParam("resultStatus"));
+				
 		$this->addElements(array(
 				$_type,
 				$adv_search,
@@ -648,6 +659,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_stuOrderBy,
 				$_department,
 				$_score_result_status,
+				$_resultStatus,
 				)
 			);
 		return $this;

@@ -161,6 +161,7 @@ span.custom-switch-indicator{line-height: 20px;}
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
 		    			<h4 class="m-b-0"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('REGISTER');?></h4>
+						<span id="message"></span>
 	    			</div>
 	    			<div class="col-sm-4 text-right"></div>
 	    		</div>
@@ -230,7 +231,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><strong><?php echo $tr->translate("STUDENT_NEW_ID");?></strong> :
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
-					                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
+					                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" onkeyup="checkDuplicateRecord();" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 					                   </div>
 					            </div>
 					            <div class="form-group" <?php if ($settingShowGroup==0){?>style="display: none;"<?php }?>>
@@ -1622,6 +1623,43 @@ function hideDialog(){
 }
 function hideDialog1(){
 	dijit.byId('alertBeforePrint').hide();
+}
+
+var isDuplicate = 0;
+var url_duplicate = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"checkstudentcode"));?>';										
+function checkDuplicateRecord(){
+	student_code = dijit.byId('student_code').get('value');
+	if(student_code=='' || student_code==-1){
+		dijit.byId('student_code').focus();
+		return false;
+	}
+	if(student_code.length<=3){
+		return false;
+	}
+	
+	dojo.xhrPost({
+		url: url_duplicate,
+		content:{
+			'student_id':student_code,
+			},
+		handleAs:"json",
+		load: function(data) {
+			if(data==1){
+				isDuplicate = 1;
+				alert("<?php echo $tr->translate("ALREADY_EXISTING_STUDENT_CODE");?>");
+				$("#message").html('<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("ALREADY_EXISTING_STUDENT_CODE");?> !');
+			}else{
+				isDuplicate=0;
+				$("#message").html('');
+			}
+			   
+		    document.getElementsByClassName("overlay")[0].style.display="none";
+		},
+		error: function(err) {
+			alert(err);
+			document.getElementsByClassName("overlay")[0].style.display="none";
+		}
+	});
 }
 
 </script>

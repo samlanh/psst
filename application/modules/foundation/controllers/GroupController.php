@@ -21,7 +21,7 @@ class Foundation_GroupController extends Zend_Controller_Action
 					'degree'	=> '',
 					'grade' 	=> '',
 					'time' 		=> '',
-					'session' 	=> '',
+					'partTimeList' 	=> '',
 					'status'	=> -1,
 					'teacher' 	=> '',
 					'start_date' => date('Y-m-d'),

@@ -34,7 +34,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 				'room_id' 		=> $_data['room'],
 				'academic_year' => $_data['academic_year'],
 				'semester' 		=> $_data['semester'],
-				'session' 		=> $_data['session'],
+				'session' 		=> $_data['part_time_list'],
 				'time' 			=> $_data['time'],
 				'degree' 		=> $_data['degree'],
 				'grade' 		=> $_data['grade'],
@@ -105,7 +105,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 				'room_id' 		=> $_data['room'],
 				'academic_year' => $_data['academic_year'],
 				'semester' 		=> $_data['semester'],
-				'session' 		=> $_data['session'],
+				'session' 		=> $_data['part_time_list'],
 				'time' 			=> $_data['time'],
 				'degree' 		=> $_data['degree'],
 				'grade'		 	=> $_data['grade'],
@@ -210,8 +210,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			 `g`.`semester` AS `semester`, 
 			i.$colunmname AS degree,
 			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
-			(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+			(select title from rms_parttime_list where rms_parttime_list.id = g.session limit 1 ) as session,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
 			time,
@@ -252,8 +251,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		if (!empty($search['degree'])) {
 			$where .= ' AND `g`.`degree`=' . $search['degree'];
 		}
-		if (!empty($search['session'])) {
-			$where .= ' AND g.session=' . $search['session'];
+		if (!empty($search['partTimeList'])) {
+			$where .= ' AND g.session=' . $search['partTimeList'];
 		}
 		if (!empty($search['status']) and $search['status'] > -1) {
 			$where .= ' AND g.status=' . $search['status'];

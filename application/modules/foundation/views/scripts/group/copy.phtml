@@ -141,7 +141,7 @@ $frm = $this->frm;
 									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SESSION"); ?> :</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("session"); ?>
+											<input id="part_time_list" name="part_time_list"  />
 										</div>
 									</div>
 									<div class="form-group">
@@ -388,6 +388,7 @@ $frm = $this->frm;
 	var subject_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode($this->subjectlist)); ?>);
 	var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
 	var gradingStore = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var part_time_list_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 
 	dojo.ready(function() {
 		new dijit.form.FilteringSelect({
@@ -465,6 +466,7 @@ $frm = $this->frm;
 					getSubjectByGrade();
 					getallGrade();
 					getDegreeInfo();
+					getPartTimeListByDregree();
 				}
 			}
 		}, "degree");
@@ -519,6 +521,19 @@ $frm = $this->frm;
 			}
 		}, "gradingId");
 
+		new dijit.form.FilteringSelect({
+			store: part_time_list_store,
+			autoComplete: false,
+			queryExpr:'*${0}*',                        
+			required: false,
+			id: "part_time_list",
+			name: "part_time_list",           
+			class: "fullside", 
+			placeHolder:"<?php echo $tr->translate('SELECT_PARTTIME_SHIFT');?>",          
+			onChange: function() {  
+			}
+		}, "part_time_list");
+
 		var branch_id = dijit.byId('branch_id');
 		branch_id.on('change', function(evt) {
 			getAllDegreeByBranch();
@@ -531,6 +546,7 @@ $frm = $this->frm;
 		getRefreshRoom();
 		getRefreshTeacher();
 		getSubject();
+		getPartTimeListByDregree();
 
 
 	});
@@ -723,6 +739,33 @@ $frm = $this->frm;
 				}
 			},
 			error: function(err) {}
+		});
+	}
+
+	var url_get_parttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';
+	function getPartTimeListByDregree(){
+		dijit.byId('part_time_list').set('value',''); 
+		degree = dijit.byId('degree').get('value');
+		branchId = dijit.byId('branch_id').get('value');
+		if(degree==''){
+			return false;
+		}
+		dojo.xhrPost({
+			url:url_get_parttime,
+			content:{
+				'degree':degree,
+				'branchId':branchId,
+				},
+			handleAs:"json",
+			load: function(data) {
+				part_time_list_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('part_time_list').set('store',part_time_list_store);  
+				if (oldDegree == degree) {
+					dijit.byId('part_time_list').attr('value', <?php echo $this->rs['session']; ?>);
+				}
+			},
+			error: function(err) {
+			}
 		});
 	}
 

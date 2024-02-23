@@ -2220,7 +2220,7 @@ function getAllgroupStudyNotPass($action=null){
   	if ($level!=1){
   		$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
   	}
-  		$sql.=" ORDER BY i.items_id ASC, i.ordering ASC";
+  		$sql.=" ORDER BY i.ordering ASC , i.items_id ASC ";
   		return $db->fetchAll($sql);
   }
   
@@ -2293,7 +2293,7 @@ function getAllgroupStudyNotPass($action=null){
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
   	}
-  	$sql.=" GROUP BY i.id ORDER BY i.items_type ASC, i.items_id DESC, i.ordering DESC ";
+  	$sql.=" GROUP BY i.id ORDER BY i.items_type ASC, i.ordering ASC , i.items_id DESC ";
   	return $db->fetchAll($sql);
   }
   function getProductbyBranch($category_id=null,$product_type=null){

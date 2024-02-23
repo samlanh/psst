@@ -212,7 +212,7 @@ table.tb-footer tr.style-head {
 										<td scope="col" colspan="4"><?php echo $tr->translate("RESULT"); ?></td>
 										
 										
-										<td scope="col" colspan="3"><?php echo $tr->translate("STATUS"); ?></td>
+										<td scope="col" colspan="4"><?php echo $tr->translate("OTHER"); ?></td>
 									  </tr>
 									 <tr class="style"  align="center">
 										<td scope="col" style="padding: 2px;overflow-wrap: break-word;" >
@@ -231,6 +231,7 @@ table.tb-footer tr.style-head {
 										<td scope="col" ><?php echo $tr->translate("NOTE"); ?></td>
 									 
 										<td scope="col" ><?php echo $tr->translate("USER"); ?></td>
+										<td scope="col" ><?php echo $tr->translate("STATUS"); ?></td>
 										<td scope="col" ><?php echo $tr->translate("RESULT"); ?></td>
 										<td scope="col" ><?php echo $tr->translate("RIGISTER"); ?></td>
 									 </tr>
@@ -263,6 +264,7 @@ table.tb-footer tr.style-head {
 											<td data-label="<?php echo $tr->translate("RESULT_BY");?>" valign="top"><?php echo $rs['result_by'];?></td>	
 											<td  data-label="<?php echo $tr->translate("NOTE");?>" align="left" valign="top"><span class="note" style="" ><?php echo $rs['note_result']; ?></span></td>
 											<td data-label="<?php echo $tr->translate("USER");?>" valign="center"><?php echo $rs['user_id'];?></td>								    
+											<td data-label="<?php echo $tr->translate("USER");?>" valign="center"><?php echo $rs['resultStatusTitle'];?></td>								    
 											<td data-label="<?php echo $tr->translate("RESULT");?>" style=" <?php if($rs['updated_result_de']==0){echo " color:red;";}?>" ><?php echo $rs['result_status']; ?></td>
 											<td data-label="<?php echo $tr->translate("STATUS");?>" style=" <?php if($rs['is_registered']==0){echo " color:red;";}?>"><?php if ($rs['is_registered']==1){ echo $tr->translate("REGISTERED");}else{ echo $tr->translate("PENDING");}?></td>							    
 									  </tr>

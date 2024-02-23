@@ -344,7 +344,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     		$sql.=' AND t.department= '.$search['department'];
     	}
     	$order=" 
-				GROUP BY sch.group_id,schDetail.techer_id,schDetail.subject_id,gsd.stu_id ORDER BY sch.group_id ASC,schDetail.techer_id,schDetail.subject_id ASC
+				GROUP BY sch.group_id,schDetail.techer_id,schDetail.subject_id,gsd.stu_id ORDER BY schDetail.techer_id,sch.group_id ASC,schDetail.subject_id ASC
 			";
 			
 		$stuOrderBy = empty($search['stuOrderBy'])?0:$search['stuOrderBy'];

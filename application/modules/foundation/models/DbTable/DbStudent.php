@@ -208,18 +208,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				Application_Form_FrmMessage::Sucessfull("STUDENT_EXISTRING","/foundation/register/add");
 				return -1;
 			}
-// 			$stu_code=$_data['student_id'];//id duplicate is check new
-// 			$existing = $this->ifStudentIdExisting($stu_code);
-// 			if(!empty($existing)){
-// 				$dbg = new Application_Model_DbTable_DbGlobal();
-// 				$degree_id = empty($_data['degree_'.$mainRecord])?0:$_data['degree_'.$mainRecord];
-// 				$stu_code = $dbg->getnewStudentId($_data['branch_id'],$degree_id);
-// 			}
 
 			$dbg = new Application_Model_DbTable_DbGlobal();
 			$degree_id = empty($_data['degree_'.$mainRecord])?0:$_data['degree_'.$mainRecord];
-			$stu_code = $dbg->getnewStudentId($_data['branch_id'],$degree_id);
-			
+
+			$canEntry = Setting_Model_DbTable_DbGeneral::geValueByKeyName('entry_stuid');
+			if($canEntry==1){//entry by self not need generate for user
+				$stu_code=$_data['student_id'];
+			}else{
+				$stu_code = $dbg->getnewStudentId($_data['branch_id'],$degree_id);
+			}
+
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);

@@ -244,7 +244,12 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		 * 
 		 * For search score 
 		 * */
-		$_arr = array(0=>$this->tr->translate("SELECT_TYPE"),1=>$this->tr->translate("MONTHLY"),2=>$this->tr->translate("SEMESTER"));
+		$_arr = array(
+			0=>$this->tr->translate("SELECT_TYPE"),
+			1=>$this->tr->translate("MONTHLY"),
+			2=>$this->tr->translate("SEMESTER"),
+			3=>$this->tr->translate("YEARLY_RESULT"),
+		);
 		$_exam_type = new Zend_Dojo_Form_Element_FilteringSelect("exam_type");
 		$_exam_type->setMultiOptions($_arr);
 		$_exam_type->setAttribs(array(

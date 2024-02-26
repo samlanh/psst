@@ -4159,6 +4159,9 @@ function getAllgroupStudyNotPass($action=null){
 	   			if(!empty($data['oldGroup'])){
 	   				$_arr['old_group']=$data['oldGroup'];
 	   			}
+				if(!empty($data['partTimeId'])){
+					$_arr['partTimeId']=$data['partTimeId'];
+				}
 	   			$this->_name='rms_group_detail_student';
 	   			$id = $this->insert($_arr);
 	   		}

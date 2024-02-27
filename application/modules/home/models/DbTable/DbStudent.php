@@ -3,24 +3,26 @@
 class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'rms_student';
-	public function getUserId(){
-		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
+	public function getUserId()
+	{
+		$session_user = new Zend_Session_Namespace(SYSTEM_SES);
 		return $session_user->user_id;
 	}
-	public function getAllStudentFronDesk($search){
+	public function getAllStudentFronDesk($search)
+	{
 		$curr = new Application_Model_DbTable_DbGlobal();
-		$lang= $curr->currentlang();
+		$lang = $curr->currentlang();
 		$_db = $this->getAdapter();
-		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;
-				$field = 'name_en';
-				$colunmname='title_en';
-				if ($lang==1){
-					$field = 'name_kh';
-					$colunmname='title';
-				}
-				$sql ="SELECT  s.stu_id,
+		$from_date = (empty($search['start_date'])) ? '1' : "s.create_date >= '" . $search['start_date'] . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : "s.create_date <= '" . $search['end_date'] . " 23:59:59'";
+		$where = " AND " . $from_date . " AND " . $to_date;
+		$field = 'name_en';
+		$colunmname = 'title_en';
+		if ($lang == 1) {
+			$field = 'name_kh';
+			$colunmname = 'title';
+		}
+		$sql = "SELECT  s.stu_id,
 							s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
 							CASE
 								WHEN primary_phone = 1 THEN s.tel
@@ -47,70 +49,71 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						   AND s.stu_id=ds.stu_id 
 		                   AND s.status = 1 
 						AND s.customer_type = 1 ";
-			$orderby = " ORDER BY s.stu_khname ASC ";
-		if(!empty($search['adv_search'])){
+		$orderby = " ORDER BY s.stu_khname ASC ";
+		if (!empty($search['adv_search'])) {
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(father_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(mother_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(guardian_khname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
-			$where .=' AND ( '.implode(' OR ',$s_where).')';
+			$s_where[] = " REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(father_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(mother_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(guardian_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
-		if(!empty($search['branch_id'])){
-			$where.=" AND s.branch_id=".$search['branch_id'];
+		if (!empty($search['branch_id'])) {
+			$where .= " AND s.branch_id=" . $search['branch_id'];
 		}
-		if(!empty($search['study_year'])){
-			$where.=" AND ds.academic_year=".$search['study_year'];
+		if (!empty($search['study_year'])) {
+			$where .= " AND ds.academic_year=" . $search['study_year'];
 		}
-		if(!empty($search['group'])){
-			$where.=" AND ds.group_id=".$search['group'];
+		if (!empty($search['group'])) {
+			$where .= " AND ds.group_id=" . $search['group'];
 		}
-		if(!empty($search['degree'])){
-			$where.=" AND ds.degree=".$search['degree'];
+		if (!empty($search['degree'])) {
+			$where .= " AND ds.degree=" . $search['degree'];
 		}
-		if(!empty($search['grade_all'])){
-			$where.=" AND ds.grade=".$search['grade_all'];
+		if (!empty($search['grade_all'])) {
+			$where .= " AND ds.grade=" . $search['grade_all'];
 		}
-		if(!empty($search['session'])){
-			$where.=" AND ds.session=".$search['session'];
+		if (!empty($search['session'])) {
+			$where .= " AND ds.session=" . $search['session'];
 		}
-		if($search['study_status']>=0){
-			$where.=' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) ='.$search['study_status'];
+		if ($search['study_status'] >= 0) {
+			$where .= ' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) =' . $search['study_status'];
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission('s.branch_id');
-		return $_db->fetchAll($sql.$where.$orderby);
+		$where .= $dbp->getAccessPermission('s.branch_id');
+		return $_db->fetchAll($sql . $where . $orderby);
 	}
-	
-	public function getStudentById($stu_id){
+
+	public function getStudentById($stu_id)
+	{
 		$db = $this->getAdapter();
 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
+		$colunmname = 'title_en';
 		$vill = 'village_name';
 		$comm = 'commune_name';
 		$dist = 'district_name';
 		$prov = 'province_en_name';
 		$view = 'name_en';
-		$occuTitle='occu_enname';
-		if ($currentLang==1){
-			$colunmname='title';
+		$occuTitle = 'occu_enname';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 			$vill = 'village_namekh';
 			$comm = 'commune_namekh';
 			$dist = 'district_namekh';
@@ -118,8 +121,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$view = 'name_kh';
 			$occuTitle = 'occu_name';
 		}
-		
- 		$sql = "SELECT s.*,
+
+		$sql = "SELECT s.*,
  				 DATE_FORMAT(`s`.`dob`,'%d/%M/%Y') AS `dob`,
  				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
  				(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
@@ -162,26 +165,27 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND s.stu_id = ds.stu_id 
 					AND ds.is_maingrade=1 
 					AND s.stu_id=$stu_id  ";
-		$where='';
+		$where = '';
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission("s.`branch_id`");
-		$where.=" LIMIT 1";
-		return $db->fetchRow($sql.$where);
+		$where .= $dbp->getAccessPermission("s.`branch_id`");
+		$where .= " LIMIT 1";
+		return $db->fetchRow($sql . $where);
 	}
-	public function getStudentByIdToken($stToken){//will combine with above
+	public function getStudentByIdToken($stToken)
+	{ //will combine with above
 		$db = $this->getAdapter();
-	
+
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
+		$colunmname = 'title_en';
 		$vill = 'village_name';
 		$comm = 'commune_name';
 		$dist = 'district_name';
 		$prov = 'province_en_name';
 		$view = 'name_en';
-		$occuTitle='occu_enname';
-		if ($currentLang==1){
-			$colunmname='title';
+		$occuTitle = 'occu_enname';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 			$vill = 'village_namekh';
 			$comm = 'commune_namekh';
 			$dist = 'district_namekh';
@@ -189,7 +193,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$view = 'name_kh';
 			$occuTitle = 'occu_name';
 		}
-	
+
 		$sql = "SELECT s.*,
 		DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
 		(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
@@ -232,27 +236,28 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			ds.itemType=1
 			AND s.stu_id = ds.stu_id
 			AND ds.is_maingrade=1
-			AND s.studentToken='".addslashes($stToken)."'";
-		$where='';
+			AND s.studentToken='" . addslashes($stToken) . "'";
+		$where = '';
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where.=$dbp->getAccessPermission("s.`branch_id`");
-		$where.=" LIMIT 1";
-		return $db->fetchRow($sql.$where);
+		$where .= $dbp->getAccessPermission("s.`branch_id`");
+		$where .= " LIMIT 1";
+		return $db->fetchRow($sql . $where);
 	}
-	function getAllStudentStudyRecord($stu_id){
+	function getAllStudentStudyRecord($stu_id)
+	{
 		$db = $this->getAdapter();
 
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		
+
 		$label = "name_en";
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		$colunmname = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 			$label = "name_kh";
 		}
-		
- 		$sql =" SELECT 
+
+		$sql = " SELECT 
 	 				ds.group_id,
 					(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year,
@@ -265,24 +270,25 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
  			WHERE 
 				ds.itemType=1 
 				AND ds.stu_id = $stu_id AND ds.is_current=1 ";
-		$where='';
+		$where = '';
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		return $db->fetchAll($sql.$where);
+		return $db->fetchAll($sql . $where);
 	}
-	
-	
-	public function getStudentPaymentDetail($stu_id){
+
+
+	public function getStudentPaymentDetail($stu_id)
+	{
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-	
+
 		$currentLang = $_db->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		$colunmname = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 		}
-		
-		$sql=" SELECT
+
+		$sql = " SELECT
 					spd.id,	
 					spd.payment_id, 
 					spd.fee,
@@ -329,19 +335,20 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
-	 
-	public function getStudentServiceUsing($stu_id,$search,$order_no){
+
+	public function getStudentServiceUsing($stu_id, $search, $order_no)
+	{
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$branch_id = $_db->getAccessPermission();
-	
+
 		$currentLang = $_db->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		$colunmname = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 		}
-		
-		$sql=" SELECT
+
+		$sql = " SELECT
 					spd.id,
 					spd.fee,
 					spd.qty,
@@ -382,18 +389,19 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
-	 
-	function getRescheduleByGroupId($id){
-		$db=$this->getAdapter();
-		
+
+	function getRescheduleByGroupId($id)
+	{
+		$db = $this->getAdapter();
+
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		$colunmname = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 		}
-		
-		$sql=" SELECT 
+
+		$sql = " SELECT 
 					gr.id,
 					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,	
 					(select group_code from rms_group as g where g.id = gr.group_id limit 1) AS group_code,
@@ -427,24 +435,26 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
-	
-	function getStudentDocumentById($id){
-		$db=$this->getAdapter();
-		$sql=" SELECT * from rms_student_document where stu_id = $id ";
+
+	function getStudentDocumentById($id)
+	{
+		$db = $this->getAdapter();
+		$sql = " SELECT * from rms_student_document where stu_id = $id ";
 		return $db->fetchAll($sql);
 	}
-	
-	function getStudentMistake($stu_id){
+
+	function getStudentMistake($stu_id)
+	{
 		$db = $this->getAdapter();
-		
+
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		$colunmname = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 		}
-		
-		$sql="SELECT
+
+		$sql = "SELECT
 					g.id as group_id,
 					g.`group_code`,
 					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
@@ -469,14 +479,15 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND st.`stu_id` = sdd.`stu_id` 
 					and sdd.stu_id = $stu_id
 			";
-		 
-		$order =" GROUP BY sd.group_id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
-		return $db->fetchAll($sql.$order);
+
+		$order = " GROUP BY sd.group_id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC";
+		return $db->fetchAll($sql . $order);
 	}
-	
-	function getStatusMistakeByStudent($stu_id,$group){
+
+	function getStatusMistakeByStudent($stu_id, $group)
+	{
 		$db = $this->getAdapter();
-		$sql="SELECT
+		$sql = "SELECT
 					sd.`group_id`,
 					sd.`type`,
 					sdd.`attendence_status` as mistake_type,
@@ -492,22 +503,23 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND sdd.`stu_id` = $stu_id
 					AND sd.`group_id` = $group 
 			";
-		$sql.=" GROUP BY sd.id ORDER BY sd.`date_attendence` ASC,sdd.attendence_status DESC ";
+		$sql .= " GROUP BY sd.id ORDER BY sd.`date_attendence` ASC,sdd.attendence_status DESC ";
 		return $db->fetchAll($sql);
 	}
-	
-	
-	function getStudentAttendence($stu_id){
+
+
+	function getStudentAttendence($stu_id)
+	{
 		$db = $this->getAdapter();
-		
+
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		$colunmname='title_en';
-		if ($currentLang==1){
-			$colunmname='title';
+		$colunmname = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'title';
 		}
-		
-		$sql="SELECT
+
+		$sql = "SELECT
 					g.id AS group_id,
 					g.`group_code`,
 					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
@@ -534,14 +546,15 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND g.is_pass!=1
 					AND st.`stu_id` = $stu_id
 			";
-		$order =" GROUP BY sta.group_id,sdd.stu_id
+		$order = " GROUP BY sta.group_id,sdd.stu_id
 		ORDER BY `g`.`degree`,`g`.`grade` DESC,g.group_code ASC ,g.id DESC,st.stu_khname ASC ";
-		return $db->fetchAll($sql.$order);
+		return $db->fetchAll($sql . $order);
 	}
-	
-	function getStatusAttendence($stu_id,$group){
+
+	function getStatusAttendence($stu_id, $group)
+	{
 		$db = $this->getAdapter();
-		$sql="SELECT
+		$sql = "SELECT
 					sat.`group_id`,
 					satd.`attendence_status`,
 					sat.`date_attendence`,
@@ -559,10 +572,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
-	function getSumStatusAttendence($stu_id,$group){
+	function getSumStatusAttendence($stu_id, $group)
+	{
 		$db = $this->getAdapter();
-		
-		$sql="SELECT
+
+		$sql = "SELECT
 			sat.`group_id`,
 			satd.`attendence_status`
 			
@@ -681,9 +695,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			AND sat.type=1
 			AND satd.`stu_id`=$stu_id
 			AND sat.`group_id`=$group GROUP BY satd.`stu_id` ";
-			
+
 		return $db->fetchRow($sql);
-		
+
 		/*
 			COUNT(if(satd.attendence_status = '1' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalComeSemester1,
 			COUNT(IF(satd.attendence_status = '2' AND sat.for_semester=1, satd.attendence_status, NULL)) AS totalASemester1,
@@ -698,27 +712,29 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalELSemester2,
 		*/
 	}
-	
-	function addReadNews($id){
-		try{
+
+	function addReadNews($id)
+	{
+		try {
 			$db = $this->getAdapter();
-			$arr =array(
-					'new_feed_id'=>$id,
-					'cus_id'=>$this->getUserId(),
-					'is_read'=>1,
-					'is_click'=>1,
-					'date'=>date("Y-m-d H:i:s"),
-					);
-			$this->_name="ln_news__read";
+			$arr = array(
+				'new_feed_id' => $id,
+				'cus_id' => $this->getUserId(),
+				'is_read' => 1,
+				'is_click' => 1,
+				'date' => date("Y-m-d H:i:s"),
+			);
+			$this->_name = "ln_news__read";
 			$this->insert($arr);
-		}catch (Exception $e){
+		} catch (Exception $e) {
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
-	function getLastExamByStudent($stu_id){
+
+	function getLastExamByStudent($stu_id)
+	{
 		$db = $this->getAdapter();
-		$sql="SELECT 
+		$sql = "SELECT 
 			s.*,sd.student_id FROM 
 			`rms_score_detail` AS sd,
 			`rms_score` AS s
@@ -728,30 +744,32 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			ORDER BY s.id DESC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	function getLastStudentEnvaluation($stu_id){
+	function getLastStudentEnvaluation($stu_id)
+	{
 		$db = $this->getAdapter();
-		$sql="SELECT e.* FROM `rms_student_evaluation` AS e
+		$sql = "SELECT e.* FROM `rms_student_evaluation` AS e
 		WHERE e.student_id = $stu_id ORDER BY e.id DESC LIMIT 1";
 		return $db->fetchRow($sql);
 	}
-	function getStudyHistoryByStudent($stu_id){
+	function getStudyHistoryByStudent($stu_id)
+	{
 		$db = $this->getAdapter();
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
-		if ($currentLang==1){// khmer
-			$title='title';
-			$view="name_kh";
-			$branch="school_namekh";
-			$student="stu_khname as name";
-			$teacher="teacher_name_kh";
-		}else{
-			$title='title_en';
-			$view="name_en";
-			$branch="school_nameen";
-			$student="CONCAT(last_name,'',stu_enname) as name";
-			$teacher="teacher_name_en";
+		if ($currentLang == 1) { // khmer
+			$title = 'title';
+			$view = "name_kh";
+			$branch = "school_namekh";
+			$student = "stu_khname as name";
+			$teacher = "teacher_name_kh";
+		} else {
+			$title = 'title_en';
+			$view = "name_en";
+			$branch = "school_nameen";
+			$student = "CONCAT(last_name,'',stu_enname) as name";
+			$teacher = "teacher_name_en";
 		}
-		$sql="SELECT
+		$sql = "SELECT
 					g.group_code,
 					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_id,
 					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
@@ -779,37 +797,38 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
-	
-	
-	function getStudentAllTestInfo($stu_id){
-		try{
+
+
+	function getStudentAllTestInfo($stu_id)
+	{
+		try {
 			$_db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = $_db->getAccessPermission('st.branch_id');
 			$lang = $_db->currentlang();
-			if($lang==1){// khmer 
+			if ($lang == 1) { // khmer 
 				$label = "name_kh";
 				$grade = "idd.title";
 				$degree = "i.title";
-			}else{ // English
+			} else { // English
 				$label = "name_en";
 				$grade = "idd.title_en";
 				$degree = "i.title_en";
 			}
-			
-			$db=$this->getAdapter();
+
+			$db = $this->getAdapter();
 			$testCondiction = TEST_CONDICTION;
-			
-			$sql=" SELECT st.*,
+
+			$sql = " SELECT st.*,
 					(SELECT $label FROM rms_view WHERE TYPE=2 AND key_code=st.sex LIMIT 1) AS sex,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=str.academic_year LIMIT 1) AS academic,
 					";
-			
-			if ($testCondiction==2){
-				$sql.="(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";
-			}else{
-				$sql.="(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=str.study_term) AS study_term,";
+
+			if ($testCondiction == 2) {
+				$sql .= "(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";
+			} else {
+				$sql .= "(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=str.study_term) AS study_term,";
 			}
-			$sql.="		
+			$sql .= "		
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 					(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
@@ -832,26 +851,27 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					AND status=1
 					AND st.stu_khname!=''
 					AND st.`stu_id` = $stu_id";
-	
+
 			$where = " ";
 			$dbp = new Application_Model_DbTable_DbGlobal();
-			$where.=$dbp->getAccessPermission("st.branch_id");
-			$sql.= $dbp->getSchoolOptionAccess('str.test_type');
-			
-			$order=" ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
-			return $db->fetchAll($sql.$where.$order);
-		}catch(Exception $e){
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$where .= $dbp->getAccessPermission("st.branch_id");
+			$sql .= $dbp->getSchoolOptionAccess('str.test_type');
+
+			$order = " ORDER By str.updated_result DESC,str.degree_result ASC,str.grade_result ASC ";
+			return $db->fetchAll($sql . $where . $order);
+		} catch (Exception $e) {
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	
-	function getCountAttendanceByStudent($_data){
+
+	function getCountAttendanceByStudent($_data)
+	{
 		$db = $this->getAdapter();
 		$attendenceStatus = empty($_data["attendenceStatus"]) ? 0 : $_data["attendenceStatus"];
 		$studentId = empty($_data["studentId"]) ? 0 : $_data["studentId"];
 		$groupId = empty($_data["groupId"]) ? 0 : $_data["groupId"];
 		$forSemester = empty($_data["forSemester"]) ? 1 : $_data["forSemester"];
-		$sql="
+		$sql = "
 			SELECT 
 				satd.attendence_id,
 				satd.attendence_status
@@ -868,16 +888,15 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				AND sat.group_id = $groupId
 				
 			";
-		$sql.="
+		$sql .= "
 				GROUP BY satd.attendence_id,satd.attendence_status
 				ORDER BY satd.attendence_status DESC
 		";
 		$rs = $db->fetchAll($sql);
 		$restult = "0";
-		if(!empty($rs)){
-			return $restult = "".COUNT($rs)."";
+		if (!empty($rs)) {
+			return $restult = "" . COUNT($rs) . "";
 		}
 		return $restult;
 	}
 }
-

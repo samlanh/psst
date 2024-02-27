@@ -1,324 +1,355 @@
-
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('SEARCH_STUDENT'));
-	echo $this->headTitle(''); 
-	$url_copy =$this->url(array('module'=>'foundation','controller'=>'register','action'=>'copy'));
-	$formList = new Application_Form_Frmtable();
-	$frm =  $this->form_search;
-	$parameterserch =  basename($_SERVER['REQUEST_URI']);
-	$urlsting = str_replace("&pages=".$this->currentPage,"",$parameterserch);
-	$sign="?";
-	if (!empty($urlsting)){
-		$sign="&";
-	}
-	$db_student= new Home_Model_DbTable_DbStudent();
-	$dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$this->headTitle($tr->translate('SEARCH_STUDENT'));
+echo $this->headTitle('');
+$url_copy = $this->url(array('module' => 'foundation', 'controller' => 'register', 'action' => 'copy'));
+$formList = new Application_Form_Frmtable();
+$frm =  $this->form_search;
+$parameterserch =  basename($_SERVER['REQUEST_URI']);
+$urlsting = str_replace("&pages=" . $this->currentPage, "", $parameterserch);
+$sign = "?";
+if (!empty($urlsting)) {
+	$sign = "&";
+}
+$db_student = new Home_Model_DbTable_DbStudent();
+$dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 ?>
 <style>
-.card-box-border {
-    background-color: #ffffff;
-    border: 1px solid rgba(98, 103, 115, 0.2);
-    padding: 10px;
-    margin-bottom: 20px;
-        color: #000;
-        box-shadow: 1px 1px 2px #ccc;
-}
-span.user-badge.bg-warning {
-    position: absolute;
-    top: 15px;
-    left: 0;
-    padding: 5px 15px;
-    border-radius: 20px;
-    color: #ffffff;
-    font-size: 11px;
-    text-transform: uppercase;
-    font-weight: bold;
-    z-index: 1 !important;
-}
-.bg-warning {
-    background: #009bcc !important;
-}
-.thumb-xl.member-thumb {
-    position: relative;
-}
-.thumb-xl.member-thumb {
-    height: 130px;
-    width: 120px;
-}
-.member-card p.text-muted.info-list {
-    text-align: left;
-    color: #0f2a5b;
-}
-.member-card img.img-thumbnail {
-    width: 100%;
-    height: 100%;
-}
-.member-card h4 {
-    margin: 0;
-    padding: 2px 0;
-}
-span.title-info {
-    min-width: 30%;
-    display: inline-block;
-    font-weight: 600;
-    color: #0f2a5b;
-}
-span.inf-value {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: inline-block;
-    width: 63%;
-    overflow: hidden;
-    vertical-align: bottom;
-}
+	.card-box-border {
+		background-color: #ffffff;
+		border: 1px solid rgba(98, 103, 115, 0.2);
+		padding: 10px;
+		margin-bottom: 20px;
+		color: #000;
+		box-shadow: 1px 1px 2px #ccc;
+	}
 
-.member-card .member-star {
-    position: absolute;
-    bottom: 10px;
-    right: 5px;
-    background-color: #ffffff;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    line-height: 26px;
-    text-align: center;
-    font-size: 18px;
-    border: solid 2px;
-}
-.text-active {
-    color: #009688;
-}
-.text-deactive {
-    color: #ff1203;
-}
-.card-box.search-list {
-    min-height: 400px;
-}
-a.btn.btn-default.btn-detail {
-    background: #009688;
-    padding: 10px;
-    color: #fff;
-}
-a.btn.btn-default.btn-detail:hover {
-    opacity: 0.8;
-}
-.blue{
-	color: #08086b;
-}
+	span.user-badge.bg-warning {
+		position: absolute;
+		top: 15px;
+		left: 0;
+		padding: 5px 15px;
+		border-radius: 20px;
+		color: #ffffff;
+		font-size: 11px;
+		text-transform: uppercase;
+		font-weight: bold;
+		z-index: 1 !important;
+	}
 
-ul.nav.navbar-right.panel_toolbox.stusearch {
-    min-width: 0;
-}
-ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
-    padding: 10px;
-}
+	.bg-warning {
+		background: #009bcc !important;
+	}
+
+	.thumb-xl.member-thumb {
+		position: relative;
+	}
+
+	.thumb-xl.member-thumb {
+		height: 130px;
+		width: 120px;
+	}
+
+	.member-card p.text-muted.info-list {
+		text-align: left;
+		color: #0f2a5b;
+	}
+
+	.member-card img.img-thumbnail {
+		width: 100%;
+		height: 100%;
+	}
+
+	.member-card h4 {
+		margin: 0;
+		padding: 2px 0;
+	}
+
+	span.title-info {
+		min-width: 30%;
+		display: inline-block;
+		font-weight: 600;
+		color: #0f2a5b;
+	}
+
+	span.inf-value {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		display: inline-block;
+		width: 63%;
+		overflow: hidden;
+		vertical-align: bottom;
+	}
+
+	.member-card .member-star {
+		position: absolute;
+		bottom: 10px;
+		right: 5px;
+		background-color: #ffffff;
+		height: 30px;
+		width: 30px;
+		border-radius: 50%;
+		line-height: 26px;
+		text-align: center;
+		font-size: 18px;
+		border: solid 2px;
+	}
+
+	.text-active {
+		color: #009688;
+	}
+
+	.text-deactive {
+		color: #ff1203;
+	}
+
+	.card-box.search-list {
+		min-height: 400px;
+	}
+
+	a.btn.btn-default.btn-detail {
+		background: #009688;
+		padding: 10px;
+		color: #fff;
+	}
+
+	a.btn.btn-default.btn-detail:hover {
+		opacity: 0.8;
+	}
+
+	.blue {
+		color: #08086b;
+	}
+
+	ul.nav.navbar-right.panel_toolbox.stusearch {
+		min-width: 0;
+	}
+
+	ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
+		padding: 10px;
+	}
 </style>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="col-sm-12 border-botom m-0">
-	    <div class="col-sm-8 pd-0">
-    		<h4 class="m-b-0"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('FINDING_ALL_STUDENT_INFORMATION');?></h4>
-    	</div>
-    	<div class="col-sm-4 text-right">
-    	</div>
-    </div>
+		<div class="col-sm-8 pd-0">
+			<h4 class="m-b-0"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('FINDING_ALL_STUDENT_INFORMATION'); ?></h4>
+		</div>
+		<div class="col-sm-4 text-right">
+		</div>
+	</div>
 	<div class="card-content collapse show">
 		<div class="card-box border-botom mb-10">
-			<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'index')); ?>" dojoType="dijit.form.Form" method="get" enctype="application/x-www-form-urlencoded">
+			<form id='foundation_class' action="<?php echo $this->url(array('module' => 'home', 'controller' => 'searchstudentinfo', 'action' => 'index')); ?>" dojoType="dijit.form.Form" method="get" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input dojoType="dijit.form.TextBox"   id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate('SEARCH');?>....." value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text">
-                   </div>
-                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("branch_id");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("study_year");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php //echo $frm->getElement("group");?>
-                   		<input id="group" />
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("degree");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<input id="grade_all" />
-                   </div>
-                </div>
-                <div class="clearfix"></div>
-                <div class="form-group">
-                	<div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("study_status");?>
-                   </div>
-<!--                    <div class="col-md-2 col-sm-2 col-xs-12"> -->
-                   		<?php //echo $frm->getElement("session");?>
-<!--                    </div> -->
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("start_date");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<?php echo $frm->getElement("end_date");?>
-                   </div>
-                   <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-                   		<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
-                   </div>
-                </div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input dojoType="dijit.form.TextBox" id="adv_search" name="adv_search" placeholder="<?php echo $tr->translate('SEARCH'); ?>....." value="<?php echo $this->adv_search['adv_search']; ?>" class="fullside" type="text">
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("branch_id"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("study_year"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php //echo $frm->getElement("group");
+						?>
+						<input id="group" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("degree"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="grade_all" />
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("study_status"); ?>
+					</div>
+					<!--                    <div class="col-md-2 col-sm-2 col-xs-12"> -->
+					<?php //echo $frm->getElement("session");
+					?>
+					<!--                    </div> -->
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("start_date"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("end_date"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search" type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
+						<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
+					</div>
+				</div>
 			</form>
 			<div class="clearfix"></div>
 		</div>
-		<div class="card-box">	
-			<?php echo $this->list;?>
+		<div class="card-box">
+			<?php echo $this->list; ?>
 		</div>
 		<div class="card-box search-list">
-			<?php if (!empty($this->row)) foreach ($this->row as $key => $rs){?>
-			<div class="col-md-3">
-                <div class="text-center card-box-border">
-                   <div class="member-card">
-                      	<span class="user-badge bg-warning" <?php if($rs['is_subspend']==1 OR $rs['is_subspend']==2 OR $rs['is_subspend']==3 OR $rs['is_subspend']==5){echo 'style="background: red !important;"';} if($rs['is_subspend']==4){ echo 'style="background: gold !important;"';}?>><?php echo ($key+1).".) ";echo $rs['status_student'];?></span>
-                       	<ul class="nav navbar-right panel_toolbox stusearch">
-	                      <li class="dropdown">
-	                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-	                        <ul class="dropdown-menu" role="menu">
-	                        <?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);
-	                        	$lastEvaluation = $db_student->getLastStudentEnvaluation($rs['stu_id']);
-	                        ?>
-	                        	<?php if (!empty($rs['group_id'])){?>
-	                        	 <li>
-		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/".$rs['group_id'];?>"><?php echo $tr->translate('STUDENT_LIST_REPORT');?></a>
-		                          </li>
-		                          <?php if($rs['is_subspend']==0){?>
-		                          <li>
-		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/certify-khmer/id/".$rs['stu_id'];?>"><?php echo $tr->translate('CERTIFY_KHMER');?></a>
-		                          </li>
-		                          <li>
-		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/allstudent/certify-english/id/".$rs['stu_id'];?>"><?php echo $tr->translate('CERTIFY_ENGLIISH');?></a>
-		                          </li>
-		                          <?php }?>
-		                         <?php $groupScore= $dbreportGr->getScoreSettingIdByGroup($rs['group_id']); 
-		                         if (!empty($groupScore)){?>
-		                         <li>
-		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/".$rs['group_id'];?>"><?php echo $tr->translate('Assessment Term');?></a>
-		                          </li>
-		                         <?php }?>
-		                          <?php }?>
-	                        	<?php if (!empty($lastExam)){?>
-		                          <li>
-		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-monthly-score-student?stu_id=".$rs['stu_id']."&group_id=".$lastExam['group_id']."&exam_type=".$lastExam['exam_type']."&for_semester=".$lastExam['for_semester']."&for_month=".$lastExam['for_month'];?>"><?php echo $tr->translate('TRANSCRIPT');?></a>
-		                          </li>
-		                           <li>
-	                           			<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-score-result/id/".$lastExam['id'];?>"><?php echo $tr->translate('SCORE_RESULT');?></a>
-                          		   </li>
-                          		    <li>
-	                           			<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-score-detail/id/".$lastExam['id'];?>"><?php echo $tr->translate('SCORE_DETAIL');?></a>
-                          		   </li>
-	                          <?php }?>
-	                          <?php if (!empty($lastEvaluation)){?>
-	                          		<li>
-		                          	<a target="_blank" href="<?php echo $this->baseUrl()."/allreport/score/rpt-student-evaluationletter?stu_id=".$rs['stu_id']."&group_id=".$lastEvaluation['group_id']."&exam_type=".$lastEvaluation['for_type']."&for_semester=".$lastEvaluation['for_semester']."&for_month=".$lastEvaluation['for_month'];?>"><?php echo $tr->translate('STUDENT_EVALUATION');?></a>
-		                          </li>
-	                          <?php }?>
-	                         
-	                        </ul>
-	                      </li>
-	                    </ul>
-                       	<div class="thumb-xl member-thumb m-b-10 center-block">
-                       		<?php 
-								$photo = $this->baseUrl()."/images/no-profile.png";
-								if ($rs['sexcode']==2){
-									$photo = $this->baseUrl()."/images/no-profile-female.png";
-								}
-                       			if (!empty($rs['photo'])){
-                       				if (file_exists(PUBLIC_PATH."/images/photo/".$rs['photo'])){
-                       					$photo = $this->baseUrl().'/images/photo/'.$rs['photo'];
-                       				}
-                       			}
-                       		?>
-                           	<img src="<?php echo $photo;?>" class=" img-thumbnail" alt="profile-image">
-                            <?php if ($rs['sexcode']==1){?>
-                            <i class="fa fa-male member-star text-active" title="verified user"></i>
-                            <?php }else{?>
-                            <i class="fa fa-female member-star text-deactive" title="verified user"></i>
-                            <?php }?>
-                        </div>
+			<?php if (!empty($this->row)) foreach ($this->row as $key => $rs) { ?>
+				<div class="col-md-3">
+					<div class="text-center card-box-border">
+						<div class="member-card">
+							<span class="user-badge bg-warning" <?php if ($rs['is_subspend'] == 1 or $rs['is_subspend'] == 2 or $rs['is_subspend'] == 3 or $rs['is_subspend'] == 5) {
+																	echo 'style="background: red !important;"';
+																}
+																if ($rs['is_subspend'] == 4) {
+																	echo 'style="background: gold !important;"';
+																} ?>><?php echo ($key + 1) . ".) ";
+																																																																									echo $rs['status_student']; ?></span>
+							<ul class="nav navbar-right panel_toolbox stusearch">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+									<ul class="dropdown-menu" role="menu">
+										<?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);
+										$lastEvaluation = $db_student->getLastStudentEnvaluation($rs['stu_id']);
+										?>
+										<?php if (!empty($rs['group_id'])) { ?>
+											<li>
+												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/" . $rs['group_id']; ?>"><?php echo $tr->translate('STUDENT_LIST_REPORT'); ?></a>
+											</li>
+											<?php if ($rs['is_subspend'] == 0) { ?>
+												<li>
+													<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/allstudent/certify-khmer/id/" . $rs['stu_id']; ?>"><?php echo $tr->translate('CERTIFY_KHMER'); ?></a>
+												</li>
+												<li>
+													<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/allstudent/certify-english/id/" . $rs['stu_id']; ?>"><?php echo $tr->translate('CERTIFY_ENGLIISH'); ?></a>
+												</li>
+											<?php } ?>
+											<?php $groupScore = $dbreportGr->getScoreSettingIdByGroup($rs['group_id']);
+											if (!empty($groupScore)) { ?>
+												<li>
+													<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/" . $rs['group_id']; ?>"><?php echo $tr->translate('Assessment Term'); ?></a>
+												</li>
+											<?php } ?>
+										<?php } ?>
+										<?php if (!empty($lastExam)) { ?>
+											<li>
+												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-monthly-score-student?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastExam['group_id'] . "&exam_type=" . $lastExam['exam_type'] . "&for_semester=" . $lastExam['for_semester'] . "&for_month=" . $lastExam['for_month']; ?>"><?php echo $tr->translate('TRANSCRIPT'); ?></a>
+											</li>
+											<li>
+												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-score-result/id/" . $lastExam['id']; ?>"><?php echo $tr->translate('SCORE_RESULT'); ?></a>
+											</li>
+											<li>
+												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-score-detail/id/" . $lastExam['id']; ?>"><?php echo $tr->translate('SCORE_DETAIL'); ?></a>
+											</li>
+										<?php } ?>
+										<?php if (!empty($lastEvaluation)) { ?>
+											<li>
+												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-student-evaluationletter?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastEvaluation['group_id'] . "&exam_type=" . $lastEvaluation['for_type'] . "&for_semester=" . $lastEvaluation['for_semester'] . "&for_month=" . $lastEvaluation['for_month']; ?>"><?php echo $tr->translate('STUDENT_EVALUATION'); ?></a>
+											</li>
+										<?php } ?>
 
-                       <div class="">
-                       		<h4 class="blue m-b-5"><?php echo $rs['stu_code'];?>&nbsp;</h4>
-                       		<h4 class="m-b-5"><?php echo $rs['stu_khname'];?>&nbsp;</h4>
-                       		<h4 class="m-b-5"><?php echo $rs['last_name']." ".$rs['stu_enname'];?>&nbsp;</h4>
-                            <p class="text-muted"><span><?php echo $rs['academic_year'];?>&nbsp;</span></p>
-                       </div>
-                       <p class="text-muted info-list font-13">
-                       		<span class="title-info"><?php echo $tr->translate('GROUP');?></span> : <span class="inf-value" ><?php echo !empty($rs['group_name'])?$rs['group_name']:"N/A";?></span><br />
-                            <span class="title-info"><?php echo $tr->translate('DEGREE');?></span> : <span class="inf-value" ><?php echo $rs['degree'];?></span> <br />
-                            <span class="title-info"><?php echo $tr->translate('GRADE');?></span> : <span class="inf-value" ><?php echo $rs['grade'];?></span><br />
-                            <!-- <span class="title-info"><?php //echo $tr->translate('SESSION');?></span> : <span class="inf-value" ><?php //echo $rs['session'];?></span><br />
-                            <span class="title-info"><?php //echo $tr->translate('ROOM');?></span> : <span class="inf-value" ><?php //echo $rs['room'];?></span><br />-->
-                            <span class="title-info"><?php echo $tr->translate('TEL');?></span> : <span class="inf-value" ><?php echo $rs['tel'];?></span>
-                        </p>
-                     </div>
-                      <a class="btn btn-default btn-detail btn-sm m-t-10" href="<?php echo $this->baseUrl()."/home/searchstudentinfo/student-detail/id/".$rs['stu_id'];?>"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $tr->translate('VIEW_DETAIL');?></a>
-                   
-               </div>
-            </div>
-            <?php }?>
-            <?php 
-             	if($this->countPages>1){ 
-					$statpage = $this->currentPage - 5;
-					$endpage = $this->currentPage + 5;
-				 	if ($this->currentPage<=5){
-				 		$statpage = 1;
-				 		$endpage =10;
-				 	}
-                 if (!empty($this->countPages)){
-						 ?>
-			<div class="clearfix"></div>
-            <div class="pagin text-center">
-            	<nav aria-label="Page navigation example">
-				  <ul class="pagination">
-				  	<?php if($this->currentPage!=1){ ?>
-				    <li class="page-item"><a class="page-link" href="<?php echo $urlsting.$sign."pages=".$this->previousPage;?>"><?php echo $tr->translate('Previous');?></a></li>
-				    <?php }?>
-				     <?php  $i=0; for( $i=1; $i<=$this->countPages; $i++){?>
-           			 	<?php if ($statpage<=$i && $endpage>=$i){?>
-				    <li class="page-item <?php if($i==$this->currentPage){ echo "active";}?>">
-				    	<a class="page-link" href="<?php echo $urlsting.$sign."pages=".$i;?>"><?php echo $i;?></a>
-				    </li>
-				    	<?php }
-					}?>
-					<?php if($this->countPages!= $this->currentPage){ ?>
-				    <li class="page-item"><a class="page-link" href="<?php echo $urlsting.$sign."pages=".$this->nextPage;?>"><?php echo $tr->translate('Next');?></a></li>
-				    <?php }?>
-				  </ul>
-				</nav>
-				<span><?php echo $tr->translate('Total Pages')." : ".$this->countPages." ".$tr->translate('Pages');?></span>
-            </div>
-             <?php }}?>
+									</ul>
+								</li>
+							</ul>
+							<div class="thumb-xl member-thumb m-b-10 center-block">
+								<?php
+								$photo = $this->baseUrl() . "/images/no-profile.png";
+								if ($rs['sexcode'] == 2) {
+									$photo = $this->baseUrl() . "/images/no-profile-female.png";
+								}
+								if (!empty($rs['photo'])) {
+									if (file_exists(PUBLIC_PATH . "/images/photo/" . $rs['photo'])) {
+										$photo = $this->baseUrl() . '/images/photo/' . $rs['photo'];
+									}
+								}
+								?>
+								<img src="<?php echo $photo; ?>" class=" img-thumbnail" alt="profile-image">
+								<?php if ($rs['sexcode'] == 1) { ?>
+									<i class="fa fa-male member-star text-active" title="verified user"></i>
+								<?php } else { ?>
+									<i class="fa fa-female member-star text-deactive" title="verified user"></i>
+								<?php } ?>
+							</div>
+
+							<div class="">
+								<h4 class="blue m-b-5"><?php echo $rs['stu_code']; ?>&nbsp;</h4>
+								<h4 class="m-b-5"><?php echo $rs['stu_khname']; ?>&nbsp;</h4>
+								<h4 class="m-b-5"><?php echo $rs['last_name'] . " " . $rs['stu_enname']; ?>&nbsp;</h4>
+								<p class="text-muted"><span><?php echo $rs['academic_year']; ?>&nbsp;</span></p>
+							</div>
+							<p class="text-muted info-list font-13">
+								<span class="title-info"><?php echo $tr->translate('GROUP'); ?></span> : <span class="inf-value"><?php echo !empty($rs['group_name']) ? $rs['group_name'] : "N/A"; ?></span><br />
+								<span class="title-info"><?php echo $tr->translate('DEGREE'); ?></span> : <span class="inf-value"><?php echo $rs['degree']; ?></span> <br />
+								<span class="title-info"><?php echo $tr->translate('GRADE'); ?></span> : <span class="inf-value"><?php echo $rs['grade']; ?></span><br />
+								<!-- <span class="title-info"><?php //echo $tr->translate('SESSION');
+																?></span> : <span class="inf-value" ><?php //echo $rs['session'];
+																																			?></span><br />
+                            <span class="title-info"><?php //echo $tr->translate('ROOM');
+														?></span> : <span class="inf-value" ><?php //echo $rs['room'];
+																																?></span><br />-->
+								<span class="title-info"><?php echo $tr->translate('TEL'); ?></span> : <span class="inf-value"><?php echo $rs['tel']; ?></span>
+							</p>
+						</div>
+						<a class="btn btn-default btn-detail btn-sm m-t-10" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?></a>
+
+					</div>
+				</div>
+			<?php } ?>
+			<?php
+			if ($this->countPages > 1) {
+				$statpage = $this->currentPage - 5;
+				$endpage = $this->currentPage + 5;
+				if ($this->currentPage <= 5) {
+					$statpage = 1;
+					$endpage = 10;
+				}
+				if (!empty($this->countPages)) {
+			?>
+					<div class="clearfix"></div>
+					<div class="pagin text-center">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination">
+								<?php if ($this->currentPage != 1) { ?>
+									<li class="page-item"><a class="page-link" href="<?php echo $urlsting . $sign . "pages=" . $this->previousPage; ?>"><?php echo $tr->translate('Previous'); ?></a></li>
+								<?php } ?>
+								<?php $i = 0;
+								for ($i = 1; $i <= $this->countPages; $i++) { ?>
+									<?php if ($statpage <= $i && $endpage >= $i) { ?>
+										<li class="page-item <?php if ($i == $this->currentPage) {
+																	echo "active";
+																} ?>">
+											<a class="page-link" href="<?php echo $urlsting . $sign . "pages=" . $i; ?>"><?php echo $i; ?></a>
+										</li>
+								<?php }
+								} ?>
+								<?php if ($this->countPages != $this->currentPage) { ?>
+									<li class="page-item"><a class="page-link" href="<?php echo $urlsting . $sign . "pages=" . $this->nextPage; ?>"><?php echo $tr->translate('Next'); ?></a></li>
+								<?php } ?>
+							</ul>
+						</nav>
+						<span><?php echo $tr->translate('Total Pages') . " : " . $this->countPages . " " . $tr->translate('Pages'); ?></span>
+					</div>
+			<?php }
+			} ?>
 		</div>
 	</div>
-</div>	
+</div>
 
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl(); ?>/js/help.js" type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dojo.data.ObjectStore");
-	dojo.require("dojo.data.ItemFileWriteStore");  
+	dojo.require("dojo.data.ItemFileWriteStore");
 
-	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
-	var oldBranch = "<?php echo empty($this->adv_search['branch_id'])?0:$this->adv_search['branch_id'];?>";
-	
-	dojo.ready(function(){
+	var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var grade_store = getDataStorefromJSON('id', 'name', <?php print_r(array()) ?>);
+	var oldBranch = "<?php echo empty($this->adv_search['branch_id']) ? 0 : $this->adv_search['branch_id']; ?>";
+
+	dojo.ready(function() {
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                        
+			autoComplete: false,
+			required: false,
 			id: "grade_all",
-			name: "grade_all",  
-			class: 'fullside',  
-			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-			onChange: function() {  
+			name: "grade_all",
+			class: 'fullside',
+			placeHolder: "<?php echo $tr->translate("SELECT_GRADE"); ?>",
+			onChange: function() {
 
 			}
 		}, "grade_all");
@@ -326,103 +357,107 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		new dijit.form.FilteringSelect({
 			store: group_store,
 			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                      
+			autoComplete: false,
+			required: false,
 			id: "group",
-			name: "group",  
-			class: 'fullside', 
-			readonly:false,
-			placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-			onChange: function() {  
-				
+			name: "group",
+			class: 'fullside',
+			readonly: false,
+			placeHolder: "<?php echo $tr->translate("SELECT_GROUP"); ?>",
+			onChange: function() {
+
 			}
 		}, "group");
 
-		
+
 		getallGrade();
 		getAllGroupByAcademic();
 
 		var branch_id = dijit.byId('branch_id');
-		 branch_id.on('change', function(evt) {
-			 getAllGroupByAcademic();
-	    });
+		branch_id.on('change', function(evt) {
+			getAllGroupByAcademic();
+		});
 		study_year = dijit.byId('study_year');
 		study_year.on('change', function(evt) {
-			 getAllGroupByAcademic();
-	    });
+			getAllGroupByAcademic();
+		});
 	});
 
-	url_getgroupbyAca = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
-	function getAllGroupByAcademic(){
+	url_getgroupbyAca = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'getallgroup')); ?>';
+
+	function getAllGroupByAcademic() {
 		dijit.byId('group').reset();
-	
+
 		study_year = dijit.byId('study_year').get('value');
-		if(study_year=='' || study_year==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
+		if (study_year == '' || study_year == -1) {
+			var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('group').set('store', group_store);
 			getAllGroupByBranch();
 			return false;
 		}
 		dojo.xhrPost({
 			url: url_getgroupbyAca,
-			content:{
-				'academic_year':study_year,
-				'noaddnew':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				group_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('group').set('store',group_store);   
-				dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  	
+			content: {
+				'academic_year': study_year,
+				'noaddnew': 1
 			},
-			error: function(err) {
-			}
+			handleAs: "json",
+			load: function(data) {
+				group_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('group').set('store', group_store);
+				dijit.byId('group').set('value', '<?php echo $this->adv_search['group'] ?>');
+			},
+			error: function(err) {}
 		});
 	}
 
-	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getgroupbybranch'));?>';
-	function getAllGroupByBranch(){
+	url_getgroup = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'getgroupbybranch')); ?>';
+
+	function getAllGroupByBranch() {
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
+		if (branch_id == '' || branch_id == -1) {
+			var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('group').set('store', group_store);
 			dijit.byId('branch_id').focus();
 			return false;
 		}
 		dojo.xhrPost({
 			url: url_getgroup,
-			content:{
-				'branch_id':branch_id,'noaddnew':1
-				},
-			handleAs:"json",
+			content: {
+				'branch_id': branch_id,
+				'noaddnew': 1
+			},
+			handleAs: "json",
 			load: function(data) {
-				group_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('group').set('store',group_store);   
-				if(oldBranch==branch_id){
-					dijit.byId('group').set('value','<?php echo $this->adv_search['group']?>');  
+				group_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('group').set('store', group_store);
+				if (oldBranch == branch_id) {
+					dijit.byId('group').set('value', '<?php echo $this->adv_search['group'] ?>');
 				}
 			},
-			error: function(err) {
-			}
+			error: function(err) {}
 		});
 	}
-	
-	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
-	function getallGrade(){
+
+	var url_dept = '<?php echo $this->url(array('module' => 'global', 'controller' => 'grade', 'action' => 'get-grade')); ?>';
+
+	function getallGrade() {
 		dept_id = dijit.byId('degree').get('value');
-		if(dept_id==''){return false;}
+		if (dept_id == '') {
+			return false;
+		}
 		dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'dept_id':dept_id,
-				'noaddnew':1
-				},
-			handleAs:"json",
+			url: url_dept,
+			content: {
+				'dept_id': dept_id,
+				'noaddnew': 1
+			},
+			handleAs: "json",
 			load: function(data) {
-				grade_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('grade_all').set('store',grade_store);   
-				dijit.byId('grade_all').attr('value','<?php echo $this->adv_search['grade_all']?>');  
+				grade_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('grade_all').set('store', grade_store);
+				dijit.byId('grade_all').attr('value', '<?php echo $this->adv_search['grade_all'] ?>');
 			},
 			error: function(err) {
 				alert(err);
@@ -430,19 +465,18 @@ ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		});
 	}
 
-	function copyRecord(url){
-		 id = dijit.byId('recordcopy').get('value');
-		 if(id!=''){
-			window.location.href = url+'/id/'+id;
-		 }else{
+	function copyRecord(url) {
+		id = dijit.byId('recordcopy').get('value');
+		if (id != '') {
+			window.location.href = url + '/id/' + id;
+		} else {
 			alert('Please select record you want to copy');
 			return false;
-		 }
+		}
 	}
 
-	function setValue(index){
+	function setValue(index) {
 		var recordcopy = $('input[name=copy]:checked').val();
-		dijit.byId('recordcopy').attr('value',recordcopy);
+		dijit.byId('recordcopy').attr('value', recordcopy);
 	}
-	
-</script> 
+</script>

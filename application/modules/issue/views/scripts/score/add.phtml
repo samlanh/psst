@@ -227,7 +227,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									<input class="fullside" dojoType="dijit.form.Textarea" id="note" name="note" value="" type="text" style=" height: 120px !important;">
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 				</div>
@@ -246,19 +246,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="form-group">
-								<label class="custom-switch"> 
-										<input type="checkbox" onChange="pushFucntionCheck();" id="push_notify" name="push_notify"  class="custom-switch-input" > 
-										<span class="custom-switch-indicator custom-radius"></span> 
-										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION')?></a> 
+								<label class="custom-switch">
+									<input type="checkbox" onChange="pushFucntionCheck();" id="push_notify" name="push_notify" class="custom-switch-input">
+									<span class="custom-switch-indicator custom-radius"></span>
+									<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION') ?></a>
 								</label>
 							</div>
 							<div class="form-group">
-								<label class="custom-switch"> 
-										<input type="checkbox"   id="publicNow" name="publicNow"  class="custom-switch-input" > 
-										<span class="custom-switch-indicator custom-radius"></span> 
-										<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('publicNow')?></a> 
+								<label class="custom-switch">
+									<input type="checkbox" id="publicNow" name="publicNow" class="custom-switch-input">
+									<span class="custom-switch-indicator custom-radius"></span>
+									<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('publicNow') ?></a>
 								</label>
 							</div>
 						</div>
@@ -362,7 +362,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						'<td rowspan="2" class="tdheader" ><?php echo $tr->translate('NO'); ?></td>' +
 						'<td rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID'); ?></td>' +
 						'<td rowspan="2" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME'); ?></td>' +
-						'<td rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></td>'+
+						'<td rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></td>' +
 						'<td rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('TYPE'); ?></td>';
 
 
@@ -373,7 +373,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						amtsubject = subjectList[j].amount_subjectdivide;
 						stringsname = subjectList[j].name;
 						subLangId = subjectList[j].subjectLang;
-						temp += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname +'</span> <input id="subject_lang'+subjectList[j].subject_id +'"  name="subject_lang'+subjectList[j].subject_id +'" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
+						temp += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname + '</span> <input id="subject_lang' + subjectList[j].subject_id + '"  name="subject_lang' + subjectList[j].subject_id + '" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
 					}
 					temp += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('AMOUNT_SUBJECT'); ?></span></td>';
 
@@ -409,11 +409,11 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						temp += '<td style="text-align:left;">&nbsp;' + data[i].stu_code + '<input dojoType="dijit.form.TextBox" name="student_id' + inx + '" value="' + data[i].stu_id + '" type="hidden" ></td>';
 						temp += '<td style="min-width:100px; text-align:left; padding:0 1px;">' + data[i].stuKhName + '<br />' + data[i].stuEnName + '</td>';
 						temp += '<td>&nbsp;' + gender(data[i].sex) + '&nbsp;</td>';
-						temp+='<td style="width:80px;"><select placeHolder="<?php echo $tr->translate('TYPE');?>" class="fullside" required="false" onChange="checkStudentType('+inx+');" dojoType="dijit.form.FilteringSelect" id="type'+inx+'" name="type'+inx+'" >';
-							temp+='<option value="1"><?php echo $tr->translate('EXAM');?></option>';	
-							temp+='<option value="2"><?php echo $tr->translate('NOT_EXAM');?></option>';	
-						temp+='</select>';
-						temp+='</td>';
+						temp += '<td style="width:80px;"><select placeHolder="<?php echo $tr->translate('TYPE'); ?>" class="fullside" required="false" onChange="checkStudentType(' + inx + ');" dojoType="dijit.form.FilteringSelect" id="type' + inx + '" name="type' + inx + '" >';
+						temp += '<option value="1"><?php echo $tr->translate('EXAM'); ?></option>';
+						temp += '<option value="2"><?php echo $tr->translate('NOT_EXAM'); ?></option>';
+						temp += '</select>';
+						temp += '</td>';
 
 						for (j = 0; j < subjectList.length; j++) {
 							maxValue = "'The value maximumn " + subjectList[j].max_subjectscore + "'";
@@ -458,17 +458,17 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		HideloadingBlock();
 	}
 
-	
+
 
 	function checkStudentType(index) {
-		type = dijit.byId("type"+index).get("value");
-		if( type==2){
+		type = dijit.byId("type" + index).get("value");
+		if (type == 2) {
 			for (var i = 0; i < subjectList.length; i++) {
 				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).set('disabled', false);
 				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).attr('value', 1);
 				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).set('required', false);
 			}
-		}else{
+		} else {
 			for (var i = 0; i < subjectList.length; i++) {
 				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).reset();
 				dijit.byId('score_' + index + '_' + subjectList[i].subject_id).set('required', true);
@@ -522,19 +522,20 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		exam_type = dijit.byId("exam_type").get("value");
 		dijit.byId('for_month').set("readOnly", false);
 		dijit.byId('for_semester').set("readOnly", false);
-		dijit.byId('for_month').reset();
-		dijit.byId('for_semester').reset();
+
 
 		$(".examtype_display").css("display", "flow-root");
 		$(".annaul_exam_display").css("display", "flow-root");
 		if (exam_type == 2) {
 			dijit.byId('for_month').set("readOnly", true);
 			$(".examtype_display").css("display", "none");
-		}else if(exam_type == 3){
+		} else if (exam_type == 3) {
 			dijit.byId('for_month').attr("value", '');
 			dijit.byId('for_semester').attr("value", '');
-			dijit.byId('for_month').set("readOnly", true);
-			dijit.byId('for_semester').set("readOnly", true);
+
+			dijit.byId('for_month').set("required", false);
+			dijit.byId('for_semester').set("required", false);
+
 			$(".annaul_exam_display").css("display", "none");
 		}
 	}
@@ -565,8 +566,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	function getSubjectByGroup() {
 		group = dijit.byId('group').get('value');
 		exam_type = dijit.byId('exam_type').get('value');
-		if(exam_type==3){
-			exam_type=2;
+		if (exam_type == 3) {
+			exam_type = 2;
 		}
 		if (group == '') {
 			$('#identity').val('');
@@ -628,54 +629,53 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			return false;
 		}
 	});
-	
-	
-	function keyPressed(TB, e,row,sujIndex) 
-    {
+
+
+	function keyPressed(TB, e, row, sujIndex) {
 		if (e.keyCode == 40 || e.keyCode == 13) { // arrow down
-            if (row < inx){
-				document.getElementById('score_'+eval(row + '+1') + '_' + TB.split("_").pop()).focus();
-            }else if (row == inx){
-				var firstRecord = eval(inx-dataStuList.length)+1;
-				document.getElementById('score_'+firstRecord+ '_' + TB.split("_").pop()).focus();         
+			if (row < inx) {
+				document.getElementById('score_' + eval(row + '+1') + '_' + TB.split("_").pop()).focus();
+			} else if (row == inx) {
+				var firstRecord = eval(inx - dataStuList.length) + 1;
+				document.getElementById('score_' + firstRecord + '_' + TB.split("_").pop()).focus();
 			}
-        }else if (e.keyCode == 38) { // arrow up
-			var firstRecord = eval(inx-dataStuList.length)+1;
-            if(row > firstRecord){
-				document.getElementById('score_'+eval(row + '-1') + '_' + TB.split("_").pop()).focus();
-            }else if (row == firstRecord){
-				document.getElementById('score_'+inx+ '_' + TB.split("_").pop()).focus();
+		} else if (e.keyCode == 38) { // arrow up
+			var firstRecord = eval(inx - dataStuList.length) + 1;
+			if (row > firstRecord) {
+				document.getElementById('score_' + eval(row + '-1') + '_' + TB.split("_").pop()).focus();
+			} else if (row == firstRecord) {
+				document.getElementById('score_' + inx + '_' + TB.split("_").pop()).focus();
 			}
-        }else if (e.keyCode == 39) { // arrow right
+		} else if (e.keyCode == 39) { // arrow right
 			var maxCol = subjectList.length;
-			var currentKey = eval(sujIndex+1);
-            if( currentKey < maxCol){
+			var currentKey = eval(sujIndex + 1);
+			if (currentKey < maxCol) {
 				var nextIndex = eval(sujIndex + '+1');
 				var nextSub = subjectList[nextIndex].subject_id;
-				document.getElementById('score_'+row+ '_' + nextSub).focus();
-			}else if ( currentKey == maxCol){
+				document.getElementById('score_' + row + '_' + nextSub).focus();
+			} else if (currentKey == maxCol) {
 				var nextSub = subjectList[0].subject_id;
-				document.getElementById('score_'+row+ '_' + nextSub).focus();
+				document.getElementById('score_' + row + '_' + nextSub).focus();
 			}
-				
-        }else if (e.keyCode == 37) { // arrow left
+
+		} else if (e.keyCode == 37) { // arrow left
 			var currentCol = TB.split("_").pop();
-			var currentKey = eval(sujIndex+1);
-            if(currentKey > 1) {
+			var currentKey = eval(sujIndex + 1);
+			if (currentKey > 1) {
 				var previousIndex = eval(sujIndex + '-1');
 				var previousSub = subjectList[previousIndex].subject_id;
-				document.getElementById('score_'+row+ '_' + previousSub).focus();        
-            }else if (currentKey == 1){
+				document.getElementById('score_' + row + '_' + previousSub).focus();
+			} else if (currentKey == 1) {
 				var maxCol = subjectList.length;
 				var thisIndex = (maxCol - 1)
 				var previousSub = subjectList[thisIndex].subject_id;
-				document.getElementById('score_'+row+ '_' + previousSub).focus();
-			}		
-        }	
-		updateTimeOut();	
-    }
-	
-	function pushFucntionCheck(){
+				document.getElementById('score_' + row + '_' + previousSub).focus();
+			}
+		}
+		updateTimeOut();
+	}
+
+	function pushFucntionCheck() {
 		if ($('#push_notify').is(':checked')) {
 			$('#publicNow').prop('checked', true);
 		}

@@ -591,6 +591,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				";
 			$sql.=' WHERE gsjb.teacher='.$userId;
 			$sql.=' AND g.`gradingId` !=0 AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
+			$sql.=' AND CASE WHEN sett.examType =2 THEN gsjb.amount_subject_sem 
+						ELSE gsjb.amount_subject 
+						END  > 0 
+				'; 
 			
 			$sql.="
 				AND (SELECT crit.criteriaType FROM `rms_exametypeeng` AS crit WHERE crit.id = sttD.criteriaId LIMIT 1) 

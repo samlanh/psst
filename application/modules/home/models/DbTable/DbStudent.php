@@ -69,6 +69,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE((SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1),' ','')  LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
@@ -90,7 +91,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND ds.session=".$search['session'];
 		}
 		if($search['study_status']>=0){
+			if( ($search['study_status']==3) || $search['study_status']==4 ){
+				$where.=" AND ds.stop_type=".$search['study_status'];
+			}else{
 			$where.=' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) ='.$search['study_status'];
+			}
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('s.branch_id');

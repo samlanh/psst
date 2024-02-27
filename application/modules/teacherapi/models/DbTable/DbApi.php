@@ -644,13 +644,19 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				foreach($row as $criteria){
 					if( ($criteriaId != $criteria["criteriaId"]) OR ($groupId != $criteria["groupId"]) ){
 						array_push($newArray, $criteria);
+					}else if($groupId == $criteria["groupId"]){
+						if(($subjectId != $criteria["subjectIdValue"]) AND ($criteriaId == $criteria["criteriaId"])){
+							array_push($newArray, $criteria);
+						}
 					}
 					$criteriaId = $criteria["criteriaId"];
 					$groupId = $criteria["groupId"];
+					$subjectId = $criteria["subjectIdValue"];
 				}
 				$row = $newArray;
 			}
 			$row = empty($row) ? array() : $row;
+			print_r(count($row));exit();
 			$result = array(
 					'status' =>true,
 					'value' =>$row,

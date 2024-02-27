@@ -259,9 +259,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			(SELECT sm.monthlySemesterAvg FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS monthlySemesterAvg,
 			(SELECT sm.overallAssessmentSemester FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS overallAssessmentSemester,
  			(SELECT sm.totalMaxScore FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS totalMaxScore,
-			 (SELECT sm.type FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS type
-		    
-   		FROM 
+			(SELECT sm.type FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id LIMIT 1) AS type ";
+		if ($exam_type == 3) {
+			$sql .= "
+			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1,
+			(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`   LIMIT 1) AS overalSemester2 ";
+		}
+
+		$sql .= " FROM 
    			`rms_score` AS s,
 		   	`rms_score_detail` AS sd,
 		   	`rms_student` AS st,
@@ -308,12 +313,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$where .= $_db->getAccessPermission('s.branch_id');
 
 		$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` ";
-		if($exam_type==1){
-			$order .=" ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
-		}else{
-			$order .=" ORDER BY (SELECT sm.overallAssessmentSemester FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+		if ($exam_type == 1) {
+			$order .= " ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+		} else {
+			$order .= " ORDER BY (SELECT sm.overallAssessmentSemester FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
 		}
-		$order .=" ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
+		$order .= " ,s.for_academic_year,s.for_semester,s.for_month,sd.`group_id`,sd.`student_id` ASC	";
 		if ($limit == 2) {
 			$limit = " LIMIT 5 ";
 		} else {
@@ -441,7 +446,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				)
 			) AS ranking
 			";
-		}else if ($search['exam_type'] == 3) {
+		} else if ($search['exam_type'] == 3) {
 			$sql .= "
 			,g.semesterTotalAverage as semesterScale
 			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1
@@ -517,19 +522,19 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$order = "  
 					GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
    				ORDER BY ";
-		if($search['exam_type']==2 OR $search['exam_type']==3){
-			$order.=" sm.overallAssessmentSemester DESC";
-		}else{
-			$order.=" (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
+		if ($search['exam_type'] == 2 or $search['exam_type'] == 3) {
+			$order .= " sm.overallAssessmentSemester DESC";
+		} else {
+			$order .= " (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
 		}
-		$order.=" ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC ";
-		
+		$order .= " ,s.for_academic_year,s.for_semester,s.for_month,s.`group_id`,sm.`student_id` ASC ";
+
 		if ($limit == 2) {
 			$limit = " limit 5";
 		} else {
 			$limit = " ";
 		}
-	//	echo $sql . $where . $order . $limit;
+		//	echo $sql . $where . $order . $limit;
 		return $db->fetchAll($sql . $where . $order . $limit);
 	}
 	public function getStundetScorebySemester($group_id, $semester)
@@ -1719,22 +1724,22 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				$mentionResultArr[$key] = $row["max_score"];
 			}
 		}
-		if($search['exam_type']==1){
-				$totalScore = "sm.total_score";
-				$totalMaxScore = "sm.totalMaxScore";
-		}else{
+		if ($search['exam_type'] == 1) {
+			$totalScore = "sm.total_score";
+			$totalMaxScore = "sm.totalMaxScore";
+		} else {
 			$totalScore = "sm.overallAssessmentSemester";
 			$totalMaxScore = "(SELECT  g.semesterTotalAverage FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 )";
 		}
 
 		$sql = "SELECT  
 		 s.id,
-		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['0'] . "'   , ".$totalScore.", NULL)) AS Total_A,
-		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['1'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['0'] . "'  , ".$totalScore.", NULL)) AS Total_B,
-		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['2'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['1'] . "'  , ".$totalScore.", NULL)) AS Total_C,
-		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['3'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['2'] . "'  , ".$totalScore.", NULL)) AS Total_D,
-		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 >= '" . $mentionResultArr['4'] . "' AND ".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['3'] . "'  , ".$totalScore.", NULL)) AS Total_E,
-		  COUNT(IF(".$totalScore."/".$totalMaxScore."*100 < '" . $mentionResultArr['4'] . "'  , ".$totalScore.", NULL)) AS Total_F
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['0'] . "'   , " . $totalScore . ", NULL)) AS Total_A,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['1'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['0'] . "'  , " . $totalScore . ", NULL)) AS Total_B,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['2'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['1'] . "'  , " . $totalScore . ", NULL)) AS Total_C,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['3'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['2'] . "'  , " . $totalScore . ", NULL)) AS Total_D,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['4'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['3'] . "'  , " . $totalScore . ", NULL)) AS Total_E,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['4'] . "'  , " . $totalScore . ", NULL)) AS Total_F
 		   
 		 FROM `rms_score` AS s  ,
 			`rms_score_monthly` AS sm  

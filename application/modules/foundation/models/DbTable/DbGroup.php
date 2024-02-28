@@ -176,6 +176,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$sql = "SELECT g.* FROM rms_group as g WHERE g.id = " . $db->quote($id);
 
 		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql .= $dbp->getDegreePermission('g.degree');
 		$sql .= $dbp->getAccessPermission('g.branch_id');
 		$sql .= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
 		$sql .= " LIMIT 1";
@@ -267,6 +268,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$where .= ' AND g.is_pass=' . $search['is_pass'];
 		}
 		$where .= $dbp->getAccessPermission('g.branch_id');
+		$where .= $dbp->getDegreePermission('g.degree');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$order =  ' ORDER BY `g`.`id` DESC ';
 		return $db->fetchAll($sql . $where . $order);

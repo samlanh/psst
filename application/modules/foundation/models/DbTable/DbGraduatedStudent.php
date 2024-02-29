@@ -10,9 +10,10 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	}
 	public function getGraduateStudentbyId($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM rms_graduated_student WHERE id =".$id;
+		$sql = "SELECT gr.* FROM rms_graduated_student AS gr,rms_group as g WHERE g.id = gr.group_id AND id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql.=$dbp->getAccessPermission('gr.branch_id');
+		$sql.=$dbp->getDegreePermission('g.degree');
 		return $db->fetchRow($sql);
 	}
 	function getAllStudentOldGroup($from_group){
@@ -57,6 +58,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		$order_by = " order by id DESC";
 		$where=" ";
 		$where.=$dbp->getAccessPermission('g.branch_id');
+		$where.=$dbp->getDegreePermission('g.degree');
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));

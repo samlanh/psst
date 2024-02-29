@@ -68,8 +68,11 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				
 		$sql.=$dbp->caseStatusShowImage("s.status");
 		
-		$sql.=" FROM rms_student AS s  WHERE  s.customer_type=1 ";
-		$orderby = " ORDER BY stu_id DESC ";
+		$sql.=" FROM 
+					rms_student AS s
+					LEFT JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1
+				WHERE  s.customer_type=1 ";
+		$orderby = " ORDER BY s.stu_id DESC ";
 
 		if(!empty($search['adv_search'])){
 			$s_where = array();
@@ -126,8 +129,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND (SELECT ds.academic_year FROM rms_group_detail_student AS ds
 			WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.academic_year =".$search['study_year']." LIMIT 1) ";
 		}
-		
 		$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('COALESCE(ds.degree,0)');
 		
 		return $_db->fetchAll($sql.$where.$orderby);
 	}

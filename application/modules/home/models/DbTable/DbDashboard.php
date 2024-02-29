@@ -59,6 +59,9 @@
     	if (!empty($droptype)){
     		$sql.=" AND sd.type=$droptype";
     	}
+		$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission('sd.branch_id');
+		$sql.=$dbp->getDegreePermission('sd.degree');
     	return $db->fetchOne($sql);
     }
     function getStudentDropNew(){
@@ -95,6 +98,7 @@
 				AND d.id NOT IN ((SELECT rr.notification_id FROM `rms_read_unread_notif` AS rr WHERE rr.notif_type=1))
 			";
     	$sql.=$dbgb->getAccessPermission('d.branch_id');
+    	$sql.=$dbgb->getDegreePermission('d.degree');
     	$order =" ORDER BY d.id DESC";
     	return $db->fetchAll($sql.$order);
     }

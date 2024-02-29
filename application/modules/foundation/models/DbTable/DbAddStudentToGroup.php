@@ -82,6 +82,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where.=$dbp->getAccessPermission('g.`branch_id`');
+		$where.=$dbp->getDegreePermission('g.`degree`');
 		return $db->fetchAll($sql.$where.$order);
 	}
 	

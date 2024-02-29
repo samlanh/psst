@@ -878,8 +878,11 @@ function getAllgroupStudyNotPass($action=null){
 		$level = $user['user_type'];
 		$stringCondiction = "";
 		if($level!=1){
-			$degreeList = $user['degreeList'];
-			$stringCondiction = " AND $degreeStr IN ($degreeList)";
+			if(!empty($user['degreeList'])){
+				$degreeList = $user['degreeList'];
+				$stringCondiction = " AND $degreeStr IN ($degreeList)";
+			}
+			
 		}
 		return $stringCondiction;
    }
@@ -2158,6 +2161,7 @@ function getAllgroupStudyNotPass($action=null){
 	  		}
 	  		$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
   		}
+		$sql.= $this->getDegreePermission('m.id');
   	}
   	
   	if (!empty($schooloption)){
@@ -2292,6 +2296,7 @@ function getAllgroupStudyNotPass($action=null){
   			}
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
+		$sql.= $this->getDegreePermission('i.items_id');
   	}
   	$sql.=" GROUP BY i.id ORDER BY i.items_type ASC, i.ordering ASC , i.items_id DESC ";
   	return $db->fetchAll($sql);
@@ -2775,7 +2780,8 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql.=" AND g.academic_year = $academic_year";
 	  	}
 	  	$sql.= $this->getAccessPermission('g.branch_id');
-	  	$sql.=" ORDER BY `g`.`id` DESC ";
+		$sql.= $this->getDegreePermission('g.degree');
+		$sql.=" ORDER BY g.degree,g.grade,g.group_code ASC,`g`.`id` DESC ";
   		return $db->fetchAll($sql);
   }
   
@@ -3918,9 +3924,10 @@ function getAllgroupStudyNotPass($action=null){
   		}
 	  	
 	  	$sql.= $this->getAccessPermission('g.branch_id');
+	  	$sql.= $this->getDegreePermission('g.degree');
 		$sql.= $this->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = g.degree LIMIT 1)');
 		
-  		$sql.=" ORDER BY g.degree,g.grade,`g`.`id` DESC ";
+  		$sql.=" ORDER BY g.degree,g.grade,g.group_code ASC,`g`.`id` DESC ";
   		return $db->fetchAll($sql);
   }
   function getAllBank($data=array()){

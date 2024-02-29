@@ -340,6 +340,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+    	$where.=$dbp->getDegreePermission('sg.degree');
     	return $db->fetchOne($sql.$where);
     }
     
@@ -351,38 +352,71 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					   `rms_group_detail_student` AS sg 
 					WHERE 
 						sg.itemType=1 
+						AND sg.is_maingrade=1
 						AND s.status=1 
 						AND sg.stop_type=0
 						AND sg.is_current=1
 						AND s.customer_type=1 
+						AND sg.is_pass=0
 						AND sg.is_newstudent=1 
 						AND s.stu_id =sg.`stu_id`  ";
     	$where='';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('sg.degree');
     	return $db->fetchOne($sql.$where);
     }   
     public function getAmountDropStudent(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(stu_id) FROM rms_student ';
-    	$where=' WHERE status=1  AND customer_type=1';
+    	$sql ='SELECT 
+					COUNT(s.stu_id) 
+			FROM 
+				rms_student AS s,
+			   `rms_group_detail_student` AS sg
+		';
+    	$where=' WHERE 
+				s.status=1  
+				AND s.customer_type=1 
+				AND sg.itemType=1 
+				AND sg.is_maingrade=1
+				AND sg.is_current=1
+				AND s.status=1 
+				AND sg.stop_type=1
+			';
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('sg.degree');
     	return $db->fetchOne($sql.$where);
     }
     public function getAmountStudentTest(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ='SELECT COUNT(stu_id) FROM `rms_student` ';
-    	$where=" WHERE status=1 AND (stu_khname!='' OR stu_enname!='') AND customer_type=4 ";
+    	$sql ='SELECT 
+				COUNT(s.stu_id) 
+			FROM 
+				rms_student AS s,
+			`rms_group_detail_student` AS sg 
+		';
+    	$where=" WHERE 
+				s.status=1 
+				AND (stu_khname!='' OR stu_enname!='') 
+				AND customer_type=4 
+				AND sg.itemType=1 
+				AND sg.is_maingrade=1
+				AND sg.stop_type=0
+				AND sg.is_current=1
+				AND sg.is_pass=0
+			";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+    	$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('sg.degree');
     	return $db->fetchOne($sql.$where);
     }
     public function getAmountStudentTestRegistered(){//count to dashboard
     	$db = $this->getAdapter();
-    	$sql ="SELECT COUNT(str.id)
+    	$sql ="SELECT 
+				COUNT(str.id)
 			FROM `rms_student` AS st,
-			`rms_student_test_result` AS str
+				`rms_student_test_result` AS str
 			WHERE str.is_registered=1
 			AND st.is_studenttest =1
 			AND str.stu_test_id = st.stu_id
@@ -390,7 +424,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		";
     	$where=" AND (st.stu_khname!='' OR st.stu_enname!='')";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+		$where.=$dbp->getAccessPermission('st.branch_id');
+		$where.=$dbp->getDegreePermission('str.degree_result');
     	return $db->fetchOne($sql.$where);
     } 
     public function getAmountStudentUpdateresult(){//count to dashboard
@@ -406,7 +441,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		";
     	$where=" AND (st.stu_khname!='' OR st.stu_enname!='')";
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission();
+		$where.=$dbp->getAccessPermission('st.branch_id');
+		$where.=$dbp->getDegreePermission('str.degree_result');
     	return $db->fetchOne($sql.$where);
     }
     

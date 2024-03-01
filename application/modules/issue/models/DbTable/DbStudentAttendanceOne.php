@@ -70,6 +70,7 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 		}
     	$order=" ORDER BY sad.id DESC ";
     	$where.=$dbp->getAccessPermission('sad.branchId');
+    	$where.=$dbp->getDegreePermission('`g`.`degree`');
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function addStudentAttendeceOne($_data){
@@ -157,16 +158,15 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
 					sad.*,
 					sa.*
 				FROM 
-					`rms_student_attendence` sa ,
-					rms_student_attendence_detail as sad 
-				WHERE  
-					sa.id = sad.attendence_id
-					and sad.`id` = $id
+					`rms_student_attendence` sa JOIN rms_student_attendence_detail as sad ON sa.id = sad.attendence_id
+					LEFT JOIN `rms_group` AS g ON sad.`groupId`=g.`id` 
+				WHERE  sad.`id` = $id
 					AND sa.type=1
 					and sad.type=2 
 			";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('sa.branch_id');
+		$sql.=$dbp->getDegreePermission('`g`.`degree`');
 		return $db->fetchRow($sql);
 	}
 	function getAttendenceDetailByID($id){

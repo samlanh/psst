@@ -45,6 +45,7 @@
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
+		$sql.= $dbp->getDegreePermission('d.id');
 		
 		return $db->fetchAll($sql.$where.$orderby);
 	}
@@ -85,7 +86,7 @@
 
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
-		
+		$sql.= $dbp->getDegreePermission('d.id');
 		return $db->fetchRow($sql);
 	}
 	public function AddDegree($_data){

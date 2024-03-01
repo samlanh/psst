@@ -82,6 +82,7 @@
 			$where.= " AND ide.is_autopayment = ".$db->quote($search['auto_payment']);
 		}
 		$where.= $dbp->getSchoolOptionAccess('ide.schoolOption');
+		$where.= $dbp->getDegreePermission('ide.items_id');
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
@@ -95,6 +96,7 @@
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('ide.schoolOption');
+		$sql.= $dbp->getDegreePermission('ide.items_id');
 		return $db->fetchRow($sql);
 	}
 	

@@ -2172,8 +2172,9 @@ function getAllgroupStudyNotPass($action=null){
 	  		$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
   		}
 		
-		if(!empty($user['degreeList'])){
-			$degreeList = $user['degreeList'];
+		$userSelect = $this->getUserProfile();
+		if(!empty($userSelect['degreeList'])){
+			$degreeList = $userSelect['degreeList'];
 			$sql.="
 				AND 
 					CASE  WHEN m.`type` !=1 THEN '1' 
@@ -2244,8 +2245,10 @@ function getAllgroupStudyNotPass($action=null){
 		$level = $user['level'];
 		if ($level!=1){
 			$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
-			if(!empty($user['degreeList'])){
-				$degreeList = $user['degreeList'];
+			
+			$userSelect = $this->getUserProfile();
+			if(!empty($userSelect['degreeList'])){
+				$degreeList = $userSelect['degreeList'];
 				$sql.="
 					AND 
 						CASE  WHEN i.items_type != 1 THEN '1' 
@@ -2327,8 +2330,10 @@ function getAllgroupStudyNotPass($action=null){
   			}
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
-		if(!empty($user['degreeList'])){
-			$degreeList = $user['degreeList'];
+		
+		$userSelect = $this->getUserProfile();
+		if(!empty($userSelect['degreeList'])){
+			$degreeList = $userSelect['degreeList'];
 			$sql.="
 				AND 
 					CASE  WHEN i.items_type != 1 THEN '1' 

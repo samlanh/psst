@@ -40,6 +40,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$where="";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("stdp.branch_id");
+    	$where.=$dbp->getDegreePermission("stdp.degree");
     	
     	$order=" ORDER BY id DESC";
     	if(empty($search)){
@@ -433,6 +434,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	$where="";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("sdr.branch_id");
+    	$where.=$dbp->getDegreePermission("sdr.degree_id_return");
     	
     	$order=" ORDER BY sdr.id DESC";
     	

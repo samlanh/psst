@@ -72,6 +72,7 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     	$where  = '';
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission("st.branch_id");
+    	$where.=$dbp->getDegreePermission("gds.degree");
     	
    		 if(empty($search)){
     		return $db->fetchAll($sql.$where.$order);

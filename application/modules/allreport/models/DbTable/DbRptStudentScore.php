@@ -192,12 +192,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbp->getAccessPermission('s.branch_id');
+		$where .= $dbp->getDegreePermission('g.degree');
 
 		$order = " ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
 		return $db->fetchAll($sql . $where . $order);
 	}
 	public function getStundetScoreDetailGroup($search, $id = null, $limit)
-	{ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា//តារាងកិត្តិយសមានរូបថត និង​អត់រូបថត(២action)
+	{ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា//តារាងកិត្តិយសមានរូបថត និង អត់រូបថត(២action)
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
@@ -311,7 +312,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$where .= " AND `g`.`session` =" . $search['session'];
 		}
 		$where .= $_db->getAccessPermission('s.branch_id');
-
+		$where .= $_db->getDegreePermission('g.degree');
 		$order = "  GROUP BY s.id,sd.`student_id`,sd.score_id,s.`reportdate` ";
 		if ($exam_type == 1) {
 			$order .= " ORDER BY (SELECT sm.total_score FROM `rms_score_monthly` AS sm WHERE sm.score_id=s.id AND student_id=st.stu_id ORDER BY sm.total_score limit 1) DESC ";
@@ -518,6 +519,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		}
 
 		$where .= $_db->getAccessPermission('s.branch_id');
+		$where .= $_db->getDegreePermission('g.degree');
 
 		$order = "  
 					GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
@@ -1655,6 +1657,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbp->getAccessPermission("s.branch_id");
+		$where .= $dbp->getDegreePermission("g.degree");
 
 		$orderBy = "  ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
 		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);

@@ -26,7 +26,14 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 		AND (`rms_view`.`key_code` = `g`.`status`)) LIMIT 1) AS `status`
 		FROM `rms_group` as `g`  ";	
     	
-    	$where= " where 1";
+    	$where= " WHERE 1";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+	   	$where.=$dbp->getAccessPermission('g.branch_id');
+	   	$where.=$dbp->getDegreePermission('g.degree');
+	   	$where.=$dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
+	   	
+		
     	$order=" order by id DESC";
    		if(empty($search)){
 	   		return $db->fetchAll($sql.$order);
@@ -157,6 +164,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 			
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$sql.=$dbp->getAccessPermission("gr.branch_id");
+			$sql.=$dbp->getDegreePermission('gr.degree');
 			
 		   	if(!empty($search['txtsearch'])){
 		   		$s_where = array();
@@ -192,7 +200,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   		$degree = "rms_items.title_en";
 	   		$branch = "b.branch_nameen";
 	   	}
-	   	
+	   	//(SELECT	$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 	   	$sql = "SELECT
 				   	`g`.`id`,
 				   	(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
@@ -201,7 +209,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				   	`g`.`semester` AS `semester`,
 				   	(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1)  LIMIT 1) as degree,
 				   	(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
-				   	(SELECT	$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
+				   	(SELECT p.`title` FROM `rms_parttime_list` AS p WHERE p.id = `g`.`session` LIMIT 1) `session`,
+					
 				   	(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 				   	(SELECT $label FROM `rms_view` WHERE `rms_view`.`type` = 9 AND `rms_view`.`key_code` = `g`.`is_pass` LIMIT 1) AS `status`,
 				   	
@@ -256,6 +265,7 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	}
 	   	$dbp = new Application_Model_DbTable_DbGlobal();
 	   	$where.=$dbp->getAccessPermission('g.branch_id');
+	   	$where.=$dbp->getDegreePermission('g.degree');
 	   	$where.= $dbp->getSchoolOptionAccess('(SELECT i.schoolOption FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` )');
 	   	
 	   	$order = ' ORDER BY g.branch_id , g.academic_year DESC ,`g`.`degree`,`g`.`grade`,`g`.`is_pass` ASC ,`g`.`group_code` ASC ';

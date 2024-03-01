@@ -1401,6 +1401,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+    	$where.=$dbp->getDegreePermission('g.degree');
     	return $db->fetchAll($sql.$where.$order);
     }
     

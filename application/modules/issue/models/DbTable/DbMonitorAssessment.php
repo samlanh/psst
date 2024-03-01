@@ -75,6 +75,7 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		$where.= $dbp->getSchoolOptionAccess('i.schoolOption');
+		$where.= $dbp->getDegreePermission('`g`.`degree`');
 		$order =  " ORDER BY COALESCE(ass.id,'0') ASC, COALESCE(ass.`isLock`,'0') ASC,s.id DESC " ;
 		return $db->fetchAll($sql.$where.$order);
 	}
@@ -118,6 +119,7 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 		$where =" WHERE ass.status = 1 AND ass.isLock = 0 ";
 		$where.=" AND ass.`id` = ".$assessmentId;
 		$where.=$dbp->getAccessPermission('ass.branchId');
+		$where.= $dbp->getDegreePermission('`g`.`degree`');
 		$where.=" LIMIT 1 ";
 		return $db->fetchRow($sql.$where);
 	}

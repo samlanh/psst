@@ -713,8 +713,18 @@ function getAllgroupStudyNotPass($action=null){
    
    public function getAllGroup(){
 	   	$db = $this->getAdapter();
-	   	$sql=" SELECT id ,group_code As name FROM `rms_group` WHERE status=1 AND group_code != '' order by id DESC ";
-	   	return $db->fetchAll($sql);
+	   	$sql=" 
+			SELECT 
+				g.id 
+				,g.group_code As name 
+			FROM 
+			`rms_group` AS g
+			WHERE g.status=1 AND g.group_code != '' 
+			";
+		$sql.= $this->getAccessPermission('g.branch_id');
+		$sql.= $this->getDegreePermission('g.degree');
+		$sql.=" ORDER BY g.degree,g.grade,g.group_code ASC,`g`.`id` DESC ";
+		return $db->fetchAll($sql);
    }
     
    public function getAllTeacherSubject(){
@@ -2161,7 +2171,16 @@ function getAllgroupStudyNotPass($action=null){
 	  		}
 	  		$sql .=' AND ( '.implode(' OR ',$s_wheres).')';
   		}
-		$sql.= $this->getDegreePermission('m.id');
+		
+		if(!empty($user['degreeList'])){
+			$degreeList = $user['degreeList'];
+			$sql.="
+				AND 
+					CASE  WHEN m.`type` !=1 THEN '1' 
+					ELSE m.id IN (".$degreeList.") 
+					END
+			";
+		}
   	}
   	
   	if (!empty($schooloption)){
@@ -2182,50 +2201,62 @@ function getAllgroupStudyNotPass($action=null){
   	if ($currentLang==1){
   		$colunmname='title';
   	}
-  	$sql="SELECT i.id,
+		$sql="
+			SELECT i.id,
 			  	CONCAT(i.$colunmname,' (',(SELECT it.$colunmname FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1),')') AS name
 			  	FROM 
 			  		`rms_itemsdetail` AS i
-			  	WHERE i.status =1 ";
-  	if(!empty($data['itemsType'])){//
-  		$sql.=" AND i.items_type=".$data['itemsType'];
-  	}
-  	if(!empty($data['itemId'])){//
-  		$sql.=" AND i.items_id=".$data['itemId'];
-  	}
-  	if(isset($data['isOnepayment'])){
-  		$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
-  	}
-  	if(isset($data['isProductset'])){
-  		$sql.=" AND i.is_productseat=".$data['isProductset'];
-  	}
-  	if(!empty($data['proLocation'])){//want to get product in this location
-  		$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['proLocation'].")";
-  	}
-  	if(!empty($data['includeProLocation'])){//want to get product in this location
-  		$sql.=" OR ( i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['includeProLocation']."))";
-  	}
-  	if(!empty($data['notLocation'])){//want to get product in this location
-  		$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['notLocation'].")";
-  	}
-  	
-  	if(!empty($data['isService'])){
-  		$sql.=" OR i.items_type=2 ";
-  	}
-  	$branchlist = $this->getAllSchoolOption();
-  	if (!empty($branchlist)){
-  	foreach ($branchlist as $i){
-  		$s_where[] = $i['id']." IN (i.schoolOption)";
-  	}
-  		$sql .=' AND ( '.implode(' OR ',$s_where).')';
-  	}
-  		$user = $this->getUserInfo();
-  		$level = $user['level'];
-  	if ($level!=1){
-  		$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
-  	}
+			  	WHERE i.status =1 
+			";
+		if(!empty($data['itemsType'])){//
+			$sql.=" AND i.items_type=".$data['itemsType'];
+		}
+		if(!empty($data['itemId'])){//
+			$sql.=" AND i.items_id=".$data['itemId'];
+		}
+		if(isset($data['isOnepayment'])){
+			$sql.=" AND i.is_onepayment=".$data['isOnepayment'];
+		}
+		if(isset($data['isProductset'])){
+			$sql.=" AND i.is_productseat=".$data['isProductset'];
+		}
+		if(!empty($data['proLocation'])){//want to get product in this location
+			$sql.=" AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['proLocation'].")";
+		}
+		if(!empty($data['includeProLocation'])){//want to get product in this location
+			$sql.=" OR ( i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['includeProLocation']."))";
+		}
+		if(!empty($data['notLocation'])){//want to get product in this location
+			$sql.=" AND i.id NOT IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=".$data['notLocation'].")";
+		}
+		
+		if(!empty($data['isService'])){
+			$sql.=" OR i.items_type=2 ";
+		}
+		$branchlist = $this->getAllSchoolOption();
+		if (!empty($branchlist)){
+		foreach ($branchlist as $i){
+			$s_where[] = $i['id']." IN (i.schoolOption)";
+		}
+			$sql .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		$user = $this->getUserInfo();
+		$level = $user['level'];
+		if ($level!=1){
+			$sql .=' AND i.schoolOption  IN ('.$user['schoolOption'].')';
+			if(!empty($user['degreeList'])){
+				$degreeList = $user['degreeList'];
+				$sql.="
+					AND 
+						CASE  WHEN i.items_type != 1 THEN '1' 
+						ELSE i.items_id IN (".$degreeList.") 
+						END
+					";
+			}
+		
+		}
   		$sql.=" ORDER BY i.ordering ASC , i.items_id ASC ";
-  		return $db->fetchAll($sql);
+	return $db->fetchAll($sql);
   }
   
   function getItemType($type){
@@ -2296,7 +2327,15 @@ function getAllgroupStudyNotPass($action=null){
   			}
   			$sql .=' AND ( '.implode(' OR ',$s_where).')';
   		}
-		$sql.= $this->getDegreePermission('i.items_id');
+		if(!empty($user['degreeList'])){
+			$degreeList = $user['degreeList'];
+			$sql.="
+				AND 
+					CASE  WHEN i.items_type != 1 THEN '1' 
+					ELSE i.items_id IN (".$degreeList.") 
+					END
+				";
+		}
   	}
   	$sql.=" GROUP BY i.id ORDER BY i.items_type ASC, i.ordering ASC , i.items_id DESC ";
   	return $db->fetchAll($sql);

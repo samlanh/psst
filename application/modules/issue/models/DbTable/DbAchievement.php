@@ -49,7 +49,8 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 	    if($search['status']>-1){
 	    	$where.=' AND ac.status='.$search['status'];
 	    }
-	    $where.=$dbp->getAccessPermission('ac.branchId');
+	    $where.= $dbp->getAccessPermission('ac.branchId');
+		$where.= $dbp->getDegreePermission('g.degree');
 	    $order =  ' ORDER BY ac.`id` DESC ' ;
 	    return $db->fetchAll($sql.$where.$order);
     }
@@ -118,9 +119,15 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 	
 	function getStudentAchievementById($id){
 		$db = $this->getAdapter();
-		$sql="SELECT c.* FROM `rms_student_achievement` AS c WHERE c.id = $id";
+		$sql="
+			SELECT 
+				c.* 
+			FROM `rms_student_achievement` AS c 
+				LEFT JOIN `rms_group` AS g ON g.id = c.groupId
+			WHERE c.id = $id";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('c.branchId');
+		$sql.=$dbp->getDegreePermission('g.degree');
 		$sql." LIMIT 1";
 		return $db->fetchRow($sql);
 	}

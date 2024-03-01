@@ -68,6 +68,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 		}
 		
 		$where.=$dbp->getAccessPermission('sdr.branchId');
+		$where.=$dbp->getDegreePermission('sdr.degree');
 		return $_db->fetchAll($sql.$where.$order_by);
 	}
 	
@@ -76,6 +77,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 		$sql = "SELECT * FROM rms_student_return WHERE id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql.=$dbp->getDegreePermission('degree');
 		return $db->fetchRow($sql);
 	}
 	function addStudentDropReturn($_data){

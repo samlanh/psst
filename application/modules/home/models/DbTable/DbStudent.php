@@ -176,6 +176,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$where = '';
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbp->getAccessPermission("s.`branch_id`");
+		$where .= $dbp->getDegreePermission('ds.degree');
 		$where .= " LIMIT 1";
 		return $db->fetchRow($sql . $where);
 	}

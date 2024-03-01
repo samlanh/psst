@@ -58,6 +58,7 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
     		$where.=" AND `g`.`room_id` =".$search['room'];
     	}
     	$where.=$dbp->getAccessPermission('sa.`branch_id`');
+		$where.=$dbp->getDegreePermission('g.degree');
     	$order=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }
@@ -208,9 +209,17 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 	}
 	function getAttendencetByIDDiscipline($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM `rms_student_attendence` sd WHERE  sd.`id`=".$id." AND sd.type=2";
+		$sql="
+			SELECT 
+				sd.* 
+			FROM 
+				`rms_student_attendence` sd 
+				JOIN rms_group AS g ON g.id = sd.group_id
+			WHERE  sd.`id`=".$id." AND sd.type=2
+		";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('sd.`branch_id`');
+		$sql.=$dbp->getDegreePermission('g.`degree`');
 		return $db->fetchRow($sql);
 	}
 	

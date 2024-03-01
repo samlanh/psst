@@ -105,9 +105,18 @@
   
   <body class="tundra">
     <!-- Start Preloader -->
-    <div id="preload-block">
-      <div class="square-block"></div>
-    </div>
+	<div class="overlay" style="display:block;">
+		<div class="middle">
+			  <div class="barWhite  bar1"></div>
+			  <div class="barWhite  bar2"></div>
+			  <div class="barWhite  bar3"></div>
+			  <div class="barWhite  bar4"></div>
+			  <div class="barWhite  bar5"></div>
+			  <div class="barWhite  bar6"></div>
+			  <div class="barWhite  bar7"></div>
+			  <div class="barWhite  bar8"></div>
+			</div>
+	</div>
     <!-- Preloader End -->
     
     <div class="container-fluid">
@@ -242,6 +251,16 @@
 				$(".pwd-toggle").addClass("fa-eye");
 				$(".pwd-toggle").removeClass("fa-eye-slash");
 			  }
+			}
+			$(document).ready(function(){
+				HideloadingBlock();
+			});
+			
+			function HideloadingBlock(){
+					setTimeout(function () {
+						document.getElementsByClassName("overlay")[0].style.display="none";
+					},1200);
+			  
 			}
 			
 	</script>

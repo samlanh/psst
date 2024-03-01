@@ -42,6 +42,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 			ELSE (SELECT $month FROM `rms_month` WHERE id=gt.forMonth  LIMIT 1) 
 			END 
 			as for_month,
+			gt.dateInput,
 			(SELECT teacher_name_kh FROM rms_teacher WHERE gt.teacherId=rms_teacher.id LIMIT 1 ) AS taecherName
 		";
 		//s.max_score,
@@ -82,7 +83,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		}
 		$where .= $dbp->getAccessPermission('s.branchId');
 		$order = " ORDER BY id DESC ";
-		// echo $sql . $where . $order; exit();
+		 echo $sql . $where . $order; 
 		return $db->fetchAll($sql . $where . $order);
 	}
 

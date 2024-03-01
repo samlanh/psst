@@ -31,7 +31,7 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 			$rs_rows = $db->getAllScoreTemporary($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDY_YEAR","STUDENT_GROUP","SUBJECT","CRITERIAL_NAME","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","TEACHER","STATUS");
+			$collumns = array("BRANCH","STUDY_YEAR","STUDENT_GROUP","SUBJECT","CRITERIAL_NAME","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","DATE","TEACHER","STATUS");
 			//"SCORE_LEVEL",
 			$link=array(
 					//'module'=>'issue','controller'=>'score','action'=>'edit',

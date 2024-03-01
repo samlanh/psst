@@ -60,9 +60,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					WHEN primary_phone = 3 THEN s.mother_phone
 					ELSE s.guardian_tel
 				END as tel,
-				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=(SELECT ds.academic_year FROM rms_group_detail_student AS ds WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1)) AS academic,
-				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
-					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
+				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=COALESCE(ds.academic_year,0) LIMIT 1) AS academic,
+				(SELECT group_code FROM `rms_group` WHERE rms_group.id=COALESCE(ds.group_id,0) LIMIT 1) AS group_name,
 			
 				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
 				
@@ -104,20 +103,16 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 
 		if(!empty($search['groupId'])){
-			$where.=" AND (SELECT ds.group_id FROM rms_group_detail_student AS ds
-				WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.group_id =".$search['groupId']." LIMIT 1) ";
+			$where.=" AND COALESCE(ds.group_id,0) = ".$search['groupId'];
 		}
 		if(!empty($search['degree'])){
-			$where.=" AND (SELECT ds.degree FROM rms_group_detail_student AS ds
-				WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.degree =".$search['degree']." LIMIT 1) ";
+			$where.=" AND COALESCE(ds.degree,0) = ".$search['degree'];
 		}
 		if(!empty($search['gradeId'])){
-			$where.=" AND (SELECT ds.grade FROM rms_group_detail_student AS ds
-				WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.grade =".$search['gradeId']." LIMIT 1) ";
+			$where.=" AND COALESCE(ds.grade,0) = ".$search['gradeId'];
 		}
 		if(!empty($search['session'])){
-			$where.=" AND (SELECT ds.session FROM rms_group_detail_student AS ds
-			WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.session =".$search['session']." LIMIT 1) ";
+			$where.=" AND COALESCE(ds.session,0) = ".$search['session'];
 		}
 		if($search['status']>-1){
 			$where.=" AND s.status=".$search['status'];
@@ -126,8 +121,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$where.=" AND s.branch_id=".$search['branch_id'];
 		}
 		if(!empty($search['study_year'])){
-			$where.=" AND (SELECT ds.academic_year FROM rms_group_detail_student AS ds
-			WHERE ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 AND ds.academic_year =".$search['study_year']." LIMIT 1) ";
+			$where.=" AND COALESCE(ds.academic_year,0) = ".$search['study_year'];
 		}
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		$where.=$dbp->getDegreePermission('COALESCE(ds.degree,0)');

@@ -56,6 +56,7 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 		}
     	$order=" ORDER BY id DESC ";
     	$where.=$dbp->getAccessPermission('sa.branch_id');
+    	$where.=$dbp->getDegreePermission('g.degree');
     	return $db->fetchAll($sql.$where.$order);
     }
 	public function addStudentAttendece($_data){
@@ -348,9 +349,16 @@ class Issue_Model_DbTable_DbStudentAttendance extends Zend_Db_Table_Abstract
 	}
 	function getAttendencetByID($id){
 		$db=$this->getAdapter();
-		$sql="SELECT * FROM `rms_student_attendence` sa WHERE  sa.`id`=".$id." AND sa.type=1 ";
+		$sql="
+			SELECT 
+				sa.* 
+			FROM 
+				`rms_student_attendence` AS sa 
+				JOIN rms_group AS g ON g.id = sa.group_id
+			WHERE  sa.`id`=".$id." AND sa.type=1 ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('sa.branch_id');
+		$sql.=$dbp->getDegreePermission('g.degree');
 		return $db->fetchRow($sql);
 	}
 	function getDisciplineStatus($discipline_id,$stu_id){

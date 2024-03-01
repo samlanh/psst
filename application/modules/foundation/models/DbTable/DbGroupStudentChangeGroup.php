@@ -101,13 +101,21 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$where.=" AND g.session=".$search['session'];
 		}
 		$where.=$dbp->getAccessPermission('g.branch_id');
+		$where.=$dbp->getDegreePermission('g.degree');
 		return $_db->fetchAll($sql.$where.$order_by);
 	}
 	public function getAllGroupStudentChangeGroupById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT gsc.*,
-		(SELECT g.degree FROM rms_group AS g WHERE g.id = gsc.from_group  LIMIT 1) AS from_degree 
-		FROM rms_group_student_change_group  AS gsc WHERE gsc.id =".$id;
+		$sql = "
+		SELECT 
+			gsc.*,
+			(SELECT g.degree FROM rms_group AS g WHERE g.id = gsc.from_group  LIMIT 1) AS from_degree 
+		FROM 
+			rms_group_student_change_group  AS gsc 
+		WHERE gsc.id =".$id;
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql.=$dbp->getAccessPermission('gsc.branch_id');
+		$sql.=$dbp->getDegreePermission('gsc.degree');
 		return $db->fetchRow($sql);
 	}
 	

@@ -724,25 +724,25 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$degree = "i.title_en";
 		}
 		
-		$sql="SELECT str.id, s.serial, $name,
-				CASE    
-					WHEN  str.test_type = 1 THEN '".$tr->translate("KHMER_KNOWLEDGE")."'
-					WHEN  str.test_type = 2 THEN '".$tr->translate("ENGLISH")."'
-					WHEN  str.test_type = 3 THEN '".$tr->translate("UNIVERSITY")."'
-				END AS test_type_title,
-				str.test_date,
-				(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,
-				(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
-				(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,
-				str.result_date,str.score,
-				(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
-				(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
-				
-				(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
-				FROM
+		$sql="
+			SELECT 
+				str.id
+				, s.serial
+				, $name
+				, (SELECT sOpt.title FROM rms_schooloption AS sOpt WHERE sOpt.id = str.test_type LIMIT 1 ) AS test_type_title
+				,str.test_date
+				,(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term
+				,(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title
+				,(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title
+				,str.result_date
+				,str.score
+				,(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title
+				,(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title
+				,(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
+			FROM
 				`rms_student_test_result` AS str
 				INNER JOIN `rms_student` AS s ON str.stu_test_id = s.stu_id 
-				WHERE str.is_current = 1
+			WHERE str.is_current = 1
 			 ";
 			$from_date =(empty($search['start_date']))? '1': " str.result_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': " str.result_date <= '".$search['end_date']." 23:59:59'";
@@ -768,6 +768,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			}
 			$dbp = new Application_Model_DbTable_DbGlobal();
 			$where.=$dbp->getAccessPermission('s.branch_id');
+			$where.=$dbp->getDegreePermission('str.degree');
 
 			$order =" ORDER BY str.id DESC ";
 			return $db->fetchAll($sql.$where.$order);

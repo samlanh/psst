@@ -90,6 +90,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		}
 		
 		$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('s.degree');
 		return $_db->fetchAll($sql.$where.$order_by);
 	}
 	public function getStudentDropById($id){
@@ -97,6 +98,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$sql = "SELECT * FROM rms_student_drop WHERE id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql.=$dbp->getDegreePermission('degree');
 		return $db->fetchRow($sql);
 	}
 	public function addStudentDrop($_data){

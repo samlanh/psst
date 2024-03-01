@@ -14,19 +14,21 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     		
     		$sql="
     		SELECT 
-				gsch.id,
-				(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) AS branch_name,	
-				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsch.academic_year LIMIT 1) AS years,
-				(SELECT group_code FROM rms_group WHERE rms_group.id= gsch.group_id LIMIT 1) AS group_code,
-				(SELECT st.title FROM `rms_schedulesetting` AS st WHERE st.id = gsch.schedule_setting LIMIT 1) AS sch_setting,
-				DATE_FORMAT(gsch.create_date,'%d-%m-%Y') AS create_date,
-				(SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id) AS user_name
+				gsch.id
+				,(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) AS branch_name
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsch.academic_year LIMIT 1) AS years
+				,g.group_code AS group_code
+				,(SELECT st.title FROM `rms_schedulesetting` AS st WHERE st.id = gsch.schedule_setting LIMIT 1) AS sch_setting
+				,DATE_FORMAT(gsch.create_date,'%d-%m-%Y') AS create_date
+				,(SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id) AS user_name
 			
     		";
     		$sql.=$dbp->caseStatusShowImage("gsch.status");
 			$sql.=" 
 				FROM 
-					`rms_group_schedule` AS gsch WHERE 1 ";
+					`rms_group_schedule` AS gsch 
+					JOIN rms_group AS g ON g.id =gsch.group_id
+				WHERE 1 ";
     		$where =' ';
 			$from_date =(empty($search['start_date']))? '1': "gsch.create_date >= '".$search['start_date']." 00:00:00'";
 			$to_date = (empty($search['end_date']))? '1': "gsch.create_date <= '".$search['end_date']." 23:59:59'";
@@ -37,7 +39,7 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     			$s_where = array();
     			$s_search = addslashes(trim($search['adv_search']));
     			$s_where[] = " gsch.`note` LIKE '%{$s_search}%'";
-    			$s_where[] = " (SELECT group_code FROM rms_group WHERE rms_group.id= gsch.group_id LIMIT 1) LIKE '%{$s_search}%'";
+    			$s_where[] = " g.group_code LIKE '%{$s_search}%'";
     			$s_where[] = " (SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) LIKE '%{$s_search}%'";
     			$where .=' AND ('.implode(' OR ',$s_where).')';
     		}
@@ -54,6 +56,7 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
 				$where.= " AND gsch.status = ".$db->quote($search['status']);
 			}
     		$where.=$dbp->getAccessPermission('gsch.branch_id');
+    		$where.=$dbp->getDegreePermission('g.degree');
     		return $db->fetchAll($sql.$where.$order);
     		
     	}catch (Exception $e){

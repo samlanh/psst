@@ -13,30 +13,32 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		$db = $this->getAdapter();
 		$_db  = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
+		
+		$label = "name_en";
+		$branch = "branch_nameen";
+		$grade = "rms_itemsdetail.title_en";
+		$degree = "rms_items.title_en";
+		$titleCol = "title";
 		if($lang==1){// khmer
 			$label = "name_kh";
 			$branch = "branch_namekh";
 			$grade = "rms_itemsdetail.title";
 			$degree = "rms_items.title";
-		}else{ // English
-			$label = "name_en";
-			$branch = "branch_nameen";
-			$grade = "rms_itemsdetail.title_en";
-			$degree = "rms_items.title_en";
+			$titleCol = "titleKh";
 		}
 		$sql = " SELECT
-					`g`.`id`,
-					(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-					`g`.`group_code` AS `group_code`,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) as academic,
-					(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree,
-					(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
-					(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
-					(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-					`g`.`semester` AS `semester`,
-					`g`.`note`,
-					(SELECT $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status,
-					(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student
+					`g`.`id`
+					,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
+					,`g`.`group_code` AS `group_code`
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) as academic
+					,(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree
+					,(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade
+					,(SELECT p.$titleCol FROM `rms_parttime_list` AS p WHERE p.id = g.session LIMIT 1) AS `session`
+					,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
+					,`g`.`semester` AS `semester`
+					,`g`.`note`
+					,(SELECT $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status
+					,(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student
 				FROM
 					rms_group g
 				where
@@ -71,8 +73,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 		if(!empty($search['grade'])){
 			$where.=' AND g.grade='.$search['grade'];
 		}
-		if(!empty($search['session'])){
-			$where.=' AND g.session='.$search['session'];
+		if(!empty($search['partTimeList'])){
+			$where.=' AND g.session='.$search['partTimeList'];
 		}
 		if(!empty($search['room'])){
 			$where.=' AND g.room_id='.$search['room'];

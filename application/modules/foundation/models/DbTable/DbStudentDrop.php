@@ -31,30 +31,36 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
 		$label="name_en";
+		$titleCol = "title";
 		if ($currentLang==1){
 			$colunmname='title';
 			$label="name_kh";
+			$titleCol = "titleKh";
 		}
 		
-		$sql = "SELECT  s.id,
-				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,			
-				(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id,
-				(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_kh,
-				(SELECT CONCAT(last_name,' ',stu_enname) FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name,
-				(SELECT $label FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex,
-				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.academic_year LIMIT 1) AS academic,
-				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree,
-				(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=s.group LIMIT 1 ) AS group_name,
-				(SELECT	`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `s`.`session`)) LIMIT 1) AS `session`,
-				(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room,
-				(SELECT $label FROM `rms_view` WHERE TYPE=5 AND key_code = s.type LIMIT 1) AS type,
-				date_stop,
-				reason,
-				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name
+		$sql = "SELECT  
+				s.id
+				,(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name	
+				,(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id
+				,(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_kh
+				,(SELECT CONCAT(last_name,' ',stu_enname) FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name
+				,(SELECT $label FROM `rms_view` WHERE TYPE=2 AND key_code = s.gender LIMIT 1) AS sex
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.academic_year LIMIT 1) AS academic
+				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=s.degree AND type=1 LIMIT 1) AS degree
+				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=s.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
+				,g.group_code AS group_name
+				,(SELECT p.$titleCol FROM `rms_parttime_list` AS p WHERE p.id = s.session LIMIT 1) AS `session`
+				,(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room
+				,(SELECT $label FROM `rms_view` WHERE TYPE=5 AND key_code = s.type LIMIT 1) AS type
+				,date_stop
+				,reason
+				,(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name
 			";
 		$sql.=$dbp->caseStatusShowImage("s.status");
-		$sql.=" FROM `rms_student_drop` AS s WHERE 1 ";
+		$sql.=" FROM 
+					`rms_student_drop` AS s 
+					JOIN rms_group AS g ON g.id = s.group
+				WHERE 1 ";
 		$where = "";
 		$from_date =(empty($search['start_date']))? '1': " s.date_stop >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " s.date_stop <= '".$search['end_date']." 23:59:59'";
@@ -82,8 +88,8 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 		if(!empty($search['grade'])){
 			$where.=" AND s.grade=".$search['grade'];
 		}
-		if(!empty($search['session'])){
-			$where.=" AND s.session=".$search['session'];
+		if(!empty($search['partTimeList'])){
+			$where.=" AND s.session=".$search['partTimeList'];
 		}
 		if($search['type']!=''){
 			$where.=" AND s.type=".$search['type'];

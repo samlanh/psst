@@ -35,54 +35,56 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$_db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
+		
 		$colunmname='title_en';
 		$label = 'name_en';
 		$branch = "branch_nameen";
 		$month = "month_en";
+		$titleCol = "title";
 		if ($currentLang==1){
 			$colunmname='title';
 			$label = 'name_kh';
 			$branch = "branch_namekh";
 			$month = "month_kh";
+			$titleCol = "titleKh";
 		}
 		$sql = "SELECT 
-					gscg.id,
-					(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-					(select group_code from rms_group where rms_group.id=gscg.from_group LIMIT 1) as group_code,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = (SELECT academic_year FROM rms_group WHERE rms_group.id=gscg.from_group LIMIT 1) LIMIT 1) AS academic,
-					(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade,
+					gscg.id
+					,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
+					,g.group_code as group_code
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic
+					,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade
 				
-					(select $label from rms_view where rms_view.type=17 and rms_view.key_code=gscg.change_type LIMIT 1) as changeType,
+					,(select $label from rms_view where rms_view.type=17 and rms_view.key_code=gscg.change_type LIMIT 1) as changeType
 				
-					(SELECT rms_group.group_code FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1) as to_group_code,
-					CASE
+					,toG.group_code as to_group_code
+					,CASE
 		   				WHEN  change_type = 3 THEN (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gscg.academic_year LIMIT 1)
-		  				ELSE (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = (SELECT rms_group.academic_year FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1) LIMIT 1)
-		   			END  AS to_academic,
-		   			CASE
+		  				ELSE (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = toG.academic_year LIMIT 1)
+		   			END  AS to_academic
+		   			,CASE
 		   				WHEN  change_type = 3 THEN (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=gscg.grade ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)
-		  				ELSE (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(SELECT rms_group.grade FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1) ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)
-		   			END  AS to_grade,
-					(select $label from rms_view where rms_view.type=4 and rms_view.key_code=(SELECT rms_group.session FROM rms_group WHERE rms_group.id=gscg.to_group LIMIT 1)  limit 1) as to_session,
-				
-					moving_date,
-					gscg.note
+		  				ELSE (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=toG.grade ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1)
+		   			END  AS to_grade
+					,(SELECT p.$titleCol FROM `rms_parttime_list` AS p WHERE p.id = toG.session LIMIT 1) AS to_session
+					,moving_date
+					,gscg.note
 			";
 		$sql.=$dbp->caseStatusShowImage("gscg.status");
 		$sql.=" FROM 
-					`rms_group_student_change_group` as gscg,
-					rms_group as g
-				WHERE 
-					g.id=gscg.from_group ";
+					`rms_group_student_change_group` as gscg
+					 JOIN rms_group as g ON g.id=gscg.from_group
+					 LEFT JOIN rms_group AS toG ON toG.id=gscg.to_group
+				WHERE 1 ";
 		$order_by=" order by id DESC";
 		$where=" ";
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
-			$s_where[] = " (SELECT group_code from rms_group WHERE rms_group.id=gscg.from_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT group_code from rms_group WHERE rms_group.id=gscg.to_group limit 1) LIKE '%{$s_search}%'";
-			$s_where[] = " (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=(select grade from rms_group where rms_group.id=gscg.from_group)) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " g.group_code LIKE '%{$s_search}%'";
+			$s_where[] = " toG.group_code LIKE '%{$s_search}%'";
 			$s_where[] = " (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
+			$s_where[] = " (SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=toG.grade) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
@@ -97,13 +99,14 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		if(!empty($search['grade'])){
 			$where.=" AND g.grade=".$search['grade'];
 		}
-		if(!empty($search['session'])){
-			$where.=" AND g.session=".$search['session'];
+		if(!empty($search['partTimeList'])){
+			$where.=" AND g.session=".$search['partTimeList'];
 		}
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		$where.=$dbp->getDegreePermission('g.degree');
 		return $_db->fetchAll($sql.$where.$order_by);
 	}
+	
 	public function getAllGroupStudentChangeGroupById($id){
 		$db = $this->getAdapter();
 		$sql = "

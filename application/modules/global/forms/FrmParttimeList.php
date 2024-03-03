@@ -49,6 +49,17 @@ class Global_Form_FrmParttimeList extends Zend_Dojo_Form
 			'queryExpr' => '*${0}*',
 			'missingMessage' => $this->tr->translate("Forget Enter Title")
 		));
+		
+		$titleKh = new Zend_Dojo_Form_Element_TextBox('titleKh');
+		$titleKh->setAttribs(array(
+			'dojoType' => 'dijit.form.ValidationTextBox',
+			'required' => 'true',
+			'class' => 'fullside height-text',
+			'placeholder' => $this->tr->translate("TITLE_KH"),
+			'autoComplete' => 'false',
+			'queryExpr' => '*${0}*',
+			'missingMessage' => $this->tr->translate("Forget Enter Title")
+		));
 
 		$description =  new Zend_Form_Element_Textarea('description');
 		$description->setAttribs(array(
@@ -115,6 +126,7 @@ class Global_Form_FrmParttimeList extends Zend_Dojo_Form
 		if (!empty($data)) {
 			$_branch_id->setValue($data["branchId"]);
 			$title->setValue($data["title"]);
+			$titleKh->setValue($data["titleKh"]);
 			$description->setValue($data["description"]);
 			$_status->setValue($data["status"]);
 			$id->setValue($data["id"]);
@@ -122,6 +134,7 @@ class Global_Form_FrmParttimeList extends Zend_Dojo_Form
 		$this->addElements(array(
 			$_branch_id,
 			$title,
+			$titleKh,
 			$description,
 			$_status,
 			$id,

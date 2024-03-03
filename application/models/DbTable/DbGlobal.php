@@ -4378,10 +4378,17 @@ function getAllgroupStudyNotPass($action=null){
 		$degreeId = empty($data["degree"]) ? 0 : $data["degree"];
 		$branchId = $data["branchId"];
 		$branchIdStr = $this->getAccessPermission("pt.`branchId`");
+		
+		$currentLang = $this->currentlang();
+		$columnName="titleKh";
+		if($currentLang==2){
+			$columnName="title";
+		}
+		
 		$sql="	SELECT 
 					pt.* 
 					,pt.id AS `id`
-					,pt.`title` AS `name`
+					,pt.$columnName AS `name`
 				FROM `rms_parttime_list` AS pt
 				WHERE pt.`status` =1 $branchIdStr   ";
 		$sql.=" AND FIND_IN_SET($degreeId,pt.`degreeId`) ";

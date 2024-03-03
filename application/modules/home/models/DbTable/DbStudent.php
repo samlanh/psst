@@ -259,23 +259,25 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbgb->currentlang();
 
-		$label = "name_en";
+		$titleCol = "title";
 		$colunmname = 'title_en';
 		if ($currentLang == 1) {
 			$colunmname = 'title';
-			$label = "name_kh";
+			$titleCol = "titleKh";
 		}
 
 		$sql = " SELECT 
-	 				ds.group_id,
-					(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
-					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year,
-					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
-				    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
-					(SELECT room_name FROM rms_room WHERE room_id=(SELECT room_id FROM `rms_group` WHERE rms_group.id=ds.group_id LIMIT 1) LIMIT 1 ) AS room_name,
-					 (SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code=(SELECT g.session FROM rms_group AS g WHERE g.id = ds.group_id LIMIT 1) LIMIT 1)AS session
+	 				ds.group_id
+					,(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name
+					,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
+					,(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name
+				    ,(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name
+					,(SELECT room_name FROM rms_room WHERE room_id=(SELECT room_id FROM `rms_group` WHERE rms_group.id=ds.group_id LIMIT 1) LIMIT 1 ) AS room_name
+					,(SELECT p.$titleCol FROM `rms_parttime_list` AS p WHERE p.id = g.session LIMIT 1) AS session
+					
 				FROM 
 					rms_group_detail_student AS ds
+					JOIN rms_group AS g ON g.id = ds.group_id
  			WHERE 
 				ds.itemType=1 
 				AND ds.stu_id = $stu_id AND ds.is_current=1 ";

@@ -36,7 +36,8 @@
 	               		<input id="grade" />
 	               </div>
 	               <div class="col-md-3 col-sm-3 col-xs-12">
-	               		 <?php echo $frm->getElement("session");?>
+	               		 <?php //echo $frm->getElement("session");?>
+						 <input id="partTimeList" />
 	               </div>
 	               <div class="col-md-3 col-sm-3 col-xs-12">
 	               		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -65,10 +66,30 @@ dojo.ready(function(){
 		onChange: function() {  
 		}
 	}, "grade");
+	
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr:'*${0}*',                        
+		required: false,
+		id: "partTimeList",
+		name: "partTimeList",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('SELECT_PARTTIME_SHIFT');?>",          
+		onChange: function() {  
+		}
+	}, "partTimeList");
+	
 	var branch_id = dijit.byId('branch_id');
-	 branch_id.on('change', function(evt) {
-  });
+		 branch_id.on('change', function(evt) {
+	});
+	
+	var degree = dijit.byId('degree');
+	 degree.on('change', function(evt) {
+		 getPartTimeListByDregree();
+    });
+	
 	getallGrade();
+	getPartTimeListByDregree();
 });
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getallGrade(){
@@ -90,5 +111,31 @@ function getallGrade(){
 			error: function(err) {
 			}
 		});
+}
+
+var urlGetParttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';
+function getPartTimeListByDregree(){
+	degree = dijit.byId('degree').get('value');
+	branchId = dijit.byId('branch_id').get('value');
+	if(degree==''){
+		return false;
+	}
+	dojo.xhrPost({
+		url: urlGetParttime,
+		content:{
+			'degree':degree,
+			'branchId':branchId,
+			},
+		handleAs:"json",
+		load: function(data) {
+			partTimeListStore  = getDataStorefromJSON('id','name', data);
+			dijit.byId('partTimeList').set('store',partTimeListStore);  
+			<?php if (!empty($this->adv_search['partTimeList'])){?>
+				dijit.byId('partTimeList').set('value',<?php echo $this->adv_search['partTimeList'];?>);
+			<?php }?>
+		},
+		error: function(err) {
+		}
+	});
 }
 </script>

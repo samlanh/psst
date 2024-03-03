@@ -63,11 +63,18 @@ $frm_items = $this->frm_items;
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE_KH"); ?> <span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("titleKh"); ?>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE"); ?> <span class="required">*</span></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm_items->getElement("title"); ?>
 										</div>
 									</div>
+									
 									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DESCRIPTION"); ?>
 										</label>

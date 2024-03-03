@@ -10,9 +10,14 @@ class Global_Model_DbTable_DbPartTimeList extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
     
-    	$sql = " SELECT s.id,
-		(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branch_name,
-		s.title, s.description, s.createDate
+    	$sql = " 
+			SELECT 
+				s.id
+				,(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=s.branchId LIMIT 1) AS branch_name
+				,s.titleKh
+				,s.title
+				,(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,s.degreeId) LIMIT 1) AS degreeList
+				, s.createDate
 		 ";
     	$sql.=$dbp->caseStatusShowImage("s.status");
     	$sql.=" FROM `rms_parttime_list` AS s WHERE 1 ";
@@ -24,6 +29,7 @@ class Global_Model_DbTable_DbPartTimeList extends Zend_Db_Table_Abstract
     	if(!empty($search['advance_search'])){
    			 $s_where = array();
     		$s_search = addslashes(trim($search['advance_search']));
+    					$s_where[] = " s.titleKh LIKE '%{$s_search}%'";
     					$s_where[] = " s.title LIKE '%{$s_search}%'";
     					$s_where[] = " s.description LIKE '%{$s_search}%'";
     					$sql .=' AND ( '.implode(' OR ',$s_where).')';
@@ -49,13 +55,14 @@ class Global_Model_DbTable_DbPartTimeList extends Zend_Db_Table_Abstract
 	    		}
 	    	}
 			$_arr = array(
-					'branchId'	 	=>$_data['branch_id'],
-					'degreeId'		=>$dept,
-					'title'			 =>$_data['title'],
-					'description'	=>$_data['description'],
-					'createDate' 	=>date("Y-m-d H:i:s"),
-					'modifyDate' 	=>date("Y-m-d H:i:s"),
-					'status'		 =>1,
+					'branchId'	 		=>$_data['branch_id'],
+					'degreeId'			=>$dept,
+					'titleKh'			=>$_data['titleKh'],
+					'title'			 	=>$_data['title'],
+					'description'		=>$_data['description'],
+					'createDate' 		=>date("Y-m-d H:i:s"),
+					'modifyDate' 		=>date("Y-m-d H:i:s"),
+					'status'			=>1,
 			);
 			$this->_name='rms_parttime_list';
 			$this->insert($_arr);
@@ -88,13 +95,14 @@ class Global_Model_DbTable_DbPartTimeList extends Zend_Db_Table_Abstract
 	    	}
 		$status=empty($_data['status'])?0:1;
    		$_arr = array(
-			'branchId'	 =>$_data['branch_id'],
-			'degreeId'	 =>$dept,
-			'title'		 =>$_data['title'],
-			'description'=>$_data['description'],
-			'createDate' =>date("Y-m-d H:i:s"),
-			'modifyDate' =>date("Y-m-d H:i:s"),
-			'status'	 =>$status,
+			'branchId'	 	=>$_data['branch_id'],
+			'degreeId'	 	=>$dept,
+			'titleKh'		=>$_data['titleKh'],
+			'title'		 	=>$_data['title'],
+			'description'	=>$_data['description'],
+			'createDate' 	=>date("Y-m-d H:i:s"),
+			'modifyDate' 	=>date("Y-m-d H:i:s"),
+			'status'	 	=>$status,
    		);
    		$this->_name='rms_parttime_list';
    		$where=' id='.$_data['id'];

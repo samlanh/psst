@@ -27,11 +27,11 @@ class Global_ParttimelistController extends Zend_Controller_Action {
 	    	$rs_rows= $db->getAllScoreEntrySetting($search);
 	    	
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("BRANCH","TITLE","DESCRIPTION","CREATE_DATE","STATUS",);
+	    	$collumns = array("BRANCH","TITLE_KH","TITLE","DEGREE","CREATE_DATE","STATUS",);
 	    	$link=array(
 	    			'module'=>'global','controller'=>'parttimelist','action'=>'edit',
 	    	);
-	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link ,'title'=>$link ,'description'=>$link));
+	    	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link ,'title'=>$link ,'titleKh'=>$link));
 	    	
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

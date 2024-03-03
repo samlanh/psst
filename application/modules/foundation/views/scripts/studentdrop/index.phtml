@@ -40,7 +40,8 @@
 				</div>
 				<div class="form-group">
 					 <div class="col-md-2 col-sm-3 col-xs-12">
-					  	<?php echo $frm->getElement("session");?>
+						<input id="partTimeList" />
+					  	<?php //echo $frm->getElement("session");?>
 					 </div>
 					 <div class="col-md-2 col-sm-3 col-xs-12">
 					 	<?php echo $frm->getElement("start_date");?>
@@ -79,11 +80,30 @@ dojo.ready(function(){
 
 		}
 	}, "grade");
-	getallGrade();
 	
-	 var branch_id = dijit.byId('branch_id');
+	new dijit.form.FilteringSelect({
+		autoComplete: false,
+		queryExpr:'*${0}*',                        
+		required: false,
+		id: "partTimeList",
+		name: "partTimeList",           
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate('SELECT_PARTTIME_SHIFT');?>",          
+		onChange: function() {  
+		}
+	}, "partTimeList");
+		
+	
+	
+	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 	});
+	var degree = dijit.byId('degree');
+	 degree.on('change', function(evt) {
+		 getPartTimeListByDregree();
+	});
+	getallGrade();
+	getPartTimeListByDregree();
 });
 	var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
@@ -109,6 +129,33 @@ dojo.ready(function(){
 				}
 			});
 	}
+	
+	var urlGetParttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';
+	function getPartTimeListByDregree(){
+		degree = dijit.byId('degree').get('value');
+		branchId = dijit.byId('branch_id').get('value');
+		if(degree==''){
+			return false;
+		}
+		dojo.xhrPost({
+			url: urlGetParttime,
+			content:{
+				'degree':degree,
+				'branchId':branchId,
+				},
+			handleAs:"json",
+			load: function(data) {
+				partTimeListStore  = getDataStorefromJSON('id','name', data);
+				dijit.byId('partTimeList').set('store',partTimeListStore);  
+				<?php if (!empty($this->search['partTimeList'])){?>
+					dijit.byId('partTimeList').set('value',<?php echo $this->search['partTimeList'];?>);
+				<?php }?>
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
 	var row=0;
 	var url="";
 	$(function(){

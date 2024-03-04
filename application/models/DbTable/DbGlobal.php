@@ -3924,7 +3924,7 @@ function getAllgroupStudyNotPass($action=null){
   						AND group_code!='' ";
 	  	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
 	  	if (!empty($forfilterreport)){
-	  			$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+	  			$sql.=" AND (g.is_pass=1 OR g.is_pass=2 OR g.is_pass=3) ";// group studying/completed
 	  	}else{
 	  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
 	  	}

@@ -198,10 +198,12 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$colunmname = 'title_en';
 		$label = "name_en";
 		$branch = "branch_nameen";
+		$titleCol = "title";
 		if ($currentLang == 1) {
 			$colunmname = 'title';
 			$label = "name_kh";
 			$branch = "branch_namekh";
+			$titleCol = "titleKh";
 		}
 
 		$sql = "SELECT `g`.`id`,
@@ -211,7 +213,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			 `g`.`semester` AS `semester`, 
 			i.$colunmname AS degree,
 			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
-			(select title from rms_parttime_list where rms_parttime_list.id = g.session limit 1 ) as session,
+			(select p.$titleCol from rms_parttime_list AS p where p.id = g.session limit 1 ) as session,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
 			time,

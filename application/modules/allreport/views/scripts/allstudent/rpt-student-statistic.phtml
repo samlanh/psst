@@ -3,7 +3,6 @@
 	echo $this->headTitle($tr->translate("RPT_STUDENT_STATISTIC")); 
 	$frm =  $this->form_search;
 	$dbst = new Allreport_Model_DbTable_DbRptAllStudent();
-	//print_r($this->rs);
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
@@ -110,7 +109,7 @@ table.tb-footer tr.style-head {
 						<thead>
 							<tr class="style-head">
 								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-								<td colspan="10"><?php echo $tr->translate("STUDY_INFO");?>
+								<td colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
 									<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
 								</td>
 							</tr>
@@ -119,7 +118,6 @@ table.tb-footer tr.style-head {
 								<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 								<td><?php echo $tr->translate("DEGREE");?></td>
 								<td><?php echo $tr->translate("GRADE");?></td>
-								<td><?php echo $tr->translate("SESSION");?></td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
@@ -145,25 +143,24 @@ table.tb-footer tr.style-head {
 					if(!empty($this->rs)){
 						foreach($this->rs AS $key=>$row){  
 
-							$newStudent = $row['newStudent'];
-							$oldStudent = $row['oldStudent'];
-							$totalstu = $row['totalStu'];
+						$newStudent = $row['newStudent'];
+						$oldStudent = $row['oldStudent'];
+						$totalstu = $row['totalStu'];
 
-							$maleStu = $row['stuMale'];
-							$femaleStu = $row['stuFemale'];
+						$maleStu = $row['stuMale'];
+						$femaleStu = $row['stuFemale'];
 
-							$GrandtotalStudent =$GrandtotalStudent+$totalstu;
-							$GrandtotalMale =$GrandtotalMale+$maleStu;
-							$GrandtotalFemale =$GrandtotalFemale+$femaleStu;
-							$GrandtotalNew =$GrandtotalNew+$newStudent;
-							$GrandtotalOld =$GrandtotalOld+$oldStudent;
-							
+						$GrandtotalStudent =$GrandtotalStudent+$totalstu;
+						$GrandtotalMale =$GrandtotalMale+$maleStu;
+						$GrandtotalFemale =$GrandtotalFemale+$femaleStu;
+						$GrandtotalNew =$GrandtotalNew+$newStudent;
+						$GrandtotalOld =$GrandtotalOld+$oldStudent;
 					?>
 					
 						<?php if($degree!=$row['degree']){?>
 								<?php if ($key>0){ $i=0;  ?>
 								<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
-									<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
+									<td colspan="5"><?php echo $tr->translate("TOTAL");?></td>
 									<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
 									<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
@@ -177,11 +174,9 @@ table.tb-footer tr.style-head {
 							<td align="left">&nbsp;<?php echo $row['academic_year_name'];?>&nbsp;</td>
 							<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
 							<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
-							<td><?php echo $row['session_name'];?></td>
 							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							
 							<td><?php echo $maleStu." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $femaleStu." ".$tr->translate("STUDENT_UNIT");?></td>		
 						</tr>
@@ -199,15 +194,12 @@ table.tb-footer tr.style-head {
 							$totalNew=$totalNew+$newStudent;
 							$totalOld = $totalOld+$oldStudent;
 							$totalMale = $totalMale+$maleStu;
-							$totalFemale = $totalFemale+$femaleStu;
-							
-							?>
-
-						<?php $degree=$row['degree'];?>
-						
+							$totalFemale = $totalFemale+$femaleStu;							
+						?>
+						<?php $degree=$row['degree'];?>					
 						<?php }} ?>	
 						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
-							<td colspan="6"><?php echo $tr->translate("TOTAL");?></td>
+							<td colspan="5"><?php echo $tr->translate("TOTAL");?></td>
 							<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
@@ -215,7 +207,7 @@ table.tb-footer tr.style-head {
 							<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
 						</tr>
 						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
-							<td colspan="6"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+							<td colspan="5"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
 							<td><?php echo $GrandtotalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
 							<td><?php echo $GrandtotalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
 							<td><?php echo $GrandtotalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	

@@ -10,6 +10,7 @@ $controller = $request->getControllerName();
 $module = $request->getModuleName();
 
 if ($module != 'default') {
+	
 	$session_user = new Zend_Session_Namespace(SYSTEM_SES);
 	$username = $session_user->first_name;
 	$them_style =  $session_user->theme_style;

@@ -86,7 +86,16 @@
 
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('d.schoolOption');
-		$sql.= $dbp->getDegreePermission('d.id');
+		$userSelect = $dbp->getUserProfile();
+		if(!empty($userSelect['degreeList'])){
+			$degreeList = $userSelect['degreeList'];
+			$sql.="
+				AND 
+					CASE  WHEN d.type != 1 THEN '1' 
+					ELSE d.id IN (".$degreeList.") 
+					END
+				";
+		}
 		return $db->fetchRow($sql);
 	}
 	public function AddDegree($_data){

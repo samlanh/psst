@@ -453,6 +453,9 @@ function checkQualified(){
 		dijit.byId('score').set('readOnly',true);
 	}else{
 		degree = dijit.byId('degree').get('value');
+		<?php if (!empty($this->detailscore['degree_result'])){?>
+			degree ='<?php echo $this->detailscore['degree_result'];?>';
+		<?php }?>
 		dijit.byId('degree_result').set('readOnly',false);
 		dijit.byId('degree_result').set('value',degree);
 		

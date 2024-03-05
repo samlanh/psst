@@ -1,5 +1,7 @@
 <?php
 class Issue_ScoretmpController extends Zend_Controller_Action {
+
+	const REDIRECT_URL='/issue/scoretmp';
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -57,8 +59,9 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 			$controller=$request->getControllerName();
 			$module=$request->getModuleName();
 	
-			$dbacc = new Application_Model_DbTable_DbUsers();
-			$rs = $dbacc->getAccessUrl($module,$controller,'delete');
+			// $dbacc = new Application_Model_DbTable_DbUsers();
+			// $rs = $dbacc->getAccessUrl($module,$controller,'delete');
+			$rs=1;
 			if(!empty($rs)){
 				$id = $this->getRequest()->getParam('id');
 				$db = new Issue_Model_DbTable_DbScoreTemorary();

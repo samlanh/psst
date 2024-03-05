@@ -112,9 +112,9 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 	function getScoreTmpById($score_id)
 	{
 		$db = $this->getAdapter();
-		$sql = "SELECT s.*
-			FROM rms_grading_tmp AS s 
-			WHERE s.id =$score_id ";
+		$sql = "SELECT s.*,
+		(SELECT c.criteriaType FROM  `rms_exametypeeng` AS c WHERE c.id = s.`criteriaId` LIMIT 1 ) AS criteriaType
+		FROM rms_grading_tmp AS s WHERE s.id =$score_id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql .= $dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
@@ -123,15 +123,28 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$db->beginTransaction();
 
-		$rs = $this->getScoreTmpById($id);
-
     	try{
-	    	$where=" id= $id";
-	    	$this->delete($where);
-	    	
+			$rs = $this->getScoreTmpById($id);
+
 	    	$this->_name="rms_grading_tmp";
 	    	$where=" id = $id";
 	    	$this->delete($where);
+
+			$this->_name = 'rms_grading_detail_tmp';
+			$this->delete("gradingId=" . $id);
+
+			if($rs['criteriaType']==2){  // EXAM
+				
+				$this->_name = 'rms_grading';
+				$this->delete("gradingTmpId=" . $id);
+
+				$this->_name = 'rms_grading_detail';
+				$this->delete("gradingTmpId=" . $id);
+
+				$this->_name = 'rms_grading_total';
+				$this->delete("gradingTmpId=" . $id);
+			}
+
 	    	$db->commit();
     	}catch(exception $e){
     		Application_Form_FrmMessage::message("Application Error");

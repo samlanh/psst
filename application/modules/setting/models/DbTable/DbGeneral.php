@@ -319,6 +319,18 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'criteriaLimitation'";
 				$this->update($arr, $where);
 			}
+			
+			$rows = $this->geLabelByKeyName('footerScoreDocument');
+			if (empty($rows)){
+				$value = empty($data['footerScoreDocument']) ? 0 : 1;
+				$arr = array('keyValue'=>$value,'keyName'=>'footerScoreDocument','note'=>"0=មិនបង្ហាញ ត្រានិងហត្ថលេខានាយក គ្រូបន្ទុក និងថ្ងៃខែ  , 1=បង្ហាញត្រានិងហត្ថលេខានាយក គ្រូបន្ទុក និងថ្ងៃខែ ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$value = empty($data['footerScoreDocument']) ? 0 : 1;
+				$arr = array('keyValue'=>$value);
+				$where=" keyName= 'footerScoreDocument'";
+				$this->update($arr, $where);
+			}
 	
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

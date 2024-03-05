@@ -18,23 +18,24 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$colunmname = 'subject_titleen';
-		$title = 'title_en';
+		$title = 'c.title_en';
 		$label = 'name_en';
 		$branch = "branch_nameen";
 		$month = "month_en";
 		if ($currentLang == 1) {
 			$colunmname = 'subject_titlekh';
-			$title = 'title';
+			$title = 'c.title';
 			$label = 'name_kh';
 			$branch = "branch_namekh";
 			$month = "month_kh";
+			
 		}
 		$sql = "SELECT gt.id,
 			(SELECT $branch FROM `rms_branch` WHERE br_id=gt.branchId LIMIT 1) As branchName,
 			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=gt.academicYear LIMIT 1) AS acadecmicYear,
 			(SELECT group_code FROM rms_group WHERE id=gt.groupId limit 1 ) AS  groupCode,
 			(SELECT $colunmname  FROM rms_subject WHERE id=gt.subjectId limit 1 ) AS  subjectName,
-			(SELECT $title  FROM rms_exametypeeng WHERE id=gt.criteriaId limit 1 ) AS  criteriaName,
+			$title ,
 			(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =gt.examType LIMIT 1) as examType,
 			gt.forSemester,
 			CASE
@@ -47,7 +48,27 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		";
 		//s.max_score,
 		$sql .= $dbp->caseStatusShowImage("gt.status");
-		$sql .= " FROM `rms_grading_tmp` AS gt  WHERE 1  "; //AND s.status=1
+		$sql .= " FROM `rms_grading_tmp` AS gt
+					INNER JOIN `rms_exametypeeng` AS c ON gt.criteriaId = c.id WHERE 1  ";
+
+		$sql .= "  AND CASE WHEN (SELECT gd.isLock FROM `rms_grading` AS gd WHERE gd.status = 1 
+					AND gd.groupId=gt.groupId 
+					AND gd.settingEntryId = gt.settingEntryId  
+					AND gd.subjectId = gt.subjectId  
+					AND gd.teacherId = gt.teacherId 
+					AND gd.examType = gt.examType LIMIT 1
+					) IS NULL THEN c.criteriaType =1
+					ELSE  c.criteriaType =2 
+					END
+					AND CASE WHEN c.criteriaType =2  THEN (SELECT gd.isLock FROM `rms_grading` AS gd WHERE gd.status = 1 
+					AND gd.groupId=gt.groupId 
+					AND gd.settingEntryId = gt.settingEntryId  
+					AND gd.subjectId = gt.subjectId  
+					AND gd.teacherId = gt.teacherId 
+					AND gd.examType = gt.examType LIMIT 1
+					)!=1
+					ELSE '1'
+					END ";  
 
 		$where = '';
 		$from_date = (empty($search['start_date'])) ? '1' : " gt.dateInput >= '" . $search['start_date'] . " 00:00:00'";
@@ -83,7 +104,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		}
 		$where .= $dbp->getAccessPermission('s.branchId');
 		$order = " ORDER BY id DESC ";
-		 echo $sql . $where . $order; 
+		// echo $sql . $where . $order; 
 		return $db->fetchAll($sql . $where . $order);
 	}
 

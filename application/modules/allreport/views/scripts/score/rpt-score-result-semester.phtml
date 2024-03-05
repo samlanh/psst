@@ -915,7 +915,7 @@ tbody#table_row tr {
 											<span class="khmerName"><?php echo trim($rs['stu_khname']); ?></span>
 										</td>
 										<td style="width: 150px; min-width:100px;">
-											<span class=" englishName"><?php echo trim($rs['stu_enname']); ?></span>
+											<span class=" englishName"><?php echo ucwords(strtolower($rs['stu_enname'])); ?></span>
 										</td>
 										<td align="center" class="bg_<?php echo $rs['sex']; ?>">&nbsp;<?php echo $sex; ?>&nbsp;</td>
 										<?php

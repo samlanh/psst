@@ -84,11 +84,11 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		}
 	
 		if (!empty($search['academic_year'])) {
-			$where .= " AND gt.academic_year =" . $search['academic_year'];
+			$where .= " AND gt.academicYear =" . $search['academic_year'];
 		}
 	
 		if (!empty($search['group'])) {
-			$where .= " AND `gt`.`group_id` =" . $search['group'];
+			$where .= " AND `gt`.`groupId` =" . $search['group'];
 		}
 		if (!empty($search['branch_id'])) {
 			$where .= " AND `gt`.`branchId` =" . $search['branch_id'];
@@ -102,22 +102,41 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		if ($search['for_semester'] > 0) {
 			$where .= " AND gt.forSemester =" . $search['for_semester'];
 		}
-		$where .= $dbp->getAccessPermission('s.branchId');
+		$where .= $dbp->getAccessPermission('gt.branchId');
 		$order = " ORDER BY id DESC ";
 		// echo $sql . $where . $order; 
 		return $db->fetchAll($sql . $where . $order);
 	}
 
-	function getScoreById($score_id)
+
+	function getScoreTmpById($score_id)
 	{
 		$db = $this->getAdapter();
-		$sql = "SELECT s.*,
-				(SELECT g.is_pass 
-					FROM `rms_group` AS g WHERE g.id = s.group_id LIMIT 1) as is_pass 
-			FROM rms_score AS s 
-			WHERE s.id=$score_id ";
+		$sql = "SELECT s.*
+			FROM rms_grading_tmp AS s 
+			WHERE s.id =$score_id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql .= $dbp->getAccessPermission('branch_id');
 		return $db->fetchRow($sql);
 	}
+	function deleteTmpScore($id){
+    	$db = $this->getAdapter();
+    	$db->beginTransaction();
+
+		$rs = $this->getScoreTmpById($id);
+
+    	try{
+	    	$where=" id= $id";
+	    	$this->delete($where);
+	    	
+	    	$this->_name="rms_grading_tmp";
+	    	$where=" id = $id";
+	    	$this->delete($where);
+	    	$db->commit();
+    	}catch(exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    		$db->rollBack();
+    	}
+    }
 }

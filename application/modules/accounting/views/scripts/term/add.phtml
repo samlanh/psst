@@ -80,7 +80,7 @@
 												<div class="form-group">
 													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
 													<div class="col-md-7 col-sm-7 col-xs-12">
-														<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch(),getAllDegreeByBranch();" id="branch_id" name="branch_id" type="text">
+														<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch()" id="branch_id" name="branch_id" type="text">
 															<?php if(!empty($this->rsbranch)){ foreach ($this->rsbranch as $rs){?>	
 																<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
 															<?php }}?>
@@ -93,12 +93,7 @@
 														<input id="academic_year" />
 													</div>
 												</div>
-												<div class="form-group">
-													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<input id="degree" />
-													</div>
-												</div>
+												
 											</div>
 									</div>
 							</div>
@@ -106,7 +101,7 @@
 
 				</div>
 
-				<div class="col-md-8 col-sm-8 col-xs-12">
+				<div class="col-md-6 col-sm-6 col-xs-12">
 					<div class="card-blogform">
 							<div class="card-body"> 
 								<div class="row"> 
@@ -138,7 +133,49 @@
 					</div>
 
 				</div>
-
+				<div id="degreee" class="col-md-2 col-sm-2 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+										</div> 
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL');?>
+										</label>
+									</div>
+									 <div class="form-group">
+										<ul class="optListRow">
+											<?php 
+												if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+												?>
+												<li class="opt-items"> 
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"  >
+														<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
+															<?php echo $rs['name'];?>
+														</label>
+													</div>
+												</li>
+												
+											<?php } ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>	
+				
 				<div class="clearfix"></div>
 			</div>
 			<div class="clearfix"></div>
@@ -176,20 +213,20 @@
 				academic_year = dijit.byId('academic_year').get('value');
 			}
 		}, "academic_year");
-		new dijit.form.FilteringSelect({
-			store: dept_store,
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,
-			id: "degree",
-			name: "degree",           
-			class: "fullside", 
-			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
-			onChange: function() {  
+		// new dijit.form.FilteringSelect({
+		// 	store: dept_store,
+		// 	queryExpr: "*${0}*",
+		// 	autoComplete: false,                     
+		// 	required: true,
+		// 	id: "degree",
+		// 	name: "degree",           
+		// 	class: "fullside", 
+		// 	placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+		// 	onChange: function() {  
 				
-			}
-		}, "degree");	
-		getAllDegreeByBranch();
+		// 	}
+		// }, "degree");	
+		//getAllDegreeByBranch();
 		getAllAcademicByBranch();
 		getTermOption();
 		addRow();
@@ -215,30 +252,31 @@
 		getAllYear(url_getacademic,contentData);
 	
 	}
-	url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
-	function getAllDegreeByBranch(){
-		dijit.byId('degree').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('degree').set('store',dept_store);  
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getdegree,
-			content:{
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data) {
-				dept_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('degree').set('store',dept_store);   
-			},
-			error: function(err) {
-			}
-		});
-	}
+
+	// url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
+	// function getAllDegreeByBranch(){
+	// 	dijit.byId('degree').reset();
+	// 	branch_id = dijit.byId('branch_id').get('value');
+	// 	if(branch_id=='' || branch_id==-1){
+	// 		var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	// 		dijit.byId('degree').set('store',dept_store);  
+	// 		dijit.byId('branch_id').focus();
+	// 		return false;
+	// 	}
+	// 	dojo.xhrPost({
+	// 		url: url_getdegree,
+	// 		content:{
+	// 			'branch_id':branch_id
+	// 			},
+	// 		handleAs:"json",
+	// 		load: function(data) {
+	// 			dept_store  = getDataStorefromJSON('id','name', data);
+	// 			dijit.byId('degree').set('store',dept_store);   
+	// 		},
+	// 		error: function(err) {
+	// 		}
+	// 	});
+	// }
 
 	function getTermOption(){
 			term_option ='<option value=""></option></option>';
@@ -299,5 +337,13 @@
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
+	}
+
+	function checkall(){
+		if ($('#check_all').is(':checked')) {
+			$(".checkbox").prop('checked', true);
+		}else{
+			$(".checkbox").prop('checked', false);
+		}
 	}
 </script>

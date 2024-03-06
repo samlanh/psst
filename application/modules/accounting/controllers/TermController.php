@@ -60,7 +60,8 @@ class Accounting_TermController extends Zend_Controller_Action {
     	$this->view->year = $db->getAceYear();
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$this->view->rsbranch = $dbg->getAllBranch();
-		
+		$this->view->faculty = $dbg->getAllDegreeName();
+
 		$rows = $dbg->getAllPaymentTerm($id=null,$hidemonth=1);
 		$this->view->term_option =	$rows ;
 

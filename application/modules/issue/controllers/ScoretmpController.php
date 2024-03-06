@@ -34,7 +34,6 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 			
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","STUDY_YEAR","STUDENT_GROUP","SUBJECT","CRITERIAL_NAME","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","DATE","TEACHER","STATUS");
-			//"SCORE_LEVEL",
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array());
 		
 		}catch (Exception $e){
@@ -48,8 +47,8 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 		$this->view->form_search=$form;
 	}
 	
-	public	function addAction(){
-		
+	public function addAction(){
+		$this->_redirect('/issue/scoretmp');
 	}
 	
 	function deleteAction(){
@@ -59,9 +58,9 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 			$controller=$request->getControllerName();
 			$module=$request->getModuleName();
 	
-			// $dbacc = new Application_Model_DbTable_DbUsers();
-			// $rs = $dbacc->getAccessUrl($module,$controller,'delete');
-			$rs=1;
+			$dbacc = new Application_Model_DbTable_DbUsers();
+			$rs = $dbacc->getAccessUrl($module,$controller,'delete');
+			
 			if(!empty($rs)){
 				$id = $this->getRequest()->getParam('id');
 				$db = new Issue_Model_DbTable_DbScoreTemorary();

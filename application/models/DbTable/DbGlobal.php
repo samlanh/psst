@@ -4320,6 +4320,7 @@ function getAllgroupStudyNotPass($action=null){
 	
 	function getUserProfile(){
 		$userID = $this->getUserId();
+		$userID = empty($userID) ? 0 : $userID;
 		$db = $this->getAdapter();
 		$sql="SELECT u.* FROM rms_users AS u WHERE u.id=".$userID;
 		return $db->fetchRow($sql);

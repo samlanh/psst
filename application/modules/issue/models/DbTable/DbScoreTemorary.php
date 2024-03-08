@@ -43,8 +43,9 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 			ELSE (SELECT $month FROM `rms_month` WHERE id=gt.forMonth  LIMIT 1) 
 			END 
 			as for_month,
-			gt.dateInput,
-			(SELECT teacher_name_kh FROM rms_teacher WHERE gt.teacherId=rms_teacher.id LIMIT 1 ) AS taecherName
+			gt.createDate,
+			(SELECT teacher_name_kh FROM rms_teacher WHERE gt.teacherId=rms_teacher.id LIMIT 1 ) AS taecherName,
+			(SELECT COUNT(gd.id) FROM `rms_grading_detail_tmp` AS gd WHERE gd.gradingId = gt.id AND gd.totalGrading>0 LIMIT 1 )  AS studentAmount
 		";
 		//s.max_score,
 		$sql .= $dbp->caseStatusShowImage("gt.status");
@@ -71,8 +72,8 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 					END ";  
 
 		$where = '';
-		$from_date = (empty($search['start_date'])) ? '1' : " gt.dateInput >= '" . $search['start_date'] . " 00:00:00'";
-		$to_date = (empty($search['end_date'])) ? '1' : " gt.dateInput <= '" . $search['end_date'] . " 23:59:59'";
+		$from_date = (empty($search['start_date'])) ? '1' : " gt.createDate >= '" . $search['start_date'] . " 00:00:00'";
+		$to_date = (empty($search['end_date'])) ? '1' : " gt.createDate <= '" . $search['end_date'] . " 23:59:59'";
 		$where = " AND " . $from_date . " AND " . $to_date;
 
 		if (!empty($search['adv_search'])) {

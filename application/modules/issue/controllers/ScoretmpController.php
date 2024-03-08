@@ -33,7 +33,7 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 			$rs_rows = $db->getAllScoreTemporary($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDY_YEAR","STUDENT_GROUP","SUBJECT","CRITERIAL_NAME","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","DATE","TEACHER","STATUS");
+			$collumns = array("BRANCH","STUDY_YEAR","STUDENT_GROUP","SUBJECT","CRITERIAL_NAME","EXAM_TYPE","FOR_SEMESTER","FOR_MONTH","DATE","TEACHER","AMOUNT_STU_INPUT","STATUS");
 			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array());
 		
 		}catch (Exception $e){

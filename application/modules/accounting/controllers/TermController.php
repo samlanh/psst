@@ -24,11 +24,11 @@ class Accounting_TermController extends Zend_Controller_Action {
 			$db = new Global_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","DEGREE","USER");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TITLE","TERM","START_DATE","END_DATE","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'term','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch_name'=>$link,'academic_year'=>$link,'degree'=>$link ));
+    		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows , array('branch_name'=>$link,'academic_year'=>$link,'title'=>$link ));
     		
     		$form=new Application_Form_FrmSearchGlobal();
     		$forms=$form->FrmSearch();
@@ -87,14 +87,15 @@ class Accounting_TermController extends Zend_Controller_Action {
     	}
     	$this->view->row = $row;
 
-		$termDetail = $db->getTermDetail($row);
-		$this->view->termDetail = $termDetail;
+		// $termDetail = $db->getTermDetail($row);
+		// $this->view->termDetail = $termDetail;
     	
     	$db = new Accounting_Model_DbTable_DbFee();
     	$this->view->year = $db->getAceYear();
     	
     	$dbg = new Application_Model_DbTable_DbGlobal();
     	$this->view->rsbranch = $dbg->getAllBranch();
+		$this->view->faculty = $dbg->getAllDegreeName();
 
 		$rows = $dbg->getAllPaymentTerm($id=null,$hidemonth=1);
 		$this->view->term_option =	$rows ;

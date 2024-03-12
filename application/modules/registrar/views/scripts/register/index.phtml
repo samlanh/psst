@@ -59,7 +59,69 @@
 			 </form>
 		</div>
 		<div class="card-box">
-			<?php echo $this->list;?>
+			<?php //echo $this->list; ?>
+		</div>
+		<div class="card-box">
+			<div class="dataTables_scrollBody" style="position: relative;  width: 100%; background:#fff;   ">
+    			<table border="1" id="datatable-responsive" style="  border-collapse: collapse;   border-color: #ddd;"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%" >
+    				<thead>
+    					<tr>
+    						<th class="tdheader text-center"><?php echo $tr->translate("NUM");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("BRANCH");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("RECEIPT_NO");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("STUDENT_ID");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("STUDENT_NAME");?></th>
+    						<th class="tdheader text-center"><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("FINE");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("TOTAL_PAYMENT");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("CREDIT_MEMO");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("PAID");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("BALANCE");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("PAYMENT_METHOD");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("CHEQUE_NO");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("DATE_PAY");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("USER");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("STATUS");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("VOID_BY");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("VOID");?></th>
+    					</tr>
+    				</thead>
+    				<tbody>
+    					<?php $r=0; if (!empty($this->row)) foreach ($this->row as $rs){ 
+    						if($r%2==0)$attb='normal';
+    						else $attb='alternate';
+    						$r++?>
+    					<tr class="context-menu-one"  oncontextmenu="setrowdata('<?php echo $rs['id']; ?>');return false;">
+    						<td style="text-align:center;" ><?php echo $r;?></td>
+							<td class="itesms text-center" ><?php echo $rs['branch_name']?></td>
+    						<td class="itesms text-center" ><?php echo $rs['receipt_number']?></td>
+							<td class="itesms text-center" ><?php echo $rs['stu_code']?></td>
+							<td class="itesms text-center" ><?php echo $rs['stu_khname']?></td>
+							<td class="itesms text-center" ><?php echo $rs['sex']?></td>
+							<td class="itesms text-center" ><?php echo $rs['YEAR']?></td>
+							<td class="itesms text-center" ><?php echo $rs['penalty']?></td>
+							<td class="itesms text-center" ><?php echo $rs['grand_total']?></td>
+							<td class="itesms text-center" ><?php echo $rs['credit_memo']?></td>
+							<td class="itesms text-center" ><?php echo $rs['paid_amount']?></td>
+							<td class="itesms text-center" ><?php echo $rs['balance_due']?></td>
+							<td class="itesms text-center" ><?php echo $rs['payment_method']?></td>
+							<td class="itesms text-center" ><?php echo $rs['create_date']?></td>
+							<td class="itesms text-center" ><?php echo $rs['user']?></td>
+							<td class="itesms text-center" ><?php echo $rs['void']?></td>
+							<td class="itesms text-center" ><?php echo $rs['void_by']?></td>
+							<td class="itesms" >
+								<?php if($rs['is_void']==0){ ?>
+									<a href="#" onclick="VoidForm('<?php echo $rs['id']; ?>');" class="btn btn-primary btn-xs"><i class="fa fa-times"></i> <?php echo $tr->translate("VOID_NOW")?> </a>
+								<?php }else{ ?>
+									<i class="fa fa-times"></i>
+								<?php } ?>
+								
+							</td>
+    					</tr>
+    					<?php }?>
+    				</tbody>
+    			</table>
+    		</div>		
 		</div>
 	</div>
 </div>
@@ -294,5 +356,9 @@
 				}
 			});
 		}
+	}
+	function VoidForm(index){
+		dijit.byId('id').set('value',index);
+		dijit.byId('updateForm').show();
 	}
 </script>

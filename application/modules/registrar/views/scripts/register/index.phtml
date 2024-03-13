@@ -71,6 +71,7 @@
     						<th class="tdheader text-center"><?php echo $tr->translate("RECEIPT_NO");?></th>
     						<th class="tdheader text-center"><?php echo $tr->translate("STUDENT_ID");?></th>
     						<th class="tdheader text-center"><?php echo $tr->translate("STUDENT_NAME");?></th>
+							<th class="tdheader text-center"><?php echo $tr->translate("SEX");?></th>
     						<th class="tdheader text-center"><?php echo $tr->translate("ACADEMIC_YEAR");?></th>
 							<th class="tdheader text-center"><?php echo $tr->translate("FINE");?></th>
 							<th class="tdheader text-center"><?php echo $tr->translate("TOTAL_PAYMENT");?></th>
@@ -105,6 +106,7 @@
 							<td class="itesms text-center" ><?php echo $rs['paid_amount']?></td>
 							<td class="itesms text-center" ><?php echo $rs['balance_due']?></td>
 							<td class="itesms text-center" ><?php echo $rs['payment_method']?></td>
+							<td class="itesms text-center" ><?php echo $rs['number']?></td>
 							<td class="itesms text-center" ><?php echo $rs['create_date']?></td>
 							<td class="itesms text-center" ><?php echo $rs['user']?></td>
 							<td class="itesms text-center" ><?php echo $rs['void']?></td>
@@ -113,7 +115,7 @@
 								<?php if($rs['is_void']==0){ ?>
 									<a href="#" onclick="VoidForm('<?php echo $rs['id']; ?>');" class="btn btn-primary btn-xs"><i class="fa fa-times"></i> <?php echo $tr->translate("VOID_NOW")?> </a>
 								<?php }else{ ?>
-									<i class="fa fa-times"></i>
+									<span class="text-danger"><i class="fa fa-times"></i></span>
 								<?php } ?>
 								
 							</td>

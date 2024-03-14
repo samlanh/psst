@@ -1894,7 +1894,10 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if(!empty($data['grade'])){//correct
   		if(!empty($data['serviceType']) AND $data['serviceType']==1){// SCHOOL FEE ONLY 
-  			$sql.=" AND  degreeId IN (SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." )";
+
+  			//$sql.=" AND  degreeId IN (SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." )";
+			
+			$sql.=" AND FIND_IN_SET((SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." ), degreeId) ";
   		}
   	}
   	

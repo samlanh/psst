@@ -1644,3 +1644,7 @@ li.opt-items.two-column {
 span.text-value {
     font-weight: 600;
 }
+
+div#contentInfoPop p, div#contentInfoPop small {
+    line-height: 14px;
+}

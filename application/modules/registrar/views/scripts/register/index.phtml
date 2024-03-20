@@ -94,10 +94,10 @@
     						$r++?>
     					<tr class="context-menu-one"  oncontextmenu="setrowdata('<?php echo $rs['id']; ?>');return false;">
     						<td style="text-align:center;" ><?php echo $r;?></td>
-							<td class="itesms text-center" ><?php echo $rs['branch_name']?></td>
-    						<td class="itesms text-center" ><?php echo $rs['receipt_number']?></td>
-							<td class="itesms text-center" ><?php echo $rs['stu_code']?></td>
-							<td class="itesms text-center" ><?php echo $rs['stu_khname']?></td>
+							<td class="itesms text-center" id="branchValue"><?php echo $rs['branch_name']?></td>
+    						<td class="itesms text-center" id="receiptValue"><?php echo $rs['receipt_number']?></td>
+							<td class="itesms text-center" id="stuCodeValue"><?php echo $rs['stu_code']?></td>
+							<td class="itesms text-center" id="stuNameValue"><?php echo $rs['stu_khname']?></td>
 							<td class="itesms text-center" ><?php echo $rs['sex']?></td>
 							<td class="itesms text-center" ><?php echo $rs['YEAR']?></td>
 							<td class="itesms text-center" ><?php echo $rs['penalty']?></td>
@@ -107,7 +107,7 @@
 							<td class="itesms text-center" ><?php echo $rs['balance_due']?></td>
 							<td class="itesms text-center" ><?php echo $rs['payment_method']?></td>
 							<td class="itesms text-center" ><?php echo $rs['number']?></td>
-							<td class="itesms text-center" ><?php echo $rs['create_date']?></td>
+							<td class="itesms text-center" id="dateValue" ><?php echo $rs['create_date']?></td>
 							<td class="itesms text-center" ><?php echo $rs['user']?></td>
 							<td class="itesms text-center" ><?php echo $rs['void']?></td>
 							<td class="itesms text-center" ><?php echo $rs['void_by']?></td>
@@ -128,11 +128,15 @@
 	</div>
 </div>
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate('VOID_REASON');?>'"  id="updateForm" style="width:350px;" >
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate('VOID_RECORD_TITLE');?>'"  id="updateForm" style="width:350px;" >
 		<div class="card pb-10 pt-10 pl-10 pr-10">
 			<form id="voidFormInfo"  name="data" action="" dojoType="dijit.form.Form" method="post">
 				<div class="card-box">
 					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12" id="contentInfoPop">
+						</div>
+					</div>
+					<div class="form-group border-top mt-20 ptb-10 ">
 					   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate('REASON');?> :
 					   </label>
 					   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -141,7 +145,7 @@
 					   </div>
 					</div>
 					<div class="form-group">
-						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+						<div class="col-sm-12 text-center">
 							<input onclick="voidReceipt();" type="button" value="1" label="<?php echo $tr->translate('VOID_NOW');?>" id="busyButton" dojoType="dijit.form.Button" 
 								class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" /> 
 						</div>
@@ -289,6 +293,7 @@
 	}
 	var row=0;
 	var url="";
+	var currentArr=[];
 	$(function(){
 		$.contextMenu({
 			selector: '.context-menu-one', 
@@ -316,6 +321,14 @@
 	});
 	function setrowdata(index){
 		row = index;
+		var strinfo="";
+		
+		strinfo+='<small >'+$("#branchValue").text()+'</small>';
+		strinfo+='<h3 class="text-danger red"><small class="text-primary " ><?php echo $tr->translate("RECEIPT_NO");?>:</small > '+$("#receiptValue").text()+'</h3>';
+		strinfo+='<p><?php echo $tr->translate("STUDENT_NAME");?>: <strong class="text-primary ">'+$("#stuCodeValue").text()+' '+$("#stuNameValue").text()+' </strong> </p>';
+		strinfo+='<p><?php echo $tr->translate("DATE_PAY");?>: <strong class="text-primary ">'+$("#dateValue").text()+'</strong></p>';
+		
+		$( "#contentInfoPop" ).html( strinfo );
 	}
 	var recordid ='';
 	function gotoAction(){

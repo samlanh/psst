@@ -153,4 +153,69 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
     		$db->rollBack();
     	}
     }
+	
+	function getScoreTemporaryInfo($search = null)
+	{
+		$db = $this->getAdapter();
+
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname = 'subject_titleen';
+		$title = 'c.title_en';
+		$label = 'name_en';
+		$branch = "branch_nameen";
+		$month = "month_en";
+		if ($currentLang == 1) {
+			$colunmname = 'subject_titlekh';
+			$title = 'c.title';
+			$label = 'name_kh';
+			$branch = "branch_namekh";
+			$month = "month_kh";
+			
+		}
+		$sql = "
+			SELECT 
+				gt.*,
+				(SELECT $branch FROM `rms_branch` WHERE br_id=gt.branchId LIMIT 1) As branchName,
+				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=gt.academicYear LIMIT 1) AS acadecmicYear,
+				(SELECT group_code FROM rms_group WHERE id=gt.groupId limit 1 ) AS  groupCode,
+				(SELECT $colunmname  FROM rms_subject WHERE id=gt.subjectId limit 1 ) AS  subjectName,
+				$title AS title,
+				(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =gt.examType LIMIT 1) as examType,
+				
+				CASE
+					WHEN gt.examType = 2 THEN ''
+				ELSE (SELECT $month FROM `rms_month` WHERE id=gt.forMonth  LIMIT 1) 
+				END as for_month,
+				(SELECT teacher_name_kh FROM rms_teacher WHERE gt.teacherId=rms_teacher.id LIMIT 1 ) AS taecherName,
+				(SELECT COUNT(gd.id) FROM `rms_grading_detail_tmp` AS gd WHERE gd.gradingId = gt.id AND gd.totalGrading>0 LIMIT 1 )  AS studentAmount
+		";
+		$sql .= " FROM `rms_grading_tmp` AS gt
+					INNER JOIN `rms_exametypeeng` AS c ON gt.criteriaId = c.id WHERE 1  ";
+
+		$sql .= "  AND CASE WHEN (SELECT gd.isLock FROM `rms_grading` AS gd WHERE gd.status = 1 
+					AND gd.groupId=gt.groupId 
+					AND gd.settingEntryId = gt.settingEntryId  
+					AND gd.subjectId = gt.subjectId  
+					AND gd.teacherId = gt.teacherId 
+					AND gd.examType = gt.examType LIMIT 1
+					) IS NULL THEN c.criteriaType =1
+					ELSE  c.criteriaType =2 
+					END
+					AND CASE WHEN c.criteriaType =2  THEN (SELECT gd.isLock FROM `rms_grading` AS gd WHERE gd.status = 1 
+					AND gd.groupId=gt.groupId 
+					AND gd.settingEntryId = gt.settingEntryId  
+					AND gd.subjectId = gt.subjectId  
+					AND gd.teacherId = gt.teacherId 
+					AND gd.examType = gt.examType LIMIT 1
+					)!=1
+					ELSE '1'
+					END ";  
+
+		$where = '';
+		$where .= " AND gt.id =" . $search['gradingTmpId'];
+		$order = " ORDER BY id DESC ";
+		$order.= " LIMIT 1 ";
+		return $db->fetchRow($sql . $where . $order);
+	}
 }

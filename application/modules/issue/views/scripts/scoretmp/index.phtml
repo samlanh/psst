@@ -47,6 +47,30 @@
 		</div>
 	</div>
 </div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate('DELETE_RECORD_TITLE');?>'"  id="updateForm" style="width:350px;" >
+		<div class="card pb-10 pt-10 pl-10 pr-10">
+			<form id="voidFormInfo"  name="data" action="" dojoType="dijit.form.Form" method="post">
+				<div class="card-box">
+					
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12" id="contentInfoPop">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<p class="message-title text-primary"><?php echo $tr->translate('DO_YOU_WANT_TO_DELETE_THIS_RECORD');?></p>
+														
+							<input onclick="dijit.byId('updateForm').hide();" type="button" value="1" label="<?php echo $tr->translate('NO');?>" id="busyButton" dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-remove" /> 
+							<input onclick="gotoAction();" type="button" value="1" label="<?php echo $tr->translate('CONFIRM');?>" id="okButton" dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-ok" /> 
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ObjectStore");
@@ -168,25 +192,47 @@
 				var m = "clicked: " + key;
 				if(key=="delete"){
 					url='<?php echo $urlDelete;?>';
+					dijit.byId('updateForm').show();
 				}
-				gotoAction();
+				//gotoAction();
 			},
 			items: {
-			
 				"delete": {name: "<?php echo $tr->translate("DELETE");?>", icon: "delete"},
 			}
 		});
 	});
 	function setrowdata(index){
 		row = index;
+		getGetTmpGrading();
 	}
 	var recordid ='';
 	function gotoAction(){
-		if (confirm("<?php echo $tr->translate("Do you want to delete this record ?");?>")) {
-				window.location.href = url+row;
-		} else {
-			return false;
-		}
+		dijit.byId('updateForm').hide();
+		window.location.href = url+row;
+	}
+	
+	var urlTmpGrading = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoretmp','action'=>'getinfo')); ?>';
+	function getGetTmpGrading(){
+			dojo.xhrPost({
+				url: urlTmpGrading,
+				content:{
+					'gradingTmpId':row,
+					},
+				handleAs:"json",
+				load: function(data) {
+					var strinfo="";
+					if(data!=""){
+						strinfo+='<small >'+data.branchName+'</small>';
+						strinfo+='<h3 class="text-primary">'+data.title+' ('+data.subjectName+')</h3>';
+						strinfo+='<p><?php echo $tr->translate("STUDENT_GROUP");?>: <strong>'+data.groupCode+'</strong> '+data.examType+' '+data.for_month+'</p>';
+						strinfo+='<p><?php echo $tr->translate("TEACHER");?>: <strong>'+data.taecherName+'</strong></p>';
+					}
+					$( "#contentInfoPop" ).html( strinfo );
+					
+				},
+				error: function(err) {
+				}
+			});
 	}
 	
 </script>

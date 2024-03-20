@@ -73,8 +73,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 	}
 	public function studentGroupAction()
 	{
-		
-		
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
 			$search['issetGroup']=0;
@@ -105,7 +103,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
 		$this->view->studentUngroup = $group->getGroupBYStudentGrade($search);
 		
-	
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
@@ -124,17 +121,18 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		}
 		else{
 			$search=array(
-					'adv_search' 		=>'',
-					'academic_year' 	=>'',
-					'grade' 	=>'',
-					'session' 		=>'',
-					'branch_id'		=>0,
-					'degree'		=>0,
-					'study_status'=>-1,
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d'),
+				'adv_search' 		=>'',
+				'academic_year' 	=>'',
+				'grade' 	=>'',
+				'session' 		=>'',
+				'branch_id'		=>0,
+				'degree'		=>0,
+				'study_status'=>-1,
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d'),
 			);
 		}
+
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);

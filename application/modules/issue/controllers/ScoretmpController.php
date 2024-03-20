@@ -45,6 +45,7 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
+
 	}
 	
 	public function addAction(){
@@ -73,6 +74,21 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
+	
+	function getinfoAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbScoreTemorary();
+			$data['gradingTmpId'] = empty($data['gradingTmpId']) ? 0 : $data['gradingTmpId'];
+			$row = $db->getScoreTemporaryInfo($data);
+			print_r(Zend_Json::encode($row));
+			exit();
+			
+		}else{
+			print_r(Zend_Json::encode(false));
+			exit();
 		}
 	}
 }

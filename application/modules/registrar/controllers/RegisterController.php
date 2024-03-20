@@ -36,6 +36,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		}
     		$this->view->adv_search=$search;
     		$rs_rows= $db->getAllStudentRegister($search);
+			$this->view->row=$rs_rows;
     		
     		$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH","RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","FINE",

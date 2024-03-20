@@ -57,7 +57,6 @@ input.btn_borwse_image {
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require('dijit.form.NumberTextBox');
 </script>
-<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
 <div class="card">
 	<div class="card-content collapse show">
 		<form id='add_client' action="" enctype="multipart/form-data" dojoType="dijit.form.Form" method="post">
@@ -198,7 +197,9 @@ input.btn_borwse_image {
 		</form>
 	</div>
 </div>
+
 <script>
+
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

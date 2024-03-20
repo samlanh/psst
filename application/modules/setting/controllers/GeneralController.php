@@ -65,6 +65,7 @@ public function init()
 		$row['studyday_schedule'] = $db_gs->geLabelByKeyName('studyday_schedule');
 		
 		$row['criteriaLimitation'] = $db_gs->geLabelByKeyName('criteriaLimitation');
+		$row['footerScoreDocument'] = $db_gs->geLabelByKeyName('footerScoreDocument');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

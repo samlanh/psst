@@ -96,7 +96,16 @@
 		}
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.= $dbp->getSchoolOptionAccess('ide.schoolOption');
-		$sql.= $dbp->getDegreePermission('ide.items_id');
+		$userSelect = $dbp->getUserProfile();
+		if(!empty($userSelect['degreeList'])){
+			$degreeList = $userSelect['degreeList'];
+			$sql.="
+				AND 
+					CASE  WHEN ide.items_type != 1 THEN '1' 
+					ELSE ide.items_id IN (".$degreeList.") 
+					END
+				";
+		}
 		return $db->fetchRow($sql);
 	}
 	

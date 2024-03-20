@@ -128,7 +128,7 @@ function addRow() {
 		if(title!=1){
 			temp+='<tr class="head-td" align="center">';
 				temp+='<th><?php echo $tr->translate("DELETE");?></th>';
-				temp+='<th colspan="2"><?php echo $tr->translate("IMAGE");?></th>';
+				temp+='<th colspan="2"><?php echo $tr->translate("IMAGE")." 1150px x 570px";?></th>';
 			temp+='</tr>';
 			dojo.query("#head-title").append(temp);
 			title=1;
@@ -158,7 +158,7 @@ function initailize() {
 	if(title!=1){
 		temp+='<tr class="head-td" align="center">';
 			temp+='<th><?php echo $tr->translate("DELETE");?></th>';
-			temp+='<th colspan="2"><?php echo $tr->translate("IMAGE");?></th>';
+			temp+='<th colspan="2"><?php echo $tr->translate("IMAGE")." 1150px x 570px";?></th>';
 		temp+='</tr>';
 		dojo.query("#head-title").append(temp);
 		title=1;

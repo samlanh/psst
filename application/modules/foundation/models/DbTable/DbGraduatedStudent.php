@@ -10,7 +10,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 	}
 	public function getGraduateStudentbyId($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT gr.* FROM rms_graduated_student AS gr,rms_group as g WHERE g.id = gr.group_id AND id =".$id;
+		$sql = "SELECT gr.* FROM rms_graduated_student AS gr,rms_group as g WHERE g.id = gr.group_id AND gr.id =".$id;
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('gr.branch_id');
 		$sql.=$dbp->getDegreePermission('g.degree');
@@ -31,23 +31,27 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 		$colunmname='title_en';
 		$label="name_en";
 		$branch = "branch_nameen";
+		$titleCol = "title";
 		if ($currentLang==1){
 			$colunmname='title';
 			$label="name_kh";
 			$branch = "branch_namekh";
+			$titleCol = "titleKh";
 		}
 		
-		$sql = "SELECT
-		gs.id,
-		(SELECT $branch FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name,
-		g.group_code,
-		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic,
-		(SELECT rms_itemsdetail.$colunmname from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade,
-		(SELECT $label from rms_view where rms_view.type=4 and rms_view.key_code = g.session limit 1 ) as session,
-		(SELECT $label from rms_view where type=9 and key_code = gs.type LIMIT 1) as type,
-		gs.note,
-		gs.create_date,
-		(select first_name from rms_users where id = gs.user_id) as user
+		$sql = "
+		SELECT
+			gs.id
+			,(SELECT $branch FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch_name
+			,g.group_code
+			,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic
+			,(SELECT rms_itemsdetail.$colunmname from rms_itemsdetail where rms_itemsdetail.`id`=g.grade AND rms_itemsdetail.items_type=1 limit 1) as grade
+			
+			,(SELECT p.$titleCol FROM `rms_parttime_list` AS p WHERE p.id = g.session LIMIT 1) AS `session`
+			,(SELECT $label from rms_view where type=9 and key_code = gs.type LIMIT 1) as type
+			,gs.note
+			,gs.create_date
+			,(select first_name from rms_users where id = gs.user_id) as user
 		";
 		$sql.=$dbp->caseStatusShowImage("gs.status");
 		$sql.=" FROM

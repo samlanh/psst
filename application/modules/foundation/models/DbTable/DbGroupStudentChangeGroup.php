@@ -100,7 +100,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$where.=" AND g.grade=".$search['grade'];
 		}
 		if(!empty($search['partTimeList'])){
-			$where.=" AND g.session=".$search['partTimeList'];
+			$where.=" AND toG.session=".$search['partTimeList'];
 		}
 		$where.=$dbp->getAccessPermission('g.branch_id');
 		$where.=$dbp->getDegreePermission('g.degree');

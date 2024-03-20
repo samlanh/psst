@@ -395,33 +395,47 @@
 						</table>
 				<?php }?>
 				<?php if(!empty($this->row) || !empty($this->income) || !empty($this->expense)){
-						$final_total_income = $net_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
+						// $final_total_income = $net_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
+						$final_total_income = $paid_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
 					?>								
 						<table width="50%" style="margin:0 auto; white-space: nowrap; font-size: 13px;">
-							<tr>
-								<td><?php echo empty($fine)?'':$tr->translate("FINE");?></td>
-								<td><?php echo empty($fine)?'':'$ '.number_format($fine,2);?></td>
-								<td><?php echo $tr->translate("BALANCE");?></td>
-								<td><?php echo '$ '.number_format($balance,2);?></td>
-							</tr>
-							<tr>
+							
+							<!-- <tr>
 								<td><?php echo $tr->translate("NET_AMOUNT");?></td>
 								<td><?php echo '$ '.number_format($total_payment,2);?></td>
+
+								<td style="font-weight: bold;"></td>
+								<td style="color: blue; font-weight: bold; font-size: 14px;"></td>
+							
+							</tr> -->
+
+							<tr>
+								<td style="font-weight: bold;"><?php echo $tr->translate("PAID_AMOUNT");?></td>
+								<td style="color: blue; font-weight: bold; font-size: 14px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
+
+								<td><?php echo $tr->translate("BALANCE");?></td>
+								<td ><?php echo '$ '.number_format($balance,2);?></td>
+							</tr>
+
+							<tr>
 								<td><?php echo $tr->translate("OTHER_INCOME"); ?>&nbsp;</td>
-								<td style="color: #F00; font-weight: bold;"><?php echo '$ '.number_format($total_income_dollar,2);?></td>
+								<td style="color: blue; font-weight: bold;"><?php echo '$ '.number_format($total_income_dollar,2);?></td>
+
+								<td><?php echo $tr->translate("CREDIT_MEMO");?>(-)</td>
+								<td style="color: #F00; font-weight: bold;"><?php echo '$ '.number_format($credit_memo,2);?></td>
 							</tr>
 							<tr>
-								<td><?php echo $tr->translate("CREDIT_MEMO");?>(-)</td>
-								<td><?php echo '$ '.number_format($credit_memo,2);?></td>
+								<td><?php echo $tr->translate("FINE");?></td>
+								<td style="color: blue; font-weight: bold;"><?php echo empty($fine)?'$ 0.00':'$ '.number_format($fine,2);?></td>
+
 								<td><?php echo $tr->translate("OTHER_EXPENSE"); ?>&nbsp;</td>
 								<td style="color: #F00; font-weight: bold;"><?php echo '$ '.number_format($total_expense_dollar,2);?></td>
 							</tr>
 							<tr>
-								<td style="font-weight: bold;"><?php echo $tr->translate("PAID_AMOUNT");?></td>
-								<td style="color: blue; font-weight: bold; font-size: 14px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
 								<td style="font-weight: bold;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
-								<td
-									style="border-bottom: 5px double #000; color: blue; font-weight: bold; font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
+								<td style="border-bottom: 5px double #000; color: blue; font-weight: bold; font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
+								<td style="font-weight: bold;"></td>
+								<td style="color: blue; font-weight: bold; font-size: 14px;"></td>
 							</tr>
 							<tr>
 								<td colspan="4"><br /></td>

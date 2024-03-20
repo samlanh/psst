@@ -319,6 +319,21 @@ input[type=file] {
 														<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('CRITERIA_LIMIT_SETTING')?></a> 
 													</label>
 												</div>
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="glyphicon glyphicon-copy" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("FOOTER_SCORE_REPORT");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<label class="custom-switch  "> 
+														<input type="checkbox" <?php if(!empty($this->row['footerScoreDocument']['keyValue'])) { echo "checked"; }else{ echo ""; }?>  id="footerScoreDocument" name="footerScoreDocument"  class="custom-switch-input" > 
+														<span class="custom-switch-indicator custom-radius"></span> 
+														<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('AUTO_STAMP_AND_DATE')?></a> 
+													</label>
+												</div>
 											</div> 
 										</div> 
 									</div> 

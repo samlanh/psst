@@ -1894,7 +1894,10 @@ function getAllgroupStudyNotPass($action=null){
   	}
   	if(!empty($data['grade'])){//correct
   		if(!empty($data['serviceType']) AND $data['serviceType']==1){// SCHOOL FEE ONLY 
-  			$sql.=" AND  degreeId IN (SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." )";
+
+  			//$sql.=" AND  degreeId IN (SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." )";
+			
+			$sql.=" AND FIND_IN_SET((SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." ), degreeId) ";
   		}
   	}
   	
@@ -3924,7 +3927,7 @@ function getAllgroupStudyNotPass($action=null){
   						AND group_code!='' ";
 	  	$forfilterreport = empty($data['forfilter'])?null:$data['forfilter'];
 	  	if (!empty($forfilterreport)){
-	  			$sql.=" AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+	  			$sql.=" AND (g.is_pass=1 OR g.is_pass=2 OR g.is_pass=3) ";// group studying/completed
 	  	}else{
 	  		$sql.=" AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
 	  	}
@@ -4320,6 +4323,7 @@ function getAllgroupStudyNotPass($action=null){
 	
 	function getUserProfile(){
 		$userID = $this->getUserId();
+		$userID = empty($userID) ? 0 : $userID;
 		$db = $this->getAdapter();
 		$sql="SELECT u.* FROM rms_users AS u WHERE u.id=".$userID;
 		return $db->fetchRow($sql);

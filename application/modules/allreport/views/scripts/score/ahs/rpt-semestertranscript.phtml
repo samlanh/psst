@@ -309,15 +309,12 @@ function getCountSubjectLang($subjectArray,$subjectLang){
 				<tr>
 					<td colspan="3" align="center">
 						<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:16px;margin-bottom:10px;">
-							<?php $scoreTitle = ($scoreInfo['exam_type'] == 1) ? $scoreInfo['forMonthKhLabel'] : "SEMESTER " . $scoreInfo['for_semester']; 
-									$resultTitle=(!empty($scoreInfo['title_score']))?$scoreInfo['title_score'] :$scoreTitle;
-
-								?>
-								<?php 
-									$scoreTitle = ($scoreInfo['exam_type'] == 1) ? strtoupper($scoreInfo['forMonthEnLabel']) : "SEMESTER " . $scoreInfo['for_semester']; 
-									$resultTitleEn=(!empty($scoreInfo['title_score_en']))? strtoupper($scoreInfo['title_score_en']) :$scoreTitle;
-
-								?>
+							<?php 
+								$arrRomanNum = array(1 => "I", 2 => "II");
+								$romanNumber = empty($arrRomanNum[$scoreInfo['for_semester']]) ? "" : $arrRomanNum[$scoreInfo['for_semester']];
+								$resultTitle = 'ឆមាសទី' . $dbgb->getNumberInkhmer($scoreInfo['for_semester']);
+								$resultTitleEn = "SEMESTER " . $romanNumber;
+							?>
 							<span class="circleHeader">របាយការណ៍ប្រចាំ<?php echo $resultTitle;?></span>
 							<strong>REPORT FOR <?php echo $resultTitleEn;?></strong>
 						</div>

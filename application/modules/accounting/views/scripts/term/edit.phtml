@@ -1,6 +1,19 @@
 <?php 
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	 $dept = '';
+
+	if (!empty($this->row['degreeId'])) {
+		$dept =  explode(",", $this->row['degreeId']);
+	}
+	$array = array();
+	if (!empty($dept)) {
+		foreach ($dept as $ss) {
+			$array[$ss] = $ss;
+		}
+	}
+
 ?>
+
 <style>
 #table tr td{
 	border:1px solid #cccccc;
@@ -35,96 +48,58 @@
 			<div class="card-box">
 				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
-							<div class="card-body"> 
-								<div class="row"> 
-										<div class="col-md-12 col-sm-12 col-xs-12">
-											
-														<div class="d-flex "> 
-																<div class="settings-main-icon ">
-																
-																	<i class="glyphicon glyphicon-education"></i>
-																	
-																</div> 
-																<div class="col-md-10 col-sm-10 col-xs-12"> 
-																	<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
-																</div> 
-														</div>
-														<div class="col-md-12 col-sm-12 col-xs-12">
-																&nbsp; 
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
-																	<?php if(!empty($this->rsbranch)){ foreach ($this->rsbranch as $rs){?>	
-																		<option value="<?php echo $rs['id'];?>" <?php if ($this->row['branch_id']==$rs['id']){ echo 'selected="selected"';}?>><?php echo $rs['name'];?></option>
-																	<?php }}?>
-																</select>	
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input id="academic_year" />
-																<input type="hidden" id="id" name="id" value="<?php echo $this->row['id'];?>" />
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input id="degree" />
-															</div>
-														</div>
-														<!-- <div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="title" name="title" placeholder="<?php echo $tr->translate("TERM");?>" value="<?php echo $this->row['title']; ?>" type="text" required="required" >
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PERIOD");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<select dojoType="dijit.form.FilteringSelect" class="fullside" id="term" name="term" type="text">
-																	<?php if(!empty($this->term_option)){ foreach ($this->term_option as $key => $rs){?>	
-																		<option value="<?php echo  $key;?>" <?php if ($this->row['periodId']== $key){ echo 'selected="selected"';}?>><?php echo $rs;?></option>
-																	<?php }}?>
-																</select>	
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("START_DATE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input constraints='{datePattern:"dd/MM/yyyy"}' dojoType="dijit.form.DateTextBox"  class="fullside" id="start_date" name="start_date" value="<?php echo date("Y-m-d",strtotime($this->row['start_date'])); ?>" type="text" required="required" >
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input constraints='{datePattern:"dd/MM/yyyy"}' dojoType="dijit.form.DateTextBox"  class="fullside" id="end_date" name="end_date" value="<?php echo date("Y-m-d",strtotime($this->row['end_date'])); ?>" type="text" required="required" >
-															</div>
-														</div>
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note"  value="<?php echo $this->row['note']; ?>" type="text" >
-															</div>
-														</div> -->
-														<div class="form-group">
-															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
-															<div class="col-md-7 col-sm-7 col-xs-12">
-																<select dojoType="dijit.form.FilteringSelect" class="fullside" id="status" name="status" type="text">
-																	<option value="1" <?php if ($this->row['status']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE");?></option>
-																	<option value="0" <?php if ($this->row['status']==0){ echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE");?></option>
-																</select>
-															</div>
-														</div>
-												</div>
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex "> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-education"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
+										</div> 
+									</div>
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										&nbsp; 
+									</div>
+									<div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+												<select dojoType="dijit.form.FilteringSelect" class="fullside" onChange="getAllAcademicByBranch();" id="branch_id" name="branch_id" type="text">
+													<?php if(!empty($this->rsbranch)){ foreach ($this->rsbranch as $rs){?>	
+														<option value="<?php echo $rs['id'];?>" <?php if ($this->row['branch_id']==$rs['id']){ echo 'selected="selected"';}?>><?php echo $rs['name'];?></option>
+													<?php }}?>
+												</select>	
+											</div>
 										</div>
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input id="academic_year" />
+												<input type="hidden" id="id" name="id" value="<?php echo $this->row['id'];?>" />
+											</div>
+										</div>
+										<!-- <div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input id="degree" />
+											</div>
+										</div> -->
+										<div class="form-group">
+											<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS");?> </label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<select dojoType="dijit.form.FilteringSelect" class="fullside" id="status" name="status" type="text">
+													<option value="1" <?php if ($this->row['status']==1){ echo 'selected="selected"';}?>><?php echo $tr->translate("ACTIVE");?></option>
+													<option value="0" <?php if ($this->row['status']==0){ echo 'selected="selected"';}?>><?php echo $tr->translate("DEACTIVE");?></option>
+												</select>
+											</div>
+										</div>
+									</div>
 								</div>
 						</div>
-
+					</div>
 				</div>
-				<div class="col-md-8 col-sm-8 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 							<div class="card-body"> 
 								<div class="row"> 
@@ -143,18 +118,95 @@
 											<div class="col-md-12 col-sm-12 col-xs-12">
 														&nbsp; 
 											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.ValidationTextBox" class="fullside" id="title" name="title" placeholder="<?php echo $tr->translate("TERM");?>" value="<?php echo $this->row['title']; ?>" type="text" required="required" >
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PERIOD");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<select dojoType="dijit.form.FilteringSelect" class="fullside" id="term" name="term" type="text">
+														<?php if(!empty($this->term_option)){ foreach ($this->term_option as $key => $rs){?>	
+															<option value="<?php echo  $key;?>" <?php if ($this->row['periodId']== $key){ echo 'selected="selected"';}?>><?php echo $rs;?></option>
+														<?php }}?>
+													</select>	
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("START_DATE");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<input constraints='{datePattern:"dd/MM/yyyy"}' dojoType="dijit.form.DateTextBox"  class="fullside" id="start_date" name="start_date" value="<?php echo date("Y-m-d",strtotime($this->row['start_date'])); ?>" type="text" required="required" >
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<input constraints='{datePattern:"dd/MM/yyyy"}' dojoType="dijit.form.DateTextBox"  class="fullside" id="end_date" name="end_date" value="<?php echo date("Y-m-d",strtotime($this->row['end_date'])); ?>" type="text" required="required" >
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<input dojoType="dijit.form.TextBox" class="fullside" id="note" name="note"  value="<?php echo $this->row['note']; ?>" type="text" >
+												</div>
+											</div>
 
-											<table class="collape tablesorter" id="table_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
+											<!-- <table class="collape tablesorter" id="table_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
 												<tr id="head-title" class="head-td" align="center"></tr>
 											</table>
 											<input type="hidden" name="identity" id="identity" dojoType="dijit.form.TextBox" value="" >
 											<input type="button" label="<?php echo $tr->translate('ADD_TERM');?>" dojoType="dijit.form.Button" 
-											class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addRow();" />
+											class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addRow();" /> -->
 										</div>
 								</div>
 							</div>
 					</div>
+				</div>
+				<div id="degreee" class="col-md-3 col-sm-3 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex">
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE"); ?></p>
+										</div>
+									</div>
+									<br />
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all" name="check_all">
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL'); ?>
+										</label>
+									</div>
+									<div class="form-group">
+										<ul class="optListRow">
+											<?php
+											if (!empty($this->faculty)) foreach ($this->faculty as $rs) {
+											?>
+												<li class="opt-items">
+													<div class="custom-control custom-checkbox">
+														<input <?php if (in_array($rs['id'], $array)) {
+																	echo "checked";
+																} ?> type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id']; ?>" value="<?php echo $rs['id']; ?>" name="selector[]">
+														<label class="custom-control-label" for="depts<?php echo $rs['id']; ?>">
+															<?php echo $rs['name']; ?>
+														</label>
+													</div>
+												</li>
 
+											<?php } ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -193,22 +245,22 @@
 				academic_year = dijit.byId('academic_year').get('value');
 			}
 		}, "academic_year");
-		new dijit.form.FilteringSelect({
-			store: dept_store,
-			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: true,
-			id: "degree",
-			name: "degree",           
-			class: "fullside", 
-			placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
-			onChange: function() {  
+		// new dijit.form.FilteringSelect({
+		// 	store: dept_store,
+		// 	queryExpr: "*${0}*",
+		// 	autoComplete: false,                     
+		// 	required: true,
+		// 	id: "degree",
+		// 	name: "degree",           
+		// 	class: "fullside", 
+		// 	placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
+		// 	onChange: function() {  
 				
-			}
-		}, "degree");	
+		// 	}
+		// }, "degree");	
 
 		getAllAcademicByBranch("<?php echo $this->row['academic_year']?>");
-		getAllDegreeByBranch("<?php echo $this->row['degreeId']?>");
+	//	getAllDegreeByBranch("<?php echo $this->row['degreeId']?>");
 		getTermOption();
 		initailize();
 	});
@@ -232,33 +284,33 @@
 	
 	}
 
-	url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
-	function getAllDegreeByBranch(old_data){
-		dijit.byId('degree').reset();
-		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('degree').set('store',dept_store);  
-			dijit.byId('branch_id').focus();
-			return false;
-		}
-		dojo.xhrPost({
-			url: url_getdegree,
-			content:{
-				'branch_id':branch_id
-				},
-			handleAs:"json",
-			load: function(data) {
-				dept_store  = getDataStorefromJSON('id','name', data);
-				dijit.byId('degree').set('store',dept_store); 
-				if(old_data!=null){
-				   dijit.byId('degree').attr('value',old_data);
-				 }  
-			},
-			error: function(err) {
-			}
-		});
-	}
+	// url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
+	// function getAllDegreeByBranch(old_data){
+	// 	dijit.byId('degree').reset();
+	// 	branch_id = dijit.byId('branch_id').get('value');
+	// 	if(branch_id=='' || branch_id==-1){
+	// 		var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	// 		dijit.byId('degree').set('store',dept_store);  
+	// 		dijit.byId('branch_id').focus();
+	// 		return false;
+	// 	}
+	// 	dojo.xhrPost({
+	// 		url: url_getdegree,
+	// 		content:{
+	// 			'branch_id':branch_id
+	// 			},
+	// 		handleAs:"json",
+	// 		load: function(data) {
+	// 			dept_store  = getDataStorefromJSON('id','name', data);
+	// 			dijit.byId('degree').set('store',dept_store); 
+	// 			if(old_data!=null){
+	// 			   dijit.byId('degree').attr('value',old_data);
+	// 			 }  
+	// 		},
+	// 		error: function(err) {
+	// 		}
+	// 	});
+	// }
 
 
 	function getTermOption(){
@@ -368,4 +420,12 @@ function initailize(){
 	dijit.byId('remark_'+col).attr('value','<?php echo $rs['note']?>');
 	<?php } }?>
 }
+
+	function checkall() {
+		if ($('#check_all').is(':checked')) {
+			$(".checkbox").prop('checked', true);
+		} else {
+			$(".checkbox").prop('checked', false);
+		}
+	}
 </script>

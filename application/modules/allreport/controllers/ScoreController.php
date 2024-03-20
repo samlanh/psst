@@ -226,6 +226,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		} else {
 			
 			$row = $db->getScoreExamByID($id);
+		//	print_r($row); exit();
 			$search = array(
 				'group' => $row['group_id'],
 				'study_year' => $row['for_academic_year'],
@@ -240,7 +241,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		}
 		$this->view->search = $search;
 		
-		$studentgroup = $db->getStudentScoreResult($search, $id);
+		$studentgroup = $db->getStudentScoreResult($search, $id, 2);
 		$this->view->studentgroup = $studentgroup;
 
 		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);

@@ -205,9 +205,11 @@
                		 }},
 
 					"scoreresultSemester": { name: "<?php echo $tr->translate("SCORE_RESULT_SEMESTER");?>", icon: "fa-file-text-o",disabled: function() {
+                  	  return disabledSmester;
+               		 }},
+					"scoreresult": { name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o",disabled: function() {
                   	  return disabled;
                		 }},
-					"scoreresult": {name: "<?php echo $tr->translate("SCORE_RESULT");?>", icon: "fa-file-text-o"},
 					"scoredetail": {name: "<?php echo $tr->translate("SCORE_DETAIL");?>", icon: "fa-file-text-o"},
 					"outstanding": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", icon: "fa-sitemap",},
 					"outstandingNophoto": {name: "<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>", icon: "fa-sitemap",},
@@ -216,14 +218,13 @@
 		
 	function setrowdata(index){
 		row = index;
-		checkSemsesterRecord(index);
-		//checkAnnaulRecord(index);
+		checkResultRecord(index);
 	}
 	var recordid ='';
 	function gotoAction(){
 		window.open(url+row, '_blank');
 	}
-	function checkSemsesterRecord(index){
+	function checkResultRecord(index){
 		urlIsSemester = '<?php echo $this->url(array('module'=>'issue','controller'=>'score','action'=>'get-issemster'));?>';
 		dojo.xhrPost({
 			url: urlIsSemester,
@@ -232,16 +233,19 @@
 			},
 			handleAs:"json",
 			load: function(dataEE) {
-				// alert(dataEE.semester);
-				// alert(dataEE.annual);
+				
 			    if(dataEE.semester==true){
-					disabled = false;
+					disabledSmester = false;
 					disabledAnnaul = true;
+					disabled = true;
 				}else if(dataEE.annual==true){
-					disabled = true;
 					disabledAnnaul = false;
-				}else{
 					disabled = true;
+					disabledSmester = true;
+				
+				}else{
+					disabled = false;
+					disabledSmester = true;
 					disabledAnnaul = true;
 				}
 				$.contextMenu('update');

@@ -2766,7 +2766,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN s.exam_type = 2 THEN s.for_semester
-					ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+						ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					
 					,CASE
@@ -2800,6 +2800,17 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as averagePass
 					,CASE 
 						WHEN s.exam_type = 2 THEN  
+							FIND_IN_SET( 
+								sm.overallAssessmentSemester, 
+								(
+									SELECT GROUP_CONCAT( smSecond.overallAssessmentSemester ORDER BY overallAssessmentSemester DESC )
+									FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
+									sSecond.`id`=smSecond.`score_id`
+									AND sSecond.group_id= s.`group_id`
+									AND sSecond.id=s.`id`
+								)
+							)
+						WHEN s.exam_type = 3 THEN  
 							FIND_IN_SET( 
 								sm.overallAssessmentSemester, 
 								(
@@ -3040,7 +3051,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				,(SELECT rms_items.pass_average FROM `rms_items` WHERE rms_items.id=g.degree AND  rms_items.type=1 LIMIT 1) as averagePass
 				
 				,CASE 
-					WHEN s.exam_type = 2 THEN  
+					WHEN s.exam_type != 1 THEN  
 						FIND_IN_SET( 
 							sm.overallAssessmentSemester, 
 							(

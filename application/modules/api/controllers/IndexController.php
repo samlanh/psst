@@ -157,6 +157,8 @@ class Api_IndexController extends Zend_Controller_Action
 				
 			}else if ($GetData['url']=="studentAchievement"){
     			$_dbAction->getStudentAchievementAction($GetData);
+			}else if ($GetData['url']=="checkingStatus"){
+    			$_dbAction->getSystemStatusAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);
@@ -279,7 +281,8 @@ class Api_IndexController extends Zend_Controller_Action
 		$scoreInfo = $resultData['scoreInfo'];
 		if($scoreInfo['exam_type']==2){
 			$resultData = $dbscore->getTranscriptSemesterExam($data);
-			
+		}else if($scoreInfo['exam_type']==3){
+			$resultData = $dbscore->getTranscriptAnnaulExam($data);
 		}
 		
 	   	$this->view->resultData = $resultData;

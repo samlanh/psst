@@ -128,6 +128,11 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     				change_type=$type
     				and status=1 
     		";
+
+		$dbp = new Application_Model_DbTable_DbGlobal();
+    	$sql.=$dbp->getAccessPermission("branch_id");
+    	$sql.=$dbp->getDegreePermission('degree');
+
     	return $db->fetchAll($sql);
     }
     

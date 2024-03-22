@@ -56,7 +56,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->groupByBranchAndSchool = $group->getAllStudentGroupbyBranchAndSchoolOption($search);
 		$this->view->search=$search;
 		
-		print_r($group->getAllStudentGroupbyBranchAndSchoolOption($search));
+		
 		$searchSS=array(
 				'branch_id'		=>1,
 			);

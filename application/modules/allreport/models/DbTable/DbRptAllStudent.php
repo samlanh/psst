@@ -83,6 +83,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('gds.degree');
+
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
@@ -183,6 +185,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+		$where.=$dbp->getDegreePermission('gds.degree');
+    	
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;
@@ -251,14 +255,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			ds.itemType=1 
 			AND s.stu_id = ds.stu_id 
 			AND s.status=1 AND s.customer_type=1 AND ds.is_current=1 AND ds.is_maingrade=1 ';
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('s.branch_id');
-    	   	
+   	
     	$order=" GROUP BY s.branch_id,(SELECT rms_items.schoolOption FROM rms_items WHERE rms_items.id=ds.degree AND rms_items.type=1 LIMIT 1)  
 			ORDER BY s.stu_id,ds.degree,ds.grade,ds.academic_year DESC ";
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+
     	if(empty($search)){
     		return $db->fetchAll($sql.$where.$order);
     	}
@@ -737,6 +740,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$where .=" AND ".$to_date;
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission('s.branch_id');
+    	$where.=$dbp->getDegreePermission('gds.degree');
     	
     	$order="  ORDER BY gds.academic_year DESC,gds.degree ASC,gds.grade DESC,gds.session ASC ";
     	if(empty($search)){
@@ -1264,6 +1268,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	
     	$where.=$dbp->getAccessPermission("s.branch_id");
+    	$where.=$dbp->getDegreePermission("gds.degree");
     	$order=" ORDER BY sd.date_end DESC, sd.stu_id ASC";
     	return $db->fetchAll($sql.$where.$order);
     }

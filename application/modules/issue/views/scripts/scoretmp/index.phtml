@@ -226,6 +226,7 @@
 						strinfo+='<h3 class="text-primary">'+data.title+' ('+data.subjectName+')</h3>';
 						strinfo+='<p><?php echo $tr->translate("STUDENT_GROUP");?>: <strong>'+data.groupCode+'</strong> '+data.examType+' '+data.for_month+'</p>';
 						strinfo+='<p><?php echo $tr->translate("TEACHER");?>: <strong>'+data.taecherName+'</strong></p>';
+						strinfo+='<p><?php echo $tr->translate("CREATE_DATE");?>: <strong>'+data.createDate+'</strong></p>';
 					}
 					$( "#contentInfoPop" ).html( strinfo );
 					

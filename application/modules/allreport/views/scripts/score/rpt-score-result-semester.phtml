@@ -1452,6 +1452,11 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			document.getElementById("stamp").checked = false;
 			stampDisplay();
 			var hideStampSetting = document.getElementById("hideStampSetting");
+			var teacher = document.getElementById("teachersigature");
+			var administrator = document.getElementById("administrator");
+
+			teacher.style.display = "block";
+			administrator.style.display = "block";
 			hideStampSetting.style.display = "none";
 
 		<?php } else { ?>

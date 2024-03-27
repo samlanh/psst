@@ -762,7 +762,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 				<div class="card-box" id="hideStampSetting">
 					<label class="control-label custom-switch float-end ">
 						<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP"); ?></a>
-						<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="dutySetting()" checked>
+						<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked>
 						<span class="custom-switch-indicator custom-radius switch-status"></span>
 					</label>
 				</div>
@@ -1029,6 +1029,11 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			document.getElementById("stamp").checked = false;
 			stampDisplay();
 			var hideStampSetting = document.getElementById("hideStampSetting");
+			var teacher = document.getElementById("teachersigature");
+			var administrator = document.getElementById("administrator");
+
+			teacher.style.display = "block";
+			administrator.style.display = "block";
 			hideStampSetting.style.display = "none";
 
 		<?php } else { ?>

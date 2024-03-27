@@ -10,6 +10,8 @@ $frm =  $this->form_search;
 $db = new Allreport_Model_DbTable_DbRptStudentScore();
 $dbgb = new Application_Model_DbTable_DbGlobal();
 
+$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
+
 //print_r($this->studentgroup);
 
 $month = array(
@@ -846,7 +848,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 						</tr>
 		</table>
 	</div>
-	<div class="card-box">
+	<div class="card-box" id="hideStampSetting">
 		<label class="control-label custom-switch float-midd ">
 			<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP"); ?></a>
 			<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked>
@@ -948,7 +950,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			dijit.byId('branch_id').set('value', '<?php echo $this->search['branch_id'] ?>');
 		<?php } ?>
 		displaymonth();
-		stampDisplay();
+		dutySetting();
 	});
 	url_getacademic = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'get-academicyear')); ?>';
 	var oldBranch = "<?php echo $this->search['branch_id'] ?>";
@@ -1012,6 +1014,22 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 			$("#semester").css("display", "block");
 			$("#month").css("display", "none");
 		}
+	}
+
+	function dutySetting() {
+		<?php if ($footerScoreDocument == 0) { ?>
+
+			document.getElementById("stamp").checked = false;
+			stampDisplay();
+			var hideStampSetting = document.getElementById("hideStampSetting");
+			var teacher = document.getElementById("teachersigature");
+			teacher.style.display = "block";
+			hideStampSetting.style.display = "none";
+
+		<?php } else { ?>
+			document.getElementById("stamp").checked = true;
+			stampDisplay();
+		<?php } ?>
 	}
 
 	function stampDisplay() {

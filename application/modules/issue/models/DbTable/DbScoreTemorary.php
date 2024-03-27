@@ -9,7 +9,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	}
 
-	
+
 
 	function getAllScoreTemporary($search = null)
 	{
@@ -28,7 +28,6 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 			$label = 'name_kh';
 			$branch = "branch_namekh";
 			$month = "month_kh";
-			
 		}
 		$sql = "SELECT gt.id,
 			(SELECT $branch FROM `rms_branch` WHERE br_id=gt.branchId LIMIT 1) As branchName,
@@ -69,7 +68,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 					AND gd.examType = gt.examType LIMIT 1
 					)!=1
 					ELSE '1'
-					END ";  
+					END ";
 
 		$where = '';
 		$from_date = (empty($search['start_date'])) ? '1' : " gt.createDate >= '" . $search['start_date'] . " 00:00:00'";
@@ -77,17 +76,12 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		$where = " AND " . $from_date . " AND " . $to_date;
 
 		if (!empty($search['adv_search'])) {
-			// $s_where = array();
-			// $s_search = addslashes(trim($search['adv_search']));
-			// $s_where[] = " s.title_score LIKE '%{$s_search}%'";
-			// $s_where[] = " s.note LIKE '%{$s_search}%'";
-			// $where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
-	
+
 		if (!empty($search['academic_year'])) {
 			$where .= " AND gt.academicYear =" . $search['academic_year'];
 		}
-	
+
 		if (!empty($search['group'])) {
 			$where .= " AND `gt`.`groupId` =" . $search['group'];
 		}
@@ -117,25 +111,26 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		(SELECT c.criteriaType FROM  `rms_exametypeeng` AS c WHERE c.id = s.`criteriaId` LIMIT 1 ) AS criteriaType
 		FROM rms_grading_tmp AS s WHERE s.id =$score_id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql .= $dbp->getAccessPermission('branch_id');
+		$sql .= $dbp->getAccessPermission('branchId');
 		return $db->fetchRow($sql);
 	}
-	function deleteTmpScore($id){
-    	$db = $this->getAdapter();
-    	$db->beginTransaction();
+	function deleteTmpScore($id)
+	{
+		$db = $this->getAdapter();
+		$db->beginTransaction();
 
-    	try{
+		try {
 			$rs = $this->getScoreTmpById($id);
 
-	    	$this->_name="rms_grading_tmp";
-	    	$where=" id = $id";
-	    	$this->delete($where);
+			$this->_name = "rms_grading_tmp";
+			$where = " id = $id";
+			$this->delete($where);
 
 			$this->_name = 'rms_grading_detail_tmp';
 			$this->delete("gradingId=" . $id);
 
-			if($rs['criteriaType']==2){  // EXAM
-				
+			if ($rs['criteriaType'] == 2) {  // EXAM
+
 				$this->_name = 'rms_grading';
 				$this->delete("gradingTmpId=" . $id);
 
@@ -146,14 +141,14 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 				$this->delete("gradingTmpId=" . $id);
 			}
 
-	    	$db->commit();
-    	}catch(exception $e){
-    		Application_Form_FrmMessage::message("Application Error");
-    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    		$db->rollBack();
-    	}
-    }
-	
+			$db->commit();
+		} catch (exception $e) {
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+		}
+	}
+
 	function getScoreTemporaryInfo($search = null)
 	{
 		$db = $this->getAdapter();
@@ -171,7 +166,6 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 			$label = 'name_kh';
 			$branch = "branch_namekh";
 			$month = "month_kh";
-			
 		}
 		$sql = "
 			SELECT 
@@ -187,6 +181,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 					WHEN gt.examType = 2 THEN ''
 				ELSE (SELECT $month FROM `rms_month` WHERE id=gt.forMonth  LIMIT 1) 
 				END as for_month,
+				gt.createDate,
 				(SELECT teacher_name_kh FROM rms_teacher WHERE gt.teacherId=rms_teacher.id LIMIT 1 ) AS taecherName,
 				(SELECT COUNT(gd.id) FROM `rms_grading_detail_tmp` AS gd WHERE gd.gradingId = gt.id AND gd.totalGrading>0 LIMIT 1 )  AS studentAmount
 		";
@@ -210,12 +205,12 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 					AND gd.examType = gt.examType LIMIT 1
 					)!=1
 					ELSE '1'
-					END ";  
+					END ";
 
 		$where = '';
 		$where .= " AND gt.id =" . $search['gradingTmpId'];
 		$order = " ORDER BY id DESC ";
-		$order.= " LIMIT 1 ";
+		$order .= " LIMIT 1 ";
 		return $db->fetchRow($sql . $where . $order);
 	}
 }

@@ -1,190 +1,277 @@
-<?php 
+<?php
 $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$countlang = count($this->lang);
 ?>
+<style>
+    .note-editable {
+        min-height: 150px !important;
+    }
+</style>
 
-<title><?php echo $tr->translate("INTRODUCTION_SETTING");?></title>
+<title><?php echo $tr->translate("INTRODUCTION_SETTING"); ?></title>
 <div class="card pb-10 pt-10 pl-10 pr-10">
-	<div class="card-content collapse show">
-		<div class="card-box">
-        	<div class="col-sm-12 border-botom">
-		    	<div class="col-sm-8 pd-0">
-		    		<h4 class="m-b-0"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('INTRODUCTION_SETTING');?></h4>
-	    		</div>
-	    		<div class="col-sm-4 text-right">
-	    		</div>
-    		</div>
-    	</div>
-    	<form action="" method="post" dojoType="dijit.form.Form" enctype="multipart/form-data" >
-    		<script type="dojo/method" event="onSubmit">			
-				if(this.validate()) {
-					loadingBlock();
-					return true;
-				}else{
-					return false;
-				}
-			</script>
-    	<div class="card-box">
-    		<div class="col-md-12 col-sm-12 col-xs-12">
-    			<div class="form-group">
-                   <label class="control-label col-md-4 col-sm-4 col-xs-12" >
-                   </label>
-                   <div class="col-md-4 col-sm-4 col-xs-12">
-                   		<strong><?php echo $tr->translate("KHMER");?></strong>
-                   </div>
-                   <div class="col-md-4 col-sm-4 col-xs-12">
-                   		<strong><?php echo $tr->translate("ENGLISH");?></strong>
-                   </div>
+    <div class="card-content collapse show">
+        <div class="card-box">
+            <div class="col-sm-12 border-botom">
+                <div class="col-sm-8 pd-0">
+                    <h4 class="m-b-0"><i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('INTRODUCTION_SETTING'); ?></h4>
                 </div>
-                <div class="form-group">
-                   <label class="control-label col-md-4 col-sm-4 col-xs-12" ><?php echo $tr->translate("INTRODUCTION");?> :
-                   </label>
-                   <div class="col-md-4 col-sm-4 col-xs-12">
-                   		<input type="text" value="<?php echo $this->row['lbl_introduction']['keyValue']?>"  name="lbl_introduction" id="lbl_introduction" dojoType="dijit.form.Textarea" class="fullside"  />
-                   </div>
-                   <div class="col-md-4 col-sm-4 col-xs-12">
-                   		<input type="text" value="<?php echo $this->row['lbl_introduction']['keyValueEn']?>"  name="lbl_introductionEn" id="lbl_introductionEn" dojoType="dijit.form.Textarea" class="fullside"  />
-                   </div>
+                <div class="col-sm-4 text-right">
                 </div>
-                <div class="form-group">
-                   <label class="control-label col-md-4 col-sm-4 col-xs-12" ><?php echo $tr->translate("INTRODUCTION");?>
-                   </label>
-                   <div class="col-md-4 col-sm-4 col-xs-12">
-                   		<input type="text" value="<?php echo $this->row['lbl_introduction_i']['keyValue']?>"  name="lbl_introduction_i" id="lbl_introduction_i" dojoType="dijit.form.Textarea" class="fullside"  />
-                   </div>
-                  <div class="col-md-4 col-sm-4 col-xs-12">
-                   		<input type="text" value="<?php echo $this->row['lbl_introduction_i']['keyValueEn']?>"  name="lbl_introduction_iEn" id="lbl_introduction_iEn" dojoType="dijit.form.Textarea" class="fullside"  />
-                   </div>
-                </div>
-                <div class="form-group">
-	              	   <label class="control-label col-md-4 col-sm-4 col-xs-12" ><?php echo $tr->translate("VIDEO_INTRO_HOWTOUSE");?>
-	                   </label>
-	                   <div class="col-md-4 col-sm-4 col-xs-12">
-	                   		<input type="text" value="<?php echo $this->row['lbl_videointro']['keyValue']?>"  name="lbl_videointro" id="lbl_videointro" dojoType="dijit.form.Textarea" class="fullside"  />
-	                   </div>
-	                   <div class="col-md-4 col-sm-4 col-xs-12">
-	                   		<input type="text" value="<?php echo $this->row['lbl_howtouse']['keyValue']?>"  name="lbl_howtouse" id="lbl_howtouse" dojoType="dijit.form.Textarea" class="fullside"  />
-	                   </div>
-		          </div>
-              	  <div class="form-group">
-		            <label class="control-label col-md-4 col-sm-4 col-xs-12" style=" vertical-align: top;"><?php echo $tr->translate("INTRODUCTION_IMAGE");?> </label>
-		            <div class="col-md-4 col-sm-4 col-xs-12 text-center" >
-		                	<?php 
-							$images = $this->baseUrl().'/images/noimage.jpg';
-							if (!empty($this->row['introduction_image']['keyValue'])){
-								if (file_exists(PUBLIC_PATH.'/images/newsevent/introduction_image/'.$this->row['introduction_image']['keyValue'])) {
-									$images = $this->baseUrl().'/images/newsevent/introduction_image/'.$this->row['introduction_image']['keyValue'];
-								}
-							}
-							?>
-							<div class="account-image" >
-								<div class="image-box">
-									<img id="profile_wiew" src="<?php echo $images;?>" alt=""  />
-								</div>
-								<div class="button_browse">
-								<div id='preview'></div>	
-									<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-									<input class="btn_borwse_image" type="file" id="images" name="images" />
-								</div>
-							</div>
-		               </div>
-		                <!-- <div class="col-md-4 col-sm-4 col-xs-12 clearfix"></div> -->
-		           </div>
             </div>
-            <div class="col-md-12 col-sm-12 col-xs-12">
+        </div>
+        <form action="" method="post" dojoType="dijit.form.Form" enctype="multipart/form-data">
+            <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+                    loadingBlock();
+                    return true;
+                } else {
+                    return false;
+                }
+            </script>
+            <div class="card-box">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card-blogform">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="d-flex">
+                                        <div class="settings-main-icon ">
+                                            <i class="glyphicon glyphicon-hand-right"></i>
+                                        </div>
+                                        <div class="col-md-8 col-sm-8 col-xs-12">
+                                            <p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("INSTRUCTION_INFO"); ?></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        &nbsp;
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("VIDEO_INTRO_HOWTOUSE"); ?>
+                                        </label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input type="text" value="<?php echo $this->row['lbl_videointro']['keyValue'] ?>" name="lbl_videointro" id="lbl_videointro" dojoType="dijit.form.Textarea" class="fullside" />
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <input type="text" value="<?php echo $this->row['lbl_howtouse']['keyValue'] ?>" name="lbl_howtouse" id="lbl_howtouse" dojoType="dijit.form.Textarea" class="fullside" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style=" vertical-align: top;"><?php echo $tr->translate("INTRODUCTION_IMAGE"); ?> </label>
+                                        <div class="col-md-4 col-sm-4 col-xs-12 text-center">
+                                            <?php
+                                            $images = $this->baseUrl() . '/images/noimage.jpg';
+                                            if (!empty($this->row['introduction_image']['keyValue'])) {
+                                                if (file_exists(PUBLIC_PATH . '/images/newsevent/introduction_image/' . $this->row['introduction_image']['keyValue'])) {
+                                                    $images = $this->baseUrl() . '/images/newsevent/introduction_image/' . $this->row['introduction_image']['keyValue'];
+                                                }
+                                            }
+                                            ?>
+                                            <div class="account-image">
+                                                <div class="image-box">
+                                                    <img id="profile_wiew" src="<?php echo $images; ?>" alt="" />
+                                                </div>
+                                                <div class="button_browse">
+                                                    <div id='preview'></div>
+                                                    <span>Upload <span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+                                                    <input class="btn_borwse_image" type="file" id="images" name="images" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="card-blogform">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <?php if ($countlang > 1) { ?>
+                                        <div class="card-box">
+                                            <ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+                                                <?php $alias = '';
+                                                foreach ($this->lang as $key => $rs) {
+                                                    $alias = str_replace(' ', '', $rs['title']); ?>
+                                                    <li class="nav-item <?php if ($key < 1) {
+                                                                            echo "active";
+                                                                        } ?>">
+                                                        <a class="nav-link " data-toggle="tab" href="<?php echo "#" . $alias; ?>" role="tab"><i class="fa fa-flag ml-2"></i> <?php echo $tr->translate(strtoupper($rs['title'])); ?></a>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($countlang > 1) { ?>
+                                        <div class="col-md-12">
+                                            <!-- Tab panels -->
+                                            <div class="tab-content vertical">
+                                                <?php $alias = '';
+                                                foreach ($this->lang as $key => $rs) {
+                                                    $alias = str_replace(' ', '', $rs['title']);
+
+                                                ?>
+                                                    <div class="tab-pane fade <?php if ($key < 1) {
+                                                                                    echo "active in";
+                                                                                } ?>" id="<?php echo $alias; ?>" role="tabpanel">
+
+                                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                            <?php if ($rs['id'] == 1) {  ?>
+
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate('CONTENT_' . strtoupper($rs['title'])) ?><span class="required">*</span>
+                                                                    </label>
+                                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                        <textarea class="ckeditor text_shape" name="lbl_introduction" id="lbl_introduction"><?php echo $this->row['lbl_introduction']['keyValue'] ?></textarea>
+                                                                    </div>
+                                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                        <textarea class="ckeditor text_shape" name="lbl_introduction_i" id="lbl_introduction_i"><?php echo $this->row['lbl_introduction_i']['keyValue'] ?></textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                            <?php } else if ($rs['id'] == 2) {  ?>
+
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate('CONTENT_' . strtoupper($rs['title'])) ?><span class="required">* </span>
+                                                                    </label>
+                                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                        <textarea class="ckeditor text_shape" name="lbl_introductionEn" id="lbl_introductionEn"><?php echo $this->row['lbl_introduction']['keyValueEn'] ?></textarea>
+                                                                    </div>
+                                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                        <textarea class="ckeditor text_shape" name="lbl_introduction_iEn" id="lbl_introduction_iEn"><?php echo $this->row['lbl_introduction_i']['keyValueEn'] ?></textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                            <?php  }  ?>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="col-md-12">
+                                            <?php $alias = '';
+                                            foreach ($this->lang as $key => $rs) {
+                                                $alias = str_replace(' ', '', $rs['title']);
+                                            ?>
+                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate('CONTENT_' . strtoupper($rs['title'])) ?><span class="required">*</span>
+                                                        </label>
+                                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                            <textarea class="ckeditor text_shape" name="lbl_introduction" id="lbl_introduction"><?php echo $this->row['lbl_introduction']['keyValue'] ?></textarea>
+                                                        </div>
+                                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                            <textarea class="ckeditor text_shape" name="lbl_introduction_i" id="lbl_introduction_i"><?php echo $this->row['lbl_introduction_i']['keyValue'] ?></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-    	</div>
-    	<div class="clearfix"></div>
-		    <div class="card-box">
-               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-               		 <input type="hidden" name="id" value="<?php echo $this->rs['code'];?>"  />
-		  			 <input type="submit" value="រក្សាទុក" label="រក្សាទុក" dojoType="dijit.form.Button"  iconClass="dijitEditorIcon dijitEditorIconSave"/> 
-	    		</div>
-	    	</div>
-		<div class="card-box">
-			<?php //echo $this->list;?>
-		</div>
-		</form>
-	</div>
+            <div class="clearfix"></div>
+            <div class="card-box">
+                <div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+                    <input type="hidden" name="id" value="<?php echo $this->rs['code']; ?>" />
+                    <input class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" type="submit" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE'); ?>" dojoType="dijit.form.Button" />
+                </div>
+            </div>
+            <div class="card-box">
+                <?php //echo $this->list;
+                ?>
+            </div>
+        </form>
+    </div>
 </div>
 <style>
-.image-box {
-    text-align: center;
-    width: 300px;
-    height: 230px;
-}
-.image-box img {
-        width: 100%;
-    height: 230px;
-}
+    .image-box {
+        text-align: center;
+        width: 300px;
+        height: 230px;
+    }
 
-.button_browse {
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    width: 101%;
-    height: 42px;
-    background: #fbf9f9;
-    border: 1px solid #e8e8e8;
-}
-.button_browse span {
-    line-height: 33px;
-    font-weight: 600;
-    cursor: pointer;
-}
-input.btn_borwse_image {
-    position: absolute;
-    width: 100%;
-    height: 38px;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    opacity: 0;
-    cursor: pointer;
-}
-.account-image {
-    border: solid 1px #eee;
-    width: 300px;
-    margin: 0 auto;
-}
+    .image-box img {
+        width: 100%;
+        height: 230px;
+    }
+
+    .button_browse {
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        width: 101%;
+        height: 42px;
+        background: #fbf9f9;
+        border: 1px solid #e8e8e8;
+    }
+
+    .button_browse span {
+        line-height: 33px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    input.btn_borwse_image {
+        position: absolute;
+        width: 100%;
+        height: 38px;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .account-image {
+        border: solid 1px #eee;
+        width: 300px;
+        margin: 0 auto;
+    }
 </style>
 <script>
-dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.Textarea");
 
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#profile_wiew').attr('src', e.target.result);
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#profile_wiew').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
         }
-        reader.readAsDataURL(input.files[0]);
     }
-}
-var maxSize = 0;
-$("#images").change(function(){
-	var iSize = ($("#images")[0].files[0].size / 1024); 
-    if (iSize / 1024 > 1) 
-    { 
-       if (((iSize / 1024) / 1024) > 1) 
-       { 
-           iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
-           alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
-     	   maxSize = 1;
-           return false;
-       }else{ 
-           iSize = (Math.round((iSize / 1024) * 100) / 100);
-           if(iSize>5){
-               alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
-         	   maxSize = 1;
-               return false;
-           }
-       } 
-    } 
-    else 
-    {
-       iSize = (Math.round(iSize * 100) / 100);
-       maxSize = 0;
-    }
-    maxSize = 0;
-    readURL(this);
-});
+    var maxSize = 0;
+    $("#images").change(function() {
+        var iSize = ($("#images")[0].files[0].size / 1024);
+        if (iSize / 1024 > 1) {
+            if (((iSize / 1024) / 1024) > 1) {
+                iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
+                alert('<?php echo $tr->translate("Image size more than 5Mb can not upload"); ?>');
+                maxSize = 1;
+                return false;
+            } else {
+                iSize = (Math.round((iSize / 1024) * 100) / 100);
+                if (iSize > 5) {
+                    alert('<?php echo $tr->translate("Image size more than 5Mb can not upload"); ?>');
+                    maxSize = 1;
+                    return false;
+                }
+            }
+        } else {
+            iSize = (Math.round(iSize * 100) / 100);
+            maxSize = 0;
+        }
+        maxSize = 0;
+        readURL(this);
+    });
 </script>

@@ -315,6 +315,8 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	   	
 	   	$dbp = new Application_Model_DbTable_DbGlobal();
 	   	$sql.=$dbp->getAccessPermission("g.branch_id");
+		$sql.=$dbp->getDegreePermission('g.degree');
+
 	   	$sql.="  LIMIT 1 ";
 	   	return $db->fetchRow($sql);
 	}

@@ -8,6 +8,7 @@ $db = new Allreport_Model_DbTable_DbRptStudentScore();
 $session_lang = new Zend_Session_Namespace('lang');
 $lang_id = $session_lang->lang_id;
 $dbgb = new Application_Model_DbTable_DbGlobal();
+$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
 
 $month = array(
 	"01" => "មករា",
@@ -1056,7 +1057,7 @@ $branchInfo = $this->branchInfo;
 				</div>
 			<?php } ?>
 		</div>
-		<div class="card-box" >
+		<div class="card-box" id="hideStampSetting" >
 			<label class="control-label custom-switch float-midd "> 
 				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
 				<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
@@ -1073,8 +1074,25 @@ $branchInfo = $this->branchInfo;
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 
 dojo.ready(function() {
-	stampDisplay();
+	dutySetting();
 });
+
+function dutySetting() {
+		<?php if ($footerScoreDocument == 0) { ?>
+
+			document.getElementById("stamp").checked = false;
+			stampDisplay();
+			var hideStampSetting = document.getElementById("hideStampSetting");
+			var teacher = document.getElementById("teachersigature");
+
+			teacher.style.display = "block";
+			hideStampSetting.style.display = "none";
+
+		<?php } else { ?>
+			document.getElementById("stamp").checked = true;
+			stampDisplay();
+		<?php } ?>
+	}
 
 function stampDisplay() {
   var checkBox = document.getElementById("stamp");

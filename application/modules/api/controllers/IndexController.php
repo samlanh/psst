@@ -157,8 +157,12 @@ class Api_IndexController extends Zend_Controller_Action
 				
 			}else if ($GetData['url']=="studentAchievement"){
     			$_dbAction->getStudentAchievementAction($GetData);
+				
+				
 			}else if ($GetData['url']=="checkingStatus"){
     			$_dbAction->getSystemStatusAction($GetData);
+			}else if ($GetData['url']=="specialFeature"){
+    			$_dbAction->getSpecialFeatureAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

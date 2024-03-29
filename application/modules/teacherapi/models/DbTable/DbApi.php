@@ -656,7 +656,6 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $newArray;
 			}
 			$row = empty($row) ? array() : $row;
-			print_r(count($row));exit();
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -2360,6 +2359,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						ELSE '".$nextDate."' 
 					END AS evaluationReturnDate
 					,(SELECT COUNT(DISTINCT(assD.studentId)) FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assd WHERE ass.id = assD.assessmentId AND ass.scoreId = sc.`id`  LIMIT 1) AS totalStudentEvaluated
+					,COALESCE((SELECT ass.isLock FROM rms_studentassessment AS ass WHERE ass.scoreId = sc.id LIMIT 1),'0') AS isLock
 			";
 			
 			$sql.=" FROM 
@@ -2654,7 +2654,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,ass.issueDate AS evaluationIssueDate
 					,ass.returnDate AS evaluationReturnDate
 					,(SELECT COUNT(DISTINCT(assD.studentId)) FROM `rms_studentassessment_detail` AS assd WHERE ass.id = assD.assessmentId AND ass.scoreId = sc.`id`  LIMIT 1) AS totalStudentEvaluated
-					
+					,ass.isLock AS isLock
 			";
 			
 			$sql.=" FROM 

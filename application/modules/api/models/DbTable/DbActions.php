@@ -1822,12 +1822,46 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 	
 	public function getSystemStatusAction($_data){
 		try{
+			$_data['currentLang'] = empty($_data['currentLang'])?1:$_data['currentLang'];
+			
+			$title = "ប្រព័ន្ធកំពុងធ្វើការជួសជុល និងថែទាំ";
+			$desc = "យើងខ្ញុំកំពុងរៀបចំ និងកែសម្រួលលើប្រព័ន្ធ កម្មវិធីរបស់យើងនឹងត្រឡប់មកវិញឆាប់ៗនេះ។ សូមអរគុណសម្រាប់ការអត់ធ្មត់រង់ចាំ។";
+			if($_data['currentLang']==2){
+				$title = "System Maintenance";
+				$desc = "We are currently updating and improving our application. We expect to be back shortly. Thank you for your patience.";
+			}
 			$row = array();
-			$row['value'] = array("status"=>1);
+			$row['value'] = array("status"=>1,"title"=>$title,"description"=>$desc);
 			$arrResult = array(
 				"result" => $row['value'],
 				"code" => "SUCCESS",
 			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
+	public function getSpecialFeatureAction($_data){
+		try{
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->getSpecialFeature($_data);
+			if ($row['status']){
+				$arrResult = array(
+					"result" => $row['value'],
+					"code" => "SUCCESS",
+				);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){

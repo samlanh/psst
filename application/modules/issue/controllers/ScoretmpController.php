@@ -18,6 +18,10 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 						'adv_search'=>'',
 						'branch_id' => '',
 						'group' => '',
+						'teacher'=>'' ,
+						'subjectId'=>'' ,
+						'criteriaId'=>'',
+
 						'academic_year'=> '',
 						'exam_type'=>-1,
 						'for_semester'=>-1,
@@ -88,6 +92,16 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 			
 		}else{
 			print_r(Zend_Json::encode(false));
+			exit();
+		}
+	}
+	function getsubjectlistAction(){
+		$this->_helper->layout()->disableLayout();
+		if($this->getRequest()->isPost()){
+			$dbExternal = new Application_Model_DbTable_DbGlobal();
+			$data = $this->getRequest()->getPost();
+			$row=$dbExternal->getAllSubjectName($data);
+			print_r(Zend_Json::encode($row));
 			exit();
 		}
 	}

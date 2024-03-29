@@ -2845,7 +2845,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.stop_type NOT IN (1,2) AND gds.is_maingrade=1 LIMIT 1) AS amountStudent
 					
 					,CASE 
-						WHEN s.exam_type = 2 THEN  
+						WHEN s.exam_type !=1 THEN  
 							(SELECT 
 								mstd.$mentionGradeTitle
 								FROM `rms_metionscore_setting_detail` AS mstd,
@@ -2870,7 +2870,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							)
 					END AS mentionGradeTitle
 					,CASE 
-						WHEN s.exam_type = 2 THEN  
+						WHEN s.exam_type !=1 THEN  
 							(SELECT 
 								mstd.metion_grade
 								FROM `rms_metionscore_setting_detail` AS mstd,
@@ -3128,7 +3128,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					) AS StGroupconcateKH)
 				),'0') AS rankingInChinese
 					
-				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 ) AS amountStudent
+				,(SELECT COUNT(gds.gd_id)  FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.is_maingrade=1 AND gds.stop_type NOT IN (1,2) ) AS amountStudent
 				,(SELECT 
 						mstd.$mentionGradeTitle
 						FROM `rms_metionscore_setting_detail` AS mstd,
@@ -5686,6 +5686,34 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	}
 			
 			$row = $db->fetchAll($sql.$limit);
+			
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	function getSpecialFeature($_data){
+		$db = $this->getAdapter();
+		try{
+			$sql="
+				SELECT 
+					sf.*
+				FROM 
+					`mobile_special_feature` AS sf
+				WHERE sf.status = 1
+			";
+			$sql.=" ORDER BY sf.ordering ASC ";
+			$row = $db->fetchAll($sql);
 			
 			$result = array(
 				'status' =>true,

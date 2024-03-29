@@ -85,6 +85,17 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		if (!empty($search['group'])) {
 			$where .= " AND `gt`.`groupId` =" . $search['group'];
 		}
+
+		if (!empty($search['teacher'])) {
+			$where .= " AND gt.teacherId  =" . $search['teacher'];
+		}
+		if (!empty($search['subjectId'])) {
+			$where .= " AND gt.subjectId   =" . $search['subjectId'];
+		}
+		if (!empty($search['criteriaId'])) {
+			$where .= " AND gt.criteriaId =" . $search['criteriaId'];
+		}
+
 		if (!empty($search['branch_id'])) {
 			$where .= " AND `gt`.`branchId` =" . $search['branch_id'];
 		}
@@ -99,7 +110,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		}
 		$where .= $dbp->getAccessPermission('gt.branchId');
 		$order = " ORDER BY id DESC ";
-		// echo $sql . $where . $order; 
+		//  echo $sql . $where . $order; 
 		return $db->fetchAll($sql . $where . $order);
 	}
 

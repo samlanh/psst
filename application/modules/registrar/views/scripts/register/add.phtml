@@ -1364,11 +1364,17 @@ function netTotal(){
 	credit_memo = dijit.byId('credit_memo').get('value');
 	credit_memo = isNaN(credit_memo)?0:credit_memo;
 	netPaidAmount = PaidAmount - credit_memo;
+	if(netPaidAmount<0){
+		netPaidAmount=0;
+	}
 	
 	dijit.byId('paid_amount').attr('value',netPaidAmount.toFixed(2));
 	balance = totalPayment-netPaidAmount;
-	
-	dijit.byId('balance_due').attr('value',balance-credit_memo);
+	balanceDue=balance-credit_memo;
+	if(balanceDue<0){
+		balanceDue=0;
+	}
+	dijit.byId('balance_due').attr('value',balanceDue.toFixed(2));
 	readMoneyInKhmer(netPaidAmount.toFixed(2));
 }	
 

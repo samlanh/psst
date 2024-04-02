@@ -27,6 +27,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			";
 			$sql.= " AND ".$db->quoteInto('s.stu_code=?', $_data['studentCode']);
 			$sql.= " AND ".$db->quoteInto('s.password=?', md5($_data['password']));
+			$sql.=" GROUP BY s.stu_id ";
 			$row = $db->fetchRow($sql);
 			
 			$result = array(

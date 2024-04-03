@@ -5730,4 +5730,85 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	
+	public function getStudentCriteriaScore($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$studentId = empty($search['studentId'])?0:$search['studentId'];
+			
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			
+			$teacherName= "teacher_name_en";
+			$subjectTitle = "subject_titleen";
+			$criteriaTitle = "title_en";
+			
+			if($currentLang==1){// khmer
+				$teacherName = "teacher_name_kh";
+				$subjectTitle = "subject_titlekh";
+				$criteriaTitle = "title";
+			}
+			$sql="SELECT
+					grdTmpD.`studentId`
+					,grdTmp.`criteriaId`
+					
+					,g.`group_code` AS groupCode
+					,(SELECT CONCAT(COALESCE(ac.fromYear),'-',COALESCE(ac.toYear)) FROM rms_academicyear AS ac WHERE ac.id=g.academic_year LIMIT 1) AS academicYear
+					,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = grdTmp.`subjectId` LIMIT 1) AS subjectTitle
+					,(SELECT cri.$criteriaTitle FROM `rms_exametypeeng` AS cri WHERE cri.id = grdTmp.`criteriaId` LIMIT 1) AS criteriaTitle
+					
+					,grdTmpD.`totalGrading`
+					,grdTmpD.`subCriterialTitleEng`
+					,grdTmpD.`subCriterialTitleKh`
+					,(SELECT sEnT.`title` FROM `rms_score_entry_setting` AS sEnT WHERE sEnT.id = grdTmp.`settingEntryId` LIMIT 1 ) AS entrySettingTitle
+					,grdTmp.*
+					,(SELECT t.$teacherName  FROM `rms_teacher` AS t WHERE t.id =grdTmp.`teacherId` LIMIT 1) AS teacherName
+					
+			FROM
+				`rms_grading_tmp` AS grdTmp 
+				JOIN `rms_grading_detail_tmp` AS grdTmpD ON grdTmp.`id` = grdTmpD.`gradingId`
+				LEFT JOIN `rms_group` AS g ON g.id = grdTmp.groupId
+			WHERE 1
+				AND grdTmpD.`studentId` = $studentId
+			";
+			
+			$where='';
+			if(!empty($search['searchBox'])){
+				$s_where=array();
+				$s_search=addslashes(trim($search['searchBox']));
+				$s_search = str_replace(' ', '', addslashes(trim($search['searchBox'])));
+				$s_where[]= " REPLACE(g.group_code,' ','') LIKE '%{$s_search}%'";
+				$s_where[]= " REPLACE((SELECT sEnT.`title` FROM `rms_score_entry_setting` AS sEnT WHERE sEnT.id = grdTmp.`settingEntryId` LIMIT 1 ),' ','') LIKE '%{$s_search}%'";
+				$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['academicYear'])){
+				$where.=" AND g.academic_year = ".$search['academicYear'];
+			}
+			if(!empty($search['groupId'])){
+				$where.=" AND g.id = ".$search['groupId'];
+			}
+			
+			$ordering=" ORDER BY grdTmp.createDate DESC, grdTmp.`id` DESC ";
+			$limit=" ";
+			if(!empty($search['LimitStart'])){
+				$limit.=" LIMIT ".$search['LimitStart'].",".$search['limitRecord'];
+			}else if(!empty($search['limitRecord'])){
+				$limit.=" LIMIT ".$search['limitRecord'];
+			}
+			
+			$row = $db->fetchAll($sql.$where.$ordering.$limit);
+			$result = array(
+				'status' =>true,
+				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
 }

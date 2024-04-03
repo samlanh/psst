@@ -163,6 +163,8 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->getSystemStatusAction($GetData);
 			}else if ($GetData['url']=="specialFeature"){
     			$_dbAction->getSpecialFeatureAction($GetData);
+			}else if ($GetData['url']=="studentCriteriaScore"){
+    			$_dbAction->getStudentCriteriaScoreAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

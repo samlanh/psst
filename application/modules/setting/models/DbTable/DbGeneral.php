@@ -14,7 +14,7 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
     	return $db->fetchRow($sql);
     }
     public static function geValueByKeyName($keyName){
-    	$db = new Application_Model_DbTable_DbGlobal();;
+    	$db = new Application_Model_DbTable_DbGlobal();
     	$sql = " SELECT keyValue
     	FROM `rms_setting`
     	WHERE status=1

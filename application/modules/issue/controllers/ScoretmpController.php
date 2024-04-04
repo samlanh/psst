@@ -98,9 +98,9 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 	function getsubjectlistAction(){
 		$this->_helper->layout()->disableLayout();
 		if($this->getRequest()->isPost()){
-			$dbExternal = new Application_Model_DbTable_DbGlobal();
+			$dbg = new Application_Model_DbTable_DbGlobal();
 			$data = $this->getRequest()->getPost();
-			$row=$dbExternal->getAllSubjectName($data);
+			$row=$dbg->getAllSubjectName($data);
 			print_r(Zend_Json::encode($row));
 			exit();
 		}

@@ -79,7 +79,11 @@ dojo.ready(function(){
 			academic_year = dijit.byId('academic_year').get('value');
 		}
 	}, "academic_year");
-	
+	var branch_id = dijit.byId('branch_id');
+	branch_id.on('change', function(evt) {
+			getAllAcademicByBranch();
+		
+	});
 	getAllAcademicByBranch();
 });
 

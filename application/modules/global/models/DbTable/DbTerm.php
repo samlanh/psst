@@ -53,13 +53,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     	$db= $this->getAdapter();
     	try{
 
-			$dept = "";
-	    	if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
-	    		if (empty($dept)){
-	    			$dept = $rs;
-	    		}else{ $dept = $dept.",".$rs;
-	    		}
-	    	}
+			$degreeSelector= implode(',', $data['degreeSelector']);
 
     		if(!empty($data['identity'])){
 				$ids = explode(',', $data['identity']);
@@ -67,7 +61,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 					$arr = array(
 							'branch_id'		=>$data['branch_id'],
 							'academic_year'	=>$data['academic_year'],
-							'degreeId'		=>$dept,
+							'degreeId'		=>$degreeSelector,
 							'title'			=>$data['title_'.$i],
 							'periodId'		=>$data['term_'.$i],
 							'start_date'	=>$data['startdate_'.$i],

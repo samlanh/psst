@@ -31,6 +31,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 			WHEN periodId = 3 THEN '$semster'
 			WHEN periodId = 4 THEN '$year'
 			END as Period,
+			(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,degreeId) LIMIT 1) AS degreeList,
 			start_date, end_date,
 			(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) AS user_name 
 	

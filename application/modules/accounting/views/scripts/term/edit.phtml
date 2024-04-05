@@ -39,6 +39,15 @@
 		<form id="add_province" action="" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">   
 	  			 if(this.validate()) {
+					var identity = [];
+	    			 $('.checkbox:checked').each(function(i){
+	    				 identity[i] = $(this).val();
+	     			});
+					if(identity==""){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+						return false;
+					}
+
 					dijit.byId('save_close').set('disabled',true);
 					return true;
 	   			}else {
@@ -179,7 +188,7 @@
 									</div>
 									<br />
 									<div class="custom-control custom-checkbox ">
-										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all" name="check_all">
+										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall(0);" class="checkbox" id="check_all" name="check_all">
 										<label class="custom-control-label" for="check_all">
 											<?php echo $tr->translate('CHECK_ALL'); ?>
 										</label>
@@ -193,7 +202,7 @@
 													<div class="custom-control custom-checkbox">
 														<input <?php if (in_array($rs['id'], $array)) {
 																	echo "checked";
-																} ?> type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id']; ?>" value="<?php echo $rs['id']; ?>" name="selector[]">
+																} ?> type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id']; ?>" value="<?php echo $rs['id']; ?>" name="selector[]" name="selector[]" onClick="checkall(1);" >
 														<label class="custom-control-label" for="depts<?php echo $rs['id']; ?>">
 															<?php echo $rs['name']; ?>
 														</label>
@@ -420,12 +429,24 @@ function initailize(){
 	dijit.byId('remark_'+col).attr('value','<?php echo $rs['note']?>');
 	<?php } }?>
 }
-
-	function checkall() {
-		if ($('#check_all').is(':checked')) {
-			$(".checkbox").prop('checked', true);
-		} else {
-			$(".checkbox").prop('checked', false);
+	
+function checkall(index){
+	if(index==0){
+		if($('#check_all').is(":checked")){
+			$('.checkbox').each(function() { //loop through each checkbox
+				this.checked = true;  
+			});
+		}else{
+			$('.checkbox').each(function() { //loop through each checkbox
+				this.checked = false;  
+			});
 		}
+	}else{
+		var a = $("input:checked").val();
+		 var identity = [];
+	     $('.checkbox:checked').each(function(i){
+	    	 identity[i] = $(this).val();
+	     });
 	}
+}
 </script>

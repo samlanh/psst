@@ -12,7 +12,18 @@
 	background: #cccccc;
 	border:1px solid #ddd;
 }
+ul.optListRow {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 35px;
+}
+ input[type=checkbox],  input[type=radio]{
+	height: 15px;
+    display: initial;
+}
 </style>
+
 <title><?php echo $this->tr->translate("ADD_START_DATE_AND_END_DATE")?></title>
  <div class="card">
 	<div class="card-content collapse show">
@@ -30,7 +41,7 @@
 	  			 if(this.validate()) {
 
 					var identity = [];
-	    			 $('.checkbox:checked').each(function(i){
+	    			 $('.degreeCheckbox:checked').each(function(i){
 	    				 identity[i] = $(this).val();
 	     			});
 					if(identity==""){
@@ -172,49 +183,6 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div id="degreee" class="col-md-2 col-sm-2 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
-										</div> 
-									</div>
-									<br />
-									<div class="custom-control custom-checkbox ">
-										<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" >
-										<label class="custom-control-label" for="check_all">
-											<?php echo $tr->translate('CHECK_ALL');?>
-										</label>
-									</div>
-									 <div class="form-group">
-										<ul class="optListRow">
-											<?php 
-												if (!empty($this->faculty)) foreach ($this->faculty as $rs){
-												?>
-												<li class="opt-items"> 
-													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]"  >
-														<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
-															<?php echo $rs['name'];?>
-														</label>
-													</div>
-												</li>
-												
-											<?php } ?>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-	            </div>	 -->
-				
 				<div class="clearfix"></div>
 			</div>
 			<div class="clearfix"></div>
@@ -252,20 +220,7 @@
 				academic_year = dijit.byId('academic_year').get('value');
 			}
 		}, "academic_year");
-		// new dijit.form.FilteringSelect({
-		// 	store: dept_store,
-		// 	queryExpr: "*${0}*",
-		// 	autoComplete: false,                     
-		// 	required: true,
-		// 	id: "degree",
-		// 	name: "degree",           
-		// 	class: "fullside", 
-		// 	placeHolder:"<?php echo $tr->translate("SELECT_DEGREE");?>",          
-		// 	onChange: function() {  
-				
-		// 	}
-		// }, "degree");	
-		//getAllDegreeByBranch();
+	
 		getAllAcademicByBranch();
 		getTermOption();
 		addRow();
@@ -300,6 +255,7 @@ function getDegreeOption(){
 }
 function CheckAllTotalDegree(index){
 	if(index==0){
+		alert(index);
 		if($('#checkAllDegree').is(":checked")){
 			$('.degreeCheckbox').each(function() { //loop through each checkbox
 				this.checked = true;  
@@ -310,6 +266,7 @@ function CheckAllTotalDegree(index){
 			});
 		}
 	}else{
+		alert(index);
 		var a = $("input:checked").val();
 		 var identity = [];
 	     $('.degreeCheckbox:checked').each(function(i){
@@ -336,31 +293,6 @@ function CheckAllTotalDegree(index){
 		getAllYear(url_getacademic,contentData);
 	
 	}
-
-	// url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
-	// function getAllDegreeByBranch(){
-	// 	dijit.byId('degree').reset();
-	// 	branch_id = dijit.byId('branch_id').get('value');
-	// 	if(branch_id=='' || branch_id==-1){
-	// 		var dept_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	// 		dijit.byId('degree').set('store',dept_store);  
-	// 		dijit.byId('branch_id').focus();
-	// 		return false;
-	// 	}
-	// 	dojo.xhrPost({
-	// 		url: url_getdegree,
-	// 		content:{
-	// 			'branch_id':branch_id
-	// 			},
-	// 		handleAs:"json",
-	// 		load: function(data) {
-	// 			dept_store  = getDataStorefromJSON('id','name', data);
-	// 			dijit.byId('degree').set('store',dept_store);   
-	// 		},
-	// 		error: function(err) {
-	// 		}
-	// 	});
-	// }
 
 	function getTermOption(){
 			term_option ='<option value=""></option></option>';
@@ -421,13 +353,5 @@ function CheckAllTotalDegree(index){
 		var strings = arrays.join(',');
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
-	}
-
-	function checkall(){
-		if ($('#check_all').is(':checked')) {
-			$(".checkbox").prop('checked', true);
-		}else{
-			$(".checkbox").prop('checked', false);
-		}
 	}
 </script>

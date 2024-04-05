@@ -24,7 +24,7 @@ class Accounting_TermController extends Zend_Controller_Action {
 			$db = new Global_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TITLE","TERM","START_DATE","END_DATE","USER");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TITLE","TERM","DEGREE","START_DATE","END_DATE","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'term','action'=>'edit',
     		);

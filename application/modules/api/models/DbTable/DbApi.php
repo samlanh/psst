@@ -4497,6 +4497,27 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$sql .=' ORDER BY g.id DESC';	
 		return $db->fetchAll($sql);
 	}
+	function getAllCriteriaByStudent($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?0:$_data['studentId'];
+		$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+		$title="title";
+		if($currentLang==2){
+			$title="title_en";
+		}
+		$sql="SELECT 
+				DISTINCT grdTmp.`criteriaId` AS id
+				,cri.$title AS `name`
+			FROM 
+				`rms_grading_tmp` AS grdTmp 
+				JOIN `rms_grading_detail_tmp` AS grdTmpD ON grdTmp.`id` = grdTmpD.`gradingId` 
+				JOIN `rms_exametypeeng` AS cri ON cri.id = grdTmp.`criteriaId` 
+			WHERE grdTmpD.`studentId` = $studentId 
+				
+			";
+		$sql .=' ORDER BY cri.criteriaType ASC,cri.id ASC ';	
+		return $db->fetchAll($sql);
+	}
 	public function getFormOptionSelect($_data){
 		$db = $this->getAdapter();
 		try{
@@ -4529,7 +4550,14 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					array("id"=>2,"name"=>$currentLang==1 ? "ពេលល្ងាច" : "Evening"),
 					array("id"=>3,"name"=>$currentLang==1 ? "ពេញមួយថ្ងៃ" : "Full Day"),
 				);
-			
+			}else if($getControlType=="criteriaList"){
+				$row = $this->getAllCriteriaByStudent($_data);
+				if(!empty($_data['withAllOpt'])){
+					array_unshift(
+						$row
+						,array('id' => "0",'name' =>$currentLang==1 ? "ទាំងអស់" : "All") 
+					);
+				}
 			}
 			
 			$result = array(
@@ -5753,7 +5781,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,grdTmp.`criteriaId`
 					
 					,g.`group_code` AS groupCode
-					,(SELECT CONCAT(COALESCE(ac.fromYear),'-',COALESCE(ac.toYear)) FROM rms_academicyear AS ac WHERE ac.id=g.academic_year LIMIT 1) AS academicYear
+					,(SELECT CONCAT(COALESCE(ac.fromYear),'-',COALESCE(ac.toYear)) FROM rms_academicyear AS ac WHERE ac.id=g.academic_year LIMIT 1) AS academicYearTitle
 					,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = grdTmp.`subjectId` LIMIT 1) AS subjectTitle
 					,(SELECT cri.$criteriaTitle FROM `rms_exametypeeng` AS cri WHERE cri.id = grdTmp.`criteriaId` LIMIT 1) AS criteriaTitle
 					
@@ -5787,6 +5815,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($search['groupId'])){
 				$where.=" AND g.id = ".$search['groupId'];
 			}
+			if(!empty($search['criteriaId'])){
+				$where.=" AND grdTmp.`criteriaId` = ".$search['criteriaId'];
+			}
 			
 			$ordering=" ORDER BY grdTmp.createDate DESC, grdTmp.`id` DESC ";
 			$limit=" ";
@@ -5795,7 +5826,6 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}else if(!empty($search['limitRecord'])){
 				$limit.=" LIMIT ".$search['limitRecord'];
 			}
-			
 			$row = $db->fetchAll($sql.$where.$ordering.$limit);
 			$result = array(
 				'status' =>true,

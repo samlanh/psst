@@ -255,7 +255,6 @@ function getDegreeOption(){
 }
 function CheckAllTotalDegree(index){
 	if(index==0){
-		alert(index);
 		if($('#checkAllDegree').is(":checked")){
 			$('.degreeCheckbox').each(function() { //loop through each checkbox
 				this.checked = true;  
@@ -266,7 +265,6 @@ function CheckAllTotalDegree(index){
 			});
 		}
 	}else{
-		alert(index);
 		var a = $("input:checked").val();
 		 var identity = [];
 	     $('.degreeCheckbox:checked').each(function(i){

@@ -398,7 +398,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$_dbfee = new Accounting_Model_DbTable_DbFee();
 				$feeID = empty($_data['academic_year'])?0:$_data['academic_year'];
 				$rowfee = $_dbfee->getFeeById($feeID);
-				$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
+				//$academicYear = empty($rowfee['academic_year'])?0:$rowfee['academic_year'];
 				
 				$dbGroup = new Foundation_Model_DbTable_DbGroup();
 				if(!empty($_data['identity_study'])){

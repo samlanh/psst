@@ -1811,6 +1811,9 @@ function getAllgroupStudyNotPass($action=null){
   	if (!empty($branch_id)){
   		$sql.=" AND t.branch_id = $branch_id";
   	}
+	if (!empty($data["department"])){
+		$sql.=" AND t.department = ".$data["department"];
+	}
   	if (!empty($stuff_type)){
 		$sql.=" AND t.staff_type = $stuff_type";
 	}

@@ -116,11 +116,12 @@ table.tb-footer tr.style-head {
 										<input id="group" />
 									</div>
 									<div class="col-md-2 col-sm-2 col-xs-12">
-										<input id="teacherId" />
-									</div>
-									<div class="col-md-2 col-sm-2 col-xs-12">
 										<?php echo $frm->getElement("department");?>
 									</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+										<input id="teacherId" />
+									</div>
+									
 								</div>
 								<div class="form-group">
 									
@@ -669,6 +670,12 @@ table.tb-footer tr.style-head {
 		academic_year.on('change', function(evt) {
 			getAllGroupByBranch();
 		});
+
+		var department = dijit.byId('department');
+		department.on('change', function(evt) {
+			getAllTeacherByGroup();
+		});
+
 		getAllGroupByBranch();
 		getAllTeacherByGroup();
 		
@@ -729,6 +736,8 @@ table.tb-footer tr.style-head {
 		}
 		
 		group = dijit.byId('group').get('value');
+		department = dijit.byId('department').get('value');
+
 		if(group=='' || group==-1){
 			group=0;
 		}
@@ -737,6 +746,7 @@ table.tb-footer tr.style-head {
 			content:{
 				'branch_id':branch_id,
 				'groupId':group,
+				'department':department,
 				'hideAddnew':1,
 				},
 			handleAs:"json",

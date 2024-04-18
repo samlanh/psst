@@ -31,6 +31,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 			WHEN periodId = 3 THEN '$semster'
 			WHEN periodId = 4 THEN '$year'
 			END as Period,
+			(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,degreeId) LIMIT 1) AS degreeList,
 			start_date, end_date,
 			(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) AS user_name 
 	
@@ -53,13 +54,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
     	$db= $this->getAdapter();
     	try{
 
-			$dept = "";
-	    	if (!empty($data['selector'])) foreach ( $data['selector'] as $rs){
-	    		if (empty($dept)){
-	    			$dept = $rs;
-	    		}else{ $dept = $dept.",".$rs;
-	    		}
-	    	}
+			$degreeSelector= implode(',', $data['degreeSelector']);
 
     		if(!empty($data['identity'])){
 				$ids = explode(',', $data['identity']);
@@ -67,7 +62,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 					$arr = array(
 							'branch_id'		=>$data['branch_id'],
 							'academic_year'	=>$data['academic_year'],
-							'degreeId'		=>$dept,
+							'degreeId'		=>$degreeSelector,
 							'title'			=>$data['title_'.$i],
 							'periodId'		=>$data['term_'.$i],
 							'start_date'	=>$data['startdate_'.$i],

@@ -5815,6 +5815,17 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($search['groupId'])){
 				$where.=" AND g.id = ".$search['groupId'];
 			}
+			if(!empty($search['forSemester'])){
+				$where.=" AND grdTmp.forSemester = ".$search['forSemester'];
+			}
+			if(!empty($search['examType'])){
+				$where.=" AND grdTmp.examType=".$search['examType'];
+				if($search['examType']==1){
+					if(!empty($search['month'])){
+						$where.=" AND grdTmp.forMonth=".$search['month'];
+					}	
+				}
+			}
 			if(!empty($search['criteriaId'])){
 				$where.=" AND grdTmp.`criteriaId` = ".$search['criteriaId'];
 			}

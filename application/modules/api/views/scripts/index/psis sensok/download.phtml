@@ -382,7 +382,7 @@ $html='<html>
 	 			$html.='</table>
 	 			<table class="header" border="1px"  width="100%" style="width:100%; border-collapse:collapse;line-height:25px;" >
 				<tr  align="left">
-					<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT COMMENT AND SUGGESTION:</td>
+					<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់និងសំណូមពររបស់មាតាបិតា PARENT\'S COMMENT AND SUGGESTION:</td>
 				</tr>';
 				for($i=0;$i<=3;$i++){
 					$html.='<tr class="borderBottom">
@@ -411,7 +411,7 @@ $html='<html>
 					<td class="borderSolidBottom blue">&nbsp;</td>
 				</tr>
 				<tr >
-					<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Teacher in Charge</td>
+					<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 					<td colspan="4" >&nbsp;</td>
 					<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
 				</tr>
@@ -940,7 +940,7 @@ $html='<html>
 					$html.='</table>
 					<table class="header" border="1px"  width="100%" style="width:100%; border-collapse:collapse;line-height:25px;" >
 					<tr  align="left">
-						<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT COMMENT AND SUGGESTION:</td>
+						<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់និងសំណូមពររបស់មាតាបិតា PARENT\'S COMMENT AND SUGGESTION:</td>
 					</tr>';
 					for($i=0;$i<=3;$i++){
 						$html.='<tr class="borderBottom">
@@ -969,7 +969,7 @@ $html='<html>
 						<td class="borderSolidBottom blue">&nbsp;</td>
 					</tr>
 					<tr >
-						<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Teacher in Charge</td>
+						<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 						<td colspan="4" >&nbsp;</td>
 						<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
 					</tr>
@@ -1407,7 +1407,7 @@ $html='<html>
 					$html.='</table>
 					<table class="header" border="1px"  width="100%" style="width:100%; border-collapse:collapse;line-height:25px;" >
 					<tr  align="left">
-						<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT COMMENT AND SUGGESTION:</td>
+						<td colspan="6" class="blue khmerBoldFont">&nbsp;យោបល់និងសំណូមពររបស់មាតាបិតា PARENT\'S COMMENT AND SUGGESTION:</td>
 					</tr>';
 					for($i=0;$i<=3;$i++){
 						$html.='<tr class="borderBottom">
@@ -1436,7 +1436,7 @@ $html='<html>
 						<td class="borderSolidBottom blue">&nbsp;</td>
 					</tr>
 					<tr >
-						<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Teacher in Charge</td>
+						<td style="height:100px;" valign="top" class="borderSolidBottom blue">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 						<td colspan="4" >&nbsp;</td>
 						<td valign="top" class="borderSolidBottom blue">&nbsp;កាលបរិច្ឆេទ Date</td>
 					</tr>
@@ -1462,7 +1462,7 @@ $html='<html>
 	$mpdf->SetDisplayMode('fullpage');
 	$mpdf->WriteHTML($html);
 	$mpdf->SetTitle('PROGRESS REPORT '.$scoreTitle);
-	$mpdf->addPage('P'); 
+	//$mpdf->addPage('P'); 
 	$mpdf->output();
 	
 	

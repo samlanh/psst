@@ -58,6 +58,11 @@ $html='<html>
 			<link rel="shortcut icon" href="'.$shortCutIco.'" type="image/x-icon" />
 			<style type="text/css">
 			
+			.header tr{ page-break-inside:avoid; page-break-after:auto; line-height:22px; }
+			#header {
+			   display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
 			body{
 			    min-height: 100vh;
 			    display: flex;
@@ -66,13 +71,27 @@ $html='<html>
 			footer{
 			    margin-top: auto;
 			}
+			table tr,
+			table tr td {
+				line-height: 22px;
+				font-size: 12px;
+			}
+			td{
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+			
 			table,
 			table.khmerFont,
-			table.studentInfo {
+			table.studentInfo,
+			table.studentInfo td{
 				page-break-inside:avoid;
 				autosize : true;
 				font-family: khmeros !important;
 				font-size: 12px !important;
+			}
+			table.studentInfo td{
+				line-height:16px !important;
 			}
 
 			.cheader {
@@ -150,9 +169,7 @@ $html='<html>
 				text-transform: uppercase;
 			}
 
-			table tr {
-				line-height: 22px;
-			}
+			
 			.separateColumn{
 				font-weight: bold;
 				white-space: nowrap;
@@ -203,7 +220,7 @@ $html='<html>
 		$html.='<body>';
 		
 		$html.='
-			<table class="pages-break" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
+			<table class="pages-break" style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: always;">
 					<tr >
 						<td align="center" colspan="3">'.$headerScore.'</td>
 					</tr>
@@ -450,8 +467,13 @@ $html='<html>
 				</table>
 			';
 		$html.='<br />';
+		
 		$html.='
-			<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
+				</td>
+			</tr>
+		</table>';
+		$html.='
+			<table class="header khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 				<tr>
 					<td align="center" colspan="5" class="khmerBoldFont  bg-blue">ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 				</tr>
@@ -531,33 +553,33 @@ $html='<html>
 				';
 				}	
 			$html.='<tr>
-					<td class="" width="30%"></td>
-					<td colspan="4"></td>
-					<td class="" width="30%"></td>
+					<td class="" width="30%">&nbsp;</td>
+					<td colspan="4">&nbsp;</td>
+					<td class="" width="30%">&nbsp;</td>
 				</tr>
 				<tr>
 					<td>កាលបរិច្ឆេទ / Date:......./......./.......</td>
-					<td colspan="4" class=""></td>
+					<td colspan="4" class="">&nbsp;</td>
 					<td>កាលបរិច្ឆេទ / Date:......./......./.......</td>
 				</tr>
-				<tr height="100px;">
-					<td class="borderSolidBottom "></td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="100px;" class="borderSolidBottom "></td>
+					<td colspan="4">&nbsp;</td>
 					<td class="borderSolidBottom "></td>
 				</tr>
-				<tr height="40px;">
-					<td valign="top"> '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="40px;" valign="top"> '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
+					<td colspan="4">&nbsp;</td>
 					<td valign="top">គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 				</tr>
-				<tr height="130px;">
-					<td valign="top" class="borderSolidBottom khmerBoldFont">បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="130px;" valign="top" class="borderSolidBottom khmerBoldFont">បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
+					<td colspan="4">&nbsp;</td>
 					<td valign="top" class="borderSolidBottom "><strong>បានពិនិត្យត្រឹមត្រូវ / Checked</strong></td>
 				</tr>
 				<tr >
 					<td>នាយករង / VICE PRINCIPLE</td>
-					<td colspan="4"></td>
+					<td colspan="4">&nbsp;</td>
 					<td>ការិយាល័យសិក្សា / Academic Office</td>
 				</tr>
 				<tfoot>
@@ -568,13 +590,6 @@ $html='<html>
 					</tr>
 				</tfoot>
 			</table>';
-		
-		
-		
-		$html.='
-				</td>
-			</tr>
-		</table>';
 		$html.='
 			</body>
 		</html>';
@@ -591,7 +606,11 @@ $html='<html>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 			<link rel="shortcut icon" href="'.$shortCutIco.'" type="image/x-icon" />
 			<style type="text/css">
-			
+			.header tr{ page-break-inside:avoid; page-break-after:auto; line-height:22px; }
+			#header {
+			   display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
 			body{
 			    min-height: 100vh;
 			    display: flex;
@@ -600,13 +619,27 @@ $html='<html>
 			footer{
 			    margin-top: auto;
 			}
+			table tr,
+			table tr td {
+				line-height: 22px;
+				font-size: 12px;
+			}
+			td{
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+			
 			table,
 			table.khmerFont,
-			table.studentInfo {
+			table.studentInfo,
+			table.studentInfo td{
 				page-break-inside:avoid;
 				autosize : true;
 				font-family: khmeros !important;
 				font-size: 12px !important;
+			}
+			table.studentInfo td{
+				line-height:16px !important;
 			}
 
 			.cheader {
@@ -684,9 +717,7 @@ $html='<html>
 				text-transform: uppercase;
 			}
 
-			table tr {
-				line-height: 22px;
-			}
+			
 			.separateColumn{
 				font-weight: bold;
 				white-space: nowrap;
@@ -736,7 +767,7 @@ $html='<html>
 		
 		$html.='<body>';
 		$html.='
-			<table style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
+			<table style="width:100%;margin: 0 auto;font-size:14px;page-break-after:always;">
 					<tr >
 						<td align="center" colspan="3">'.$headerScore.'</td>
 					</tr>
@@ -1129,8 +1160,14 @@ $html='<html>
 				}
 
 			$html.='</table>';
+		
+			
 		$html.='
-			<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
+				</td>
+			</tr>
+		</table>';		
+$html.='
+			<table class="header khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 				<tr align="center">
 					<td align="center" colspan="6" class=" khmerBoldFont bg-blue">ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 				</tr>
@@ -1183,14 +1220,14 @@ $html='<html>
 					if ($commentType != $rsComment['commentType']) {
 						$html.='
 							<tr align="center">
-								<td colspan="5" class=" doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
+								<td colspan="6" class=" doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
 							</tr>';
 						
 					}
 					$commentType = $rsComment['commentType'];
 					$html.='
 						<tr>
-							<td align="left" colspan="4" class="">'.$rsComment['commentLabel'].'</td>
+							<td align="left" colspan="5" class="">'.$rsComment['commentLabel'].'</td>
 							<td align="center">'.$rsComment['ratingLabel'].'</td>
 						</tr>';
 				}
@@ -1217,33 +1254,33 @@ $html='<html>
 				';
 				}	
 			$html.='<tr>
-					<td class="" width="30%"></td>
-					<td colspan="4"></td>
-					<td class="" width="30%"></td>
+					<td class="" width="30%">&nbsp;</td>
+					<td colspan="4">&nbsp;</td>
+					<td class="" width="30%">&nbsp;</td>
 				</tr>
 				<tr>
 					<td>កាលបរិច្ឆេទ / Date:......./......./.......</td>
-					<td colspan="4" class=""></td>
+					<td colspan="4" class="">&nbsp;</td>
 					<td>កាលបរិច្ឆេទ / Date:......./......./.......</td>
 				</tr>
-				<tr height="100px;">
-					<td class="borderSolidBottom "></td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="100px;" class="borderSolidBottom "></td>
+					<td colspan="4">&nbsp;</td>
 					<td class="borderSolidBottom "></td>
 				</tr>
-				<tr height="40px;">
-					<td valign="top"> '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="40px;" valign="top"> '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
+					<td colspan="4">&nbsp;</td>
 					<td valign="top">គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 				</tr>
-				<tr height="130px;">
-					<td valign="top" class="borderSolidBottom khmerBoldFont">បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="130px;" valign="top" class="borderSolidBottom khmerBoldFont">បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
+					<td colspan="4">&nbsp;</td>
 					<td valign="top" class="borderSolidBottom "><strong>បានពិនិត្យត្រឹមត្រូវ / Checked</strong></td>
 				</tr>
 				<tr >
 					<td>នាយករង / VICE PRINCIPLE</td>
-					<td colspan="4"></td>
+					<td colspan="4">&nbsp;</td>
 					<td>ការិយាល័យសិក្សា / Academic Office</td>
 				</tr>
 				<tfoot>
@@ -1253,12 +1290,7 @@ $html='<html>
 						</td>
 					</tr>
 				</tfoot>
-			</table>';
-			
-		$html.='
-				</td>
-			</tr>
-		</table>';				
+			</table>';		
 	$html.="
 		</body>
 	</html>";
@@ -1277,6 +1309,11 @@ $html='<html>
 			<link rel="shortcut icon" href="'.$shortCutIco.'" type="image/x-icon" />
 			<style type="text/css">
 			
+			.header tr{ page-break-inside:avoid; page-break-after:auto; line-height:22px; }
+			#header {
+			   display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
 			body{
 			    min-height: 100vh;
 			    display: flex;
@@ -1285,13 +1322,27 @@ $html='<html>
 			footer{
 			    margin-top: auto;
 			}
+			table tr,
+			table tr td {
+				line-height: 22px;
+				font-size: 12px;
+			}
+			td{
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+			
 			table,
 			table.khmerFont,
-			table.studentInfo {
+			table.studentInfo,
+			table.studentInfo td{
 				page-break-inside:avoid;
 				autosize : true;
 				font-family: khmeros !important;
 				font-size: 12px !important;
+			}
+			table.studentInfo td{
+				line-height:16px !important;
 			}
 
 			.cheader {
@@ -1369,9 +1420,7 @@ $html='<html>
 				text-transform: uppercase;
 			}
 
-			table tr {
-				line-height: 22px;
-			}
+			
 			.separateColumn{
 				font-weight: bold;
 				white-space: nowrap;
@@ -1428,7 +1477,7 @@ $html='<html>
 		}
 		$html.='<body>';
 		$html.='
-			<table style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: page;">
+			<table style="width:100%;background:#fff; margin: 0 auto;font-size:14px;break-after: always;">
 					<tr >
 						<td align="center" colspan="3">'.$headerScore.'</td>
 					</tr>
@@ -1709,8 +1758,14 @@ $html='<html>
 
 			</table>
 			';
+		
+			
 		$html.='
-			<table class="khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
+				</td>
+			</tr>
+		</table>';	
+$html.='
+			<table class="header khmerFont" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 				<tr align="center">
 					<td align="center" colspan="6" class=" khmerBoldFont bg-blue">ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
 				</tr>
@@ -1763,14 +1818,14 @@ $html='<html>
 					if ($commentType != $rsComment['commentType']) {
 						$html.='
 							<tr align="center">
-								<td colspan="5" class=" doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
+								<td colspan="6" class=" doubleBorder khmerBoldFont">'.$rsComment['commentType'].'</td>
 							</tr>';
 						
 					}
 					$commentType = $rsComment['commentType'];
 					$html.='
 						<tr>
-							<td align="left" colspan="4" class="">'.$rsComment['commentLabel'].'</td>
+							<td align="left" colspan="5" class="">'.$rsComment['commentLabel'].'</td>
 							<td align="center">'.$rsComment['ratingLabel'].'</td>
 						</tr>';
 				}
@@ -1797,33 +1852,33 @@ $html='<html>
 				';
 				}	
 			$html.='<tr>
-					<td class="" width="30%"></td>
-					<td colspan="4"></td>
-					<td class="" width="30%"></td>
+					<td class="" width="30%">&nbsp;</td>
+					<td colspan="4">&nbsp;</td>
+					<td class="" width="30%">&nbsp;</td>
 				</tr>
 				<tr>
 					<td>កាលបរិច្ឆេទ / Date:......./......./.......</td>
-					<td colspan="4" class=""></td>
+					<td colspan="4" class="">&nbsp;</td>
 					<td>កាលបរិច្ឆេទ / Date:......./......./.......</td>
 				</tr>
-				<tr height="100px;">
-					<td class="borderSolidBottom "></td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="100px;" class="borderSolidBottom "></td>
+					<td colspan="4">&nbsp;</td>
 					<td class="borderSolidBottom "></td>
 				</tr>
-				<tr height="40px;">
-					<td valign="top"> '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="40px;" valign="top"> '."ហត្ថលេខាមាតាបិតា Parent's Signature".'</td>
+					<td colspan="4">&nbsp;</td>
 					<td valign="top">គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
 				</tr>
-				<tr height="130px;">
-					<td valign="top" class="borderSolidBottom khmerBoldFont">បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
-					<td colspan="4"></td>
+				<tr >
+					<td height="130px;" valign="top" class="borderSolidBottom khmerBoldFont">បានឃើញ និងឯកភាព <br />SEEN AND APPROVED</td>
+					<td colspan="4">&nbsp;</td>
 					<td valign="top" class="borderSolidBottom "><strong>បានពិនិត្យត្រឹមត្រូវ / Checked</strong></td>
 				</tr>
 				<tr >
 					<td>នាយករង / VICE PRINCIPLE</td>
-					<td colspan="4"></td>
+					<td colspan="4">&nbsp;</td>
 					<td>ការិយាល័យសិក្សា / Academic Office</td>
 				</tr>
 				<tfoot>
@@ -1833,12 +1888,7 @@ $html='<html>
 						</td>
 					</tr>
 				</tfoot>
-			</table>';
-			
-		$html.='
-				</td>
-			</tr>
-		</table>';				
+			</table>';		
 	$html.="
 		</body>
 	</html>";

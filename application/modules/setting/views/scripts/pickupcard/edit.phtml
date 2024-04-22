@@ -142,12 +142,21 @@
 													<img id="profile_wiew" src="<?php echo $image;?>" alt=""  />
 												</div>
 												<div class="button_browse">
-												<div id='preview'></div>	
-													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<div id='preview'></div>	
+													<span>Upload <span ><i class="fa fa-upload" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="photo" name="photo" >
 												</div>
 											</div>
 									   </div>
+									   <?php if(file_exists(PUBLIC_PATH."/images/card/".$this->rs['background'])){ ?>
+									   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+									  	 	<a href="<?php echo $image; ?>" download="pickup-student-card">
+												<div class="button_download">
+													<span>Download <span ><i class="fa fa-download" aria-hidden="true"></i></span></span>
+												</div>
+											</a>
+									   </div>
+									   <?php } ?>
 									</div>
 								</div>
 							</div>
@@ -183,11 +192,20 @@
 												</div>
 												<div class="button_browse">
 												<div id='preview'></div>	
-													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<span>Upload <span ><i class="fa fa-upload" aria-hidden="true"></i></span></span>
 													<input class="btn_borwse_image" type="file" id="photo_back" name="photo_back" >
 												</div>
 											</div>
 									   </div>
+									   <?php if(file_exists(PUBLIC_PATH."/images/card/".$this->rs['background_back'])){ ?>
+									   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+									 	  <a href="<?php echo $image; ?>" download="pickup-student-card-back">
+												<div class="button_download">
+													<span>Download <span ><i class="fa fa-download" aria-hidden="true"></i></span></span>
+												</div>
+											</a>
+									   </div>
+									 <?php } ?>
 									</div>
 								</div>
 							</div>
@@ -214,6 +232,19 @@
 	</div>
 </div>
 <style>
+.button_download {
+	margin-top: 34px;
+    text-align: center;
+    width: 100%;
+    height: 34px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_download span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
 .button_browse {
     position: relative;
     overflow: hidden;

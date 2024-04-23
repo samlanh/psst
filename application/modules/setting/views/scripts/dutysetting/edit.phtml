@@ -173,6 +173,15 @@
 															</div>
 														</div>
 													</div>
+													<?php if(file_exists(PUBLIC_PATH."/images/logo/".$this->rs['stamp'])){ ?>
+													<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+														<a href="<?php echo $stamp; ?>" download="stamp">
+															<div class="button_download">
+																<span>Download <span ><i class="fa fa-download" aria-hidden="true"></i></span></span>
+															</div>
+														</a>
+													</div>
+													<?php } ?>
 												</div>
 											</div>
 										</div>
@@ -214,6 +223,15 @@
 															</div>
 														</div>
 													</div>
+													<?php if(file_exists(PUBLIC_PATH."/images/logo/".$this->rs['signature'])){ ?>
+													<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+														<a href="<?php echo $signature; ?>" download="signature">
+															<div class="button_download">
+																<span>Download <span ><i class="fa fa-download" aria-hidden="true"></i></span></span>
+															</div>
+														</a>
+													</div>
+													<?php } ?>
 												</div>
 											</div>
 										</div>
@@ -243,6 +261,18 @@
 }
 .image-box img {
     height: 160px;
+}
+.button_download {
+    text-align: center;
+    width: 100%;
+    height: 34px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_download span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .button_browse {

@@ -255,7 +255,7 @@
 											<div class="image-box">
 												<?php 
 												$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
-												if(!empty($this->rs['background'])){
+												if(!empty($this->rs['front_background'])){
 													if (file_exists(PUBLIC_PATH."/images/card/".$this->rs['front_background'])){
 													$image = $this->baseUrl().'/images/card/'.$this->rs['front_background'];
 													}
@@ -268,7 +268,9 @@
 												<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
 												<input class="btn_borwse_image" type="file" id="front_background" name="front_background" >
 											</div>
-											<?php if(file_exists(PUBLIC_PATH."/images/card/".$this->rs['front_background'])){ ?>
+											<?php 
+											if(!empty($this->rs['front_background'])){
+											if(file_exists(PUBLIC_PATH."/images/card/".$this->rs['front_background'])){ ?>
 												<div class="col-md-12 col-sm-12 col-xs-12 text-center">
 													<a href="<?php echo $image; ?>" download="default_card_bg">
 															<div class="button_download">
@@ -276,7 +278,7 @@
 															</div>
 														</a>
 												</div>
-											<?php } ?>
+											<?php }} ?>
 										</div>
 								   </div>
 								</div>

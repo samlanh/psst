@@ -273,6 +273,15 @@ $frm = $this->frm_branch;
 												</div>
 											</div>
 									   </div>
+									   <?php if(file_exists(PUBLIC_PATH."/images/card/".$this->rs['background'])){ ?>
+									   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+									 	  <a href="<?php echo $image; ?>" download="certificate_back_wiew">
+												<div class="button_download">
+													<span>Download <span ><i class="fa fa-download" aria-hidden="true"></i></span></span>
+												</div>
+											</a>
+									   </div>
+									 	<?php } ?>
 									</div>
 								</div>
 							</div>
@@ -297,6 +306,19 @@ $frm = $this->frm_branch;
 	</div>
 </div>
 <style>
+.button_download {
+	margin-top: 34px;
+    text-align: center;
+    width: 100%;
+    height: 34px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_download span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
 .button_browse {
     position: relative;
     overflow: hidden;

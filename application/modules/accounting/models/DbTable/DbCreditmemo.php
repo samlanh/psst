@@ -19,6 +19,7 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				c.end_date,
 				c.note,
 				(SELECT name_kh FROM rms_view WHERE rms_view.type=23 AND key_code=c.type LIMIT 1) AS paid_transfer,
+				c.createDate,
 				(SELECT first_name FROM `rms_users` WHERE id=c.user_id LIMIT 1) AS user_name,
 				c.status 
 			  FROM 
@@ -82,7 +83,9 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'date'			=>date('Y-m-d H:i:s',strtotime($data['Date'])),
 				'end_date'		=>$data['end_date'],
 				'status'		=>1,
-				'user_id'		=>$this->getUserId()
+				'user_id'		=>$this->getUserId(),
+				'createDate'	=>date("Y-m-d H:i:s"),
+				'modifyDate'	=>date("Y-m-d H:i:s")
 				);
 			if(!empty($data['otherincome_id'])){
 				$arr['otherincome_id']=$data['otherincome_id'];
@@ -106,6 +109,8 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 				'end_date'		=>$data['end_date'],
 				'status'		=>$data['status'],
 				'user_id'		=>$this->getUserId(),
+				'createDate'	=>date("Y-m-d H:i:s"),
+				'modifyDate'	=>date("Y-m-d H:i:s")
 			);
 			if(!empty($data['otherincome_id'])){
 				$where="otherincome_id = ".$data['otherincome_id'];

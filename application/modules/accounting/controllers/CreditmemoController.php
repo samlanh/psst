@@ -32,7 +32,7 @@ class Accounting_CreditmemoController extends Zend_Controller_Action
     		$glClass = new Application_Model_GlobalClass();
     		$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","STUDENT_CODE","STUDENT_NAME","TOTAL_AMOUNT","TOTAL_AMOUNT_AFTER","START_DATE","END_DATE","NOTE","PAID_TRANSFER","BY_USER","STATUS");
+    		$collumns = array("BRANCH","STUDENT_CODE","STUDENT_NAME","TOTAL_AMOUNT","TOTAL_AMOUNT_AFTER","START_DATE","END_DATE","NOTE","PAID_TRANSFER","CREATE_DATE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'creditmemo','action'=>'edit',
     		);

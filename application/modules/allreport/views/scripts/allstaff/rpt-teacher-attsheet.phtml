@@ -76,7 +76,7 @@ table.tb-footer tr.style-head {
 				}
 				academic_year=dijit.byId('academic_year').get('value');
 				if(academic_year=='' || academic_year==0){
-					alert('<?php echo $tr->translate('PLEASE_SELECT_ACADEMIC');?>!');
+					alert('<?php echo $tr->translate('PLEASE_SELECT_YEAR');?>!');
 					dijit.byId('academic_year').focus(); 
 					return false;
 				}

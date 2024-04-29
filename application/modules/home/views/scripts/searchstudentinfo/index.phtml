@@ -209,37 +209,37 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 										?>
 										<?php if (!empty($rs['group_id'])) { ?>
 											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/" . $rs['group_id']; ?>"><?php echo $tr->translate('STUDENT_LIST_REPORT'); ?></a>
+												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("STUDENT_LIST_REPORT");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/" . $rs['group_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('STUDENT_LIST_REPORT'); ?></a>
 											</li>
 											<?php if ($rs['is_subspend'] == 0) { ?>
 												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/allstudent/certify-khmer/id/" . $rs['stu_id']; ?>"><?php echo $tr->translate('CERTIFY_KHMER'); ?></a>
+													<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("CERTIFY_KHMER");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/certify-khmer/id/" . $rs['stu_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('CERTIFY_KHMER'); ?></a>
 												</li>
 												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/allstudent/certify-english/id/" . $rs['stu_id']; ?>"><?php echo $tr->translate('CERTIFY_ENGLIISH'); ?></a>
+													<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("CERTIFY_ENGLIISH");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/certify-english/id/" . $rs['stu_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('CERTIFY_ENGLIISH'); ?></a>
 												</li>
 											<?php } ?>
 											<?php $groupScore = $dbreportGr->getScoreSettingIdByGroup($rs['group_id']);
 											if (!empty($groupScore)) { ?>
 												<li>
-													<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/" . $rs['group_id']; ?>"><?php echo $tr->translate('Assessment Term'); ?></a>
+													<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("Assessment Term");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/" . $rs['group_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('Assessment Term'); ?></a>
 												</li>
 											<?php } ?>
 										<?php } ?>
 										<?php if (!empty($lastExam)) { ?>
 											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-monthly-score-student?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastExam['group_id'] . "&exam_type=" . $lastExam['exam_type'] . "&for_semester=" . $lastExam['for_semester'] . "&for_month=" . $lastExam['for_month']; ?>"><?php echo $tr->translate('TRANSCRIPT'); ?></a>
+												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("TRANSCRIPT");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-monthly-score-student?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastExam['group_id'] . "&exam_type=" . $lastExam['exam_type'] . "&for_semester=" . $lastExam['for_semester'] . "&for_month=" . $lastExam['for_month'].'&inFrame=true'; ?>');" ><?php echo $tr->translate('TRANSCRIPT'); ?></a>
 											</li>
 											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-score-result/id/" . $lastExam['id']; ?>"><?php echo $tr->translate('SCORE_RESULT'); ?></a>
+												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("SCORE_RESULT");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-score-result/id/" . $lastExam['id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('SCORE_RESULT'); ?></a>
 											</li>
 											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-score-detail/id/" . $lastExam['id']; ?>"><?php echo $tr->translate('SCORE_DETAIL'); ?></a>
+												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("SCORE_DETAIL");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-score-detail/id/" . $lastExam['id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('SCORE_DETAIL'); ?></a>
 											</li>
 										<?php } ?>
 										<?php if (!empty($lastEvaluation)) { ?>
 											<li>
-												<a target="_blank" href="<?php echo $this->baseUrl() . "/allreport/score/rpt-student-evaluationletter?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastEvaluation['group_id'] . "&exam_type=" . $lastEvaluation['for_type'] . "&for_semester=" . $lastEvaluation['for_semester'] . "&for_month=" . $lastEvaluation['for_month']; ?>"><?php echo $tr->translate('STUDENT_EVALUATION'); ?></a>
+												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("STUDENT_EVALUATION");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-student-evaluationletter?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastEvaluation['group_id'] . "&exam_type=" . $lastEvaluation['for_type'] . "&for_semester=" . $lastEvaluation['for_semester'] . "&for_month=" . $lastEvaluation['for_month'].'&inFrame=true'; ?>');" ><?php echo $tr->translate('STUDENT_EVALUATION'); ?></a>
 											</li>
 										<?php } ?>
 

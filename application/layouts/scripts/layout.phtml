@@ -57,7 +57,7 @@ if ($module != 'default') {
 	}
 	
 	$inFrame = $request->getParam("inFrame");
-	$classShow = empty($inFrame) ? "" : "hidden";
+	$classShow = empty($inFrame) ? "" : "hiddenBlog";
 	$classContentInframe = empty($inFrame) ? "" : "content-inframe";
 	$padLeftContent = empty($inFrame) ? "" : "mrg-left-none";
 ?>
@@ -153,6 +153,11 @@ if ($module != 'default') {
 				font-size: 16px;
 				vertical-align: super;
 				line-height: 0;
+			}
+			.hiddenBlog {
+				visibility: hidden;
+				display: none;
+				width: 0 !important;
 			}
 		</style>
 		<?php if ($module == 'home' and $controller == "index" and $action == "index") { ?>
@@ -399,7 +404,7 @@ if ($module != 'default') {
 				var currentTitle = $(document).attr('title');
 				$('#firstTabs').attr('title', currentTitle);
 				var currentTab = $('#tt').tabs();
-				$(".tabs-header ul.tabs" ).addClass( "hidden" );
+				$(".tabs-header ul.tabs" ).addClass( "hiddenBlog" );
 	
 			});
 
@@ -588,7 +593,7 @@ if ($module != 'default') {
 								
 								var currentAmtTab = $(".tabs-header ul.tabs" ).children().length;
 								if(currentAmtTab<=1){
-									$(".tabs-header ul.tabs" ).addClass( "hidden" );
+									$(".tabs-header ul.tabs" ).addClass( "hiddenBlog" );
 								}
 							}
 						}]
@@ -596,9 +601,9 @@ if ($module != 'default') {
 					
 					var currentAmtTab = $(".tabs-header ul.tabs" ).children().length;
 					if(currentAmtTab>1){
-						$(".tabs-header ul.tabs" ).removeClass( "hidden" );
+						$(".tabs-header ul.tabs" ).removeClass( "hiddenBlog" );
 					}else{
-						$(".tabs-header ul.tabs" ).addClass( "hidden" );
+						$(".tabs-header ul.tabs" ).addClass( "hiddenBlog" );
 					}
 				}
 				

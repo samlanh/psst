@@ -184,20 +184,28 @@
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
 				var m = "clicked: " + key;
+				var newPageTitle="";
 				if(key=="outstanding"){
 					url='<?php echo $urlOutStanding;?>';
+					newPageTitle="<?php echo $tr->translate("OUTSTANDING_STUDENT");?>";
 				}else if(key=="outstandingNophoto"){
 					url='<?php echo $urlOutStandingNoPhoto;?>';
+					newPageTitle="<?php echo $tr->translate("OUTSTANDING_STUDENT_NO_PHOTO");?>";
 				}else if(key=="scoreresult"){
 					url='<?php echo $urlScoreResult;?>';
+					newPageTitle="<?php echo $tr->translate("SCORE_RESULT");?>";
 				}else if(key=="scoredetail"){
 					url='<?php echo $urlScoreDetail;?>';
+					newPageTitle="<?php echo $tr->translate("SCORE_DETAIL");?>";
 				}else if(key=="scoreresultSemester"){
 					url='<?php echo $urlScoreResultSemester;?>';
+					newPageTitle="<?php echo $tr->translate("SCORE_RESULT_SEMESTER");?>";
 				}else if(key=="scoreresultannaul"){
 					url='<?php echo $urlScoreResultAnnaul;?>';
+					newPageTitle="<?php echo $tr->translate("SCORE_RESULT_ANNAUL");?>";
 				}
-				gotoAction();
+				addTab(newPageTitle,url+row+'?inFrame=true');
+				//gotoAction();
 			},
 			items: {
 					"scoreresultannaul": { name: "<?php echo $tr->translate("SCORE_RESULT_ANNAUL");?>", icon: "fa-file-text-o",disabled: function() {

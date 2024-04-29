@@ -37,7 +37,7 @@
 	<?php foreach($this->row  as $key=> $rs){ ?>
 		<div id="noteContent<?php echo $key?>" style="display: none;"><?php echo $rs['note'];?></div>
 	<?php } ?>
-	
+</div>	
 <script type="text/javascript">
 dojo.ready(function(){
 	readMoneyInKhmer("<?php echo $this->rr['paid_amount'];?>");

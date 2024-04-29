@@ -55,6 +55,11 @@ if ($module != 'default') {
 		$session_user->timeout = time();
 		$session_user->lock();
 	}
+	
+	$inFrame = $request->getParam("inFrame");
+	$classShow = empty($inFrame) ? "" : "hidden";
+	$classContentInframe = empty($inFrame) ? "" : "content-inframe";
+	$padLeftContent = empty($inFrame) ? "" : "mrg-left-none";
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 	<html>
@@ -200,9 +205,9 @@ if ($module != 'default') {
 				</div>
 			</div>
 		</div>
-		<div class="container body" <?php if (($module != 'rsvacl' and $controller != "useraccess" and $action != "add") and ($module != 'home' and $controller != "index" and $action != "index")) { ?> style="display: none;" <?php } ?>>
+		<div class="container body" <?php if (($module != 'rsvacl' and $controller != "useraccess" and $action != "add") and ($module != 'home' and $controller != "index" and $action != "index")) { ?> style="visibility: hidden;" <?php } ?>>
 			<div class="main_container">
-				<div class="col-md-3 left_col ">
+				<div class="col-md-3 left_col <?php echo $classShow;?>">
 					<div class="left_col scroll-view">
 						<div class="navbar nav_title">
 							<a href="<?php echo $this->baseUrl() . "/home"; ?>" class="site_title"><span><img src="<?php echo $this->baseUrl() ?>/images/cam-app-logo.png" alt="CAM APP TECHNOLOGY"></span></a>
@@ -212,7 +217,7 @@ if ($module != 'default') {
 					</div>
 				</div>
 				<!-- top navigation -->
-				<div class="top_nav">
+				<div class="top_nav <?php echo $classShow;?>">
 					<div class="nav_menu">
 						<nav>
 							<div class="nav toggle">
@@ -260,86 +265,80 @@ if ($module != 'default') {
 				</div>
 				<!-- /top navigation -->
 				<!-- page content -->
-				<div class="right_col" role="main">
+				<div class="right_col <?php echo $padLeftContent;?>" role="main" >
 					<div class="right-conten" style="min-height: 570px;">
-						<div style="clear:both;"></div>
-						<?php if ($module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $module != 'default') { ?>
-							<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
-								<?php if ($action == 'index' and $module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $controller != 'studentnearlyendservice' and $controller != 'studentpaymentlate' and $controller != 'studentpaymentlate') { ?>
-									<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
-										<a title="<?php echo $tr->translate('ADD_NEW'); ?>" class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'add'), null, true); ?>">
-											<i class="fa fa-plus-circle" aria-hidden="true"></i>
-										</a>
-									</div>
-								<?php } elseif ($action == 'add' or $action == 'edit' or $action == 'copy' or $action == 'view' or $module == 'allreport' or $action == 'createtestexam') { ?>
-									<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
-										<a title="<?php echo $tr->translate('GO_BACK'); ?>" class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'index'), null, true); ?>">
-											<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
-										</a>
+						<div id="tt" class="easyui-tabs  <?php echo $classContentInframe;?>" style="width:100%; ">
+							<div id="firstTabs" title="Home" >
+								<div style="clear:both;"></div>
+								<?php if ($module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $module != 'default') { ?>
+									<div class="ptss-frame  js-ptss-frame <?php echo $classShow;?>"><!-- is-opened -->
+										<?php if ($action == 'index' and $module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $controller != 'studentnearlyendservice' and $controller != 'studentpaymentlate' and $controller != 'studentpaymentlate') { ?>
+											<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
+												<a title="<?php echo $tr->translate('ADD_NEW'); ?>" class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'add'), null, true); ?>">
+													<i class="fa fa-plus-circle" aria-hidden="true"></i>
+												</a>
+											</div>
+										<?php } elseif ($action == 'add' or $action == 'edit' or $action == 'copy' or $action == 'view' or $module == 'allreport' or $action == 'createtestexam') { ?>
+											<div class="ptss__toggle-btnaddd  js-ptss-toggle-btn add-edit-action">
+												<a title="<?php echo $tr->translate('GO_BACK'); ?>" class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'index'), null, true); ?>">
+													<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
+												</a>
+											</div>
+										<?php } ?>
+										<?php if ($action == 'index' and $module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $controller != 'studentnearlyendservice' and $controller != 'studentpaymentlate' and $controller != 'studentpaymentlate' and $module != 'allreport') { ?>
+											<div class="ptss__header add-edit-action">
+												<a class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'add'), null, true); ?>"><?php echo $tr->translate('ADD'); ?>
+													<i class="fa fa-plus-circle" aria-hidden="true"></i>
+												</a>
+											</div>
+										<?php } elseif ($action == 'add' or $action == 'edit' or $action == 'copy' or $action == 'view' or $module == 'allreport') { ?>
+											<div class="ptss__header add-edit-action">
+												<a class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'index'), null, true); ?>">
+													<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> <?php echo $tr->translate('GO_BACK'); ?>
+												</a>
+											</div>
+										<?php } ?>
 									</div>
 								<?php } ?>
-								<?php if ($action == 'index' and $module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $controller != 'studentnearlyendservice' and $controller != 'studentpaymentlate' and $controller != 'studentpaymentlate' and $module != 'allreport') { ?>
-									<div class="ptss__header add-edit-action">
-										<a class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'add'), null, true); ?>"><?php echo $tr->translate('ADD'); ?>
-											<i class="fa fa-plus-circle" aria-hidden="true"></i>
-										</a>
-									</div>
-								<?php } elseif ($action == 'add' or $action == 'edit' or $action == 'copy' or $action == 'view' or $module == 'allreport') { ?>
-									<div class="ptss__header add-edit-action">
-										<a class='add-edit' href="<?php echo $this->url(array('module' => $module, 'controller' => $controller, 'action' => 'index'), null, true); ?>">
-											<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> <?php echo $tr->translate('GO_BACK'); ?>
-										</a>
-									</div>
-								<?php } ?>
-							</div>
-						<?php } ?>
 
-						<?php if ($module == 'allreport' and $action != 'index' and $action != 'rpt-certificate') { ?>
-							<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
-								<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
-									<i class="fa fa-print"></i>
-								</div>
-								<div class="ptss__header"><?php echo $tr->translate("PRINT"); ?></div>
-								<div class="ptss__settings">
-									<div class="ptss__single-setting" id="ptss__layout">
-										<div class="ptss__setting-control">
-											<div class="ptss__layout-wrapper">
-												<a class="qButton" title="<?php echo $tr->translate("Preview"); ?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
-												<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>" onclick="doPrint();"><i class="fa fa-print" aria-hidden="true"></i></a>
-												<a class="qButton excel" href="#" title="<?php echo $tr->translate("Export"); ?>" onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+								<?php if ($module == 'allreport' and $action != 'index' and $action != 'rpt-certificate') { ?>
+									<div class="ptss-frame  js-ptss-frame "><!-- is-opened -->
+										<div class="ptss__toggle-btn  js-ptss-toggle-btn ">
+											<i class="fa fa-print"></i>
+										</div>
+										<div class="ptss__header"><?php echo $tr->translate("PRINT"); ?></div>
+										<div class="ptss__settings">
+											<div class="ptss__single-setting" id="ptss__layout">
+												<div class="ptss__setting-control">
+													<div class="ptss__layout-wrapper">
+														<a class="qButton" title="<?php echo $tr->translate("Preview"); ?>" href="#" onclick="preview();"><i class="fa fa-search" aria-hidden="true"></i></a>
+														<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>" onclick="doPrint();"><i class="fa fa-print" aria-hidden="true"></i></a>
+														<a class="qButton excel" href="#" title="<?php echo $tr->translate("Export"); ?>" onclick="exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								<?php } ?>
+								<?php if ($module != 'home'  or ($module == "home" and $controller !== "index")) { ?>
+									<section class="inputmask">
+										<div class="row">
+											<div class="col-sm-12">
+											<?php } ?>
+											<?php
+											$db = new Application_Model_DbTable_DbUsers();
+											$rs = $db->getAccessUrl($module, $controller, $action);
+											echo $this->layout()->content;
+											?>
+											<?php if ($module != 'home' or ($module == "home" and $controller !== "index")) { ?>
+											</div>
+										</div>
+									</section>
+								<?php } ?>
+						
 							</div>
-							<div style="clear:both;"></div>
-						<?php } ?>
-						<?php if ($module != 'home'  or ($module == "home" and $controller !== "index")) { ?>
-							<section class="inputmask">
-								<div class="row">
-									<div class="col-md-12 col-sm-12 col-xs-12">
-									<?php } ?>
-									<?php
-									$db = new Application_Model_DbTable_DbUsers();
-									$rs = $db->getAccessUrl($module, $controller, $action);
-									echo $this->layout()->content;
-
-									//  								if(!empty($teacher_id)){
-									//  									echo $this->layout()->content;
-									//  								}else{
-									//  									if(!empty($rs) OR $action=='changepassword'){
-									//  										echo $this->layout()->content;
-									//  									}else{
-									//  										//echo $this->render('pagenotfund.phtml');
-									//  									}
-									//  								}
-									//echo $this->layout()->content;
-									?>
-									<?php if ($module != 'home' or ($module == "home" and $controller !== "index")) { ?>
-									</div>
-								</div>
-							</section>
-						<?php } ?>
+						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -393,12 +392,15 @@ if ($module != 'default') {
 					updateTimeOut();
 					checkSessionExpire();
 				});
-				$('.ckeditor').summernote(
-				{
+				$('.ckeditor').summernote({
 				  minHeight: 300, 
-				  
-				}
-				);
+				});
+				
+				var currentTitle = $(document).attr('title');
+				$('#firstTabs').attr('title', currentTitle);
+				var currentTab = $('#tt').tabs();
+				$(".tabs-header ul.tabs" ).addClass( "hidden" );
+	
 			});
 
 			var urlReload = '<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'reloadr')); ?> ';
@@ -479,7 +481,8 @@ if ($module != 'default') {
 
 				loadingBlock();
 				$(".overlay").fadeOut(1000, function() {
-					$("div.container.body").fadeIn(500);
+					//$("div.container.body").fadeIn(500);
+					$("div.container.body").css("visibility", "visible");
 
 					<?php if ((($module != 'home' or $controller == "crm" or $controller == "studentpermission") and ($action == "index")) or $module == 'allreport') { ?>
 						$('#datatable-responsive').DataTable({
@@ -566,10 +569,49 @@ if ($module != 'default') {
 				}
 
 			<?php } ?>
+			
+			function addTab(title, url){
+				if ($('#tt').tabs('exists', title)){
+					$('#tt').tabs('select', title);
+				} else {
+					var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
+					$('#tt').tabs('add',{
+						title:title,
+						content:content,
+						tools:[{
+							iconCls:'fa fa-times',
+							handler:function(){
+								$('#tt').tabs('select', title);
+								var tab = $('#tt').tabs('getSelected');
+								var index = $('#tt').tabs('getTabIndex',tab);
+								$('#tt').tabs('close',index);
+								
+								var currentAmtTab = $(".tabs-header ul.tabs" ).children().length;
+								if(currentAmtTab<=1){
+									$(".tabs-header ul.tabs" ).addClass( "hidden" );
+								}
+							}
+						}]
+					});
+					
+					var currentAmtTab = $(".tabs-header ul.tabs" ).children().length;
+					if(currentAmtTab>1){
+						$(".tabs-header ul.tabs" ).removeClass( "hidden" );
+					}else{
+						$(".tabs-header ul.tabs" ).addClass( "hidden" );
+					}
+				}
+				
+				
+			}
+
 		</script>
 
 		<script src="<?php echo $this->baseUrl() ?>/admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="<?php echo $this->baseUrl() ?>/admin/build/js/custom.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/admin/easyui/easyui.css">
+		<script type="text/javascript" src="<?php echo $this->baseUrl()?>/admin/easyui/jquery.easyui.min.js"></script>
+
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 	</body>
 

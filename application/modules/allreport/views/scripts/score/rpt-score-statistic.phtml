@@ -7,7 +7,7 @@
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
-
+	$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
 ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -634,7 +634,7 @@
 			
 		</table>
 	</div>	
-	<div class="card-box" >
+	<div class="card-box" id="hideStampSetting" >
 			<label class="control-label custom-switch float-midd "> 
 				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
 				<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
@@ -703,7 +703,8 @@
 	    });
 		 getallGrade();
 		 getAllGroupByBranch();
-		 stampDisplay();
+		// stampDisplay();
+		 dutySetting();
 	});
 	
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
@@ -765,6 +766,25 @@
 				}
 			});
 	}
+
+function dutySetting() {
+
+<?php if ($footerScoreDocument == 0) { ?>
+
+	document.getElementById("stamp").checked = false;
+	stampDisplay();
+	var hideStampSetting = document.getElementById("hideStampSetting");
+ 	var administrator = document.getElementById("administrator");
+
+ 	administrator.style.display = "block";
+	hideStampSetting.style.display = "none";
+
+<?php } else { ?>
+	document.getElementById("stamp").checked = true;
+	stampDisplay();
+<?php } ?>
+
+}
 
 function stampDisplay() {
   var checkBox = document.getElementById("stamp");

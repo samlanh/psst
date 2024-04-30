@@ -201,17 +201,28 @@
 		$.contextMenu({
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
-			
+				var newPageTitle="";
+				var actionType=1;
 				var m = "clicked: " + key;
 				if(key=="edit"){
 					url='<?php echo $urlEdit;?>';
+					newPageTitle="<?php echo $tr->translate("EDIT");?>";
+					actionType=2;
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
+					newPageTitle="<?php echo $tr->translate("COPY");?>";
+					actionType=2;
 				}
 				else if(key=="view"){
 					url='<?php echo $urlView;?>';
+					newPageTitle="<?php echo $tr->translate("FRONTDESK_INFO");?>";
 				}
-				gotoAction();
+				if(actionType==1){
+					addTab(newPageTitle,url+row+'?inFrame=true');
+				}else{
+					gotoAction();
+				}
+				//gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
@@ -225,6 +236,6 @@
 	}
 	var recordid ='';
 	function gotoAction(){
-		window.open(url+row, '_blank');
+		window.open(url+row, '_self');
 	}
 </script> 

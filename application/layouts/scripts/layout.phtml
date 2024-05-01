@@ -572,9 +572,13 @@ if ($module != 'default') {
 				}
 
 				function exportExcel() {
+					var currentTitle = $(document).attr('title');
+					var todayStr = "<?php echo date("d-m-Y"); ?>";
+					currentTitle = currentTitle+'-'+todayStr;
 					$('#exportExcel').tableExport({
-						type: 'excel',
-						escape: 'false'
+						type: 'excel'
+						,escape: 'false'
+						,fileName:currentTitle
 					});
 				}
 

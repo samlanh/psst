@@ -229,7 +229,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'is_current'	=> 1,
 								'stop_type'		=> 0,
 								'is_pass'		=> 0,
-								'is_current'	=> 1,
 								'user_id'		=> $this->getUserId(),
 								'status'		=> 1,
 								'modify_date'	=> date("Y-m-d H:i:s")

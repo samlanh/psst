@@ -4,6 +4,119 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'rms_group_schedule';
+	function ImportXMLSchedule($data){
+
+		
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		
+		$urlPart= PUBLIC_PATH.'/xml/';
+		if (!file_exists($urlPart)) {
+			mkdir($urlPart, 0777, true);
+		}	
+		
+		$fileName = $_FILES['photo']['name'];
+		// if (!empty($_data['uploaded'])){
+		// 	$photo=$_data['uploaded'];
+		// }else if (!empty($name)){
+			// $ss = 	explode(".", $name);
+			// $image_name = "profile_student_".date("Y").date("m").date("d").time().".".end($ss);
+			$tmp = $_FILES['photo']['tmp_name'];
+			if(move_uploaded_file($tmp, $urlPart.$fileName)){
+			$stting = "upload succussed";
+			}
+			else{
+				$string = "Image Upload failed";
+			}
+		echo $string;
+		exit();
+
+		$xml=simplexml_load_file($urlPart.$fileName, 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+		$dbxml = new Issue_Model_DbTable_DbImportxml;
+		$array = json_decode(json_encode((array)$xml), TRUE);
+		/**
+		 * check subject
+		 */
+		$tableData = $array["subjects"]["subject"];
+		$subjectColumn = $array["subjects"]["@attributes"]["columns"];
+		$columnList = explode(',', $subjectColumn);
+		if(!empty($tableData)) foreach($tableData as $row){//use
+			$subjectTitle =null;//$row["@attributes"]['name'];
+			$strId =$row["@attributes"]['id'];
+			$shortcut =$row["@attributes"]['short'];
+			$Subject = $this->getSubjectId($subjectTitle,$strId,$shortcut);
+		}
+
+
+		/**
+		 * check teacher
+		 */
+		$tableData = $array["teachers"]["teacher"];
+		$periodsColumn = $array["teachers"]["@attributes"]["columns"];
+		$columnList = explode(',', $periodsColumn);
+		if(!empty($tableData)) foreach($tableData as $row){//use
+
+			$teacherTitle =null;//$row["@attributes"]['name'];
+			$strId =$row["@attributes"]['id'];
+			$gender =$row["@attributes"]['gender'];
+			$shortcut = $row['@attributes']['short'];
+			$teacher = $this->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
+		}
+
+
+		/**
+		 * Summary of getUserId
+		 *check group
+		 */
+
+		 $tableData = $array["classes"]["class"];
+		$periodsColumn = $array["classes"]["@attributes"]["columns"];
+		$columnList = explode(',', $periodsColumn);
+
+		if(!empty($tableData)) foreach($tableData as $row){//use
+			$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
+			$strId =$row["@attributes"]['id'];
+			$groupId = $this->getGroupId($groupCode,$strId);
+		}
+
+		/**
+		 * Summary of getUserId
+		 * add card
+		 */
+
+		 $tableData = $array["cards"]["card"];
+		 if(!empty($tableData)) foreach($tableData as $row){//use
+			 $lessionId = $row["@attributes"]['lessonid'];
+			 $period = $row["@attributes"]['period'];
+			 $days = $row["@attributes"]['days'];
+			 $this->addcard($lessionId,$period,$days);
+		 }
+
+		/**
+		 * Summary of getUserId
+		 * update existing schedule
+		 */
+
+		 
+		$tableData = $array["lessons"]["lesson"];
+		$periodsColumn = $array["classes"]["@attributes"]["columns"];
+		$columnList = explode(',', $periodsColumn);
+
+		if(!empty($tableData)) foreach($tableData as $row){
+			$subjectId= $dbxml->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
+			$teacherId = $dbxml->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
+			$groupId = $dbxml->getGroupIdbyStrId($row["@attributes"]['classids']);
+			
+			
+			$lessionId = $row["@attributes"]['id'];
+			
+			$data = array(
+							'subject_id'=>$subjectId,
+							'techer_id' =>$teacherId,
+							'note'=>'abc',
+					);
+			$dbxml->updateExistingSchedule($lessionId,$data,$groupId);
+		}
+	}
 	public function getUserId(){
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
@@ -29,24 +142,21 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		$subject_id =  $db->fetchOne($sql);
         
 		if(empty($subject_id)){
-			echo $title;
-			exit();
-			// $arr = array(
-			// 	'subject_titlekh'=>$kh_name,
-			// 	'subject_titleen'=>$eng_name,
-			// 	'shortcut'		=>$eng_name,
-			// 	'schoolOption'	=>1,
-			// 	'is_parent'		=>0,
-			// 	'subject_lang'	=>$subject_lang,
-			// 	'type_subject'	=>$subject_type,
-			// 	//'note'		    =>"From Import",
-			// 	'date'			=>date("Y-m-d"),
-			// 	// 'modify_date'	=>date("Y-m-d H:i:s"),
-			// 	'status'		=>1,
-			// 	'user_id'		=>$this->getUserId(),
-			// );
-			// $this->_name='rms_subject';
-			// $subject_id = $this->insert($arr); 
+			
+			$arr = array(
+				'subject_titlekh'=>$title,
+				'subject_titleen'=>$title,
+				'shortcut'		=>$shortcut,
+				'schoolOption'	=>1,
+				'is_parent'		=>0,
+				'subject_lang'	=>$sublang ,
+				'type_subject'	=>1,
+				'date'			=>date("Y-m-d"),
+				'status'		=>1,
+				'user_id'		=>$this->getUserId(),
+			);
+			$this->_name='rms_subject';
+			$subject_id = $this->insert($arr); 
 		}else{
 			$this->_name='rms_subject';
 			$array = array(
@@ -78,6 +188,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				echo $title;
 				exit();
 				$code = $dbg->getTeacherCode(1);
+
 				$_arr=array(
 						'branch_id' 		 => 1,
 						'teacher_name_en'	 => $title,
@@ -178,8 +289,6 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				$this->insert($_arr);
 	}
 	
-
-	
 	function dayofWeek($str){
 		$days = array(
 				'10000'=>1,//mon
@@ -214,5 +323,6 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 // 			exit();
 		}
 	}
+	
 }   
 

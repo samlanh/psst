@@ -1,0 +1,251 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+	echo $this->headTitle($tr->translate('Import xml Schedule')); 
+	$url_save = $this->url(array('module'=>'issue','controller'=>'importxmlschedule','action'=>'index'));
+	$frm = $this->frm_items; 
+?>
+<head>
+
+</head>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main ul {
+    display: flex;
+}
+
+.main ul li {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 40px;
+}
+
+.main ul li .icons {
+    font-size: 25px;
+    color: #1b761b;
+    margin: 0 60px;
+}
+
+.main ul li .label {
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #1b761b;
+}
+
+.main ul li .step {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-color: #d7d7c3;
+    margin: 16px 0 10px;
+    display: grid;
+    place-items: center;
+    color: ghostwhite;
+    position: relative;
+    cursor: pointer;
+}
+
+.main .step::after {
+    content: "";
+    position: absolute;
+    width: 197px;
+    height: 3px;
+    background-color: #d7d7c3;
+    right: 30px;
+}
+
+.main .first::after {
+    width: 0;
+    height: 0;
+}
+
+.main ul li .step .awesome {
+    display: none;
+}
+
+.main ul li .step p {
+    font-size: 18px;
+}
+
+.main ul li .active {
+    background-color: #1b761b;
+}
+
+.main li .active::after {
+    background-color: #1b761b;
+
+}
+
+.main ul li .active p {
+    display: none;
+}
+
+.main ul li .active .awesome {
+    display: flex;
+}
+</style>
+<div class="card-box">
+    <div class="col-sm-12 border-botom">
+        <div class="col-sm-8 pd-0">
+            <h4 class="m-b-0"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('IMPORT_XML_SCHEDULE')?></h4>
+        </div>
+        <div class="col-sm-4 text-right">
+        </div>
+    </div>
+</div>
+<div class="card-box">
+	<div class="col-sm-12 border-botom">
+	<form id='importxml' enctype="multipart/form-data" dojoType="dijit.form.Form" method="post">
+		<script type="dojo/method" event="onSubmit">	
+			if(this.validate()) {
+				/*branch_id=dijit.byId("branch_id").get("value");
+                if(branch_id==-1 || branch_id==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>!!!");
+					dijit.byId("branch_id").focus();
+                    return false;
+				}*/
+			
+				loadingBlock();
+				return true;
+			}else {
+				return false;
+			}		
+		</script>
+			<table width="100%" style=" margin-top:10px;">
+				
+				<tr>
+					<td><br /><br /><br />
+						<div class="col-sm-4 text-right"></div>	
+						<div class="col-sm-4 text-right">
+							<div class="form-group mb-4">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									&nbsp;
+								</div>
+							</div>
+							<div class="form-group ">
+								<div class="col-md-6"><?php echo $tr->translate('CHOOSE_FILE')?>(XML File)</div>
+								<div class="col-md-6"><input type="file" name="file_excel" id="file_excel" accept=".xml" required="required" class="fullside"/></div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-6"></div>
+								<div class="col-md-6" align="left">
+								<input type="submit" value="SAVE_CLOSE" label="<?php echo $tr->translate('IMPORT_FILE')?>" id="import_file" dojoType="dijit.form.Button" name="import_file"
+								class="button-class button-primary" iconClass="glyphicon glyphicon-download-alt" /> 
+								</div>
+							</div>
+    					</div>
+    					<div class="col-sm-4 text-right"></div>		
+					</td>
+				</tr>
+			</table>	
+		</form>
+	</div>
+</div>
+<div class="main">
+
+    <ul>
+        <li>
+            <i class="icons awesome fa-solid fa-user"></i>
+            <div class="step first">
+                <p>1</p>
+                <i class="awesome fa-solid fa-check"></i>
+            </div>
+            <p class="label">Profile</p>
+        </li>
+        <li>
+            <i class="icons awesome fa-solid fa-coins"></i>
+            <div class="step second">
+                <p>2</p>
+                <i class="awesome fa-solid fa-check"></i>
+            </div>
+            <p class="label">Finances</p>
+        </li>
+        <li>
+            <i class="icons awesome fa-solid fa-house"></i>
+            <div class="step third">
+                <p>3</p>
+                <i class="awesome fa-solid fa-check"></i>
+            </div>
+            <p class="label">Property</p>
+        </li>
+        <li>
+            <i class="icons awesome fa-regular fa-star-half-stroke"></i>
+            <div class="step fourth">
+                <p>4</p>
+                <i class="awesome fa-solid fa-check"></i>
+            </div>
+            <p class="label">Evaluation</p>
+        </li>
+        <li>
+            <i class="icons awesome fa-solid fa-thumbs-up"></i>
+            <div class="step fifth">
+                <p>5</p>
+                <i class="awesome fa-solid fa-check"></i>
+            </div>
+            <p class="label">Approval</p>
+        </li>
+    </ul>
+</div>
+<?php 
+
+// $xml=simplexml_load_file(PUBLIC_PATH."/xml/Schedulev4.xml", 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+// $dbxml = new Issue_Model_DbTable_DbImportxml;
+// $array = json_decode(json_encode((array)$xml), TRUE);
+
+// $tableData = $array["subjects"]["subject"];
+// $subjectColumn = $array["subjects"]["@attributes"]["columns"];
+// $columnList = explode(',', $subjectColumn);
+//  if(!empty($tableData)) foreach($tableData as $row){//use
+
+//  	$subjectTitle =null;//$row["@attributes"]['name'];
+//  	$strId =$row["@attributes"]['id'];
+//  	$shortcut =$row["@attributes"]['short'];
+//  	$Subject = $dbxml->getSubjectId($subjectTitle,$strId,$shortcut);
+//  }
+
+?>
+<script>
+const first = document.querySelector(".first");
+const second = document.querySelector(".second");
+const third = document.querySelector(".third");
+const fourth = document.querySelector(".fourth");
+const fifth = document.querySelector(".fifth");
+const steps = [first, second, third, fourth, fifth];
+
+function nextStep(currentStep) {
+    steps.forEach(step => step.classList.remove("active"));
+
+    steps.forEach((step, index) => {
+        if (index <= currentStep) {
+            step.classList.add("active");
+        } else {
+            step.classList.remove("active");
+        }
+    });
+}
+
+steps.forEach((step, index) => {
+    step.addEventListener("click", () => {
+        nextStep(index);
+    });
+});
+</script>

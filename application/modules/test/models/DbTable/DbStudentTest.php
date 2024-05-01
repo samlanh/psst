@@ -512,14 +512,14 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$check  = $this->checkStudentInGroupDetail($data);
 					if (!empty($check)){
 
-						$_arr['partTimeId']=$data['part_time_list'];
+						$_arr['session']=$data['part_time_list'];
 
 						$where = "stu_id=".$data['stu_test_id'];
 						$where.=" AND test_restult_id = $test ";
 						$this->_name="rms_group_detail_student";
 						$this->update($_arr, $where);
 					}else{
-						$_arr['partTimeId']=$data['part_time_list'];
+						$_arr['session']=$data['part_time_list'];
 						$_arr['branch_id']=$data['branch_id'];
 						$_arr['entryFrom']=6;
 						$this->_name="rms_group_detail_student";
@@ -563,7 +563,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				$check  = $this->checkStudentInGroupDetail($arrCheck);
 				if (!empty($check)){
 
-					$_arr['partTimeId']=$data['part_time_list'];
+					$_arr['session']=$data['part_time_list'];
 
 					$where = "stu_id=".$data['stu_test_id'];
 					//$degreeUp = empty($check['degree'])?$data['degree']:$check['degree'];
@@ -573,7 +573,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					$this->update($_arr, $where);
 				}else{
 					$schoolOption = empty($data['schoolOption'])?1:$check['schoolOption'];
-					$_arr['partTimeId']    =$data['part_time_list'];
+					$_arr['session']    =$data['part_time_list'];
 					$_arr['school_option'] =$schoolOption;
 					$_arr['branch_id']     =$data['branch_id'];
 					$_arr['entryFrom']     =6;
@@ -697,7 +697,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree_result AND i.type=1 LIMIT 1) AS degree_result_title,
 			(SELECT $grade FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade_result AND idd.items_type=1 LIMIT 1) AS grade_result_title,
 			(SELECT first_name FROM rms_users WHERE rms_users.id = str.result_by LIMIT 1) AS result_by
-			,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
+			,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`session` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
 		FROM
 			`rms_student_test_result` AS str
 		WHERE 
@@ -786,7 +786,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		
 		$sql="SELECT
 		str.*,
-		(SELECT sd.partTimeId  FROM `rms_group_detail_student` AS sd WHERE sd.stu_id = str.stu_test_id AND sd.test_restult_id=str.id LIMIT 1) AS part_time_id,
+		(SELECT sd.session  FROM `rms_group_detail_student` AS sd WHERE sd.stu_id = str.stu_test_id AND sd.test_restult_id=str.id LIMIT 1) AS part_time_id,
 		(SELECT sd.feeId  FROM `rms_group_detail_student` AS sd WHERE sd.stu_id = str.stu_test_id AND sd.test_restult_id=str.id LIMIT 1) AS feeId,
 		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,
 		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = str.grade AND idd.items_type=1 LIMIT 1) AS grade_title,

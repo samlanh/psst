@@ -282,7 +282,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'degree'		=>$degreeId,
 									'grade'			=>$gradeId,
 									'session'		=>$sesionId,
-									'partTimeId'	=>$sesionId,
 									'startDate'		=>'',
 									'endDate'		=>'',
 									'balance'		=>0,

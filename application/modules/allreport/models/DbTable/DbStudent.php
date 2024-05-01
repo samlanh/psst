@@ -340,7 +340,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					str.updated_result AS updated_result_de,
 					str.note AS note_result,
 					str.is_registered
-					,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
+					,(SELECT ptl.title FROM rms_parttime_list AS ptl WHERE ptl.status=1 AND ptl.id = COALESCE((SELECT gs.`session` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') LIMIT 1 ) AS partTimeTitle
 					,CASE 
 						WHEN str.resultStatus = 2 THEN '".$tr->translate("Unqualified")."'
 						ELSE '".$tr->translate("Qualified")."'
@@ -404,7 +404,7 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$where .= " AND str.resultStatus = ".$search['resultStatus'];
 			}
 			if(!empty($search['partTimeList'])){
-				$where .= " AND COALESCE((SELECT gs.`partTimeId` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') = ".$search['partTimeList'];
+				$where .= " AND COALESCE((SELECT gs.`session` FROM `rms_group_detail_student` AS gs WHERE gs.`test_restult_id` = str.`id` LIMIT 1),'0') = ".$search['partTimeList'];
 			}
 			
 			$dbp = new Application_Model_DbTable_DbGlobal();

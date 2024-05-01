@@ -543,16 +543,21 @@ if ($module != 'default') {
 							dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
 					<?php }
 					} ?>
-					window.frames["print_frame"].document.body.innerHTML = dojo.byId('divPrint').innerHTML;
-					window.frames["print_frame"].window.focus();
-					window.frames["print_frame"].window.print();
+					var currentTitle = $(document).attr('title');
+					var winPrint = window.open('', '', 'left=0,top=0,width=1000,height=600,toolbar=0,scrollbars=0,status=0');
+					winPrint.document.write('<title>'+currentTitle+'</title>'+dojo.byId('divPrint').innerHTML);
+					winPrint.document.close();
+					winPrint.focus();
+					winPrint.print();
+					winPrint.close();
+					
 				}
 
 				function hideleft() {
 					(dojo.style("leftmenu", "display") == "none") ? 'show' : 'hide'();
 				}
-
 				function preview() {
+
 					var disp_setting = "toolbar=no,status=no,resizable=no,location=no,directories=yes,menubar=no,";
 					disp_setting += "scrollbars=no,fullscreen=yes, height=700, left=100, top=25";
 					var content_vlue = document.getElementById("divPrint").innerHTML;

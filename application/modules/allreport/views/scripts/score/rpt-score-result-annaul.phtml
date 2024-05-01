@@ -782,7 +782,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 
 <?php
 $urlOutStanding = $this->baseUrl() . "/allreport/score/certificate-letterofpraisenew/id/";
-$urlOutStandingNoPhoto = $this->baseUrl() . $link;
+$urlTranscript = $this->baseUrl() . $link;
 ?>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
@@ -801,8 +801,9 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 					url = '<?php echo $urlOutStanding; ?>';
 					gotoAction();
 				} else if (key == "transcript") {
-					url = '<?php echo $urlOutStandingNoPhoto; ?>';
-					gotoAction1();
+					url = '<?php echo $urlTranscript; ?>';
+					newPageTitle="<?php echo $tr->translate("TRANSCRIPT");?>";
+					gotoNewTab();
 				}
 
 			},
@@ -831,9 +832,9 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
 	}
 
-	function gotoAction1() {
-		window.open(url + '/id/' + row + '/stu_id/' + student_id);
-	}
+	function gotoNewTab(newPageTitle) {
+		addTab(newPageTitle,url + '/id/' + row + '/stu_id/' + student_id+'?inFrame=true');
+  	}
 
 
 
@@ -997,10 +998,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		?>
 		scoreId = <?php echo $this->scoreId ?>;
 		if (scoreId != '') {
-			window.open(
-				'<?php echo $url_all_transcript; ?>',
-				'_blank' // <- This is what makes it open in a new window.
-			);
+			addTab("<?php echo $tr->translate("PRINT_ALL_TRANSCRIPT");?>",'<?php echo $url_all_transcript; ?>'+'?inFrame=true');
 		}
 	}
 
@@ -1012,10 +1010,7 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 		?>
 		id_selected = dijit.byId('id_selected').get('value');
 		if (id_selected != '') {
-			window.open(
-				'<?php echo $url_transcript; ?>' + '/stu_id/' + id_selected,
-				'_blank' // <- This is what makes it open in a new window.
-			);
+			addTab("<?php echo $tr->translate("PRINT_SELECT_TRANSCRIPT");?>",'<?php echo $url_transcript; ?>' + '/stu_id/' + id_selected+'?inFrame=true');
 		} else if (id_selected == '') {
 			alert('Please select record you want to print');
 			return false;

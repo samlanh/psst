@@ -181,48 +181,34 @@ function getallGrade(){
 			selector: '.context-menu-one', 
 			selectableSubMenu:true,
 			callback: function(key, options) {
+				var newPageTitle="";
+				var actionType=1;
 				var m = "clicked: " + key;
 				if(key=="edit"){
 					url='<?php echo $urlEdit;?>';
+					actionType=2;
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
+					actionType=2;
 				}else if(key=="rpt-student-group"){
 					url='<?php echo $urlStudentGroup;?>';
+					newPageTitle="<?php echo $tr->translate("STUDENT_LIST_REPORT");?>";
 				}else if(key=="rpt-att-list"){
 					url='<?php echo $urlAttList;?>';
+					newPageTitle="<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>";
 				}else if(key=="rpt-totalattendance"){
 					url='<?php echo $urlTotalAtt;?>';
+					newPageTitle="<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>";
 				}else if(key=="rpt-student-list"){
 					url='<?php echo $urlStudentList;?>';
-				}else if(key=="rpt-resultbysemester"){
-					url='<?php echo $urlscoresemester;?>';
-					window.open(url+''+row+'/type/1','_blank');
-					return true;
-				}else if(key=="outstandingsem1"){
-					url='<?php echo $urloutstanding1;?>';
-					window.open(url+''+row+'/type/1','_blank');
-					return true;
+					newPageTitle="<?php echo $tr->translate("STUDENT_LIST");?>";
 				}
-				else if(key=="rpt-semester2"){
-					url='<?php echo $urlscoresemester;?>';
-					window.open(url+''+row+'/type/2','_blank');
-					return true;
-				}else if(key=="outstandingsem2"){
-					url='<?php echo $urloutstanding1;?>';
-					window.open(url+''+row+'/type/2','_blank');
-					return true;
+
+				if(actionType==1){
+					addTab(newPageTitle,url+row+'?inFrame=true');
+				}else{
+					gotoAction();
 				}
-				else if(key=="scoreyear"){
-					url='<?php echo $urlscoreyear;?>';
-					window.open(url+''+row+'/type/3','_blank');
-					return true;
-				}
-				else if(key=="outstandingyear"){
-					url='<?php echo $urloutstandingyear;?>';
-					window.open(url+''+row+'/type/3','_blank');
-					return true;
-				}
-				gotoAction();
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit", accesskey: "e"},
@@ -238,26 +224,6 @@ function getallGrade(){
 	    				"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
 	                }
 	            },
-				/*
-				"outstandingsem": {
-	                "name": "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", 
-	                icon: "fa-file-text-o",
-	                "items": {
-	                	"outstandingsem1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
-	    				"outstandingsem2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
-	    				"outstandingyear": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
-	                }
-	            },
-				"result": {
-	                "name": "<?php echo $tr->translate("RESULT");?>", 
-	                icon: "fa-file-text-o",
-	                "items": {
-	                    "rpt-resultbysemester": {"name": "<?php echo $tr->translate("RESULT_SEMESTER1");?>",icon: "fa-file-text-o"},
-	                    "rpt-semester2": {"name": "<?php echo $tr->translate("RESULT_SEMESTER2");?>",icon: "fa-file-text-o"},
-	                    "scoreyear": {"name": "<?php echo $tr->translate("YEARLY_EXAM");?>",icon: "fa-file-text-o"}
-	                }
-	            },
-				*/
 			}
 		});
 	});

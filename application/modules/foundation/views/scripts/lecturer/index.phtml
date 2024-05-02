@@ -44,9 +44,13 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement('active_type');?>
                    </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('department');?>
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement('status_search');?>
                    </div>
+
                   <div class="col-md-2 col-sm-2 col-xs-12">
                    		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
                    </div>
@@ -70,18 +74,25 @@ dojo.require("dijit.form.DateTextBox");
 		$.contextMenu({
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
-			
+				var newPageTitle="";
+				var actionType=1;
 				var m = "clicked: " + key;
 				if(key=="view"){
 					url='<?php echo $urlView;?>';
+					newPageTitle="<?php echo $tr->translate("FRONTDESK_INFO");?>";
 				}else if(key=="copy"){
 					url='<?php echo $urlCopy;?>';
+					actionType=2;
 				}
 				else if(key=="edit"){
 					url='<?php echo $urlEdit;?>';
+					actionType=2;
 				}
-				
-				gotoAction();
+				if(actionType==1){
+					addTab(newPageTitle,url+row+'?inFrame=true');
+				}else{
+					gotoAction();
+				}
 			},
 			items: {
 				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit"},

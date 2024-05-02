@@ -367,10 +367,13 @@ $(function(){
 			var m = "clicked: " + key;
 			if(key=="certifykhmer"){
 				url='<?php echo $urlCertifyKhmer;?>';
+				newPageTitle="<?php echo $tr->translate("CERTIFY_KHMER");?>";
 			}else if(key=="certifyenglish"){
 				url='<?php echo $urlCertifyEnglish;?>';
+				newPageTitle="<?php echo $tr->translate("CERTIFY_ENGLIISH");?>";
 			} 
-			gotoAction();
+			addTab(newPageTitle,url+row+'?inFrame=true');
+		//	gotoAction();
 		},
 		items: {
 			"certifykhmer": {name: "<?php echo $tr->translate("CERTIFY_KHMER");?>", icon: "fa-file-text-o",},

@@ -424,6 +424,10 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		if($search['active_type'] != '' AND $search['active_type']>-1){
 			$where.=' AND active_type='.$search['active_type'];
 		}
+		if(!empty($search['department'])){
+			$where.=' AND department='.$search['department'];
+		}
+
 		$order_by=" ORDER BY id DESC";
 		
 		$where.= $dbp->getAccessPermission('g.branch_id');		

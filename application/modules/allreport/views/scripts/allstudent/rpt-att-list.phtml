@@ -29,6 +29,8 @@
 	$day = array("Mon"=>"ចន្ទ","Tue"=>"អង្គ","Wed"=>"ពុធ","Thu"=>"ព្រហ","Fri"=>"សុក្រ","Sat"=>"សៅរ៍");
 	$frm =  $this->form_search;
 	$classHideHeight=classHideHeight;
+
+	$urlAction = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list'));
 ?>	
 <div class="reportblog">
 	<div class="card-box">
@@ -40,7 +42,7 @@
     		</div>
     	</div>
     </div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-att-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $urlAction.'?inFrame=true'; ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		
 		<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="card-blogform">

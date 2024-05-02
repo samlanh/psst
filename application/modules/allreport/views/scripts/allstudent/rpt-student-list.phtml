@@ -6,6 +6,8 @@
 	$frm =  $this->form_search;
 	$urlCertifyKhmer = $this->baseUrl()."/allreport/allstudent/certify-khmer/id/";
 	$urlCertifyEnglish = $this->baseUrl()."/allreport/allstudent/certify-english/id/";
+
+	$urlAction = $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-list'));
 ?>	
 <style>
 .hide{visibility:visible !important;
@@ -27,7 +29,7 @@ table.tb-footer tr.style-head {
     		</div>
     	</div>
     </div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-list')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+	<form  id='foundation_class' action="<?php echo $urlAction.'?inFrame=true'; ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
             <div class="col-md-3 col-sm-3 col-xs-12">
             	<input class="fullside" dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="Search by student name....." value="" type="text">

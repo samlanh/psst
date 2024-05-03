@@ -47,6 +47,8 @@
 		7=>"SU",
 	);
 	$frm =  $this->form_search;
+    //print_r($this->rs);
+	
 ?>	
 <style>
 .hover:hover{ background:#ccc;}
@@ -310,6 +312,8 @@ table.tb-footer tr.style-head {
 						background: #b2afaf;
 					}
 					.holiday-label {
+						font-family: 'Times New Roman','Khmer OS Battambang';
+						font-weight: normal;
 						line-height: 1;
 						padding-top: .5rem;
 						position: relative;
@@ -352,9 +356,19 @@ table.tb-footer tr.style-head {
 												
 											}else{ 
 												$dOfWeek = date('w',strtotime("$start_date +$k day"));
+												$dateOfMonth=date("Y-m-d",strtotime("$start_date +$k day"));
 												$className="";
 												if(empty($arrStudyDay[$dOfWeek])){
 													$className="notStudy";
+												}else{
+													$holidayParram = array(
+														"degree"		=>$row['degree'],
+														"formatMonthDay"=> $dateOfMonth,
+													);
+													$holiday = $dbStaff->getCalendar($holidayParram);
+													if(!empty($holiday)){
+														$className="notStudy";
+													}
 												}
 											?>
 											<td align="center" class="<?php echo $className;?>" >
@@ -375,7 +389,7 @@ table.tb-footer tr.style-head {
 							"subjectId"=>$row['subject_id'],
 						);
 						$resultTime = $dbStaff->getTeachingTimeByGroupAndSubject($arrTime);
-
+					
 						if($key>0){
 								$arrStudyDay=array();
 							?> 
@@ -467,11 +481,31 @@ table.tb-footer tr.style-head {
 									<td colspan="4" class="centerClass" height="90px">Instructor's Signature</td>
 									<?php if($amount_day>0 ){
 										for($k=0;$k<$amount_day;$k++){
+											
 											if(date('D',strtotime(" $start_date+$k day"))=="Sun"){
 												
 											}else{ ?>
 											<td align="center" class="holiday-label">
-											  
+												
+												<?php 
+											
+													$className='';
+													$dOfWeek = date('w',strtotime("$start_date +$k day"));
+
+													$dateOfMonth=date("Y-m-d",strtotime("$start_date +$k day"));
+													if(!empty($arrStudyDay[$dOfWeek])){
+
+														$holidayParram = array(
+														"degree"		=>$row['degree'],
+														"formatMonthDay"=> $dateOfMonth,
+													);
+													$holiday = $dbStaff->getCalendar($holidayParram);
+													if(!empty($holiday)){
+														$className= $tr->translate("HOLIDAY");
+													}
+												} 
+												echo $className;
+												?>
 											</td>
 									<?php 
 											} 
@@ -571,10 +605,22 @@ table.tb-footer tr.style-head {
 												
 											}else{ 
 												$dOfWeek = date('w',strtotime("$start_date +$k day"));
+												$dateOfMonth=date("Y-m-d",strtotime("$start_date +$k day"));
+
 												$className="";
 												if(empty($arrStudyDay[$dOfWeek])){
 													$className="notStudy";
+												}else{
+													$holidayParram = array(
+														"degree"		=>$row['degree'],
+														"formatMonthDay"=> $dateOfMonth,
+													);
+													$holiday = $dbStaff->getCalendar($holidayParram);
+													if(!empty($holiday)){
+														$className="notStudy";
+													}
 												}
+												
 											?>
 											<td align="center" class="<?php echo $className;?>" >
 											</td>
@@ -603,9 +649,19 @@ table.tb-footer tr.style-head {
 												
 											}else{ 
 												$dOfWeek = date('w',strtotime("$start_date +$k day"));
+												$dateOfMonth=date("Y-m-d",strtotime("$start_date +$k day"));
 												$className="";
 												if(empty($arrStudyDay[$dOfWeek])){
 													$className="notStudy";
+												}else{
+													$holidayParram = array(
+														"degree"		=>$row['degree'],
+														"formatMonthDay"=> $dateOfMonth,
+													);
+													$holiday = $dbStaff->getCalendar($holidayParram);
+													if(!empty($holiday)){
+														$className="notStudy";
+													}
 												}
 											?>
 											<td align="center" class="<?php echo $className;?>" >

@@ -308,6 +308,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				, CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullName
 				
 				,g.group_code
+				, g.degree
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYearTitle
 				,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName	 
 					  
@@ -357,7 +358,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 			$orderCondiction= " ,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) ASC ";
 		}
 		$order.=$orderCondiction;
-			
+	//	echo $sql.$order;
     	return $db->fetchAll($sql.$order);
     } 
 	
@@ -391,8 +392,80 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				AND schDetail.subject_id = $subjectId
 		";
 		$order=" ORDER BY schDetail.day_id ASC ";
-		
+	//	echo $sql.$order;
 		return $db->fetchAll($sql.$order);
+	}
+
+	public function getCalendarHolidayEveryYear($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$title="title";
+			
+			if ($currentLang==2){
+				$title="title_en";
+			}
+			
+			$month = date('m',strtotime($search['mothHoliday']));
+			$year_month = date('Y-m',strtotime($search['mothHoliday']));
+			 
+			 $sql="SELECT mc.$title AS holiday_name,
+						  DATE_FORMAT(mc.date, '%d') AS holiday_day,
+						  DATE_FORMAT(mc.date, '%a') AS holiday_string,
+						  DATE_FORMAT(mc.date, '%m') AS holiday_month
+				   FROM `mobile_calendar` AS mc 
+					WHERE 
+						mc.`active` =1 
+						AND (( mc.`type_holiday` =1  AND DATE_FORMAT(mc.date, '%m')= ".$month.") 
+							 OR  (mc.`type_holiday` =2  AND DATE_FORMAT(mc.date, '%Y-%m')='".$year_month."'))";
+			 $sql.=" ORDER BY DATE_FORMAT(mc.date, '%d') ASC ";
+			 
+				$result = $db->fetchAll($sql);
+				return $result;
+			}catch(Exception $e){
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				return false;
+			}
+	}	
+
+	public function getCalendar($search){
+		$db = $this->getAdapter();
+		try{
+			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
+			$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()."/images/";
+			 
+			$sql=" SELECT c.*
+				,CASE
+					   WHEN $currentLang = 1 THEN c.title
+					   WHEN $currentLang = 2 THEN c.title_en
+				END AS titleHoliday 
+			FROM `mobile_calendar` AS c
+			WHERE c.`active` =1 ";
+			if (!empty($search['type_holiday'])){
+				$sql.=" AND c.`type_holiday` = ".$search['type_holiday'];
+			}
+		
+			if (!empty($search['formatMonthDay'])){
+				$sql.=" AND (CASE 
+				WHEN c.type_holiday= 1 THEN  DATE_FORMAT(c.date, '%m-%d')
+				ELSE  DATE_FORMAT(c.date, '%m-%d-%Y') 
+				END ) = CASE WHEN c.type_holiday= 1 THEN '".date("m-d",strtotime($search['formatMonthDay']))."'
+				 ELSE '".date("m-d-Y",strtotime($search['formatMonthDay']))."' END  ";
+			}
+			// if (!empty($search['formatMonthDayYear'])){
+			// 	$sql.=" AND DATE_FORMAT(c.date, '%m-%d-%Y') = ".date("m-d-Y",strtotime($search['formatMonthDayYear']));
+			// }
+
+			if (!empty($search['degree'])){
+				$sql.=" AND FIND_IN_SET(".$search['degree'].",c.dept)";
+			}
+			$sql_order= "  ORDER BY c.id ASC ";
+		//	echo $sql.$sql_order;
+			return $db->fetchRow($sql.$sql_order);
+		
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 	}
 }
 

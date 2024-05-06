@@ -20,7 +20,8 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 						'teacher_type' => $_data['teacher_type'],
 						'branch_id' => $_data['branch_id'],
 						'active_type' => $_data['active_type'],
-						'status' => $_data['status_search']
+						'status' => $_data['status_search'],
+						'department' => $_data['department']
 						);
 			}else{
 				$search = array(
@@ -31,6 +32,7 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 						'teacher_type' => -1,
 						'branch_id' => '',
 						'active_type' => -1,
+						'department' => '',
 						'status' => -1);
 			}
 			$rs_rows= $db->getAllTeacher($search);

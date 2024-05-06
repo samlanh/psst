@@ -180,7 +180,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 				$sql.=" AND s.branch_id =".$search['branch_id'];
 			}
 			if(!empty($search['partTime'])){
-				$sql.=' AND sd.partTimeId='.$search['partTime'];
+				$sql.=' AND sd.session='.$search['partTime'];
 			}
 			if(!empty($search['study_year'])){ // filter by currtent feeid of student 
 				$sql.=' AND sd.feeId='.$search['study_year'];

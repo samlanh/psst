@@ -870,7 +870,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				,gds.degree
 				,gds.grade
 				,gds.session
-				,gds.partTimeId AS studyTime
+				,gds.session AS studyTime
 				,(SELECT g.room_id FROM `rms_group` AS g WHERE g.id = gds.group_id LIMIT 1) AS room
 				
 			FROM

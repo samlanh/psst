@@ -309,6 +309,15 @@ table.tb-footer tr.style-head {
 					td.notStudy {
 						background: #b2afaf;
 					}
+					.holiday-label {
+						line-height: 1;
+						padding-top: .5rem;
+						position: relative;
+						transform: rotate(180deg);
+						white-space: nowrap;
+						writing-mode: vertical-rl;
+						color: red;
+					}
 		</style>
 		<?php if(!empty($this->rs)) {?>
 				<?php  
@@ -461,8 +470,8 @@ table.tb-footer tr.style-head {
 											if(date('D',strtotime(" $start_date+$k day"))=="Sun"){
 												
 											}else{ ?>
-											<td align="center" >
-											
+											<td align="center" class="holiday-label">
+											  
 											</td>
 									<?php 
 											} 

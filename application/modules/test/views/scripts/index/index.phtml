@@ -98,24 +98,31 @@
 		$.contextMenu({
 			selector: '.context-menu-one', 
 			callback: function(key, options) {
-			
+				var newPageTitle="";
+				var actionType=1;
 				var m = "clicked: " + key;
 				if(key=="enterresult"){
 					url='<?php echo $urlEnterResult;?>';
+					actionType=2;
 				}else if(key=="enterresultkh"){
 					url='<?php echo $urlCreateExamKh;?>';
+					actionType=2;
 				}
 				
 				else if(key=="profile"){
 					url='<?php echo $urlProfile;?>';
+					newPageTitle="<?php echo $tr->translate("STUDENT_PROFILE");?>";
 				}
 				else if(key=="edit"){
 					url='<?php echo $urledit;?>';
+					actionType=2;
 				}
-				/*else if(key=="enterresultuniver"){
-					url='<?php //echo $urlCreateExamUniver;?>';
-				}*/
-				gotoAction();
+			//	gotoAction();
+				if(actionType==1){
+					addTab(newPageTitle,url+row+'?inFrame=true');
+				}else{
+					gotoAction();
+				}
 			},
 			items: {
 				<?php if($userinfo['level']==1){ ?>
@@ -149,6 +156,6 @@
 	}
 	var recordid ='';
 	function gotoAction(){
-	 	window.open(url+row);
+	 	window.open(url+row, '_self');
 	}
 </script> 

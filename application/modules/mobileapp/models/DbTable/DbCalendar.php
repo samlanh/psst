@@ -9,10 +9,18 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 	}
 	function getAllCalendar($search){
 		$db=$this->getAdapter();
-		$from_date =(empty($search['start_date']))? '1': "mba.create_date >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': "mba.create_date <= '".$search['end_date']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;	
-		$sql="SELECT mba.keycode as id ,mba.title,mba.amount_day,mba.start_date,mba.end_date,mba.active as status FROM $this->_name AS mba WHERE 1";
+		$from_date =(empty($search['start_date']))? '1': "mba.start_date >= '".$search['start_date']."'";
+		$to_date = (empty($search['end_date']))? '1': "mba.start_date <= '".$search['end_date']."'";
+		$where = " AND 
+		CASE WHEN mba.type_holiday = 1 
+		THEN  mba.type_holiday = 1 
+		ELSE ".$from_date." AND ".$to_date." END ";	
+		$sql="SELECT mba.keycode as id
+				,mba.title,mba.amount_day
+				,mba.start_date
+				,mba.end_date
+				,mba.active as status
+			FROM $this->_name AS mba WHERE 1";
 		if($search['search_status']>-1){
 			$where.= " AND mba.active = ".$search['search_status'];
 		}

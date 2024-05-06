@@ -42,10 +42,13 @@ class Issue_importscheduleController extends Zend_Controller_Action {
 			$this->view->frm_items = $frm;
 			
 		}catch (Exception $e){
-			echo $e->getMessage();exit();
+			
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+	}
+	function addAction(){
+		$this->_redirect("/issue/Importschedule");
 	}
 	public function editAction(){
 		// try{

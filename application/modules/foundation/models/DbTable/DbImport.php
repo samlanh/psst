@@ -2,8 +2,6 @@
 
 class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 {
-
-    protected $_name = 'ldc_product';
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('auth');
     	return $session_user->user_id;

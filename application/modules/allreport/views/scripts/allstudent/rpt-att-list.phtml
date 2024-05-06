@@ -11,6 +11,8 @@
 	$this->headTitle($tr->translate("STUDENT_ATTENDANT_LIST")); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
+
+	$dbCalender = new Allreport_Model_DbTable_DbRptAllStaff();
 	
 	$db = new Allreport_Model_DbTable_DbRptAllStudent();
 	$start_date = $this->datasearch['start_date'];
@@ -132,7 +134,7 @@
 		}
 		td.rotate > div {
 		  transform: rotate(270deg);
-			width: 20px;
+			width: 30px;
 		}
 		tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 		
@@ -171,7 +173,20 @@
             size:A4 landscape;
             margin:0;
           }
-							
+		  .holiday-label {
+			font-family: 'Times New Roman','Khmer OS Battambang';
+			font-weight: normal;
+			line-height: 1;
+			padding-top: .5rem;
+			position: relative;
+			transform: rotate(180deg);
+			white-space: nowrap;
+			writing-mode: vertical-rl;
+			color: red;
+		}
+		td.notStudy {
+			background: #b2afaf;
+		}	
 	</style>
 						
 	<table style="background:#fff; margin: 0 auto; width: 100%;"  border="0">
@@ -234,11 +249,24 @@
 								</td>
 							</tr>
 							<?php if($this->datasearch['showsign']==1){?>
-							<tr align="center" style="height: 65px; background: #ccd9ff;" class="signnature">
+							<tr align="center" style="height: 100px; background: #ccd9ff;" class="signnature">
 								<td colspan="5" style="font-weight: bold;"><?php echo $tr->translate("Instructor's Signature");?></td>
 								<?php for($k=0;$k<$amount_day;$k++){?>
-									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ $date = date('d-m-Y',strtotime("$start_date +$k day"));?>
-										<td class="rotate"></td>
+									<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){
+
+										}else{ 
+											$className="";
+											$date = date('d-m-Y',strtotime("$start_date +$k day"));
+											$holidayParram = array(
+												"degree"		=> $this->rr['degree_id'],
+												"formatMonthDay"=> $date,
+											);
+											$holiday = $dbCalender->getCalendar($holidayParram);
+											if(!empty($holiday)){
+												$className=$tr->translate("HOLIDAY");
+											}
+										?>
+										<td class="rotate holiday-label"><?php echo $className; ?></td>
 									<?php }?>
 								<?php }?>
 							</tr>
@@ -290,9 +318,22 @@
 							</td>
 							<td><?php echo $row['tel'];?></td>
 							<?php $p=0; $a=0;$l=0;$el=0; for($k=0;$k<$amount_day;$k++){?>
-							<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){}else{ //$date = date('d-m-Y',strtotime("$start_date +$k day"));?>
-								<td align="center" >
-								</td>
+							<?php if(date('D',strtotime(" $start_date+$k day"))=="Sun"){
+
+								}else{
+								 $date = date('d-m-Y',strtotime("$start_date +$k day"));
+								 $className="";
+								 $holidayParram = array(
+									"degree"		=> $this->rr['degree_id'],
+									"formatMonthDay"=> $date,
+								);
+								$holiday = $dbCalender->getCalendar($holidayParram);
+								if(!empty($holiday)){
+									$className="notStudy";
+								}
+								 
+								 ?>
+								<td align="center" class="<?php echo $className;?>" ></td>
 								<?php }?>
 							<?php }?>
 						</tr>

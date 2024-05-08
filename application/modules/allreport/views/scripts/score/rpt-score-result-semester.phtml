@@ -1221,7 +1221,8 @@ $urlTranscript = $this->baseUrl() . $link;
 				var m = "clicked: " + key;
 				if (key == "letterofprais") {
 					url = '<?php echo $urlOutStanding; ?>';
-					gotoAction();
+					newPageTitle="<?php echo $tr->translate("HORNOR_CERTIFICATE");?>";
+					gotoNewTab1(newPageTitle);
 				} else if (key == "transcript") {
 					url = '<?php echo $urlTranscript; ?>';
 					newPageTitle="<?php echo $tr->translate("TRANSCRIPT");?>";
@@ -1251,12 +1252,15 @@ $urlTranscript = $this->baseUrl() . $link;
 
 	var recordid = '';
 
-	function gotoAction() {
-		window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
-	}
+	// function gotoAction() {
+	// 	window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
+	// }
 
 	function gotoNewTab(newPageTitle) {
 		addTab(newPageTitle,url + '/id/' + row + '/stu_id/' + student_id+'?inFrame=true');
+  	}
+	  function gotoNewTab1(newPageTitle) {
+		addTab(newPageTitle,url + row + '/stu_id/' + student_id + '/rank/' + rank+'?inFrame=true');
   	}
 
 

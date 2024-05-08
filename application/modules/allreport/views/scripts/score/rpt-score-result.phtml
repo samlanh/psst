@@ -1144,13 +1144,14 @@
   				var m = "clicked: " + key;
   				if (key == "letterofprais") {
   					url = '<?php echo $urlOutStanding; ?>';
-  					gotoAction();
+					newPageTitle="<?php echo $tr->translate("HORNOR_CERTIFICATE");?>";
+					gotoNewTab1(newPageTitle);
   				} else if (key == "transcript") {
   					url = '<?php echo $urlTranscript; ?>';
 					newPageTitle="<?php echo $tr->translate("TRANSCRIPT");?>";
-  					//gotoAction1();
 					gotoNewTab(newPageTitle);
   				}
+			
 
   			},
   			items: {
@@ -1174,15 +1175,19 @@
 
   	var recordid = '';
 
-  	function gotoAction() {
-  		window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
-  	}
+  	// function gotoAction() {
+  	// 	window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
+  	// }
 
   	// function gotoAction1() {
   	// 	window.open(url + '/id/' + row + '/stu_id/' + student_id);
   	// }
+	
 	function gotoNewTab(newPageTitle) {
 		addTab(newPageTitle,url + '/id/' + row + '/stu_id/' + student_id+'?inFrame=true');
+  	}
+	function gotoNewTab1(newPageTitle) {
+		addTab(newPageTitle,url + row + '/stu_id/' + student_id + '/rank/' + rank+'?inFrame=true');
   	}
 
 

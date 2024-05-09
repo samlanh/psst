@@ -556,7 +556,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 								if ($scoreInfo['overallAssessmentSemester'] >= ($semesterScale / 2)) {
 									echo 'ជាប់​ - ត្រូវបានឡើងថ្នាក់';
 								} else {
-									echo 'ធ្លាក់';
+									echo '';
 								}
 								?>
 							</td>
@@ -571,7 +571,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 								if ($scoreInfo['overallAssessmentSemester'] >= ($semesterScale / 2)) {
 									echo 'Passed - Promoted ';
 								} else {
-									echo 'Failed';
+									echo '';
 								}
 								?>
 							</td>
@@ -581,7 +581,15 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overalSemester1'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> &nbsp;&nbsp; <?php echo $scoreInfo['rankSemester1'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overalSemester2'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> &nbsp;&nbsp; <?php echo $scoreInfo['rankSemester2'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
 							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> &nbsp;&nbsp; <?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
-							<td></td>
+							<td>
+							<?php
+								if ($scoreInfo['overallAssessmentSemester'] >= ($semesterScale / 2)) {
+									echo $scoreInfo['promoteResult'];
+								} else {
+									echo ' ';
+								}
+								?>
+							</td>
 						</tr>
 
 					</table>

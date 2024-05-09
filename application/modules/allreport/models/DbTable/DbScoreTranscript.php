@@ -438,6 +438,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 					s.title_score,
 					s.exam_type,
 					s.for_month,
+					s.note as promoteResult,
 					(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthKhLabel,
 					(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthEnLabel,
 					s.for_semester,

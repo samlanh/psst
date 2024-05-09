@@ -1040,6 +1040,44 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
 	}
+
+	public function rptSubjectStatisticAction()
+	{
+		if ($this->getRequest()->isPost()) {
+
+			$search = $this->getRequest()->getPost();
+
+			$db = new Allreport_Model_DbTable_DbRptStudentScore();
+			$rs = $db->getScoreStatistic($search);
+		} else {
+			$rs = array();
+			$search = array(
+				'branch_id' 	=> "",
+				'academic_year'	=> "",
+				'group' 		=> "",
+				'grade' 		=> "",
+				'degree' 		=> "",
+				'exam_type' 	=> 0,
+				'for_semester' 	=> 0,
+				'for_month' 	=> 0,
+				'start_date'	=> date('Y-m-d'),
+				'end_date'		=> date('Y-m-d'),
+				'sort_degree' => ''
+			);
+		}
+		$this->view->rs = $rs;
+		$this->view->search = $search;
+
+		$branch_id = empty($search['branch_id']) ? 1 : $search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
+
+		$form = new Application_Form_FrmSearchGlobal();
+		$forms = $form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search = $form;
+	}
 	function rptScoreResultSemesterAction()
 	{ 
 		$id = $this->getRequest()->getParam("id");

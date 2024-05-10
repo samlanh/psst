@@ -1048,7 +1048,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 
 			$db = new Allreport_Model_DbTable_DbRptStudentScore();
-			$rs = $db->getScoreStatistic($search);
+			$rs = $db->getStatisticScoreDetail($search);
 		} else {
 			$rs = array();
 			$search = array(
@@ -1062,7 +1062,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'for_month' 	=> 0,
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
-				'sort_degree' => ''
+				'mention'		=> ''
 			);
 		}
 		$this->view->rs = $rs;

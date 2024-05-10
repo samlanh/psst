@@ -623,6 +623,26 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
     			'autoComplete'=>'false',
     			'queryExpr'=>'*${0}*',));
 			$_resultStatus->setValue($request->getParam("resultStatus"));
+
+
+		$_mention=  new Zend_Dojo_Form_Element_FilteringSelect('mention');
+		$_mention->setAttribs(array(
+			'dojoType'=>$this->filter,
+			'class'=>'fullside',
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("SELCECT_MENTION"),
+		));
+		$_mention_opt = array(
+			''=>$this->tr->translate("SELCECT_MENTION"),
+			90=>$this->tr->translate("GRADE_A"),
+			80=>$this->tr->translate("GRADE_B"),
+			70=>$this->tr->translate("GRADE_C"),
+			60=>$this->tr->translate("GRADE_D"),
+			50=>$this->tr->translate("GRADE_E"),
+			0=>$this->tr->translate("GRADE_F"),
+		);
+		$_mention->setMultiOptions($_mention_opt);
+		$_mention->setValue($request->getParam("mention"));
 				
 		$this->addElements(array(
 				$_type,
@@ -665,6 +685,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_department,
 				$_score_result_status,
 				$_resultStatus,
+				$_mention
 				)
 			);
 		return $this;

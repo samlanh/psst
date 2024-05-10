@@ -1754,4 +1754,174 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$where .= " GROUP BY sm.`score_id`";
 		return $db->fetchAll($sql . $where);
 	}
+
+	public function getStatisticScoreDetail($search, $id = null)
+	{ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
+		//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+			$month = "month_kh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+			$month = "month_en";
+		}
+		$search['exam_type']	= empty($search['exam_type']) ? 0 : $search['exam_type'];
+		$sql = "
+			SELECT
+				(SELECT $branch FROM rms_branch as b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,
+				(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_logo,
+				(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=s.`branch_id` LIMIT 1) AS schoolNameKh,
+				(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=s.`branch_id` LIMIT 1) AS schoolNameEng,
+				
+				g.`branch_id`,
+				g.`group_code`,
+				`g`.`degree` as degree_id,
+				`g`.`semester` AS `semester`,
+				
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academic_year,
+				(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS start_year,
+				(SELECT ac.toYear FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS end_year,
+				(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+				(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+				(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+				(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
+				
+				(SELECT st.stu_khname FROM `rms_student` AS st WHERE st.stu_id = sm.`student_id` LIMIT 1) AS StuNameKh,
+				(SELECT CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) FROM `rms_student` AS st WHERE st.stu_id = sm.`student_id` LIMIT 1) AS StuNameEn,
+				(SELECT st.stu_code FROM `rms_student` AS st WHERE st.stu_id = sm.`student_id` LIMIT 1) AS stuCode,
+				(SELECT st.sex FROM `rms_student` AS st WHERE st.stu_id = sm.`student_id` LIMIT 1) AS Sex,
+		   	
+			   	s.`id`,
+			   	s.for_academic_year,
+		   		s.`group_id`,
+		   		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+			   	s.exam_type,
+			   	s.for_semester,
+			   	s.for_month as for_month_id,
+			   	s.reportdate,
+				s.date_input,
+				s.principalId,
+				s.academicStaffId,
+			   	s.title_score,
+				s.title_score_en,
+			   	s.max_score,
+				sm.`student_id`,
+				sm.total_score,
+				sm.totalMaxScore,
+		    (sm.totalMaxScore/2) as passScore";
+		if ($search['exam_type'] == 1) {
+
+			$sql .= " ,g.max_average as semesterScal
+					,sm.total_avg as totalAverage ";
+		} else if ($search['exam_type'] == 2) {
+			$sql .= "
+			,g.semesterTotalAverage as semesterScal
+			,(g.semesterTotalAverage/2) as passAverage
+			,sm.totalKhAvg
+			,sm.totalEnAvg
+			,sm.totalChAvg
+			,sm.OveralAvgKh
+			,sm.OveralAvgEng
+			,sm.OveralAvgCh
+			,sm.monthlySemesterAvg
+			,sm.overallAssessmentSemester as totalAverage
+			,FIND_IN_SET( 
+				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
+				(    
+					SELECT 
+						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
+					FROM rms_score_monthly AS dd 
+					WHERE  dd.`score_id`= s.id
+				)
+			) AS ranking
+			";
+		}else if ($search['exam_type'] == 3){
+			$sql .= "
+			,g.semesterTotalAverage as semesterScale
+			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1
+			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`   LIMIT 1) AS overalSemester2
+			,(g.semesterTotalAverage/2) as passAverage
+			,sm.overallAssessmentSemester as totalAverage
+			,FIND_IN_SET( 
+				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
+				(    
+					SELECT 
+						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
+					FROM rms_score_monthly AS dd 
+					WHERE  dd.`score_id`= s.id
+				)
+			) AS ranking
+			";
+		}
+
+		$sql .= " FROM `rms_score` AS s INNER JOIN `rms_score_monthly` AS sm
+					 ON s.id = sm.`score_id`
+					 JOIN `rms_group` AS g
+					 ON g.`id` = s.`group_id`
+				 WHERE  s.status = 1  AND sm.type = 1  ";
+
+		if (!empty($id)) {
+			$sql .= " AND s.id = $id ";
+		}
+		$where = '';
+		if (!empty($search['branch_id'])) {
+			$where .= " AND s.`branch_id` =" . $search['branch_id'];
+		}
+		if (!empty($search['academic_year'])) {
+			$where .= " AND s.for_academic_year =" . $search['academic_year'];
+		}
+		if (!empty($search['group'])) {
+			$where .= " AND s.group_id =" . $search['group'];
+		}
+		if (!empty($search['exam_type'])) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
+			if ($search['exam_type'] == 1) {
+				if (!empty($search['for_month'])) {
+					$where .= " AND s.for_month =" . $search['for_month'];
+				}
+			} else if ($search['exam_type'] == 2) {
+				if (!empty($search['for_semester'])) {
+					$where .= " AND s.for_semester =" . $search['for_semester'];
+				}
+			}
+		}
+
+		if (!empty($search['degree'])) {
+			$where .= " AND `g`.`degree` =" . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= " AND `g`.`grade` =" . $search['grade'];
+		}
+		// if (!empty($search['mention'])) {
+		// 	if($search['exam_type'] == 1){
+		// 		if($search['mention']=0){
+		// 			$where .= " AND sm.total_avg <  ";
+		// 		}
+
+		// 	}
+		// }
+		$where .= $_db->getAccessPermission('s.branch_id');
+		$where .= $_db->getDegreePermission('g.degree');
+
+		$order = "  
+					GROUP BY s.id,sm.`student_id`,sm.score_id,s.`reportdate`
+   				ORDER BY s.`group_id`, ";
+		if ($search['exam_type'] == 2 or $search['exam_type'] == 3) {
+			$order .= " sm.overallAssessmentSemester DESC";
+		} else {
+			$order .= " sm.total_score DESC ";
+		}
+		$order .= " ,s.for_academic_year,s.for_semester,s.for_month,sm.`student_id` ASC ";
+	//	echo $sql . $where . $order ;
+		return $db->fetchAll($sql . $where . $order );
+	}
 }

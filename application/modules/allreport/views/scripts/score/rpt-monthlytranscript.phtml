@@ -478,8 +478,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 						<tr class="khmerBoldFont " align="center">
 							<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
 							<td>ភាគរយ<br />PERCENTAGE</td>
-							<td>កម្រិត <br />GRADE</td>
-							<td>និទ្ទេស<br />INTERPRETATION</td>
+							<td colspan="2">និទ្ទេស <br />GRADE</td>
 							<td><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVMENT AND EFFORT</td>
 						</tr>
 						<?php
@@ -506,7 +505,7 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 
 
 								<td><?php echo $rsgd['percentage']; ?></td>
-								<td><?php echo $rsgd['grade']; ?></td>
+								<td style="width: 80px;"><?php echo $rsgd['grade']; ?></td>
 								<td><?php echo $rsgd['interpretation']; ?></td>
 								<td><?php echo $rsgd['achievment']; ?></td>
 							</tr>

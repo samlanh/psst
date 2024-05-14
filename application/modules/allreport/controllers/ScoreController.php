@@ -1062,7 +1062,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'for_month' 	=> 0,
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
-				'mention'		=> ''
+				'mention'		=> '',
+				'student_list'	=> '',
+				'subject_list'	=> ''
 			);
 		}
 		$this->view->rs = $rs;

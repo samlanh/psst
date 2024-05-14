@@ -3,7 +3,7 @@
 	$session_lang = new Zend_Session_Namespace('lang');
 	$lang_id = $session_lang->lang_id;
 	$dbgb = new Application_Model_DbTable_DbGlobal();
-	$this->headTitle($tr->translate('RPT_SUBJECT_STATISTIC')); 
+	$this->headTitle($tr->translate('RPT_RESULT_STATISTIC')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
@@ -15,7 +15,7 @@
 	<div class="card-box">
     	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_SUBJECT_STATISTIC');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_RESULT_STATISTIC');?></h4>
     		</div>
     		<div class="col-sm-4 text-right">
     		</div>
@@ -86,6 +86,23 @@
             	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
             </div>
         </div>
+		<table width="100%"
+			style="margin: 0px; font-family: 'khmer os battambang';">
+			<tr>
+				<td colspan="5">
+					<div style="margin: 10px 0px;">
+						<input type="checkBox" style="margin-left: 3%;"
+							dojoType="dijit.form.CheckBox" value="1" id="student_list"
+							name="student_list"
+							<?php if(!empty($this->search['student_list'])){if($this->search['student_list']==1){echo "checked='checked'";}}?> /> <?php echo $tr->translate("STUDENT_LIST");?>
+						<input type="checkBox" style="margin-left: 3%;"
+							dojoType="dijit.form.CheckBox" value="2" id="subject_list"
+							name="subject_list"
+							<?php if(!empty($this->search['subject_list'])){if($this->search['subject_list']==2){echo "checked='checked'";}}?> /><?php echo $tr->translate("SUBJECT_EXAM");?>
+					</div>
+				</td>
+			</tr>
+		</table>
 	</form>	
 <style>
 .hidden{
@@ -123,7 +140,7 @@
 					?>
 					<ul class="headerTitle">
 						<li>
-							<strong><?php echo $tr->translate("RPT_SUBJECT_STATISTIC");?></strong>
+							<?php echo $tr->translate("RPT_RESULT_STATISTIC");?>
 						</li>
 						<li>
 							<?php echo $resulTilte;?>
@@ -169,6 +186,7 @@
 									}
 									.center{text-align: center !important;}
 									table.content-data{
+										font-family: 'Times New Roman','Khmer OS Battambang';
 										border-collapse:collapse;
 										border:1px solid #000; 
 										font-size:12px;
@@ -176,7 +194,7 @@
 								
 									}
 									table.content-data thead tr.style {
-									line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+										line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 										background: #c1d0f3;
 										font-weight:600;
 									}
@@ -187,7 +205,7 @@
 									ul.headerTitle li{
 										list-style:none;line-height:20px;
 										font-size: 14px;
-										font-family:'Times New Roman','Khmer OS Battambang';
+										font-family:'Times New Roman','Khmer OS Muol Light';
 									}
 									span.separateColumn{
 										width:49%;
@@ -322,6 +340,8 @@
 								<td><?php echo $tr->translate("NAME_KH");?></td>
 								<td><?php echo $tr->translate("NAME_EN");?></td>
 								<td><?php echo $tr->translate("SEX");?></td>
+								<td><?php echo $tr->translate("DEGREE");?></td>
+								<td><?php echo $tr->translate("GRADE");?></td>
 								<td><?php echo $tr->translate("GROUP");?></td>
 								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
 								<td><?php echo $tr->translate("AVERAGE");?></td>
@@ -332,13 +352,13 @@
 							 $i=0; 
 							 if (!empty($this->rs)){ foreach($this->rs as $key=> $rs){ $i++;
 							?>
-							<tr class="style-rowdata hover" align="center" >
-							    <td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
-							    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
-								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stuCode']; ?></td>
+							<tr class="style-rowdata hover" >
+							    <td align="center" data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
+							    <td align="center" data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
+								<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stuCode']; ?></td>
 								<td data-label="<?php echo $tr->translate("NAME_KH");?>" ><?php echo $rs['StuNameKh']; ?></td>
 								<td data-label="<?php echo $tr->translate("NAME_EN");?>" ><?php echo $rs['StuNameEn']; ?></td>
-								<td data-label="<?php echo $tr->translate("SEX");?>" >
+								<td align="center" data-label="<?php echo $tr->translate("SEX");?>" >
 									<?php 
 									if($rs['Sex']=1){
 										echo $tr->translate("MALE");
@@ -346,10 +366,12 @@
 										echo $tr->translate("FEMALE");
 									}  ?>
 								</td>
-								<td data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['group_code']; ?></td>
-								<td data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rs['total_score']; ?></td>
-								<td data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rs['totalAverage']; ?></td>
-								<td class="red " align="center" >
+								<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['degree']; ?></td>
+								<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['grade']; ?></td>
+								<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['group_code']; ?></td>
+								<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rs['total_score']; ?></td>
+								<td align="center" data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rs['totalAverage']; ?></td>
+								<td class="redBold " align="center" data-label="<?php echo $tr->translate("MENTION");?>">
 									<?php echo $dbgb->getMentionScore($rs['totalAverage'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterScal']); ?>
 								</td>
 							  </tr>

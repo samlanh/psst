@@ -1819,50 +1819,19 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				sm.totalMaxScore,
 		    (sm.totalMaxScore/2) as passScore";
 		if ($search['exam_type'] == 1) {
-
 			$sql .= " ,g.max_average as semesterScal
 					,sm.total_avg as totalAverage ";
 		} else if ($search['exam_type'] == 2) {
 			$sql .= "
-			,g.semesterTotalAverage as semesterScal
-			,(g.semesterTotalAverage/2) as passAverage
-			,sm.totalKhAvg
-			,sm.totalEnAvg
-			,sm.totalChAvg
-			,sm.OveralAvgKh
-			,sm.OveralAvgEng
-			,sm.OveralAvgCh
-			,sm.monthlySemesterAvg
-			,sm.overallAssessmentSemester as totalAverage
-			,FIND_IN_SET( 
-				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
-				(    
-					SELECT 
-						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
-					FROM rms_score_monthly AS dd 
-					WHERE  dd.`score_id`= s.id
-				)
-			) AS ranking
+				,g.semesterTotalAverage as semesterScal
+				,sm.overallAssessmentSemester as totalAverage
 			";
 		}else if ($search['exam_type'] == 3){
 			$sql .= "
-			,g.semesterTotalAverage as semesterScale
-			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1
-			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= st.stu_id AND d.group_id = s.`group_id`   LIMIT 1) AS overalSemester2
-			,(g.semesterTotalAverage/2) as passAverage
-			,sm.overallAssessmentSemester as totalAverage
-			,FIND_IN_SET( 
-				COALESCE((SELECT ms.overallAssessmentSemester FROM `rms_score_monthly` AS ms WHERE ms.score_id = s.id AND ms.student_id = st.stu_id LIMIT 1),'0'), 
-				(    
-					SELECT 
-						GROUP_CONCAT( dd.overallAssessmentSemester ORDER BY dd.overallAssessmentSemester DESC ) 
-					FROM rms_score_monthly AS dd 
-					WHERE  dd.`score_id`= s.id
-				)
-			) AS ranking
+				,g.semesterTotalAverage as semesterScale
+				,sm.overallAssessmentSemester as totalAverage
 			";
 		}
-
 		$sql .= " FROM `rms_score` AS s INNER JOIN `rms_score_monthly` AS sm
 					 ON s.id = sm.`score_id`
 					 JOIN `rms_group` AS g
@@ -1901,14 +1870,28 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		if (!empty($search['grade'])) {
 			$where .= " AND `g`.`grade` =" . $search['grade'];
 		}
-		// if (!empty($search['mention'])) {
-		// 	if($search['exam_type'] == 1){
-		// 		if($search['mention']=0){
-		// 			$where .= " AND sm.total_avg <  ";
-		// 		}
-
-		// 	}
-		// }
+		if (!empty($search['mention'])) {
+			if ($search['exam_type'] == 1) {
+				$avg = "sm.total_avg";
+				$scale= "g.max_average";
+			} else {
+				$avg = "sm.overallAssessmentSemester";
+				$scale = "g.semesterTotalAverage";
+			}
+			if($search['mention']==0){
+				$where .= " AND ".$avg." < ".$scale."*50/100 ";
+			}else if($search['mention']==50){
+				$where .= " AND ".$avg." >= ".$scale."*50/100 AND ".$avg."<".$scale."*60/100";
+			}else if($search['mention']==60){
+				$where .= " AND ".$avg." >= ".$scale."*60/100 AND ".$avg."<".$scale."*70/100";
+			}else if($search['mention']==70){
+				$where .= " AND ".$avg." >= ".$scale."*70/100 AND ".$avg."<".$scale."*80/100";
+			}else if($search['mention']==80){
+				$where .= " AND ".$avg." >= ".$scale."*80/100 AND ".$avg."<".$scale."*90/100";
+			}else if($search['mention']==90){
+				$where .= " AND ".$avg." > ".$scale."*90/100 ";
+			}
+		}
 		$where .= $_db->getAccessPermission('s.branch_id');
 		$where .= $_db->getDegreePermission('g.degree');
 

@@ -1048,7 +1048,8 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 
 			$db = new Allreport_Model_DbTable_DbRptStudentScore();
-			$rs = $db->getStatisticScoreDetail($search);
+			$rs = $db->getStatisticScoreResult($search);
+			$rsDetail = $db->getStatisticScoreResult($search);
 		} else {
 			$rs = array();
 			$search = array(
@@ -1068,6 +1069,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			);
 		}
 		$this->view->rs = $rs;
+		$this->view->rsDetail = $rsDetail;
 		$this->view->search = $search;
 
 		$branch_id = empty($search['branch_id']) ? 1 : $search['branch_id'];

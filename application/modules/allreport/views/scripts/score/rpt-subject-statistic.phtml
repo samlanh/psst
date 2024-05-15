@@ -109,372 +109,766 @@
 	display: table-cell !important;
 }
 </style>
-	<div id="divPrint">
-		<table style="background:#fff; margin: 0 auto; width: 100%;">
-			<tr>
-				<td colspan="3"><?php echo $this->rsheader;?></td>
-			</tr>
-			<tr class="line"><td colspan="3"></td></tr>
-			<tr>
-				<td width="28%" align="left"></td>
-				<td width="44%" align="center">
-					<?php 
-					$resulTilte="";
-					$academicYear="";
-					
-					if(!empty($this->rs)){ 
-						if(!empty($this->search)){
-							if($this->search['exam_type']==1){
-								$titleScore=$this->rs['0']['title_score'];
-								$resulTilte = "ប្រចាំខែ ".$titleScore;
-							}else{
-								if($this->search['for_semester']==1){
-									$resulTilte = "ប្រចាំ ឆមាសទី១";
-								}elseif($this->search['for_semester']==2){
-									$resulTilte = "ប្រចាំ ឆមាសទី២";
-								}
-							}
-						 } 
-						 $academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academic_year'];
-						}
-					?>
-					<ul class="headerTitle">
-						<li>
-							<?php echo $tr->translate("RPT_RESULT_STATISTIC");?>
-						</li>
-						<li>
-							<?php echo $resulTilte;?>
-						</li>
-						<li>
-							<?php echo $academicYear;?>
-						</li>
-					</ul>
-				</td>
-				<td align="right" width="28%"></td>
-			</tr>
-			<tr>
-				<td colspan="3" valign="top" id="exportExcel">
-						<style type="text/css">
-								.style{
-										line-height: 20px;font-size: 13px !important;
-										font-family: 'Times New Roman','Khmer OS Battambang';
-									}
-									.hideblog{display: none;}
-									.hiddenblog{display: block !important;}
-									.style1:hover{ background: #ccc; }
-									table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-									
-									table.content-data { page-break-inside:auto }
-									table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
-									#header {
-									display: table-header-group;
-									page-break-inside:avoid; page-break-after:auto;
-									margin-top: 100px;
-									}
-									.hide{visibility: hidden;}
-									@media print {
-									div.divFooter {
-										position: fixed;
-										top: 0;
-										width: 100%;
-										height: 100px;
-										bottom:0px;
-										margin:0;
-									}
-										.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
-										
-									}
-									.center{text-align: center !important;}
-									table.content-data{
-										font-family: 'Times New Roman','Khmer OS Battambang';
-										border-collapse:collapse;
-										border:1px solid #000; 
-										font-size:12px;
-										width:100%;
-								
-									}
-									table.content-data thead tr.style {
-										line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
-										background: #c1d0f3;
-										font-weight:600;
-									}
-									table.content-data  tr.style {
-										white-space: nowrap;
-									}
-									
-									ul.headerTitle li{
-										list-style:none;line-height:20px;
-										font-size: 14px;
-										font-family:'Times New Roman','Khmer OS Muol Light';
-									}
-									span.separateColumn{
-										width:49%;
-										display: inline-block;
-									}
-									
-									table.tb-footer{
-										border-collapse:collapse;
-										border:1px solid #000; 
-										font-size:12px;
-										font-family: 'Times New Roman','Khmer OS Battambang';
-									}
-									table.tb-footer tr{
-									line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
-									}
-									table tr td{
-										padding:0 2px;
-									}
-									tr.voidclass {
-										background: #fff7f7;
-									}
-									td.centerText{
-										text-align: center;
-									}
-									.redBold {
-										font-weight: 600;
-										color: #f80000;
-									}
-									table.content-data tr td{
-										padding: 1px;
-									}
-									.bold{font-weight: bold;
-									background:#dee5e7;}
-
-									@media print{
-										@page{
-											margin:0.5cm 0.7cm 0.2cm 0.7cm;
-											page-break-before: avoid;
-											-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-											-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-											-ms-transform: scale(0.5);   /* IE 9 */
-											-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-											transform: scale(0.5);
-											page: A4;
-											size:portrait;
-										}
-									}
-									.principalStamp {
-										position:relative;
-										width: 300px;
-										height: 140px;
-										margin:0 auto;
-										margin-top:-20px;
-									}
-									.principalStamp .stamp {
-										width:140px;
-										height:140px;
-										position:absolute;
-										transform: translate(-81%);
-										left:50%;
-									}
-									.principalStamp .signature {
-										left: 40px;
-										bottom: 32px;
-										height: 100px;
-										width:200px;
-										position: absolute;
-									}
-									.principalStamp .principalName{
-										left: 65px;
-										top: 113px;
-										height: 100px;
-										width: 200px;
-										position: absolute;
-									}
-									.seenApproved{
-										position: relative;
-									}
-									.seenApproved .interimPrincipal{
-										position: absolute;
-										left: 50%;
-										top: 20px;
-										transform: translate(-50%);
-										z-index: 1;
-									}
-									
-									.administrator {
-											position:relative;
-											width: 300px;
-											height: 140px;
-											margin:0 auto;
-										}
-										.administrator .administratorstamp {
-											width:130px;
-											height:130px;
-											position:absolute;
-											transform: translate(-50%);
-											left:50%;
-										}
-										.administrator .administratorsignature {
-											left: 40px;
-											bottom: 32px;
-											height: 100px;
-											width:200px;
-											position: absolute;
-										}
-										.administrator .administratorName {
-											left: 65px;
-											top: 80px;
-											height: 100px;
-											width: 200px;
-											position: absolute;
-										}
-										label.LabelTeacher {
-											line-height: 25px;
-											font-weight: initial;
-											font-family: 'Times New Roman','Khmer OS Battambang';
-											white-space: nowrap;
-										}
-						</style>
-						<?php 
-						
-						$active_student = 0;
-						$drop_student = 0;?>
-					<div id="exportExcel">
-						<table class="content-data" cellpadding="4"​ border="1">
-						  <thead>
-							  <tr class="style" align="center">
-								<td ><?php echo $tr->translate("NUM");?></td>
-								<td><?php echo $tr->translate("BRANCH");?></td>
-								<td><?php echo $tr->translate("STUDENT_ID");?></td>
-								<td><?php echo $tr->translate("NAME_KH");?></td>
-								<td><?php echo $tr->translate("NAME_EN");?></td>
-								<td><?php echo $tr->translate("SEX");?></td>
-								<td><?php echo $tr->translate("DEGREE");?></td>
-								<td><?php echo $tr->translate("GRADE");?></td>
-								<td><?php echo $tr->translate("GROUP");?></td>
-								<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
-								<td><?php echo $tr->translate("AVERAGE");?></td>
-								<td><?php echo $tr->translate("MENTION");?></td>
-							  </tr>
-						  </thead>
-						  <?php
-							 $i=0; 
-							 if (!empty($this->rs)){ foreach($this->rs as $key=> $rs){ $i++;
-							?>
-							<tr class="style-rowdata hover" >
-							    <td align="center" data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
-							    <td align="center" data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
-								<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stuCode']; ?></td>
-								<td data-label="<?php echo $tr->translate("NAME_KH");?>" ><?php echo $rs['StuNameKh']; ?></td>
-								<td data-label="<?php echo $tr->translate("NAME_EN");?>" ><?php echo $rs['StuNameEn']; ?></td>
-								<td align="center" data-label="<?php echo $tr->translate("SEX");?>" >
-									<?php 
-									if($rs['Sex']=1){
-										echo $tr->translate("MALE");
-									}else{
-										echo $tr->translate("FEMALE");
-									}  ?>
-								</td>
-								<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['degree']; ?></td>
-								<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['grade']; ?></td>
-								<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['group_code']; ?></td>
-								<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rs['total_score']; ?></td>
-								<td align="center" data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rs['totalAverage']; ?></td>
-								<td class="redBold " align="center" data-label="<?php echo $tr->translate("MENTION");?>">
-									<?php echo $dbgb->getMentionScore($rs['totalAverage'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterScal']); ?>
-								</td>
-							  </tr>
-							<?php 
-							 }
-							}?>
-						
-						</table>
-						<br>
-					</div>
-				</td>
-			</tr>
-			
-			<?php 	
-				$dbbranch = new Application_Model_DbTable_DbGlobal();
-				$branch_id= empty($this->rs[0]['branch_id'])?0:$this->rs[0]['branch_id'];
-				$branchInfo =  $dbbranch->getBranchInfo($branch_id);
-			?>
-			<tr >
-				<td colspan="3" width="100%">
-					<table>
+	<div class="card-box">
+		<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+			<li class="nav-item active">
+			     <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("SCORE_RESULT");?></a>
+			</li>
+			<li class="nav-item">
+			    <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+			        <i class="fa fa-money ml-2"></i> <?php echo $tr->translate("SCORE_DETAIL");?>
+			    </a>
+			</li>
+		</ul>
+	</div>
+	  <!--/. Tab Menu -->
+    <div class="col-md-12">
+			 <!-- Tab panels -->
+		<div class="tab-content vertical">
+			<!--Panel 1-->
+			<div class="tab-pane fade in " id="panel21" role="tabpanel">
+				<div class="text-right">
+				    <a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrintProfle('divPrint');" ><i class="fa fa-print" aria-hidden="true"></i></a>
+				</div>
+				<div id="divPrint">
+					<table style="background:#fff; margin: 0 auto; width: 100%;">
 						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td align="center">
-							<label id="lunarDate" class="LabelTeacher">
+							<td colspan="3"><?php echo $this->rsheader;?></td>
+						</tr>
+						<tr class="line"><td colspan="3"></td></tr>
+						<tr>
+							<td width="28%" align="left"></td>
+							<td width="44%" align="center">
 								<?php 
-										$inputDate =date("Y-m-d") ;
-										$time  = strtotime($inputDate);
-										$day   = date('d',$time);
-										$month = date('m',$time);
-										$year  = date('Y',$time);
+								$resulTilte="";
+								$academicYear="";
+								
+								if(!empty($this->rs)){ 
+									if(!empty($this->search)){
+										if($this->search['exam_type']==1){
+											$titleScore=$this->rs['0']['title_score'];
+											$resulTilte = "ប្រចាំខែ ".$titleScore;
+										}else{
+											if($this->search['for_semester']==1){
+												$resulTilte = "ប្រចាំ ឆមាសទី១";
+											}elseif($this->search['for_semester']==2){
+												$resulTilte = "ប្រចាំ ឆមាសទី២";
+											}
+										}
+									} 
+									$academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academic_year'];
+									}
+								?>
+								<ul class="headerTitle">
+									<li>
+										<?php echo $tr->translate("RPT_RESULT_STATISTIC");?>
+									</li>
+									<li>
+										<?php echo $resulTilte;?>
+									</li>
+									<li>
+										<?php echo $academicYear;?>
+									</li>
+								</ul>
+							</td>
+							<td align="right" width="28%"></td>
+						</tr>
+						<tr>
+							<td colspan="3" valign="top" id="exportExcel">
+									<style type="text/css">
+											.style{
+													line-height: 20px;font-size: 13px !important;
+													font-family: 'Times New Roman','Khmer OS Battambang';
+												}
+												.hideblog{display: none;}
+												.hiddenblog{display: block !important;}
+												.style1:hover{ background: #ccc; }
+												table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+												
+												table.content-data { page-break-inside:auto }
+												table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
+												#header {
+												display: table-header-group;
+												page-break-inside:avoid; page-break-after:auto;
+												margin-top: 100px;
+												}
+												.hide{visibility: hidden;}
+												@media print {
+												div.divFooter {
+													position: fixed;
+													top: 0;
+													width: 100%;
+													height: 100px;
+													bottom:0px;
+													margin:0;
+												}
+													.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+													
+												}
+												.center{text-align: center !important;}
+												table.content-data{
+													font-family: 'Times New Roman','Khmer OS Battambang';
+													border-collapse:collapse;
+													border:1px solid #000; 
+													font-size:12px;
+													width:100%;
 											
-										$lunaDate = date('Y-m-d',strtotime($inputDate));
-										$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
-									?>
-									<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
-									</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+												}
+												table.content-data thead tr.style {
+													line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+													background: #c1d0f3;
+													font-weight:600;
+												}
+												table.content-data  tr.style {
+													white-space: nowrap;
+												}
+												
+												ul.headerTitle li{
+													list-style:none;line-height:20px;
+													font-size: 14px;
+													font-family:'Times New Roman','Khmer OS Muol Light';
+												}
+												span.separateColumn{
+													width:49%;
+													display: inline-block;
+												}
+												
+												table.tb-footer{
+													border-collapse:collapse;
+													border:1px solid #000; 
+													font-size:12px;
+													font-family: 'Times New Roman','Khmer OS Battambang';
+												}
+												table.tb-footer tr{
+												line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
+												}
+												table tr td{
+													padding:0 2px;
+												}
+												tr.voidclass {
+													background: #fff7f7;
+												}
+												td.centerText{
+													text-align: center;
+												}
+												.redBold {
+													font-weight: 600;
+													color: #f80000;
+												}
+												table.content-data tr td{
+													padding: 1px;
+												}
+												.bold{font-weight: bold;
+												background:#dee5e7;}
+
+												@media print{
+													@page{
+														margin:0.5cm 0.7cm 0.2cm 0.7cm;
+														page-break-before: avoid;
+														-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+														-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+														-ms-transform: scale(0.5);   /* IE 9 */
+														-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+														transform: scale(0.5);
+														page: A4;
+														size:portrait;
+													}
+												}
+												.principalStamp {
+													position:relative;
+													width: 300px;
+													height: 140px;
+													margin:0 auto;
+													margin-top:-20px;
+												}
+												.principalStamp .stamp {
+													width:140px;
+													height:140px;
+													position:absolute;
+													transform: translate(-81%);
+													left:50%;
+												}
+												.principalStamp .signature {
+													left: 40px;
+													bottom: 32px;
+													height: 100px;
+													width:200px;
+													position: absolute;
+												}
+												.principalStamp .principalName{
+													left: 65px;
+													top: 113px;
+													height: 100px;
+													width: 200px;
+													position: absolute;
+												}
+												.seenApproved{
+													position: relative;
+												}
+												.seenApproved .interimPrincipal{
+													position: absolute;
+													left: 50%;
+													top: 20px;
+													transform: translate(-50%);
+													z-index: 1;
+												}
+												
+												.administrator {
+														position:relative;
+														width: 300px;
+														height: 140px;
+														margin:0 auto;
+													}
+													.administrator .administratorstamp {
+														width:130px;
+														height:130px;
+														position:absolute;
+														transform: translate(-50%);
+														left:50%;
+													}
+													.administrator .administratorsignature {
+														left: 40px;
+														bottom: 32px;
+														height: 100px;
+														width:200px;
+														position: absolute;
+													}
+													.administrator .administratorName {
+														left: 65px;
+														top: 80px;
+														height: 100px;
+														width: 200px;
+														position: absolute;
+													}
+													label.LabelTeacher {
+														line-height: 25px;
+														font-weight: initial;
+														font-family: 'Times New Roman','Khmer OS Battambang';
+														white-space: nowrap;
+													}
+									</style>
+									<?php 
+									
+									$active_student = 0;
+									$drop_student = 0;?>
+								<div id="exportExcel">
+									<table class="content-data" cellpadding="4"​ border="1">
+									<thead>
+										<tr class="style" align="center">
+											<td ><?php echo $tr->translate("NUM");?></td>
+											<td><?php echo $tr->translate("BRANCH");?></td>
+											<td><?php echo $tr->translate("STUDENT_ID");?></td>
+											<td><?php echo $tr->translate("NAME_KH");?></td>
+											<td><?php echo $tr->translate("NAME_EN");?></td>
+											<td><?php echo $tr->translate("SEX");?></td>
+											<td><?php echo $tr->translate("DEGREE");?></td>
+											<td><?php echo $tr->translate("GRADE");?></td>
+											<td><?php echo $tr->translate("GROUP");?></td>
+											<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
+											<td><?php echo $tr->translate("AVERAGE");?></td>
+											<td><?php echo $tr->translate("MENTION");?></td>
+										</tr>
+									</thead>
+									<?php
+										$i=0; 
+										if (!empty($this->rs)){ foreach($this->rs as $key=> $rs){ $i++;
+										?>
+										<tr class="style-rowdata hover" >
+											<td align="center" data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
+											<td align="center" data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stuCode']; ?></td>
+											<td data-label="<?php echo $tr->translate("NAME_KH");?>" ><?php echo $rs['StuNameKh']; ?></td>
+											<td data-label="<?php echo $tr->translate("NAME_EN");?>" ><?php echo $rs['StuNameEn']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("SEX");?>" >
+												<?php 
+												if($rs['Sex']=1){
+													echo $tr->translate("MALE");
+												}else{
+													echo $tr->translate("FEMALE");
+												}  ?>
+											</td>
+											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['degree']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['grade']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['group_code']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rs['total_score']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rs['totalAverage']; ?></td>
+											<td class="redBold " align="center" data-label="<?php echo $tr->translate("MENTION");?>">
+												<?php echo $dbgb->getMentionScore($rs['totalAverage'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterScal']); ?>
+											</td>
+										</tr>
+										<?php 
+										}
+										}?>
+									
+									</table>
+									<br>
+								</div>
 							</td>
 						</tr>
-						<tr>
-								<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-									<div class="seenApproved">បានឃើញ និងឯកភាព
-										<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
-									</div>
-								</td>
-								<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
-								<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
-									<?php
-										if ($lang_id == 1) { ?>
-											<label id= "date" style="display:none">
-												ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
-											</label>
-										<?php }else{ ?>
-											<label id= "date" style="display:none">
-												Phnom Penh,
-												<?php echo date("l");?>,
-												<?php echo date("d");?> 
-												<?php echo date("F");?>,
-												<?php echo date("Y");?> 
-											</label>
-									<?php } ?>
-									<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
-								</td>
-						</tr>
-						<tr>
-								<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
-								<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
-								<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">ការិយាល័យសិក្សាធិការ</td>
-						</tr>
-						<tr>
-								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-									<div class="principalStamp" id="principalStamp" style="display:none;">
-										<div class="stamp" >
-											<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
-											<div class="signature">
-												<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
-											</div>
-											<div class="principalName">
-												<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-											</div>
-										</div>
-									</div>
-								</td>
-								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-								</td>
-								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-									<?php if (!empty($branchInfo['administration_signature'])) { ?>
-										<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
-									<?php } else { ?>
-										<div id="administrator" style="height: 100px;"></div>
-									<?php } ?>
-									<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
-								</td>
+						
+						<?php 	
+							$dbbranch = new Application_Model_DbTable_DbGlobal();
+							$branch_id= empty($this->rs[0]['branch_id'])?0:$this->rs[0]['branch_id'];
+							$branchInfo =  $dbbranch->getBranchInfo($branch_id);
+						?>
+						<tr >
+							<td colspan="3" width="100%">
+								<table>
+									<tr>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td align="center">
+										<label id="lunarDate" class="LabelTeacher">
+											<?php 
+													$inputDate =date("Y-m-d") ;
+													$time  = strtotime($inputDate);
+													$day   = date('d',$time);
+													$month = date('m',$time);
+													$year  = date('Y',$time);
+														
+													$lunaDate = date('Y-m-d',strtotime($inputDate));
+													$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+												?>
+												<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
+												</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+										</td>
+									</tr>
+									<tr>
+											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+												<div class="seenApproved">បានឃើញ និងឯកភាព
+													<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+												</div>
+											</td>
+											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
+											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
+												<?php
+													if ($lang_id == 1) { ?>
+														<label id= "date" style="display:none">
+															ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+														</label>
+													<?php }else{ ?>
+														<label id= "date" style="display:none">
+															Phnom Penh,
+															<?php echo date("l");?>,
+															<?php echo date("d");?> 
+															<?php echo date("F");?>,
+															<?php echo date("Y");?> 
+														</label>
+												<?php } ?>
+												<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+											</td>
+									</tr>
+									<tr>
+											<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
+											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
+											<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">ការិយាល័យសិក្សាធិការ</td>
+									</tr>
+									<tr>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+												<div class="principalStamp" id="principalStamp" style="display:none;">
+													<div class="stamp" >
+														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
+														<div class="signature">
+															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
+														</div>
+														<div class="principalName">
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											</td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+												<?php if (!empty($branchInfo['administration_signature'])) { ?>
+													<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
+												<?php } else { ?>
+													<div id="administrator" style="height: 100px;"></div>
+												<?php } ?>
+												<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
+											</td>
+									</tr>
+								</table>
+							</td>
 						</tr>
 					</table>
-					
-				</td>
-			</tr>
-			
-			
-		</table>
+				</div>	
+			</div>
+			<!--End Panel 1-->
+
+			<!--Panel 2-->
+			<div class="tab-pane fade in active" id="panel22" role="tabpanel">
+				<div class="text-right">
+				    <a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrintProfle('divPrintDetail');" ><i class="fa fa-print" aria-hidden="true"></i></a>
+				</div>
+				<div id="divPrintDetail">
+					<table style="background:#fff; margin: 0 auto; width: 100%;">
+						<tr>
+							<td colspan="3"><?php echo $this->rsheader;?></td>
+						</tr>
+						<tr class="line"><td colspan="3"></td></tr>
+						<tr>
+							<td width="28%" align="left"></td>
+							<td width="44%" align="center">
+								<?php 
+								$resulTilte="";
+								$academicYear="";
+								
+								if(!empty($this->rs)){ 
+									if(!empty($this->search)){
+										if($this->search['exam_type']==1){
+											$titleScore=$this->rs['0']['title_score'];
+											$resulTilte = "ប្រចាំខែ ".$titleScore;
+										}else{
+											if($this->search['for_semester']==1){
+												$resulTilte = "ប្រចាំ ឆមាសទី១";
+											}elseif($this->search['for_semester']==2){
+												$resulTilte = "ប្រចាំ ឆមាសទី២";
+											}
+										}
+									} 
+									$academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academic_year'];
+									}
+								?>
+								<ul class="headerTitle">
+									<li>
+										<?php echo $tr->translate("RPT_RESULT_STATISTIC");?>
+									</li>
+									<li>
+										<?php echo $resulTilte;?>
+									</li>
+									<li>
+										<?php echo $academicYear;?>
+									</li>
+								</ul>
+							</td>
+							<td align="right" width="28%"></td>
+						</tr>
+						<tr>
+							<td colspan="3" valign="top" id="exportExcel">
+									<style type="text/css">
+											.style{
+													line-height: 20px;font-size: 13px !important;
+													font-family: 'Times New Roman','Khmer OS Battambang';
+												}
+												.hideblog{display: none;}
+												.hiddenblog{display: block !important;}
+												.style1:hover{ background: #ccc; }
+												table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+												
+												table.content-data { page-break-inside:auto }
+												table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
+												#header {
+												display: table-header-group;
+												page-break-inside:avoid; page-break-after:auto;
+												margin-top: 100px;
+												}
+												.hide{visibility: hidden;}
+												@media print {
+												div.divFooter {
+													position: fixed;
+													top: 0;
+													width: 100%;
+													height: 100px;
+													bottom:0px;
+													margin:0;
+												}
+													.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+													
+												}
+												.center{text-align: center !important;}
+												table.content-data{
+													font-family: 'Times New Roman','Khmer OS Battambang';
+													border-collapse:collapse;
+													border:1px solid #000; 
+													font-size:12px;
+													width:100%;
+											
+												}
+												table.content-data thead tr.style {
+													line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+													background: #c1d0f3;
+													font-weight:600;
+												}
+												table.content-data  tr.style {
+													white-space: nowrap;
+												}
+												
+												ul.headerTitle li{
+													list-style:none;line-height:20px;
+													font-size: 14px;
+													font-family:'Times New Roman','Khmer OS Muol Light';
+												}
+												span.separateColumn{
+													width:49%;
+													display: inline-block;
+												}
+												
+												table.tb-footer{
+													border-collapse:collapse;
+													border:1px solid #000; 
+													font-size:12px;
+													font-family: 'Times New Roman','Khmer OS Battambang';
+												}
+												table.tb-footer tr{
+												line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
+												}
+												table tr td{
+													padding:0 2px;
+												}
+												tr.voidclass {
+													background: #fff7f7;
+												}
+												td.centerText{
+													text-align: center;
+												}
+												.redBold {
+													font-weight: 600;
+													color: #f80000;
+												}
+												table.content-data tr td{
+													padding: 1px;
+												}
+												.bold{font-weight: bold;
+												background:#dee5e7;}
+
+												@media print{
+													@page{
+														margin:0.5cm 0.7cm 0.2cm 0.7cm;
+														page-break-before: avoid;
+														-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+														-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+														-ms-transform: scale(0.5);   /* IE 9 */
+														-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+														transform: scale(0.5);
+														page: A4;
+														size:portrait;
+													}
+												}
+												.principalStamp {
+													position:relative;
+													width: 300px;
+													height: 140px;
+													margin:0 auto;
+													margin-top:-20px;
+												}
+												.principalStamp .stamp {
+													width:140px;
+													height:140px;
+													position:absolute;
+													transform: translate(-81%);
+													left:50%;
+												}
+												.principalStamp .signature {
+													left: 40px;
+													bottom: 32px;
+													height: 100px;
+													width:200px;
+													position: absolute;
+												}
+												.principalStamp .principalName{
+													left: 65px;
+													top: 113px;
+													height: 100px;
+													width: 200px;
+													position: absolute;
+												}
+												.seenApproved{
+													position: relative;
+												}
+												.seenApproved .interimPrincipal{
+													position: absolute;
+													left: 50%;
+													top: 20px;
+													transform: translate(-50%);
+													z-index: 1;
+												}
+												
+												.administrator {
+														position:relative;
+														width: 300px;
+														height: 140px;
+														margin:0 auto;
+													}
+													.administrator .administratorstamp {
+														width:130px;
+														height:130px;
+														position:absolute;
+														transform: translate(-50%);
+														left:50%;
+													}
+													.administrator .administratorsignature {
+														left: 40px;
+														bottom: 32px;
+														height: 100px;
+														width:200px;
+														position: absolute;
+													}
+													.administrator .administratorName {
+														left: 65px;
+														top: 80px;
+														height: 100px;
+														width: 200px;
+														position: absolute;
+													}
+													label.LabelTeacher {
+														line-height: 25px;
+														font-weight: initial;
+														font-family: 'Times New Roman','Khmer OS Battambang';
+														white-space: nowrap;
+													}
+									</style>
+									<?php 
+									
+									$active_student = 0;
+									$drop_student = 0;?>
+								<div id="exportExcel">
+									<table class="content-data" cellpadding="4"​ border="1">
+									<thead>
+										<tr class="style" align="center">
+											<td ><?php echo $tr->translate("NUM");?></td>
+											<td><?php echo $tr->translate("BRANCH");?></td>
+											<td><?php echo $tr->translate("STUDENT_ID");?></td>
+											<td><?php echo $tr->translate("NAME_KH");?></td>
+											<td><?php echo $tr->translate("NAME_EN");?></td>
+											<td><?php echo $tr->translate("SEX");?></td>
+											<td><?php echo $tr->translate("DEGREE");?></td>
+											<td><?php echo $tr->translate("GRADE");?></td>
+											<td><?php echo $tr->translate("GROUP");?></td>
+											<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
+											<td><?php echo $tr->translate("AVERAGE");?></td>
+											<td><?php echo $tr->translate("MENTION");?></td>
+										</tr>
+									</thead>
+									<?php
+										$i=0; 
+										if (!empty($this->rs)){ foreach($this->rs as $key=> $rs){ $i++;
+										?>
+										<tr class="style-rowdata hover" >
+											<td align="center" data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
+											<td align="center" data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stuCode']; ?></td>
+											<td data-label="<?php echo $tr->translate("NAME_KH");?>" ><?php echo $rs['StuNameKh']; ?></td>
+											<td data-label="<?php echo $tr->translate("NAME_EN");?>" ><?php echo $rs['StuNameEn']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("SEX");?>" >
+												<?php 
+												if($rs['Sex']=1){
+													echo $tr->translate("MALE");
+												}else{
+													echo $tr->translate("FEMALE");
+												}  ?>
+											</td>
+											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['degree']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['grade']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['group_code']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rs['total_score']; ?></td>
+											<td align="center" data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rs['totalAverage']; ?></td>
+											<td class="redBold " align="center" data-label="<?php echo $tr->translate("MENTION");?>">
+												<?php echo $dbgb->getMentionScore($rs['totalAverage'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterScal']); ?>
+											</td>
+										</tr>
+										<?php 
+										}
+										}?>
+									
+									</table>
+									<br>
+								</div>
+							</td>
+						</tr>
+						
+						<?php 	
+							$dbbranch = new Application_Model_DbTable_DbGlobal();
+							$branch_id= empty($this->rs[0]['branch_id'])?0:$this->rs[0]['branch_id'];
+							$branchInfo =  $dbbranch->getBranchInfo($branch_id);
+						?>
+						<tr >
+							<td colspan="3" width="100%">
+								<table>
+									<tr>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td align="center">
+										<label id="lunarDate" class="LabelTeacher">
+											<?php 
+													$inputDate =date("Y-m-d") ;
+													$time  = strtotime($inputDate);
+													$day   = date('d',$time);
+													$month = date('m',$time);
+													$year  = date('Y',$time);
+														
+													$lunaDate = date('Y-m-d',strtotime($inputDate));
+													$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+												?>
+												<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
+												</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+										</td>
+									</tr>
+									<tr>
+											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+												<div class="seenApproved">បានឃើញ និងឯកភាព
+													<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+												</div>
+											</td>
+											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
+											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
+												<?php
+													if ($lang_id == 1) { ?>
+														<label id= "date" style="display:none">
+															ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+														</label>
+													<?php }else{ ?>
+														<label id= "date" style="display:none">
+															Phnom Penh,
+															<?php echo date("l");?>,
+															<?php echo date("d");?> 
+															<?php echo date("F");?>,
+															<?php echo date("Y");?> 
+														</label>
+												<?php } ?>
+												<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+											</td>
+									</tr>
+									<tr>
+											<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
+											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
+											<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">ការិយាល័យសិក្សាធិការ</td>
+									</tr>
+									<tr>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+												<div class="principalStamp" id="principalStamp" style="display:none;">
+													<div class="stamp" >
+														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
+														<div class="signature">
+															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
+														</div>
+														<div class="principalName">
+															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											</td>
+											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+												<?php if (!empty($branchInfo['administration_signature'])) { ?>
+													<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
+												<?php } else { ?>
+													<div id="administrator" style="height: 100px;"></div>
+												<?php } ?>
+												<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
+											</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>	
+			</div>
+			<!--END Panel 2-->
+		</div>
 	</div>	
+	
 	<div class="card-box" id="hideStampSetting" >
 			<label class="control-label custom-switch float-midd "> 
 				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
@@ -668,4 +1062,10 @@ function stampDisplay() {
 	lunarDate.style.display = "none";
   }
 }
+function doPrintProfle(keyid) {
+		window.frames["print_frame"].document.body.innerHTML=dojo.byId(keyid).innerHTML;
+	    window.frames["print_frame"].window.focus();
+	    window.frames["print_frame"].window.print();
+	    hideDialog();
+	}	
 </script>

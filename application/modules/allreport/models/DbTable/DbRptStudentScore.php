@@ -1755,7 +1755,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql . $where);
 	}
 
-	public function getStatisticScoreDetail($search, $id = null)
+	public function getStatisticScoreResult($search, $id = null)
 	{ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
 		//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/
 		$db = $this->getAdapter();

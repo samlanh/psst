@@ -1904,7 +1904,116 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$order .= " sm.total_score DESC ";
 		}
 		$order .= " ,s.for_academic_year,s.for_semester,s.for_month,sm.`student_id` ASC ";
-	//	echo $sql . $where . $order ;
+		echo $sql . $where . $order ;
 		return $db->fetchAll($sql . $where . $order );
 	}
+	function getSubjectScoreDetail($data)
+	{ //transcript and score detail
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+			$branch = "b.branch_namekh";
+			$month = "month_kh";
+		} else { // English
+			$label = "name_en";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+			$branch = "b.branch_nameen";
+			$month = "month_en";
+		}
+		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
+						s.id=sd.subject_id LIMIT 1) ";
+
+		$strCollect = 'amount_subject';
+		$strMaxScore = 'max_score';
+		if ($data['examType'] == 2 OR $data['examType'] == 3) { //semester
+			$strCollect = 'amount_subject_sem';
+			$strMaxScore = 'semester_max_score';
+		}
+
+		$strSubjecMaxScore = " (SELECT $strMaxScore FROM `rms_group_subject_detail` WHERE
+		group_id=sd.group_id AND
+		subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
+
+		$strMultiSubject = " (SELECT $strCollect FROM `rms_group_subject_detail` WHERE
+		group_id=sd.group_id AND subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
+		//need to check this score is monthly or semester?
+
+		$subjectId = empty($data['subjectId']) ? 0 : $data['subjectId'];
+		$scoreId = empty($data['scoreId']) ? 0 : $data['scoreId'];
+		// $sql = "SELECT
+		// 			$strSubjectLange AS subjectLang,
+		// 			$strSubjecMaxScore AS maxScore,
+		// 			$strMultiSubject AS multiSubject,
+		// 			sd.`subject_id`,
+		// 			sd.gradingTotalId,
+		// 			sd.`score` AS totalAverage,
+					
+		// 			FIND_IN_SET(sd.`score`,
+		// 				(SELECT GROUP_CONCAT(insd.score ORDER BY insd.score DESC)
+		// 				FROM 
+		// 					rms_score_detail AS insd 
+		// 				 WHERE
+		// 					insd.`score_id`=$scoreId
+		// 				 	AND sd.`subject_id`=insd.subject_id
+		// 				ORDER BY insd.`score` DESC )) AS rankingSubject,	
+		// 			sd.score_cut,
+		// 			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
+		// 			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
+		// 			sd.amount_subject
+		// 		FROM  `rms_score_detail` AS sd 
+		// 			LEFT JOIN rms_group AS g ON g.id=sd.group_id 
+		// 			LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id`
+		// 		WHERE 1 ";
+		$sql="SELECT
+				(SELECT b.school_namekh FROM rms_branch AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS schoolNameKh,
+				(SELECT st.stu_code FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS stuCode,
+				(SELECT st.stu_khname FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS StuNameKh,
+				(SELECT CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS StuNameEn,
+				(SELECT st.sex FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS Sex,
+				(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
+				(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
+
+				g.`group_code`,
+				`g`.`degree` as degree_id,
+				`g`.`semester` AS `semester`,
+				
+				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academic_year,
+				(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS start_year,
+				(SELECT ac.toYear FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS end_year,
+				(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+				(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+
+				sd.`subject_id`,
+				sd.gradingTotalId,
+				sd.`score` AS totalAverage,
+				sd.score_cut,
+				
+				sd.amount_subject
+			FROM  `rms_score_detail` AS sd 
+				INNER JOIN `rms_score` AS s ON s.id=sd.`score_id` 
+				LEFT JOIN rms_group AS g ON g.id=sd.group_id 
+				LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id`
+			WHERE 1
+					";
+		if (!empty($scoreId)) {
+			$sql .= " AND sd.`score_id`=" . $scoreId;
+		}
+		if (!empty($data['studentId'])) {
+			$sql .= " AND sd.`student_id`=" . $data['studentId'];
+		}
+		if (!empty($subjectId)) {
+			$sql .= " AND sd.`subject_id`=" . $subjectId;
+		}
+		if (!empty($data['groupbySubjectId'])) { //for get all subject in result detail
+			$sql .= " GROUP BY subject_id ";
+		}
+		$sql .= " ORDER  BY $strSubjectLange  ASC, gsj.subject_order  ASC ";
+		return $db->fetchAll($sql);
+	}
+
 }

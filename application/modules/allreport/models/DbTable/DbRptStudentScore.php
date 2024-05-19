@@ -374,7 +374,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 		}
-		$search['exam_type']	= empty($search['exam_type']) ? 0 : $search['exam_type'];
+		$search['exam_type'] = empty($search['exam_type']) ? 0 : $search['exam_type'];
 		$sql = "
 			SELECT
 				(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
@@ -1325,7 +1325,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$order = " ORDER BY gscg.`id` ASC ";
 
 		//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
-		$where  = '';
+		$where = '';
 		//echo $sql;exit();
 		if (empty($search)) {
 			return $db->fetchAll($sql . $order);
@@ -1404,7 +1404,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$order = " ORDER BY gscg.`id` ASC";
 
 		//$groupby=" GROUP BY g.`academic_year`,g.`grade`,g.`session`";
-		$where  = '';
+		$where = '';
 		//echo $sql;exit();
 		if (empty($search)) {
 			return $db->fetchAll($sql . $order);
@@ -1602,7 +1602,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	function getScoreStatistic($search)
 	{ //using
 		$db = $this->getAdapter();
-		$_db  = new Application_Model_DbTable_DbGlobal();
+		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
 		if ($lang == 1) { // khmer
 			$label = "name_kh";
@@ -1689,14 +1689,15 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				$search['scoreId'] = $rs['id'];
 
 				$rsMention = $this->getCountStudentScore($search);
-				if (!empty($rsMention)) foreach ($rsMention as $rsGrade) {
-					$resultInfo[$key]['Total_A'] = !empty($rsGrade['Total_A']) ? $rsGrade['Total_A'] : 0;
-					$resultInfo[$key]['Total_B'] = !empty($rsGrade['Total_B']) ? $rsGrade['Total_B'] : 0;
-					$resultInfo[$key]['Total_C'] = !empty($rsGrade['Total_C']) ? $rsGrade['Total_C'] : 0;
-					$resultInfo[$key]['Total_D'] = !empty($rsGrade['Total_D']) ? $rsGrade['Total_D'] : 0;
-					$resultInfo[$key]['Total_E'] = !empty($rsGrade['Total_E']) ? $rsGrade['Total_E'] : 0;
-					$resultInfo[$key]['Total_F'] = !empty($rsGrade['Total_F']) ? $rsGrade['Total_F'] : 0;
-				}
+				if (!empty($rsMention))
+					foreach ($rsMention as $rsGrade) {
+						$resultInfo[$key]['Total_A'] = !empty($rsGrade['Total_A']) ? $rsGrade['Total_A'] : 0;
+						$resultInfo[$key]['Total_B'] = !empty($rsGrade['Total_B']) ? $rsGrade['Total_B'] : 0;
+						$resultInfo[$key]['Total_C'] = !empty($rsGrade['Total_C']) ? $rsGrade['Total_C'] : 0;
+						$resultInfo[$key]['Total_D'] = !empty($rsGrade['Total_D']) ? $rsGrade['Total_D'] : 0;
+						$resultInfo[$key]['Total_E'] = !empty($rsGrade['Total_E']) ? $rsGrade['Total_E'] : 0;
+						$resultInfo[$key]['Total_F'] = !empty($rsGrade['Total_F']) ? $rsGrade['Total_F'] : 0;
+					}
 			}
 		}
 		return $resultInfo;
@@ -1774,7 +1775,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$branch = "b.branch_nameen";
 			$month = "month_en";
 		}
-		$search['exam_type']	= empty($search['exam_type']) ? 0 : $search['exam_type'];
+		$search['exam_type'] = empty($search['exam_type']) ? 0 : $search['exam_type'];
 		$sql = "
 			SELECT
 				(SELECT $branch FROM rms_branch as b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,
@@ -1826,7 +1827,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				,g.semesterTotalAverage as semesterScal
 				,sm.overallAssessmentSemester as totalAverage
 			";
-		}else if ($search['exam_type'] == 3){
+		} else if ($search['exam_type'] == 3) {
 			$sql .= "
 				,g.semesterTotalAverage as semesterScale
 				,sm.overallAssessmentSemester as totalAverage
@@ -1873,23 +1874,23 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		if (!empty($search['mention'])) {
 			if ($search['exam_type'] == 1) {
 				$avg = "sm.total_avg";
-				$scale= "g.max_average";
+				$scale = "g.max_average";
 			} else {
 				$avg = "sm.overallAssessmentSemester";
 				$scale = "g.semesterTotalAverage";
 			}
-			if($search['mention']==0){
-				$where .= " AND ".$avg." < ".$scale."*50/100 ";
-			}else if($search['mention']==50){
-				$where .= " AND ".$avg." >= ".$scale."*50/100 AND ".$avg."<".$scale."*60/100";
-			}else if($search['mention']==60){
-				$where .= " AND ".$avg." >= ".$scale."*60/100 AND ".$avg."<".$scale."*70/100";
-			}else if($search['mention']==70){
-				$where .= " AND ".$avg." >= ".$scale."*70/100 AND ".$avg."<".$scale."*80/100";
-			}else if($search['mention']==80){
-				$where .= " AND ".$avg." >= ".$scale."*80/100 AND ".$avg."<".$scale."*90/100";
-			}else if($search['mention']==90){
-				$where .= " AND ".$avg." > ".$scale."*90/100 ";
+			if ($search['mention'] == 1) {
+				$where .= " AND " . $avg . " < " . $scale . "*50/100 ";
+			} else if ($search['mention'] == 50) {
+				$where .= " AND " . $avg . " >= " . $scale . "*50/100 AND " . $avg . "<" . $scale . "*60/100";
+			} else if ($search['mention'] == 60) {
+				$where .= " AND " . $avg . " >= " . $scale . "*60/100 AND " . $avg . "<" . $scale . "*70/100";
+			} else if ($search['mention'] == 70) {
+				$where .= " AND " . $avg . " >= " . $scale . "*70/100 AND " . $avg . "<" . $scale . "*80/100";
+			} else if ($search['mention'] == 80) {
+				$where .= " AND " . $avg . " >= " . $scale . "*80/100 AND " . $avg . "<" . $scale . "*90/100";
+			} else if ($search['mention'] == 90) {
+				$where .= " AND " . $avg . " > " . $scale . "*90/100 ";
 			}
 		}
 		$where .= $_db->getAccessPermission('s.branch_id');
@@ -1904,10 +1905,10 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$order .= " sm.total_score DESC ";
 		}
 		$order .= " ,s.for_academic_year,s.for_semester,s.for_month,sm.`student_id` ASC ";
-		echo $sql . $where . $order ;
-		return $db->fetchAll($sql . $where . $order );
+		//	echo $sql . $where . $order ;
+		return $db->fetchAll($sql . $where . $order);
 	}
-	function getSubjectScoreDetail($data)
+	function getSubjectScoreDetail($search)
 	{ //transcript and score detail
 		$db = $this->getAdapter();
 		$_db = new Application_Model_DbTable_DbGlobal();
@@ -1918,69 +1919,57 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$degree = "rms_items.title";
 			$branch = "b.branch_namekh";
 			$month = "month_kh";
+			$subject_name = "sj.subject_titlekh";
 		} else { // English
 			$label = "name_en";
 			$grade = "rms_itemsdetail.title_en";
 			$degree = "rms_items.title_en";
 			$branch = "b.branch_nameen";
-			$month = "month_en";
+			$subject_name = "sj.subject_titleen";
 		}
-		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
-						s.id=sd.subject_id LIMIT 1) ";
+		
+		// $strCollect = 'amount_subject';
+		// $strMaxScore = 'max_score';
+		// if ($data['examType'] == 2 OR $data['examType'] == 3) { //semester
+		// 	$strCollect = 'amount_subject_sem';
+		// 	$strMaxScore = 'semester_max_score';
+		// }
 
-		$strCollect = 'amount_subject';
-		$strMaxScore = 'max_score';
-		if ($data['examType'] == 2 OR $data['examType'] == 3) { //semester
-			$strCollect = 'amount_subject_sem';
-			$strMaxScore = 'semester_max_score';
-		}
+		// $strSubjecMaxScore = " (SELECT $strMaxScore FROM `rms_group_subject_detail` WHERE
+		// group_id=sd.group_id AND
+		// subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
 
-		$strSubjecMaxScore = " (SELECT $strMaxScore FROM `rms_group_subject_detail` WHERE
-		group_id=sd.group_id AND
-		subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
+		// $strMultiSubject = " (SELECT $strCollect FROM `rms_group_subject_detail` WHERE
+		// group_id=sd.group_id AND subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
+		// //need to check this score is monthly or semester?
 
-		$strMultiSubject = " (SELECT $strCollect FROM `rms_group_subject_detail` WHERE
-		group_id=sd.group_id AND subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
-		//need to check this score is monthly or semester?
-
-		$subjectId = empty($data['subjectId']) ? 0 : $data['subjectId'];
-		$scoreId = empty($data['scoreId']) ? 0 : $data['scoreId'];
-		// $sql = "SELECT
-		// 			$strSubjectLange AS subjectLang,
-		// 			$strSubjecMaxScore AS maxScore,
-		// 			$strMultiSubject AS multiSubject,
-		// 			sd.`subject_id`,
-		// 			sd.gradingTotalId,
-		// 			sd.`score` AS totalAverage,
-					
-		// 			FIND_IN_SET(sd.`score`,
-		// 				(SELECT GROUP_CONCAT(insd.score ORDER BY insd.score DESC)
-		// 				FROM 
-		// 					rms_score_detail AS insd 
-		// 				 WHERE
-		// 					insd.`score_id`=$scoreId
-		// 				 	AND sd.`subject_id`=insd.subject_id
-		// 				ORDER BY insd.`score` DESC )) AS rankingSubject,	
-		// 			sd.score_cut,
-		// 			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
-		// 			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
-		// 			sd.amount_subject
-		// 		FROM  `rms_score_detail` AS sd 
-		// 			LEFT JOIN rms_group AS g ON g.id=sd.group_id 
-		// 			LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id`
-		// 		WHERE 1 ";
-		$sql="SELECT
-				(SELECT b.school_namekh FROM rms_branch AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS schoolNameKh,
+		// $subjectId = empty($data['subjectId']) ? 0 : $data['subjectId'];
+		$sql = "SELECT
+				(SELECT $branch FROM rms_branch as b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branch_name,
 				(SELECT st.stu_code FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS stuCode,
 				(SELECT st.stu_khname FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS StuNameKh,
 				(SELECT CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS StuNameEn,
 				(SELECT st.sex FROM `rms_student` AS st WHERE st.stu_id = sd.`student_id` LIMIT 1) AS Sex,
-				(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
-				(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
+				(SELECT $subject_name FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
+				(SELECT subject_lang FROM `rms_subject` s WHERE s.id=sd.subject_id LIMIT 1) as subLang,
 
 				g.`group_code`,
 				`g`.`degree` as degree_id,
 				`g`.`semester` AS `semester`,
+
+				s.`id`,
+			   	s.for_academic_year,
+		   		s.`group_id`,
+		   		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+			   	s.exam_type,
+			   	s.for_semester,
+			   	s.for_month as for_month_id,
+			   	s.reportdate,
+				s.date_input,
+				s.principalId,
+				s.academicStaffId,
+			   	s.title_score,
+				s.title_score_en,
 				
 				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academic_year,
 				(SELECT ac.fromYear FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS start_year,
@@ -1989,31 +1978,80 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 
 				sd.`subject_id`,
-				sd.gradingTotalId,
-				sd.`score` AS totalAverage,
-				sd.score_cut,
-				
-				sd.amount_subject
-			FROM  `rms_score_detail` AS sd 
-				INNER JOIN `rms_score` AS s ON s.id=sd.`score_id` 
+				sd.`orgScore` AS totalAverage,
+				sd.amount_subject, ";
+		if ($search['exam_type'] == 1) {
+			$sql .= "gsj.max_score as subMaxScore, ";
+		} else {
+			$sql .= "gsj.semester_max_score as subMaxScore ";
+		}
+
+		$sql .= "FROM  `rms_score_detail` AS sd 
+				LEFT JOIN `rms_score` AS s ON s.id=sd.`score_id` 
 				LEFT JOIN rms_group AS g ON g.id=sd.group_id 
-				LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id`
+				LEFT JOIN `rms_group_subject_detail` AS gsj ON sd.subject_id=gsj.subject_id AND g.id=gsj.`group_id`
 			WHERE 1
 					";
-		if (!empty($scoreId)) {
-			$sql .= " AND sd.`score_id`=" . $scoreId;
+	
+		$where = '';
+		if (!empty($search['branch_id'])) {
+			$where .= " AND s.`branch_id` =" . $search['branch_id'];
 		}
-		if (!empty($data['studentId'])) {
-			$sql .= " AND sd.`student_id`=" . $data['studentId'];
+		if (!empty($search['academic_year'])) {
+			$where .= " AND s.for_academic_year =" . $search['academic_year'];
 		}
-		if (!empty($subjectId)) {
-			$sql .= " AND sd.`subject_id`=" . $subjectId;
+		if (!empty($search['group'])) {
+			$where .= " AND s.group_id =" . $search['group'];
 		}
-		if (!empty($data['groupbySubjectId'])) { //for get all subject in result detail
-			$sql .= " GROUP BY subject_id ";
+		if (!empty($search['subjectId'])) {
+			$where .= " AND sd.`subject_id` =" . $search['subjectId'];
 		}
-		$sql .= " ORDER  BY $strSubjectLange  ASC, gsj.subject_order  ASC ";
-		return $db->fetchAll($sql);
+		if (!empty($search['exam_type'])) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
+			if ($search['exam_type'] == 1) {
+				if (!empty($search['for_month'])) {
+					$where .= " AND s.for_month =" . $search['for_month'];
+				}
+			} else if ($search['exam_type'] == 2) {
+				if (!empty($search['for_semester'])) {
+					$where .= " AND s.for_semester =" . $search['for_semester'];
+				}
+			}
+		}
+
+		if (!empty($search['degree'])) {
+			$where .= " AND `g`.`degree` =" . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= " AND `g`.`grade` =" . $search['grade'];
+		}
+		if (!empty($search['mention'])) {
+			if ($search['exam_type'] == 1) {
+				$avg = "sd.orgScore";
+				$scale = "gsj.max_score";
+			} else {
+				$avg = "sd.orgScore";
+				$scale = "gsj.semester_max_score";
+			}
+			if ($search['mention'] == 1) {
+				$where .= " AND " . $avg . " < " . $scale . "*50/100 ";
+			} else if ($search['mention'] == 50) {
+				$where .= " AND " . $avg . " >= " . $scale . "*50/100 AND " . $avg . "<" . $scale . "*60/100";
+			} else if ($search['mention'] == 60) {
+				$where .= " AND " . $avg . " >= " . $scale . "*60/100 AND " . $avg . "<" . $scale . "*70/100";
+			} else if ($search['mention'] == 70) {
+				$where .= " AND " . $avg . " >= " . $scale . "*70/100 AND " . $avg . "<" . $scale . "*80/100";
+			} else if ($search['mention'] == 80) {
+				$where .= " AND " . $avg . " >= " . $scale . "*80/100 AND " . $avg . "<" . $scale . "*90/100";
+			} else if ($search['mention'] == 90) {
+				$where .= " AND " . $avg . " > " . $scale . "*90/100 ";
+			}
+		}
+		$where .= $_db->getAccessPermission('s.branch_id');
+		$where .= $_db->getDegreePermission('g.degree');
+		$order = " ORDER BY  s.`group_id`, subLang ASC ,totalAverage DESC ";
+		//echo $sql . $where . $order ; exit();
+		return $db->fetchAll($sql . $where . $order);
 	}
 
 }

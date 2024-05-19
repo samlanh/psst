@@ -5,7 +5,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	{
 		/* Initialize action controller here */
 		header('content-type: text/html; charset=utf8');
-		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+		defined('BASE_URL') || define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	public function indexAction()
 	{
@@ -22,7 +22,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'exam_type' => -1,
 				'for_semester' => -1,
 				'group' => '',
-				
+
 				'academic_year' => '',
 				'grade' => 0,
 				'degree' => 0,
@@ -224,9 +224,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		if ($this->getRequest()->isPost()) {
 			$search = $this->getRequest()->getPost();
 		} else {
-			
+
 			$row = $db->getScoreExamByID($id);
-		//	print_r($row); exit();
+			//	print_r($row); exit();
 			$search = array(
 				'group' => $row['group_id'],
 				'study_year' => $row['for_academic_year'],
@@ -240,7 +240,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			);
 		}
 		$this->view->search = $search;
-		
+
 		$studentgroup = $db->getStudentScoreResult($search, $id, 2);
 		$this->view->studentgroup = $studentgroup;
 
@@ -304,13 +304,13 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'adv_search' 	=> "",
-				'group' 		=> "",
-				'branch_id' 	=> "",
-				'academic_year'	=> "",
-				'grade' 		=> "",
-				'session' 		=> "",
-				'teacher' 		=> "",
+				'adv_search' => "",
+				'group' => "",
+				'branch_id' => "",
+				'academic_year' => "",
+				'grade' => "",
+				'session' => "",
+				'teacher' => "",
 				'room' => 0,
 				'degree' => 0,
 				'study_status' => -1,
@@ -485,10 +485,10 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'adv_search' 		=> '',
-				'branch_id' 	=> '',
-				'academic_year' 	=> '',
-				'change_id' 	=> '',
+				'adv_search' => '',
+				'branch_id' => '',
+				'academic_year' => '',
+				'change_id' => '',
 			);
 		}
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
@@ -518,9 +518,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = array(
 				'adv_search' => '',
 				'academic_year' => '',
-				'branch_id' 	=> '',
+				'branch_id' => '',
 				'group' => '',
-				'room' 	=> '',
+				'room' => '',
 				'degree' => '',
 				'grade' => '',
 				'session' => '',
@@ -590,15 +590,15 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'adv_search' 		=> '',
-				'academic_year' 	=> '',
-				'grade' 	=> '',
-				'session' 		=> '',
-				'group' 		=> '',
-				'branch_id'		=> 0,
-				'degree'		=> 0,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'adv_search' => '',
+				'academic_year' => '',
+				'grade' => '',
+				'session' => '',
+				'group' => '',
+				'branch_id' => 0,
+				'degree' => 0,
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 		$this->view->search = $search;
@@ -621,15 +621,15 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'title' 		=> '',
-				'study_year' 	=> '',
-				'grade_all' 	=> '',
-				'session' 		=> '',
-				'group' 		=> '',
+				'title' => '',
+				'study_year' => '',
+				'grade_all' => '',
+				'session' => '',
+				'group' => '',
 				'branch_id' => 0,
 				'degree' => 0,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 		$this->view->datasearch = $search;
@@ -652,15 +652,15 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'adv_search' 		=> '',
-				'academic_year' 	=> '',
-				'grade' 	=> '',
-				'session' 		=> '',
-				'group' 		=> '',
-				'branch_id'		=> 0,
-				'degree'		=> 0,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'adv_search' => '',
+				'academic_year' => '',
+				'grade' => '',
+				'session' => '',
+				'group' => '',
+				'branch_id' => 0,
+				'degree' => 0,
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 
@@ -687,13 +687,13 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$this->view->datasearch = $search;
 		} else {
 			$search = array(
-				'adv_search' 		=> '',
-				'academic_year' 	=> '',
-				'grade' 	=> '',
-				'session' 		=> '',
-				'group' 		=> '',
-				'branch_id'		=> 0,
-				'degree'		=> 0,
+				'adv_search' => '',
+				'academic_year' => '',
+				'grade' => '',
+				'session' => '',
+				'group' => '',
+				'branch_id' => 0,
+				'degree' => 0,
 			);
 		}
 
@@ -719,7 +719,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		} else {
 			$search = array(
 				'start_date' => null,
-				'end_date'	=> date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 		$this->view->search = $search;
@@ -751,16 +751,16 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'adv_search' 		=> '',
-				'branch_id'		=> '',
-				'degree'		=> '',
-				'academic_year' 	=> '',
-				'grade' 	=> '',
-				'group'			=> '',
-				'student'			=> '',
-				'language_type'			=> '',
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'adv_search' => '',
+				'branch_id' => '',
+				'degree' => '',
+				'academic_year' => '',
+				'grade' => '',
+				'group' => '',
+				'student' => '',
+				'language_type' => '',
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 
@@ -787,15 +787,15 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'title' 		=> '',
-				'branch_id'		=> '',
-				'degree'		=> '',
-				'study_year' 	=> '',
-				'grade_all' 	=> '',
-				'group'			=> '',
-				'student'			=> '',
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'title' => '',
+				'branch_id' => '',
+				'degree' => '',
+				'study_year' => '',
+				'grade_all' => '',
+				'group' => '',
+				'student' => '',
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 
@@ -833,16 +833,16 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 		} else {
 			$search = array(
-				'adv_search' 		=> '',
-				'branch_id'		=> '',
-				'degree'		=> '',
-				'academic_year' 	=> '',
-				'grade' 	=> '',
-				'group'			=> '',
-				'student'			=> '',
-				'language_type' 	=> '',
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'adv_search' => '',
+				'branch_id' => '',
+				'degree' => '',
+				'academic_year' => '',
+				'grade' => '',
+				'group' => '',
+				'student' => '',
+				'language_type' => '',
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 			);
 		}
 
@@ -1014,16 +1014,16 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		} else {
 			$rs = array();
 			$search = array(
-				'branch_id' 	=> "",
-				'academic_year'	=> "",
-				'group' 		=> "",
-				'grade' 		=> "",
-				'degree' 		=> "",
-				'exam_type' 	=> 0,
-				'for_semester' 	=> 0,
-				'for_month' 	=> 0,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
+				'branch_id' => "",
+				'academic_year' => "",
+				'group' => "",
+				'grade' => "",
+				'degree' => "",
+				'exam_type' => 0,
+				'for_semester' => 0,
+				'for_month' => 0,
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
 				'sort_degree' => ''
 			);
 		}
@@ -1048,26 +1048,26 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$search = $this->getRequest()->getPost();
 
 			$db = new Allreport_Model_DbTable_DbRptStudentScore();
-			//$rs = $db->getStatisticScoreResult($search);
-			$rs=array();
-			$rsDetail=array();
-			//$rsDetail = $db->getSubjectScoreDetail($search);
+			$rs = $db->getStatisticScoreResult($search);
+			$rsDetail = $db->getSubjectScoreDetail($search);
 		} else {
 			$rs = array();
+			$rsDetail = array();
 			$search = array(
-				'branch_id' 	=> "",
-				'academic_year'	=> "",
-				'group' 		=> "",
-				'grade' 		=> "",
-				'degree' 		=> "",
-				'exam_type' 	=> 0,
-				'for_semester' 	=> 0,
-				'for_month' 	=> 0,
-				'start_date'	=> date('Y-m-d'),
-				'end_date'		=> date('Y-m-d'),
-				'mention'		=> '',
-				'student_list'	=> '',
-				'subject_list'	=> ''
+				'branch_id' => "",
+				'academic_year' => "",
+				'group' => "",
+				'grade' => "",
+				'subjectId' => "",
+				'degree' => "",
+				'exam_type' => 0,
+				'for_semester' => 0,
+				'for_month' => 0,
+				'start_date' => date('Y-m-d'),
+				'end_date' => date('Y-m-d'),
+				'mention' => '',
+				// 'student_list' => '',
+				// 'subject_list' => ''
 			);
 		}
 		$this->view->rs = $rs;
@@ -1085,7 +1085,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$this->view->form_search = $form;
 	}
 	function rptScoreResultSemesterAction()
-	{ 
+	{
 		$id = $this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		if ($this->getRequest()->isPost()) {
@@ -1133,7 +1133,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	}
 
 	function rptScoreResultAnnaulAction()
-	{ 
+	{
 		$id = $this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		if ($this->getRequest()->isPost()) {

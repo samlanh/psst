@@ -639,7 +639,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			70=>$this->tr->translate("GRADE_C"),
 			60=>$this->tr->translate("GRADE_D"),
 			50=>$this->tr->translate("GRADE_E"),
-			0=>$this->tr->translate("GRADE_F"),
+			1=>$this->tr->translate("GRADE_F"),
 		);
 		$_mention->setMultiOptions($_mention_opt);
 		$_mention->setValue($request->getParam("mention"));

@@ -1,46 +1,49 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$session_lang = new Zend_Session_Namespace('lang');
-	$lang_id = $session_lang->lang_id;
-	$dbgb = new Application_Model_DbTable_DbGlobal();
-	$this->headTitle($tr->translate('RPT_RESULT_STATISTIC')); 
-	echo $this->headTitle();
-	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$frm =  $this->form_search;
-	$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
-	//print_r($this->rs);
-
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$session_lang = new Zend_Session_Namespace('lang');
+$lang_id = $session_lang->lang_id;
+$dbgb = new Application_Model_DbTable_DbGlobal();
+$this->headTitle($tr->translate('RPT_RESULT_STATISTIC'));
+echo $this->headTitle();
+$base_url = Application_Form_FrmMessage::getUrl("/");
+$frm = $this->form_search;
+$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
+// print_r($this->rsdetail); 
 ?>
-<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
+<div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
-    	<div class="col-sm-12 border-botom">
-		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_RESULT_STATISTIC');?></h4>
-    		</div>
-    		<div class="col-sm-4 text-right">
-    		</div>
-    	</div>
-    </div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-subject-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-						<script type="dojo/method" event="onSubmit">			
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0"><i class="fa fa-file "
+						aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_RESULT_STATISTIC'); ?>
+				</h4>
+			</div>
+			<div class="col-sm-4 text-right">
+			</div>
+		</div>
+	</div>
+	<form id='foundation_class'
+		action="<?php echo $this->url(array('module' => 'allreport', 'controller' => 'score', 'action' => 'rpt-subject-statistic')); ?>"
+		dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<script type="dojo/method" event="onSubmit">
 								if(this.validate()) {
 									
 									exam_type=dijit.byId('exam_type').get('value');
 									if(exam_type=='' || exam_type==0){
-										alert('<?php echo $tr->translate('SELECT_EXAM_TYPE');?>!');
+										alert('<?php echo $tr->translate('SELECT_EXAM_TYPE'); ?>!');
 										dijit.byId('exam_type').focus(); 
 										return false;
 									}else if(exam_type==2){
 										for_semester=dijit.byId('for_semester').get('value');
 										if(for_semester=='' || for_semester==0){
-											alert('<?php echo $tr->translate('SELECT_SEMESTER');?>!');
+											alert('<?php echo $tr->translate('SELECT_SEMESTER'); ?>!');
 											dijit.byId('for_semester').focus(); 
 											return false;
 										}
 									}else if(exam_type==1){
 										for_month=dijit.byId('for_month').get('value');
 										if(for_month=='' || for_month==0){
-											alert('<?php echo $tr->translate('CHOOSE_MONTH');?>!');
+											alert('<?php echo $tr->translate('CHOOSE_MONTH'); ?>!');
 											dijit.byId('for_month').focus(); 
 											return false;
 										}
@@ -52,122 +55,134 @@
 								}
 			</script>
 		<div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("branch_id");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("academic_year");?>
-            </div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("degree");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="grade" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="group" />
-            </div>
+				<?php echo $frm->getElement("branch_id"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("academic_year"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("degree"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="grade" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="group" />
+			</div>
 			
-        </div>
-        <div class="form-group">
+		</div>
+		<div class="form-group">
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("exam_type");?>
-            </div>
+				<?php echo $frm->getElement("exam_type"); ?>
+			</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("for_semester");?>
-            </div>
+				<?php echo $frm->getElement("for_semester"); ?>
+			</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("for_month");?>
-            </div>
+				<?php echo $frm->getElement("for_month"); ?>
+			</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("mention");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-            </div>
-        </div>
-		<table width="100%"
-			style="margin: 0px; font-family: 'khmer os battambang';">
+				<input id="subjectId" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("mention"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<button class="button-class button-primary" iconClass="glyphicon glyphicon-search"
+					dojoType="dijit.form.Button" showLabel="true"
+					type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
+			</div>
+		</div>
+		<!-- <table width="100%" style="margin: 0px; font-family: 'khmer os battambang';">
 			<tr>
 				<td colspan="5">
 					<div style="margin: 10px 0px;">
-						<input type="checkBox" style="margin-left: 3%;"
-							dojoType="dijit.form.CheckBox" value="1" id="student_list"
-							name="student_list"
-							<?php if(!empty($this->search['student_list'])){if($this->search['student_list']==1){echo "checked='checked'";}}?> /> <?php echo $tr->translate("STUDENT_LIST");?>
-						<input type="checkBox" style="margin-left: 3%;"
-							dojoType="dijit.form.CheckBox" value="2" id="subject_list"
-							name="subject_list"
-							<?php if(!empty($this->search['subject_list'])){if($this->search['subject_list']==2){echo "checked='checked'";}}?> /><?php echo $tr->translate("SUBJECT_EXAM");?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1"
+							id="student_list" name="student_list" <?php if (!empty($this->search['student_list'])) {
+								if ($this->search['student_list'] == 1) {
+									echo "checked='checked'";
+								}
+							} ?> /> <?php echo $tr->translate("STUDENT_LIST"); ?>
+						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="2"
+							id="subject_list" name="subject_list" <?php if (!empty($this->search['subject_list'])) {
+								if ($this->search['subject_list'] == 2) {
+									echo "checked='checked'";
+								}
+							} ?> /><?php echo $tr->translate("SUBJECT_EXAM"); ?>
 					</div>
 				</td>
 			</tr>
-		</table>
-	</form>	
-<style>
-.hidden{
-	display: table-cell !important;
-}
-</style>
+		</table> -->
+	</form>
+	<style>
+		.hidden {
+			display: table-cell !important;
+		}
+	</style>
 	<div class="card-box">
 		<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 			<li class="nav-item ">
-			     <a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i> <?php echo $tr->translate("SCORE_RESULT");?></a>
+				<a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i>
+					<?php echo $tr->translate("SCORE_RESULT"); ?></a>
 			</li>
 			<li class="nav-item active">
-			    <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-			        <i class="fa fa-money ml-2"></i> <?php echo $tr->translate("SCORE_DETAIL");?>
-			    </a>
+				<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+					<i class="fa fa-money ml-2"></i> <?php echo $tr->translate("SCORE_DETAIL"); ?>
+				</a>
 			</li>
 		</ul>
 	</div>
-	  <!--/. Tab Menu -->
-    <div class="col-md-12">
-			 <!-- Tab panels -->
+	<!--/. Tab Menu -->
+	<div class="col-md-12">
+		<!-- Tab panels -->
 		<div class="tab-content vertical">
 			<!--Panel 1-->
 			<div class="tab-pane fade in" id="panel21" role="tabpanel">
 				<div class="text-right">
-				    <a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrintProfle('divPrint');" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>"
+						onclick="doPrintProfle('divPrint');"><i class="fa fa-print" aria-hidden="true"></i></a>
 				</div>
 				<div id="divPrint">
 					<table style="background:#fff; margin: 0 auto; width: 100%;">
 						<tr>
-							<td colspan="3"><?php echo $this->rsheader;?></td>
+							<td colspan="3"><?php echo $this->rsheader; ?></td>
 						</tr>
-						<tr class="line"><td colspan="3"></td></tr>
+						<tr class="line">
+							<td colspan="3"></td>
+						</tr>
 						<tr>
 							<td width="28%" align="left"></td>
 							<td width="44%" align="center">
-								<?php 
-								$resulTilte="";
-								$academicYear="";
-								
-								if(!empty($this->rs)){ 
-									if(!empty($this->search)){
-										if($this->search['exam_type']==1){
-											$titleScore=$this->rs['0']['title_score'];
-											$resulTilte = "ប្រចាំខែ ".$titleScore;
-										}else{
-											if($this->search['for_semester']==1){
+								<?php
+								$resulTilte = "";
+								$academicYear = "";
+
+								if (!empty($this->rs)) {
+									if (!empty($this->search)) {
+										if ($this->search['exam_type'] == 1) {
+											$titleScore = $this->rs['0']['title_score'];
+											$resulTilte = "ប្រចាំខែ " . $titleScore;
+										} else {
+											if ($this->search['for_semester'] == 1) {
 												$resulTilte = "ប្រចាំ ឆមាសទី១";
-											}elseif($this->search['for_semester']==2){
+											} elseif ($this->search['for_semester'] == 2) {
 												$resulTilte = "ប្រចាំ ឆមាសទី២";
 											}
 										}
-									} 
-									$academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academic_year'];
 									}
+									$academicYear = "ឆ្នាំសិក្សា " . $this->rs[0]['academic_year'];
+								}
 								?>
 								<ul class="headerTitle">
 									<li>
-										<?php echo $tr->translate("RPT_RESULT_STATISTIC");?>
+										<?php echo $tr->translate("RPT_RESULT_STATISTIC"); ?>
 									</li>
 									<li>
-										<?php echo $resulTilte;?>
+										<?php echo $resulTilte; ?>
 									</li>
 									<li>
-										<?php echo $academicYear;?>
+										<?php echo $academicYear; ?>
 									</li>
 								</ul>
 							</td>
@@ -175,370 +190,479 @@
 						</tr>
 						<tr>
 							<td colspan="3" valign="top" id="exportExcel">
-									<style type="text/css">
-											.style{
-													line-height: 20px;font-size: 13px !important;
-													font-family: 'Times New Roman','Khmer OS Battambang';
-												}
-												.hideblog{display: none;}
-												.hiddenblog{display: block !important;}
-												.style1:hover{ background: #ccc; }
-												table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-												
-												table.content-data { page-break-inside:auto }
-												table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
-												#header {
-												display: table-header-group;
-												page-break-inside:avoid; page-break-after:auto;
-												margin-top: 100px;
-												}
-												.hide{visibility: hidden;}
-												@media print {
-												div.divFooter {
-													position: fixed;
-													top: 0;
-													width: 100%;
-													height: 100px;
-													bottom:0px;
-													margin:0;
-												}
-													.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+								<style type="text/css">
+									.style {
+										line-height: 20px;
+										font-size: 13px !important;
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+									}
+
+									.hideblog {
+										display: none;
+									}
+
+									.hiddenblog {
+										display: block !important;
+									}
+
+									.style1:hover {
+										background: #ccc;
+									}
+
+									table tr td ul li {
+										text-align: center;
+										list-style: none;
+										line-height: 25px;
+									}
+
+									table.content-data {
+										page-break-inside: auto
+									}
+
+									table.content-data tr {
+										page-break-inside: avoid;
+										page-break-after: auto;
+									}
+
+									#header {
+										display: table-header-group;
+										page-break-inside: avoid;
+										page-break-after: auto;
+										margin-top: 100px;
+									}
+
+									.hide {
+										visibility: hidden;
+									}
+
+									@media print {
+										div.divFooter {
+											position: fixed;
+											top: 0;
+											width: 100%;
+											height: 100px;
+											bottom: 0px;
+											margin: 0;
+										}
+
+										.hide {
+											visibility: visible;
+											height:
+												<?php echo $classHideHeight; ?>;}
 													
 												}
-												.center{text-align: center !important;}
-												table.content-data{
-													font-family: 'Times New Roman','Khmer OS Battambang';
-													border-collapse:collapse;
-													border:1px solid #000; 
-													font-size:12px;
-													width:100%;
-											
-												}
-												table.content-data thead tr.style {
-													line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
-													background: #c1d0f3;
-													font-weight:600;
-												}
-												table.content-data  tr.style {
-													white-space: nowrap;
-												}
-												
-												ul.headerTitle li{
-													list-style:none;line-height:20px;
-													font-size: 14px;
-													font-family:'Times New Roman','Khmer OS Muol Light';
-												}
-												span.separateColumn{
-													width:49%;
-													display: inline-block;
-												}
-												
-												table.tb-footer{
-													border-collapse:collapse;
-													border:1px solid #000; 
-													font-size:12px;
-													font-family: 'Times New Roman','Khmer OS Battambang';
-												}
-												table.tb-footer tr{
-												line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
-												}
-												table tr td{
-													padding:0 2px;
-												}
-												tr.voidclass {
-													background: #fff7f7;
-												}
-												td.centerText{
-													text-align: center;
-												}
-												.redBold {
-													font-weight: 600;
-													color: #f80000;
-												}
-												table.content-data tr td{
-													padding: 1px;
-												}
-												.bold{font-weight: bold;
-												background:#dee5e7;}
 
-												@media print{
-													@page{
-														margin:0.5cm 0.7cm 0.2cm 0.7cm;
-														page-break-before: avoid;
-														-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-														-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-														-ms-transform: scale(0.5);   /* IE 9 */
-														-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-														transform: scale(0.5);
-														page: A4;
-														size:portrait;
-													}
-												}
-												.principalStamp {
-													position:relative;
-													width: 300px;
-													height: 140px;
-													margin:0 auto;
-													margin-top:-20px;
-												}
-												.principalStamp .stamp {
-													width:140px;
-													height:140px;
-													position:absolute;
-													transform: translate(-81%);
-													left:50%;
-												}
-												.principalStamp .signature {
-													left: 40px;
-													bottom: 32px;
-													height: 100px;
-													width:200px;
-													position: absolute;
-												}
-												.principalStamp .principalName{
-													left: 65px;
-													top: 113px;
-													height: 100px;
-													width: 200px;
-													position: absolute;
-												}
-												.seenApproved{
-													position: relative;
-												}
-												.seenApproved .interimPrincipal{
-													position: absolute;
-													left: 50%;
-													top: 20px;
-													transform: translate(-50%);
-													z-index: 1;
-												}
-												
-												.administrator {
-														position:relative;
-														width: 300px;
-														height: 140px;
-														margin:0 auto;
-													}
-													.administrator .administratorstamp {
-														width:130px;
-														height:130px;
-														position:absolute;
-														transform: translate(-50%);
-														left:50%;
-													}
-													.administrator .administratorsignature {
-														left: 40px;
-														bottom: 32px;
-														height: 100px;
-														width:200px;
-														position: absolute;
-													}
-													.administrator .administratorName {
-														left: 65px;
-														top: 80px;
-														height: 100px;
-														width: 200px;
-														position: absolute;
-													}
-													label.LabelTeacher {
-														line-height: 25px;
-														font-weight: initial;
-														font-family: 'Times New Roman','Khmer OS Battambang';
-														white-space: nowrap;
-													}
-									</style>
-									<?php 
-									
-									$active_student = 0;
-									$drop_student = 0;?>
-								<div id="exportExcel">
-									<table class="content-data" cellpadding="4"​ border="1">
-									<thead>
-										<tr class="style" align="center">
-											<td ><?php echo $tr->translate("NUM");?></td>
-											<td><?php echo $tr->translate("BRANCH");?></td>
-											<td><?php echo $tr->translate("STUDENT_ID");?></td>
-											<td><?php echo $tr->translate("NAME_KH");?></td>
-											<td><?php echo $tr->translate("NAME_EN");?></td>
-											<td><?php echo $tr->translate("SEX");?></td>
-											<td><?php echo $tr->translate("DEGREE");?></td>
-											<td><?php echo $tr->translate("GRADE");?></td>
-											<td><?php echo $tr->translate("GROUP");?></td>
-											<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
-											<td><?php echo $tr->translate("AVERAGE");?></td>
-											<td><?php echo $tr->translate("MENTION");?></td>
-										</tr>
-									</thead>
-									<?php
-										$i=0; 
-										if (!empty($this->rs)){ foreach($this->rs as $key=> $rs){ $i++;
-										?>
-										<tr class="style-rowdata hover" >
-											<td align="center" data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
-											<td align="center" data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch_name']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rs['stuCode']; ?></td>
-											<td data-label="<?php echo $tr->translate("NAME_KH");?>" ><?php echo $rs['StuNameKh']; ?></td>
-											<td data-label="<?php echo $tr->translate("NAME_EN");?>" ><?php echo $rs['StuNameEn']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("SEX");?>" >
-												<?php 
-												if($rs['Sex']=1){
-													echo $tr->translate("MALE");
-												}else{
-													echo $tr->translate("FEMALE");
-												}  ?>
-											</td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['degree']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['grade']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rs['group_code']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rs['total_score']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rs['totalAverage']; ?></td>
-											<td class="redBold " align="center" data-label="<?php echo $tr->translate("MENTION");?>">
-												<?php echo $dbgb->getMentionScore($rs['totalAverage'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterScal']); ?>
-											</td>
-										</tr>
-										<?php 
+									.center {
+										text-align: center !important;
+									}
+
+									table.content-data {
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+										border-collapse: collapse;
+										border: 1px solid #000;
+										font-size: 12px;
+										width: 100%;
+
+									}
+
+									table.content-data thead tr.style {
+										line-height: 25px;
+										font-size: 12px !important;
+										padding: 1px 0px;
+										white-space: nowrap;
+										height: 22px;
+										background: #c1d0f3;
+										font-weight: 600;
+									}
+
+									table.content-data tr.style {
+										white-space: nowrap;
+									}
+
+									ul.headerTitle li {
+										list-style: none;
+										line-height: 20px;
+										font-size: 14px;
+										font-family: 'Times New Roman', 'Khmer OS Muol Light';
+									}
+
+									span.separateColumn {
+										width: 49%;
+										display: inline-block;
+									}
+
+									table.tb-footer {
+										border-collapse: collapse;
+										border: 1px solid #000;
+										font-size: 12px;
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+									}
+
+									table.tb-footer tr {
+										line-height: 14px;
+										font-size: 12px;
+										padding: 2px 0px;
+										height: 25px;
+									}
+
+									table tr td {
+										padding: 0 2px;
+									}
+
+									tr.voidclass {
+										background: #fff7f7;
+									}
+
+									td.centerText {
+										text-align: center;
+									}
+
+									.redBold {
+										font-weight: 600;
+										color: #f80000;
+									}
+
+									table.content-data tr td {
+										padding: 1px;
+									}
+
+									.bold {
+										font-weight: bold;
+										background: #dee5e7;
+									}
+
+									@media print {
+										@page {
+											margin: 0.5cm 0.7cm 0.2cm 0.7cm;
+											page-break-before: avoid;
+											-webkit-transform: scale(0.5);
+											/* Chrome, Safari 3.1+  */
+											-moz-transform: scale(0.5);
+											/* Firefox 3.5-15 */
+											-ms-transform: scale(0.5);
+											/* IE 9 */
+											-o-transform: scale(0.5);
+											/* Opera 10.50-12.00 */
+											transform: scale(0.5);
+											page: A4;
+											size: portrait;
 										}
-										}?>
-									
+									}
+
+									.principalStamp {
+										position: relative;
+										width: 300px;
+										height: 140px;
+										margin: 0 auto;
+										margin-top: -20px;
+									}
+
+									.principalStamp .stamp {
+										width: 140px;
+										height: 140px;
+										position: absolute;
+										transform: translate(-81%);
+										left: 50%;
+									}
+
+									.principalStamp .signature {
+										left: 40px;
+										bottom: 32px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									.principalStamp .principalName {
+										left: 65px;
+										top: 113px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									.seenApproved {
+										position: relative;
+									}
+
+									.seenApproved .interimPrincipal {
+										position: absolute;
+										left: 50%;
+										top: 20px;
+										transform: translate(-50%);
+										z-index: 1;
+									}
+
+									.administrator {
+										position: relative;
+										width: 300px;
+										height: 140px;
+										margin: 0 auto;
+									}
+
+									.administrator .administratorstamp {
+										width: 130px;
+										height: 130px;
+										position: absolute;
+										transform: translate(-50%);
+										left: 50%;
+									}
+
+									.administrator .administratorsignature {
+										left: 40px;
+										bottom: 32px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									.administrator .administratorName {
+										left: 65px;
+										top: 80px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									label.LabelTeacher {
+										line-height: 25px;
+										font-weight: initial;
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+										white-space: nowrap;
+									}
+								</style>
+								<?php
+
+								$active_student = 0;
+								$drop_student = 0; ?>
+								<div id="exportExcel">
+									<table class="content-data" cellpadding="4" ​ border="1">
+										<thead>
+											<tr class="style" align="center">
+												<td><?php echo $tr->translate("NUM"); ?></td>
+												<td><?php echo $tr->translate("BRANCH"); ?></td>
+												<td><?php echo $tr->translate("STUDENT_ID"); ?></td>
+												<td><?php echo $tr->translate("NAME_KH"); ?></td>
+												<td><?php echo $tr->translate("NAME_EN"); ?></td>
+												<td><?php echo $tr->translate("SEX"); ?></td>
+												<td><?php echo $tr->translate("DEGREE"); ?></td>
+												<td><?php echo $tr->translate("GRADE"); ?></td>
+												<td><?php echo $tr->translate("GROUP"); ?></td>
+												<td><?php echo $tr->translate("TOTAL_SCORE"); ?></td>
+												<td><?php echo $tr->translate("AVERAGE"); ?></td>
+												<td><?php echo $tr->translate("MENTION"); ?></td>
+											</tr>
+										</thead>
+										<?php
+										$i = 0;
+										if (!empty($this->rs)) {
+											foreach ($this->rs as $key => $rs) {
+												$i++;
+												?>
+												<tr class="style-rowdata hover">
+													<td align="center" data-label="<?php echo $tr->translate("NUM"); ?>">
+														<?php echo $key + 1; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("BRANCH"); ?>">
+														<?php echo $rs['branch_name']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID"); ?>">
+														<?php echo $rs['stuCode']; ?></td>
+													<td data-label="<?php echo $tr->translate("NAME_KH"); ?>">
+														<?php echo $rs['StuNameKh']; ?></td>
+													<td data-label="<?php echo $tr->translate("NAME_EN"); ?>">
+														<?php echo $rs['StuNameEn']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("SEX"); ?>">
+														<?php
+														if ($rs['Sex'] = 1) {
+															echo $tr->translate("MALE");
+														} else {
+															echo $tr->translate("FEMALE");
+														} ?>
+													</td>
+													<td align="center" data-label="<?php echo $tr->translate("GROUP"); ?>">
+														<?php echo $rs['degree']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("GROUP"); ?>">
+														<?php echo $rs['grade']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("GROUP"); ?>">
+														<?php echo $rs['group_code']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE"); ?>">
+														<?php echo $rs['total_score']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("AVERAGE"); ?>">
+														<?php echo $rs['totalAverage']; ?></td>
+													<td class="redBold " align="center"
+														data-label="<?php echo $tr->translate("MENTION"); ?>">
+														<?php echo $dbgb->getMentionScore($rs['totalAverage'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterScal']); ?>
+													</td>
+												</tr>
+											<?php
+											}
+										} ?>
+
 									</table>
 									<br>
 								</div>
 							</td>
 						</tr>
-						
-						<?php 	
-							$dbbranch = new Application_Model_DbTable_DbGlobal();
-							$branch_id= empty($this->rs[0]['branch_id'])?0:$this->rs[0]['branch_id'];
-							$branchInfo =  $dbbranch->getBranchInfo($branch_id);
+
+						<?php
+						$dbbranch = new Application_Model_DbTable_DbGlobal();
+						$branch_id = empty($this->rs[0]['branch_id']) ? 0 : $this->rs[0]['branch_id'];
+						$branchInfo = $dbbranch->getBranchInfo($branch_id);
 						?>
-						<tr >
+						<tr>
 							<td colspan="3" width="100%">
 								<table>
 									<tr>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td align="center">
-										<label id="lunarDate" class="LabelTeacher">
-											<?php 
-													$inputDate =date("Y-m-d") ;
-													$time  = strtotime($inputDate);
-													$day   = date('d',$time);
-													$month = date('m',$time);
-													$year  = date('Y',$time);
-														
-													$lunaDate = date('Y-m-d',strtotime($inputDate));
-													$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+											<label id="lunarDate" class="LabelTeacher">
+												<?php
+												$inputDate = date("Y-m-d");
+												$time = strtotime($inputDate);
+												$day = date('d', $time);
+												$month = date('m', $time);
+												$year = date('Y', $time);
+
+												$lunaDate = date('Y-m-d', strtotime($inputDate));
+												$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
 												?>
 												<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
-												</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+											</label><label id="lunarBlankDate"
+												class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
 										</td>
 									</tr>
 									<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-												<div class="seenApproved">បានឃើញ និងឯកភាព
-													<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
-												</div>
-											</td>
-											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
-											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
-												<?php
-													if ($lang_id == 1) { ?>
-														<label id= "date" style="display:none">
-															ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
-														</label>
-													<?php }else{ ?>
-														<label id= "date" style="display:none">
-															Phnom Penh,
-															<?php echo date("l");?>,
-															<?php echo date("d");?> 
-															<?php echo date("F");?>,
-															<?php echo date("Y");?> 
-														</label>
-												<?php } ?>
-												<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
-											</td>
+										<td valign="top" width="33%"
+											style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+											<div class="seenApproved">បានឃើញ និងឯកភាព
+												<span
+													class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+											</div>
+										</td>
+										<td width="33%" valign="top"
+											style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">
+										</td>
+										<td width="33%"
+											style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;"
+											valign="top">
+											<?php
+											if ($lang_id == 1) { ?>
+												<label id="date" style="display:none">
+													ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?>
+													ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?>
+													ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+												</label>
+											<?php } else { ?>
+												<label id="date" style="display:none">
+													Phnom Penh,
+													<?php echo date("l"); ?>,
+													<?php echo date("d"); ?>
+													<?php echo date("F"); ?>,
+													<?php echo date("Y"); ?>
+												</label>
+											<?php } ?>
+											<div id="blank_date" style="display:none">
+												ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+										</td>
 									</tr>
 									<tr>
-											<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
-											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
-											<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">ការិយាល័យសិក្សាធិការ</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;">
+										</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">
+										</td>
+										<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">
+											ការិយាល័យសិក្សាធិការ</td>
 									</tr>
 									<tr>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-												<div class="principalStamp" id="principalStamp" style="display:none;">
-													<div class="stamp" >
-														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
-														<div class="signature">
-															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
-														</div>
-														<div class="principalName">
-															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-														</div>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											<div class="principalStamp" id="principalStamp" style="display:none;">
+												<div class="stamp">
+													<img
+														src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>" />
+													<div class="signature">
+														<img
+															src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
+													</div>
+													<div class="principalName">
+														<span
+															style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
 													</div>
 												</div>
-											</td>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-											</td>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-												<?php if (!empty($branchInfo['administration_signature'])) { ?>
-													<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
-												<?php } else { ?>
-													<div id="administrator" style="height: 100px;"></div>
-												<?php } ?>
-												<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
-											</td>
+											</div>
+										</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+										</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											<?php if (!empty($branchInfo['administration_signature'])) { ?>
+												<div id="administrator" style="display:none"><img
+														src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>"
+														style="width:200px;height:100px;position:relative;" /></div>
+											<?php } else { ?>
+												<div id="administrator" style="height: 100px;"></div>
+											<?php } ?>
+											<span
+												style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
+										</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
 					</table>
-				</div>	
+				</div>
 			</div>
 			<!--End Panel 1-->
 
 			<!--Panel 2-->
 			<div class="tab-pane fade in active" id="panel22" role="tabpanel">
 				<div class="text-right">
-				    <a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT");?>" onclick="doPrintProfle('divPrintDetail');" ><i class="fa fa-print" aria-hidden="true"></i></a>
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>"
+						onclick="doPrintProfle('divPrintDetail');"><i class="fa fa-print" aria-hidden="true"></i></a>
 				</div>
 				<div id="divPrintDetail">
 					<table style="background:#fff; margin: 0 auto; width: 100%;">
 						<tr>
-							<td colspan="3"><?php echo $this->rsheader;?></td>
+							<td colspan="3"><?php echo $this->rsheader; ?></td>
 						</tr>
-						<tr class="line"><td colspan="3"></td></tr>
+						<tr class="line">
+							<td colspan="3"></td>
+						</tr>
 						<tr>
 							<td width="28%" align="left"></td>
 							<td width="44%" align="center">
-								<?php 
-								$resulTilte="";
-								$academicYear="";
-								
-								if(!empty($this->rsdetail)){ 
-									if(!empty($this->search)){
-										if($this->search['exam_type']==1){
-											$titleScore=$this->rsdetail['0']['title_score'];
-											$resulTilte = "ប្រចាំខែ ".$titleScore;
-										}else{
-											if($this->search['for_semester']==1){
+								<?php
+								$resulTilte = "";
+								$academicYear = "";
+
+								if (!empty($this->rsdetail)) {
+									if (!empty($this->search)) {
+										if ($this->search['exam_type'] == 1) {
+											$titleScore = $this->rsdetail['0']['title_score'];
+											$resulTilte = "ប្រចាំខែ " . $titleScore;
+										} else {
+											if ($this->search['for_semester'] == 1) {
 												$resulTilte = "ប្រចាំ ឆមាសទី១";
-											}elseif($this->search['for_semester']==2){
+											} elseif ($this->search['for_semester'] == 2) {
 												$resulTilte = "ប្រចាំ ឆមាសទី២";
 											}
 										}
-									} 
-									$academicYear = "ឆ្នាំសិក្សា ".$this->rsdetail[0]['academic_year'];
 									}
+									$academicYear = "ឆ្នាំសិក្សា " . $this->rsdetail[0]['academic_year'];
+								}
 								?>
 								<ul class="headerTitle">
 									<li>
-										<?php echo $tr->translate("RPT_RESULT_STATISTIC");?>
+										<?php echo $tr->translate("RPT_RESULT_STATISTIC"); ?>
 									</li>
 									<li>
-										<?php echo $resulTilte;?>
+										<?php echo $resulTilte; ?>
 									</li>
 									<li>
-										<?php echo $academicYear;?>
+										<?php echo $academicYear; ?>
 									</li>
 								</ul>
 							</td>
@@ -546,528 +670,710 @@
 						</tr>
 						<tr>
 							<td colspan="3" valign="top" id="exportExcel">
-									<style type="text/css">
-											.style{
-													line-height: 20px;font-size: 13px !important;
-													font-family: 'Times New Roman','Khmer OS Battambang';
-												}
-												.hideblog{display: none;}
-												.hiddenblog{display: block !important;}
-												.style1:hover{ background: #ccc; }
-												table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-												
-												table.content-data { page-break-inside:auto }
-												table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
-												#header {
-												display: table-header-group;
-												page-break-inside:avoid; page-break-after:auto;
-												margin-top: 100px;
-												}
-												.hide{visibility: hidden;}
-												@media print {
-												div.divFooter {
-													position: fixed;
-													top: 0;
-													width: 100%;
-													height: 100px;
-													bottom:0px;
-													margin:0;
-												}
-													.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+								<style type="text/css">
+									.style {
+										line-height: 20px;
+										font-size: 13px !important;
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+									}
+
+									.hideblog {
+										display: none;
+									}
+
+									.hiddenblog {
+										display: block !important;
+									}
+
+									.style1:hover {
+										background: #ccc;
+									}
+
+									table tr td ul li {
+										text-align: center;
+										list-style: none;
+										line-height: 25px;
+									}
+
+									table.content-data {
+										page-break-inside: auto
+									}
+
+									table.content-data tr {
+										page-break-inside: avoid;
+										page-break-after: auto;
+									}
+
+									#header {
+										display: table-header-group;
+										page-break-inside: avoid;
+										page-break-after: auto;
+										margin-top: 100px;
+									}
+
+									.hide {
+										visibility: hidden;
+									}
+
+									@media print {
+										div.divFooter {
+											position: fixed;
+											top: 0;
+											width: 100%;
+											height: 100px;
+											bottom: 0px;
+											margin: 0;
+										}
+
+										.hide {
+											visibility: visible;
+											height:
+												<?php echo $classHideHeight; ?>;}
 													
 												}
-												.center{text-align: center !important;}
-												table.content-data{
-													font-family: 'Times New Roman','Khmer OS Battambang';
-													border-collapse:collapse;
-													border:1px solid #000; 
-													font-size:12px;
-													width:100%;
-											
-												}
-												table.content-data thead tr.style {
-													line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
-													background: #c1d0f3;
-													font-weight:600;
-												}
-												table.content-data  tr.style {
-													white-space: nowrap;
-												}
-												
-												ul.headerTitle li{
-													list-style:none;line-height:20px;
-													font-size: 14px;
-													font-family:'Times New Roman','Khmer OS Muol Light';
-												}
-												span.separateColumn{
-													width:49%;
-													display: inline-block;
-												}
-												
-												table.tb-footer{
-													border-collapse:collapse;
-													border:1px solid #000; 
-													font-size:12px;
-													font-family: 'Times New Roman','Khmer OS Battambang';
-												}
-												table.tb-footer tr{
-												line-height: 14px; font-size:12px; padding:2px 0px; height: 25px;
-												}
-												table tr td{
-													padding:0 2px;
-												}
-												tr.voidclass {
-													background: #fff7f7;
-												}
-												td.centerText{
-													text-align: center;
-												}
-												.redBold {
-													font-weight: 600;
-													color: #f80000;
-												}
-												table.content-data tr td{
-													padding: 1px;
-												}
-												.bold{font-weight: bold;
-												background:#dee5e7;}
 
-												@media print{
-													@page{
-														margin:0.5cm 0.7cm 0.2cm 0.7cm;
-														page-break-before: avoid;
-														-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-														-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-														-ms-transform: scale(0.5);   /* IE 9 */
-														-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-														transform: scale(0.5);
-														page: A4;
-														size:portrait;
-													}
-												}
-												.principalStamp {
-													position:relative;
-													width: 300px;
-													height: 140px;
-													margin:0 auto;
-													margin-top:-20px;
-												}
-												.principalStamp .stamp {
-													width:140px;
-													height:140px;
-													position:absolute;
-													transform: translate(-81%);
-													left:50%;
-												}
-												.principalStamp .signature {
-													left: 40px;
-													bottom: 32px;
-													height: 100px;
-													width:200px;
-													position: absolute;
-												}
-												.principalStamp .principalName{
-													left: 65px;
-													top: 113px;
-													height: 100px;
-													width: 200px;
-													position: absolute;
-												}
-												.seenApproved{
-													position: relative;
-												}
-												.seenApproved .interimPrincipal{
-													position: absolute;
-													left: 50%;
-													top: 20px;
-													transform: translate(-50%);
-													z-index: 1;
-												}
-												
-												.administrator {
-														position:relative;
-														width: 300px;
-														height: 140px;
-														margin:0 auto;
-													}
-													.administrator .administratorstamp {
-														width:130px;
-														height:130px;
-														position:absolute;
-														transform: translate(-50%);
-														left:50%;
-													}
-													.administrator .administratorsignature {
-														left: 40px;
-														bottom: 32px;
-														height: 100px;
-														width:200px;
-														position: absolute;
-													}
-													.administrator .administratorName {
-														left: 65px;
-														top: 80px;
-														height: 100px;
-														width: 200px;
-														position: absolute;
-													}
-													label.LabelTeacher {
-														line-height: 25px;
-														font-weight: initial;
-														font-family: 'Times New Roman','Khmer OS Battambang';
-														white-space: nowrap;
-													}
-									</style>
-									<?php 
-									
-									$active_student = 0;
-									$drop_student = 0;?>
-								<div id="exportExcel">
-									<table class="content-data" cellpadding="4"​ border="1">
-									<thead>
-										<tr class="style" align="center">
-											<td ><?php echo $tr->translate("NUM");?></td>
-											<td><?php echo $tr->translate("BRANCH");?></td>
-											<td><?php echo $tr->translate("STUDENT_ID");?></td>
-											<td><?php echo $tr->translate("NAME_KH");?></td>
-											<td><?php echo $tr->translate("NAME_EN");?></td>
-											<td><?php echo $tr->translate("SEX");?></td>
-											<td><?php echo $tr->translate("DEGREE");?></td>
-											<td><?php echo $tr->translate("GRADE");?></td>
-											<td><?php echo $tr->translate("GROUP");?></td>
-											<td><?php echo $tr->translate("SUBJECT");?></td>
-											<td><?php echo $tr->translate("TOTAL_SCORE");?></td>
-											<td><?php echo $tr->translate("AVERAGE");?></td>
-											<td><?php echo $tr->translate("MENTION");?></td>
-										</tr>
-									</thead>
-									<?php
-										$i=0; 
-										if (!empty($this->rsdetail)){ foreach($this->rsdetail as $key=> $rsdetail){ $i++;
-										?>
-										<tr class="style-rowdata hover" >
-											<td align="center" data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $key+1;?></td>
-											<td align="center" data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rsdetail['branch_name']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID");?>" ><?php echo $rsdetail['stuCode']; ?></td>
-											<td data-label="<?php echo $tr->translate("NAME_KH");?>" ><?php echo $rsdetail['StuNameKh']; ?></td>
-											<td data-label="<?php echo $tr->translate("NAME_EN");?>" ><?php echo $rsdetail['StuNameEn']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("SEX");?>" >
-												<?php 
-												if($rsdetail['Sex']=1){
-													echo $tr->translate("MALE");
-												}else{
-													echo $tr->translate("FEMALE");
-												}  ?>
-											</td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rsdetail['degree']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rsdetail['grade']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" ><?php echo $rsdetail['group_code']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("GROUP");?>" > </td>
-											<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE");?>" ><?php echo $rsdetail['total_score']; ?></td>
-											<td align="center" data-label="<?php echo $tr->translate("AVERAGE");?>" ><?php echo $rsdetail['totalAverage']; ?></td>
-											<td class="redBold " align="center" data-label="<?php echo $tr->translate("MENTION");?>">
-												<?php echo $dbgb->getMentionScore($rsdetail['totalAverage'], $rsdetail['for_academic_year'], $rsdetail['degree_id'], 1, $rsdetail['grade'], $rsdetail['semesterScal']); ?>
-											</td>
-										</tr>
-										<?php 
+									.center {
+										text-align: center !important;
+									}
+
+									table.content-data {
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+										border-collapse: collapse;
+										border: 1px solid #000;
+										font-size: 12px;
+										width: 100%;
+
+									}
+
+									table.content-data thead tr.style {
+										line-height: 25px;
+										font-size: 12px !important;
+										padding: 1px 0px;
+										white-space: nowrap;
+										height: 22px;
+										background: #c1d0f3;
+										font-weight: 600;
+									}
+
+									table.content-data tr.style {
+										white-space: nowrap;
+									}
+
+									ul.headerTitle li {
+										list-style: none;
+										line-height: 20px;
+										font-size: 14px;
+										font-family: 'Times New Roman', 'Khmer OS Muol Light';
+									}
+
+									span.separateColumn {
+										width: 49%;
+										display: inline-block;
+									}
+
+									table.tb-footer {
+										border-collapse: collapse;
+										border: 1px solid #000;
+										font-size: 12px;
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+									}
+
+									table.tb-footer tr {
+										line-height: 14px;
+										font-size: 12px;
+										padding: 2px 0px;
+										height: 25px;
+									}
+
+									table tr td {
+										padding: 0 2px;
+									}
+
+									tr.voidclass {
+										background: #fff7f7;
+									}
+
+									td.centerText {
+										text-align: center;
+									}
+
+									.redBold {
+										font-weight: 600;
+										color: #f80000;
+									}
+
+									table.content-data tr td {
+										padding: 1px;
+									}
+
+									.bold {
+										font-weight: bold;
+										background: #dee5e7;
+									}
+
+									@media print {
+										@page {
+											margin: 0.5cm 0.7cm 0.2cm 0.7cm;
+											page-break-before: avoid;
+											-webkit-transform: scale(0.5);
+											/* Chrome, Safari 3.1+  */
+											-moz-transform: scale(0.5);
+											/* Firefox 3.5-15 */
+											-ms-transform: scale(0.5);
+											/* IE 9 */
+											-o-transform: scale(0.5);
+											/* Opera 10.50-12.00 */
+											transform: scale(0.5);
+											page: A4;
+											size: portrait;
 										}
-										}?>
-									
+									}
+
+									.principalStamp {
+										position: relative;
+										width: 300px;
+										height: 140px;
+										margin: 0 auto;
+										margin-top: -20px;
+									}
+
+									.principalStamp .stamp {
+										width: 140px;
+										height: 140px;
+										position: absolute;
+										transform: translate(-81%);
+										left: 50%;
+									}
+
+									.principalStamp .signature {
+										left: 40px;
+										bottom: 32px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									.principalStamp .principalName {
+										left: 65px;
+										top: 113px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									.seenApproved {
+										position: relative;
+									}
+
+									.seenApproved .interimPrincipal {
+										position: absolute;
+										left: 50%;
+										top: 20px;
+										transform: translate(-50%);
+										z-index: 1;
+									}
+
+									.administrator {
+										position: relative;
+										width: 300px;
+										height: 140px;
+										margin: 0 auto;
+									}
+
+									.administrator .administratorstamp {
+										width: 130px;
+										height: 130px;
+										position: absolute;
+										transform: translate(-50%);
+										left: 50%;
+									}
+
+									.administrator .administratorsignature {
+										left: 40px;
+										bottom: 32px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									.administrator .administratorName {
+										left: 65px;
+										top: 80px;
+										height: 100px;
+										width: 200px;
+										position: absolute;
+									}
+
+									label.LabelTeacher {
+										line-height: 25px;
+										font-weight: initial;
+										font-family: 'Times New Roman', 'Khmer OS Battambang';
+										white-space: nowrap;
+									}
+								</style>
+								<?php
+
+								$active_student = 0;
+								$drop_student = 0; ?>
+								<div id="exportExcel">
+									<table class="content-data" cellpadding="4" ​ border="1">
+										<thead>
+											<tr class="style" align="center">
+												<td><?php echo $tr->translate("NUM"); ?></td>
+												<td><?php echo $tr->translate("BRANCH"); ?></td>
+												<td><?php echo $tr->translate("STUDENT_ID"); ?></td>
+												<td><?php echo $tr->translate("NAME_KH"); ?></td>
+												<td><?php echo $tr->translate("NAME_EN"); ?></td>
+												<td><?php echo $tr->translate("SEX"); ?></td>
+												<td><?php echo $tr->translate("DEGREE"); ?></td>
+												<td><?php echo $tr->translate("GRADE"); ?></td>
+												<td><?php echo $tr->translate("GROUP"); ?></td>
+												<td><?php echo $tr->translate("SUBJECT"); ?></td>
+												<td><?php echo $tr->translate("MAXSCORE_SUBJECT"); ?></td>
+												<td><?php echo $tr->translate("TOTAL_SCORE"); ?></td>
+												<td><?php echo $tr->translate("MENTION"); ?></td>
+											</tr>
+										</thead>
+										<?php
+										$i = 0;
+										if (!empty($this->rsdetail)) {
+											foreach ($this->rsdetail as $key => $rsdetail) {
+												$i++;
+												?>
+												<tr class="style-rowdata hover">
+													<td align="center" data-label="<?php echo $tr->translate("NUM"); ?>">
+														<?php echo $key + 1; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("BRANCH"); ?>">
+														<?php echo $rsdetail['branch_name']; ?></td>
+													
+													<td align="center" data-label="<?php echo $tr->translate("STUDENT_ID"); ?>">
+														<?php echo $rsdetail['stuCode']; ?></td>
+													<td data-label="<?php echo $tr->translate("NAME_KH"); ?>">
+														<?php echo $rsdetail['StuNameKh']; ?></td>
+													<td data-label="<?php echo $tr->translate("NAME_EN"); ?>">
+														<?php echo $rsdetail['StuNameEn']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("SEX"); ?>">
+														<?php
+														if ($rsdetail['Sex'] = 1) {
+															echo $tr->translate("MALE");
+														} else {
+															echo $tr->translate("FEMALE");
+														} ?>
+													</td>
+													<td align="center" data-label="<?php echo $tr->translate("DEGREE"); ?>">
+														<?php echo $rsdetail['degree']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("GRADE"); ?>">
+														<?php echo $rsdetail['grade']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("GROUP"); ?>">
+														<?php echo $rsdetail['group_code']; ?></td>
+													<td  data-label="<?php echo $tr->translate("SUBJECT"); ?>">
+														<?php echo $rsdetail['sub_name']; if($rsdetail['subLang']==1){ echo "(ខ្មែរ)"; }else{echo "(English)";}?></td>
+													<td align="center"
+														data-label="<?php echo $tr->translate("MAXSCORE_SUBJECT"); ?>">
+														<?php echo $rsdetail['subMaxScore']; ?></td>
+													<td align="center" data-label="<?php echo $tr->translate("TOTAL_SCORE"); ?>">
+														<?php echo $rsdetail['totalAverage']; ?></td>
+													<td class="redBold " align="center"
+														data-label="<?php echo $tr->translate("MENTION"); ?>">
+														<?php echo $dbgb->getMentionScore($rsdetail['totalAverage'], $rsdetail['for_academic_year'], $rsdetail['degree_id'], 1, $rsdetail['grade'], $rsdetail['subMaxScore']); ?>
+													</td>
+												</tr>
+											<?php
+											}
+										} ?>
+
 									</table>
 									<br>
 								</div>
 							</td>
 						</tr>
-						
-						<?php 	
-							$dbbranch = new Application_Model_DbTable_DbGlobal();
-							$branch_id= empty($this->rsdetail[0]['branch_id'])?0:$this->rsdetail[0]['branch_id'];
-							$branchInfo =  $dbbranch->getBranchInfo($branch_id);
+
+						<?php
+						$dbbranch = new Application_Model_DbTable_DbGlobal();
+						$branch_id = empty($this->rsdetail[0]['branch_id']) ? 0 : $this->rsdetail[0]['branch_id'];
+						$branchInfo = $dbbranch->getBranchInfo($branch_id);
 						?>
-						<tr >
+						<tr>
 							<td colspan="3" width="100%">
 								<table>
 									<tr>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
 										<td align="center">
-										<label id="lunarDate" class="LabelTeacher">
-											<?php 
-													$inputDate =date("Y-m-d") ;
-													$time  = strtotime($inputDate);
-													$day   = date('d',$time);
-													$month = date('m',$time);
-													$year  = date('Y',$time);
-														
-													$lunaDate = date('Y-m-d',strtotime($inputDate));
-													$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
+											<label id="lunarDate1" class="LabelTeacher">
+												<?php
+												$inputDate = date("Y-m-d");
+												$time = strtotime($inputDate);
+												$day = date('d', $time);
+												$month = date('m', $time);
+												$year = date('Y', $time);
+
+												$lunaDate = date('Y-m-d', strtotime($inputDate));
+												$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
 												?>
 												<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
-												</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
+											</label><label id="lunarBlankDate1"
+												class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
 										</td>
 									</tr>
 									<tr>
-											<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-												<div class="seenApproved">បានឃើញ និងឯកភាព
-													<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
-												</div>
-											</td>
-											<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
-											<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;" valign="top">
-												<?php
-													if ($lang_id == 1) { ?>
-														<label id= "date" style="display:none">
-															ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
-														</label>
-													<?php }else{ ?>
-														<label id= "date" style="display:none">
-															Phnom Penh,
-															<?php echo date("l");?>,
-															<?php echo date("d");?> 
-															<?php echo date("F");?>,
-															<?php echo date("Y");?> 
-														</label>
-												<?php } ?>
-												<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
-											</td>
+										<td valign="top" width="33%"
+											style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
+											<div class="seenApproved">បានឃើញ និងឯកភាព
+												<span
+													class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
+											</div>
+										</td>
+										<td width="33%" valign="top"
+											style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">
+										</td>
+										<td width="33%"
+											style="white-space: nowrap;font-family:'Khmer os battambang'; text-align: center;"
+											valign="top">
+											<?php
+											if ($lang_id == 1) { ?>
+												<label id="date1" style="display:none">
+													ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?>
+													ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?>
+													ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+												</label>
+											<?php } else { ?>
+												<label id="date1" style="display:none">
+													Phnom Penh,
+													<?php echo date("l"); ?>,
+													<?php echo date("d"); ?>
+													<?php echo date("F"); ?>,
+													<?php echo date("Y"); ?>
+												</label>
+											<?php } ?>
+											<div id="blank_date1" style="display:none">
+												ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
+										</td>
 									</tr>
 									<tr>
-											<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
-											<td valign="top" style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;"></td>
-											<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">ការិយាល័យសិក្សាធិការ</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;">
+										</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Battambang';font-size:13px;text-align: center;">
+										</td>
+										<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'">
+											ការិយាល័យសិក្សាធិការ</td>
 									</tr>
 									<tr>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-												<div class="principalStamp" id="principalStamp" style="display:none;">
-													<div class="stamp" >
-														<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
-														<div class="signature">
-															<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
-														</div>
-														<div class="principalName">
-															<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-														</div>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											<div class="principalStamp" id="principalStamp1" style="display:none;">
+												<div class="stamp">
+													<img
+														src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>" />
+													<div class="signature">
+														<img
+															src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
+													</div>
+													<div class="principalName">
+														<span
+															style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
 													</div>
 												</div>
-											</td>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-											</td>
-											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-												<?php if (!empty($branchInfo['administration_signature'])) { ?>
-													<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
-												<?php } else { ?>
-													<div id="administrator" style="height: 100px;"></div>
-												<?php } ?>
-												<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
-											</td>
+											</div>
+										</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+										</td>
+										<td valign="top"
+											style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
+											<?php if (!empty($branchInfo['administration_signature'])) { ?>
+												<div id="administrator1" style="display:none"><img
+														src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>"
+														style="width:200px;height:100px;position:relative;" /></div>
+											<?php } else { ?>
+												<div id="administrator1" style="height: 100px;"></div>
+											<?php } ?>
+											<span
+												style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
+										</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
 					</table>
-				</div>	
+				</div>
 			</div>
 			<!--END Panel 2-->
 		</div>
-	</div>	
-	
-	<div class="card-box" id="hideStampSetting" >
-			<label class="control-label custom-switch float-midd "> 
-				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
-				<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
-				<span class="custom-switch-indicator custom-radius switch-status"></span> 
-			</label> 
+	</div>
+
+	<div class="card-box" id="hideStampSetting">
+		<label class="control-label custom-switch float-midd ">
+			<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span>
+				&nbsp; <?php echo $tr->translate("PRINT_STAMP"); ?></a>
+			<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay(),stampDisplay1()" checked>
+			<span class="custom-switch-indicator custom-radius switch-status"></span>
+		</label>
 	</div>
 </div>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
 <script type="text/javascript">
-	dojo.require("dojo.data.ItemFileWriteStore"); 
-	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	dojo.require("dojo.data.ItemFileWriteStore");
+	var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?> );
+	var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?> );
+	var teacher_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?> );
 	
-	dojo.ready(function(){
+	dojo.ready(function () {
 
 		new dijit.form.FilteringSelect({
 			store: teacher_store,
 			queryExpr: "*${0}*",
-			autoComplete: false,                     
+			autoComplete: false,
 			required: false,
 			id: "teacher",
-			name: "teacher",           
-			class: "fullside", 
-			placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
-			onChange: function() {  
+			name: "teacher",
+			class: "fullside",
+			placeHolder: "<?php echo $tr->translate("SELECT_TEACHER"); ?>",          
+			onChange: function () {
 			}
 		}, "teacher");
 
 
 		new dijit.form.FilteringSelect({
 			store: group_store,
-		    queryExpr: "*${0}*",
-			autoComplete: false,                     
-		    id: "group",
-		    name: "group",  
-		    class: 'fullside', 
-		    readonly:false,
-		    required:false,
-		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-		    onChange: function() {  
-			    
-		    }
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			id: "group",
+			name: "group",
+			class: 'fullside',
+			readonly: false,
+			required: false,
+			placeHolder: "<?php echo $tr->translate("SELECT_GROUP"); ?>",          
+			onChange: function () {
+
+			}
 		}, "group");
-		
+
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
-			autoComplete: false,                     
-			required: false,                        
+			autoComplete: false,
+			required: false,
 			id: "grade",
-			name: "grade",  
-			class: 'fullside',  
-			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-			onChange: function() {  
+			name: "grade",
+			class: 'fullside',
+			placeHolder: "<?php echo $tr->translate("SELECT_GRADE"); ?>",          
+			onChange: function () {
 			}
 		}, "grade");
-		
-		 var branch_id = dijit.byId('branch_id');
-		 branch_id.on('change', function(evt) {
-			 getAllGroupByBranch();
-			
-	    });
-		 var academic_year = dijit.byId('academic_year');
-		 academic_year.on('change', function(evt) {
-			 getAllGroupByBranch();
-	    });
-		 getallGrade();
-		 getAllGroupByBranch();
-		// stampDisplay();
-		 dutySetting();
+
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			required: false,
+			id: "subjectId",
+			name: "subjectId",
+			class: 'fullside',
+			placeHolder: "ជ្រើសមុខវិជ្ជា/Select Subject",
+			onChange: function () {
+			}
+		}, "subjectId");
+
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function (evt) {
+			getAllGroupByBranch();
+
+		});
+		var academic_year = dijit.byId('academic_year');
+		academic_year.on('change', function (evt) {
+			getAllGroupByBranch();
+		});
+		getallGrade();
+		getAllGroupByBranch();
+		getAllSubject();
+		dutySetting();
 	});
-	
-	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
-	var old_grade = "<?php echo $this->search['grade']?>";
-	var old_degree = "<?php echo $this->search['degree']?>";
-	function getAllGroupByBranch(){
+
+	urlGetSubjectStore = '<?php echo $this->url(array('module' => 'issue', 'controller' => 'scoretmp', 'action' => 'getsubjectlist')); ?>';
+	function getAllSubject() {
+		dijit.byId('subjectId').reset();
+		var subjectStore = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?> );
+		dijit.byId('subjectId').set('store', subjectStore);
+
+		group = dijit.byId('group').get('value');
+
+		dojo.xhrPost({
+			url: urlGetSubjectStore,
+			content: {
+				'groupId': group,
+			},
+			handleAs: "json",
+			load: function (data) {
+				subjectStore = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('subjectId').set('store', subjectStore);
+				dijit.byId('subjectId').attr('value', '<?php echo $this->search['subjectId'] ?>');      
+			},
+			error: function (err) {
+			}
+		});
+	}
+
+	url_getgroup = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'getallgroup')); ?>';
+	var old_grade = "<?php echo $this->search['grade'] ?>";
+	var old_degree = "<?php echo $this->search['degree'] ?>";
+	function getAllGroupByBranch() {
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');
-		if(branch_id=='' || branch_id==-1){
-			var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-			dijit.byId('group').set('store',group_store);  
+		if (branch_id == '' || branch_id == -1) {
+			var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?> );
+			dijit.byId('group').set('store', group_store);
 			dijit.byId('branch_id').focus();
 			return false;
 		}
 		degree = dijit.byId('degree').get('value');
-		if(degree=='' || degree==-1){degree ="";}
+		if (degree == '' || degree == -1) { degree = ""; }
 		grade = dijit.byId('grade').get('value');
-		if(grade=='' || grade==-1){grade ="";}
+		if (grade == '' || grade == -1) { grade = ""; }
 		academic_year = dijit.byId('academic_year').get('value');
-		if(academic_year=='' || academic_year==-1){academic_year ="";}
-		
+		if (academic_year == '' || academic_year == -1) { academic_year = ""; }
+
 		dojo.xhrPost({
 			url: url_getgroup,
-			content:{
-				'branch_id':branch_id,
-				'degree':degree,
-				'grade':grade,
-				'academic_year':academic_year,
-				'noaddnew':1,
-				'forfilter':1
-				},
-			handleAs:"json",
-			load: function(data) {
-			    group_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('group').set('store',group_store);   
-				if(old_grade == grade || old_degree== degree){
-		    		dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-		  	 	}
-		
+			content: {
+				'branch_id': branch_id,
+				'degree': degree,
+				'grade': grade,
+				'academic_year': academic_year,
+				'noaddnew': 1,
+				'forfilter': 1
 			},
-			error: function(err) {
+			handleAs: "json",
+			load: function (data) {
+				group_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('group').set('store', group_store);
+				if (old_grade == grade || old_degree == degree) {
+					dijit.byId('group').set('value', '<?php echo $this->search['group'] ?>');  
+				   }
+
+			},
+			error: function (err) {
 			}
 		});
 	}
-	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
-	function getallGrade(){
-		getAllGroupByBranch();  
+	var url_dept = '<?php echo $this->url(array('module' => 'global', 'controller' => 'grade', 'action' => 'get-grade')); ?>';
+	function getallGrade() {
+		getAllGroupByBranch();
 		dept_id = dijit.byId('degree').get('value');
-		if(dept_id=='' || dept_id==-1){return false;}
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id,
-					'noaddnew':1
-					},
-				handleAs:"json",
-				load: function(data) {
-					dijit.byId('grade').attr('value','');
-					grade_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('grade').set('store',grade_store); 
-					if(old_degree==dept_id){
-		    			dijit.byId('grade').set('value','<?php echo $this->search['grade']?>');  
-		  	 		}
-				   
-				},
-				error: function(err) {
-				}
-			});
+		if (dept_id == '' || dept_id == -1) { return false; }
+		dojo.xhrPost({
+			url: url_dept,
+			content: {
+				'dept_id': dept_id,
+				'noaddnew': 1
+			},
+			handleAs: "json",
+			load: function (data) {
+				dijit.byId('grade').attr('value', '');
+				grade_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('grade').set('store', grade_store);
+				if (old_degree == dept_id) {
+					dijit.byId('grade').set('value', '<?php echo $this->search['grade'] ?>');  
+					   }
+
+			},
+			error: function (err) {
+			}
+		});
 	}
 
-function dutySetting() {
+	function dutySetting() {
 
-<?php if ($footerScoreDocument == 0) { ?>
+		<?php if ($footerScoreDocument == 0) { ?>
 
-	document.getElementById("stamp").checked = false;
-	stampDisplay();
-	var hideStampSetting = document.getElementById("hideStampSetting");
- 	var administrator = document.getElementById("administrator");
+		document.getElementById("stamp").checked = false;
+			stampDisplay();
+			stampDisplay();
+			var hideStampSetting = document.getElementById("hideStampSetting");
+			var administrator = document.getElementById("administrator");
 
- 	administrator.style.display = "block";
-	hideStampSetting.style.display = "none";
+			administrator.style.display = "block";
+			hideStampSetting.style.display = "none";
 
-<?php } else { ?>
-	document.getElementById("stamp").checked = true;
-	stampDisplay();
-<?php } ?>
+		<?php } else { ?>
+		document.getElementById("stamp").checked = true;
+			stampDisplay1();
+			stampDisplay1();
+		<?php } ?>
 
 }
 
-function stampDisplay() {
-  var checkBox = document.getElementById("stamp");
-  var stamp = document.getElementById("principalStamp");
+	function stampDisplay() {
+		var checkBox = document.getElementById("stamp");
+		var stamp = document.getElementById("principalStamp");
 
-  var administrator = document.getElementById("administrator");
-  var lunarBlankDate =  document.getElementById("lunarBlankDate");
-  var lunarDate =  document.getElementById("lunarDate");
-  
-  
-  var date = document.getElementById("date");
-  var blank_date = document.getElementById("blank_date");
-  
-  if (checkBox.checked == true){
-    stamp.style.display = "block";
-	
-	administrator.style.display = "block";
-	administrator.style.visibility = "visible";
-	
-	
-	date.style.display = "block";
-	blank_date.style.display = "none";
-	lunarBlankDate.style.display = "none";
-	lunarDate.style.display = "block";
+		var administrator = document.getElementById("administrator");
+		var lunarBlankDate = document.getElementById("lunarBlankDate");
+		var lunarDate = document.getElementById("lunarDate");
 
-  } else {
-	stamp.style.display = "none";
-	administrator.style.visibility = "hidden";
-	date.style.display = "none";
-	blank_date.style.display = "block";
-	lunarBlankDate.style.display = "block";
-	lunarDate.style.display = "none";
-  }
-}
-function doPrintProfle(keyid) {
-		window.frames["print_frame"].document.body.innerHTML=dojo.byId(keyid).innerHTML;
-	    window.frames["print_frame"].window.focus();
-	    window.frames["print_frame"].window.print();
-	    hideDialog();
+
+		var date = document.getElementById("date");
+		var blank_date = document.getElementById("blank_date");
+
+		if (checkBox.checked == true) {
+			stamp.style.display = "block";
+
+			administrator.style.display = "block";
+			administrator.style.visibility = "visible";
+
+
+			date.style.display = "block";
+			blank_date.style.display = "none";
+			lunarBlankDate.style.display = "none";
+			lunarDate.style.display = "block";
+
+		} else {
+			stamp.style.display = "none";
+			administrator.style.visibility = "hidden";
+			date.style.display = "none";
+			blank_date.style.display = "block";
+			lunarBlankDate.style.display = "block";
+			lunarDate.style.display = "none";
+		}
+	}
+	function stampDisplay1() {
+		var checkBox = document.getElementById("stamp");
+		var stamp = document.getElementById("principalStamp1");
+
+		var administrator = document.getElementById("administrator1");
+		var lunarBlankDate = document.getElementById("lunarBlankDate1");
+		var lunarDate = document.getElementById("lunarDate1");
+
+
+		var date = document.getElementById("date1");
+		var blank_date = document.getElementById("blank_date1");
+
+		if (checkBox.checked == true) {
+			stamp.style.display = "block";
+
+			administrator.style.display = "block";
+			administrator.style.visibility = "visible";
+
+
+			date.style.display = "block";
+			blank_date.style.display = "none";
+			lunarBlankDate.style.display = "none";
+			lunarDate.style.display = "block";
+
+		} else {
+			stamp.style.display = "none";
+			administrator.style.visibility = "hidden";
+			date.style.display = "none";
+			blank_date.style.display = "block";
+			lunarBlankDate.style.display = "block";
+			lunarDate.style.display = "none";
+		}
+	}
+
+	function doPrintProfle(keyid) {
+		window.frames["print_frame"].document.body.innerHTML = dojo.byId(keyid).innerHTML;
+		window.frames["print_frame"].window.focus();
+		window.frames["print_frame"].window.print();
+		hideDialog();
 	}	
 </script>

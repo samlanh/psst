@@ -94,17 +94,17 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 					type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
 			</div>
 		</div>
-		<!-- <table width="100%" style="margin: 0px; font-family: 'khmer os battambang';">
+		<table width="100%" style="margin: 0px; font-family: 'khmer os battambang';">
 			<tr>
 				<td colspan="5">
 					<div style="margin: 10px 0px;">
-						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1"
+						<input type="checkBox"  style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="1"
 							id="student_list" name="student_list" <?php if (!empty($this->search['student_list'])) {
 								if ($this->search['student_list'] == 1) {
 									echo "checked='checked'";
 								}
 							} ?> /> <?php echo $tr->translate("STUDENT_LIST"); ?>
-						<input type="checkBox" style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="2"
+						<input type="checkBox"  style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="2"
 							id="subject_list" name="subject_list" <?php if (!empty($this->search['subject_list'])) {
 								if ($this->search['subject_list'] == 2) {
 									echo "checked='checked'";
@@ -113,7 +113,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 					</div>
 				</td>
 			</tr>
-		</table> -->
+		</table>
 	</form>
 	<style>
 		.hidden {
@@ -122,11 +122,11 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 	</style>
 	<div class="card-box">
 		<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
-			<li class="nav-item ">
+			<li class="nav-item " <?php if (!empty($this->search['student_list'])){ if ($this->search['student_list'] == 1 ) { echo "active";} } ?> >
 				<a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i>
 					<?php echo $tr->translate("SCORE_RESULT"); ?></a>
 			</li>
-			<li class="nav-item active">
+			<li class="nav-item <?php if (!empty($this->search['subject_list'])){ if ($this->search['subject_list'] == 2 ) { echo "active";} } ?>">
 				<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
 					<i class="fa fa-money ml-2"></i> <?php echo $tr->translate("SCORE_DETAIL"); ?>
 				</a>
@@ -138,7 +138,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 		<!-- Tab panels -->
 		<div class="tab-content vertical">
 			<!--Panel 1-->
-			<div class="tab-pane fade in" id="panel21" role="tabpanel">
+			<div class="tab-pane fade in <?php if (!empty($this->search['student_list'])){  if ($this->search['student_list'] == 1) { echo "active";}} ?>" id="panel21" role="tabpanel">
 				<div class="text-right">
 					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>"
 						onclick="doPrintProfle('divPrint');"><i class="fa fa-print" aria-hidden="true"></i></a>
@@ -618,7 +618,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 			<!--End Panel 1-->
 
 			<!--Panel 2-->
-			<div class="tab-pane fade in active" id="panel22" role="tabpanel">
+			<div class="tab-pane fade in <?php if (!empty($this->search['subject_list'])){  if ($this->search['subject_list'] == 2 ) { echo "active";} } ?>" id="panel22" role="tabpanel">
 				<div class="text-right">
 					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>"
 						onclick="doPrintProfle('divPrintDetail');"><i class="fa fa-print" aria-hidden="true"></i></a>

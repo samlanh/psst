@@ -1957,6 +1957,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				`g`.`degree` as degree_id,
 				`g`.`semester` AS `semester`,
 
+				s.`branch_id`,
 				s.`id`,
 			   	s.for_academic_year,
 		   		s.`group_id`,
@@ -1987,7 +1988,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		}
 
 		$sql .= "FROM  `rms_score_detail` AS sd 
-				LEFT JOIN `rms_score` AS s ON s.id=sd.`score_id` 
+				INNER JOIN `rms_score` AS s ON s.id=sd.`score_id` 
 				LEFT JOIN rms_group AS g ON g.id=sd.group_id 
 				LEFT JOIN `rms_group_subject_detail` AS gsj ON sd.subject_id=gsj.subject_id AND g.id=gsj.`group_id`
 			WHERE 1

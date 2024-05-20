@@ -1044,12 +1044,10 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	public function rptSubjectStatisticAction()
 	{
 		if ($this->getRequest()->isPost()) {
-
 			$search = $this->getRequest()->getPost();
-
-			$db = new Allreport_Model_DbTable_DbRptStudentScore();
-			$rs = $db->getStatisticScoreResult($search);
-			$rsDetail = $db->getSubjectScoreDetail($search);
+			// $db = new Allreport_Model_DbTable_DbRptStudentScore();
+			// $rs = $db->getStatisticScoreResult($search);
+			// $rsDetail = $db->getSubjectScoreDetail($search);
 		} else {
 			$rs = array();
 			$rsDetail = array();
@@ -1066,10 +1064,23 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'start_date' => date('Y-m-d'),
 				'end_date' => date('Y-m-d'),
 				'mention' => '',
-				// 'student_list' => '',
-				// 'subject_list' => ''
+				'student_list' => '',
+				'subject_list' => ''
 			);
 		}
+		if(!empty($search['student_list'])){
+			$db = new Allreport_Model_DbTable_DbRptStudentScore();
+			$rs = $db->getStatisticScoreResult($search);
+		}else{
+			$rs = array();
+		}
+		if(!empty($search['subject_list'])){
+			$db = new Allreport_Model_DbTable_DbRptStudentScore();
+			$rsDetail = $db->getSubjectScoreDetail($search);
+		}else{
+			$rsDetail = array();
+		}
+
 		$this->view->rs = $rs;
 		$this->view->rsdetail = $rsDetail;
 		$this->view->search = $search;

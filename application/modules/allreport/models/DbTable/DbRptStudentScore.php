@@ -1982,18 +1982,17 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				sd.`orgScore` AS totalAverage,
 				sd.amount_subject, ";
 		if ($search['exam_type'] == 1) {
-			$sql .= "gsj.max_score as subMaxScore, ";
+			$sql .= "gsj.max_score as subMaxScore ";
 		} else {
 			$sql .= "gsj.semester_max_score as subMaxScore ";
 		}
 
 		$sql .= "FROM  `rms_score_detail` AS sd 
-				INNER JOIN `rms_score` AS s ON s.id=sd.`score_id` 
+				INNER JOIN `rms_score` AS s ON s.id=sd.score_id
 				LEFT JOIN rms_group AS g ON g.id=sd.group_id 
 				LEFT JOIN `rms_group_subject_detail` AS gsj ON sd.subject_id=gsj.subject_id AND g.id=gsj.`group_id`
 			WHERE 1
 					";
-	
 		$where = '';
 		if (!empty($search['branch_id'])) {
 			$where .= " AND s.`branch_id` =" . $search['branch_id'];
@@ -2051,7 +2050,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$where .= $_db->getAccessPermission('s.branch_id');
 		$where .= $_db->getDegreePermission('g.degree');
 		$order = " ORDER BY  s.`group_id`, subLang ASC ,totalAverage DESC ";
-		//echo $sql . $where . $order ; exit();
+	//	echo $sql . $where . $order ; exit();
 		return $db->fetchAll($sql . $where . $order);
 	}
 

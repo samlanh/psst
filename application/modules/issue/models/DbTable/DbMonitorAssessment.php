@@ -73,6 +73,19 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 		if(!empty($search['degree'])){
 			$where.=' AND `g`.`degree`='.$search['degree'];
 		}
+		if (!empty($search['exam_type'])) {
+			$where .= " AND s.exam_type =" . $search['exam_type'];
+			if ($search['exam_type'] == 1) {
+				if (!empty($search['for_month'])) {
+					$where .= " AND s.for_month =" . $search['for_month'];
+				}
+			} else if ($search['exam_type'] == 2) {
+				if (!empty($search['for_semester'])) {
+					$where .= " AND s.for_semester =" . $search['for_semester'];
+				}
+			}
+		}
+		
 		$where.=$dbp->getAccessPermission('s.branch_id');
 		$where.= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$where.= $dbp->getDegreePermission('`g`.`degree`');

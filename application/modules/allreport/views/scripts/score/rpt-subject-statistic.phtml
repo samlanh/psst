@@ -123,12 +123,12 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 	<div class="card-box">
 		<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
 			<li class="nav-item " <?php if (!empty($this->search['student_list'])){ if ($this->search['student_list'] == 1 ) { echo "active";} } ?> >
-				<a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-user ml-2"></i>
+				<a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-file-text-o ml-2"></i>
 					<?php echo $tr->translate("SCORE_RESULT"); ?></a>
 			</li>
 			<li class="nav-item <?php if (!empty($this->search['subject_list'])){ if ($this->search['subject_list'] == 2 ) { echo "active";} } ?>">
 				<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
-					<i class="fa fa-money ml-2"></i> <?php echo $tr->translate("SCORE_DETAIL"); ?>
+					<i class="fa fa-file-text-o ml-2"></i> <?php echo $tr->translate("SCORE_DETAIL"); ?>
 				</a>
 			</li>
 		</ul>

@@ -27,6 +27,15 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 		dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<script type="dojo/method" event="onSubmit">
 								if(this.validate()) {
+
+									studentCheckBox = document.getElementById("student_list");
+									subjectCheckBox = document.getElementById("subject_list");
+									if(studentCheckBox.checked==false && subjectCheckBox.checked==false){
+										alert('<?php echo $tr->translate('PLEACE_CHECK_TYPE'); ?>!');
+										dijit.byId('student_list').focus(); 
+										return false;
+
+									}
 									
 									exam_type=dijit.byId('exam_type').get('value');
 									if(exam_type=='' || exam_type==0){
@@ -103,7 +112,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 								if ($this->search['student_list'] == 1) {
 									echo "checked='checked'";
 								}
-							} ?> /> <?php echo $tr->translate("STUDENT_LIST"); ?>
+							} ?> /><?php echo $tr->translate("STUDENT_LIST"); ?>
 						<input type="checkBox"  style="margin-left: 3%;" dojoType="dijit.form.CheckBox" value="2"
 							id="subject_list" name="subject_list" <?php if (!empty($this->search['subject_list'])) {
 								if ($this->search['subject_list'] == 2) {
@@ -122,7 +131,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 	</style>
 	<div class="card-box">
 		<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
-			<li class="nav-item " <?php if (!empty($this->search['student_list'])){ if ($this->search['student_list'] == 1 ) { echo "active";} } ?> >
+			<li class="nav-item <?php if (!empty($this->search['student_list'])){ if ($this->search['student_list'] == 1 ) { echo "active";} } ?>" >
 				<a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-file-text-o ml-2"></i>
 					<?php echo $tr->translate("SCORE_RESULT"); ?></a>
 			</li>
@@ -1288,7 +1297,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 
 		document.getElementById("stamp").checked = false;
 			stampDisplay();
-			stampDisplay();
+			stampDisplay1();
 			var hideStampSetting = document.getElementById("hideStampSetting");
 			var administrator = document.getElementById("administrator");
 
@@ -1297,7 +1306,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 
 		<?php } else { ?>
 		document.getElementById("stamp").checked = true;
-			stampDisplay1();
+			stampDisplay();
 			stampDisplay1();
 		<?php } ?>
 

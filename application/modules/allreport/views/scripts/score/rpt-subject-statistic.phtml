@@ -31,7 +31,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 									studentCheckBox = document.getElementById("student_list");
 									subjectCheckBox = document.getElementById("subject_list");
 									if(studentCheckBox.checked==false && subjectCheckBox.checked==false){
-										alert('<?php echo $tr->translate('PLEACE_CHECK_TYPE'); ?>!');
+										alert('<?php echo $tr->translate('Please Tick Type'); ?>!');
 										dijit.byId('student_list').focus(); 
 										return false;
 
@@ -463,10 +463,41 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 											</tr>
 										</thead>
 										<?php
+
 										$i = 0;
+										$m = 0;
+										$f = 0;
+										$count_pass = 0;
+										$count_fail=0;	
+										$pass_female=0;
+										$fail_female=0;
+
 										if (!empty($this->rs)) {
 											foreach ($this->rs as $key => $rs) {
 												$i++;
+
+												if ($rs['Sex'] == 1) {
+													$sex = $tr->translate("MALE_SHORT");
+													$m = $m + 1;
+												} else {
+													$sex = $tr->translate("FEMALE_SHORT");
+													$f = $f + 1;
+												}
+
+												$totalAverage = $rs['totalAverage'];
+												$passScore=$rs['semesterScal']/2;
+												if ($totalAverage >= $passScore) {
+													$count_pass++;
+													if ($rs['Sex'] == 2) {
+														$pass_female = $pass_female + 1;
+													} //femail
+												} else {
+													$count_fail++;
+													if ($rs['Sex'] == 2) {
+														$fail_female = $fail_female + 1;
+													}
+												}
+
 												?>
 												<tr class="style-rowdata hover">
 													<td align="center" data-label="<?php echo $tr->translate("NUM"); ?>">
@@ -479,14 +510,8 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 														<?php echo $rs['StuNameKh']; ?></td>
 													<td data-label="<?php echo $tr->translate("NAME_EN"); ?>">
 														<?php echo $rs['StuNameEn']; ?></td>
-													<td align="center" data-label="<?php echo $tr->translate("SEX"); ?>">
-														<?php
-														if ($rs['Sex'] = 1) {
-															echo $tr->translate("MALE");
-														} else {
-															echo $tr->translate("FEMALE");
-														} ?>
-													</td>
+													<td align="center" data-label="<?php echo $tr->translate("SEX"); ?>">	
+														<?php echo $sex; ?></td>
 													<td align="center" data-label="<?php echo $tr->translate("GROUP"); ?>">
 														<?php echo $rs['degree']; ?></td>
 													<td align="center" data-label="<?php echo $tr->translate("GROUP"); ?>">
@@ -509,6 +534,134 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 									</table>
 									<br>
 								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" width="100%">
+								<table cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px;font-family:'Khmer OS Fasthand';font-size: 12px;">
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT"); ?> : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+												<?php
+												 if ($i > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $i));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $i));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($i - $f > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $i - $f));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $i - $f));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+											<span style="display: inline-block; width: 15%;"></span>
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($f > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $f));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $f));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span> 
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;">សិស្សជាប់មធ្យមភាគ : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;"> 
+												<?php
+													if ($count_pass > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($count_pass - $pass_female > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass - $pass_female));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass - $pass_female));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+											<span style="display: inline-block; width: 15%;"></span>
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($pass_female > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;">សិស្សក្រោមមធ្យមភាគ : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+												<?php
+													if ($count_fail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap;" valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;"> 
+												<?php
+													if ($count_fail - $fail_female > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail - $fail_female));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail - $fail_female));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+											<span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style="display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($fail_female > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 
@@ -665,7 +818,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 								?>
 								<ul class="headerTitle">
 									<li>
-										<?php echo $tr->translate("RPT_RESULT_STATISTIC"); ?>
+										<?php echo $tr->translate("RPT_SUBJECT_STATISTIC"); ?>
 									</li>
 									<li>
 										<?php echo $resulTilte; ?>
@@ -944,10 +1097,38 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 											</tr>
 										</thead>
 										<?php
-										$i = 0;
+										$num = 0;
+										$m_dettail = 0;
+										$f_dettail = 0;
+										$count_pass_detail = 0;
+										$count_fail_detail = 0;
+										$pass_female_detail = 0;
+										$fail_female_deatil=0;
+
 										if (!empty($this->rsdetail)) {
 											foreach ($this->rsdetail as $key => $rsdetail) {
-												$i++;
+													$num++;
+													if ($rsdetail['Sex'] == 1) {
+														$sex = $tr->translate("MALE_SHORT");
+														$m_dettail = $m_dettail + 1;
+													} else {
+														$sex = $tr->translate("FEMALE_SHORT");
+														$f_dettail = $f_dettail + 1;
+													}
+
+													$totalAverage = $rsdetail['totalAverage'];
+													$passScore=$rsdetail['subMaxScore']/2;
+													if ($totalAverage >= $passScore) {
+														$count_pass_detail++;
+														if ($rsdetail['Sex'] == 2) {
+															$pass_female_detail = $pass_female_detail + 1;
+														} //femail
+													} else {
+														$count_fail_detail++;
+														if ($rsdetail['Sex'] == 2) {
+															$fail_female_deatil = $fail_female_deatil + 1;
+														}
+													}
 												?>
 												<tr class="style-rowdata hover">
 													<td align="center" data-label="<?php echo $tr->translate("NUM"); ?>">
@@ -962,13 +1143,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 													<td data-label="<?php echo $tr->translate("NAME_EN"); ?>">
 														<?php echo $rsdetail['StuNameEn']; ?></td>
 													<td align="center" data-label="<?php echo $tr->translate("SEX"); ?>">
-														<?php
-														if ($rsdetail['Sex'] = 1) {
-															echo $tr->translate("MALE");
-														} else {
-															echo $tr->translate("FEMALE");
-														} ?>
-													</td>
+														<?php echo $sex; ?></td>
 													<td align="center" data-label="<?php echo $tr->translate("DEGREE"); ?>">
 														<?php echo $rsdetail['degree']; ?></td>
 													<td align="center" data-label="<?php echo $tr->translate("GRADE"); ?>">
@@ -996,7 +1171,135 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 								</div>
 							</td>
 						</tr>
-
+						<tr>
+							<td colspan="3" width="100%">
+								<table cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px;font-family:'Khmer OS Fasthand';font-size: 12px;">
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;"><?php echo $tr->translate("TOTAL_STUDENT"); ?> : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+												<?php
+												 if ($num > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $num));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $num));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($num - $f_dettail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $num - $f_dettail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $num - $f_dettail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+											<span style="display: inline-block; width: 15%;"></span>
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($f_dettail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $f_dettail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $f_dettail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span> 
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;">សិស្សជាប់មធ្យមភាគ : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;"> 
+												<?php
+													if ($count_pass_detail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass_detail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass_detail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap; " valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($count_pass_detail - $pass_female_detail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass_detail - $pass_female_detail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_pass_detail - $pass_female_detail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+											<span style="display: inline-block; width: 15%;"></span>
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($pass_female_detail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female_detail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $pass_female_detail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" width="33%" style="font-family:'Khmer os battambang';text-align: left; padding-left: 3%;">
+											<span style="display: inline-block; width: 70%;">សិស្សក្រោមមធ្យមភាគ : </span>
+											<span class="valueAmount" style=" display: inline-block; text-align: right; width: 28%;">
+												<?php
+													if ($count_fail_detail > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail_detail));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail_detail));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+										<td width="33%" valign="top" style="font-family:'Khmer os battambang';"></td>
+										<td width="33%" style="font-family:'Khmer os battambang';white-space: nowrap;" valign="top">
+											<span style="display: inline-block; width: 15%;"><?php echo $tr->translate("MALE"); ?> :</span>
+											<span class="valueAmount" style=" display: inline-block; width: 10%; text-align: right;"> 
+												<?php
+													if ($count_fail_detail - $fail_female_deatil > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail_detail - $fail_female_deatil));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $count_fail_detail - $fail_female_deatil));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+											<span style="display: inline-block; width: 15%;"></span><span style="display: inline-block; width: 15%;"><?php echo $tr->translate("FEMALE"); ?> :</span>
+											<span class="valueAmount" style="display: inline-block; width: 10%; text-align: right;">
+												<?php
+													if ($fail_female_deatil > 0) {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female_deatil));
+													} else {
+														echo $dbgb->getNumberInkhmer(sprintf("%02d", $fail_female_deatil));
+													}
+													echo " " . $tr->translate("STUDENT_UNIT"); 
+												?>
+											</span>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					
 						<?php
 						$dbbranch = new Application_Model_DbTable_DbGlobal();
 						$branch_id = empty($this->rsdetail[0]['branch_id']) ? 0 : $this->rsdetail[0]['branch_id'];

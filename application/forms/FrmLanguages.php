@@ -8,9 +8,11 @@ class Application_Form_FrmLanguages{
 		// set up translation adapter
 		$session_lang=new Zend_Session_Namespace('lang');
 		$lang_id=$session_lang->lang_id;
-		if($lang_id==1){
+		if($lang_id==1 OR empty($lang_id)){
 			$str="km";
-		}else{$str="en"; }	
+		}else{
+			$str="en";
+			}	
 		
 		$schoolOption=1;
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -39,6 +41,7 @@ class Application_Form_FrmLanguages{
 		
 		$session_language=new Zend_Session_Namespace('language');		
 		if(!empty($session_language->language)){
+			
 			$tr->setLocale(strtolower($session_language->language));
 		}
 		return $tr;

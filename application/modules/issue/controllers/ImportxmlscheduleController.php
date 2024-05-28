@@ -28,11 +28,10 @@ class Issue_ImportxmlscheduleController extends Zend_Controller_Action {
 				// }
 				// $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 				$data = $this->getRequest()->getPost();
-				$db->ImportXMLSchedule($data);
-				Application_Form_FrmMessage::Sucessfull("Import Successfully", "/issue/importschedule");
-			}
-			else{
-			
+				$db->uploadXMLFile($data);
+				Application_Form_FrmMessage::Sucessfull("Import Successfully","/issue/importxmlschedule");
+			}else{
+
 			}
 			
 			$frm = new Issue_Form_FrmSchedule();
@@ -47,6 +46,17 @@ class Issue_ImportxmlscheduleController extends Zend_Controller_Action {
 		}
 		
 	}
+	function importxmlAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbImportxml();
+			$result = $db->importxmlSubject($data);
+			print_r(Zend_Json::encode($result));
+			exit();
+		}
+	}
+	
+
 	function addAction(){
 		$this->_redirect("/issue/importxmlschedule");
 	}

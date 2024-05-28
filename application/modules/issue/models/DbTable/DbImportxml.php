@@ -14,15 +14,15 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			mkdir($urlPart, 0777, true);
 		}	
 		
-		$fileName = $_FILES['photo']['name'];
+		$fileName = $_FILES['xml_file']['name'];
 		// if (!empty($_data['uploaded'])){
 		// 	$photo=$_data['uploaded'];
 		// }else if (!empty($name)){
 			// $ss = 	explode(".", $name);
 			// $image_name = "profile_student_".date("Y").date("m").date("d").time().".".end($ss);
-			$tmp = $_FILES['photo']['tmp_name'];
+			$tmp = $_FILES['xml_file']['tmp_name'];
 			if(move_uploaded_file($tmp, $urlPart.$fileName)){
-			$stting = "upload succussed";
+			$string = "upload succussed";
 			}
 			else{
 				$string = "Image Upload failed";
@@ -30,7 +30,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		echo $string;
 		exit();
 
-		$xml=simplexml_load_file($urlPart.$fileName, 'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+		$xml = simplexml_load_file($urlPart.$fileName,'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
 		$dbxml = new Issue_Model_DbTable_DbImportxml;
 		$array = json_decode(json_encode((array)$xml), TRUE);
 		/**
@@ -117,6 +117,147 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			$dbxml->updateExistingSchedule($lessionId,$data,$groupId);
 		}
 	}
+	function uploadXMLFile($data){
+		
+		$urlPart= PUBLIC_PATH.'/xml/';
+		if (!file_exists($urlPart)) {
+			mkdir($urlPart, 0777, true);
+		}
+		$fileName = $_FILES['xml_file']['name'];
+		
+			$tmp = $_FILES['xml_file']['tmp_name'];
+			if(move_uploaded_file($tmp, $urlPart.$fileName)){
+				$sessionXml=new Zend_Session_Namespace('xmlFile');
+				$sessionXml->xml_FileName=$fileName;
+				return 1;
+			}
+			else{
+				return 0;
+			}
+		
+	}
+	function getXmlDataFromFile(){
+	
+		$sessionXml = new Zend_Session_Namespace('xmlFile');
+		$fileName = $sessionXml->xml_FileName;//for creat sess
+		if(!empty($fileName)){
+			$urlPart= PUBLIC_PATH.'/xml/';
+			$xml = simplexml_load_file($urlPart.$fileName,'SimpleXMLElement', LIBXML_NOCDATA) or die("Error: Cannot create object");
+			$dbxml = new Issue_Model_DbTable_DbImportxml;
+			return json_decode(json_encode((array)$xml), TRUE);
+		} else {
+			return false;
+		}
+    	
+
+	}
+	function importxmlSubject($data)
+	{
+		$array = $this->getXmlDataFromFile();
+		/**
+		 * check subject
+		 */
+		if(!empty($array)){
+			$step = 7;
+
+			if ($step == 2) {
+				$tableData = $array["subjects"]["subject"];
+				$subjectColumn = $array["subjects"]["@attributes"]["columns"];
+				$columnList = explode(',', $subjectColumn);
+				if (!empty($tableData))
+					foreach ($tableData as $row) {//use
+						$subjectTitle = null;//$row["@attributes"]['name'];
+						$strId = $row["@attributes"]['id'];
+						$shortcut = $row["@attributes"]['short'];
+						$Subject = $this->getSubjectId($subjectTitle, $strId, $shortcut);
+					}
+					return 3;
+			}elseif($step==3){
+				/**
+			 * check teacher
+			 */
+				$tableData = $array["teachers"]["teacher"];
+				$periodsColumn = $array["teachers"]["@attributes"]["columns"];
+				$columnList = explode(',', $periodsColumn);
+				if(!empty($tableData)) foreach($tableData as $row){//use
+
+					$teacherTitle =$row["@attributes"]['name'];
+					$strId =$row["@attributes"]['id'];
+					$gender =$row["@attributes"]['gender'];
+					$shortcut = $row['@attributes']['short'];
+					$teacher = $this->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
+				}
+				return 4;
+			} elseif ($step == 4) {
+				$tableData = $array["classes"]["class"];
+				$periodsColumn = $array["classes"]["@attributes"]["columns"];
+				$columnList = explode(',', $periodsColumn);
+
+				if(!empty($tableData)) foreach($tableData as $row){//use
+					$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
+					$strId =$row["@attributes"]['id'];
+					$groupId = $this->getGroupId($groupCode,$strId);
+				}
+				return 5;
+			} elseif ($step == 5) {
+				/**
+			 * Summary of getUserId
+			 *check group
+			*/
+
+			$tableData = $array["classes"]["class"];
+			$periodsColumn = $array["classes"]["@attributes"]["columns"];
+			$columnList = explode(',', $periodsColumn);
+
+			if(!empty($tableData)) foreach($tableData as $row){//use
+				$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
+				$strId =$row["@attributes"]['id'];
+				$groupId = $this->getGroupId($groupCode,$strId);
+			}
+
+			/**
+			 * Summary of getUserId
+			 * add card
+			 */
+
+				return 6;
+			} elseif ($step == 6){
+				// $db = $this->getAdapter();
+				// $db->fetchRow($sql);
+				$tableData = $array["cards"]["card"];
+				if(!empty($tableData)) foreach($tableData as $row){//use
+					$lessionId = $row["@attributes"]['lessonid'];
+					$period = $row["@attributes"]['period'];
+					$days = $row["@attributes"]['days'];
+						$this->addcard($lessionId,$period,$days);
+				}
+				return 7;
+			} elseif ($step == 7) {
+				$tableData = $array["lessons"]["lesson"];
+				$periodsColumn = $array["classes"]["@attributes"]["columns"];
+				$columnList = explode(',', $periodsColumn);
+
+				if(!empty($tableData)) foreach($tableData as $row){
+					$subjectId= $this->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
+					$teacherId = $this->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
+					$groupId = $this->getGroupIdbyStrId($row["@attributes"]['classids']);
+					
+					$lessionId = $row["@attributes"]['id'];
+					
+					$data = array(
+							'subject_id'=>$subjectId,
+							'techer_id' =>$teacherId,
+							'note'=>'abc',
+							);
+					$this->updateExistingSchedule($lessionId,$data,$groupId);
+				}
+				return 8;
+			}
+		}else{
+			return 0;
+		}
+
+	}
 	public function getUserId(){
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;
@@ -172,21 +313,21 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 	
 		$db = $this->getAdapter();
 		
-			$sql="SELECT id FROM `rms_teacher` WHERE 1";
+			$sql="SELECT id FROM `rms_teacher` WHERE 1 ";
 			if(!empty($title)){
-				$sql.=" AND teacher_name_kh = '".$title."' OR teacher_name_en = '".$title."'"; 
+				$sql.=" AND (teacher_name_kh = '".$title."' OR teacher_name_en = '".$title."')"; 
 			}
 			elseif(!empty($shortcut)){
 				$sql.=" AND teacher_code = '".$shortcut."'";
 			}
 			
 			$teacherId =  $db->fetchOne($sql);
+
 			$dbg = new Application_Model_DbTable_DbGlobal();
 				
 			if(empty($teacherId)){
 				$sex= ($gender=='M')?1:2;
-				echo $title;
-				exit();
+				
 				$code = $dbg->getTeacherCode(1);
 
 				$_arr=array(

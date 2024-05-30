@@ -32,7 +32,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 									subjectCheckBox = document.getElementById("subject_list");
 									if(studentCheckBox.checked==false && subjectCheckBox.checked==false){
 										alert('<?php echo $tr->translate('Please Tick Type'); ?>!');
-										dijit.byId('student_list').focus(); 
+										studentCheckBox.focus();
 										return false;
 
 									}

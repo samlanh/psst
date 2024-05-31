@@ -71,10 +71,16 @@ class Issue_ScoretmpController extends Zend_Controller_Action {
 				$db = new Issue_Model_DbTable_DbScoreTemorary();
 				if(!empty($id)){
 					$db->deleteTmpScore($id);
-					Application_Form_FrmMessage::Sucessfull("DELETE_SUCCESS",self::REDIRECT_URL);
+					Application_Form_FrmMessage::message("DELETE_SUCCESS");
+					echo '<script type="text/javascript">
+                 		  	window.history.back();
+                 		 </script>';
+					exit;
 				}
+			}else{
+				Application_Form_FrmMessage::Sucessfull("You no permission to delete",self::REDIRECT_URL);
 			}
-			Application_Form_FrmMessage::Sucessfull("You no permission to delete",self::REDIRECT_URL);
+			
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

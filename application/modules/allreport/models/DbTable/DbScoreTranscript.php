@@ -246,7 +246,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 			'scoreId' => $scoreId,
 			'studentId' => $studentId
 		);
-		$scoreInfo =  $this->getScoreAnnaulInformation($resultArray);
+		$scoreInfo =  $this->getScoreAcsdemicInformation($resultArray);
 
 		$resultScoreArr = array(
 			'scoreId' => $scoreId,
@@ -849,6 +849,219 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 
 		return $db->fetchRow($sql);
 	}
+
+	function getScoreAcsdemicInformation($data)
+	{
+		$db = $this->getAdapter();
+		$studentId = empty($data['studentId']) ? 0 : $data['studentId'];
+		$scoreId = empty($data['scoreId']) ? 0 : $data['scoreId'];
+		$strSubLang = " (SELECT subject_lang FROM `rms_subject` sub WHERE sub.id=sd.subject_id LIMIT 1) ";
+		$sql = "SELECT 
+					g.degree AS degreeId,
+					g.group_code AS groupCode,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) as academicYearLabel,
+					g.academic_year as academicYearId,
+					g.semesterTotalAverage as semesterTotalAverage,
+					g.branch_id,
+					s.id as scoreId,
+					s.group_id,
+					s.title_score_en,
+					s.title_score,
+					s.exam_type,
+					s.for_month,
+					s.note as promoteResult,
+					(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthKhLabel,
+					(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthEnLabel,
+					s.for_semester,
+					
+					FIND_IN_SET((SELECT sm.total_avg FROM rms_score_monthly sm WHERE 
+				 				sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+					(SELECT GROUP_CONCAT(total_avg ORDER BY total_avg DESC)
+						FROM 
+							rms_score_monthly AS dd 
+						 WHERE
+							s.`id`=dd.`score_id`
+						)
+				 ) AS rank,	
+
+				 FIND_IN_SET((SELECT sm.overallAssessmentSemester FROM rms_score_monthly sm WHERE 
+				 sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+					(SELECT GROUP_CONCAT(overallAssessmentSemester ORDER BY overallAssessmentSemester DESC)
+						FROM 
+							rms_score_monthly AS dd 
+						WHERE
+							s.`id`=dd.`score_id`
+						)
+				) AS rankOverall,	
+
+				FIND_IN_SET( 
+					COALESCE((SELECT ms.OveralAvgKh FROM rms_score_monthly AS ms WHERE ms.score_id = s.`id` AND ms.student_id = " . $data['studentId'] . " LIMIT 1),'0'), 
+					(    
+					  SELECT 
+						GROUP_CONCAT( dd.OveralAvgKh ORDER BY dd.OveralAvgKh DESC ) 
+					  FROM rms_score_monthly AS dd 
+					  WHERE  dd.score_id= s.`id`
+					)
+				  ) AS rankOverallKh,
+
+			   FIND_IN_SET((SELECT sm.OveralAvgEng FROM rms_score_monthly sm WHERE 
+			   sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+				  (SELECT GROUP_CONCAT(OveralAvgEng ORDER BY OveralAvgEng DESC)
+					  FROM 
+						  rms_score_monthly AS dd 
+					  WHERE
+						  s.`id`=dd.`score_id`
+					  )
+			  ) AS rankOverallEng,	
+
+			  FIND_IN_SET((SELECT sm.OveralAvgCh FROM rms_score_monthly sm WHERE 
+			  sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+				 (SELECT GROUP_CONCAT(OveralAvgCh ORDER BY OveralAvgCh DESC)
+					 FROM 
+						 rms_score_monthly AS dd 
+					 WHERE
+						 s.`id`=dd.`score_id`
+					 )
+			 ) AS rankOverallCh,	
+				 
+				 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =1
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =1
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)) AS rankingInKhmer,
+					
+					
+					
+					 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =2
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =2
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)) AS rankingInEnglish,
+				 
+				
+					 FIND_IN_SET((SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+				 	 sd.`score_id`=$scoreId  
+					 AND sd.`student_id`=$studentId
+					 AND $strSubLang =3
+					),
+					
+					(SELECT GROUP_CONCAT(totalScore ORDER BY totalScore DESC)
+					FROM (
+						SELECT SUM(sd.score) AS totalScore  FROM rms_score_detail AS sd WHERE 
+						sd.`score_id`=$scoreId 
+						AND $strSubLang =3
+						GROUP BY sd.`student_id`
+					) AS StGroupconcateKH)) AS rankingInChinese,
+				 
+				 
+				 (SELECT sm.total_avg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalAvg,
+				 		
+				  (SELECT sm.total_score 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalScoreAvg,
+
+				 (SELECT sm.totalMaxScore 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalMaxScore,
+
+
+				 (SELECT sm.totalKhAvg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalKhAvg,
+				(SELECT sm.totalEnAvg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalEnAvg,
+				(SELECT sm.totalChAvg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS totalChAvg,
+				(SELECT sm.OveralAvgKh 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS OveralAvgKh,
+				(SELECT sm.OveralAvgEng 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS OveralAvgEng,
+				(SELECT sm.OveralAvgCh 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS OveralAvgCh,		
+
+				 (SELECT sm.monthlySemesterAvg 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS monthlySemesterAvg,
+
+				(SELECT sm.overallAssessmentSemester 
+				 		FROM rms_score_monthly sm WHERE 
+				 		sm.score_id=s.id 
+				 		AND sm.student_id=" . $studentId . " LIMIT 1) AS overallAssessmentSemester,
+				 		
+				 (SELECT COUNT(sm.`id`) FROM rms_score_monthly AS sm WHERE
+					s.`id`=sm.`score_id` LIMIT 1) as amountStudent,
+
+				(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`  LIMIT 1) AS overalSemester1,
+				(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`   LIMIT 1) AS overalSemester2,
+				(SELECT ml.total_score FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`  LIMIT 1) AS totalScoreSemester1,
+				(SELECT ml.total_score FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= " . $studentId . " AND d.group_id = s.`group_id`   LIMIT 1) AS totalScoreSemester2,
+
+				FIND_IN_SET((SELECT sm.overallAssessmentSemester FROM rms_score_monthly sm INNER JOIN rms_score AS d ON d.`id` = sm.score_id WHERE 
+				d.exam_type=2 AND d.`for_semester`=1 AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+					(SELECT GROUP_CONCAT(overallAssessmentSemester ORDER BY overallAssessmentSemester DESC)
+						FROM 
+							rms_score_monthly AS dd 
+							 INNER JOIN  rms_score AS d ON d.`id` = dd.score_id
+						WHERE
+						d.exam_type=2  AND d.`for_semester`=1 AND d.group_id=s.group_id
+						)
+				) AS rankSemester1,
+
+				FIND_IN_SET((SELECT sm.overallAssessmentSemester FROM rms_score_monthly sm INNER JOIN rms_score AS d ON d.`id` = sm.score_id WHERE 
+				d.exam_type=2 AND d.`for_semester`=2 AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
+					(SELECT GROUP_CONCAT(overallAssessmentSemester ORDER BY overallAssessmentSemester DESC)
+						FROM 
+							rms_score_monthly AS dd 
+							 INNER JOIN  rms_score AS d ON d.`id` = dd.score_id
+						WHERE
+						d.exam_type=2  AND d.`for_semester`=2 AND d.group_id=s.group_id
+						)
+				) AS rankSemester2
+
+			FROM 
+				rms_score AS s,
+				rms_group g
+			WHERE s.group_id=g.id ";
+		if (!empty($data['scoreId'])) {
+			$sql .= " AND s.id=" . $data['scoreId'];
+		}
+
+		return $db->fetchRow($sql);
+	}
+
 	function getScoreSemesterInformation($data)
 	{
 		$db = $this->getAdapter();

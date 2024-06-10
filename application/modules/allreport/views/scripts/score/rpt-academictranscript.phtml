@@ -74,7 +74,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 			table.header,
 			table.studentInfo {
 				page-break-inside: auto;
-				font-family: 'Khmer OS Battambang', 'Times New Roman' !important;
+				font-family:'Times New Roman', 'Khmer OS Battambang' !important;
 				font-size: 12px !important;
 			}
 
@@ -94,6 +94,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 				white-space: nowrap;
 				color: #000;
 				font-weight: bold;
+		
 			}
 
 			.hover:hover {
@@ -124,6 +125,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 			.teacherComment {
 				min-height: 50px;
+			}
+			.blackColor{
+				color: #000;
 			}
 
 			.border-none {
@@ -221,7 +225,6 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 				$studentInfo = $resultData['studentInfo'];
 				$scoreSubjectList = $resultData['scoreSubjectInfo'];
-				$evalueationList = $resultData['EvalueationList'];
 				$scoreInfo = $resultData['scoreInfo'];
 
 				$groupId = $scoreInfo['group_id'];
@@ -233,21 +236,10 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 				$semesterScale = (empty($scoreInfo['semesterTotalAverage'])) ? 50 : $scoreInfo['semesterTotalAverage'];
 
-
-
 				$SemesterKhAvg = $scoreInfo['totalKhAvg'];
 				$SemesterEnAvg = $scoreInfo['totalEnAvg'];
 				$SemesterChAvg = $scoreInfo['totalChAvg'];
-				
-				//Semester 1
-				$monthlyAvgKhSemester1 = $scoreInfo['monthlyAvgKhSemester1'];
-				$monthlyAvgKhSemester1 = $scoreInfo['monthlyAvgEnSemester1'];
-				$monthlyAvgKhSemester1 = $scoreInfo['monthlyAvgChSemester1'];
-
-				//Semester 2
-				$monthlyAvgKhSemester2 = $scoreInfo['monthlyAvgKhSemester2'];
-				$monthlyAvgKhSemester2 = $scoreInfo['monthlyAvgEnSemester2'];
-				$monthlyAvgKhSemester2 = $scoreInfo['monthlyAvgChSemester2'];
+			
 
 			//	print_r($scoreInfo);
 
@@ -255,9 +247,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 				//$title= $titleNum;
 				if ($titleNum == 1) {
-					$title = "របាយការណ៍ការវិវឌ្ឍ : " . $scoreInfo['groupCode'] . '_' . $studentInfo['stu_code'] . '_' . $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
+					$title = "របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ : " . $scoreInfo['groupCode'] . '_' . $studentInfo['stu_code'] . '_' . $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
 				} else {
-					$title = "របាយការណ៍ការវិវឌ្ឍ : " . $scoreInfo['groupCode'];
+					$title = "របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ : " . $scoreInfo['groupCode'];
 				}
 				$this->headTitle($title);
 				echo $this->headTitle();
@@ -502,8 +494,8 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 														<td rowspan="2">ល.រ<br />No.</td>
 														<td rowspan="2" colspan="2">មុខវិជ្ជា Subject</td>
 														<td rowspan="2">ពិន្ទុអតិបរមា <br />Maximum Score</td>
-														<td colspan="2">ឆមាសទី១ <br />SemesterI </td>
-														<td colspan="2">ឆមាសទី២ <br />SemesterII </td>
+														<td colspan="2">ឆមាសទី១ <br />Semester I </td>
+														<td colspan="2">ឆមាសទី២ <br />Semester II </td>
 														<td colspan="2">ប្រចាំឆ្នាំ <br />Annual</td>
 													</tr>
 													<tr class="cheader" align="center">
@@ -695,8 +687,8 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 										<td class="blank"></td>
 									</tr>
 									<?php $GrandMultiSubSubject = $totalMaxScore / $semesterScale; ?>
-									<tr class="cheader" align="center">
-										<td >Exam Avg</td>
+									<tr class="style hover" align="center">
+										<td class="khmerBoldFont"><strong>Exam Avg</strong></td>
 										<td>
 											<strong>
 												<?php
@@ -724,8 +716,8 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 										</td>
 										<td class="blank"></td>
 									</tr>
-									<tr class="cheader" align="center">
-										<td >Monthly Avg</td>
+									<tr class="style hover" align="center">
+										<td class="khmerBoldFont"><strong>Monthly Avg</strong></td>
 										<td>
 											<strong>
 												<?php
@@ -745,8 +737,8 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 										<td class="blank"></td>
 										<td class="blank"></td>
 									</tr>
-									<tr class="cheader" align="center">
-										<td >Overall Avg</td>
+									<tr class="style hover" align="center">
+										<td class="khmerBoldFont"><strong>Overall Avg</strong></td>
 										<td>
 											<strong>
 												<?php
@@ -784,80 +776,59 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 											</strong>
 										</td>
 									</tr>
-								<table>
+								</table>
+								<br>
+								<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
+									<tr>
+										<td colspan="6" class=" khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+									</tr>
+									<tr class="khmerBoldFont " align="center">
+										<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
+										<td>ភាគរយ<br />PERCENTAGE</td>
+										<td colspan="2">និទ្ទេស <br />GRADE</td>
+										<td><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVEMENT AND EFFORT</td>
+									</tr>
+									<?php
+									$ismergRow = 0;
+
+									$reGradingResult  = $dbgb->getGradingSystem($degreeId); ?>
+
+									<?php
+									if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) {
+									?>
+										<tr class="" align="center">
+											<?php if ($keygd == 0) { ?>
+												<td align="center" colspan="2" rowspan="<?php echo count($reGradingResult); ?>" class="khmerBoldFont">
+													<span>Annual <sub>Avg</sub> = </span>
+													<div class="frac">
+														<span>SemesterI <sub>Avg</sub> + SemesterII <sub>Avg</sub></span>
+														<span class="symbol">/</span>
+														<span class="bottom">2</span>
+
+													</div>
+												</td>
+											<?php } ?>
+											<td><?php echo $rsgd['percentage']; ?></td>
+											<td style="width: 100px;"><?php echo $rsgd['grade']; ?></td>
+											<td><?php echo $rsgd['interpretation']; ?></td>
+											<td><?php echo $rsgd['achievment']; ?></td>
+										</tr>
+									<?php } ?> 
+								</table>
+								<br>
+								<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
+									<tr height="170px;">
+										<td class="borderSolidBottom" width="30%">&nbsp;</td>
+										<td colspan="4">&nbsp;</td>
+										<td class="borderSolidBottom" width="30%">&nbsp;</td>
+									</tr>
+									<tr>
+										<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
+										<td colspan="4">&nbsp;</td>
+										<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
+									</tr>
+								</table>
 							</td>
-						</tr>
-					</table>
-					<br>
-					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-						<tr>
-							<td colspan="6" class=" khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
-						</tr>
-						<tr class="khmerBoldFont " align="center">
-							<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
-							<td>ភាគរយ<br />PERCENTAGE</td>
-							<td colspan="2">និទ្ទេស <br />GRADE</td>
-							<td><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVEMENT AND EFFORT</td>
-						</tr>
-						<?php
-						$ismergRow = 0;
-
-						$reGradingResult  = $dbgb->getGradingSystem($degreeId); ?>
-
-						<?php
-						if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) {
-						?>
-							<tr class="" align="center">
-								<?php if ($keygd == 0) { ?>
-									<td align="center" colspan="2" rowspan="<?php echo count($reGradingResult); ?>" class="khmerBoldFont">
-										<span>Annual <sub>Avg</sub> = </span>
-										<div class="frac">
-											<span>SemesterI <sub>Avg</sub> + SemesterII <sub>Avg</sub></span>
-											<span class="symbol">/</span>
-											<span class="bottom">2</span>
-
-										</div>
-									</td>
-								<?php } ?>
-								<td><?php echo $rsgd['percentage']; ?></td>
-								<td style="width: 100px;"><?php echo $rsgd['grade']; ?></td>
-								<td><?php echo $rsgd['interpretation']; ?></td>
-								<td><?php echo $rsgd['achievment']; ?></td>
-							</tr>
-						<?php } ?> 
-
-						<?php
-						$teacherComment = '';
-						$commentType = '';
-						if (!empty($evalueationList)) foreach ($evalueationList as $keycom => $rsComment) {
-							if ($teacherComment == '') {
-								$teacherComment = $rsComment['teacherComment'];
-							}
-						?>
-							<?php if ($commentType != $rsComment['commentType']) { ?>
-								<tr align="center">
-									<td colspan="6" class=" doubleBorder khmerBoldFont"><?php echo $rsComment['commentType']; ?></td>
-								</tr>
-							<?php }
-							$commentType = $rsComment['commentType'];
-							?>
-							<tr>
-								<td align="left" colspan="5" class="">&nbsp;<?php echo $rsComment['commentLabel']; ?></td>
-								<td align="center"><?php echo $rsComment['ratingLabel']; ?></td>
-							</tr>
-						<?php } ?>
-					</table>
-					<br>
-					<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-						<tr height="180px;">
-							<td class="borderSolidBottom" width="30%">&nbsp;</td>
-							<td colspan="4">&nbsp;</td>
-							<td class="borderSolidBottom" width="30%">&nbsp;</td>
-						</tr>
-						<tr>
-							<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
-							<td colspan="4">&nbsp;</td>
-							<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
 						</tr>
 					</table>
 					

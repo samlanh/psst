@@ -292,9 +292,6 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 
 					'totalAvgSemester1' => $scoreSubjectInfoSemester1[$key]['totalAverage'],
 					'totalAvgSemester2' => $scoreSubjectInfoSemester2[$key]['totalAverage'],
-
-					// 'totalAvgSemester1' => $result['totalAvgSemester1'],
-					// 'totalAvgSemester2' => $result['totalAvgSemester2'],
 				);
 
 				$arrSub = array(
@@ -309,21 +306,11 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 				}
 			}
 		}
-		$arreValue = array(
-			'scoreId' => $scoreId,
-			'studentId' => $studentId,
-			'groupId' => $scoreInfo['group_id'],
-			'forType' => $scoreInfo['exam_type'],
-			'forSemester' => $scoreInfo['for_semester'],
-			'forMonth' => $scoreInfo['for_month'],
-		);
-		$resultEvalueAtion = $this->getStudentAssessmentEvaluation($arreValue);
-
+	
 		$result = array(
 			'studentInfo' => $studentInfo,
 			'scoreInfo' => $scoreInfo,
 			'scoreSubjectInfo' => $scoreResultList,
-			'EvalueationList' => $resultEvalueAtion,
 		);
 		return $result;
 	}
@@ -495,17 +482,7 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE 
 		s.id=sd.subject_id LIMIT 1) ";
-
-		$strCollect = 'amount_subject_sem';
-		$strMaxScore = 'semester_max_score';
-
-		$strSubjecMaxScore = " (SELECT $strMaxScore FROM `rms_group_subject_detail` WHERE
-		group_id=sd.group_id AND
-		subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
-
-		$strMultiSubject = " (SELECT $strCollect FROM `rms_group_subject_detail` WHERE
-		group_id=sd.group_id AND subject_id=sd.subject_id  ORDER BY rms_group_subject_detail.id ASC LIMIT 1) ";
-
+	
 		$subjectId = empty($data['subjectId']) ? 0 : $data['subjectId'];
 	
 		$sql = "SELECT

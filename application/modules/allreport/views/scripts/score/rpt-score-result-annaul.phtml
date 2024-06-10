@@ -8,6 +8,7 @@ $frm =  $this->form_search;
 $db = new Allreport_Model_DbTable_DbRptStudentScore();
 $dbgb = new Application_Model_DbTable_DbGlobal();
 $link = "/allreport/score/rpt-annaultranscript";
+$linkAcademic = "/allreport/score/rpt-academictranscript";
 $month = array(
 	"01" => "មករា",
 	"02" => "កុម្ភៈ",
@@ -116,6 +117,9 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 					<option value="2" <?php if ($this->search['exam_type'] == 2) {
 											echo 'selected="selected"';
 										} ?>>ប្រលងឆមាស</option>
+					<option value="3" <?php if ($this->search['exam_type'] == 3) {
+											echo 'selected="selected"';
+										} ?>>ប្រលងប្រចាំឆ្នាំ</option>
 				</select>
 			</div>
 			<div id="semester" class="col-md-2 col-sm-2 col-xs-12">
@@ -783,6 +787,7 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 <?php
 $urlOutStanding = $this->baseUrl() . "/allreport/score/certificate-letterofpraisenew/id/";
 $urlTranscript = $this->baseUrl() . $link;
+$urlAcademic = $this->baseUrl() . $linkAcademic;
 ?>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
 <script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
@@ -805,7 +810,11 @@ $urlTranscript = $this->baseUrl() . $link;
 					url = '<?php echo $urlTranscript; ?>';
 					newPageTitle="<?php echo $tr->translate("TRANSCRIPT");?>";
 					gotoNewTab(newPageTitle);
+				} else if (key == "academic") {
+					url = '<?php echo $urlAcademic; ?>';
+					gotoAction1();
 				}
+				
 
 			},
 			items: {
@@ -815,6 +824,10 @@ $urlTranscript = $this->baseUrl() . $link;
 				},
 				"letterofprais": {
 					name: "<?php echo $tr->translate("HORNOR_CERTIFICATE"); ?>",
+					icon: "fa-file",
+				},
+				"academic": {
+					name: "<?php echo $tr->translate("ACADIMIC"); ?>",
 					icon: "fa-file",
 				},
 			}
@@ -831,6 +844,9 @@ $urlTranscript = $this->baseUrl() . $link;
 
 	function gotoAction() {
 		window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
+	}
+	function gotoAction1() {
+		window.open(url + '/id/' + row + '/stu_id/' + student_id);
 	}
 
 	function gotoNewTab(newPageTitle) {

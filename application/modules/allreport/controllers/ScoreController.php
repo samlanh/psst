@@ -1209,4 +1209,23 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
 	}
+	function rptAcademictranscriptAction()
+	{
+
+		$scoreId = $this->getRequest()->getParam("id");
+		$stu_id = $this->getRequest()->getParam("stu_id");
+		$db = new Allreport_Model_DbTable_DbRptStudentScore();
+		$search = array(
+			'scoreId' => empty($scoreId) ? 0 : $scoreId
+		);
+		if (!empty($stu_id)) {
+			$search['stu_id'] = $stu_id;
+		}
+
+		$result = $db->getAllStudentIdByScoreResult($search, $scoreId, 1);
+		$this->view->studentScoreResult = $result;
+
+		$db = new Application_Model_DbTable_DbGlobal();
+		$this->view->month = $db->getAllMonth();
+	}
 }

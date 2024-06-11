@@ -140,6 +140,17 @@ span.custom-switch-indicator{line-height: 20px;}
 		<form id='office_receipt' action="<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
+					
+					student_type = dijit.byId('student_type').get('value');
+					if(student_type===2){
+						student_code = dijit.byId('student_code').get('value');
+						if(student_code==''){
+							alert("Please Input Student Code!");
+							dijit.byId("student_code").focus();
+							return false;
+    					}
+					}
+
     				year = dijit.byId('study_year').get('value');
    					if(year==-1){
          				dijit.byId("study_year").focus();
@@ -1408,6 +1419,17 @@ function printSave(){
 	checkSession();
 	var receipt_type =<?php echo RECEIPT_TYPE; ?>;
 	if(dijit.byId('office_receipt').validate()){
+
+		student_type = dijit.byId('student_type').get('value');
+		if(student_type==2){
+			student_code = dijit.byId('student_code').get('value');
+			if(student_code==''){
+				alert("Please Input Student Code");
+				dijit.byId("student_code").focus();
+				return false;
+			}
+		}
+		
 		study_year = dijit.byId("study_year").get("value");
 		if(study_year==1){dijit.byId("study_year").focus();}
 		var identity = $('#identity').val();
@@ -1594,6 +1616,17 @@ function printSubmit(){
 }
 function submitAction(){
 	if(dijit.byId('office_receipt').validate()){	
+
+		student_type = dijit.byId('student_type').get('value');
+		if(student_type==2){
+			student_code = dijit.byId('student_code').get('value');
+			if(student_code==''){
+				alert("Please Input Student Code");
+				dijit.byId("student_code").focus();
+				return false;
+			}
+		}
+
 		year = dijit.byId('study_year').get('value');
 		if(year==-1){
 			dijit.byId("study_year").focus();

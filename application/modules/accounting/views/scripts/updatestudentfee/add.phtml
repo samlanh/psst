@@ -143,6 +143,7 @@ a.btnstyle:hover{color:#eee;}
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 	                   		 <input id="academic_year_fee" />
 	                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
+							 <input type="hidden" name="OldFee" id="OldFee" dojoType="dijit.form.TextBox" /> 
 		                   </div>
 		                </div>
 		                
@@ -223,6 +224,13 @@ dojo.ready(function(){
 		class: "fullside", 		
 		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 		onChange: function() {  
+			oldFeeId='<?php echo $this->search['fromFeeid'];?>';
+			fromFeeid = dijit.byId('fromFeeid').get('value');
+			dijit.byId('OldFee').attr('value',fromFeeid);
+
+			if(oldFeeId!=fromFeeid){
+				$('#public-methods').empty().multiSelect('refresh');
+			}
 		}
 	}, "fromFeeid");
 	
@@ -236,6 +244,7 @@ dojo.ready(function(){
 
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicByBranch(){
+	
 	dijit.byId('academic_year_fee').reset();
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){

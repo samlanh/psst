@@ -84,23 +84,13 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 					$all_stu_id = $_data['public-methods'];
 					
 					foreach ($all_stu_id as $stu_id){
-						
-						// if(!empty($_data['fromFeeid'])){
-						// 	$this->_name = 'rms_group_detail_student';
-						// 	$data_gro = array(
-						// 		//'is_current'=> 0,
-						// 		'feeId'=> $_data['academic_year_fee'],
-						// 	);
-						// 	$where = 'itemType=1 AND stu_id = '.$stu_id." AND feeId=".$_data['fromFeeid']." AND is_current=1 ";
-						// 	$this->update($data_gro, $where);
-						// }
-						if(!empty($_data['fromFeeid'])){
+						if(!empty($_data['OldFee'])){
 							$this->_name = 'rms_group_detail_student';
 							$data_gro = array(
 									'is_current'=> 1,
 									'feeId'=> $feeId,
 							);
-							$where = 'itemType=1 AND stu_id = '.$stu_id."  AND is_current=1 AND (feeId =".$_data['fromFeeid']." OR oldFeeId =".$_data['fromFeeid'].")";
+							$where = 'itemType=1 AND stu_id = '.$stu_id."  AND is_current=1 AND (feeId =".$_data['OldFee']." OR oldFeeId =".$_data['OldFee'].")";
 							$this->update($data_gro, $where);
 						}
 					}

@@ -85,27 +85,31 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 					
 					foreach ($all_stu_id as $stu_id){
 						
+						// if(!empty($_data['fromFeeid'])){
+						// 	$this->_name = 'rms_group_detail_student';
+						// 	$data_gro = array(
+						// 		//'is_current'=> 0,
+						// 		'feeId'=> $_data['academic_year_fee'],
+						// 	);
+						// 	$where = 'itemType=1 AND stu_id = '.$stu_id." AND feeId=".$_data['fromFeeid']." AND is_current=1 ";
+						// 	$this->update($data_gro, $where);
+						// }
 						if(!empty($_data['fromFeeid'])){
 							$this->_name = 'rms_group_detail_student';
 							$data_gro = array(
-								'is_current'=> 0,
+									'is_current'=> 1,
+									'feeId'=> $feeId,
 							);
-							$where = 'itemType=1 AND stu_id = '.$stu_id." AND feeId=".$_data['fromFeeid']." AND is_current=1 ";
+							$where = 'itemType=1 AND stu_id = '.$stu_id."  AND is_current=1 AND (feeId =".$_data['fromFeeid']." OR oldFeeId =".$_data['fromFeeid'].")";
 							$this->update($data_gro, $where);
 						}
-						
-						$data_gro = array(
-								'is_current'=> 1,
-								'feeId'=> $_data['academic_year_fee'],
-						);
-						$where = 'itemType=1 AND stu_id = '.$stu_id." AND feeId=0 AND is_current=1 ";
-						$this->update($data_gro, $where);
 					}
 				}
 			}
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			echo $e->getMessage(); exit();
 		}
 	}
 	
@@ -136,7 +140,8 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				AND s.stu_id=sd.stu_id
 				AND sd.is_current=1 ";
 		if(!empty($search['fromFeeid'])){
-			$sql.=" AND sd.feeId =".$search['fromFeeid'];
+			$sql.=" AND (sd.feeId =".$search['fromFeeid'];
+			$sql.=" OR sd.oldFeeId =".$search['fromFeeid'].")";
 		}
 		if(!empty($search['degree'])){
 			$sql.=" AND sd.degree =".$search['degree'];

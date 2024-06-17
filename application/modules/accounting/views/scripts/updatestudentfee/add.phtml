@@ -248,7 +248,8 @@ function getAllAcademicByBranch(){
 		url: url_getacademic,
 		content:{
 			'branch_id':branch_id,
-			'selectOption':1
+			'selectOption':1,
+			'isFinished':0
 			},
 		handleAs:"json",
 		load: function(data){

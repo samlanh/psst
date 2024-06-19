@@ -240,7 +240,9 @@ table.tb-footer tr.style-head {
 								<?php 
 								$updated_result=0;
 								$total_register=0;
-								 $i=0; 
+								 $i=0;
+								//print_r($this->row);
+								// exit();
 								if(!empty($this->row)){ foreach($this->row as $rs){ $i++;?>
 									  <tr class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $rs['stu_id'];?>);return false;" align="center"  >
 											<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>

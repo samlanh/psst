@@ -834,7 +834,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=str.academic_year LIMIT 1) AS academic,
 					";
 
-			if ($testCondiction == 2) {
+			if ($testCondiction == 2){
 				$sql .= "(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";
 			} else {
 				$sql .= "(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=str.study_term) AS study_term,";

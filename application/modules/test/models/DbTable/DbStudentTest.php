@@ -669,7 +669,6 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$grade = "idd.title_en";
 			$degree = "i.title_en";
 		}
-		$testCondiction = TEST_CONDICTION;
 		$sql="SELECT 
 			str.*,
 			CASE    
@@ -684,11 +683,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				WHEN  str.comment = 4 THEN '".$tr->translate("WEAK")."'
 				END AS comment_title,";
 		
-		if ($testCondiction==2){
-			$sql.="(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";
-		}else{
-			$sql.="(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=study_term) AS study_term,";
-		}
+			$sql.="(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";		
 		
 		$sql.="
 			

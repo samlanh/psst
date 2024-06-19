@@ -12,7 +12,7 @@ class Application_Form_FrmLanguages{
 			$str="km";
 		}else{
 			$str="en";
-			}	
+		}	
 		
 		$schoolOption=1;
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);

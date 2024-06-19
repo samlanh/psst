@@ -2,9 +2,6 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('TEST_RESULT'));
 	$frm =  $this->form_search;
-	$_dbgb = new Application_Model_DbTable_DbGlobal();
-	$userinfo = $_dbgb->getUserInfo();
-	$testCondiction = TEST_CONDICTION;
 ?>
 	
 <script>

@@ -125,7 +125,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 			
 			$group=array(
 				'is_use'	=>1,//used
-				'is_pass'	=>3,//finish
+				'is_pass'	=>4,//finish
 				'note'		=>'graduated'
 			);
 			$where=" id=".$_data['group'];
@@ -196,7 +196,7 @@ class Foundation_Model_DbTable_DbGraduatedStudent extends Zend_Db_Table_Abstract
 				$this->_name = 'rms_group';
 				$group=array(
 						'is_use'	=>1,
-						'is_pass'	=>3,
+						'is_pass'	=>4,
 					);
 				$where=" id=".$_data['group'];
 				$this->update($group, $where);

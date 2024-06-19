@@ -1,5 +1,5 @@
 <?php
-class Accounting_YearstudyController extends Zend_Controller_Action {
+class Global_YearstudyController extends Zend_Controller_Action {
     public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
@@ -26,7 +26,7 @@ class Accounting_YearstudyController extends Zend_Controller_Action {
 			$list = new Application_Form_Frmtable();
 			$collumns = array("FROM_YEAR","TO_YEAR","CREATED_DATE","BY_USER","STATUS");
 			$link=array(
-				'module'=>'accounting','controller'=>'yearstudy','action'=>'edit',
+				'module'=>'global','controller'=>'yearstudy','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('fromYear'=>$link,'toYear'=>$link));
 		}catch (Exception $e){
@@ -49,9 +49,9 @@ class Accounting_YearstudyController extends Zend_Controller_Action {
 					$sms = "RECORD_EXIST";
 				}
 				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/accounting/yearstudy");
+					Application_Form_FrmMessage::Sucessfull($sms,"/global/yearstudy");
 				}
-				Application_Form_FrmMessage::Sucessfull($sms,"/accounting/yearstudy/add");			
+				Application_Form_FrmMessage::Sucessfull($sms,"/global/yearstudy/add");			
 					
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -82,7 +82,7 @@ class Accounting_YearstudyController extends Zend_Controller_Action {
 				if($_discount==-1){
 					$sms = "RECORD_EXIST";
 				}
-				Application_Form_FrmMessage::Sucessfull($sms,"/accounting/yearstudy");	
+				Application_Form_FrmMessage::Sucessfull($sms,"/global/yearstudy");	
 					
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -91,7 +91,7 @@ class Accounting_YearstudyController extends Zend_Controller_Action {
 		}
 		$row=$db->getAcademicYearById($id);
 		if(empty($row)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/accounting/yearstudy");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/global/yearstudy");
 			exit();
 		}
 		

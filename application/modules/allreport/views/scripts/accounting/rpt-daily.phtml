@@ -183,6 +183,9 @@
 					 	$total_expense_dollar = 0;
 					 	$total_payment=0;
 					 	$fine = 0;
+						$credit_memo_case = 0;
+						$credit_memo_bank = 0;
+						$credit_memo_chegue = 0;
 					 	$credit_memo = 0;
 					 	$net_amount = 0;
 						$paid_amount = 0;
@@ -264,14 +267,16 @@
 						  	 			$net_amount = $net_amount + $rs['grand_total'];
 										$paid_amount = $paid_amount + $rs['paid_amount'];
 										$balance = $balance + $rs['balance_due'];
-										
+
 										if($rs['payment_method']==1){
 											$total_cash = $total_cash+$rs['paid_amount'];
+											$credit_memo_case = $credit_memo_case+$rs['credit_memo'];
 										}elseif($rs['payment_method']==2){
 											$total_bank = $total_bank+$rs['paid_amount'];
-										}
-										else{
+											$credit_memo_bank = $credit_memo_bank+$rs['credit_memo'];
+										}else{
 											$total_cheque = $total_cheque+$rs['paid_amount'];
+											$credit_memo_chegue = $credit_memo_chegue+$rs['credit_memo'];
 										}
 						  	 		} 
 							  	 ?>
@@ -448,15 +453,15 @@
 								<td colspan="4">
 									<div
 										style="width: 33%; float: left; text-align: center; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
-							  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
+							  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp-$credit_memo_case,2);?>
 							  			</div>
 									<div
 										style="width: 33%; float: left; text-align: center; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
-							  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp,2);?>
+							  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp-$credit_memo_bank,2);?>
 							  			</div>
 									<div
 										style="width: 33%; float: left; text-align: center; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
-							  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp,2);?>
+							  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp-$credit_memo_chegue,2);?>
 							  			</div>
 									<div style="clear: both;"></div>
 								</td>

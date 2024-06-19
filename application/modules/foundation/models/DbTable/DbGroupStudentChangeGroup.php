@@ -277,6 +277,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'oldGroup'		=>$_data['from_group'],
 									'academicYear'	=>$_data['study_year'],
 									'feeId'			=>$_data['academic_year'],//feeId
+									'oldFeeId'		=>$rsexist['feeId'],//Old Fee Id
 									'schoolOption'  =>$schoolOption,
 									'degree'		=>$degreeId,
 									'grade'			=>$gradeId,
@@ -344,6 +345,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'groupId'		=>$_data['groupId'],
 								'oldGroup'		=>$_data['from_group'],
 								'feeId'			=>$_data['academic_year'],
+								'oldFeeId'		=>$rsexist['feeId'],//Old Fee Id
 								'degree'		=>$degreeId,
 								'grade'			=>$gradeId,
 								'session'		=>0,

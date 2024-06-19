@@ -74,7 +74,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 			table.header,
 			table.studentInfo {
 				page-break-inside: auto;
-				font-family: 'Khmer OS Battambang', 'Times New Roman' !important;
+				font-family:'Times New Roman', 'Khmer OS Battambang' !important;
 				font-size: 12px !important;
 			}
 
@@ -94,6 +94,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 				white-space: nowrap;
 				color: #000;
 				font-weight: bold;
+		
 			}
 
 			.hover:hover {
@@ -125,6 +126,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 			.teacherComment {
 				min-height: 50px;
 			}
+			.blackColor{
+				color: #000;
+			}
 
 			.border-none {
 				border: 1px solid #fff;
@@ -140,6 +144,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 			.colorRed {
 				color: #000 !important;
+			}
+			.blank{
+				background-color: #ccc;
 			}
 
 			.khmerBoldFont {
@@ -218,7 +225,6 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 				$studentInfo = $resultData['studentInfo'];
 				$scoreSubjectList = $resultData['scoreSubjectInfo'];
-				$evalueationList = $resultData['EvalueationList'];
 				$scoreInfo = $resultData['scoreInfo'];
 
 				$groupId = $scoreInfo['group_id'];
@@ -230,21 +236,20 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 				$semesterScale = (empty($scoreInfo['semesterTotalAverage'])) ? 50 : $scoreInfo['semesterTotalAverage'];
 
-
-
 				$SemesterKhAvg = $scoreInfo['totalKhAvg'];
 				$SemesterEnAvg = $scoreInfo['totalEnAvg'];
 				$SemesterChAvg = $scoreInfo['totalChAvg'];
+			
 
-				print_r($scoreInfo);
+			//	print_r($scoreInfo);
 
 				$break_page = "pages-break";
 
 				//$title= $titleNum;
 				if ($titleNum == 1) {
-					$title = "របាយការណ៍ការវិវឌ្ឍ : " . $scoreInfo['groupCode'] . '_' . $studentInfo['stu_code'] . '_' . $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
+					$title = "របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ : " . $scoreInfo['groupCode'] . '_' . $studentInfo['stu_code'] . '_' . $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
 				} else {
-					$title = "របាយការណ៍ការវិវឌ្ឍ : " . $scoreInfo['groupCode'];
+					$title = "របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ : " . $scoreInfo['groupCode'];
 				}
 				$this->headTitle($title);
 				echo $this->headTitle();
@@ -304,10 +309,14 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 								</table>
 							</td>
 						</tr>
-						<t
+						<tr>
 							<td colspan="3" id="exportExcel" valign="top">
 								<table class="header" cellpadding="2" border="1" style="margin:0 auto;width:100%;border-collapse:collapse;border: solid 2px #000;">
 									<?php
+
+									$GrandtotalScoreSemesterI = 0;
+									$GrandtotalScoreSemesterII = 0;
+
 									$totalAveragescoreSemester1 = 0;
 									$totalAveragescoreSemester2 = 0;
 									$totalAveragescore = 0;
@@ -327,6 +336,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 											$totalMaxScore = $totalMaxScore + $maxScore;
 
+											$GrandtotalScoreSemesterI = $GrandtotalScoreSemesterI + $resultScore['totalAvgSemester1'];
+											$GrandtotalScoreSemesterII = $GrandtotalScoreSemesterII + $resultScore['totalAvgSemester2'];
+										
 											$grade = $dbgb->getMentionScore($resultScore['totalAverage'], $academicId, $scoreInfo['degreeId'], 1, null, $maxScore);
 											$gradeSemester1 = $dbgb->getMentionScore($resultScore['totalAvgSemester1'], $academicId, $scoreInfo['degreeId'], 1, null, $maxScore);
 											$gradeSemester2 = $dbgb->getMentionScore($resultScore['totalAvgSemester2'], $academicId, $scoreInfo['degreeId'], 1, null, $maxScore);
@@ -337,11 +349,11 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 														<td rowspan="4" colspan="3"><?php echo ($currentLang == 1) ? 'កម្មវិធីខ្មែរ  Khmer Program Assessment' : 'កម្មវិធីអង់គ្លេស  English Program Assessment' ?></td>
 														<td ><?php echo $totalSubMaxScore; ?></td>
 														<td ><?php echo $totalAveragescoreSemester1; ?></td>
-														<td></td>
+														<td class="blank"></td>
 														<td ><?php echo $totalAveragescoreSemester2; ?></td>
-														<td ></td>
+														<td class="blank"></td>
 														<td><?php echo $totalAveragescore; ?></td>
-														<td></td>
+														<td class="blank"></td>
 													</tr>
 													<?php $totalmultiSubSubject = $totalSubMaxScore / $semesterScale; ?>
 													<tr class="cheader" align="center">
@@ -354,7 +366,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 																?>
 															</strong>
 														</td>
-														<td ></td>
+														<td class="blank"></td>
 														<td>
 															<strong>
 																<?php
@@ -363,7 +375,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 																?>
 															</strong>
 														</td>
-														<td ></td>
+														<td class="blank"></td>
 														<td>
 															<strong>
 																<?php
@@ -372,62 +384,104 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 																?>
 															</strong>
 														</td>
-														<td></td>
+														<td class="blank"></td>
 													</tr>
 													<tr class="cheader" align="center">
 														<td >Monthly Avg</td>
-														<td></td>
-														<td ></td>
-														<td></td>
-														<td ></td>
-														<td></td>
-														<td></td>
+														<td>
+															<strong>
+																<?php
+																if ($currentLang == 1) {
+																	$monthlyLangAvgSemesterI = $scoreInfo['monthlyAvgKhSemester1'];
+																} elseif ($currentLang == 2) {
+																	$monthlyLangAvgSemesterI = $scoreInfo['monthlyAvgEnSemester1'];
+																} else {
+																	$monthlyLangAvgSemesterI = $scoreInfo['monthlyAvgChSemester1'];
+																}
+																echo number_format($monthlyLangAvgSemesterI, 2);
+																?>
+															</strong>
+														</td>
+														<td class="blank"></td>
+														<td>
+															<strong>
+																<?php
+																if ($currentLang == 1) {
+																	$monthlyLangAvgSemesterII = $scoreInfo['monthlyAvgKhSemester2'];
+																} elseif ($currentLang == 2) {
+																	$monthlyLangAvgSemesterII = $scoreInfo['monthlyAvgEnSemester2'];
+																} else {
+																	$monthlyLangAvgSemesterII = $scoreInfo['monthlyAvgChSemester2'];
+																}
+																echo number_format($monthlyLangAvgSemesterII, 2);
+																?>
+															</strong>
+														</td>
+														<td class="blank"></td>
+														<td class="blank"></td>
+														<td class="blank"></td>
 													</tr>
 													<tr class="cheader" align="center">
 														<td >Overall Avg</td>
-														<td></td>
-														<td ></td>
-														<td></td>
-														<td ></td>
-														<td></td>
-														<td></td>
+														<td>
+															<strong>
+																<?php
+																if ($currentLang == 1) {
+																	$overalAvgLangSemesterI = $scoreInfo['OveralAvgKhSemester1'];
+																} elseif ($currentLang == 2) {
+																	$overalAvgLangSemesterI = $scoreInfo['OveralAvgEnSemester1'];
+																} else {
+																	$overalAvgLangSemesterI = $scoreInfo['OveralAvgChSemester1'];
+																}
+																echo number_format($overalAvgLangSemesterI, 2);
+																?>
+															</strong>
+														</td>
+														<td >
+															<strong class="colorRed">
+																<?php echo $dbgb->getMentionScore($overalAvgLangSemesterI, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+															</strong>
+														</td>
+														<td>
+															<strong>
+																<?php
+																if ($currentLang == 1) {
+																	$overalAvgLangSemesterII = $scoreInfo['OveralAvgKhSemester2'];
+																} elseif ($currentLang == 2) {
+																	$overalAvgLangSemesterII = $scoreInfo['OveralAvgEnSemester2'];
+																} else {
+																	$overalAvgLangSemesterII = $scoreInfo['OveralAvgChSemester2'];
+																}
+																echo number_format($overalAvgLangSemesterII, 2);
+																?>
+															</strong>
+														</td>
+														<td >
+															<strong class="colorRed">
+																<?php echo $dbgb->getMentionScore($overalAvgLangSemesterII, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+															</strong>
+														</td>
+														<td>
+															<strong>
+																<?php
+																if ($currentLang == 1) {
+																	$overalAvgLangAnnual = $scoreInfo['OveralAvgKh'];
+																} elseif ($currentLang == 2) {
+																	$overalAvgLangAnnual = $scoreInfo['OveralAvgEng'];
+																} else {
+																	$overalAvgLangAnnual = $scoreInfo['OveralAvgCh'];
+																}
+																echo number_format($overalAvgLangAnnual, 2);
+																?>
+															</strong>
+														</td>
+														<td >
+															<strong class="colorRed">
+																<?php echo $dbgb->getMentionScore($overalAvgLangAnnual, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+															</strong>
+														</td>
 													</tr>
 													
-													<!-- <tr class="style hover">
-														<td colspan="3" align="center" class=" ">&nbsp;
-															រង្វាយតម្លៃជារួមប្រចាំឆ្នាំ Overall Annual Assessment
-														</td>
-														<td align="center">
-															<strong>
-																<?php
-																if ($currentLang == 1) {
-																	$overalSemesterLangAvg = $scoreInfo['OveralAvgKh'];
-																} elseif ($currentLang == 2) {
-																	$overalSemesterLangAvg = $scoreInfo['OveralAvgEng'];
-																} else {
-																	$overalSemesterLangAvg = $scoreInfo['OveralAvgCh'];
-																}
-																echo number_format($overalSemesterLangAvg, 2);
-																?>
-															</strong>
-														</td>
-														<td colspan="3" align="center"></td>
-														<td align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($overalSemesterLangAvg, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?></strong>&nbsp;</td>
-														<td align="center">
-															<strong>
-																<?php
-																if ($currentLang == 1) {
-																	$rankLangOverlal = $scoreInfo['rankOverallKh'];
-																} elseif ($currentLang == 2) {
-																	$rankLangOverlal = $scoreInfo['rankOverallEng'];
-																} else {
-																	$rankLangOverlal = $scoreInfo['rankOverallCh'];
-																}
-																echo $rankLangOverlal;
-																?>
-															</strong>
-														</td>
-													</tr> -->
 												<?php
 													$totalAveragescoreSemester1 = 0;
 													$totalAveragescoreSemester2 = 0;
@@ -436,42 +490,22 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 													$totalmultiSubSubject = 0;
 													$i = 1;
 												} ?>
-												<?php if ($scoreInfo['degreeId'] == 1) { ?>
-													<tr class="cheader" align="center">
+												<tr class="cheader" align="center">
 														<td rowspan="2">ល.រ<br />No.</td>
 														<td rowspan="2" colspan="2">មុខវិជ្ជា Subject</td>
 														<td rowspan="2">ពិន្ទុអតិបរមា <br />Maximum Score</td>
-														<td colspan="2">ឆមាសទី១ <br />SemesterI </td>
-														<td colspan="2">ឆមាសទី២ <br />SemesterII </td>
+														<td colspan="2">ឆមាសទី១ <br />Semester I </td>
+														<td colspan="2">ឆមាសទី២ <br />Semester II </td>
 														<td colspan="2">ប្រចាំឆ្នាំ <br />Annual</td>
 													</tr>
 													<tr class="cheader" align="center">
 														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Grade</td>
+														<td>និទ្ទេស<br />Letter Grade</td>
 														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Grade</td>
+														<td>និទ្ទេស<br />Letter Grade</td>
 														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Grade</td>
+														<td>និទ្ទេស<br />Letter Grade</td>
 													</tr>
-												<?php } else { ?>
-													
-													<tr class="cheader" align="center">
-														<td rowspan="2">ល.រ<br />No.</td>
-														<td rowspan="2" colspan="2">មុខវិជ្ជា Subject</td>
-														<td rowspan="2">ពិន្ទុអតិបរមា <br />Maximum Score</td>
-														<td colspan="2">ឆមាសទី១ <br />SemesterI </td>
-														<td colspan="2">ឆមាសទី២ <br />SemesterII </td>
-														<td colspan="2">ប្រចាំឆ្នាំ <br />Annual</td>
-													</tr>
-													<tr class="cheader" align="center">
-														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Grade</td>
-														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Grade</td>
-														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Grade</td>
-													</tr>
-												<?php } ?>
 											<?php }
 											$currentLang = $resultScore['subjectLang'];
 
@@ -505,11 +539,11 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 										<td rowspan="4" colspan="3"><?php echo ($currentLang == 1) ? 'កម្មវិធីខ្មែរ  Khmer Program Assessment' : 'កម្មវិធីអង់គ្លេស  English Program Assessment' ?></td>
 										<td ><?php echo $totalSubMaxScore; ?></td>
 										<td ><?php echo $totalAveragescoreSemester1; ?></td>
-										<td></td>
+										<td class="blank"></td>
 										<td ><?php echo $totalAveragescoreSemester2; ?></td>
-										<td ></td>
+										<td class="blank"></td>
 										<td><?php echo $totalAveragescore; ?></td>
-										<td></td>
+										<td class="blank"></td>
 									</tr>
 									<?php $totalmultiSubSubject = $totalSubMaxScore / $semesterScale; ?>
 									<tr class="cheader" align="center">
@@ -522,7 +556,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 												?>
 											</strong>
 										</td>
-										<td ></td>
+										<td class="blank"></td>
 										<td>
 											<strong>
 												<?php
@@ -531,7 +565,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 												?>
 											</strong>
 										</td>
-										<td ></td>
+										<td class="blank"></td>
 										<td>
 											<strong>
 												<?php
@@ -540,254 +574,264 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 												?>
 											</strong>
 										</td>
-										<td></td>
+										<td class="blank"></td>
 									</tr>
 									<tr class="cheader" align="center">
 										<td >Monthly Avg</td>
-										<td></td>
-										<td ></td>
-										<td></td>
-										<td ></td>
-										<td></td>
-										<td></td>
+										<td>
+											<strong>
+												<?php
+													if ($currentLang == 1) {
+														$monthlyLangAvgSemesterI = $scoreInfo['monthlyAvgKhSemester1'];
+													} elseif ($currentLang == 2) {
+														$monthlyLangAvgSemesterI = $scoreInfo['monthlyAvgEnSemester1'];
+													} else {
+														$monthlyLangAvgSemesterI = $scoreInfo['monthlyAvgChSemester1'];
+													}
+													echo number_format($monthlyLangAvgSemesterI, 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+										<td>
+											<strong>
+												<?php
+													if ($currentLang == 1) {
+														$monthlyLangAvgSemesterII = $scoreInfo['monthlyAvgKhSemester2'];
+													} elseif ($currentLang == 2) {
+														$monthlyLangAvgSemesterII = $scoreInfo['monthlyAvgEnSemester2'];
+													} else {
+														$monthlyLangAvgSemesterII = $scoreInfo['monthlyAvgChSemester2'];
+													}
+													echo number_format($monthlyLangAvgSemesterII, 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+										<td class="blank"></td>
+										<td class="blank"></td>
 									</tr>
 									<tr class="cheader" align="center">
 										<td >Overall Avg</td>
-										<td></td>
-										<td ></td>
-										<td></td>
-										<td ></td>
-										<td></td>
-										<td></td>
-									</tr>
-
-									<!-- <tr class="style hover">
-										<td colspan="3" align="center" class=" ">&nbsp;
-											រង្វាយតម្លៃជារួមប្រចាំឆ្នាំ Overall Annual Assessment
-										</td>
-										<td align="center">
+										<td>
 											<strong>
 												<?php
-												if ($currentLang == 1) {
-													$overalSemesterLangAvg = $scoreInfo['OveralAvgKh'];
-												} elseif ($currentLang == 2) {
-													$overalSemesterLangAvg = $scoreInfo['OveralAvgEng'];
-												} else {
-													$overalSemesterLangAvg = $scoreInfo['OveralAvgCh'];
-												}
-												echo number_format($overalSemesterLangAvg, 2);
+													if ($currentLang == 1) {
+														$overalAvgLangSemesterI = $scoreInfo['OveralAvgKhSemester1'];
+													} elseif ($currentLang == 2) {
+														$overalAvgLangSemesterI = $scoreInfo['OveralAvgEnSemester1'];
+													} else {
+														$overalAvgLangSemesterI = $scoreInfo['OveralAvgChSemester1'];
+													}
+													echo number_format($overalAvgLangSemesterI, 2);
 												?>
 											</strong>
 										</td>
-										<td colspan="3" align="center"></td>
-										<td align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($overalSemesterLangAvg, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?></strong>&nbsp;</td>
-										<td align="center">
+										<td >
+											<strong class="colorRed">
+												<?php echo $dbgb->getMentionScore($overalAvgLangSemesterI, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+											</strong>
+										</td>
+										<td>
 											<strong>
 												<?php
-												if ($currentLang == 1) {
-
-													$rankLangOverlal = $scoreInfo['rankOverallKh'];
-												} elseif ($currentLang == 2) {
-
-													$rankLangOverlal = $scoreInfo['rankOverallEng'];
-												} else {
-
-													$rankLangOverlal = $scoreInfo['rankOverallCh'];
-												}
-												echo $rankLangOverlal;
+													if ($currentLang == 1) {
+														$overalAvgLangSemesterII = $scoreInfo['OveralAvgKhSemester2'];
+													} elseif ($currentLang == 2) {
+															$overalAvgLangSemesterII = $scoreInfo['OveralAvgEnSemester2'];
+													} else {
+														$overalAvgLangSemesterII = $scoreInfo['OveralAvgChSemester2'];
+													}
+													echo number_format($overalAvgLangSemesterII, 2);
 												?>
 											</strong>
 										</td>
-									</tr> -->
-
-									<tr class="style hover doubleBorder " style=" font-size:13px;">
-										<td colspan="3" align="center" class="khmerBoldFont">
-											ទាំងពីរកម្មវិធី <strong>Both Programs</strong>
+										<td >
+											<strong class="colorRed">
+												<?php echo $dbgb->getMentionScore($overalAvgLangSemesterII, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+											</strong>
 										</td>
-										<td class="fontBold textCenter">មធ្យមភាគ <br />Average Score </td>
-										<td class="fontBold textCenter">ពិន្ទុអតិបរមា <br />Maximum Score </td>
-										<td colspan="2" class="fontBold textCenter">ពិន្ទុ<br />Score</td>
-										<td class="fontBold textCenter">និទ្ទេស<br />Grade</td>
-										<td class="fontBold textCenter">ចំណាត់ថ្នាក់<br />Rank</td>
-									</tr>
-									<tr class="style hover">
-										<td colspan="3" align="center" class=" khmerBoldFont">
-											រង្វាយតម្លៃជារួមប្រចាំឆ្នាំ Overall Annual Assessment
-										</td>
-										<td align="center">
+										<td>
 											<strong>
 												<?php
-												echo  $scoreInfo['overallAssessmentSemester'];
+													if ($currentLang == 1) {
+														$overalAvgLangAnnual = $scoreInfo['OveralAvgKh'];
+													} elseif ($currentLang == 2) {
+														$overalAvgLangAnnual = $scoreInfo['OveralAvgEng'];
+													} else {
+														$overalAvgLangAnnual = $scoreInfo['OveralAvgCh'];
+													}
+													echo number_format($overalAvgLangAnnual, 2);
 												?>
 											</strong>
 										</td>
-										<td colspan="3" align="center"></td>
-										<td align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?></strong>&nbsp;</td>
-										<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+										<td >
+											<strong class="colorRed">
+												<?php echo $dbgb->getMentionScore($overalAvgLangAnnual, $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+											</strong>
+										</td>
 									</tr>
 
+									<!-- Both Program -->
+
+									<tr class="style hover" align="center">
+										<td  rowspan="4" colspan="3" class="khmerBoldFont"> 
+											ទាំងពីរកម្មវិធី <strong>Both-Programs Assessment</strong>
+										</td>
+										<td ><strong><?php echo $totalMaxScore; ?></strong></td>
+										<td ><strong><?php echo $GrandtotalScoreSemesterI; ?></strong></td>
+										<td class="blank"></td>
+										<td ><strong><?php echo $GrandtotalScoreSemesterII; ?></strong></td>
+										<td class="blank"></td>
+										<td><strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong></td>
+										<td class="blank"></td>
+									</tr>
+									<?php $GrandMultiSubSubject = $totalMaxScore / $semesterScale; ?>
+									<tr class="style hover" align="center">
+										<td class="khmerBoldFont"><strong>Exam Avg</strong></td>
+										<td>
+											<strong>
+												<?php
+													$GrandExamAvgSemesterI = $GrandtotalScoreSemesterI / $GrandMultiSubSubject;
+													echo number_format($GrandExamAvgSemesterI, 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+										<td>
+											<strong>
+												<?php
+													$GrandExamAvgSemesterII = $GrandtotalScoreSemesterII / $GrandMultiSubSubject;
+													echo number_format($GrandExamAvgSemesterII, 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+										<td>
+											<strong>
+												<?php
+													echo number_format($scoreInfo['totalAvg'], 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+									</tr>
+									<tr class="style hover" align="center">
+										<td class="khmerBoldFont"><strong>Monthly Avg</strong></td>
+										<td>
+											<strong>
+												<?php
+													echo number_format($scoreInfo['monthlySemester1'], 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+										<td>
+											<strong>
+												<?php
+													echo number_format($scoreInfo['monthlySemester2'], 2);
+												?>
+											</strong>
+										</td>
+										<td class="blank"></td>
+										<td class="blank"></td>
+										<td class="blank"></td>
+									</tr>
+									<tr class="style hover" align="center">
+										<td class="khmerBoldFont"><strong>Overall Avg</strong></td>
+										<td>
+											<strong>
+												<?php
+													echo number_format($scoreInfo['overalSemester1'], 2);
+												?>
+											</strong>
+										</td>
+										<td >
+											<strong class="colorRed">
+												<?php echo $dbgb->getMentionScore($scoreInfo['overalSemester1'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+											</strong>
+										</td>
+										<td>
+											<strong>
+												<?php
+													echo number_format($scoreInfo['overalSemester2'], 2);
+												?>
+											</strong>
+										</td>
+										<td >
+											<strong class="colorRed">
+												<?php echo $dbgb->getMentionScore($scoreInfo['overalSemester2'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+											</strong>
+										</td>
+										<td>
+											<strong>
+												<?php
+													echo number_format($scoreInfo['overallAssessmentSemester'], 2);
+												?>
+											</strong>
+										</td>
+										<td >
+											<strong class="colorRed">
+												<?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?>
+											</strong>
+										</td>
+									</tr>
+								</table>
+								<br>
+								<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
+									<tr>
+										<td colspan="6" class=" khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+									</tr>
+									<tr class="khmerBoldFont " align="center">
+										<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
+										<td>ភាគរយ<br />PERCENTAGE</td>
+										<td colspan="2">និទ្ទេស <br />GRADE</td>
+										<td><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVEMENT AND EFFORT</td>
+									</tr>
+									<?php
+									$ismergRow = 0;
+
+									$reGradingResult  = $dbgb->getGradingSystem($degreeId); ?>
+
+									<?php
+									if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) {
+									?>
+										<tr class="" align="center">
+											<?php if ($keygd == 0) { ?>
+												<td align="center" colspan="2" rowspan="<?php echo count($reGradingResult); ?>" class="khmerBoldFont">
+													<span>Annual <sub>Avg</sub> = </span>
+													<div class="frac">
+														<span>SemesterI <sub>Avg</sub> + SemesterII <sub>Avg</sub></span>
+														<span class="symbol">/</span>
+														<span class="bottom">2</span>
+
+													</div>
+												</td>
+											<?php } ?>
+											<td><?php echo $rsgd['percentage']; ?></td>
+											<td style="width: 100px;"><?php echo $rsgd['grade']; ?></td>
+											<td><?php echo $rsgd['interpretation']; ?></td>
+											<td><?php echo $rsgd['achievment']; ?></td>
+										</tr>
+									<?php } ?> 
+								</table>
+								<br>
+								<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
+									<tr height="170px;">
+										<td class="borderSolidBottom" width="30%">&nbsp;</td>
+										<td colspan="4">&nbsp;</td>
+										<td class="borderSolidBottom" width="30%">&nbsp;</td>
+									</tr>
+									<tr>
+										<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
+										<td colspan="4">&nbsp;</td>
+										<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
+									</tr>
 								</table>
 							</td>
 						</tr>
 					</table>
-					<br>
-					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-						<tr class="khmerBoldFont " align="center">
-							<td width="20%" colspan="2">របាយការណ៍សម្រាប់<br />REPORT FOR</td>
-							<td width="20%">ឆមាសទី១<br />FIRST SEMESTER</td>
-							<td width="20%">ឆមាសទី២ <br />SECOND SEMESTER</td>
-							<td width="20%">ប្រចាំឆ្នាំ<br />ANNUAL</td>
-							<td width="20%">លទ្ធផល <br />RESULT</td>
-						</tr>
-						<tr class="khmerBoldFont " align="center">
-							<td colspan="2">ពិន្ទុសរុប<br />Total Score</td>
-							<td><strong><?php echo $scoreInfo['totalScoreSemester1']; ?></strong></td>
-							<td><strong><?php echo $scoreInfo['totalScoreSemester2']; ?></strong></td>
-							<td><strong><?php echo $scoreInfo['totalScoreAvg'];  ?></strong></td>
-							<td>
-								<?php
-								if ($scoreInfo['overallAssessmentSemester'] >= ($semesterScale / 2)) {
-									echo 'ជាប់​ - ត្រូវបានឡើងថ្នាក់';
-								} else {
-									echo '';
-								}
-								?>
-							</td>
-						</tr>
-						<tr class="khmerBoldFont " align="center">
-							<td colspan="2">មធ្យមភាគពិន្ទុ<br />Average Score</td>
-							<td><strong><?php echo  $scoreInfo['overalSemester1'];  ?></strong></td>
-							<td><strong><?php echo  $scoreInfo['overalSemester2'];  ?></strong></td>
-							<td><strong><?php echo  $scoreInfo['overallAssessmentSemester'];  ?></strong></td>
-							<td>
-								<?php
-								if ($scoreInfo['overallAssessmentSemester'] >= ($semesterScale / 2)) {
-									echo 'Passed - Promoted ';
-								} else {
-									echo '';
-								}
-								?>
-							</td>
-						</tr>
-						<tr class="khmerBoldFont " align="center">
-							<td colspan="2">និទ្ទេស និងចំណាត់ថ្នាក់<br />Letter Grade And Rank</td>
-							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overalSemester1'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> &nbsp;&nbsp; <?php echo $scoreInfo['rankSemester1'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
-							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overalSemester2'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> &nbsp;&nbsp; <?php echo $scoreInfo['rankSemester2'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
-							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> &nbsp;&nbsp; <?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
-							<td>
-							<?php
-								if ($scoreInfo['overallAssessmentSemester'] >= ($semesterScale / 2)) {
-									echo $scoreInfo['promoteResult'];
-								} else {
-									echo ' ';
-								}
-								?>
-							</td>
-						</tr>
-
-					</table>
-					<br>
-					<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
-						<tr>
-							<td colspan="6" class=" khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
-						</tr>
-						<tr class="khmerBoldFont " align="center">
-							<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
-							<td>ភាគរយ<br />PERCENTAGE</td>
-							<td>កម្រិត <br />GRADE</td>
-							<td>និទ្ទេស<br />INTERPRETATION</td>
-							<td><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVEMENT AND EFFORT</td>
-						</tr>
-						<?php
-						$ismergRow = 0;
-
-						$reGradingResult  = $dbgb->getGradingSystem($degreeId); ?>
-
-						<?php
-						if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) {
-						?>
-							<tr class="" align="center">
-								<?php if ($keygd == 0) { ?>
-									<td align="center" colspan="2" rowspan="<?php echo count($reGradingResult); ?>" class="khmerBoldFont">
-										<span>Annual <sub>Avg</sub> = </span>
-										<div class="frac">
-											<span>SemesterI <sub>Avg</sub> + SemesterII <sub>Avg</sub></span>
-											<span class="symbol">/</span>
-											<span class="bottom">2</span>
-
-										</div>
-									</td>
-								<?php } ?>
-								<td><?php echo $rsgd['percentage']; ?></td>
-								<td><?php echo $rsgd['grade']; ?></td>
-								<td><?php echo $rsgd['interpretation']; ?></td>
-								<td><?php echo $rsgd['achievment']; ?></td>
-							</tr>
-						<?php } ?> <!-- <tr class="" align="center">
-							<td align="center" colspan="2">&nbsp;TOTAL SCORE</td>
-							<td>100%</td>
-							<td colspan="3"></td>
-						</tr>
-					 -->
-
-
-						<?php
-						$teacherComment = '';
-						$commentType = '';
-						if (!empty($evalueationList)) foreach ($evalueationList as $keycom => $rsComment) {
-							if ($teacherComment == '') {
-								$teacherComment = $rsComment['teacherComment'];
-							}
-						?>
-							<?php if ($commentType != $rsComment['commentType']) { ?>
-								<tr align="center">
-									<td colspan="6" class=" doubleBorder khmerBoldFont"><?php echo $rsComment['commentType']; ?></td>
-								</tr>
-							<?php }
-							$commentType = $rsComment['commentType'];
-							?>
-							<tr>
-								<td align="left" colspan="5" class="">&nbsp;<?php echo $rsComment['commentLabel']; ?></td>
-								<td align="center"><?php echo $rsComment['ratingLabel']; ?></td>
-							</tr>
-						<?php } ?>
-					</table>
-					<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-						<tr align="left">
-							<td colspan="6" class=" khmerBoldFont">&nbsp;យោបល់របស់មាតាបិតា PARENT'S COMMENT AND SUGGESTION:</td>
-						</tr>
-						<?php for ($i = 0; $i <= 3; $i++) { ?>
-							<tr class="borderBottom">
-								<td colspan="6" class="borderBottom">&nbsp;</td>
-							</tr>
-						<?php } ?>
-						<tr>
-							<td class="borderSolidBottom" width="30%">&nbsp;</td>
-							<td colspan="4">&nbsp;</td>
-							<td class="borderSolidBottom" width="30%">&nbsp;</td>
-						</tr>
-						<tr>
-							<td class="borderSolidBottom ">&nbsp;ហត្ថលេខាមាតាបិតា Parent's Signature</td>
-							<td colspan="4" class="borderSolidBottom">&nbsp;</td>
-							<td class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
-						</tr>
-
-						<tr height="100px;">
-							<td class="borderSolidBottom ">&nbsp;</td>
-							<td colspan="4">&nbsp;</td>
-							<td class="borderSolidBottom ">&nbsp;</td>
-						</tr>
-						<tr height="180px;">
-							<td valign="top" class="borderSolidBottom ">&nbsp;គ្រូបន្ទុកថ្នាក់ Homeroom Teacher</td>
-							<td colspan="4">&nbsp;</td>
-							<td valign="top" class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
-						</tr>
-						<tr>
-							<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
-							<td colspan="4">&nbsp;</td>
-							<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
-						</tr>
-					</table>
+					
 				<?php } ?>
 
 		<?php	}

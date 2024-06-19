@@ -1205,7 +1205,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$result = $db->getAllStudentIdByScoreResult($search, $scoreId, 1);
 		$this->view->studentScoreResult = $result;
-
+		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->month = $db->getAllMonth();
 	}

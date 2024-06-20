@@ -141,16 +141,6 @@ span.custom-switch-indicator{line-height: 20px;}
 			<script type="dojo/method" event="onSubmit">   
    				if(this.validate()) {
 					
-					student_type = dijit.byId('student_type').get('value');
-					if(student_type===2){
-						student_code = dijit.byId('student_code').get('value');
-						if(student_code==''){
-							alert("Please Input Student Code!");
-							dijit.byId("student_code").focus();
-							return false;
-    					}
-					}
-
     				year = dijit.byId('study_year').get('value');
    					if(year==-1){
          				dijit.byId("study_year").focus();
@@ -242,7 +232,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><strong><?php echo $tr->translate("STUDENT_NEW_ID");?></strong> :
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
-					                   		<input  type="text" style="color: red;" dojoType="dijit.form.TextBox" name="student_code" id="student_code" onkeyup="checkDuplicateRecord();" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
+					                   		<input  type="text" style="color: red;" dojoType="dijit.form.ValidationTextBox" name="student_code" id="student_code" onkeyup="checkDuplicateRecord();" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
 					                   </div>
 					            </div>
 					            <div class="form-group" <?php if ($settingShowGroup==0){?>style="display: none;"<?php }?>>
@@ -683,6 +673,8 @@ span.user-badge.bg-warning {
 <script type="text/javascript">
 	//dojo.require('dijit/registry');
 	dojo.require('dijit.form.NumberTextBox');
+	dojo.require("dijit.form.ValidationTextBox");
+	dojo.require('dijit.form.TextBox');
 	dojo.require("dojo.number");
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.Textarea");
@@ -840,17 +832,18 @@ function checkAutoControl(studentType){
 	$("#displayControl").css("display", "block");
 
 	dijit.byId('student_code').attr('value','');
-	
+
 	if(studentType==1){//existing
 		$("#displayControl").css("display", "none");
 	}
 	else if(studentType==2){//from
 		$(".displayLabel").html('<?php echo $tr->translate("AUTO_TO_STUDENT");?>');
 	}
-
 	if(<?php echo $settingNewStuID;?>==1 && studentType==2){
 		$(".stuCodeControl").css("display", "block");
+		dijit.byId('student_code').set("required",true); 
 	}else{
+		dijit.byId('student_code').set("required",false); 
 		$(".stuCodeControl").css("display", "none");
 	}
 }
@@ -1420,16 +1413,6 @@ function printSave(){
 	var receipt_type =<?php echo RECEIPT_TYPE; ?>;
 	if(dijit.byId('office_receipt').validate()){
 
-		student_type = dijit.byId('student_type').get('value');
-		if(student_type==2){
-			student_code = dijit.byId('student_code').get('value');
-			if(student_code==''){
-				alert("Please Input Student Code");
-				dijit.byId("student_code").focus();
-				return false;
-			}
-		}
-		
 		study_year = dijit.byId("study_year").get("value");
 		if(study_year==1){dijit.byId("study_year").focus();}
 		var identity = $('#identity').val();
@@ -1616,16 +1599,6 @@ function printSubmit(){
 }
 function submitAction(){
 	if(dijit.byId('office_receipt').validate()){	
-
-		student_type = dijit.byId('student_type').get('value');
-		if(student_type==2){
-			student_code = dijit.byId('student_code').get('value');
-			if(student_code==''){
-				alert("Please Input Student Code");
-				dijit.byId("student_code").focus();
-				return false;
-			}
-		}
 
 		year = dijit.byId('study_year').get('value');
 		if(year==-1){

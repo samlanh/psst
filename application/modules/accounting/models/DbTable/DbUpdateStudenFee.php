@@ -32,7 +32,7 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 					WHEN 0 THEN '".$tr->translate("ONE_PROGRAM_ONLY")."'
 					END is_multistudy,
 					t.generation,
-					(SELECT count(ds.stu_id) FROM rms_group_detail_student AS ds WHERE ds.feeId = t.id AND ds.itemType=1  LIMIT 1 ) AS amountStudent,
+					(SELECT count(ds.stu_id) FROM rms_group_detail_student AS ds WHERE ds.feeId = t.id AND ds.itemType=1 AND ds.is_current=1  LIMIT 1 ) AS amountStudent,
 					(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
 					t.create_date,
 					(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,

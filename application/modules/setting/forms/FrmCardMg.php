@@ -134,6 +134,62 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				 0=>$this->tr->translate("DACTIVE"));
 		$status_search->setMultiOptions($_status_opt);
 		$status_search->setValue($request->getParam("status_search"));
+
+
+		$name_left=new Zend_Dojo_Form_Element_NumberTextBox('name_left');
+		$name_left->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$name_top=new Zend_Dojo_Form_Element_NumberTextBox('name_top');
+		$name_top->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$studentcode_left = new Zend_Dojo_Form_Element_NumberTextBox('studentcode_left');
+		$studentcode_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>true,
+		));
+
+		$studentcode_top = new Zend_Dojo_Form_Element_NumberTextBox('studentcode_top');
+		$studentcode_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>true,
+		));
+
+		$group_left = new Zend_Dojo_Form_Element_NumberTextBox('group_left');
+		$group_left->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$group_top = new Zend_Dojo_Form_Element_NumberTextBox('group_top');
+		$group_top->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
+		$code_left = new Zend_Dojo_Form_Element_NumberTextBox('code_left');
+		$code_left->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$code_top = new Zend_Dojo_Form_Element_NumberTextBox('code_top');
+		$code_top->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
@@ -150,6 +206,17 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			$card_type->setValue($data['card_type']);
 			$valid->setValue($data['valid']);
 			$issue->setValue($data['issue']);
+			$name_left->setValue($data['issue']);
+
+			$name_left->setValue($data['stunameleft']);
+			$name_top->setValue($data['stunametop']);
+			$studentcode_left->setValue($data['studentcodeleft']);
+			$studentcode_top->setValue($data['studentcodetop']);
+			$group_left->setValue($data['groupleft']);
+			$group_top->setValue($data['grouptop']);
+			$code_left->setValue($data['qrcodeleft']);
+			$code_top->setValue($data['qrcodetop']);
+
 		}
 		
 		$this->addElements(array(
@@ -166,7 +233,15 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				$display_by,
 				$_adv_search,
 				$status_search,
-				$_id
+				$_id,
+				$name_left,
+				$name_top,
+				$studentcode_left,
+				$studentcode_top,
+				$group_left,
+				$group_top,
+				$code_left,
+				$code_top
 		));
 		
 		return $this;

@@ -44,7 +44,7 @@
 					 page-break-after:always;					
 				}
 				
-				.name-card-block ul.list-data li.sdudent-id.color-{
+				.name-card-block ul.list-data li.sdudent-id.color{
 					color:#<?php echo $color;?>;
 				}
 			<?php }?>
@@ -94,14 +94,13 @@
 				}
 				.name-card-block ul.list-data li.sdudent-id{
 					margin-top:10px;
-					/*color: #01731b;*/
 					color: #01049f;
 				}
 				.foot-left-block {
 					position: relative;
 					width: 100%;
 				}
-				.qrimages {
+				.qrimages{
 					position: absolute;
 					top: 257px;
 					left: -30px;
@@ -112,7 +111,7 @@
 					width: 29%;
 					text-align: center;
 				}
-					.validdate {
+				.validdate {
 				    position: relative;
 				}
 				.validdate .exp_date {
@@ -122,8 +121,9 @@
 				    right: 5px;
 				    font-size: 5px;
 				    font-weight: 700 !important;
-				}@media print{@page {size: landscape}}
-							</style>
+				}
+				@media print{@page {size: landscape}}
+			</style>
 		<?php 
 			
 				$i=0; $student= count($this->rs);
@@ -166,10 +166,7 @@
 						<div class="validdate">
 	                    		<span class="exp_date"><?php //echo date("F j, Y",strtotime($validDate))?></span>
 	                    	</div>
-					<?php  
-// 							$QrCodeValue = $row['studentToken'];
-// 							$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr","codeReader"=>$QrCodeValue),null,true);
-							
+					<?php  				
 							$QrCodeValue =URL_STUDENT_PROFILE.'/public/info/studentinfo/token/'.$row['studentToken'];
 							$url = $this->url(array("module"=>"default","controller"=>"index","action"=>"generate-qr"),null,true);
 							$url.='?codeReader='.$QrCodeValue;

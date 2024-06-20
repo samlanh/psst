@@ -159,7 +159,6 @@
 														</label>
 													</div>
 												</li>
-												
 											<?php } ?>
 										</ul>
 									</div>
@@ -175,10 +174,84 @@
 								<div class="col-md-12 col-sm-12 col-xs-12"> 
 									<div class="d-flex"> 
 										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-screenshot" aria-hidden="true"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("POSITION_SETTING");?></p>
+										</div>
+									</div>
+									<div class="form-group bg-primary">
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center " ><i class="glyphicon glyphicon-move" aria-hidden="true"></i><br><?php echo $tr->translate("NAME_POSITION");?> 
+									   </label>
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center" ><i class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></i><br><?php echo $tr->translate("LEFT");?>
+									   </label>
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center" ><i class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></i><br> <?php echo $tr->translate("TOP");?>
+									   </label>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-12 col-sm-12 col-xs-12 " >
+									   </label>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("NAME");?> 
+									   </label>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+											<?php echo $frm->getElement("name_left");?>
+									   </div>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+									 	  <?php echo $frm->getElement("name_top");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("STUDENT_ID");?> 
+									   </label>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+											<?php echo $frm->getElement("studentcode_left");?>
+									   </div>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+									 	  <?php echo $frm->getElement("studentcode_top");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("PHOTO");?> 
+									   </label>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+											<?php echo $frm->getElement("photo_left");?>
+									   </div>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+									 	  <?php echo $frm->getElement("photo_top");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("GROUP");?> 
+									   </label>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+											<?php echo $frm->getElement("group_left");?>
+									   </div>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+									 	  <?php echo $frm->getElement("group_top");?>
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("QR Code");?> 
+									   </label>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+											<?php echo $frm->getElement("code_left");?>
+									   </div>
+									   <div class="col-md-4 col-sm-4 col-xs-12">
+									 	  <?php echo $frm->getElement("code_top");?>
+									   </div>
+									</div>
+								</div>
+							</div>
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
 											<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
 										</div> 
 										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PHOTO");?></p>
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("FRONT_CARD");?></p>
 										</div> 
 									</div>	            	
 									<div class="form-group">
@@ -203,6 +276,8 @@
 	            <div class="col-md-3 col-sm-3 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body"> 
+							
+
 							<div class="row"> 
 								<div class="col-md-12 col-sm-12 col-xs-12"> 
 									<div class="d-flex"> 
@@ -255,11 +330,11 @@
 .image-box {
     text-align: center;
     width: 5.15cm;
-    height: 8.5cm;
+    height: 4.5cm;
 }
 .image-box img {
-    width: 5.15cm;
-    height: 8.5cm;
+    width: 98%;
+    height: 4.5cm;
 }
 
 .button_browse {

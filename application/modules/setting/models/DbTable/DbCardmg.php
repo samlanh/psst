@@ -68,7 +68,19 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 	    			'status'	=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'create_date'	=>date("Y-m-d H:i:s"),
-	    			'user_id'	=>$this->getUserId(),					
+	    			'user_id'	=>$this->getUserId(),	
+					
+					'stunameleft'	=>$_data['name_left'],
+					'stunametop'	=>$_data['name_top'],
+					'studentcodeleft'	=>$_data['studentcode_left'],
+					'studentcodetop'	=>$_data['studentcode_top'],
+					'photo_left'	=>$_data['photo_left'],
+					'photo_top'	=>$_data['photo_top'],
+					'groupleft'	=>$_data['group_left'],
+					'grouptop'	=>$_data['group_top'],
+					'qrcodeleft'	=>$_data['code_left'],
+					'qrcodetop'	=>$_data['code_top'],
+					
 	    			);
 	    	
 	    	$dept = "";
@@ -154,7 +166,18 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				'default'	=>$default,
 				'status'	=>1,
 				'modify_date'	=>date("Y-m-d H:i:s"),
-				'user_id'	=>$this->getUserId(),		
+				'user_id'	=>$this->getUserId(),	
+				
+				'stunameleft'	=>$_data['name_left'],
+				'stunametop'	=>$_data['name_top'],
+				'studentcodeleft'	=>$_data['studentcode_left'],
+				'studentcodetop'	=>$_data['studentcode_top'],
+				'photo_left'	=>$_data['photo_left'],
+				'photo_top'	=>$_data['photo_top'],
+				'groupleft'	=>$_data['group_left'],
+				'grouptop'	=>$_data['group_top'],
+				'qrcodeleft'	=>$_data['code_left'],
+				'qrcodetop'	=>$_data['code_top'],
 			);
 			
 			$dept = "";

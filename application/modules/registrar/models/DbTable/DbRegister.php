@@ -558,7 +558,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	    			(CASE WHEN s.stu_khname IS NULL OR s.stu_khname='' THEN s.stu_enname ELSE s.stu_khname END) AS stu_khname,
 	    			(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 	    			(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE rms_tuitionfee.id=sp.academic_year) AS YEAR,
-	 		        sp.penalty,sp.grand_total,sp.credit_memo,sp.paid_amount,sp.balance_due,
+	 		        sp.grand_total,sp.credit_memo,sp.paid_amount,sp.balance_due,
 					(SELECT $label FROM `rms_view` WHERE type=8 AND key_code=payment_method LIMIT 1) AS payment_method,
 					number,sp.create_date,
 	 		       (SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user,

@@ -142,7 +142,7 @@ class Global_ParttimelistController extends Zend_Controller_Action {
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
 			$data['degree'] = empty($data['degree']) ? 0 : $data['degree'];
 			$grade = $_dbgb->getAllPartTimeList($data);
-			array_unshift($grade, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_PARTTIME_SHIFT")));
+			array_unshift($grade, array ( 'id' =>'','name' =>$this->tr->translate("PART_TIME_LIST")));
 			print_r(Zend_Json::encode($grade));
 			exit();
 		}

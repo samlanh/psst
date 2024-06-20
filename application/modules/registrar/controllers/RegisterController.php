@@ -38,12 +38,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$rs_rows= $db->getAllStudentRegister($search);
 			$this->view->row=$rs_rows;
     		
-    		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADEMIC_YEAR","FINE",
-    				"TOTAL_PAYMENT","CREDIT_MEMO","PAID","BALANCE",
-    							"PAYMENT_METHOD","CHEQUE_NO","DATE_PAY","USER","STATUS","VOID_BY");
+    		// $list = new Application_Form_Frmtable();
+    		// $collumns = array("BRANCH","RECEIPT_NO","STUDENT_ID","STUDENT_NAME","SEX","ACADIMIC_YEAR_FEE",
+    		// 		"TOTAL_PAYMENT","CREDIT_MEMO","PAID","BALANCE",
+    		// 					"PAYMENT_METHOD","CHEQUE_NO","DATE_PAY","USER","STATUS","VOID_BY");
     		
-    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array());
+    		// $this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array());
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

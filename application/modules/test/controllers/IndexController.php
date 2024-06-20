@@ -32,10 +32,10 @@ class Test_IndexController extends Zend_Controller_Action
     		$list = new Application_Form_Frmtable();
 
     		$testCondiction = TEST_CONDICTION;
-    		$collumns = array("SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","PHONE","DOB","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
+    		$collumns = array("SERIAL","STUDENT_NAMEKHMER","SurName","Name","SEX","PHONE","DOB","GUARDIAN_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
     		
     		if ($testCondiction!==2){
-    			$collumns = array("BRANCH","SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","PARENT_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
+    			$collumns = array("BRANCH","SERIAL","STUDENT_NAMEKHMER","Last Name","First Name","SEX","NATIONALITY","PHONE","DOB","FROM_SCHOOL","GUARDIAN_NAME","CONTACT_NO","GENERAL_KNOWLEDGE_RESULT","FOREIGN_LANGUAGE_RESULT","BY_USER","PRINT_PROFILE");
     			
     		}
     		$link=array(
@@ -187,8 +187,10 @@ class Test_IndexController extends Zend_Controller_Action
     	$schoolOption = $db->getSchoolOptionbyStudentId($id);
 		if(!empty($schoolOption)){
 			if($type!=$schoolOption){
-				Application_Form_FrmMessage::message('YOU CAN NOT TEST THIS OPTION');
-				echo "<script>window.close();</script>";exit();
+				//Application_Form_FrmMessage::message('YOU CAN NOT TEST THIS OPTION');
+				Application_Form_FrmMessage::Sucessfull("YOU CAN NOT TEST THIS OPTION",self::REDIRECT_URL);
+    		exit();
+				//echo "<script>window.close();</script>";exit();
 			}
 		}
     	

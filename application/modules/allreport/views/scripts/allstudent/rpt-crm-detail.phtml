@@ -75,10 +75,10 @@
 											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("STUDENT_NAMEKHMER");?></span>&nbsp;: <?php echo $this->rs['kh_name'];?></td>
 										</tr>
 										<tr>
-											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("First Name");?></span>&nbsp;: <?php echo $this->rs['first_name'];?></td>
+											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("Last Name");?></span>&nbsp;: <?php echo $this->rs['last_name'];?></td>
 										</tr>
 										<tr>
-											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("Last Name");?></span>&nbsp;: <?php echo $this->rs['last_name'];?></td>
+											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("First Name");?></span>&nbsp;: <?php echo $this->rs['first_name'];?></td>
 										</tr>
 										<tr>
 											<td>&nbsp;<span class="label-title"><?php echo $tr->translate("GENDER");?></span>&nbsp;: <?php echo $this->rs['sexTitle'];?></td>
@@ -134,8 +134,8 @@
 										<tr class="head-title">
 											<td><?php echo $tr->translate("N_O");?></td>
 											<td><?php echo $tr->translate("STUDENT_NAMEKHMER");?></td>
-											<td><?php echo $tr->translate("First Name");?></td>
 											<td><?php echo $tr->translate("Last Name");?></td>
+											<td><?php echo $tr->translate("First Name");?></td>
 											<td><?php echo $tr->translate("GENDER");?></td>
 											<td><?php echo $tr->translate("AGE")." (".$tr->translate("YEAR").")";?></td>
 											<td><?php echo $tr->translate("DEGREE");?></td>
@@ -145,8 +145,8 @@
 										<tr class="row-value">
 											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>" align="center"><?php echo $key+1;?>&nbsp;</td>
 											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['stu_khname'];?>&nbsp;</td>
-											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['stu_enname'];?>&nbsp;</td>
 											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['last_name'];?>&nbsp;</td>
+											<td class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['stu_enname'];?>&nbsp;</td>
 											<td align="center" class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['sextitle'];?>&nbsp;</td>
 											<td align="center" class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['age'];?>&nbsp;</td>
 											<td align="center" class="<?php if (count($this->rowdetail)==$key+1){ echo "borderbottom-none";}?>">&nbsp;<?php echo $rs['degree_title'];?>&nbsp;</td>

@@ -122,7 +122,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    			<td style="text-align: center;vertical-align: middle; ">'.($key+1).'</td>
 	    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
 	    			<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
-	    			<input type="text" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
+	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
     			</td>

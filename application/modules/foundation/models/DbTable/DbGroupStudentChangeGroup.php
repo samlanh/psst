@@ -408,24 +408,26 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 	function moveCurrentScoreToOtherGroup($FromGroupId,$toGroupId,$studentId){
 		$db = $this->getAdapter();
 		$param = array(
-				'groupId'=>$FromGroupId
+				'groupId'=>$FromGroupId//from group
 				);
-		$rsScores = $this->getScorebyGroup($param);
+		$rsOldScores = $this->getScorebyGroup($param);
 		
-		if(!empty($rsScores)){
-			foreach($rsScores as $rsScore){
+		if(!empty($rsOldScores)){
+			foreach($rsOldScores as $rsScoreFrom){
 				$arr = array(
 						'fetchRow'=>1,
 						'groupId'=>$toGroupId,
-						'exam_type'=>$rsScore['exam_type'],
-						'for_month'=>$rsScore['for_month'],
-						'for_semester'=>$rsScore['for_semester'],
+						'exam_type'=>$rsScoreFrom['exam_type'],
+						'for_month'=>$rsScoreFrom['for_month'],
+						'for_semester'=>$rsScoreFrom['for_semester'],
 					);	
 				$rsScoreToGroup = $this->getScorebyGroup($arr);
 				
 				
 				if(!empty($rsScoreToGroup)){
+					
 					$scoreId = $rsScoreToGroup['id'];
+
 					$sqlColumn = '
 							gradingTotalId,
 							group_id,
@@ -442,7 +444,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					INSERT INTO rms_score_detail (score_id,$sqlColumn)
 						SELECT '".$scoreId."' AS score_id ,".$sqlColumn."
 					FROM `rms_score_detail`
-						WHERE score_id=".$rsScore['id']." AND student_id=".$studentId;
+						WHERE score_id=".$rsScoreFrom['id']." AND student_id=".$studentId;
 					$db->query($sql);
 					
 					//score monthly here 
@@ -455,13 +457,22 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					totalMaxScore,
 					remark,
 					isRead,
-					readDate ';
+					readDate,
+					totalKhAvg,
+					totalEnAvg,
+					totalChAvg,
+					OveralAvgKh,
+					OveralAvgEng,
+					OveralAvgCh,
+					monthlySemesterAvg,
+					overallAssessmentSemester,
+					type';
 					
 					$sql="
 						INSERT INTO rms_score_monthly (score_id,$sqlColumnMonthly)
 							SELECT '".$scoreId."' AS score_id ,".$sqlColumnMonthly."
 						FROM `rms_score_monthly`
-							WHERE score_id=".$rsScore['id']." AND student_id=".$studentId;
+							WHERE score_id=".$rsScoreFrom['id']." AND student_id=".$studentId;
 					$db->query($sql);
 					
 				}

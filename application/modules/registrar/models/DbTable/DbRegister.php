@@ -71,7 +71,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$arr = array(
     				'customer_type' =>1,
     				'stu_code'=>$stu_code,
-    				'create_date'=>date("Y-m-d H:i:s")
+    				'modify_date'=>date("Y-m-d H:i:s")
     		);
     		$this->_name='rms_student';
     		$where="stu_id = ".$data['old_stu'];
@@ -165,7 +165,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     							'cutstock_id'=>$data['cutStockId'],
     							'student_paymentdetail_id'=>$sale_detailid,
     							'product_id'=>$row['pro_id'],
-    							'due_amount'=>0,
+    							'due_amount'=>$data['qty_'.$i],
     							'qty_receive'=>$row['set_qty'] * $data['qty_'.$i],
     							'remain'=>0,
     							'remide_date'=>'',
@@ -223,7 +223,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     					'cutstock_id'=>$data['cutStockId'],
     					'student_paymentdetail_id'=>$sale_detailid,
     					'product_id'=>$data['item_id'.$i],
-    					'due_amount'=>0,
+    					'due_amount'=>$data['qty_'.$i],
     					'qty_receive'=>$data['qty_'.$i],
     					'remain'=>0,
     					'remide_date'=>'',
@@ -345,8 +345,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 					$dbpush = new  Application_Model_DbTable_DbGlobal();
 // 					$dbpush->getTokenUser(null,$id, 1);
 				
-				$key = new Application_Model_DbTable_DbKeycode();
-				$keydata=$key->getKeyCodeMiniInv(TRUE);
+				// $key = new Application_Model_DbTable_DbKeycode();
+				// $keydata=$key->getKeyCodeMiniInv(TRUE);
 				$condictionSale = Setting_Model_DbTable_DbGeneral::geValueByKeyName('sale_cut_stock');
 // 				$condictionSale = empty($stockSetting)?0:$stockSetting;//0=Transfer Cut Stock Direct,1=Transfer  Cut Stock with Receive
 				
@@ -437,6 +437,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 					
 					if(!empty($rs_item) AND !empty($data['autoNextPay'.$i])){
+						//echo $data['autoNextPay' . $i];
+						//exit();
 							$_arr= array(
 								'branch_id'		=> $data['branch_id'],
 								'studentId'		=> $data['old_stu'],

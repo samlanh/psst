@@ -4207,6 +4207,7 @@ function getAllgroupStudyNotPass($action=null){
 	   					'status'		=> 1,
 	   					'note'			=> $data['remark'],
 	   					'create_date'	=> date("Y-m-d H:i:s"),
+						'modify_date'	=> date("Y-m-d H:i:s"),
 	   					'user_id'		=> $this->getUserId(),
 	   					'entryFrom'		=> $data['entryFrom'],//1 crm,2 foundation,3change group,4 payment,5 Cashier Init
 	   			);

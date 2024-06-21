@@ -201,9 +201,9 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     		$sql="SELECT
 			    		tfd.id,
 			    		tfd.tuition_fee AS price,
-			    		(SELECT is_onepayment FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as onepayment,
-			    		(SELECT is_productseat FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as is_set,
-			    		(SELECT items_type FROM `rms_itemsdetail` WHERE id=$item_id LIMIT 1) as items_type,
+			    		(SELECT is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as onepayment,
+			    		(SELECT is_productseat FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as is_set,
+			    		(SELECT items_type FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as items_type,
 			    		(SELECT spd.validate FROM rms_student_payment as sp,rms_student_paymentdetail as spd
     						WHERE sp.student_id =".$data['studentid']."
 			    				AND spd.itemdetail_id = $item_id

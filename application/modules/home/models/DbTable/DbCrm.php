@@ -152,10 +152,12 @@
 							'crm_grade'=> $_data['grade_'.$i],
 							'crm_partime_id'=> $_data['part_time_list_'.$i],
 							'age'=> $_data['age_'.$i],
-							'user_id'	  => $this->getUserId(),
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
-							'studentToken'=>$stuToken
+							'studentToken'=>$stuToken,
+							'create_date'		=>date("Y-m-d H:i:s"),
+							'modify_date'		=>date("Y-m-d H:i:s"),
+							'user_id'	  => $this->getUserId(),
 							);
 					$this->_name="rms_student";
 					$student_i = $this->insert($array);
@@ -306,6 +308,7 @@
 							'user_id'	  => $this->getUserId(),
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
+							'modify_date'=>date("Y-m-d H:i:s")
 							);
 						$this->_name="rms_student";
 						$where = " stu_id =".$_data['detailid'.$i];
@@ -320,7 +323,7 @@
 								'school_option'		=>$school_option,
 								'degree'			=>$_data['degree_'.$i],
 								'grade'				=>$_data['grade_'.$i],
-								'session'		=>$_data['part_time_list_'.$i],
+								'session'			=>$_data['part_time_list_'.$i],
 								'is_current'		=>1,
 								'is_setgroup'		=>0,
 								'is_maingrade'		=>1,
@@ -330,9 +333,9 @@
 								'entryFrom'			=>1,
 						);
 						$this->_name="rms_group_detail_student";
-						$where = " stu_id =".$_data['detailid'.$i];
+						$where ="itemType=1 AND stu_id =".$_data['detailid'.$i];
 						$this->update($_arr, $where);
-						
+
 					}else{
 						
 						$stuToken = $_dbgb->getStudentToken();
@@ -353,6 +356,10 @@
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
 							'studentToken'=>$stuToken,
+							'crm_status'=> $_data['crm_status'],
+							'modify_date' => date("Y-m-d H:i:s"),
+							'create_date'		=>date("Y-m-d H:i:s"),
+							
 						);
 						$this->_name="rms_student";
 						$student_i = $this->insert($array);

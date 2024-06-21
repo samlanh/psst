@@ -1044,7 +1044,8 @@ function addRow(serviceId,dataLabel,dataRow=null) {
 				checked='checked';
 				disabled='';
 				if(dataRow!=null){
-					if((student_type=='3'|| student_type=='2') && dataRow.is_onepayment=='1'){
+					
+					if((student_type=='3'|| student_type=='2') && dataRow.is_onepayment=='1'){//isOnepayment
 						checked='';
 						disabled='disabled';
 					}
@@ -1278,20 +1279,20 @@ function getservicefee(key){
  			},
  			handleAs:"json",
  			load: function(data){
-
+				
  				resultFee = data.resultFee;
-	 			dijit.byId("remark"+key).attr("value",'');
+				dijit.byId("remark"+key).attr("value",'');
 	 			dijit.byId("price_"+key).attr("value",resultFee.price);
 	 			dijit.byId("service_type_"+key).attr("value",resultFee.items_type);
 	 			
 	 			calculateTotal(key);
  				if(resultFee.validate!=null){
- 					dijit.byId("date_start_"+key).attr("value",resultFee.validate);
+					dijit.byId("date_start_"+key).attr("value",resultFee.validate);
  	 	 		}else{
  	 	 			dijit.byId('date_start_'+key).attr('value','<?php echo date('Y-m-d');?>');
  	 	 	 	}
  				
-	 			if(data.onepayment==1){
+	 			if(resultFee.onepayment==1){
 	 				$("#autoNextPay"+key).prop( "checked",false);
 	 				$("#autoNextPay"+key).prop( "disabled",true);
 	 				dijit.byId('date_start_'+key).reset();

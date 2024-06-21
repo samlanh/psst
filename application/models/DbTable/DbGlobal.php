@@ -3880,7 +3880,7 @@ function getAllgroupStudyNotPass($action=null){
   				'discountType'=>$item['discountType'],
   				'discountValue'=>$item['discountValue'],
   				'itemDetaillabel'=>$item['itemDetaillabel'],
-  				'isOnepayment'=>$item['is_onepayment'],
+  				'is_onepayment'=>$item['is_onepayment'],
 	  		);
 	  		 
 	  		$param = array(

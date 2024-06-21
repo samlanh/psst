@@ -117,7 +117,6 @@
 					url='<?php echo $urledit;?>';
 					actionType=2;
 				}
-			//	gotoAction();
 				if(actionType==1){
 					addTab(newPageTitle,url+row+'?inFrame=true');
 				}else{
@@ -128,8 +127,6 @@
 				<?php if($userinfo['level']==1){ ?>
 				"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop  "},
 				"enterresultkh": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_KH");?>", icon: "fa-laptop  "},
-				
-				//"enterresultuniver": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
 				<?php }else{ 
 					if(!empty($userinfo['schoolOption'])){
 						$schoolOption = explode(",",$userinfo['schoolOption']);
@@ -140,7 +137,6 @@
 							<?php }else if($scp==2){ ?>
 							"enterresult": {name: "<?php echo $tr->translate("CREATE_TEST_EXAM_EN");?>", icon: "fa-laptop"},
 							<?php }else if($scp==3){ ?>
-							//"enterresultuniver": {name: "<?php //echo $tr->translate("CREATE_TEST_EXAM_UNIV");?>", icon: "fa-laptop  "},
 							<?php }?>
 						
 						<?php }?>

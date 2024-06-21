@@ -87,7 +87,7 @@ table.tb-footer tr.style-head {
 					<td width="20%" align="right">
 					</td>
 					<td width="60%" align="center">
-						<span style="color:#000; font-size: 14px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("CRM_REPORT");?></span><br/>
+						<span style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("CRM_REPORT");?></span><br/>
 						<span style="color:#000; font-size: 12px;font-family:Times New Roman,'Khmer OS Battambang';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </span>
 					</td>
 					<td width="20%" align="right"><label id='lbl_branch'></label></td>
@@ -97,7 +97,7 @@ table.tb-footer tr.style-head {
 				</tr>
 			<style>
 				.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 16px;font-size: 10px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.hideblog{display: none;}
@@ -171,9 +171,10 @@ table.tb-footer tr.style-head {
 					}
 
 					.know_byitem{display: inline-table;width:33%;}
-					.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:12px;}
+					.know_by,label{font-family:'Times New Roman','Khmer OS Battambang';font-size:11px;}
 					.know_by li{line-height: 15px;}
 					.oddRecord{background:#ecf1ff;}
+					.normal_wrap{white-space:normal;width:150px;}
 					@media print {
 							@page {
 								page:A4;
@@ -194,7 +195,7 @@ table.tb-footer tr.style-head {
 										<td scope="col" rowspan="2"><?php echo $tr->translate("REASON");?></td>
 										<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("KNOW_BY");?>&nbsp;</td>
 										<td	scope="col" rowspan="2"><?php echo $tr->translate("Amount Contacted");?></td>
-										<td scope="col" colspan="3"><?php echo $tr->translate("STUDENT_INFO");?></td>
+										<td scope="col" colspan="2"><?php echo $tr->translate("STUDENT_INFO");?></td>
 										<td scope="col" rowspan="2"><?php echo $tr->translate("TYPE");?></td>
 										<td scope="col" rowspan="2"><?php echo $tr->translate("CREATE_DATE");?></td>
 										<td scope="col" rowspan="2"><?php echo $tr->translate("BY_USER");?></td>
@@ -207,7 +208,6 @@ table.tb-footer tr.style-head {
 										<td scope="col"><?php echo $tr->translate("PHONE");?></td>
 										<td scope="col"><?php echo $tr->translate("CURRENT_ADDRESS");?></td>
 										<td scope="col">&nbsp;<?php echo $tr->translate("STUDENT_NAME"); ?>&nbsp;</td>
-										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
 										<td scope="col">&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
 									</tr>
 								</thead>
@@ -218,11 +218,11 @@ table.tb-footer tr.style-head {
 								if(!empty($this->row)){ foreach ($this->row AS $key=> $row) { $i++;?>
 								<tr class="style hover context-menu-one <?php if($key%2==0){echo'oddRecord';}?>" align="center" oncontextmenu="setrowdata(<?php echo $row['id'];?>);return false;" >
 									<td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $i;?></td>
-									<td data-label="<?php echo $tr->translate("NAME");?>"  align="center" style="padding: 1px"><?php echo $row['kh_name'];?><div><?php echo $row['last_name']." ".$row['first_name'];?></div></td>
+									<td class="normal_wrap" data-label="<?php echo $tr->translate("NAME");?>"  align="left" style="padding: 1px;"><?php echo $row['kh_name'];?><div><?php echo $row['last_name']." ".$row['first_name'];?></div></td>
 									<td data-label="<?php echo $tr->translate("GENDER");?>"  align="center">&nbsp;<?php echo $row['sexTitle']; ?>&nbsp;</td>
-									<td data-label="<?php echo $tr->translate("PHONE");?>"  align="center" ><?php echo $row['tel'];?></td>
-									<td class="small" data-label="<?php echo $tr->translate("CURRENT_ADDRESS");?>"  align="center" ><small><?php echo $row['current_address'];?></small></td>
-									<td data-label="<?php echo $tr->translate("ASK_FOR");?>"  align="left">&nbsp;<?php echo $row['ask_for_title'];?>&nbsp;</td>
+									<td class="normal_wrap" data-label="<?php echo $tr->translate("PHONE");?>"  align="left" ><?php echo $row['tel'];?></td>
+									<td class="normal_wrap small" data-label="<?php echo $tr->translate("CURRENT_ADDRESS");?>"  align="left" ><small><?php echo $row['current_address'];?></small></td>
+									<td class="small" data-label="<?php echo $tr->translate("ASK_FOR");?>"  align="left">&nbsp;<?php echo $row['ask_for_title'];?>&nbsp;</td>
 									<?php 
 										$total_student = $total_student+1;
 										$know_by[$row['know_by']]=@$know_by[$row['know_by']]+1;
@@ -249,9 +249,8 @@ table.tb-footer tr.style-head {
 									<td data-label="<?php echo $tr->translate("REASON");?>"  align="left" ><small><?php echo $row['reason'];?></small></td>
 									<td data-label="<?php echo $tr->translate("KNOW_BY");?>" ><?php echo $row['know_by_title'];?></td>
 									<td data-label="<?php echo $tr->translate("Amount Contacted");?>"  align="center">&nbsp;<?php echo $row['amountContact'];?> <?php echo $tr->translate("Times");?></td>
-									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"  align="center" style="padding: 2px 5px;"><?php echo $row['stuNameKh'];?><div><?php echo $row['stuNameEn'];?></div></td>	
-									<td data-label="<?php echo $tr->translate("DEGREE");?>"  align="left">&nbsp;<?php echo $row['degree'];?>&nbsp;</td>	
-									<td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>	
+									<td class="normal_wrap" data-label="<?php echo $tr->translate("STUDENT_NAME");?>"  align="left" style="padding: 0px 5px;"><?php echo $row['stuNameKh'];?><div><?php echo $row['stuNameEn'];?></div></td>	
+									<td class="normal_wrap" data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo empty($row['grade'])?$row['degree']:$row['grade'];?>&nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("TYPE");?>" >&nbsp;<?php echo $row['customer_type'];?>&nbsp;</td>	
 									<td data-label="<?php echo $tr->translate("CREATE_DATE");?>" >&nbsp;
 									<?php

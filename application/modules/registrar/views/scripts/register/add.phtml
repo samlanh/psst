@@ -182,7 +182,7 @@ span.custom-switch-indicator{line-height: 20px;}
 									</div>
 								</div>
 				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<select class="fullside" name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();getAllAcademicBy();">
 							    			<?php if(!empty($this->rsbranch))foreach($this->rsbranch as $rs){?>
@@ -192,7 +192,7 @@ span.custom-switch-indicator{line-height: 20px;}
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span> :
+				                   <label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("CUSTOMER_TYPE");?> <span class="required">*</span>
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<select class="fullside" name="customer_type" id="customer_type" dojoType="dijit.form.FilteringSelect">
@@ -202,7 +202,7 @@ span.custom-switch-indicator{line-height: 20px;}
 				                   </div>
 				                </div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span> :
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span>
 				                   </label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 				                   		<select type="text" name="student_type" id="student_type" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();" >
@@ -223,20 +223,20 @@ span.custom-switch-indicator{line-height: 20px;}
 									</div>
 								</div>
 				                <div class="form-group">
-				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" id="lblNameControl" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span>:</label>
+				                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" id="lblNameControl" ><?php echo $tr->translate("STUDENT_NAME");?> <span class="required">*</span></label>
 				                   <div class="col-md-7 col-sm-7 col-xs-12">
 										<input id="old_stu" />
 				                   </div>
 				                </div>
 				                <div class="form-group stuCodeControl" <?php if ($settingNewStuID==0){?>style="display: none;"<?php }?>>
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><strong><?php echo $tr->translate("STUDENT_NEW_ID");?></strong> :
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><strong><?php echo $tr->translate("STUDENT_NEW_ID");?></strong> <span class="required">*</span>
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
-					                   		<input  type="text" style="color: red;" dojoType="dijit.form.ValidationTextBox" name="student_code" id="student_code" onkeyup="checkDuplicateRecord();" class="fullside" placeholder="<?php echo $tr->translate("អត្តលេខសិស្សថ្មី");?>" />
+					                   		<input  type="text" style="color: red;" dojoType="dijit.form.ValidationTextBox" name="student_code" id="student_code" onkeyup="checkDuplicateRecord();" class="fullside" placeholder="<?php echo $tr->translate("NEW_STUDENT_ID");?>" />
 					                   </div>
 					            </div>
 					            <div class="form-group" <?php if ($settingShowGroup==0){?>style="display: none;"<?php }?>>
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?>  :
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GROUP");?>
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
 					                   		<input id="group_id" />
@@ -245,7 +245,7 @@ span.custom-switch-indicator{line-height: 20px;}
 					                   </div>
 					            </div>
 				                <div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADIMIC_YEAR_FEE");?> :
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADIMIC_YEAR_FEE");?>
 				                   		<input class="fullside" dojoType="dijit.form.TextBox"  id="grade_fromgrouop" name="grade_fromgrouop" value="" type="hidden"  >
 										<input type="hidden" name="group_name" id="group_name" class="fullside" dojoType="dijit.form.TextBox"/>
 				                   </label>
@@ -266,7 +266,7 @@ span.custom-switch-indicator{line-height: 20px;}
 										</div>
 									</div>
 					              <div class="form-group">
-					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>  :
+					                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("RECEIPT_NO");?>
 					                   </label>
 					                   <div class="col-md-7 col-sm-7 col-xs-12">
 					                   		<input readonly type="text" style="color: red;"  dojoType="dijit.form.TextBox" name="receipt_no" id="receipt_no" class="fullside" />

@@ -101,7 +101,7 @@
 		<style>
 			.style {
 				line-height: 20px;
-				font-size: 11px !important;
+				font-size: 10px !important;
 			}
 			table.content-data {
 				border-collapse: collapse;
@@ -119,7 +119,7 @@
 			}
 			table.content-data tr.titlerow,table.content-data thead tr.style {
 				line-height: 20px;
-				font-size: 11px !important;
+				font-size: 10px !important;
 				padding: 1px 0px;
 				white-space: nowrap;
 				height: 24px;
@@ -135,11 +135,14 @@
 				font-size: 8px;
 				line-height: 10px;
 				white-space: normal;
-				width: 100px;
+				max-width: 100px;
 				display: block;
 			}
 			table tr td{
 				font-family: 'Times New Roman', 'Khmer OS Battambang';
+			}
+			.row_data{
+				white-space: normal; max-width: 200px; line-height: 12px;
 			}
 			
 			@media print {
@@ -149,7 +152,7 @@
 				}
 				@page {
 					page: A4;
-					margin: 0.8cm;
+					margin: 0.6cm 0.5cm;
 				}
 				.bgRow {
 					background: #d6e2ff !important;
@@ -165,12 +168,12 @@
 				<td width="15%" align="center"></td>
 				<td align="center" width="70%">
 					<div
-						style="color: #000; font-size: 14px; font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></div>
+						style="color: #000; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_PAYMENT_RECEIPT"); ?></div>
 						<?php if(!empty($this->search["start_date"])){?>
-						<span style="color: #000; font-size: 14px; font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height: 22px;"><?php echo date("d-m-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-m-Y",strtotime($this->search["end_date"]));?></span><?php }?>
+						<span style="color: #000; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:18px;"><?php echo date("d-m-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-m-Y",strtotime($this->search["end_date"]));?></span><?php }?>
 				</td>
 				<td width="15%">
-					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
+					<label style="font-size:8px;" class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
 				</td>
 			</tr>
 			<tr>
@@ -206,7 +209,7 @@
 								<td scope="col"><?php echo $tr->translate("BALANCE");?></td>
 								<td scope="col"><?php echo $tr->translate("PAYMENT_METHOD");?></td>
 								<td scope="col"><?php echo $tr->translate("PAID_DATE");?></td>
-								<td style="width: 150px !important;" scope="col"><?php echo $tr->translate("NOTE");?></td>
+								<td scope="col"><?php echo $tr->translate("NOTE");?></td>
 								<td scope="col"><?php echo $tr->translate("USER");?></td>
 								<td scope="col"><?php echo $tr->translate("STATUS");?></td>
 								<td scope="col"><?php echo $tr->translate("VOID_BY");?></td>
@@ -225,12 +228,11 @@
 							   	 ?>
 							    </td>
 							<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"
-								style="white-space: nowrap; text-align: left; line-height: 15px;">
+								class="row_data">
 								<div><?php echo $rs['stu_khname']; ?></div>
 							   	 <?php echo $rs['last_name'].$rs['stu_enname'];?>
 							    </td>
-							<td
-								style="white-space: nowrap; max-width: 200px; line-height: 15px;"
+							<td class="row_data"
 								data-label="<?php echo $tr->translate("STUDY_INFO");?>">
 								<div>
 								<?php 
@@ -403,7 +405,7 @@
 						// $final_total_income = $net_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
 						$final_total_income = $paid_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
 					?>								
-						<table width="50%" style="margin:0 auto; white-space: nowrap; font-size: 13px;">
+						<table width="50%" style="margin:0 auto; white-space: nowrap; font-size: 11px;line-height:18px;border-spacing:0px;">
 							
 							<!-- <tr>
 								<td><?php echo $tr->translate("NET_AMOUNT");?></td>
@@ -416,7 +418,7 @@
 
 							<tr>
 								<td style="font-weight: bold;"><?php echo $tr->translate("PAID_AMOUNT");?></td>
-								<td style="color: blue; font-weight: bold; font-size: 14px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
+								<td style="color: blue; font-weight: bold; font-size: 12px;"><?php echo '$ '.number_format($paid_amount,2);?></td>
 
 								<td><?php echo $tr->translate("BALANCE");?></td>
 								<td ><?php echo '$ '.number_format($balance,2);?></td>
@@ -438,29 +440,29 @@
 							</tr>
 							<tr>
 								<td style="font-weight: bold;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
-								<td style="border-bottom: 5px double #000; color: blue; font-weight: bold; font-size: 14px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
+								<td style="border-bottom: 5px double #000; color: blue; font-weight: bold; font-size: 12px;"><?php echo '$ '.number_format($final_total_income,2);?></td>
 								<td style="font-weight: bold;"></td>
-								<td style="color: blue; font-weight: bold; font-size: 14px;"></td>
+								<td style="color: blue; font-weight: bold; font-size: 10px;"></td>
 							</tr>
 							<tr>
 								<td colspan="4"><br /></td>
 							</tr>
 							<tr>
 								<td colspan="4"
-									style="border-bottom: 1px solid #000; margin-top: 10px;"></td>
+									style="border-bottom: 1px solid #000; margin-top: 5px;"></td>
 							</tr>
 							<tr>
 								<td colspan="4">
 									<div
-										style="width: 33%; float: left; text-align: center; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
+										style="width: 33%; float: left; text-align: center; font-size: 11px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
 							  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp-$credit_memo_case,2);?>
 							  			</div>
 									<div
-										style="width: 33%; float: left; text-align: center; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
+										style="width: 33%; float: left; text-align: center; font-size: 11px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
 							  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp-$credit_memo_bank,2);?>
 							  			</div>
 									<div
-										style="width: 33%; float: left; text-align: center; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
+										style="width: 33%; float: left; text-align: center; font-size: 11px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
 							  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp-$credit_memo_chegue,2);?>
 							  			</div>
 									<div style="clear: both;"></div>

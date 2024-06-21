@@ -69,7 +69,7 @@
 				<td width="20%" align="center">
 				</td>
 				<td width="60%" align="center">
-					<div style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
+					<div style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_INCOMEBYCATE')?></div><br />
 					<strong style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search["start_date"])){?>For <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
 				</td>
 				<td width="20%" align="center"><label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label></td>
@@ -160,7 +160,7 @@
 							<?php }?>
 							<tr>
 								<td colspan="3" style="text-align: right;font-weight:bold;"><?php echo $tr->translate('TOTLE_AMOUNT');?></td>
-								<td><strong style="border-bottom: 5px solid #000;font-size:17px;">$&nbsp;<?php echo number_format(($grand_total+$total_penalty-$credit_memo)+$total_otherincome,2);?></strong></td>
+								<td><strong style="border-bottom: 5px solid #000;font-size:14px;">$&nbsp;<?php echo number_format(($grand_total+$total_penalty-$credit_memo)+$total_otherincome,2);?></strong></td>
 							</tr>
 					</table>
 				</td>	

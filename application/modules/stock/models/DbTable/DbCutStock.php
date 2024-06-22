@@ -350,12 +350,18 @@ if(!empty($type)){
     function getCutStockBYId($id){
     	$db = $this->getAdapter();
     	$sql="SELECT pp.*,
-			(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_khname,
-			(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_enname,
-			(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS last_name,
-			(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS stu_code,
+			s.stu_khname AS stu_khname,
+			s.stu_enname AS stu_enname,
+			s.last_name AS last_name,
+			s.stu_code AS stu_code,
+			s.tel,
+			(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) as gender,
 			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name
-    	FROM rms_cutstock AS pp WHERE pp.id = $id ";
+    	FROM 
+			rms_cutstock AS pp,
+			rms_student s  
+		
+		WHERE s.stu_id = pp.student_id AND pp.id = $id ";
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission('pp.branch_id');
     	$sql.=" LIMIT 1";

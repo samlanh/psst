@@ -7,9 +7,7 @@
 <style>
 .hover:hover{ background:#ccc;}
 table.content-data tr.style-head,
-table.tb-footer tr.style-head {
-   font-weight: bold !important;
-}
+
 </style>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
@@ -60,140 +58,112 @@ table.tb-footer tr.style-head {
 		<div id="divPrint">
 			<style>
 					.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 20px;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
-					.hideblog{display: none;}
-					.hiddenblog{display: block !important;}
-					.style1:hover{ background: #ccc; }
-					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-					table { page-break-inside:auto }
+					
 					tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
 					  display: table-header-group;
-					  page-break-inside:avoid; page-break-after:auto;
-					  margin-top: 100px;
+					  page-break-inside:avoid; 
+					  page-break-after:auto;
 					}
-					.hide{visibility: hidden;}
-					@media print {
-					 div.divFooter {
-					    position: fixed;
-					    top: 0;
-					  	width: 100%;
-					  	height: 100px;
-					  	bottom:0px;
-						margin:0;
-					  }
-						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
-						
-					}
-					.center{text-align: center !important;}
 					table.content-data{
 						border-collapse:collapse;
 						border:1px solid #000; 
-						font-size:8px;
+						font-size:10px;
 						width:100%;
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
 					table.content-data  tr.style {
-					 
 					   white-space: nowrap;
-						
-					}
-					table.tb-footer{
-						border-collapse:collapse;
-						border:1px solid #000; 
-						font-size:11px;
-						font-family: 'Times New Roman','Khmer OS Battambang';
-					}
-					table.tb-footer tr{
-					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
-					}
-					table tr td{
-						padding:0 2px;
-					}
-					tr.voidclass {
-						background: #fff7f7;
-					}
-					td.centerText{
-						text-align: center;
-					}
-					.redBold {
-						font-weight: 600;
-						color: #f80000;
 					}
 					table.content-data tr td{
-						padding: 2px;
-					}	
+						padding: 1px;
+					}
+					
+					.small{white-space:normal;width:200px;}
+					.wrapcontent{width:350px;white-space: normal;}	
+					td.hideborder{border-left: 1px solid #fff;border-bottom: 1px solid #fff;}
 					@media print{
 						@page{
-							margin:0.3cm 0.7cm 0cm 0.7cm;
+							margin:0.5cm;
 							page-break-before: avoid;
 							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
 							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
 							-ms-transform: scale(0.5);   /* IE 9 */
 							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
 							transform: scale(0.5);
-							size:A4 landscape;
+							size:A4 Portrait;
 						}
 					}
 			</style>
-			<table style="background:#fff;width:90%; margin: 0 auto;white-space: nowrap;width: 100%;font-family:'Times New Roman','Khmer OS Battambang'">
-				<tr>
-					<td colspan="3"><?php echo $this->rsheader;?></td>
-				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="15%" align="right">&nbsp;</td>
-					<td align="center"  width="70%">
-						<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate("RPT_BYPRODUCT_SOLD"); ?></span><br />
-						<span style="font-size: 12px;"><?php if(!empty($this->search['start_date'])){?>&nbsp;<?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate("TO"); ?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
-					</td>
-					<td width="15%" align="right">&nbsp;</td>
-				</tr>
+			<table style="background:#fff;margin: 0 auto;white-space: nowrap;width: 100%;font-family:'Times New Roman','Khmer OS Battambang'">
+				
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table class="content-data" cellpadding="5"​  border="1" >
+						<table width="100%">
+						<tr>
+							<td colspan="3"><?php echo $this->rsheader;?></td>
+						</tr>
+						<tr>
+							<td width="15%" align="right">&nbsp;</td>
+							<td align="center"  width="70%">
+								<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate("RPT_BYPRODUCT_SOLD"); ?></span><br />
+								<span style="font-size: 12px;"><?php if(!empty($this->search['start_date'])){?>&nbsp;<?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate("TO"); ?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
+							</td>
+							<td width="15%" align="right">&nbsp;</td>
+						</tr>
+						</table>
+						<table class="content-data" cellpadding="0"​  border="1" >
 							<thead>
 							<tr class="style" align="center">
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 									<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-									<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("SALE_INFO");?>&nbsp;</td>
+									<td scope="col" colspan="5">&nbsp;<?php echo $tr->translate("SALE_INFO");?>&nbsp;</td>
 								</tr>
 							<tr class="style" align="center">
 								<td scope="col">&nbsp;<?php echo $tr->translate("CATEGORY");?>&nbsp;</td>
 								<td scope="col">&nbsp;<?php echo $tr->translate("PRODUCT_CODE");?>&nbsp;</td>
 							    <td scope="col">&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
-							    <td scope="col">&nbsp;<?php echo $tr->translate("PRICE");?>&nbsp;</td>
 							    <td scope="col">&nbsp;<?php echo $tr->translate("QTY");?>&nbsp;</td>
-							    <td scope="col">&nbsp;<?php echo $tr->translate("TOTAL");?>&nbsp;</td>
+							    <td scope="col">&nbsp;<?php echo $tr->translate("TOTAL_SALE");?>&nbsp;</td>
+								<td scope="col">&nbsp;<?php echo $tr->translate("TOTAL_COST");?>&nbsp;</td>
+								<td scope="col">&nbsp;<?php echo $tr->translate("TOTAL_PROFIT");?>&nbsp;</td>
 							</tr>
 							</thead>
-						<?php $grand_total=0; if (!empty($this->rspro)) foreach ($this->rspro as $key=> $rs){?>
+						<?php 
+						$total_qty=0;
+						$grand_totalsale=0;
+						$grand_totalcost=0;
+						 if (!empty($this->rspro)) foreach ($this->rspro as $key=> $rs){?>
 							<tr class="style hover" align="center">
 								<td data-label="<?php echo $tr->translate("NUM");?>">&nbsp;<?php echo $key+1; ?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("BRANCH");?>" align="left">&nbsp;<?php echo $rs['branch_name'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("CATEGORY");?>" align="center">&nbsp;<?php echo $rs['category'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("PRODUCT_CODE");?>">&nbsp;<?php echo $rs['code'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left">&nbsp;<?php echo $rs['items_name'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("PRICE");?>">&nbsp;<?php echo $rs['fee'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("QTY");?>">&nbsp;<?php echo $rs['qty'];?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("TOTAL");?>"> &nbsp;<?php echo number_format($rs['subtotal'],2);?>&nbsp;</td>
+								<td class="small" data-label="<?php echo $tr->translate("CATEGORY");?>" align="left">&nbsp;<?php echo $rs['category'];?>&nbsp;</td>
+								<td class="small" align="left" data-label="<?php echo $tr->translate("PRODUCT_CODE");?>">&nbsp;<?php echo $rs['code'];?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left" class="wrapcontent">&nbsp;<?php echo $rs['items_name'];?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("QTY");?>">&nbsp;<?php echo number_format($rs['qty'],2);?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("TOTAL_SALE");?>">&nbsp;<?php echo number_format($rs['subtotalsale'],2);?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("TOTAL_COST");?>"> &nbsp;<?php echo number_format($rs['subtotalcost'],2);?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("TOTAL_PROFIT");?>"> &nbsp;<?php echo number_format($rs['subtotalsale']-$rs['subtotalcost'],2);?>&nbsp;</td>
 							</tr>
-						<?php 
-						$grand_total = $grand_total + $rs['subtotal'];
+						<?php
+						$total_qty = $total_qty + $rs['qty'];
+						$grand_totalsale = $grand_totalsale + $rs['subtotalsale'];
+						$grand_totalcost = $grand_totalcost + $rs['subtotalcost'];
 						}?>
-	 						<tr style="font-size:13px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
-								<td colspan="7" ><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
-								<td align="center" style="border: 1px solid #000;"><strong><?php echo "$ ".number_format($grand_total,2);?></strong></td>
+	 						<tr style="font-size:12px; height: 20px;border: 1px solid #000;" align="center" class="hover" >
+								<td colspan="5" align="right" class="hideborder"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+								<td><strong><?php echo number_format($total_qty,2);?></strong></td>
+								<td><strong><?php echo "$ ".number_format($grand_totalsale,2);?></strong></td>
+								<td><strong><?php echo "$ ".number_format($grand_totalcost,2);?></strong></td>
+								<td align="center" style="border: 1px solid #000;"><strong><?php echo "$ ".number_format($grand_totalsale-$grand_totalcost,2);?></strong></td>
 	 						</tr>
 						</table>
 					</td>
@@ -232,7 +202,6 @@ table.tb-footer tr.style-head {
 	var url_dept = '<?php echo $this->url(array('module'=>'allreport','controller'=>'stock','action'=>'get-productbycate')); ?>';
 	function getProductByCate(){
 		cate_id = dijit.byId("category_id").get("value");
-		//if(cate_id>0){
 			dojo.xhrPost({
 				url:url_dept,
 				content:{
@@ -247,6 +216,5 @@ table.tb-footer tr.style-head {
 				error: function(err) {
 				}
 			});
-		//}
 	}
 </script>

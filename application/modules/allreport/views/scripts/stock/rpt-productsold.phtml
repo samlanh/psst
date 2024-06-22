@@ -8,9 +8,7 @@
 <style>
 	.hover:hover{ background:#ccc;}
 	table.content-data tr.style-head,
-	table.tb-footer tr.style-head {
-	   font-weight: bold !important;
-	}
+	
 </style>
 <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
@@ -59,10 +57,6 @@
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line"><td colspan="3"></td></tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
 				<tr>
 					<td width="15%" align="center">
 					</td>
@@ -74,19 +68,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
 					<td colspan="3" id="exportExcel">
 					<style>
 					.style{
-						line-height: 20px;font-size: 11px !important;
+						line-height: 22px;font-size: 11px !important;
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
-					.hideblog{display: none;}
-					.hiddenblog{display: block !important;}
 					.style1:hover{ background: #ccc; }
-					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
 					table { page-break-inside:auto }
 					tr{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
@@ -94,7 +82,6 @@
 					  page-break-inside:avoid; page-break-after:auto;
 					  margin-top: 100px;
 					}
-					.hide{visibility: hidden;}
 					@media print {
 					 div.divFooter {
 					    position: fixed;
@@ -104,8 +91,6 @@
 					  	bottom:0px;
 						margin:0;
 					  }
-						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
-						
 					}
 					.center{text-align: center !important;}
 					table.content-data{
@@ -115,23 +100,12 @@
 						width:100%;
 					}
 					table.content-data thead tr.style {
-					   line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+					   line-height: 22px; font-size:10px !important; padding:1px 0px; white-space: nowrap; 
 						background: #c1d0f3;
 						font-weight:600;
 					}
-					table.content-data  tr.style {
-					 
+					table.content-data tr.style {
 					   white-space: nowrap;
-						
-					}
-					table.tb-footer{
-						border-collapse:collapse;
-						border:1px solid #000; 
-						font-size:11px;
-						font-family: 'Times New Roman','Khmer OS Battambang';
-					}
-					table.tb-footer tr{
-					 line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
 					}
 					table tr td{
 						padding:0 2px;
@@ -147,7 +121,7 @@
 						color: #f80000;
 					}
 					table.content-data tr td{
-						padding: 2px;
+						padding: 1px;
 					}	
 					@media print{
 						@page{
@@ -179,10 +153,8 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('UNIT_COST');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL_COST');?>&nbsp;</td>
-									
 									<td scope="col">&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									
 									<td scope="col">&nbsp;<?php echo $tr->translate('PROFIT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('RECEIPT_NO');?></td>
 									<td scope="col"> &nbsp;<?php echo $tr->translate('CREATED_DATE');?>&nbsp;</td>
@@ -195,16 +167,15 @@
 						if(!empty($this->product_sold)){ foreach ($this->product_sold AS $rs) { $i++;
 						?>
 							<tr class="style hover" align="left">
-							    <td data-label="<?php echo $tr->translate("NUM");?>"><?php echo $i; ?></td>
+							    <td align="center" data-label="<?php echo $tr->translate("NUM");?>"><?php echo $i; ?></td>
 							    <td data-label="<?php echo $tr->translate("BRANCH");?>"> <?php echo $rs['branch_name'];?></td>
 							    <td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $rs['stu_code'];?></td>
 							    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" style="text-align: left;"><?php echo $rs['student_name'];?></td>
 							    <td data-label="<?php echo $tr->translate("PRODUCT_CATEGORY");?>"><?php echo $rs['category'];?></td>
 							    <td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" style="text-align: left;">&nbsp;<?php echo $rs['items_name'];?></td>
-							    
 							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo $rs['qty'];?></td>
 							    <td data-label="<?php echo $tr->translate("UNIT_COST");?>"><?php echo $rs['cost'];?></td>
-							    <td data-label="<?php echo $tr->translate("TOTAL_COST");?>">
+							    <td data-label="<?php echo $tr->translate("TOTAL_COST");?>"><strong>
 							    <?php 
 								    	$subTotalcost = $rs['qty']*$rs['cost'];
 								    	echo number_format($subTotalcost,2);
@@ -212,26 +183,25 @@
 								    	$totalCost = $totalCost+$subTotalcost;
 								    	$totalSell = $totalSell+$subTotalSell;
 							    ?>
-							    </td>
+							    </strong></td>
 							    <td data-label="<?php echo $tr->translate("SELL_PRICE");?>"><?php echo $rs['price'];?></td>
-							    <td data-label="<?php echo $tr->translate("TOTAL");?>"><?php echo number_format($subTotalSell,2);?>&nbsp;</td>
-							    <td data-label="<?php echo $tr->translate("PROFIT");?>"><?php echo $subTotalSell-$subTotalcost;?>&nbsp;</td>
-							    <td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><strong><?php echo $rs['receipt_number'];?></strong></td>
-							    <td data-label="<?php echo $tr->translate("CREATED_DATE");?>"><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
-							    <td data-label="<?php echo $tr->translate("USER");?>"><?php echo $rs['user']; ?></td>
+							    <td data-label="<?php echo $tr->translate("TOTAL");?>"><strong><?php echo number_format($subTotalSell,2);?></strong>&nbsp;</td>
+							    <td align="center" data-label="<?php echo $tr->translate("PROFIT");?>"><strong><?php echo number_format($subTotalSell-$subTotalcost,2);?></strong>&nbsp;</td>
+							    <td align="center" data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><strong><?php echo $rs['receipt_number'];?></strong></td>
+							    <td align="center" data-label="<?php echo $tr->translate("CREATED_DATE");?>"><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
+							    <td align="center" data-label="<?php echo $tr->translate("USER");?>"><?php echo $rs['user']; ?></td>
 							 </tr>
 						  		<?php 
-						  			
 								}}
 								?>	  
 						</table>
 						<table width="40%" border="1" style="font-family:'Times New Roman','Khmer OS Battambang'; margin-top:15px;border: 1px solid #000;border-collapse: collapse;float:right"  >
-						   <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px; " align="center">
+						   <tr align="center" style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height:25px; " align="center">
 							   <td width="33%"><?php echo $tr->translate('TOTAL_UNIT_PRICE')?></td>
 							    <td width="33%"><?php echo $tr->translate('TOTAL_SALE')?></td>
-							   <td width="33%"><?php echo $tr->translate('PROFIT')?></td>
+							   <td width="33%"><?php echo $tr->translate('TOTAL_PROFIT')?></td>
 						   </tr>
-						    <tr align="center" style="font-size:12px; height: 20px;line-height: 30px; " align="center">
+						    <tr align="center" style="font-size:12px;line-height:25px;font-weight:bold;" align="center">
 							   <td>$ <?php echo number_format($totalCost,2);?></td>
 							   <td>$ <?php echo number_format($totalSell,2);?></td>
 							   <td>$ <?php echo number_format($totalSell-$totalCost,2);?></td>

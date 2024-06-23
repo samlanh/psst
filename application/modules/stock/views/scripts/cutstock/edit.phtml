@@ -133,15 +133,12 @@ tr.head-td th {
 									</div>
 							</div>
 						</div>
-
 		            </div>
-
 		            <div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="card-blogform">
 							<div class="card-body"> 
 									<div class="row"> 
 										<div class="col-md-12 col-sm-12 col-xs-12">
-
 											<div class="d-flex "> 
 												<div class="settings-main-icon ">
 													<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
@@ -172,6 +169,7 @@ tr.head-td th {
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 														<?php echo $frm->getElement("balance");?>
+														
 												</div>
 											</div>
 											<div class="form-group" style="display: none;">
@@ -179,21 +177,15 @@ tr.head-td th {
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 														<?php echo $frm->getElement("amount");?>
+														<?php echo $frm->getElement("all_balance");?>
 												</div>
 											</div>
-											
 											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_RECEIVED");?> 
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 													<?php echo $frm->getElement("total_received");?>
-												</div>
-											</div>
-											<div class="form-group" style="display: none;">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DISCOUNT");?> 
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("total_discount");?>
+													
 												</div>
 											</div>
 											<div class="form-group">
@@ -292,24 +284,7 @@ tr.head-td th {
 	                </div>
           		 </div>
           		 <div class="col-md-4 col-sm-4 col-xs-12">
-				  	 <div class="card-blogform">
-								<div class="card-body"> 
-										<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12">
-												<div class="d-flex "> 
-													<div class="settings-main-icon ">
-														<i class="glyphicon glyphicon-usd" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("MONEY");?></p>
-													</div> 
-												</div>
-
-
-											</div>
-										</div>
-								</div>
-					</div>
+				  	
           		 </div>
          	 </div>  
 	          <div class="clearfix"></div>
@@ -335,25 +310,36 @@ tr.head-td th {
 				tr.hearder_table td {
 				    padding: 5px;
 				}
+				table span.small{display: block;line-height: 20px;
 		</style>
-		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:15px !important;white-space:nowrap;">
+		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:12px !important;white-space:nowrap;">
 			<tr>
 				<td colspan="4"><label id="lbl_header"></label></td>
 			</tr>
 			<tr>
 				<td colspan="4" align="center">
-					<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ</strong>
+					<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ<span class="small">RECIEVED NOTED</span></strong>
 				</td>
 			</tr>
 			<tr>
-				<td>Student's ID : &nbsp;&nbsp;<span id="lb_id"></span> </td>
+				<td>Student ID : &nbsp;&nbsp;<span id="lb_id"></span> </td>
 				<td></td>
 				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span id="lb_receipt_no" style="text-align:left; color:red; min-width: 100px; display: inline-block;"></span></td>
 			</tr>
 			<tr>
-				<td>Student's Name : &nbsp;&nbsp;<span id="lb_name"></span></td>
+				<td>Student Name : &nbsp;&nbsp;<span id="lb_name"></span></td>
 				<td></td>
 				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span id="lb_date" style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
+			</tr>
+			<tr>
+				<td>Gender : &nbsp;&nbsp;<span id="lb_gender"></span></td>
+				<td></td>
+				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Print Date</span> : <span id="lb_print" style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date('d/m/Y, H:i ',strtotime(Zend_Date::now()));?></span></td>
+			</tr>
+			<tr>
+				<td>Tel : &nbsp;&nbsp;<span id="lb_tel"></span></td>
+				<td></td>
+				<td colspan="2" align="right"></td>
 			</tr>
 			<tr>
 				<td  colspan="4">
@@ -362,17 +348,17 @@ tr.head-td th {
 			</tr>
 			<tr>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:40px;font-size:10px;"></div>
-					<?php echo $tr->translate("INFORS_TO");?>
+					<div style="font-size:10px;"></div>
+					<strong>អ្នកប្រគល់ Stock Controller</strong>
 				</td>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:40px;font-size:10px;"></div>
-					<?php echo $tr->translate("INFORS_RECEIVE");?>
+					<div style="font-size:10px;"></div>
+					<strong>អ្នកទទួល Customer</strong>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:30px;font-size:10px;"></div>
+					<div style="margin-top:100px;font-size:10px;"></div>
 					<?php 
 						   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 						   $last_name=$session_user->last_name;
@@ -381,23 +367,18 @@ tr.head-td th {
 						?>
 				</td>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:30px;font-size:10px;"></div>
+					<div style="margin-top:100px;font-size:10px;"></div>
 					<span id="studentpay"></span>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="4" align="right">
-					<!-- <div style=" font-size: 11px;font-weight: bold;font-family: arail">Date : <label id="lb_date" class=" one bold"><?php //echo date("d/M/Y",strtotime($this->row['received_date']));;?></label></div> -->
-					<div style="padding-top:20px; font-size:10px;"><?php echo date('l , jS / m / Y , H:i:s ',strtotime(Zend_Date::now()));?></div>
-				</td>
-			</tr>
 		</table>
+		<div style="padding-top: 30px;" id='printblog2'></div>
 	</div>
 	<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
-			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel"
-			type="button" onclick="hideDialog();">Cancel</button>
-			<button dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconPrint"
-				type="button" onclick="printSubmit();"><?php echo $tr->translate("Print");?></button>
+			<button dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-erase"
+			type="button" onclick="hideDialog();"><?php echo $tr->translate("CANCEL");?></button>
+			<button dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+				type="button" onclick="printSubmit();"><?php echo $tr->translate("PRINT");?></button>
 </div>
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
@@ -468,13 +449,13 @@ tr.head-td th {
 		temp='';
 	    temp='<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">'
 			  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
-				  temp+='<td >No</td>';
-				  temp+='<td >Receipt</td>';
-				  temp+='<td >Item Name</td>';
-				  temp+='<td >Qty</td>';
-				  temp+='<td >Qty Received</td>';
-				  temp+='<td >Qty Balance</td>';
-				  temp+='<td >Remain Date</td>';
+			  temp+='<td >លរ<span class="small">No.</span></td>';
+			  temp+='<td >លេខយោង <span class="small">Receipt Ref</span></td>';
+			  temp+='<td >ពណ៍នា<span class="small">Item Name</span></td>';
+			  temp+='<td >បរិមាណសរុប<span class="small">Total Qty</span></td>';
+			  temp+='<td >បរិមាណទទួល<span class="small">Received Qty</span></td>';
+			  temp+='<td >បរិមាណនៅសល់<span class="small">Remain Qty</span></td>';
+			  temp+='<td >ថ្ងៃមកយក<span class="small">Remind Date</span></td>';
 			  temp+='</tr>';
 			  var rowId = $('#identity').val();
 				var rowIDArray = rowId.split(',');
@@ -507,12 +488,25 @@ tr.head-td th {
 				  	temp+='<td align="center">&nbsp;'+dateremide+'&nbsp;</td>';
 					temp+='</tr>';
 				}
+
+				for(let initrow=n+1;initrow<=6;initrow++){
+					temp+='<tr class="rowlist">';
+						temp+='<td align="center">&nbsp;'+initrow+'&nbsp;</td>';
+						temp+='<td align="center">&nbsp;</td>';
+						temp+='<td>&nbsp;</td>';
+						temp+='<td align="center">&nbsp;</td>';
+						temp+='<td align="center"></td>';
+						temp+='<td align="center">&nbsp;</td>';
+						temp+='<td align="center">&nbsp;</td>';
+					temp+='</tr>';
+			}
+
 				temp+='<tr class="rowlist">';
-					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Received :</td>';
+					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received	</strong></td>';
 					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_received').get('value')+'&nbsp;</td>';
 				temp+='</tr>';
 				temp+='<tr class="rowlist">';
-					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">Total Remain :</td>';
+					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប Total Qty Remain</strong></td>';
 					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_due').get('value')+'&nbsp;</td>';
 				temp+='</tr>';
 			temp+='</table>';
@@ -525,6 +519,7 @@ tr.head-td th {
 	}
 
 	function printSubmit(){
+		dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
@@ -611,6 +606,8 @@ tr.head-td th {
 				dojo.byId("lb_name").innerHTML =  data.stuName;
 				dojo.byId("lb_id").innerHTML =  data.stucode;
 				dojo.byId("studentpay").innerHTML =  data.stuName;
+				dojo.byId("lb_gender").innerHTML =  data.gender;
+				dojo.byId("lb_tel").innerHTML =  data.tel;
 				calBalance();
 				HideloadingBlock();
 			},

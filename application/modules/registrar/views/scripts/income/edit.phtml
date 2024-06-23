@@ -513,14 +513,14 @@ function getbranchinfo(){
 </div>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width: 30%;" id="popup_cate">
-		<form style="background-color: buttonface;" id='frm_add_cate_income'
+		<form id='frm_add_cate_income'
 			dojoType="dijit.form.Form" method="post"
 			enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%"
 				style="margin: 0 auto; line-height: 24px;">
 				<tr>
 					<td>
-						<fieldset style="background-color: buttonface;">
+						<fieldset>
 							<table style="margin: 0 auto; line-height: 35px; width: 95%;"
 								cellspacing="5">
 								<tr>
@@ -546,14 +546,16 @@ function getbranchinfo(){
 								</tr>
 								<tr>
 									<td colspan="2" align="center"><input
-										iconClass="dijitIconDelete" type="button" value="close"
+										class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+									 	type="button" value="close"
 										label="<?php echo $tr->translate("CANCEL")?>"
-										dojoType="dijit.form.Button" onclick="hideDialog();" /> <input
+										dojoType="dijit.form.Button" onclick="hideDialog();" /> 
+										<input
 										type="button" value="save_ajax" name="save_ajax"
 										id="save_ajax"
 										label="<?php echo $tr->translate("SAVECLOSE")?>"
 										dojoType="dijit.form.Button"
-										iconClass="dijitEditorIcon dijitEditorIconSave"
+										class="button-class button-primary"
 										onclick="addCateIncome();" /></td>
 								</tr>
 							</table>

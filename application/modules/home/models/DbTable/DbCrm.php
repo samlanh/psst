@@ -155,8 +155,8 @@
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
 							'studentToken'=>$stuToken,
-							'create_date'		=>date("Y-m-d H:i:s"),
-							'modify_date'		=>date("Y-m-d H:i:s"),
+							'create_date'	=>date("Y-m-d H:i:s"),
+							'modify_date'	=>date("Y-m-d H:i:s"),
 							'user_id'	  => $this->getUserId(),
 							);
 					$this->_name="rms_student";

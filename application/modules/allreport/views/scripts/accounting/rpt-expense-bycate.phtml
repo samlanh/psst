@@ -49,8 +49,7 @@
 					@media print {
 						@page {
 							page: A4;
-							size: landscape;
-							margin: 0.8cm;
+							margin: 0.5cm;
 						}
 					}
 		</style>
@@ -59,29 +58,20 @@
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr class="line">
-					<td colspan="3"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
 				<tr>
 					<td width="15%" align="center"></td>
 					<td width="70%" align="center">
-						<strong style="color:#000; font-size: 14px;font-family:Times New Roman,'khmer os muol light';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
-						<span style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
+						<strong style="color:#000; font-size:12px;font-family:Times New Roman,'khmer os muol light';"><?php echo $tr->translate('RPT_CATE_EXPENSE')?></strong><br />
+						<span style="color:#000; font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td width="15%" align="center">
 					</td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
 					<td colspan="3" id="exportExcel">
 						<table cellpadding="0"​ cellspacing="0" border="0" style="font-family:Times New Roman,'Khmer OS Battambang';margin:0 auto;width:100%;white-space:nowrap; " >
 							<thead>
-								<tr style="font-size:14px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
+								<tr style="font-size:12px; height: 20px;background-color: #ccd9ff;line-height: 30px;font-weight: bold;" align="center" >
 									<td width="30%"></td>
 									<td width="10%" style="text-align: left;" ><?php echo $tr->translate('CATE_EXPENSE')?></td>
 									<td width="25%" style=""></td>
@@ -130,14 +120,14 @@
 							<?php if($total_expense>0){?>
 							<tr>
 								<td colspan="4">
-									<table width="100%" style="font-size:12px;color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Battambang';">
+									<table width="100%" style="font-size:12px;color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
 										<tr style="text-align: center;">
 											<td width="30%">បានឃើញនិង ឯកភាព</td>
 											<td width="30%">បានពិនិត្យ</td>
 											<td width="30%">ភ្នំពេញ, ថ្ងៃទី……ខែ……ឆ្នាំ………	</td>
 										</tr>
 										<tr style="text-align: center;">
-											<td width="30%" style="font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
+											<td width="30%" style="font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light'">លោកអគ្គនាយក</td>
 											<td width="30%">ប្រធានគណនេយ្យ</td>
 											<td width="30%">បេឡាករ</td>
 										</tr>

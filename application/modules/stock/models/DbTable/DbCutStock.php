@@ -69,23 +69,26 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$branch_id = $data['branch_id'];
     	$type = $data['cut_stock_type'];
     	$sql=" SELECT 
-				spd.*,
-				sp.branch_id,
-				sp.receipt_number,
-				sp.create_date AS payment_date,
-				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS student_name,
-				(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
-				(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
-				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
-				(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
-				(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
-				FROM `rms_student_payment` AS sp,
-				`rms_saledetail` AS spd
+					spd.*,
+					sp.branch_id,
+					sp.receipt_number,
+					sp.create_date AS payment_date,
+					(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS student_name,
+					(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_enname,
+					(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS last_name,
+					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
+					(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS tel,
+					(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = (SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) LIMIT 1) AS gender,
+					(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
+					(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
+				FROM 
+					`rms_student_payment` AS sp,
+					`rms_saledetail` AS spd
 				WHERE spd.payment_id = sp.id
-				AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
-				AND sp.is_void=0
-				AND sp.student_id=$student_id
-				AND sp.branch_id=$branch_id";
+					AND (SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
+					AND sp.is_void=0
+					AND sp.student_id=$student_id
+					AND sp.branch_id=$branch_id";
 
 			if(!empty($type )){
                 if($type ==1){
@@ -115,6 +118,8 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			}
     			$stuName=$row['stu_enname']." ".$row['last_name'];
     			$stuCode=$row['stu_code'];
+    			$gender=$row['gender'];
+    			$tel=$row['tel'];
 				
     			$string.='
     			<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
@@ -176,7 +181,14 @@ if(!empty($type)){
     	if (!empty($userbalace)){
     		$all_balance = $userbalace;
     	}
-    	$array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'all_balance'=>$all_balance);
+    	$array = array(
+			'stuName'=>$stuName,
+			'stucode'=>$stuCode,
+			'gender'=>$gender,
+			'tel'=>$tel,
+			'stringrow'=>$string,
+			'keyindex'=>$no,
+			'identity'=>$identity,'all_balance'=>$all_balance);
     	return $array;
     }
     function getCurrentBalanceByStudent($data){
@@ -404,26 +416,26 @@ if(!empty($type)){
     	$sql="
     	SELECT 
 				spd.*,
-				(SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS branch_id,
-				(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS receipt_number,
-	    		(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
-	    		
-	    		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
-	    		(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
-	    		(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
-	    		(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
-	    	
-	    		(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
-	    		(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
+					(SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS branch_id,
+					(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS receipt_number,
+					(SELECT sp.create_date FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) AS payment_date,
+					(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS student_name,
+					(SELECT s.stu_enname FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_enname,
+					(SELECT s.last_name FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS last_name,
+					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
+					(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS tel,
+					'' as gender,
+					(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
+					(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
 	    	
 				FROM
-				`rms_saledetail` AS spd
+					`rms_saledetail` AS spd
 				WHERE 
-				(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
-		    	AND (SELECT sp.is_void FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=0
-		    	AND spd.qty_after >0
-		    	AND (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$student_id
-	    		AND (SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$branch_id 
+					(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) =3
+					AND (SELECT sp.is_void FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=0
+					AND spd.qty_after >0
+					AND (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$student_id
+					AND (SELECT sp.branch_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1)=$branch_id 
     	";
     	if (!empty($data['bypuchase_no'])){
     		$s_search=addslashes(trim($data['bypuchase_no']));
@@ -452,6 +464,8 @@ if(!empty($type)){
 			    }
 			    $stuName=$row['stu_enname']." ".$row['last_name'];
 			    $stuCode=$row['stu_code'];
+			    $gender=$row['gender'];
+			    $tel=$row['tel'];
 			    $rowpaymentdetail = $this->getCutstockDetailByCutstockIdAndStuDetailId($data['cutstockid'], $row['id']);
 			    if (!empty($rowpaymentdetail)){
 			    	if (empty($identityedit)){
@@ -557,7 +571,12 @@ if(!empty($type)){
 	    if (!empty($userbalace)){
 	   	 	$all_balance = $userbalace;
 	    }
-	    $array = array('stuName'=>$stuName,'stucode'=>$stuCode,'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'identitycheck'=>$identityedit,'all_balance'=>$all_balance,'sql'=>$sql);
+	    $array = array(
+		'stuName'=>$stuName,
+		'stucode'=>$stuCode,
+		'gender'=>$gender,
+		'tel'=>$tel,
+		'stringrow'=>$string,'keyindex'=>$no,'identity'=>$identity,'identitycheck'=>$identityedit,'all_balance'=>$all_balance,'sql'=>$sql);
 	    return $array;
     }
     function getSumCutStockDetailByStuPayDetId($stupaydetail_id,$cutstockdetailid){

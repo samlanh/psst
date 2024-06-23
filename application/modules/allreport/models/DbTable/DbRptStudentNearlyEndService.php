@@ -37,6 +37,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				 s.stu_enname AS first_name,
 				 s.last_name AS last_name,
 				 s.tel,
+				 (SELECT group_code FROM `rms_group` g WHERE g.id=sp.group_id limit 1) AS group_name,
 				 (SELECT $label from rms_view where rms_view.type=2 and key_code=s.sex LIMIT 1) AS sex,
 				 sp.`receipt_number` AS receipt,
 				 spd.`payment_id` AS payment_id,
@@ -95,7 +96,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	if(!empty($search['study_year'])){
 			$where.= " AND gd.academic_year = ".$search['study_year'];
 		}
-    	$order="  GROUP BY spd.`id`  ORDER by spd.itemdetail_id ASC ";
+    	$order=" ORDER by spd.itemdetail_id ASC ";
 		// echo $sql.$where.$order; exit();
     	return $db->fetchAll($sql.$where.$order);
     }

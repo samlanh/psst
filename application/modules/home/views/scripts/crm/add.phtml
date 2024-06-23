@@ -309,11 +309,11 @@ table#table_row tr td {
 </style>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_know_by" >
-		<form style="background-color: buttonface;" id='frm_know_by' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<form id='frm_know_by' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
 			<tr>
 				<td>
-					<fieldset style="background-color: buttonface;">
+					<fieldset>
 					<legend align="center" ><?php echo $tr->translate('KNOW_BY');?></legend>
 						<table style="margin: 0 auto; width: 100%;  padding:10px;" cellspacing="7" >
 							<tr>
@@ -322,10 +322,11 @@ table#table_row tr td {
 							</tr>
 							<tr>
 								<td colspan="4" align="center">
+									<br />
 									<input type="button" value="ចាកចេញ" label="<?php echo $tr->translate("CLOSE");?>" id="hide_know_by" name="hide_know_by" dojoType="dijit.form.Button" 
 									​ ​​iconClass="dijitIconUndo" onclick="hideDialog2();"/>
 									<input type="button" value="save" label="<?php echo $tr->translate("SAVE");?>" id="save_know_by" name="save_know_by" dojoType="dijit.form.Button" 
-									 iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addKnowBy();"/>
+									class="button-class button-primary"  iconClass="glyphicon glyphicon-paste" onclick="addKnowBy();"/>
 								</td>
 							</tr>
 						</table>

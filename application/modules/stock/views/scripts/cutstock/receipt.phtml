@@ -38,22 +38,17 @@ img.view{height: 70px !important;}
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4">
-							&nbsp;
-						</td>
-					</tr>
-					<tr>
 						<td colspan="4" align="center">
 							<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ<span class="small">RECIEVED NOTED</span></strong>
 						</td>
 					</tr>
 					<tr>
-						<td>Student's ID : <?php echo $this->row['stu_code'];?></td>
+						<td>Student ID : <?php echo $this->row['stu_code'];?></td>
 						<td></td>
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['serailno'];?><?php if($this->row['status']==0){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></span></td>
 					</tr>
 					<tr>
-						<td>Student's Name : <?php echo $this->row['stu_khname'].'/'.$this->row['stu_enname']." ".$this->row['last_name'];?></td>
+						<td>Student Name : <?php echo $this->row['stu_khname'].'/'.$this->row['stu_enname']." ".$this->row['last_name'];?></td>
 						<td></td>
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
 					</tr>
@@ -64,7 +59,7 @@ img.view{height: 70px !important;}
 						</td>
 					</tr>
 					<t>
-						<td>Tel : <?php print_r($this->row['tel']); ?></td>
+						<td>Tel : <?php echo($this->row['tel']); ?></td>
 						<td></td>
 						<td colspan="2" align="right"></td>
 					</tr>
@@ -72,7 +67,7 @@ img.view{height: 70px !important;}
 						<td  colspan="4">
 							<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">
 							  	<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;line-height:15px;">
-								  	<td>លរ<span class="small">No</span></td>
+								  	<td>លរ<span class="small">No.</span></td>
 								  	<td>លេខយោង <span class="small">Receipt Ref</span></td>
 								  	<td >ពណ៍នា<span class="small">Item Name</span></td>
 								  	<td >បរិមាណសរុប<span class="small">Total Qty</span></td>
@@ -90,6 +85,7 @@ img.view{height: 70px !important;}
 							  		<td align="center"> &nbsp;<?php echo $row['remain']?>&nbsp;</td>
 							  		<td align="center">&nbsp;<?php if (!empty($row['remain']) OR $row['remain']>0){ echo date("d/M/Y",strtotime($row['remide_date']));}else{ echo '-';}?>&nbsp;</td>
 							  	</tr>
+							  	<?php }?>
 								<?php for($record=$key+1;$record<=5;$record++){?>
 								<tr>
 									<td align="center">&nbsp;<?php echo $record + 1; ?></td>
@@ -101,13 +97,12 @@ img.view{height: 70px !important;}
 									<td></td>
 								</tr>
 								<?php } ?>
-							  	<?php }?>
 							  	<tr class="rowlist">
-									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>Total Qty Received</strong> :</td>
+									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received</strong></td>
 									<td align="center">&nbsp;&nbsp;<strong><?php echo $this->row['total_received'];?></strong>&nbsp;</td>
 								</tr>
 								<tr class="rowlist">
-									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>Total Qty Remain</strong> :</td>
+									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប  Total Qty Remain</strong></td>
 									<td align="center">&nbsp;&nbsp;<strong><?php echo $this->row['total_qty_due'];?></strong>&nbsp;</td>
 								</tr>
 							 </table>
@@ -116,11 +111,11 @@ img.view{height: 70px !important;}
 					<tr>
 						<td colspan="2" width="50%" align="center">
 							<div style="font-size:10px;"></div>
-							<?php echo $tr->translate("INFORS_TO");?>
+							<strong>អ្នកប្រគល់ Stock Controller </strong>
 						</td>
 						<td colspan="2" width="50%" align="center">
 							<div style="font-size:10px;"></div>
-							<?php echo $tr->translate("INFORS_RECEIVE");?>
+							<strong>អ្នកទទួល Customer</strong>
 						</td>
 					</tr>
 					<tr>

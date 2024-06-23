@@ -536,9 +536,9 @@ function getbranchinfo(){
 						</tr>
 						<tr>
 							<td colspan="2" align="center">
-								<input type="button" name="close" id="close" value="close"  class="button-class button-danger" iconClass="glyphicon glyphicon-remove"  label="<?php echo $tr->translate("CANCEL")?>" dojoType="dijit.form.Button" onclick="hidePopup();" />
-								<input type="button" label="<?php echo $tr->translate("SAVE")?>" name='save_ajax' id='save_ajax' value='save_ajax' onclick="addCateIncome();" dojoType="dijit.form.Button"
-						 		class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" />
+								<input type="button" name="close" value="close" class="button-class button-danger" iconClass="glyphicon glyphicon-remove" label="<?php echo $tr->translate("CANCEL")?>" dojoType="dijit.form.Button" onclick="hidePopup();" />
+								<input type="button" label="<?php echo $tr->translate("SAVE")?>" name='save_ajax' id='save_ajax' value='<?php echo $tr->translate("SAVE")?>' onclick="addCateIncome();" dojoType="dijit.form.Button"
+								class="button-class button-primary" iconClass="glyphicon glyphicon-print" />
 							</td>
 						</tr>
 					</table>

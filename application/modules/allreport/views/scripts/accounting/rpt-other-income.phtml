@@ -10,7 +10,7 @@ table.content-data tr.style-head,
 table.tb-footer tr.style-head {
    font-weight: bold !important;
 }
-.hideprintdate{display:none !important;}
+.hideprintdate{display:none !important;font-size:8px !important;}
 </style>	
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 		<div class="card-box">
@@ -59,7 +59,6 @@ table.tb-footer tr.style-head {
 						font-family: 'Times New Roman','Khmer OS Battambang';
 					}
 					.style1:hover{ background: #ccc; }
-					table tr td ul li{text-align: left;list-style: none;line-height: 25px; }
 					table.content-data { page-break-inside:auto }
 					tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
 					#header {
@@ -67,7 +66,7 @@ table.tb-footer tr.style-head {
 					  page-break-inside:avoid; page-break-after:auto;
 					  margin-top: 100px;
 					}
-					.hide{visibility: hidden;}
+					
 					@media print {
 					 div.divFooter {
 					    position: fixed;
@@ -77,8 +76,6 @@ table.tb-footer tr.style-head {
 					  	bottom:0px;
 						margin:0;
 					  }
-						.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
-						
 					}
 					.center{text-align: center !important;}
 					table.content-data{
@@ -91,29 +88,27 @@ table.tb-footer tr.style-head {
 						background: #c1d0f3;
 						font-weight:600;
 					}
-					
 					table tr td{
 						padding:0 2px;
 					}
-					
 					table.content-data tr td{
 						padding: 2px;
 					}
-				.noted {
-					word-wrap: break-word;
-					word-break: break-all;
-					font-size: 8px;
-					line-height: 10px;
-					white-space: normal;
-					width: 100px;
-					display: block;
-				}
-				@media print {
-					@page {
-						size: A4 landscape;
-						margin: 0.8cm;
+					.noted{
+						word-wrap: break-word;
+						word-break: break-all;
+						font-size: 8px;
+						line-height: 10px;
+						white-space: normal;
+						width: 100px;
+						display: block;
 					}
-				}
+					@media print{
+						@page{
+							size: A4 landscape;
+							margin: 0.8cm;
+						}
+					}
 		</style>
 		
 		<div id="exportExcel">
@@ -121,20 +116,16 @@ table.tb-footer tr.style-head {
 					<tr>
 						<td colspan="3"><?php echo $this->rsheader;?></td>
 					</tr>
-					<tr class="line"><td colspan="3"></td></tr>
 					<tr>
 						<td width="20%" align="center">
 						</td>
 						<td width="60%" align="center">
 							<span style="padding-left: 0px;  color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('RPT_OTHER_INCOME')?></span><br />
-							<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-m-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>     
+							<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-m-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>     
 						</td>
 						<td width="20%" align="center">
-							<label class='hideprintdate'>Print Date <?php echo date("d-m-Y h:i");?></label>
+							<label class='hideprintdate' style="font-size:8px;">Print Date <?php echo date("d-m-Y h:i");?></label>
 						</td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td colspan="3" id="exportExcel">

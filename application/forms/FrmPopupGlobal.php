@@ -190,7 +190,6 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 		$pageSetup = ($settingAmtReceipt==1)?'size:A5 landscape;':'size:A4 portrait;';
 		$showReport = (SHOW_HEADER_RECEIPT==1)?'display:block':'display:none';
 		
-		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		
 		$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -207,11 +206,10 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 				}
 				.h1{ margin-top: -6px;}
 				.values{ min-height: 25px; padding: 2px 5px;display: block; font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';}
-						
-				.fonteng{font-size:14px;}
-				.one{white-space:nowrap;font-size:14px;}
+				.fonteng{font-size:12px;}
+				.one{white-space:nowrap;font-size:12px;}
 				.border{border:1px solid #000 !important; min-width:220px}
-				.heght-row {
+				.heght-row{
 				    height: 38px;
 				}
 				.noted{
@@ -226,14 +224,15 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					white-space: normal;
 					width:95%;
 				}
+				span.small{display:block;width:100%;line-height:20px;}
 				@media print{
 						@page{
 							margin:0.3cm 0.7cm 0cm 0.7cm;
 							page-break-before: avoid;
-							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-							-ms-transform: scale(0.5);   /* IE 9 */
-							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							-webkit-transform: scale(0.5);
+							-moz-transform: scale(0.5);
+							-ms-transform: scale(0.5);
+							-o-transform: scale(0.5);
 							transform: scale(0.5);
 							'.$pageSetup.'
 						}
@@ -253,14 +252,14 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 						<table width="100%" style="font-size:12px;margin-top:-5px;">
 							<tr>
 								<td width="30%"></td>
-								<td align="center" width="40%" style="font-size: 12px; line-height: 20px;">
-									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 14px;">បង្កាន់ដៃបង់ប្រាក់</div>
+								<td align="center" width="40%" style="line-height: 20px;">
+									<div style="font-family:'."'Times New Roman'".','."'Khmer OS Muol Light'".';font-size: 12px;">បង្កាន់ដៃបង់ប្រាក់</div>
 									<strong>OFFICIAL RECEIPT</strong>
 								</td>
-								<td width="30%" valign="center" align="center">
-									<div style="font-size: 12px;margin-top:-10px;" id="time_footer">
-										Print By:'.$last_name." ".$username.$usertype.'
-					        			<br />Print Date:'.date("d-m-Y, g:i a").'
+								<td width="30%" valign="center" align="left">
+									<div style="font-size:10px;" id="time_footer">
+										<span class="small">Print By:'.$last_name." ".$username.$usertype.'</span>
+					        			<span class="small">Print Date:'.date("d-m-Y, g:i a").'</span>
 					        		</div>
 								</td>
 							</tr>
@@ -306,16 +305,16 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 								<td class="border values one">&nbsp;<span id="lbl_cheqe_no"></span>&nbsp;</td>
 							</tr>
 							
-							<tr style="font-size: 15px; font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';">
+							<tr style="font-size: 12px; font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';">
 								<td colspan="2" align="center">បេឡាករ/Cashier</td>
 								<td colspan="2" align="center" >អតិថិជន/Customer</td>
 							</tr>
 							<tr style="height:75px;">
 								<td colspan="4" align="center">&nbsp;</td>
 							</tr>
-							<tr style="font-size: 15px;">
+							<tr style="font-size: 12px;">
 								<td colspan="2" align="center">
-									<h4 id="user_sign" style="font-weight:bold; font-family: Arial Black;color:#000; font-size: 13px;font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';"> 
+									<h4 id="user_sign" style="font-weight:bold; font-family: Arial Black;color:#000; font-size: 12px;font-family:'."'.Times New Roman.'".','."'Khmer OS Battambang'".';"> 
 								        '.$last_name." ".$username.$usertype.'
 					        		</h4>
 								</td>
@@ -363,14 +362,15 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 					white-space: normal;
 					width:98%;
 				}
-				.expenseReceipt ul{text-align:left;
-				padding:0;
+				.expenseReceipt ul{
+					text-align:left;
+					padding:0;
 				}
 				.expenseReceipt ul li{list-style-type:none;line-height:18px;}
-				@media print {
+				@media print{
 					@page {
 						'.$pageSetup.';
-						margin: 0.8cm;
+						margin: 0.5cm  0.5cm  0cm  0.5cm;
 					}
 				}
 				.tablesorter td{border:1px solid #000 !important;}
@@ -393,7 +393,7 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 							<label id="lbl_printdate" class="smallsize">Print Date '.date('d-m-Y g:i a').'</label>
 						</td>
 						<td valign="top" align="center">
-							<div style="font-size: 14px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div>
+							<div style="font-size: 13px !important;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div>
 							<div style="font-size: 12px;sans-serif;margin-top:0px;font-weight: bold;">PAYMENT VOUCHER</div>
 						</td>
 						<td width="30%" align="left" >
@@ -443,13 +443,13 @@ class Application_Form_FrmPopupGlobal extends Zend_Dojo_Form
 				</tr>
 				<tr>
 					<td align="center" valign="top">
-						<div style="font-weight:bold;color:#000; font-size: 14px;">'.$paidBy.'
+						<div style="font-weight:bold;color:#000; font-size: 12px;">'.$paidBy.'
 						</div>
 					</td>
 					<td></td>
 					<td  valign="top">
 						<div
-							style="font-weight: bold; color: #000; font-size: 14px;">
+							style="font-weight: bold; color: #000; font-size: 12px;">
 							<strong>Received By :</strong> &nbsp;<label id="lb_receiver"> </label>
 						</div>
 					</td>

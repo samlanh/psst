@@ -1,22 +1,31 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('ADD_DISCOUNTSETTING')); 
-	$frm= $this->frm_discount;
-	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('ADD_DISCOUNTSETTING'));
+$frm = $this->frm_discount;
+$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
+<style>
+	.optListRow li.opt-items input[type=checkbox],
+	input[type=radio] {
+		margin: -9px 0 0 !important;
+	}
+</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
-               	<div class="col-sm-12 border-botom">
-		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-shield " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DISCOUNTSETTING');?></h4>
-    			</div>
-    			<div class="col-sm-4 text-right">
-    			</div>
-    		</div>
-    	</div>
-		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded">
-			<script type="dojo/method" event="onSubmit"> 
+			<div class="col-sm-12 border-botom">
+				<div class="col-sm-8 pd-0">
+					<h4 class="m-b-0"><i class="fa fa-shield "
+							aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('ADD_DISCOUNTSETTING'); ?>
+					</h4>
+				</div>
+				<div class="col-sm-4 text-right">
+				</div>
+			</div>
+		</div>
+		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form"
+			enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">
 				dranch=dijit.byId('branch_id').get('value');
 					if(dranch==''){
 						alert('Please Select Branch!');
@@ -34,148 +43,253 @@
 						alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ!');
 						return false;
 					}
-  				 if(this.validate()) {
-    				dijit.byId("save_close").attr("disabled",true);
+				   if(this.validate()) {
+					dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
-   					 return true;
-   				}else {
-    				return false;
-   				}
+						return true;
+				   }else {
+					return false;
+				   }
 			</script>
 			<div class="card-box">
-				<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
-							<div class="card-body"> 
-									<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12">
-													<div class="d-flex "> 
-															<div class="settings-main-icon ">
-															
-															<i class="material-icons-outlined">discount</i>
-																
-															</div> 
-															<div class="col-md-10 col-sm-10 col-xs-12"> 
-																<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DISCOUNT_INFO");?></p>
-															</div> 
-													</div>
-													<div class="col-md-12 col-sm-12 col-xs-12">
-															&nbsp; 
-													</div>
-	
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span></label>
-														<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("branch_id");?>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISCOUNT_OPTION");?>
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-																<?php echo $frm->getElement("discountOption");?>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_NAME");?>
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-															<input id="studentId" />
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-															<input id="itemType" />
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("COURSE_SERVICE_PRODUCT").'/'.$tr->translate("PRODUCT");?>
-													</label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-															<input id="itemId" />
-														</div>
-													</div>
-													
-													<div class="d-flex "> 
-															<div class="settings-main-icon ">
-															
-															<i class="material-icons-outlined">discount</i>
-																
-															</div> 
-															<div class="col-md-10 col-sm-10 col-xs-12"> 
-																<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DISCOUNT_SETTING");?></p>
-															</div> 
-													</div>
-													
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DISCOUNT_TYPE");?>
-														</label>
-														<div class="col-md-7 col-sm-7 col-xs-12">
-																<input id="disname_id" />
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DisValueType");?>
-														</label>
-														<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("DisValueType");?>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DIS_MAX");?>
-														</label>
-														<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("discountValue");?>
-														</div>
-													</div>
-													<div class="d-flex "> 
-														<div class="settings-main-icon ">
-															<i class="fa fa-calendar" aria-hidden="true"></i>
-														</div> 
-														<div class="col-md-10 col-sm-10 col-xs-12"> 
-															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("VALIDATE");?></p>
-														</div> 
-													</div>
-													<div class="form-group">
-														<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("START_DATE");?>
-														</label>
-														<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("start_date");?>
-														</div>
-													</div>
-													<div class="form-group">
-														<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("END_DATE");?>
-														</label>
-														<div class="col-md-7 col-sm-7 col-xs-12">
-															<?php echo $frm->getElement("end_date");?>
-														</div>
-													</div>
-	
-												</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										&nbsp;
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH"); ?>
+											<span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("branch_id"); ?>
 										</div>
 									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACEDMIC_YEAR"); ?>
+											<span class="required">*</span></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("academic_year"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_TITLE"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("discountTitle"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_OPTION"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("discountFor"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12 col-sm-12 col-xs-12">
+											<div class="d-flex ">
+												<div class="settings-main-icon ">
+													<i class="material-icons-outlined">discount</i>
+												</div>
+												<div class="col-md-10 col-sm-10 col-xs-12">
+													<p class="tx-20 font-weight-semibold d-flex ">
+														<?php echo $tr->translate("DISCOUNT_INFO"); ?>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group hidden_student">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="studentId" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_FOR_TYPE"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("discountforType"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="itemType" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("COURSE_SERVICE_PRODUCT") . '/' . $tr->translate("PRODUCT"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="itemId" />
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-
-
-                 <div class="clearfix"></div>
-		         <div class="card-box mt-20">
-	               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-		               	<input type="button" onClick="submitDataClose()" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" 
-						   class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-saved" />
-						<input type="submit" value="save_new" name="save_new" id="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" 
-						class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
-               	</div>
-               </div>
-             </div>
-           </div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex">
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<p class="tx-20 font-weight-semibold d-flex ">
+												<?php echo $tr->translate("DEGREE"); ?>
+											</p>
+										</div>
+									</div>
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input"
+											onchange="checkall();" class="checkbox" id="check_all" name="check_all">
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL'); ?>
+										</label>
+									</div>
+									<div class="form-group">
+										<ul class="optListRow">
+											<?php
+											if (!empty($this->rsdegree))
+												foreach ($this->rsdegree as $rs) {
+													?>
+													<li class="opt-items">
+														<div class="custom-control custom-checkbox">
+															<input type="checkbox" class="checkbox custom-control-input"
+																id="depts<?php echo $rs['id']; ?>"
+																value="<?php echo $rs['id']; ?>" name="selector[]">
+															<label class="custom-control-label"
+																for="depts<?php echo $rs['id']; ?>">
+																<?php echo $rs['name']; ?>
+															</label>
+														</div>
+													</li>
+												<?php } ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex ">
+										<div class="settings-main-icon ">
+											<i class="material-icons-outlined">discount</i>
+										</div>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<p class="tx-20 font-weight-semibold d-flex ">
+												<?php echo $tr->translate("DISCOUNT_SETTING"); ?>
+											</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_TYPE"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="discount_id" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DisValueType"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("DisValueType"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DIS_MAX"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("discountValue"); ?>
+										</div>
+									</div>
+									<div class="d-flex ">
+										<div class="settings-main-icon ">
+											<i class="fa fa-calendar" aria-hidden="true"></i>
+										</div>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<p class="tx-20 font-weight-semibold d-flex ">
+												<?php echo $tr->translate("VALIDATE"); ?>
+											</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_PERIOD"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("discountPeriod"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("START_DATE"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("start_date"); ?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label
+											class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("END_DATE"); ?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("end_date"); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="card-box mt-20">
+					<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+						<input type="button" onClick="submitDataClose()" value="save_close" name="save_close"
+							id="save_close" label="<?php echo $tr->translate('SAVE_CLOSE'); ?>"
+							dojoType="dijit.form.Button" class="button-class button-primary"
+							iconClass="glyphicon glyphicon-floppy-saved" />
+						<input type="submit" value="save_new" name="save_new" id="save_new"
+							label="<?php echo $tr->translate('SAVE_NEW'); ?>" dojoType="dijit.form.Button"
+							class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-open" />
+					</div>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>
 <div class="dijitHidden">
-	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_add_discount" >
-		<form style="" id='frm_adddiscount' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<script type="dojo/method" event="onSubmit">			
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_add_discount">
+		<form style="" id='frm_adddiscount' dojoType="dijit.form.Form" method="post"
+			enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">
 				if(this.validate()) {
 					return true;
 				} else {
@@ -183,227 +297,277 @@
 				}
 			</script>
 			<table cellspacing="10" width="100%" style="margin: 0 auto;">
-			<tr>
-				<td>
-					<fieldset>
-					<legend align="center" ><?php echo $tr->translate('ADD_DISCOUNT');?></legend>
-						<table style="margin: 0 auto; width: 100%;  padding:10px; line-height: 35px;" cellspacing="7" >
+				<tr>
+					<td>
+						<table style="margin: 0 auto; width: 100%;  padding:10px; line-height: 35px;" cellspacing="7">
 							<tr>
-								<td><?php echo $tr->translate('DISCOUNT_TYPE');?></td>
-								<td><input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="dis_name" name="dis_name" value="" type="text"></td>
+								<td><?php echo $tr->translate('DISCOUNT_TYPE'); ?></td>
+								<td><input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside"
+										id="dis_name" name="dis_name" value="" type="text"></td>
 							</tr>
 							<tr style="display: none;">
-								<td><?php echo $tr->translate('STATUS');?></td>
-								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"   class="fullside">
-	    								<option value="1" ><?php echo $tr->translate('ACTIVE');?></option>
-	    								<option value="0" ><?php echo $tr->translate('DEACTIVE');?></option>
+								<td><?php echo $tr->translate('STATUS'); ?></td>
+								<td><select name="status_j" id="status_j" dojoType="dijit.form.FilteringSelect"
+										class="fullside">
+										<option value="1"><?php echo $tr->translate('ACTIVE'); ?></option>
+										<option value="0"><?php echo $tr->translate('DEACTIVE'); ?></option>
 									</select>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2" align="center" >
-									<input type="button"  label="<?php echo $tr->translate("CANCEL");?>" id="cancelButton" 
-									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconCancel" onclick="hideDialog();"/>
-									<input type="button" value="save_new" name="s_save"  id="s_save" label="<?php echo $tr->translate("SAVE");?>" id="submitButton" 
-									dojoType="dijit.form.Button" iconClass="dijitEditorIcon dijitEditorIconSave" onclick="addDiscount();"/>
+								<td colspan="2" align="center">
+									<input type="button" label="<?php echo $tr->translate("CANCEL"); ?>"
+										id="cancelButton" dojoType="dijit.form.Button"
+										class="button-class button-danger" iconClass="glyphicon glyphicon-erase"
+										onclick="hideDialog();" />
+									<input type="button" value="save_new" name="s_save" id="s_save"
+										label="<?php echo $tr->translate("SAVE"); ?>" id="submitButton"
+										dojoType="dijit.form.Button" class="button-class button-primary"
+										iconClass="glyphicon glyphicon-floppy-open" onclick="addDiscount();" />
 								</td>
 							</tr>
 						</table>
-				</fieldset>
-				</td>
-			</tr>
-		</table>
+					</td>
+				</tr>
+			</table>
 		</form>
 	</div>
 </div>
-<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
-<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
+<script src="<?php echo $baseurl; ?>/js/help.js"></script>
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");
-	dojo.require('dijit.form.TextBox');  
+	dojo.require('dijit.form.TextBox');
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.DateTextBox");
-	var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
-	var ItemTypestore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->itemType));?> );
-dojo.ready(function(){
-	new dijit.form.FilteringSelect({
-		store: disname_store,
-		required: true,   
-		autoComplete: false,
-		queryExpr: "*${0}*",  
-		id: "disname_id",
-		name: "disname_id",           
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
-		onChange: function() {  
-			discount_id = dijit.byId('disname_id').get('value');
-			if(discount_id==-1){
-				dijit.byId("popup_add_discount").show();
-				dijit.byId("s_save").set("disabled",false);
+	var disname_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode($this->discount)); ?>);
+	var ItemTypestore = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode($this->itemType)); ?>);
+	require(["dojo/ready"], function (ready) {
+		new dijit.form.FilteringSelect({
+			store: disname_store,
+			required: true,
+			autoComplete: false,
+			queryExpr: "*${0}*",
+			id: "discount_id",
+			name: "discount_id",
+			class: "fullside",
+			placeHolder: "<?php echo $tr->translate("SELECT_DISCOUNT"); ?>",
+			onChange: function () {
+				discount_id = dijit.byId('discount_id').get('value');
+				if (discount_id == -1) {
+					dijit.byId("popup_add_discount").show();
+					dijit.byId("s_save").set("disabled", false);
+				}
 			}
-		}
-	}, "disname_id");
+		}, "discount_id");
 
-	new dijit.form.FilteringSelect({
-		store:ItemTypestore,
-		required: false,  
-		autoComplete: false,
-		queryExpr: "*${0}*",                      
-	    id: "itemType",
-	    name: "itemType",  
-	    tabindex: "1",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_CATEGORY")?>", 
-	    onChange: function() {          
-	    	itemId = dijit.byId('itemType').get('value');
-	    	dijit.byId("itemId").reset();
-		    if(itemId>0){
-		    	getAllItemId(itemId);
-		    }
-	   }
-	}, "itemType");
+		new dijit.form.FilteringSelect({
+			store: ItemTypestore,
+			required: false,
+			autoComplete: false,
+			queryExpr: "*${0}*",
+			id: "itemType",
+			name: "itemType",
+			tabindex: "1",
+			class: 'fullside',
+			placeHolder: "<?php echo $tr->translate("SELECT_CATEGORY") ?>",
+			onChange: function () {
+				itemId = dijit.byId('itemType').get('value');
+				dijit.byId("itemId").reset();
+				if (itemId > 0) {
+					getAllItemId(itemId);
+				}
+			}
+		}, "itemType");
 
-	new dijit.form.FilteringSelect({
-		required: false,  
-		autoComplete: false,
-		queryExpr: "*${0}*",                      
-	    id: "itemId",
-	    name: "itemId",  
-	    tabindex: "1",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_ITEM")?>", 
-	    onChange: function() {          
-	   }
-	}, "itemId");
+		new dijit.form.FilteringSelect({
+			required: false,
+			autoComplete: false,
+			queryExpr: "*${0}*",
+			id: "itemId",
+			name: "itemId",
+			tabindex: "1",
+			class: 'fullside',
+			placeHolder: "<?php echo $tr->translate("SELECT_ITEM") ?>",
+			onChange: function () {
+			}
+		}, "itemId");
 
-	new dijit.form.FilteringSelect({
-		required: false,  
-		autoComplete: false,
-		queryExpr: "*${0}*",                      
-	    id: "studentId",
-	    name: "studentId",  
-	    tabindex: "1",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>", 
-	    
-	}, "studentId");
+		new dijit.form.FilteringSelect({
+			required: false,
+			autoComplete: false,
+			queryExpr: "*${0}*",
+			id: "studentId",
+			name: "studentId",
+			tabindex: "1",
+			class: 'fullside',
+			placeHolder: "<?php echo $tr->translate("SELECT_STUDENT_NAME") ?>",
 
-	branchId = dijit.byId('branch_id');
-	branchId.on('change',function(evt){
+		}, "studentId");
+
+		ready(function () {
+			branchId = dijit.byId('branch_id');
+			branchId.on('change', function (evt) {
+				branchId = dijit.byId('branch_id').get('value');
+				if (branchId == '') {
+					dijit.byId("branch_id").focus();
+					return false;
+				}
+				getAllstudentBranch();
+			});
+
+			discount_id = dijit.byId('discount_id');
+			discount_id.on('change', function (evt) {
+				getAllstudentBranch();
+			});
+
+			checkDiscountPeriod();
+			getAllstudentBranch();
+			discountFor();
+			checkDiscountForType();
+		});
+
+	});
+
+
+	function getAllstudentBranch() {
+		dijit.byId("studentId").reset();
 		branchId = dijit.byId('branch_id').get('value');
-		if(branchId==''){
-			dijit.byId("branch_id").focus();
+		if (branchId == '') {
+			dijit.byId('branch_id').focus();
+		}
+		discount_id = dijit.byId('discount_id').get('value');
+
+		if (discount_id == 1) {
 			return false;
 		}
-		getAllstudentBranch();
-		
-	});
+		var urlGet = '<?php echo $this->url(array('module' => 'registrar', 'controller' => 'register', 'action' => 'getliststudenturl')); ?>';
 
-	discountOption = dijit.byId('discountOption');
-	discountOption.on('change',function(evt){
-		getAllstudentBranch();
-	});
-	getAllstudentBranch();
-});
+		contentData = {
+			'branchId': branchId,
+			'customerType': 1
+		}
+		getAllStudentByBranch(urlGet, contentData);
+	}
+	function getAllItemId(itemId) {
+		dijit.byId("itemId").reset();
+		branchId = dijit.byId('branch_id').get('value');
+		studentId = dijit.byId('studentId').get('value');
+		var urlGet = '<?php echo $this->url(array('module' => 'global', 'controller' => 'grade', 'action' => 'get-allitemid')); ?>';
 
-function getAllstudentBranch(){
-	dijit.byId("studentId").reset();
-	branchId = dijit.byId('branch_id').get('value');
-	if(branchId==''){
-		 dijit.byId('branch_id').focus();
+		contentData = {
+			'itemId': itemId,
+			'studentId': studentId,
+		}
+		getAllItemIdByType(urlGet, contentData);
 	}
-	discountOption = dijit.byId('discountOption').get('value');
-	
-	if(discountOption==1){
-		return false;
-	}
-	var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
-	
-	contentData = {
-			'branchId':branchId,
-			'customerType':1
-			}
-	getAllStudentByBranch(urlGet,contentData);
-}
-function getAllItemId(itemId){
-	dijit.byId("itemId").reset();
-	branchId = dijit.byId('branch_id').get('value');
 
-	studentId = dijit.byId('studentId').get('value');
-	
-	var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
-	
-	contentData = {
-		'itemId':itemId,
-		'studentId':studentId,
-	}
-	getAllItemIdByType(urlGet,contentData);
-}
-
-function submitDataClose(){
-	dranch=dijit.byId('branch_id').get('value');
-	if(dranch==''){
-		alert('Please Select Branch!');
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	dis_max=dijit.byId('discountValue').get('value');
-	if(dis_max>100){
-		alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
-		return false;
-	}
-	end_date=dijit.byId('end_date').get('value');
-	start_date=dijit.byId('start_date').get('value');
-	if(end_date<start_date){
-		alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ!');
-		return false;
-	} 
-	if(dijit.byId('add_discount').validate()){
-		dijit.byId('save_close').set('disabled',true);
-		dijit.byId('save_new').set('disabled',true);
-		var url_submit = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'add')); ?>';
-		dojo.xhrPost({
-		    url: url_submit,	
-			form: dojo.byId("add_discount"),		    
-			load: function(data) {
-				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/accounting/discountsetting";
-			},
-			error: function(e) {
-			}
-		});
-	}
-}
-var url_adddiscount = '<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'adddiscount')); ?>';
-	function addDiscount(){
-		if(dijit.byId('frm_adddiscount').validate()){
-			dijit.byId("s_save").attr("disabled",true);
+	function submitDataClose() {
+		dranch = dijit.byId('branch_id').get('value');
+		if (dranch == '') {
+			alert('Please Select Branch!');
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		dis_max = dijit.byId('discountValue').get('value');
+		if (dis_max > 100) {
+			alert('អាចបញ្ចុះតម្លៃពី 1 ដល់ 99!');
+			return false;
+		}
+		end_date = dijit.byId('end_date').get('value');
+		start_date = dijit.byId('start_date').get('value');
+		if (end_date < start_date) {
+			alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ!');
+			return false;
+		}
+		if (dijit.byId('add_discount').validate()) {
+			dijit.byId('save_close').set('disabled', true);
+			dijit.byId('save_new').set('disabled', true);
+			var url_submit = '<?php echo $this->url(array('module' => 'accounting', 'controller' => 'discountsetting', 'action' => 'add')); ?>';
 			dojo.xhrPost({
-					url:url_adddiscount,
-					form: dojo.byId("frm_adddiscount"),
-					handleAs:"json",
-					load: function(data) {
-						var Itemmake = { 
-							 id: data,
-							 name: dijit.byId('dis_name').get('value')
-						   };
-				   addDataToSelectbox(dijit.byId('disname_id'), disname_store, Itemmake, data);
-				   dijit.byId('frm_adddiscount').reset();
-				   dijit.byId("popup_add_discount").hide();	
+				url: url_submit,
+				form: dojo.byId("add_discount"),
+				load: function (data) {
+					alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?> !');
+					window.location.href = "<?php echo $this->baseUrl(); ?>/accounting/discountsetting";
 				},
-				error:function(err){
+				error: function (e) {
 				}
-		});
+			});
+		}
 	}
-}
-function branch(){
-    dept_id = dijit.byId('branch').get('value');
-    if(dept_id==-1){
-    	dijit.byId("popup_add_discount").show();
+	var url_adddiscount = '<?php echo $this->url(array('module' => 'accounting', 'controller' => 'discountsetting', 'action' => 'adddiscount')); ?>';
+	function addDiscount() {
+		if (dijit.byId('frm_adddiscount').validate()) {
+			dijit.byId("s_save").attr("disabled", true);
+			dojo.xhrPost({
+				url: url_adddiscount,
+				form: dojo.byId("frm_adddiscount"),
+				handleAs: "json",
+				load: function (data) {
+					var Itemmake = {
+						id: data,
+						name: dijit.byId('dis_name').get('value')
+					};
+					addDataToSelectbox(dijit.byId('discount_id'), disname_store, Itemmake, data);
+					dijit.byId('frm_adddiscount').reset();
+					dijit.byId("popup_add_discount").hide();
+				},
+				error: function (err) {
+				}
+			});
+		}
 	}
-}
-function hideDialog(){
-	dijit.byId('frm_adddiscount').reset();
-	dijit.byId("popup_add_discount").hide();
-}
+	function branch() {
+		dept_id = dijit.byId('branch').get('value');
+		if (dept_id == -1) {
+			dijit.byId("popup_add_discount").show();
+		}
+	}
+	function hideDialog() {
+		dijit.byId('frm_adddiscount').reset();
+		dijit.byId("popup_add_discount").hide();
+	}
+	function checkall() {
+
+		if ($('#check_all').is(':checked')) {
+			$(".checkbox").prop('checked', true);
+		} else {
+			$(".checkbox").prop('checked', false);
+		}
+		checkDiscountForType();
+	}
+	function checkDiscountPeriod() {
+		discountPeriod = dijit.byId('discountPeriod').get('value');
+		if (discountPeriod == 2) {
+			dijit.byId('start_date').set('readOnly', false);
+			dijit.byId('end_date').set('readOnly', false);
+			dijit.byId('start_date').set("required", true);
+			dijit.byId('end_date').set("required", true);
+		} else {
+			dijit.byId('start_date').reset();
+			dijit.byId('end_date').reset();
+			dijit.byId('start_date').set("required", false);
+			dijit.byId('end_date').set("required", false);
+			dijit.byId('start_date').set('readOnly', true);
+			dijit.byId('end_date').set('readOnly', true);
+		}
+	}
+	function checkDiscountForType(){
+		var discountforType = dijit.byId('discountforType').get('value');
+		if(discountforType==1){//school fee
+			//$(".hidden_student").css('display','block');
+		}else{
+			//$(".hidden_student").css('display','none');
+			$(".checkbox").prop('checked', false);
+		}
+	}
+	function discountFor(){
+		var discountFor = dijit.byId('discountFor').get('value');
+		if(discountFor==1){
+			$(".hidden_student").css('display','block');
+		}else{
+			$(".hidden_student").css('display','none');
+		}
+	}
 </script>

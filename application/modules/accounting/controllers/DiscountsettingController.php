@@ -79,6 +79,8 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 		$frm_discount=$tsub->FrmDiscountsetting();
 		Application_Model_Decorator::removeAllDecorator($frm_discount);
 		$this->view->frm_discount = $frm_discount;
+
+		$this->view->rsdegree = $model->getAllDegreeName();
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -108,6 +110,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action {
 		$model = new Application_Model_DbTable_DbGlobal();		
 		$dis = $model->getAllDiscount();
 		$this->view->discount = $dis;
+		$this->view->rsdegree = $model->getAllDegreeName();
 		
 		$this->view->itemType = $model->getAllItems();
 		

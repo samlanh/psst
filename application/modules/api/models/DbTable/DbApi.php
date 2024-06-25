@@ -3407,6 +3407,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$sql=" SELECT 
 					spd.*
+					,CASE 
+						WHEN COALESCE(spd.totalpayment,0) < COALESCE(spd.fee,0) 
+						THEN FORMAT(COALESCE(spd.fee,0) - COALESCE(spd.totalpayment,0),2)
+						ELSE spd.total_discount
+					END AS total_discount
 			    	,(SELECT $grade FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS itemsName
 			    	,(SELECT items_type FROM `rms_itemsdetail` WHERE id=spd.itemdetail_id LIMIT 1) AS itemsType
 			    	,(SELECT $label FROM `rms_view` WHERE  `type`=6 AND key_code= spd.payment_term LIMIT 1) AS paymentTerm

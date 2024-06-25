@@ -31,7 +31,7 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 		$year_opt = $db->getAllAcademicYear(1);
 		$acadmicyear->setMultiOptions($year_opt);
 
-		$discountTitle = new Zend_Dojo_Form_Element_FilteringSelect('discountTitle');
+		$discountTitle = new Zend_Dojo_Form_Element_ValidationTextBox('discountTitle');
 		$discountTitle->setAttribs(
 			array(
 				'dojoType' => $this->tvalidate,
@@ -39,7 +39,6 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 				'required' => true
 			)
 		);
-
 
 		$_discount = new Zend_Dojo_Form_Element_FilteringSelect('discount_id');
 		$_discount->setAttribs(
@@ -72,11 +71,17 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 				'onchange'=>'discountFor();'
 			)
 		);
-		$opt = array(
-			'2' => $this->tr->translate('ALL_STUDENT'),
-			'1' => $this->tr->translate('ONLY_STUDENT'),
-		);
+		$opt = $db->getViewById(37, 1,1);
+		unset($opt[-1]);
+
+		if ($request->getActionName() == 'index' OR $request->getModuleName() == 'allreport') {
+			$opt['0']=$this->tr->translate("PLEASE_SELECT");
+			ksort($opt);
+			$discountFor->setAttrib('required', 'false');
+			$acadmicyear->setAttrib('required', 'false');
+		}
 		$discountFor->setMultiOptions($opt);
+		$discountFor->setValue($request->getParam('discountFor'));
 
 		$discountType = new Zend_Dojo_Form_Element_FilteringSelect('DisValueType');
 		$discountType->setAttribs(
@@ -114,22 +119,18 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 		$start_date->setAttribs(
 			array(
 				'dojoType' => 'dijit.form.DateTextBox',
-				//'required'=>true,
 				'class' => 'fullside',
 				'constraints' => "{datePattern:'dd/MM/yyyy'}"
 			)
 		);
-		//$start_date->setValue(date('Y-m-d'));
 		$end_date = new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$end_date->setAttribs(
 			array(
 				'dojoType' => 'dijit.form.DateTextBox',
-				//'required' => true,
 				'class' => 'fullside',
 				'constraints' => "{datePattern:'dd/MM/yyyy'}"
 			)
 		);
-		//$end_date->setValue(date('Y-m-d'));
 
 		$discountPeriod = new Zend_Dojo_Form_Element_FilteringSelect('discountPeriod');
 		$discountPeriod->setAttribs(
@@ -138,15 +139,26 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 				'class' => 'fullside',
 				'autoComplete' => 'false',
 				'queryExpr' => '*${0}*',
+				'placeHolder'=>$this->tr->translate('DISCOUNT_PERIOD'),
 				'onchange' => 'checkDiscountPeriod();'
 			)
 		);
-		$opt = array(
-			'1' => $this->tr->translate('ONETIME_ONLY'),
-			'2' => $this->tr->translate('BY_PERIOD'),
-			'3' => $this->tr->translate('LIFT_TIME'),
-		);
+		// $opt = array(
+		// 	'1' => $this->tr->translate('ONETIME_ONLY'),
+		// 	'2' => $this->tr->translate('BY_PERIOD'),
+		// 	'3' => $this->tr->translate('LIFT_TIME'),
+		// );
+		$opt = $db->getViewById(39, 1,1);
+		unset($opt[-1]);
+		
+		if ($request->getActionName() == 'index' OR $request->getModuleName() == 'allreport') {
+			$opt['0']=$this->tr->translate("SELECT").$this->tr->translate("DISCOUNT_PERIOD");
+			ksort($opt);
+			$discountPeriod->setAttrib('required', 'false');
+		}
+
 		$discountPeriod->setMultiOptions($opt);
+		$discountPeriod->setValue($request->getParam('discountPeriod'));
 
 		$discountforType = new Zend_Dojo_Form_Element_FilteringSelect('discountforType');
 		$discountforType->setAttribs(
@@ -158,28 +170,15 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 				'onchange' => 'checkDiscountForType();'
 			)
 		);
-		$opt = array(
-			'1' => $this->tr->translate('SCHOOL_FEE'),
-			'2' => $this->tr->translate('SERVICE'),
-		);
-		$discountforType->setMultiOptions($opt);
+		// $opt = array(
+		// 	'1' => $this->tr->translate('SCHOOL_FEE'),
+		// 	'2' => $this->tr->translate('SERVICE'),
+		// );
 
-		$discountPeriod = new Zend_Dojo_Form_Element_FilteringSelect('discountPeriod');
-		$discountPeriod->setAttribs(
-			array(
-				'dojoType' => $this->filter,
-				'class' => 'fullside',
-				'autoComplete' => 'false',
-				'queryExpr' => '*${0}*',
-				'onchange' => 'checkDiscountPeriod();'
-			)
-		);
-		$opt = array(
-			'1' => $this->tr->translate('ONETIME_ONLY'),
-			'2' => $this->tr->translate('BY_PERIOD'),
-			'3' => $this->tr->translate('LIFT_TIME'),
-		);
-		$discountPeriod->setMultiOptions($opt);
+		$opt = $db->getViewById(38, 1,1);
+		unset($opt[-1]);
+
+		$discountforType->setMultiOptions($opt);
 
 		$_dismax = new Zend_Dojo_Form_Element_NumberTextBox('discountValue');
 		$_dismax->setAttribs(
@@ -191,7 +190,7 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 		);
 
 		$_status = new Zend_Dojo_Form_Element_FilteringSelect('status');
-		$_status->setAttribs(array('dojoType' => $this->filter, 'class' => 'fullside', ));
+		$_status->setAttribs(array('dojoType' => $this->filter,'class' =>'fullside'));
 		$_status_opt = array(
 			1 => $this->tr->translate("ACTIVE"),
 			0 => $this->tr->translate("DACTIVE")
@@ -199,14 +198,21 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 		$_status->setMultiOptions($_status_opt);
 
 		if (!empty($data)) {
-			$_discount->setValue($data['discountType']);
-			$_dismax->setValue($data['discountValue']);
-			$_branch_id->setValue($data['branch_id']);
-			$start_date->setValue($data['start_date']);
-			$end_date->setValue($data['end_date']);
-			$_status->setValue($data['status']);
-			$discountFor->setValue($data['discountOption']);
+			$_branch_id->setValue($data['branchId']);
+			$acadmicyear->setValue($data['academicYear']);
+			$discountTitle->setValue($data['discountTitle']);
+			$discountFor->setValue($data['discountFor']);
+			$discountforType->setValue($data['discountForType']);
 
+			$_discount->setValue($data['discountId']);
+			$discountType->setValue($data['DisValueType']);
+			$_dismax->setValue($data['discountValue']);
+
+			$discountPeriod->setValue($data['discountPeriod']);
+			$start_date->setValue($data['startDate']);
+			$end_date->setValue($data['endDate']);
+
+			$_status->setValue($data['status']);
 		}
 		$this->addElements(
 			array(

@@ -4,6 +4,7 @@
 	echo $this->headTitle($tr->translate("DISCOUNTSETTING"));
 ?>	
 <?php $frm =  $this->form_search;?>
+
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -22,13 +23,22 @@
 						<?php echo $frm->getElement("title");?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("academic_year");?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("branch_id");?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('discountFor');?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 	            		<input id="studentId" />
 	            	</div>
 	            	<div class="col-md-2 col-sm-2 col-xs-12">
 	            		<input id="discountId" />
+	            	</div>
+	            	<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('discountPeriod');?>
 	            	</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement('status_search');?>
@@ -84,7 +94,6 @@ dojo.ready(function(){
 			return false;
 		}
 		getAllstudentBranch();
-		
 	});
 
 	getAllstudentBranch();

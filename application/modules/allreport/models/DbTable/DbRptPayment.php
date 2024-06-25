@@ -281,38 +281,78 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql.$where.$orderby);
     }
     function getDiscountSetting($search = '',$type=null){
-    	$db = $this->getAdapter();
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    
-    	$currentLang = $dbp->currentlang();
-    	$colunmname='title_en';
-    	if ($currentLang==1){
-    		$colunmname='title';
-    	}
-    	$sql = "SELECT
-			    	 g.discount_id AS id,
-			    	(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id LIMIT 1) AS branch,
-			    	(SELECT name_en FROM `rms_view` WHERE type=35 AND key_code=g.discountOption LIMIT 1)AS discountOption,
-			    	(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))
-		    		FROM rms_student AS s
-		    			WHERE s.stu_id=g.studentId LIMIT 1) AS studentName,
-			    	(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.itemType LIMIT 1) AS itemType,
-			    	(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id =`g`.`itemId` LIMIT 1) AS itemDetail,
-			    	(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.discountType LIMIT 1) AS disc_name,
-			    	CONCAT(g.discountValue,
-			    	(CASE
-				    	WHEN DisValueType=1 THEN '%'
-				    	WHEN DisValueType=2 THEN '$'
-			    	END )) AS DisValueType,
-			    	DATE_FORMAT(g.start_date,'%d-%m-%Y') start_date,
-			    	DATE_FORMAT(g.end_date,'%d-%m-%Y') end_date,
-			    	(SELECT CONCAT(first_name) FROM rms_users WHERE id=g.user_id LIMIT 1 ) AS user_name
-    			";
-    	$sql.=$dbp->caseStatusShowImage("g.status");
-    	$sql.=" FROM rms_dis_setting AS g ";
-    
-    	$order = ' ORDER BY id DESC ';
-    	$where = ' WHERE discountType!="" ';
+		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentLang = $dbp->currentlang();
+		$colunmname = 'name_en';
+		$strDegree = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'name_kh';
+			$strDegree = 'title';
+		}
+
+		$strStudent = "(SELECT CONCAT(COALESCE(s.stu_code,''),' ',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,'')) FROM rms_student AS s WHERE s.stu_id=ds.studentId LIMIT 1) ";
+
+		$sqlPeriod = "(SELECT name_en FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
+		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
+
+		$sql = "SELECT ds.id, 
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
+					discountTitle,
+					(CASE 
+						WHEN ds.discountFor=2 THEN $sqlDiscountFor
+						WHEN ds.discountFor=1 THEN $strStudent
+					END) AS discountForText,
+					(SELECT $colunmname FROM `rms_view` WHERE TYPE=38 AND key_code=ds.discountFor LIMIT 1) AS discountForOption,
+					(SELECT GROUP_CONCAT($strDegree) FROM `rms_items` WHERE FIND_IN_SET(id,degree)) as degreeList,
+					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
+					CONCAT(ds.discountValue, 
+					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,		
+					CONCAT(COALESCE($sqlPeriod),' ',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y')),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'))) AS discountPeriod, 
+					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
+					ds.createDate";
+
+		$sql .= $dbp->caseStatusShowImage("ds.status");
+		$sql .= " FROM rms_dis_setting AS ds ";
+
+		$order =" ORDER BY id DESC ";
+		$where =" WHERE 1";
+
+		if (!empty($search['title'])) {
+			$s_where = array();
+			$s_search = addslashes(trim($search['title']));
+			$s_where[] = " discountTitle LIKE '%{$s_search}%'";
+			$s_where[] = " discountValue LIKE '%{$s_search}%'";
+			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
+		}
+		if (($search['academic_year'])>0) {
+			$where .= ' AND ds.academicYear=' . $search['academic_year'];
+		}
+		
+		if (!empty($search['branch_id'])) {
+			$where .= ' AND ds.branchId=' . $search['branch_id'];
+		}
+		if (!empty($search['studentId'])) {
+			$where .= ' AND ds.studentId=' . $search['studentId'];
+		}
+		if (!empty($search['discountId'])) {
+			$where .= ' AND ds.discountId=' . $search['discountId'];
+		}
+		if (!empty($search['discountFor'])) {
+			$where .= ' AND ds.discountFor=' . $search['discountFor'];
+		}
+		if (!empty($search['discountPeriod'])) {
+			$where .= ' AND ds.discountPeriod=' . $search['discountPeriod'];
+		}
+		if ($search['status_search'] > -1) {
+			$where .= ' AND status=' . $search['status_search'];
+		}
+		$where .= $dbp->getAccessPermission('ds.branchId');
+		return $db->fetchAll($sql . $where . $order);
+		
+    	
     
      if(!empty($search['title'])){
     		$s_where = array();

@@ -391,7 +391,16 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("DACTIVE"));
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
-		$this->addElements(array($_title,$_status,$_branch_id));
+
+		$frm = new Accounting_Form_FrmDiscount();
+		$newfrm = $frm->FrmDiscountsetting();
+		
+		$discountFor = $newfrm->getElement('discountFor');
+		$discountPeriod = $newfrm->getElement('discountPeriod');
+		$academic_year = $newfrm->getElement('academic_year');
+
+		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year));
+		
 	
 		return $this;
 	}

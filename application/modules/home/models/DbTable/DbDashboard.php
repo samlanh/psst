@@ -112,17 +112,20 @@
     		$title="v.name_kh";
     	}
     	$sql="SELECT 
-			(SELECT branch_nameen FROM `rms_branch` WHERE br_id=g.branch_id)AS branch,
-			(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=g.discountType )AS disc_name,
-			g.*,
-			(SELECT  CONCAT(first_name) FROM rms_users WHERE id=g.user_id )AS user_name,
-			(SELECT $title FROM rms_view as v WHERE v.type=1 AND v.key_code =g.status) AS `status` 
+				(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1)AS branch,
+				(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1)AS disc_name,
+				ds.*,
+				(SELECT  CONCAT(first_name) FROM rms_users WHERE id=ds.userId LIMIT 1)AS user_name,
+				(SELECT $title FROM rms_view as v WHERE v.type=1 AND v.key_code =ds.status LIMIT 1) AS `status` 
 			FROM 
-			rms_dis_setting AS g
-			WHERE g.status=1
-			AND g.end_date <='$date'";
-    	$sql.=$dbgb->getAccessPermission('g.branch_id');
-    	$order =" ORDER BY g.discount_id DESC";
+				rms_dis_setting AS ds
+			WHERE 
+				ds.status=1
+				AND ds.discountFor=2
+				AND ds.discountPeriod=2
+				AND ds.endDate <='$date'";
+    	$sql.=$dbgb->getAccessPermission('ds.branchId');
+    	$order =" ORDER BY ds.discountId DESC";
     	return $db->fetchAll($sql.$order);
     }
 }

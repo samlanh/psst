@@ -26,8 +26,8 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 		<form id='add_discount' action="" method="post" dojoType="dijit.form.Form"
 			enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">
-				dranch=dijit.byId('branch_id').get('value');
-					if(dranch==''){
+				branch=dijit.byId('branch_id').get('value');
+					if(branch==''){
 						alert('Please Select Branch!');
 						dijit.byId('branch_id').focus()
 						return false;
@@ -39,14 +39,22 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 					}  
 				 end_date=dijit.byId('end_date').get('value');
 				 start_date=dijit.byId('start_date').get('value');
+				
 					if(end_date<start_date){
-						alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ!');
+						alert('ថ្ងៃចាប់ផ្តើម មិនអាចហួសថ្ងៃបញ្ចប់ទេ');
+						return false;
+					}
+					discountforType=dijit.byId('discountforType').get('value');
+					var ifCheckedDegree = $('input[name="selector[]"]:checked').length > 0;
+
+					if(discountforType==1 && ifCheckedDegree==false){
+						alert('please check degree');
 						return false;
 					}
 				   if(this.validate()) {
 					dijit.byId("save_close").attr("disabled",true);
 					dijit.byId("save_new").attr("disabled",true);
-						return true;
+					return true;
 				   }else {
 					return false;
 				   }
@@ -57,7 +65,6 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-12 col-sm-12 col-xs-12">
-
 									<div class="col-md-12 col-sm-12 col-xs-12">
 										&nbsp;
 									</div>
@@ -121,22 +128,6 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm->getElement("discountforType"); ?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label
-											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE"); ?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="itemType" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label
-											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("COURSE_SERVICE_PRODUCT") . '/' . $tr->translate("PRODUCT"); ?>
-										</label>
-										<div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="itemId" />
 										</div>
 									</div>
 								</div>
@@ -287,8 +278,7 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 </div>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popup_add_discount">
-		<form style="" id='frm_adddiscount' dojoType="dijit.form.Form" method="post"
-			enctype="application/x-www-form-urlencoded">
+		<form id='frm_adddiscount' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">
 				if(this.validate()) {
 					return true;
@@ -341,7 +331,7 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.DateTextBox");
 	var disname_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode($this->discount)); ?>);
-	var ItemTypestore = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode($this->itemType)); ?>);
+	//var ItemTypestore = getDataStorefromJSON('id', 'name', <?php //print_r(Zend_Json::encode($this->itemType)); ?>);
 	require(["dojo/ready"], function (ready) {
 		new dijit.form.FilteringSelect({
 			store: disname_store,
@@ -351,7 +341,7 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			id: "discount_id",
 			name: "discount_id",
 			class: "fullside",
-			placeHolder: "<?php echo $tr->translate("SELECT_DISCOUNT"); ?>",
+			placeHolder: "<?php //echo $tr->translate("SELECT_DISCOUNT"); ?>",
 			onChange: function () {
 				discount_id = dijit.byId('discount_id').get('value');
 				if (discount_id == -1) {
@@ -362,38 +352,6 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 		}, "discount_id");
 
 		new dijit.form.FilteringSelect({
-			store: ItemTypestore,
-			required: false,
-			autoComplete: false,
-			queryExpr: "*${0}*",
-			id: "itemType",
-			name: "itemType",
-			tabindex: "1",
-			class: 'fullside',
-			placeHolder: "<?php echo $tr->translate("SELECT_CATEGORY") ?>",
-			onChange: function () {
-				itemId = dijit.byId('itemType').get('value');
-				dijit.byId("itemId").reset();
-				if (itemId > 0) {
-					getAllItemId(itemId);
-				}
-			}
-		}, "itemType");
-
-		new dijit.form.FilteringSelect({
-			required: false,
-			autoComplete: false,
-			queryExpr: "*${0}*",
-			id: "itemId",
-			name: "itemId",
-			tabindex: "1",
-			class: 'fullside',
-			placeHolder: "<?php echo $tr->translate("SELECT_ITEM") ?>",
-			onChange: function () {
-			}
-		}, "itemId");
-
-		new dijit.form.FilteringSelect({
 			required: false,
 			autoComplete: false,
 			queryExpr: "*${0}*",
@@ -402,7 +360,6 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			tabindex: "1",
 			class: 'fullside',
 			placeHolder: "<?php echo $tr->translate("SELECT_STUDENT_NAME") ?>",
-
 		}, "studentId");
 
 		ready(function () {
@@ -426,9 +383,7 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			discountFor();
 			checkDiscountForType();
 		});
-
 	});
-
 
 	function getAllstudentBranch() {
 		dijit.byId("studentId").reset();
@@ -553,21 +508,21 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			dijit.byId('end_date').set('readOnly', true);
 		}
 	}
-	function checkDiscountForType(){
+	function checkDiscountForType() {
 		var discountforType = dijit.byId('discountforType').get('value');
-		if(discountforType==1){//school fee
+		if (discountforType == 1) {//school fee
 			//$(".hidden_student").css('display','block');
-		}else{
+		} else {
 			//$(".hidden_student").css('display','none');
 			$(".checkbox").prop('checked', false);
 		}
 	}
-	function discountFor(){
+	function discountFor() {
 		var discountFor = dijit.byId('discountFor').get('value');
-		if(discountFor==1){
-			$(".hidden_student").css('display','block');
-		}else{
-			$(".hidden_student").css('display','none');
+		if (discountFor == 1) {
+			$(".hidden_student").css('display', 'block');
+		} else {
+			$(".hidden_student").css('display', 'none');
 		}
 	}
 </script>

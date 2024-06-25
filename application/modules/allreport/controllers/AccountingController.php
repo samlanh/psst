@@ -255,10 +255,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			else{
 				$search = array(
 					'title' => '',
+					'academic_year' => '0',
 					'branch' => '',
-					'studentId'=>'',
-					'discountId'=>'',
-					'status_search' =>-1
+					'studentId' => '',
+					'discountId' => '',
+					'discountFor' => '0',
+					'discountPeriod' => '0',
+					'status_search' => -1
 				);
 			}
 			$this->view->search = $search;

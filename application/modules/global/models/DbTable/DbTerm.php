@@ -36,7 +36,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 			(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) AS user_name 
 	
 			FROM 
-			rms_startdate_enddate WHERE 1 ";
+			rms_startdate_enddate WHERE 1 AND forDepartment=1 ";
 			 $where = "";
     	
     	if(!empty($search['branch_id'])){
@@ -184,7 +184,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	// }
 	function getTermById($id=null){
 		$db = $this->getAdapter();
-		$sql=" select * from rms_startdate_enddate WHERE id = $id ";
+		$sql=" select * from rms_startdate_enddate WHERE forDepartment=1 AND id = $id ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->getAccessPermission('branch_id');
 		$sql.=" LIMIT 1 ";
@@ -192,7 +192,7 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	}
 	public function getTermDetail($data=null){
 		$db= $this->getAdapter();
-		$sql="SELECT * FROM rms_startdate_enddate WHERE academic_year=".$data['academic_year']." AND degreeId=".$data['degreeId']." ORDER BY periodId ASC ";
+		$sql="SELECT * FROM rms_startdate_enddate WHERE forDepartment=1 AND academic_year=".$data['academic_year']." AND degreeId=".$data['degreeId']." ORDER BY periodId ASC ";
 	
 		return $db->fetchAll($sql);
 	}

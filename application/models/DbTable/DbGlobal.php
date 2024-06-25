@@ -1877,7 +1877,7 @@ function getAllgroupStudyNotPass($action=null){
   	$db = $this->getAdapter();
   	$sql=" SELECT id,
   		CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name 
-  		FROM rms_startdate_enddate WHERE status=1 ";
+  		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
   	if(!empty($data['branch_id'])){
   		$sql.=" AND branch_id = ".$data['branch_id'];
   	}

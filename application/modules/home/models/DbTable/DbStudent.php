@@ -837,7 +837,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			if ($testCondiction == 2){
 				$sql .= "(SELECT tm.note FROM `rms_test_term` AS tm WHERE tm.id=str.study_term) AS study_term,";
 			} else {
-				$sql .= "(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.id=str.study_term) AS study_term,";
+				$sql .= "(SELECT CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') FROM `rms_startdate_enddate` WHERE rms_startdate_enddate.forDepartment=1 AND rms_startdate_enddate.id=str.study_term) AS study_term,";
 			}
 			$sql .= "		
 					(SELECT $degree FROM `rms_items` AS i WHERE i.id = str.degree AND i.type=1 LIMIT 1) AS degree_title,

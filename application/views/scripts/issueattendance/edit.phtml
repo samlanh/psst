@@ -1,0 +1,210 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("editAttendance");
+	echo $this->headTitle($pageTitle);
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$rowInfo = $this->rowInfo;
+
+	$today = new DateTime();
+	$attendenceDate =  $today->format("Y-m-d");
+?>	
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="card mb-1 ">
+			<div class="card-header pb-1"> 
+				<h3 class="card-title mb-2 "><?php echo $rowInfo['branchName'].' "ថ្នាក់ '." ".$rowInfo['groupCode'].'"'?></h3> 
+				<h3 class="card-title mb-2 "><?php echo $rowInfo['branchNameEn'].' "Class'." ".$rowInfo['groupCode'].'"'?></h3> 
+			</div>
+		</div>
+		<div class="card-content collapse show mt-1">
+			<form id='issueAttendance' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<script type="dojo/method" event="onSubmit">   
+					if(this.validate()){
+						var identity = $('#identity').val();
+						if(identity==''){
+							var msgTitle = "បំពេញព័ត៌មានមិនគ្រប់គ្រាន់ / Incompleted Data To save";
+							var msgDesc = "មិនមានព័ត៌មានសិស្សដែលត្រូវបញ្ចូល / There is no record to save";
+							infoMessageAlert(msgTitle,msgDesc);
+							return false;
+						}
+						var msgTitle = "អ្នកពិតជាចង់រក្សាទុកទីន្នន័យនេះឬ ? / Do you want to Save it ?";
+						var msgDesc = "សូមធ្វើការត្រួតពិនិត្យព័ត៌មានមុនពេលរក្សាទុក ! / Please checking information before saving !";
+						comfirmingSubmit('issueAttendance',msgTitle,msgDesc);
+						return false;
+						
+					}else {
+						return false;
+					}
+					</script>
+				<div class="card-box">
+					<div class="col-md-4 col-sm-4 col-xs-12">
+						<div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+											</div> 
+											<div class="col-md-10 col-sm-10 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex ">ព័ត៌មានអវត្តមាន / Attendance Info</p>
+											</div> 
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label bold col-md-5 col-sm-5 col-xs-12">មុខវិជ្ជា<br />Subject</label>
+									<div class="col-md-7 col-sm-7 col-xs-12">
+										<?php echo $rowInfo["subjectTitleKh"];?>
+										<br />
+										<?php echo $rowInfo["subjectTitleEng"];?>
+										<input type="hidden" name="branchId" id="branchId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["branchId"];?>"/>
+										<input type="hidden" name="groupId" id="groupId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["groupId"];?>"/>
+										<input type="hidden" name="subjectId" id="subjectId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["subject_id"];?>"/>
+										<input type="hidden" name="scheduleDetailId" id="scheduleDetailId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["scheduleDetailId"];?>"/>
+										<input type="hidden" name="from_hour" id="from_hour" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["from_hour"];?>"/>
+										<input type="hidden" name="to_hour" id="to_hour" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["to_hour"];?>"/>
+										<input type="hidden" name="forSemester" id="forSemester" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["forSemester"];?>"/>
+										<input type="hidden" name="attendanceId" id="attendanceId" class="fullside" dojoType="dijit.form.TextBox" value="<?php echo $rowInfo["isIssuedAtt"];?>"/>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ឆមាស <br /> Semester</label>
+									<div class="col-md-7 col-sm-7 col-xs-12">
+										<?php echo $rowInfo["forSemesterTitle"];?>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<label class="control-label bold col-md-5 col-sm-5 col-xs-12">កាលបរិច្ឆេទ <br /> Date</label>
+									<div class="col-md-7 col-sm-7 col-xs-12">
+										<?php echo $today->format("d-M-Y");?>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<label class="control-label bold col-md-5 col-sm-5 col-xs-12">ម៉ោងសិក្សា <br /> Teaching Time</label>
+									<div class="col-md-7 col-sm-7 col-xs-12">
+										<?php echo $rowInfo["daysTitle"];?>
+										<br />
+										<?php echo $rowInfo["fromHourTitle"];?> - <?php echo $rowInfo["toHourTitle"];?>
+									</div>
+								 </div>
+								 <div class="form-group">
+									<label class="control-label bold col-md-5 col-sm-5 col-xs-12">តម្រៀបសិស្ស<br />Sort Student Lists</label>
+									<div class="col-md-7 col-sm-7 col-xs-12">
+										<select id="sortStundent" name="sortStundent" class="fullside" onchange="filterStudent()"  dojoType="dijit.form.FilteringSelect" >
+											<option value="0">ទូរទៅ / Default </option>
+											<option value="1">លេខសម្គាល់សិស្ស/Student ID (ASC)</option>
+											<option value="2">ឈ្មោះសិស្សខ្មែរ/Name In Khmer (ASC)</option>
+											<option value="3"> ឈ្មោះសិស្សអង់គ្លេស / Name In English (ASC)</option>
+										</select>
+									</div>
+								 </div>
+								 <div class="clearfix"></div>
+								<div class="card-box mt-20">
+									<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+										<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" id="save_new" name="save_new" label="រក្សាទុក / Save" dojoType="dijit.form.Button"  />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8 col-sm-8 col-xs-12">
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div id="studentList">
+								</div>
+								<input type="hidden" name="identity" id="identity"  value="" >
+								<input type="hidden" dojoType="dijit.form.TextBox" name="indexKey" id="indexKey"  value="" >
+								<div class="form-group">
+									
+									<table id="table_row" style="border-collapse: collapse; border:1px solid #ccc;width:100%" >
+									</table>
+								</div>
+							</div>
+					   </div>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+dojo.require("dijit.form.Textarea");
+dojo.require("dijit.form.DateTextBox");
+dojo.require('dijit.form.NumberTextBox');
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.ready(function(){
+	
+	filterStudent();
+});
+
+var inx=0;
+var urlGetStudent= '<?php echo $this->url(array('module'=>'default','controller'=>'issueattendance','action'=>'get-student')); ?>';
+function filterStudent(){
+	$('#identity').val('');
+	dojo.query("#table_row").append("");
+	loadingBlock();
+	
+	group = dijit.byId('groupId').get('value');
+	sortStundent = dijit.byId('sortStundent').get('value');
+	
+	amtsubject = 0;
+	subjectId = dijit.byId('subjectId').get('value');
+	attendanceId = '<?php echo empty($rowInfo["isIssuedAtt"]) ? 0 : $rowInfo["isIssuedAtt"]; ?>';
+	fromHour = dijit.byId('from_hour').get('value');
+	toHour = dijit.byId('to_hour').get('value');
+	subjectId = dijit.byId('subjectId').get('value');
+	
+	if( group =='' ){
+		return false;
+	}
+	dojo.xhrPost({
+	    url: urlGetStudent,
+	    content : { 
+			'groupId':group
+			,'sortStundent':sortStundent
+			,'keyIndex':inx
+			,'attendanceId':attendanceId
+			,'fromHour':fromHour
+			,'toHour':toHour
+			,'subjectId':subjectId
+			
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		 
+	       if(data!=""){
+				inx=data.keyIndex;
+				$("#identity").val(data.identity);
+				
+				dojo.html.set(dojo.byId("studentList"),data.contentHtml , {
+					parseContent: true,
+				});
+				
+	       }else{
+		    	$('#identity').val('');
+	       }
+		   HideloadingBlock();	
+	   },		
+	    error: function(err) {
+			HideloadingBlock();
+	    }
+	});
+	
+}
+
+</script>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

@@ -63,6 +63,12 @@
     	 <form id='office_receipt' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 			<script type="dojo/method" event="onSubmit">   
   				 if(this.validate()) {
+					var identity = $('#identity').val();
+					if (identity == '') {
+						alert("There is no record to save");
+						return false;
+					}
+
 					branch_id = dijit.byId('branch_id').get('value');
    					if(branch_id=="" || branch_id==-1){
 						alert("<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>");
@@ -251,6 +257,7 @@
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dijit.form.Textarea");
+	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.TextBox");
 	dojo.require("dojo.NodeList-manipulate");
 	
@@ -364,6 +371,7 @@
 		group = dijit.byId('group').get('value');
 		if(group==''){
 			alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>");
+			dijit.byId("group").focus();
 			return false;
 		}
 		branch_id = dijit.byId('branch_id').get('value');
@@ -392,71 +400,6 @@ function gender(sex){
 	}else sex='<?php echo $tr->translate('FEMALE');?>';
 	return sex;
 }
-</script>
-
-<script> //validate controll form 
-function AllowOnlyNumbers(e) {
-    e = (e) ? e : window.event;
-    var key = null;
-    var charsKeys = [
-        97, // a  Ctrl + a Select All
-        65, // A Ctrl + A Select All
-        99, // c Ctrl + c Copy
-        67, // C Ctrl + C Copy
-        118, // v Ctrl + v paste
-        86, // V Ctrl + V paste
-        115, // s Ctrl + s save
-        83, // S Ctrl + S save
-        112, // p Ctrl + p print
-        80 // P Ctrl + P print
-    ];
-    var specialKeys = [
-	    8, // backspace
-	    9, // tab
-	    27, // escape
-	    13, // enter
-	    35, // Home & shiftKey +  #
-	    36, // End & shiftKey + $
-	    37, // left arrow &  shiftKey + %
-	    39, //right arrow & '
-	    46, // delete & .
-	    109,//.
-	    45 //Ins &  -
-    ];
-
-    key = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
-
-    if (key && key < 48 || key > 57) {
-        //Allow: Ctrl + char for action save, print, copy, ...etc
-        if ((e.ctrlKey && charsKeys.indexOf(key) != -1) ||
-            //Fix Issue: f1 : f12 Or Ctrl + f1 : f12, in Firefox browser
-            (navigator.userAgent.indexOf("Firefox") != -1 && ((e.ctrlKey && e.keyCode && e.keyCode > 0 && key >= 112 && key <= 123) || (e.keyCode && e.keyCode > 0 && key && key >= 112 && key <= 123)))) {
-            return true
-        }
-            // Allow: Special Keys
-        else if (specialKeys.indexOf(key) != -1) {
-            //Fix Issue: right arrow & Delete & ins in FireFox
-            if ((key == 39 || key == 45 || key == 46 || key == 109)) {
-                //return (navigator.userAgent.indexOf("Firefox") != -1 && e.keyCode != undefined && e.keyCode > 0);
-                return true
-            }
-                //DisAllow : "#" & "$" & "%"
-            else if (e.shiftKey && (key == 35 || key == 36 || key == 37)) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-        else {
-            return false;
-        }
-    }
-    else {
-        return true;
-       }
-    }
-
 function getScoreInfoBygroup(){
 	url_group = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentrefillscore','action'=>'getscoreinfo'));?>';
 	scoreId = dijit.byId('scoreId').get('value');
@@ -552,47 +495,70 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 			}
 		});
 	}
+
 	keyrow =0;
-	inx=0;
 	urlGetStudentInfo = '<?php echo $this->url(array('module'=>'issue','controller'=>'studentrefillscore','action'=>'get-studentscore'));?>';
 	function addRowStudent(){
-
+		
 		studentId=dijit.byId("studentId").get("value");
 		scoreId=dijit.byId("scoreId").get("value");
 
+		groupId=dijit.byId("groupId").get("value");
+		examTypeId=dijit.byId("examTypeId").get("value");
+		semesterId=dijit.byId("semesterId").get("value");
+		
 		if(studentId==-1 || studentId==""){return false;}
+
+		var idens = $("#identity").val();
+		var arrays = idens.split(',');
+		if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++) {
+				readychoose = dijit.byId('student_id'+arrays[i]).get('value');
+				 if(readychoose==studentId){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+					dijit.byId('studentId').reset();
+					 return false;
+				 }
+			}
+		}
 	
 		dojo.xhrPost({
 			url: urlGetStudentInfo,
 			content:{
 				'studentId':studentId,
 				'scoreId':scoreId,
+				'groupId':groupId,
+				'examTypeId':examTypeId,
+				'semesterId':semesterId,
 				},
 			handleAs:"json",
 			load: function(data) { 
 				if(data!=""){
 					keyrow = keyrow+1;
-					inx=inx+1;;
-					
+				
 					var strStudent="";
-						strStudent += '<td width="10px" align="center"><img onclick="deleteRecord(' + inx + ')" src="<?php echo $this->baseUrl(); ?>/images/Delete_16.png"></td>';
+						strStudent += '<td width="10px" align="center"><img onclick="deleteRecord(' + keyrow + ')" src="<?php echo $this->baseUrl(); ?>/images/Delete_16.png"></td>';
 						strStudent += '<td width="10px" align="center">&nbsp;' + keyrow + '</td>';
-						strStudent += '<td style="text-align:left;">&nbsp;' + data.stu_code + '<input dojoType="dijit.form.TextBox" name="student_id' + inx + '" value="' + studentId + '" type="hidden" ></td>';
+						strStudent += '<td style="text-align:left;">&nbsp;' + data.stu_code + '<input dojoType="dijit.form.TextBox" name="student_id'+keyrow+'" id="student_id'+keyrow+'" value="'+studentId+'" type="hidden" ></td>';
 						strStudent += '<td style="min-width:100px; text-align:left; padding:0 1px;">' + data.stuKhName + '<br />' + data.stuEnName + '</td>';
 						strStudent += '<td>&nbsp;' + gender(data.sex) + '&nbsp;</td>';
 						for (j = 0; j < subjectList.length; j++) {
 							maxValue = "'The value maximumn " + subjectList[j].max_subjectscore + "'";
 							invalidesms = "rangeMessage:" + maxValue;
 							totalAverage = '';
-							strStudent += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + inx + ',' + j + ')" value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + inx + '_' + subjectList[j].subject_id + '"  name="score_' + inx + '_' + subjectList[j].subject_id + '" /></td>';
+							if (examTypeId == 3) {
+								if (typeof(data.gradingScore[j]) != "undefined") {
+									totalAverage = data.gradingScore[j].totalAverage;
+								}
+							}
+							strStudent += '<td id="score_' + j + '"><input onkeydown="keyPressed(this.id,event,' + keyrow + ',' + j + ')" value="' + totalAverage + '" data-dojo-props="constraints:{min:0,max:' + subjectList[j].max_subjectscore + '},' + invalidesms + '" required="1" class="fullside" dojoType="dijit.form.NumberTextBox" type="text" id="score_' + keyrow + '_' + subjectList[j].subject_id + '"  name="score_' + keyrow + '_' + subjectList[j].subject_id + '" /></td>';
 						}
-						strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + inx + '"  name="amount_subject' + inx + '" ></td>';
+						strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="' + j + '" id="amount_subject' + keyrow + '"  name="amount_subject' + keyrow + '" ></td>';
 						if (examType == 2) {
-							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="" id="totalKhAvg' + inx + '"  name="totalKhAvg' + inx + '" ></td>';
-							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="" id="totalEnAvg' + inx + '"  name="totalEnAvg' + inx + '" ></td>';
-							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="" id="monthlySemesterAvg' + inx + '"  name="monthlySemesterAvg' + inx + '" ></td>';
+							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.totalKhAvg+'" id="totalKhAvg' + keyrow + '"  name="totalKhAvg' + keyrow + '" ></td>';
+							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.totalEnAvg+'" id="totalEnAvg' + keyrow + '"  name="totalEnAvg' + keyrow + '" ></td>';
+							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.monthlySemesterAvg+'" id="monthlySemesterAvg' + keyrow + '"  name="monthlySemesterAvg' + keyrow + '" ></td>';
 						}
-						strStudent += '<td ><input dojoType="dijit.form.TextBox" class="fullside" name="note_' + inx + '"  value="" type="text" ></td>';
 					tmp='<tr class="rowData" id="row'+keyrow+'">';
 					tmp+="</tr>";
 	
@@ -609,6 +575,7 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 			
 			},
 			error: function(err) {
+				alert(err);
 			}
 		});	
 	}
@@ -632,9 +599,6 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 
 		group = dijit.byId('groupId').get('value');
 		examType = dijit.byId('examTypeId').get('value');
-		if (examType == 3) {
-			examType = 2;
-		}
 		dojo.xhrPost({
 			url: url_getSubject,
 			content: {
@@ -647,7 +611,7 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 
 				var strHeadRow="";
 				strHeadRow = '<tr class="head-td" align="left"><th rowspan="3" class="tdheader"><?php echo $tr->translate('DEL'); ?></th>' +
-						'<th rowspan="2" class="tdheader" ><?php echo $tr->translate('NO'); ?></th>' +
+						'<th rowspan="2" class="tdheader" ><?php echo $tr->translate('NUM'); ?></th>' +
 						'<th rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID'); ?></th>' +
 						'<th rowspan="2" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME'); ?></th>' +
 						'<th rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></th>';
@@ -655,7 +619,7 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 					for (j = 0; j < subjectList.length; j++) {
 						no++;
 						amtsubject = subjectList[j].amount_subjectdivide;
-						stringsname = subjectList[j].name;
+						stringsname = subjectList[j].shortcuttitle;
 						subLangId = subjectList[j].subjectLang;
 						strHeadRow += '<th class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname + '</span> <input id="subject_lang' + subjectList[j].subject_id + '"  name="subject_lang' + subjectList[j].subject_id + '" value="' + subLangId + '" type="hidden" >&nbsp;</th>';
 					}
@@ -666,8 +630,6 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 						strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG_EN'); ?></span></th>';
 						strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG'); ?></span></th>';
 					}
-
-					strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('NOTE'); ?></span></th>';
 					strHeadRow += '</tr>';
 
 					strHeadRow += '<tr class="head-td" align="center" > <th colspan="' + subjectList.length + '" class="tdheader header"><?php echo $tr->translate('SUBJECT'); ?></th>';
@@ -687,5 +649,49 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 				alert(err);
 			}
 		});
+	}
+	
+	function keyPressed(TB, e, row, sujIndex) {
+		if (e.keyCode == 40 || e.keyCode == 13) { // arrow down
+			if (row < inx) {
+				document.getElementById('score_' + eval(row + '+1') + '_' + TB.split("_").pop()).focus();
+			} else if (row == inx) {
+				var firstRecord = eval(inx - dataStuList.length) + 1;
+				document.getElementById('score_' + firstRecord + '_' + TB.split("_").pop()).focus();
+			}
+		} else if (e.keyCode == 38) { // arrow up
+			var firstRecord = eval(inx - dataStuList.length) + 1;
+			if (row > firstRecord) {
+				document.getElementById('score_' + eval(row + '-1') + '_' + TB.split("_").pop()).focus();
+			} else if (row == firstRecord) {
+				document.getElementById('score_' + inx + '_' + TB.split("_").pop()).focus();
+			}
+		} else if (e.keyCode == 39) { // arrow right
+			var maxCol = subjectList.length;
+			var currentKey = eval(sujIndex + 1);
+			if (currentKey < maxCol) {
+				var nextIndex = eval(sujIndex + '+1');
+				var nextSub = subjectList[nextIndex].subject_id;
+				document.getElementById('score_' + row + '_' + nextSub).focus();
+			} else if (currentKey == maxCol) {
+				var nextSub = subjectList[0].subject_id;
+				document.getElementById('score_' + row + '_' + nextSub).focus();
+			}
+
+		} else if (e.keyCode == 37) { // arrow left
+			var currentCol = TB.split("_").pop();
+			var currentKey = eval(sujIndex + 1);
+			if (currentKey > 1) {
+				var previousIndex = eval(sujIndex + '-1');
+				var previousSub = subjectList[previousIndex].subject_id;
+				document.getElementById('score_' + row + '_' + previousSub).focus();
+			} else if (currentKey == 1) {
+				var maxCol = subjectList.length;
+				var thisIndex = (maxCol - 1)
+				var previousSub = subjectList[thisIndex].subject_id;
+				document.getElementById('score_' + row + '_' + previousSub).focus();
+			}
+		}
+		updateTimeOut();
 	}
 </script> 

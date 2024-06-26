@@ -62,6 +62,7 @@ dojo.ready(function(){
 		searchAttr: "name",
 		class: 'fullside',
 		value:"<?php echo $this->result['district_name'];?>",
+		placeHolder:"<?php echo $tr->translate("DISTRICT");?>",
 		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះសាខា​កូន!",	
 			onChange: function() {
 					filterCommune();
@@ -78,7 +79,7 @@ dojo.ready(function(){
 		searchAttr: "name",
 		class: 'fullside',
 		value:"<?php echo $this->result['commune_name'];?>",
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះសាខា​កូន!",	
+		placeHolder:"<?php echo $tr->translate("COMMUNE");?>",
 			onChange: function() {
 	        }
 		}, "commune_name");

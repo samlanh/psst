@@ -1,0 +1,166 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("ISSUE_ATTENDANCE_LIST");
+	echo $this->headTitle($pageTitle);
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$db = new Application_Model_DbTable_DbIssueAttendance();
+	
+?>	
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<style>
+	span.mini-button-class-danger,
+	span.mini-button-class-success,
+	span.mini-button-class-loading,
+	a.mini-button-class-edit,
+	a.mini-button-class {
+		padding: 2px;
+		font-size: 10px;
+		line-height: 14px;
+		border-radius: 5px;
+		text-align: center;
+		display: block;
+		margin: 1px 0;
+	}
+	a.mini-button-class {
+		color: #fff;
+		background-color: #0150a6;
+		border-color: #004b9c;
+		
+	 }
+	a.mini-button-class-edit {
+		color: #ffffff;
+		background-color: #d1a00c;
+		border-color: #004b9c;
+	}
+	a.mini-button-class-edit:hover,
+	a.mini-button-class:hover {
+		background: #009688;
+	}
+	span.mini-button-class-success {
+		color: #fff;
+		background-color: green;
+		border: solid 1px  #004b9c;
+	}
+	span.mini-button-class-loading {
+		color: #7c7c7c;
+		background-color: #fbfbfb;
+		border: solid 1px #eee;
+	}
+	span.mini-button-class-danger {
+		color: #ffffff;
+		background-color: #b34040;
+		border: solid 1px #910000;
+	}
+	.oneLineTitle {
+		text-overflow: ellipsis;
+		display: -webkit-box !important;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="card mb-1 pb-3">
+			<div class="card-header pb-1"> 
+				<h3 class="card-title mb-1 "><?php echo $tr->translate("SEARCH"); ?></h3> 
+			</div>
+			<div class="card-content">
+				<div class="card-body">
+				</div>
+			</div>
+			
+			<div class="row"> 
+				<?php 
+					if(!empty($this->row)) foreach($this->row as $row){ 
+						$cardClass = "border-top-primary border-top-darken-1";
+						$bgClass = "border-primary bg-gradient-directional-primary";
+						$isIssuedAtt = empty($row['isIssuedAtt']) ? 0 : $row['isIssuedAtt'];
+						
+						$urlAction = $this->baseUrl()."/issueattendance/add?groupId=".$row['groupId']."&subjectId=".$row['subject_id']."&scheduleDetailId=".$row['scheduleDetailId'];
+						$titleAction = $tr->translate('issueAttendance');
+						$iconAction = "glyphicon glyphicon-sort-by-order";
+						$buttonClass = "";
+
+						$array = array(
+							"degree"=> $row['degree_id'],
+							"fromHourValue"=> $row['from_hour'],
+							"toHourValue"=> $row['to_hour'],
+						);
+						$checkingTime =	 $db->checkAvailableTimeInput($array);
+						if(empty($checkingTime)) {
+							$urlAction = "";
+							$titleAction = $tr->translate('unavailable');
+							$iconAction = "glyphicon glyphicon-sort-by-order";
+							$buttonClass = "mini-button-class-loading";
+						}else if($checkingTime==2){
+								$urlAction = "";
+								$titleAction = $tr->translate('expired');
+								$iconAction = "glyphicon glyphicon-eye-close";
+								$buttonClass = "mini-button-class-danger";
+						}
+						if($isIssuedAtt>0){
+							$urlAction = $this->baseUrl()."/issueattendance/edit?groupId=".$row['groupId']."&subjectId=".$row['subject_id']."&scheduleDetailId=".$row['scheduleDetailId']."&attendanceId=".$isIssuedAtt;
+							$titleAction = $tr->translate('editAttendance');
+							$iconAction = "glyphicon glyphicon-edit";
+							if(empty($checkingTime) || $checkingTime==2) {
+								$urlAction = "";
+								$titleAction = $tr->translate('completed');
+								$iconAction = "fa fa-check-circle-o";
+								$buttonClass = "mini-button-class-success";
+							}
+						}
+
+						
+					
+						
+				?>
+				<div class="col-md-3 col-sm-3 col-xs-12"> 
+					<div class="card mb-0 <?php echo $cardClass; ?> border-top-5">
+						<div class="card-content">
+							<div class="row d-flex mb-1">
+								<div class="col-xs-5 pr-0">
+								
+									<div class="d-flex align-items-center h-100 text-white  <?php echo $bgClass; ?>">
+										<span class="mt-0 mb-0 mr-auto ml-auto text-white font-large-1 text-center">
+											<?php echo $row['groupCode']; ?>
+											<small class="timeSchedule text-white mt-0"><i class="glyphicon glyphicon-education font-large-4"></i> </small>
+										</span>
+									</div>
+								</div>
+								<div class="col-xs-7 pl-0">
+									<div class="col-md-12 col-sm-12 col-xs-12 pt-1">
+										<p class="mb-0 m-0"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>&nbsp;<?php echo $row['branchName']; ?></p>
+										
+										<h4 class="text-primary mb-0 m-0"><i class="fa fa-calendar" ></i> <?php echo $row['daysTitle']; ?></h4>
+										<p class="mb-0 "><i class="fa fa-clock-o" ></i>&nbsp;<?php echo $row['fromHourTitle']." - ".$row['toHourTitle']; ?></p>
+										
+										<h5 class="text-warning oneLineTitle m-0"><?php echo $row['subjectTitle']; ?></h5>
+										<p class="mb-0"><i class="glyphicon glyphicon-education" aria-hidden="true"></i>&nbsp;<?php echo $row['academicYear']; ?></p>
+										<p class="mb-0 "><i class="glyphicon glyphicon-blackboard" aria-hidden="true"></i>&nbsp;<?php echo $row['roomName']; ?></p>
+										<?php if($urlAction!=""){ ?>
+											<a target="_blank" title="<?php echo $titleAction;?>" class="mini-button-class oneLineTitle" href="<?php echo $urlAction;?>">
+												<i class=" <?php echo $iconAction; ?> " ></i> <?php echo $titleAction;?>
+											</a>
+										<?php }else{?>
+											<span title="<?php echo $titleAction;?>" class="mini-button-class <?php echo $buttonClass;?> oneLineTitle" >
+												<i class=" <?php echo $iconAction; ?> " ></i> <?php echo $titleAction;?>
+											</span>
+										<?php } ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php  } ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

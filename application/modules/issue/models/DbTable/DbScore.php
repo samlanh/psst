@@ -1170,7 +1170,13 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				(SELECT sj.parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS parent,
 				(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS sub_name,
 				(SELECT sj.is_parent FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS is_parent,
-				(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+				(SELECT  sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcut,
+				(SELECT CONCAT(sj.shortcut,
+			  		CASE
+					  	WHEN subject_lang =1 THEN '(ខ្មែរ)'
+					  	WHEN subject_lang =2 THEN '(English)'
+					  ELSE ''
+				END)  FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS shortcuttitle,
 				(gsjd.amount_subject) amtsubject_month,
 				(gsjd.amount_subject_sem) amtsubject_semester,
 				(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
@@ -1181,6 +1187,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					  	WHEN subject_lang =2 THEN '(English)'
 					  ELSE ''
 				END) FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS name
+				
 			FROM 
 		 		rms_group_subject_detail AS gsjd ,
 		 		rms_group as g

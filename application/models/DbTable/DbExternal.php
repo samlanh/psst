@@ -683,6 +683,36 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		if ($currentLang == 1) {
 			$studentName = 's.stu_khname';
 		}
+		
+		$queryStatmentForIssueAttendance="";
+		$queryCondictionForIssueAttendance="";
+		if (!empty($data['forIssueAttendance'])) {
+			
+			$date = new DateTime();
+			if(!empty($data['attendenceDate'])){
+				$date = new DateTime($data['attendenceDate']);
+			}
+			$attendenceDate =  $date->format("Y-m-d");
+			if(!empty($data["attendanceId"])){
+				$attendanceId = empty($data["attendanceId"]) ? 0 : $data["attendanceId"];
+				$subjectId = empty($data["subjectId"]) ? 0 : $data["subjectId"];
+				$fromHour = empty($data["fromHour"]) ? 0 : $data["fromHour"];
+				$toHour = empty($data["toHour"]) ? 0 : $data["toHour"];
+
+				$queryStatmentForIssueAttendance=",COALESCE((SELECT attd.id FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id  AND attd.subjectId = $subjectId AND attd.toHour = $toHour  AND attd.fromHour =  $fromHour AND   att.date_attendence = DATE_FORMAT('$attendenceDate', '%Y/%m/%d') LIMIT 1),0) AS detailIdAtt";
+				$queryStatmentForIssueAttendance.=",COALESCE((SELECT attd.attendence_status FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id  AND attd.subjectId = $subjectId AND attd.toHour = $toHour  AND attd.fromHour =  $fromHour AND   att.date_attendence = DATE_FORMAT('$attendenceDate', '%Y/%m/%d') LIMIT 1),0) AS attendenceStatus";
+				$queryStatmentForIssueAttendance.=",COALESCE((SELECT attd.description FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id  AND attd.subjectId = $subjectId AND attd.toHour = $toHour  AND attd.fromHour =  $fromHour AND   att.date_attendence = DATE_FORMAT('$attendenceDate', '%Y/%m/%d') LIMIT 1),'') AS reason";
+				$queryStatmentForIssueAttendance.=",'0' AS permissionRecordId";
+			}else{
+				$queryStatmentForIssueAttendance= "
+					,COALESCE(attD.attendence_status,'') as attendenceStatus
+					,COALESCE(attD.description,'') as reason
+					,COALESCE(attD.id,'0') AS permissionRecordId
+				";
+				$queryCondictionForIssueAttendance= " LEFT JOIN rms_student_attendence_detail AS attD ON attD.type=2 AND sgh.stu_id = attD.stu_id AND attD.attendanceDate ='".$attendenceDate."' ";
+			}
+			
+		}
 
 		$sql = "
 				SELECT
@@ -696,11 +726,12 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					,(SELECT teacherComment FROM `rms_studentassessment_detail` WHERE teacherComment!='' AND studentId=sgh.`stu_id` ORDER BY id DESC LIMIT 1) AS teacherComment
 					
 				 ";
-
+			$sql .= $queryStatmentForIssueAttendance;
 		$sql .= "";
-		$sql .= "FROM 
+		$sql .= " FROM 
 					`rms_group_detail_student` AS sgh";
-
+			$sql .= $queryCondictionForIssueAttendance;
+			
 		if (!empty($data['forScoreSubject'])) {
 			$sql .= "
 				LEFT JOIN rms_grading_total AS gradingTotal 
@@ -1163,7 +1194,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 
 	function calculateScoreByAtt($stuId, $data, $attSettingResult)
 	{
-
+		$data['settingEntryId'] =  empty($data['settingEntryId']) ? 0 : $data['settingEntryId'];
 		$attResult = $this->getSettingEntryById($data['settingEntryId']);
 
 		$sql = "SELECT

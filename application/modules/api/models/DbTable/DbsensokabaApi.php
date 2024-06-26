@@ -256,10 +256,11 @@ class Api_Model_DbTable_DbsensokabaApi extends Zend_Db_Table_Abstract
 		if(!empty($ids))foreach ($ids as $chatIDuser){
 			print_r($this->getUserIdstatus());exit();
 			//$data['chat_id']=$chatIDuser;
-// 			print_r($data);
+
 			//echo"https://api.telegram.org/bot$token/sendMessage?" . http_build_query($data);
 			//echo"<br /><br /><br /><br />";
 			  //$result = file_get_contents("https://api.telegram.org/bot$token/sendMessage?" . http_build_query($data),true);
+			  
 			//$result = file_get_contents('https://api.telegram.org/bot1971785720:AAG46O8Q6venZRO-GfEmVcB5KzU_YMHiQa4/sendMessage?chat_id=483545634&text=hello');
 			 // print_r($result);exit();
 		}

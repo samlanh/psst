@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("ISSUE_ATTENDANCE_LIST");
+	$pageTitle = $tr->translate("ISSUE_ATTENDANCE");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$db = new Application_Model_DbTable_DbIssueAttendance();
@@ -82,7 +82,7 @@
 						
 						$urlAction = $this->baseUrl()."/issueattendance/add?groupId=".$row['groupId']."&subjectId=".$row['subject_id']."&scheduleDetailId=".$row['scheduleDetailId'];
 						$titleAction = $tr->translate('issueAttendance');
-						$iconAction = "glyphicon glyphicon-sort-by-order";
+						$iconAction = "fa fa-sliders";
 						$buttonClass = "";
 
 						$array = array(
@@ -94,7 +94,7 @@
 						if(empty($checkingTime)) {
 							$urlAction = "";
 							$titleAction = $tr->translate('unavailable');
-							$iconAction = "glyphicon glyphicon-sort-by-order";
+							$iconAction = "fa fa-spinner";
 							$buttonClass = "mini-button-class-loading";
 						}else if($checkingTime==2){
 								$urlAction = "";
@@ -113,10 +113,6 @@
 								$buttonClass = "mini-button-class-success";
 							}
 						}
-
-						
-					
-						
 				?>
 				<div class="col-md-3 col-sm-3 col-xs-12"> 
 					<div class="card mb-0 <?php echo $cardClass; ?> border-top-5">
@@ -132,6 +128,21 @@
 									</div>
 								</div>
 								<div class="col-xs-7 pl-0">
+									
+									<ul class="nav navbar-right panel_toolbox stusearch">
+										<li class="dropdown">
+											
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" <?php if(empty($isIssuedAtt)){ echo ' style="color:#fff";';} ?>><i class="fa fa-ellipsis-v"></i></a>
+											<?php if(!empty($isIssuedAtt)){?>	
+											<ul class="dropdown-menu" role="menu">
+												<li>
+													<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-attendance-detail?id=".$isIssuedAtt."&subjectId=".$row['subject_id']."&groupId=".$row['groupId']."&fromHour=".$row['from_hour']."&toHour=".$row['to_hour'];?>"><?php echo $tr->translate('STUDENT_ATTENDANCE_LIST');?></a>
+												</li>
+											</ul>
+											<?php } ?>
+										</li>
+									</ul>
+									
 									<div class="col-md-12 col-sm-12 col-xs-12 pt-1">
 										<p class="mb-0 m-0"><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>&nbsp;<?php echo $row['branchName']; ?></p>
 										
@@ -161,6 +172,13 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+
+</script>
 <?php 
 	echo $this->render('externalFoot.phtml');
 ?>

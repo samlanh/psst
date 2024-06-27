@@ -247,21 +247,39 @@ class Application_Model_DbTable_DbIssueAttendance extends Zend_Db_Table_Abstract
 			$min = $date->format("i");
 
 			$currentTimeValue = floatval($hour.".".$min);
-
-			if($currentTimeValue >=floatval($data["fromHourValue"]) && $currentTimeValue <= floatval($data["toHourValue"]) ){
+			$delayValue = 0.2;
+			$fromHourValue = floatval($data["fromHourValue"])-$delayValue;
+			$toHourValue = floatval($data["toHourValue"])+$delayValue;
+			if($currentTimeValue >= $fromHourValue && $currentTimeValue <= $toHourValue ){
 				//available
 				$value =1;
-			}else if($currentTimeValue > floatval($data["toHourValue"]) ){ 
+			}else if($currentTimeValue > $fromHourValue ){ 
 				//expired
 				$value =2;
 			}else{
 				//unavailable
 				$value =0;
 			}
+			$value = 1;
 		}
 		return $value;
 	}
 	
+	function checkClassTodayHasAttendance($data){
+		$db=$this->getAdapter();
+		$today = new DateTime($data['attendenceDate']);
+		$attendenceDate =  $today->format("Y-m-d");
+		$groupId = empty($data['groupId']) ? 0 : $data['groupId'];
+		$sql="
+			SELECT 
+				att.id
+			FROM `rms_student_attendence` AS att
+			WHERE att.`date_attendence` = DATE_FORMAT('$attendenceDate', '%Y/%m/%d') 
+				AND att.`status` = 1
+				AND att.`group_id` = $groupId
+		";
+		return $db->fetchOne($sql);
+	}
 	function getStudentForIssueAttendance($data){
 	   $dbExternal = new Application_Model_DbTable_DbExternal();
 	   
@@ -274,6 +292,11 @@ class Application_Model_DbTable_DbIssueAttendance extends Zend_Db_Table_Abstract
 	   $keyIndex = $data['keyIndex'];
 	   $data['forIssueAttendance'] = "1";
 	   $data['attendenceDate'] = $attendenceDate;
+
+	   if(empty($data["attendanceId"])){
+			$thisAttendanceId = $this->checkClassTodayHasAttendance($data);
+			$data['thisAttendanceId'] =$thisAttendanceId;
+	   }
 
 	   $identity="";
 	   $arrClassCol = array(

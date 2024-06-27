@@ -1,0 +1,338 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$pageTitle = $tr->translate("STUDENT_ATTENDANCE_SUMMARY");
+	echo $this->headTitle($pageTitle);
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	
+	$pageTitle = '<i class="fa fa-file-text"></i> '.$pageTitle;
+	$branchInfo = $this->branchInfo;
+	
+	$signature="";
+	$stamp="";
+	if (!empty($branchInfo['signature'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$branchInfo['signature'])){
+			$signature = $this->baseUrl().'/images/logo/'.$branchInfo['signature'];
+		}
+	}
+	if (!empty($branchInfo['stamp'])){
+		if (file_exists(PUBLIC_PATH."/images/logo/".$branchInfo['stamp'])){
+			$stamp = $this->baseUrl().'/images/logo/'.$branchInfo['stamp'];
+		}
+	}
+	
+	
+	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$dbExternal = new Application_Model_DbTable_DbExternal();
+	$dbReport = new Application_Model_DbTable_DbReport();
+	$rs = $this->rs;
+	$gradingId = $rs['id'];
+	
+	$mainTeacherSigature="";
+	if (!empty($rs['mainTeacherSigature'])){
+		if (file_exists(PUBLIC_PATH."/images/photo/".$rs['mainTeacherSigature'])){
+			$mainTeacherSigature = $this->baseUrl().'/images/photo/'.$rs['mainTeacherSigature'];
+		}
+	}
+
+	$startDate = "2024-06-27";
+	$endDate = "2024-09-04";
+	
+	$date_diff = abs(strtotime($endDate) - strtotime($startDate)); 
+	$years = floor($date_diff / (365*60*60*24));
+	$amountMonth = floor(($date_diff - $years * 365*60*60*24) / (30*60*60*24));
+?>	
+<?php 
+	echo $this->render('externalHead.phtml');
+?>
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="card mb-1 ">
+			<div class="reportblog">
+	
+				<form style="display:none;" id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<div class="form-group">
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<select class="fullside" dojoType="dijit.form.FilteringSelect" id="study_type" name="study_type">
+								<option value="-1"><?php echo $tr->translate("STUDENT_TYPE");?></option>
+								<?php if(!empty($this->study_type)){foreach($this->study_type as $rs){?>
+								<option value="<?php echo $rs['id'];?>" <?php if($this->search['study_type']==$rs['id']){echo "selected";}?>><?php echo $rs['name'];?></option>
+								<?php }}?>
+							</select>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
+							<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
+								<option value="0" <?php if($stuOrderBy==0){echo "selected";}?> ><?php echo $tr->translate("ORDER_BY_KH_NAME");?></option>
+								<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>><?php echo $tr->translate("ORDER_BY_EN_NAME");?></option>
+							</select>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+						</div>
+					</div>
+				</form>
+				<div id="divPrint">
+					<style> 
+						.headReportRespone{
+							display:none;
+						}
+						table ,
+						table tr td,
+						table tr td span{
+							color: #002c7b;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+								font-size: 10px;
+							line-height: 16px;
+						}
+						table tr td small {
+							font-size: 9px;
+							white-space: normal;
+						}
+						table.content-data{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							width: 100%;
+						}
+						table.content-data tr.headrow:hover {
+							background: initial;
+						}
+						table.content-data tr.style.headrow:hover {
+							background: #3c4b76;
+						}
+						table.content-data  tr.style {
+							line-height: 16px; 
+							padding:1px 0px; 
+							white-space: nowrap;height: 22px; 
+							background: #3c4b76;
+							font-weight:600;
+						}
+						table.content-data  tr.style th,
+						table.content-data  tr.style th span{
+							line-height: 16px; 
+							font-weight:600;
+							color: #ffffff;
+						}
+						table.content-data  tr.style th {
+							padding:2px 0;
+							text-align:center;
+						}
+						table.tb-footer{
+							border-collapse:collapse;
+							border:1px solid #000; 
+							font-size:10px;
+							font-family: 'Times New Roman','Khmer OS Battambang';
+						}
+						table.tb-footer tr{
+						 line-height: 14px; font-size:10px; padding:2px 0px; height: 25px;
+						}
+						table tr td{
+							padding:0 2px;
+						}
+						span.khmerLabel,
+						span.englishLabel{
+							display:block;
+						}
+						span.khmerName, span.englishName {
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							white-space: nowrap;
+							padding: 0 3px;
+						}
+						tr.style span.khmerName {
+							font-size:12px;
+						}
+						tr.style span.englishName {
+							font-size:11px;
+						}
+						span.valueAmount {
+							font-weight: 600;
+							color: #002c7b;
+						}
+						ul.scoreTitle {
+							padding: 0;
+							margin: 0;
+							list-style: none;
+							font-size: inherit;
+						}
+						ul.scoreTitle li {
+							line-height: 18px;
+							color:#002c7b;
+							list-style-type:none !important;
+						}
+						@media print {
+							ul.printInfo {
+								position: absolute;
+								left: 0;
+								bottom: 5px;
+								list-style: none;
+								margin: 0;
+								padding: 0;
+								visibility: visible;
+							}
+							ul.printInfo li {
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size: 8px;
+								text-align: left;
+								line-height:12px;
+								color: #002c7b;
+							}
+							@page {
+								page:A4;
+								size: portrait;
+								 margin: 0.8cm;
+							}
+						}
+					</style>
+					<table style="margin: 0 auto; width: 100%;color:#000;"  >
+							
+							<tr>
+								<td colspan="3" id="exportExcel">
+									<table class="content-data " width="100%" border="1"  cellspacing="0" cellpadding="0">
+										<?php  $i=0;
+										$m=0;$f=0;
+										$teacher_name="";
+										$str='';
+
+										$subjectId="";
+										if (!empty($this->row)){ foreach ($this->row as  $key=> $row){ 
+											if($key==0){
+												$str=$key+1;
+											}else{
+												$str.=",".($key+1);
+											}
+											$i++; 
+
+											$strHead="";
+											$strHeadDate="";
+											$strRowStudent="";
+											if($amountMonth>0){
+												$arrFiltering = array(
+													"subjectId"=> $row['subjectId'],
+													"groupId"=> $row['groupId'],
+													"studentId"=> $row['studentId'],
+													"attendenceDate"=> $row['subjectId'],
+												);
+												for($i= 0; $i<$amountMonth; $i++){
+													$date = new DateTime($startDate);
+													$date->modify("+$i month");
+													$arrFiltering["attendenceDate"] = $date->format("Y-m-d");
+													$rowCount =  $dbReport->getCountingAttendanceType($arrFiltering);
+
+													$strHeadDate.='<th colspan="4"  scope="col">'.$date->format("M-Y").'</th>';
+													$strHead.='<th  scope="col">A</th>';
+													$strHead.='<th  scope="col">P</th>';
+													$strHead.='<th  scope="col">L</th>';
+													$strHead.='<th  scope="col">EL</th>';
+
+													$strRowStudent.='<td align="center" scope="col">'.sprintf('%01d',$rowCount["totalAbsent"],0).'</td>';
+													$strRowStudent.='<td align="center" scope="col">'.sprintf('%01d',$rowCount["totalP"],0).'</td>';
+													$strRowStudent.='<td align="center" scope="col">'.sprintf('%01d',$rowCount["totalLate"],0).'</td>';
+													$strRowStudent.='<td align="center" scope="col">'.sprintf('%01d',$rowCount["totalEl"],0).'</td>';
+												}
+											}
+										?>
+										<?php if($key ==0 || $subjectId !=$row['subjectId']){ ?>
+											<tr class="headrow" >
+												<td colspan="<?php echo (6+($amountMonth*4));?>" align="center" style=" <?php if($key==0){ echo "border-top: 1px solid #fff; "; }?> border-left: 1px solid #fff; border-right: 1px solid #fff;">
+													<ul class="scoreTitle">
+														<li style="font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
+															បញ្ជីសង្ខេបអវត្តមានសិស្ស
+														</li>
+														<li style="font-size:12px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
+															Students Attendance List
+														</li>
+														<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+															កម្រិត/វគ្ / Degree : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $row['degreeTitle'];?></span> 
+															ថ្នាក់សិក្សា / Class : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $row['groupCode'];?></span> 
+															បន្ទប់ / Room : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $row['roomName'];?></span>
+														</li>
+														<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
+															ឆ្នាំសិក្សា / ACADEMIC YEAR : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo$row['academicYear'];?></span>
+															មុខវិជ្ជា / Subject : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo$row['subjectTitle'];?></span>
+														</li>
+													</ul>
+												</td>
+											</tr>
+												<tr class="style headrow" align="center" >
+													<th rowspan="2" scope="col">
+														<span class="khmerLabel">ល.រ</span>
+														<span class="englishLabel">N<sup>o</sup></span>
+													</th>
+													<th rowspan="2" scope="col">
+														<span class="khmerLabel">អត្តលេខ</span>
+														<span class="englishLabel">ID</span>
+													</th>
+													<th rowspan="2" scope="col">
+														<span class="khmerLabel">គោត្តនាម-នាម</span>
+														<span class="englishLabel">Student Name</span>
+													</th>
+													<th rowspan="2" scope="col">
+														<span class="khmerLabel">ឈ្មោះជាអក្សរឡាតាំង</span>
+														<span class="englishLabel">Latin Name</span>
+													</th>
+													<th rowspan="2" scope="col">
+														<span class="khmerLabel">ភេទ</span>
+														<span class="englishLabel">Sex</span>
+													</th>
+													<?php echo $strHeadDate; ?>
+													<th rowspan="2" scope="col" width="160px">
+														<span class="khmerLabel">ផ្សេងៗ</span>
+														<span class="englishLabel">Remark</span>
+													</th>	
+												</tr>
+												<tr class="style headrow" align="center" >
+													<?php echo $strHead; ?>
+												</tr>
+										<?php $i=0;
+										}  ?>
+										<tr style="line-height: 20px;" >
+											<td data-label="ល.រ/No" align="center"><?php echo $i;?>
+											</td>
+											<td data-label="អត្តលេខ/ID" ><?php echo $row['stuCode'];?></td>
+											<td data-label="គោត្តនាម-នាម/Student Name" align="left"><?php echo $row['stuKhName'];?></td>
+											<td data-label="ឈ្មោះជាអក្សរឡាតាំង/Latin Name" align="left"><?php echo $row['stuEnName'];?></td>
+											<td data-label="ភេទ/Sex" align="center">
+											<?php 
+												if($row['gender']==1){
+													$m = $m+1;
+													echo $tr->translate("MALE");
+												}else{
+													$f=$f+1;
+													echo $tr->translate("FEMALE");
+												}
+											?>
+											</td>
+											<?php echo $strRowStudent; ?>
+											<td data-label="ផ្សេងៗ/Remark" align="center">&nbsp;</td>
+										</tr>
+												<?php $subjectId=$row['subjectId']; ?>
+
+										<?php }
+									}?>	
+									</table>
+									
+								</td>
+							</tr>
+					  </table>
+					  <div class="footPrintDate"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+   setPageTitle('<?php echo $pageTitle; ?>');
+});
+
+</script>
+<?php 
+	echo $this->render('externalFoot.phtml');
+?>

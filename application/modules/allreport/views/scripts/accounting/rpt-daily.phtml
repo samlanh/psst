@@ -403,18 +403,18 @@
 				<?php }?>
 				<?php if(!empty($this->row) || !empty($this->income) || !empty($this->expense)){
 						// $final_total_income = $net_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
-						$final_total_income = $paid_amount + $fine + $total_income_dollar  - $credit_memo - $total_expense_dollar ;
+						$final_total_income = $paid_amount + $fine + $total_income_dollar   - $total_expense_dollar ;
 					?>								
 						<table width="50%" style="margin:0 auto; white-space: nowrap; font-size: 11px;line-height:18px;border-spacing:0px;">
 							
-							<!-- <tr>
-								<td><?php echo $tr->translate("NET_AMOUNT");?></td>
-								<td><?php echo '$ '.number_format($total_payment,2);?></td>
+							<tr>
+								<td style="font-weight: bold;"><?php echo $tr->translate("NET_AMOUNT");?></td>
+								<td style="font-weight: bold;"><?php echo '$ '.number_format($total_payment,2);?></td>
 
 								<td style="font-weight: bold;"></td>
 								<td style="color: blue; font-weight: bold; font-size: 14px;"></td>
 							
-							</tr> -->
+							</tr>
 
 							<tr>
 								<td style="font-weight: bold;"><?php echo $tr->translate("PAID_AMOUNT");?></td>
@@ -455,15 +455,15 @@
 								<td colspan="4">
 									<div
 										style="width: 33%; float: left; text-align: center; font-size: 11px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
-							  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp-$credit_memo_case,2);?>
+							  				<?php echo $tr->translate("CASH");?>&nbsp;$&nbsp; <?php echo number_format($total_cash-$total_cashexp,2);?>
 							  			</div>
 									<div
 										style="width: 33%; float: left; text-align: center; font-size: 11px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
-							  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp-$credit_memo_bank,2);?>
+							  				<?php echo $tr->translate("BANK");?> &nbsp;$&nbsp;<?php echo number_format($total_bank-$total_bankexp,2);?>
 							  			</div>
 									<div
 										style="width: 33%; float: left; text-align: center; font-size: 11px; font-family: 'Times New Roman', 'Khmer OS Muol Light';">
-							  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp-$credit_memo_chegue,2);?>
+							  				<?php echo $tr->translate("CHEQUE");?>&nbsp;$&nbsp;<?php echo number_format($total_cheque-$total_chequeexp,2);?>
 							  			</div>
 									<div style="clear: both;"></div>
 								</td>

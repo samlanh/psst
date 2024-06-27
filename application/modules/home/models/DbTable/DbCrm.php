@@ -356,7 +356,6 @@
 							'from_school'=> $_data['old_school'],
 							'know_by'=> $_data['know_by'],
 							'studentToken'=>$stuToken,
-							'crm_status'=> $_data['crm_status'],
 							'modify_date' => date("Y-m-d H:i:s"),
 							'create_date'		=>date("Y-m-d H:i:s"),
 							

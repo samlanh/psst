@@ -300,7 +300,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 									'entryFrom'	=>4,//not sure
 									'remark'	=>'grade upgrade'
 							);
-							$db = $dbg->AddItemToGroupDetailStudent($arr);
+							 $dbg->AddItemToGroupDetailStudent($arr);
 						}
 					}
 				}
@@ -367,7 +367,7 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 								'entryFrom'	=>4,//not sure
 								'remark'	=>'ឆ្លងភូមិសិក្សា'
 						);
-						$db = $dbg->AddItemToGroupDetailStudent($arr);
+						$dbg->AddItemToGroupDetailStudent($arr);
 						
 					}
 				}
@@ -387,7 +387,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			$_db->commit();
 			
 		}catch(Exception $e){
-			echo $e->getMessage();exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$_db->rollBack();
 			Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -398,6 +397,19 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$sql="SELECT * FROM rms_score WHERE 1";
 		if(!empty($data['groupId'])){
 			$sql.=" AND group_id=".$data['groupId'];
+		}
+		if(!empty($data['exam_type'])){
+			if($data['exam_type']==1){
+				$sql.=" AND exam_type=".$data['exam_type'];
+				if(!empty($data['for_month'])){
+					$sql.=" AND for_month=".$data['for_month'];
+				}
+			}else{
+				$sql.=" AND exam_type=".$data['exam_type'];
+			}
+		}
+		if(!empty($data['for_semester'])){
+			$sql.=" AND for_semester=".$data['for_semester'];
 		}
 		if(!empty($data['fetchRow'])){
 			return $db->fetchRow($sql);

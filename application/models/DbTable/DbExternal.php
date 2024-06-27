@@ -703,6 +703,11 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				$queryStatmentForIssueAttendance.=",COALESCE((SELECT attd.attendence_status FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id  AND attd.subjectId = $subjectId AND attd.toHour = $toHour  AND attd.fromHour =  $fromHour AND   att.date_attendence = DATE_FORMAT('$attendenceDate', '%Y/%m/%d') LIMIT 1),0) AS attendenceStatus";
 				$queryStatmentForIssueAttendance.=",COALESCE((SELECT attd.description FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id  AND attd.subjectId = $subjectId AND attd.toHour = $toHour  AND attd.fromHour =  $fromHour AND   att.date_attendence = DATE_FORMAT('$attendenceDate', '%Y/%m/%d') LIMIT 1),'') AS reason";
 				$queryStatmentForIssueAttendance.=",'0' AS permissionRecordId";
+			}else if(!empty($data["thisAttendanceId"])){
+				$attendanceId = empty($data["thisAttendanceId"]) ? 0 : $data["thisAttendanceId"];
+				$queryStatmentForIssueAttendance=",COALESCE((SELECT attd.attendence_status FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id ORDER BY attd.id DESC LIMIT 1),0) AS attendenceStatus";
+				$queryStatmentForIssueAttendance.=",COALESCE((SELECT attd.description FROM `rms_student_attendence` AS att, `rms_student_attendence_detail` AS attd WHERE att.id = $attendanceId AND att.id = attd.attendence_id  AND sgh.stu_id =attd.stu_id ORDER BY attd.id DESC LIMIT 1),0) AS reason";
+				$queryStatmentForIssueAttendance.=",'0' AS permissionRecordId";
 			}else{
 				$queryStatmentForIssueAttendance= "
 					,COALESCE(attD.attendence_status,'') as attendenceStatus
@@ -723,6 +728,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuKhName
 					,(SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS stuEnName
 					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS sex
+					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sgh.`stu_id` LIMIT 1) AS gender
 					,(SELECT teacherComment FROM `rms_studentassessment_detail` WHERE teacherComment!='' AND studentId=sgh.`stu_id` ORDER BY id DESC LIMIT 1) AS teacherComment
 					
 				 ";

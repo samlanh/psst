@@ -1,7 +1,7 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	
-	$pageTitle = $tr->translate("STUDENT_LIST_REPORT");
+	$pageTitle = $tr->translate("STUDENT_ATTENDANCE_LIST");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	
@@ -187,10 +187,9 @@
 								<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 									<ul class="scoreTitle">
 										<li style="font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light';">
-											បញ្ជីរាយនាមឈ្មោះសិស្ស
-										</li>
+											បញ្ជីវត្តមានសិស្ស
 										<li style="font-size:12px; font-family:'Times New Roman'; text-transform: uppercase;font-weight: 600;">
-											Students List Report
+											Students Attendance List
 										</li>
 										<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
 											កម្រិត/វគ្ / Degree : <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $this->rr['degree'];?></span> 

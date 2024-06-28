@@ -34,13 +34,19 @@
 			$mainTeacherSigature = $this->baseUrl().'/images/photo/'.$rs['mainTeacherSigature'];
 		}
 	}
-
-	$startDate = "2024-06-27";
-	$endDate = "2024-09-04";
+	$date1 = new DateTime($this->search['startDate']);
+	$startDate = $date1->format("Y-m-d");
+	$date2 = new DateTime($this->search['endDate']);
+	$endDate = $date2->format("Y-m-d");
 	
-	$date_diff = abs(strtotime($endDate) - strtotime($startDate)); 
-	$years = floor($date_diff / (365*60*60*24));
-	$amountMonth = floor(($date_diff - $years * 365*60*60*24) / (30*60*60*24));
+	if($date1->format("Y-m")==$date2->format("Y-m")){
+		$amountMonth = 1;
+	}else{
+		$date_diff = abs(strtotime($endDate) - strtotime($startDate)); 
+		$years = floor($date_diff / (365*60*60*24));
+		$amountMonth = floor(($date_diff - $years * 365*60*60*24) / (30*60*60*24));
+		$amountMonth = $amountMonth+1;
+	}
 ?>	
 <?php 
 	echo $this->render('externalHead.phtml');
@@ -50,15 +56,18 @@
 		<div class="card mb-1 ">
 			<div class="reportblog">
 	
-				<form id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<div class="form-group">
 						<div class="col-md-2 col-sm-2 col-xs-12">
-							<input dojoType="dijit.form.TextBox" id="txtsearch" name="txtsearch" placeholder="<?php echo $tr->translate("SEARCH_STUDENT_NAME");?>" value="<?php echo $this->search['txtsearch'];?>" type="text">
+							
+							<input required constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" id="startDate" name="startDate" placeholder="<?php echo $tr->translate("START_DATE");?>" value="<?php echo $this->search['startDate']; ?>" type="text">
 						</div>
-						
 						<div class="col-md-2 col-sm-2 col-xs-12">
-							<?php $stuOrderBy = empty($this->search['stuOrderBy'])?0:$this->search['stuOrderBy'];?>
-							<select class="fullside" dojoType="dijit.form.FilteringSelect" id="stuOrderBy" name=stuOrderBy>
+							<input required constraints="{datePattern:'dd/MM/yyyy'}" dojoType="dijit.form.DateTextBox" id="endDate" name="endDate" placeholder="<?php echo $tr->translate("END_DATE");?>" value="<?php echo $this->search['endDate']; ?>" type="text">
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-12">
+							<?php $stuOrderBy = empty($this->search['sortStundent'])?0:$this->search['sortStundent'];?>
+							<select class="fullside" dojoType="dijit.form.FilteringSelect" id="sortStundent" name=sortStundent>
 								<option value="0" <?php if($stuOrderBy==0){echo "selected";}?>>ទូរទៅ / Default </option>
 								<option value="1" <?php if($stuOrderBy==1){echo "selected";}?>>លេខសម្គាល់សិស្ស/Student ID (ASC)</option>
 								<option value="2" <?php if($stuOrderBy==2){echo "selected";}?>>ឈ្មោះសិស្សខ្មែរ/Name In Khmer (ASC)</option>
@@ -66,7 +75,7 @@
 							</select>
 						</div>
 						<div class="col-md-2 col-sm-2 col-xs-12">
-							<button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+							<button class="button-class button-primary" iconclass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 						</div>
 					</div>
 				</form>
@@ -115,6 +124,10 @@
 						table.content-data  tr.style th {
 							padding:2px 0;
 							text-align:center;
+						}
+
+						table.content-data  td.odd {
+							background: #f3f3f3;
 						}
 						table.tb-footer{
 							border-collapse:collapse;
@@ -213,15 +226,23 @@
 													"studentId"=> $row['studentId'],
 													"attendenceDate"=> $row['subjectId'],
 												);
-												for($i= 0; $i<$amountMonth; $i++){
+												for($k= 0; $k<$amountMonth; $k++){
+
+													$mod = $k%2;
+													$classOdd="";
+													if($mod==1){
+														$classOdd="odd";
+													}
+
 													$date = new DateTime($startDate);
-													$date->modify("+$i month");
+													$date->modify("+$k month");
 													$arrFiltering["attendenceDate"] = $date->format("Y-m-d");
 													$rowCount =  $dbReport->getCountingAttendanceType($arrFiltering);
-													$totalAbsent = "-";
-													$totalP = "-";
-													$totalLate = "-";
-													$totalEl = "-";
+													
+													$totalAbsent = 0;
+													$totalP = 0;
+													$totalLate = 0;
+													$totalEl = 0;
 													if(!empty($rowCount)){
 														$totalAbsent = sprintf('%01d',$rowCount["totalAbsent"],0);
 														$totalP = sprintf('%01d',$rowCount["totalP"],0);
@@ -235,10 +256,10 @@
 													$strHead.='<th  scope="col">L</th>';
 													$strHead.='<th  scope="col">EL</th>';
 
-													$strRowStudent.='<td align="center" scope="col">'.$totalAbsent.'</td>';
-													$strRowStudent.='<td align="center" scope="col">'.$totalP.'</td>';
-													$strRowStudent.='<td align="center" scope="col">'.$totalLate.'</td>';
-													$strRowStudent.='<td align="center" scope="col">'.$totalEl.'</td>';
+													$strRowStudent.='<td class="'.$classOdd.'" align="center" scope="col">'.$totalAbsent.'</td>';
+													$strRowStudent.='<td class="'.$classOdd.'" align="center" scope="col">'.$totalP.'</td>';
+													$strRowStudent.='<td class="'.$classOdd.'" align="center" scope="col">'.$totalLate.'</td>';
+													$strRowStudent.='<td class="'.$classOdd.'" align="center" scope="col">'.$totalEl.'</td>';
 												}
 											}
 										?>
@@ -332,7 +353,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-
+dojo.require("dijit.form.DateTextBox");
 $( document ).ready(function() {
    setPageTitle('<?php echo $pageTitle; ?>');
 });

@@ -222,7 +222,28 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getDegreePermission('g.`degree`');
 		return $db->fetchRow($sql);
 	}
-	
+	function getStudentInfo($data){
+		$db = $this->getAdapter();
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "
+			SELECT 
+				s.*
+				,s.stu_khname AS stuNameKH
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+				,CONCAT(s.stu_khname,' ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.sex AS sex
+				,CASE
+					WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS genderTitle
+			FROM `rms_student` AS s ";
+		$sql.= "
+			WHERE s.stu_id = $studentId
+		";
+    	$sql.= " LIMIT 1 ";
+    	return $db->fetchRow($sql);
+	}
 	
 }
 

@@ -104,8 +104,17 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 	function getStudentBygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Issue_Model_DbTable_DbStudentAttendance();
+			$db = new Issue_Model_DbTable_DbStudentdiscipline();
 			$data=$db->getStudentByGroup($data['group']);
+			print_r(Zend_Json::encode($data));
+			exit();
+		}
+	}
+	function getStudentInfoAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Issue_Model_DbTable_DbStudentdiscipline();
+			$data=$db->getStudentInfo($data);
 			print_r(Zend_Json::encode($data));
 			exit();
 		}

@@ -1,550 +1,642 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('RPT_STUDENT_GROUP')); 
-	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$frm =  $this->form_search;
-	$urlStudentGroup = $this->baseUrl()."/allreport/allstudent/rpt-student-group/id/";
-	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
-	$urlTotalAtt = $this->baseUrl()."/allreport/score/rpt-totalattendance/id/";
-	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
-	$urlAssesment = $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/";
-	
-	$urlStudentGroupAdjust = $this->baseUrl()."/allreport/allstudent/rpt-studentgroup-adjust/id/";
-	
-	$urlStudentGroup = $this->baseUrl()."/allreport/allstudent/rpt-student-group/id/";
-	$urlAttList = $this->baseUrl()."/allreport/allstudent/rpt-att-list/id/";
-	$urlTotalAtt = $this->baseUrl()."/allreport/score/rpt-totalattendance/id/";
-	$urlStudentList = $this->baseUrl()."/allreport/allstudent/rpt-student-list/id/";
-	$urlAssesment = $this->baseUrl()."/allreport/score/rpt-assessmentterm/id/";
-	$urlscoresemester = $this->baseUrl()."/allreport/score/rpt-resultbysemester/id/";
-	$urloutstanding1 = $this->baseUrl()."/allreport/score/semester-outstanding-student/id/";
-	$urlscoreyear = $this->baseUrl()."/allreport/score/rpt-resultbyyear/id/";
-	$urloutstandingyear = $this->baseUrl()."/allreport/score/yearly-outstanding-student/id/";
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('RPT_STUDENT_GROUP'));
+$base_url = Application_Form_FrmMessage::getUrl("/");
+$frm = $this->form_search;
+$urlStudentGroup = $this->baseUrl() . "/allreport/allstudent/rpt-student-group/id/";
+$urlAttList = $this->baseUrl() . "/allreport/allstudent/rpt-att-list/id/";
+$urlTotalAtt = $this->baseUrl() . "/allreport/score/rpt-totalattendance/id/";
+$urlStudentList = $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/";
+$urlAssesment = $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/";
+
+$urlStudentGroupAdjust = $this->baseUrl() . "/allreport/allstudent/rpt-studentgroup-adjust/id/";
+
+$urlStudentGroup = $this->baseUrl() . "/allreport/allstudent/rpt-student-group/id/";
+$urlAttList = $this->baseUrl() . "/allreport/allstudent/rpt-att-list/id/";
+$urlTotalAtt = $this->baseUrl() . "/allreport/score/rpt-totalattendance/id/";
+$urlStudentList = $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/";
+$urlAssesment = $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/";
+$urlscoresemester = $this->baseUrl() . "/allreport/score/rpt-resultbysemester/id/";
+$urloutstanding1 = $this->baseUrl() . "/allreport/score/semester-outstanding-student/id/";
+$urlscoreyear = $this->baseUrl() . "/allreport/score/rpt-resultbyyear/id/";
+$urloutstandingyear = $this->baseUrl() . "/allreport/score/yearly-outstanding-student/id/";
 ?>
 <div class="reportblog">
 	<div class="card-box">
-    	<div class="col-sm-12 border-botom">
-		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT_GROUP');?></h4>
-    		</div>
-    		<div class="col-sm-4 text-right">
-    		</div>
-    	</div>
-    </div>
-	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'student-group')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("adv_search");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("branch_id");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("academic_year");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="group" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="teacher" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("study_status");?>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("degree");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="grade" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("school_option");?>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="room" />
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-            </div>
-            <div class="col-md-2 col-sm-2 col-xs-12">
-            </div>
-        </div>
-	</form>	
-<style>
-.hover:hover{ background:#ccc;}
-table.content-data tr.style-head,
-table.tb-footer tr.style-head {
-   font-weight: bold !important;
-}
-.hidden{
-	display: table-cell !important;
-}
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0"><i class="fa fa-file "
+						aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT_GROUP'); ?></h4>
+			</div>
+			<div class="col-sm-4 text-right">
+			</div>
+		</div>
+		<!-- <div class="x_panel tile">
+                <div class="x_title">
+                  <h2>Quick Settings</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: block;">
+                 
+                </div>
+              </div> -->
+	</div>
 
-</style>
-	<div id="divPrint">
-		<table style="background:#fff; margin: 0 auto; width: 100%;" cellpadding="0">
-			<tr>
-				<td colspan="3"><?php echo $this->rsheader;?></td>
-			</tr>
-			<tr class="line"><td colspan="3"></td></tr>
-			<tr>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td width="28%" align="left">
-				</td>
-				<td width="44%" align="center">
-					<span style="font-weight:200;color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP");?></span>
-				</td>
-				<td align="right" width="28%"></td>
-			</tr>
-			<tr>
-				<td colspan="3" valign="top" id="exportExcel">
+
+	<div class="x_panel tile">
+                <div class="x_title">
+                  <h2><?php echo $tr->translate('Quick Search');?></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: block;">
+			<form id='foundation_class'
+				action="<?php echo $this->url(array('module' => 'allreport', 'controller' => 'allstudent', 'action' => 'student-group')); ?>"
+				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("adv_search"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("branch_id"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("academic_year"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="group" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="teacher" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("study_status"); ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("degree"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="grade" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("school_option"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="room" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search"
+							dojoType="dijit.form.Button" showLabel="true"
+							type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<style>
+		.hover:hover {
+			background: #ccc;
+		}
+
+		table.content-data tr.style-head,
+		table.tb-footer tr.style-head {
+			font-weight: bold !important;
+		}
+
+		.hidden {
+			display: table-cell !important;
+		}
+	</style>
+	
+		<div id="divPrint">
+			<table style="background:#fff; margin: 0 auto; width: 100%;" cellpadding="0">
+				<tr>
+					<td colspan="3"><?php echo $this->rsheader; ?></td>
+				</tr>
+				<tr class="line">
+					<td colspan="3"></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="28%" align="left">
+					</td>
+					<td width="44%" align="center">
+						<span
+							style="font-weight:200;color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_GROUP"); ?></span>
+					</td>
+					<td align="right" width="28%"></td>
+				</tr>
+				<tr>
+					<td colspan="3" valign="top" id="exportExcel">
 						<style type="text/css">
-							th,td{ padding:0 1px; color:#4839bd;}
-							table{ border-collapse:collapse; margin:0 auto;border-color:#4839bd; }
-							.padding{ padding: 0 1px !important;}
-							table{ page-break-inside:auto;font-family:'Times New Roman','Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
-							#header {display: table-header-group;page-break-inside:avoid; page-break-after:auto;}
-							.hover:hover{background: #ccc;}
-							.hidden{display: none;}
-							tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-							
-							table.content-data{
-								border-collapse:collapse;
-								width:100%;
-								border:1px solid #4839bd; 
-								font-family:'Times New Roman','Khmer OS Battambang';
-								font-size:12px;
+							th,
+							td {
+								padding: 0 1px;
+								color: #4839bd;
+							}
+							table {
+								border-collapse: collapse;
+								margin: 0 auto;
+								border-color: #4839bd;
+							}
+							.padding {
+								padding: 0 1px !important;
+							}
+							table {
+								page-break-inside: auto;
+								font-family: 'Times New Roman', 'Khmer OS Battambang';
+							}
+							tr {
+								page-break-inside: avoid;
+								page-break-after: auto
+							}
+							#header {
+								display: table-header-group;
+								page-break-inside: avoid;
+								page-break-after: auto;
+							}
+							.hover:hover {
+								background: #ccc;
+							}
+							.hidden {
+								display: none;
+							}
+							tr.line td {
+								border-bottom: 2px solid #000;
+								padding-top: 5px;
+							}
+							table.content-data {
+								border-collapse: collapse;
+								width: 100%;
+								border: 1px solid #4839bd;
+								font-family: 'Times New Roman', 'Khmer OS Battambang';
+								font-size: 12px;
 								white-space: nowrap;
-								margin:0 auto;
-								color:#4839bd;
+								margin: 0 auto;
+								color: #4839bd;
 							}
 							table.content-data thead tr.style-head {
-							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
+								line-height: 25px;
+								padding: 1px 0px;
+								white-space: nowrap;
+								height: 22px;
 								background: #ccd9ff;
 								text-align: center;
 							}
 							@media print {
 								@page {
 									page: A4;
-									size: portrait;;
+									size: portrait;
+									;
 									margin: 0.8cm;
 								}
 							}
 						</style>
-						<?php 
+						<?php
 						$totalNew = 0;
-						$totalOld=0;
+						$totalOld = 0;
 						$totalStudent = 0;
-						$totalDrop=0;
-						$totalStudying=0;
+						$totalDrop = 0;
+						$totalStudying = 0;
 						?>
-					<div id="exportExcel">
-						<table class="content-data" cellpadding="3"  border="1" >
-						  <thead>
-							  <tr class="style-head">
-							    <td scope="col" >&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
-							    <td scope="col" >&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
-							    <td scope="col" >&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR");?>&nbsp;</td>
-							    <td scope="col" >&nbsp;<?php echo $tr->translate("STUDY_GROUP");?>&nbsp;</td>
-							    <td scope="col" >&nbsp;<?php echo $tr->translate("SEMESTER");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("DEGREE");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("GRADE");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("SESSION");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("ROOM");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_DROP");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("STUDENT_STUDY");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
-							  </tr>
-						  </thead>
-						  <?php $i=0; 
-						  if (!empty($this->rs)){foreach($this->rs as $rs){ $i++;
-							  $totalStudent = $totalStudent+$rs['Num_Student'];
-							  $totalDrop = $totalDrop+$rs['student_drop'];
-							  $totalNew+=$rs['New_Student'];
-							  $totalStudying = $totalStudying+($rs['Num_Student']-$rs['student_drop']);
-							  $totalOld =$totalOld+($rs['Num_Student']-$rs['New_Student']);
-						  ?>
-						  <tr oncontextmenu="setrowdata(<?php echo $rs['id'];?>);return false;" style="font-size:12px; line-height: 25px;"​ align="center" class='hover padding context-menu-one'>
-						   	<td data-label="<?php echo $tr->translate("NUM");?>" ><?php echo $i;?></td>
-						   	<td data-label="<?php echo $tr->translate("BRANCH");?>"  align="left">&nbsp;<?php echo $rs['branch_name']; ?></td>
-						    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"  align="left">&nbsp;<?php echo $rs['academic']; ?></td>
-						    <td data-label="<?php echo $tr->translate("STUDY_GROUP");?>"  align="left">&nbsp;<?php echo $rs['group_code']; ?></td>
-						    <td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo $rs['semester']; ?></td>
-						    <td data-label="<?php echo $tr->translate("DEGREE");?>"  align="left">&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
-						    <td data-label="<?php echo $tr->translate("GRADE");?>"  align="left">&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
-						    <td data-label="<?php echo $tr->translate("SESSION");?>" >&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
-						    <td data-label="<?php echo $tr->translate("ROOM");?>"  align="left">&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
-						    <td data-label="<?php echo $tr->translate("NEW_STUDENT");?>" >&nbsp;<?php echo $rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td data-label="<?php echo $tr->translate("OLD_STUDENT");?>" >&nbsp;<?php echo $rs['Num_Student']-$rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td data-label="<?php echo $tr->translate("TOTAL_STUDENT");?>" >&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td data-label="<?php echo $tr->translate("STUDENT_DROP");?>" >&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td data-label="<?php echo $tr->translate("STUDENT_STUDY");?>" >&nbsp;<?php echo $rs['Num_Student']-$rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT");?></td>
-						    <td data-label="<?php echo $tr->translate("STATUS");?>"  align="left">&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
-						  </tr>
-						  <?php 
-						  	
-						  }} ?>
-						
-						<?php if (!empty($this->studentUngroup)){?>
-							<tr class="style-head">
-								<td colspan="15"><?php echo $tr->translate("STUDENT_NOT_YET_REPORT");?></td>
-							</tr>
-					<?php 
-						$i=0;
-					if(!empty($this->studentUngroup)){
-						foreach($this->studentUngroup AS $key=>$row){  
-							
-							$newStudent = $row['newStudent'];
-							$oldStudent = $row['oldStudent'];
-							$totalstu = $row['totalStu'];
-							$stopStudent = $row['suspendStudent']+$row['stopStudent'];
-							$studyngStudent =$row['totalStu']-$stopStudent;
-							
-							$totalNew=$totalNew+$newStudent;
-							$totalOld = $totalOld+$oldStudent;
-							$totalStudent =$totalStudent+$totalstu;
-							$totalDrop=$totalDrop+$stopStudent;
-							$totalStudying=$totalStudying+$studyngStudent;
-							
-					?>
-						<tr class="style-rowdata hover" align="center"  >
-							<td><?php echo ++$i;?></td>
-							<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
-							<td align="left">&nbsp;<?php echo $row['academic_year_name'];?>&nbsp;</td>
-							<td></td>
-							<td></td>
-							<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
-							<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
-							<td><?php echo $row['session_name'];?></td>
-							<td></td>
-							<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $stopStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $studyngStudent." ".$tr->translate("STUDENT_UNIT");?></td>
-							<td></td>	
-						</tr>
-						<?php }} ?>	
-					<?php }?>
-							<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:12px;background:#a3bbff;">
-								<td colspan="9"><?php echo $tr->translate("TOTAL");?></td>
-								<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
-								<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
-								<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-								<td><?php echo $totalDrop." ".$tr->translate("STUDENT_UNIT");?></td>
-								<td><?php echo $totalStudying." ".$tr->translate("STUDENT_UNIT");?></td>
-								<td></td>
-							</tr>
-					</table> 
-					</div>
-				</td>
-			</tr>
-			<tr >
-				<td colspan="3"  style="border:1px solid #fff; ">
-					<?php echo $this->rsfooter ?>	
-				</td>
-			</tr>
-		</table>
-	</div>	
-</div>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+						<div id="exportExcel">
+							<table class="content-data" cellpadding="3" border="1">
+								<thead>
+									<tr class="style-head">
+										<td scope="col">&nbsp;<?php echo $tr->translate("NUM"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("BRANCH"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("ACADEMIC_YEAR"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("STUDY_GROUP"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("SEMESTER"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("DEGREE"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("GRADE"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("SESSION"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("ROOM"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("NEW_STUDENT"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("OLD_STUDENT"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("TOTAL_STUDENT"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("STUDENT_DROP"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("STUDENT_STUDY"); ?>&nbsp;</td>
+										<td scope="col">&nbsp;<?php echo $tr->translate("STATUS"); ?>&nbsp;</td>
+									</tr>
+								</thead>
+								<?php $i = 0;
+								if (!empty($this->rs)) {
+									foreach ($this->rs as $rs) {
+										$i++;
+										$totalStudent = $totalStudent + $rs['Num_Student'];
+										$totalDrop = $totalDrop + $rs['student_drop'];
+										$totalNew += $rs['New_Student'];
+										$totalStudying = $totalStudying + ($rs['Num_Student'] - $rs['student_drop']);
+										$totalOld = $totalOld + ($rs['Num_Student'] - $rs['New_Student']);
+										?>
+										<tr oncontextmenu="setrowdata(<?php echo $rs['id']; ?>);return false;"
+											style="font-size:12px; line-height: 25px;" ​ align="center"
+											class='hover padding context-menu-one'>
+											<td data-label="<?php echo $tr->translate("NUM"); ?>"><?php echo $i; ?></td>
+											<td data-label="<?php echo $tr->translate("BRANCH"); ?>" align="left">
+												&nbsp;<?php echo $rs['branch_name']; ?></td>
+											<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR"); ?>" align="left">
+												&nbsp;<?php echo $rs['academic']; ?></td>
+											<td data-label="<?php echo $tr->translate("STUDY_GROUP"); ?>" align="left">
+												&nbsp;<?php echo $rs['group_code']; ?></td>
+											<td data-label="<?php echo $tr->translate("SEMESTER"); ?>"><?php echo $rs['semester']; ?>
+											</td>
+											<td data-label="<?php echo $tr->translate("DEGREE"); ?>" align="left">
+												&nbsp;&nbsp;<?php echo $rs['degree']; ?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("GRADE"); ?>" align="left">
+												&nbsp;<?php echo $rs['grade']; ?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("SESSION"); ?>">
+												&nbsp;<?php echo $rs['session']; ?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("ROOM"); ?>" align="left">
+												&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
+											<td data-label="<?php echo $tr->translate("NEW_STUDENT"); ?>">
+												&nbsp;<?php echo $rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+											</td>
+											<td data-label="<?php echo $tr->translate("OLD_STUDENT"); ?>">
+												&nbsp;<?php echo $rs['Num_Student'] - $rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+											</td>
+											<td data-label="<?php echo $tr->translate("TOTAL_STUDENT"); ?>">
+												&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+											</td>
+											<td data-label="<?php echo $tr->translate("STUDENT_DROP"); ?>">
+												&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+											</td>
+											<td data-label="<?php echo $tr->translate("STUDENT_STUDY"); ?>">
+												&nbsp;<?php echo $rs['Num_Student'] - $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+											</td>
+											<td data-label="<?php echo $tr->translate("STATUS"); ?>" align="left">
+												&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>
+										</tr>
+									<?php
+									}
+								} ?>
+								<?php if (!empty($this->studentUngroup)) { ?>
+									<tr class="style-head">
+										<td colspan="15"><?php echo $tr->translate("STUDENT_NOT_YET_REPORT"); ?></td>
+									</tr>
+									<?php
+									$i = 0;
+									if (!empty($this->studentUngroup)) {
+										foreach ($this->studentUngroup as $key => $row) {
+											$newStudent = $row['newStudent'];
+											$oldStudent = $row['oldStudent'];
+											$totalstu = $row['totalStu'];
+											$stopStudent = $row['suspendStudent'] + $row['stopStudent'];
+											$studyngStudent = $row['totalStu'] - $stopStudent;
+											$totalNew = $totalNew + $newStudent;
+											$totalOld = $totalOld + $oldStudent;
+											$totalStudent = $totalStudent + $totalstu;
+											$totalDrop = $totalDrop + $stopStudent;
+											$totalStudying = $totalStudying + $studyngStudent;
+											?>
+											<tr class="style-rowdata hover" align="center">
+												<td><?php echo ++$i; ?></td>
+												<td align="left">&nbsp;<?php echo $row['branch_name']; ?>&nbsp;</td>
+												<td align="left">&nbsp;<?php echo $row['academic_year_name']; ?>&nbsp;</td>
+												<td></td>
+												<td></td>
+												<td align="left">&nbsp;<?php echo $row['degree_name']; ?></td>
+												<td align="left">&nbsp;<?php echo $row['grade_name']; ?></td>
+												<td><?php echo $row['session_name']; ?></td>
+												<td></td>
+												<td><?php echo $newStudent . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+												<td><?php echo $oldStudent . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+												<td><?php echo $totalstu . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+												<td><?php echo $stopStudent . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+												<td><?php echo $studyngStudent . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+												<td></td>
+											</tr>
+										<?php }
+									} ?>
+								<?php } ?>
+								<tr align="center" class="hover"
+									style="font-weight:bold;height:30px;font-size:12px;background:#a3bbff;">
+									<td colspan="9"><?php echo $tr->translate("TOTAL"); ?></td>
+									<td><?php echo $totalNew . " " . $tr->translate("STUDENT_UNIT");
+									; ?></td>
+									<td><?php echo $totalOld . " " . $tr->translate("STUDENT_UNIT");
+									; ?></td>
+									<td><?php echo $totalStudent . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+									<td><?php echo $totalDrop . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+									<td><?php echo $totalStudying . " " . $tr->translate("STUDENT_UNIT"); ?></td>
+									<td></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="border:1px solid #fff; ">
+						<?php echo $this->rsfooter ?>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
 <script type="text/javascript">
-dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dojo.data.ItemFileWriteStore");
 
-var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-var room_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-dojo.ready(function(){
+	var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var teacher_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	var room_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+	dojo.ready(function () {
 
-	new dijit.form.FilteringSelect({
-		store: teacher_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,
-		id: "teacher",
-		name: "teacher",           
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
-		onChange: function() {  
-		}
-	}, "teacher");
+		new dijit.form.FilteringSelect({
+			store: teacher_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			required: false,
+			id: "teacher",
+			name: "teacher",
+			class: "fullside",
+			placeHolder: "<?php echo $tr->translate("SELECT_TEACHER"); ?>",
+			onChange: function () {
+			}
+		}, "teacher");
 
-	new dijit.form.FilteringSelect({
-		store: room_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                     
-		id: "room",
-		name: "room",
-		class: "fullside", 		
-		placeHolder:"<?php echo $tr->translate("SELECT_ROOM");?>",          
-		onChange: function() {
-			  
-		}
-	}, "room");
-	
-	new dijit.form.FilteringSelect({
-		store: group_store,
-	    queryExpr: "*${0}*",
-		autoComplete: false,                     
-	    id: "group",
-	    name: "group",  
-	    class: 'fullside', 
-	    readonly:false,
-	    required:false,
-	    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
-	    onChange: function() {  
-		    
-	    }
-	}, "group");
-	
-	new dijit.form.FilteringSelect({
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: false,                        
-		id: "grade",
-		name: "grade",  
-		class: 'fullside',  
-		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-		onChange: function() {  
-		}
-	}, "grade");
-	
-	 var branch_id = dijit.byId('branch_id');
-	 branch_id.on('change', function(evt) {
-		 getAllGroupByBranch();
-		 getRefreshRoom();
-		 getRefreshTeacher();
-    });
-	 var academic_year = dijit.byId('academic_year');
-	 academic_year.on('change', function(evt) {
-		 getAllGroupByBranch();
-    });
-	 getallGrade();
-	 getRefreshTeacher();
-	 getAllGroupByBranch();
-	 getRefreshRoom();
-	 <?php if(!empty($this->search['academic_year'])){ ?>
-	 dijit.byId('academic_year').set('value','<?php echo $this->search['academic_year']?>');  
-	 <?php } ?>
-});
-var oldBranch = "<?php echo $this->search['branch_id']?>";
+		new dijit.form.FilteringSelect({
+			store: room_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			required: false,
+			id: "room",
+			name: "room",
+			class: "fullside",
+			placeHolder: "<?php echo $tr->translate("SELECT_ROOM"); ?>",
+			onChange: function () {
 
-url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
-function getAllGroupByBranch(){
-	dijit.byId('group').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('group').set('store',group_store);  
-		dijit.byId('branch_id').focus();
-		return false;
-	}
-	degree = dijit.byId('degree').get('value');
-	if(degree=='' || degree==-1){degree ="";}
-	grade = dijit.byId('grade').get('value');
-	if(grade=='' || grade==-1){grade ="";}
-	academic_year = dijit.byId('academic_year').get('value');
-	if(academic_year=='' || academic_year==-1){academic_year ="";}
-	
-	dojo.xhrPost({
-		url: url_getgroup,
-		content:{
-			'branch_id':branch_id,
-			'degree':degree,
-			'grade':grade,
-			'academic_year':academic_year,
-			'noaddnew':1,
-			'forfilter':1
-			},
-		handleAs:"json",
-		load: function(data) {
-		    group_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('group').set('store',group_store);   
-		    if(oldBranch==branch_id){
-		    	dijit.byId('group').set('value','<?php echo $this->search['group']?>');  
-		    }
-		},
-		error: function(err) {
-		}
+			}
+		}, "room");
+
+		new dijit.form.FilteringSelect({
+			store: group_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			id: "group",
+			name: "group",
+			class: 'fullside',
+			readonly: false,
+			required: false,
+			placeHolder: "<?php echo $tr->translate("SELECT_GROUP"); ?>",
+			onChange: function () {
+
+			}
+		}, "group");
+
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,
+			required: false,
+			id: "grade",
+			name: "grade",
+			class: 'fullside',
+			placeHolder: "<?php echo $tr->translate("SELECT_GRADE"); ?>",
+			onChange: function () {
+			}
+		}, "grade");
+
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function (evt) {
+			getAllGroupByBranch();
+			getRefreshRoom();
+			getRefreshTeacher();
+		});
+		var academic_year = dijit.byId('academic_year');
+		academic_year.on('change', function (evt) {
+			getAllGroupByBranch();
+		});
+		getallGrade();
+		getRefreshTeacher();
+		getAllGroupByBranch();
+		getRefreshRoom();
+		<?php if (!empty($this->search['academic_year'])) { ?>
+			dijit.byId('academic_year').set('value', '<?php echo $this->search['academic_year'] ?>');
+		<?php } ?>
 	});
-}
-var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
-function getallGrade(){
-	getAllGroupByBranch();  
-	dept_id = dijit.byId('degree').get('value');
-	if(dept_id=='' || dept_id==-1){return false;}
+	var oldBranch = "<?php echo $this->search['branch_id'] ?>";
+
+	url_getgroup = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'getallgroup')); ?>';
+	function getAllGroupByBranch() {
+		dijit.byId('group').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if (branch_id == '' || branch_id == -1) {
+			var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('group').set('store', group_store);
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		degree = dijit.byId('degree').get('value');
+		if (degree == '' || degree == -1) { degree = ""; }
+		grade = dijit.byId('grade').get('value');
+		if (grade == '' || grade == -1) { grade = ""; }
+		academic_year = dijit.byId('academic_year').get('value');
+		if (academic_year == '' || academic_year == -1) { academic_year = ""; }
+
 		dojo.xhrPost({
-			url:url_dept,
-			content:{
-				'dept_id':dept_id,
-				'noaddnew':1
-				},
-			handleAs:"json",
-			load: function(data) {
-				dijit.byId('grade').attr('value','');
-				grade_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('grade').set('store',grade_store); 
-			    dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+			url: url_getgroup,
+			content: {
+				'branch_id': branch_id,
+				'degree': degree,
+				'grade': grade,
+				'academic_year': academic_year,
+				'noaddnew': 1,
+				'forfilter': 1
 			},
-			error: function(err) {
+			handleAs: "json",
+			load: function (data) {
+				group_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('group').set('store', group_store);
+				if (oldBranch == branch_id) {
+					dijit.byId('group').set('value', '<?php echo $this->search['group'] ?>');
+				}
+			},
+			error: function (err) {
 			}
 		});
-}
-var row=0;
-var url="";
-$(function(){
-	$.contextMenu({
-		selector: '.context-menu-one', 
-		callback: function(key, options) {
-		
-			var m = "clicked: " + key;
-			if(key=="rpt-student-group"){
-				url='<?php echo $urlStudentGroup;?>';
-			}else if(key=="rpt-att-list"){
-				url='<?php echo $urlAttList;?>';
-			}else if(key=="rpt-totalattendance"){
-				url='<?php echo $urlTotalAtt;?>';
-			}else if(key=="rpt-student-list"){
-				url='<?php echo $urlStudentList;?>';
-			}else if(key=="rpt-assessmentterm"){
-				url='<?php echo $urlAssesment;?>';
-			}else if(key=="rptAdjustStudent"){
-				url='<?php echo $urlStudentGroupAdjust;?>';
-			}else if(key=="outstandingsem1"){
-				url='<?php echo $urloutstanding1;?>';
-				window.open(url+''+row+'/type/1','_blank');
-				return true;
-			}else if(key=="outstandingsem2"){
-				url='<?php echo $urloutstanding1;?>';
-				window.open(url+''+row+'/type/2','_blank');
-				return true;
-			}else if(key=="outstandingyear"){
-				url='<?php echo $urloutstandingyear;?>';
-				window.open(url+''+row+'/type/3','_blank');
-				return true;
-			}else if(key=="rpt-semester2"){
-				url='<?php echo $urlscoresemester;?>';
-				window.open(url+''+row+'/type/2','_blank');
-				return true;
-			}else if(key=="rpt-resultbysemester"){
-				url='<?php echo $urlscoresemester;?>';
-				window.open(url+''+row+'/type/1','_blank');
-				return true;
-			}
-			else if(key=="scoreyear"){
-				url='<?php echo $urlscoreyear;?>';
-				window.open(url+''+row+'/type/3','_blank');
-				return true;
-			}
-			 
-			gotoAction();
-		},
-		items: {
-			"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
-	    	"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
-	    	"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-	    	"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-			// "list": {
-	        //         "name": "<?php echo $tr->translate("LIST");?>", 
-	        //         icon: "fa-file-text-o",
-	        //         "items": {
-	        //         	"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT");?>", icon: "fa-file-text-o",},
-	    	// 			"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST");?>", icon: "fa-file-text-o"},
-	    	// 			"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-	    	// 			"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>", icon: "fa-file-text-o"},
-	        //         }
-	        //     },
-            // "outstandingsem": {
-            //     "name": "<?php echo $tr->translate("OUTSTANDING_STUDENT");?>", 
-            //     icon: "fa-file-text-o",
-            //     "items": {
-            //     	"outstandingsem1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1");?>", icon: "fa-file-text-o"},
-    		// 		"outstandingsem2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2");?>", icon: "fa-file-text-o"},
-    		// 		"outstandingyear": {name: "<?php echo $tr->translate("HONOR_YEARLY");?>", icon: "fa-file-text-o"},
-            //     }
-            // },
-			// "result": {
-            //     "name": "<?php echo $tr->translate("RESULT");?>", 
-            //     icon: "fa-file-text-o",
-            //     "items": {
-            //         "rpt-resultbysemester": {"name": "<?php echo $tr->translate("RESULT_SEMESTER1");?>",icon: "fa-file-text-o"},
-            //         "rpt-semester2": {"name": "<?php echo $tr->translate("RESULT_SEMESTER2");?>",icon: "fa-file-text-o"},
-            //         "scoreyear": {"name": "<?php echo $tr->translate("YEARLY_EXAM");?>",icon: "fa-file-text-o"}
-            //     }
-            // },
-		}
-	});
-});
-function setrowdata(index){
-	row = index;
-}
-var recordid ='';
-function gotoAction(){
-	window.open(url+row);
-}
-var url_gettecher = '<?php echo $this->url(array("module"=>"foundation","controller"=>"lecturer","action"=>"getteacher"));?>';										
-function getRefreshTeacher(){
-	dijit.byId('teacher').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id==-1){
-		var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('teacher').set('store',teacher_store);  
-		return false;
 	}
-	dojo.xhrPost({
-		url:url_gettecher,
-		content:{
-			'branch_id':branch_id,'has_addnew':1
+	var url_dept = '<?php echo $this->url(array('module' => 'global', 'controller' => 'grade', 'action' => 'get-grade')); ?>';
+	function getallGrade() {
+		getAllGroupByBranch();
+		dept_id = dijit.byId('degree').get('value');
+		if (dept_id == '' || dept_id == -1) { return false; }
+		dojo.xhrPost({
+			url: url_dept,
+			content: {
+				'dept_id': dept_id,
+				'noaddnew': 1
 			},
-		handleAs:"json",
-		load: function(data) {
-		    teacher_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('teacher').set('store',teacher_store);  
-		    if(oldBranch==branch_id){
-		   	 dijit.byId('teacher').set('value','<?php echo $this->search['teacher']?>'); 
-		    }
-		    document.getElementsByClassName("overlay")[0].style.display="none";
-		},
-		error: function(err){
-			document.getElementsByClassName("overlay")[0].style.display="none";
-		}
-	});
-}
-
-var url_getRoom = '<?php echo $this->url(array("module"=>"global","controller"=>"room","action"=>"getroom"));?>';	
-function getRefreshRoom(){
-	dijit.byId('room').reset();
-	branch_id = dijit.byId('branch_id').get('value');
-	if(branch_id=='' || branch_id == -1){
-		return false;
+			handleAs: "json",
+			load: function (data) {
+				dijit.byId('grade').attr('value', '');
+				grade_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('grade').set('store', grade_store);
+				dijit.byId('grade').attr('value', '<?php echo $this->search['grade'] ?>');
+			},
+			error: function (err) {
+			}
+		});
 	}
-	dojo.xhrPost({
-		url: url_getRoom,
-		handleAs:"json",
-		content:{
-				'branch_id':branch_id,'has_addnew':1
-				},
-		load: function(data) {
-			room_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('room').set('store',room_store);  
-		    if(oldBranch==branch_id){
-		    	dijit.byId('room').set('value','<?php echo $this->search['room']?>');  
-		    }
-		    document.getElementsByClassName("overlay")[0].style.display="none";
-		},
-		error: function(err) {
-			document.getElementsByClassName("overlay")[0].style.display="none";
-		}
+	var row = 0;
+	var url = "";
+	$(function () {
+		$.contextMenu({
+			selector: '.context-menu-one',
+			callback: function (key, options) {
+
+				var m = "clicked: " + key;
+				if (key == "rpt-student-group") {
+					url = '<?php echo $urlStudentGroup; ?>';
+				} else if (key == "rpt-att-list") {
+					url = '<?php echo $urlAttList; ?>';
+				} else if (key == "rpt-totalattendance") {
+					url = '<?php echo $urlTotalAtt; ?>';
+				} else if (key == "rpt-student-list") {
+					url = '<?php echo $urlStudentList; ?>';
+				} else if (key == "rpt-assessmentterm") {
+					url = '<?php echo $urlAssesment; ?>';
+				} else if (key == "rptAdjustStudent") {
+					url = '<?php echo $urlStudentGroupAdjust; ?>';
+				} else if (key == "outstandingsem1") {
+					url = '<?php echo $urloutstanding1; ?>';
+					window.open(url + '' + row + '/type/1', '_blank');
+					return true;
+				} else if (key == "outstandingsem2") {
+					url = '<?php echo $urloutstanding1; ?>';
+					window.open(url + '' + row + '/type/2', '_blank');
+					return true;
+				} else if (key == "outstandingyear") {
+					url = '<?php echo $urloutstandingyear; ?>';
+					window.open(url + '' + row + '/type/3', '_blank');
+					return true;
+				} else if (key == "rpt-semester2") {
+					url = '<?php echo $urlscoresemester; ?>';
+					window.open(url + '' + row + '/type/2', '_blank');
+					return true;
+				} else if (key == "rpt-resultbysemester") {
+					url = '<?php echo $urlscoresemester; ?>';
+					window.open(url + '' + row + '/type/1', '_blank');
+					return true;
+				}
+				else if (key == "scoreyear") {
+					url = '<?php echo $urlscoreyear; ?>';
+					window.open(url + '' + row + '/type/3', '_blank');
+					return true;
+				}
+
+				gotoAction();
+			},
+			items: {
+				"rpt-student-group": { name: "<?php echo $tr->translate("STUDENT_LIST_REPORT"); ?>", icon: "fa-file-text-o", },
+				"rpt-student-list": { name: "<?php echo $tr->translate("STUDENT_LIST"); ?>", icon: "fa-file-text-o" },
+				"rpt-att-list": { name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST"); ?>", icon: "fa-file-text-o" },
+				"rpt-totalattendance": { name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST"); ?>", icon: "fa-file-text-o" },
+				// "list": {
+				//         "name": "<?php echo $tr->translate("LIST"); ?>", 
+				//         icon: "fa-file-text-o",
+				//         "items": {
+				//         	"rpt-student-group": {name: "<?php echo $tr->translate("STUDENT_LIST_REPORT"); ?>", icon: "fa-file-text-o",},
+				// 			"rpt-student-list": {name: "<?php echo $tr->translate("STUDENT_LIST"); ?>", icon: "fa-file-text-o"},
+				// 			"rpt-att-list": {name: "<?php echo $tr->translate("STUDENT_ATTENDANT_LIST"); ?>", icon: "fa-file-text-o"},
+				// 			"rpt-totalattendance": {name: "<?php echo $tr->translate("TOTAL_ATTENDANT_LIST"); ?>", icon: "fa-file-text-o"},
+				//         }
+				//     },
+				// "outstandingsem": {
+				//     "name": "<?php echo $tr->translate("OUTSTANDING_STUDENT"); ?>", 
+				//     icon: "fa-file-text-o",
+				//     "items": {
+				//     	"outstandingsem1": {name: "<?php echo $tr->translate("HONOR_SEMESTER1"); ?>", icon: "fa-file-text-o"},
+				// 		"outstandingsem2": {name: "<?php echo $tr->translate("HONOR_SEMESTER2"); ?>", icon: "fa-file-text-o"},
+				// 		"outstandingyear": {name: "<?php echo $tr->translate("HONOR_YEARLY"); ?>", icon: "fa-file-text-o"},
+				//     }
+				// },
+				// "result": {
+				//     "name": "<?php echo $tr->translate("RESULT"); ?>", 
+				//     icon: "fa-file-text-o",
+				//     "items": {
+				//         "rpt-resultbysemester": {"name": "<?php echo $tr->translate("RESULT_SEMESTER1"); ?>",icon: "fa-file-text-o"},
+				//         "rpt-semester2": {"name": "<?php echo $tr->translate("RESULT_SEMESTER2"); ?>",icon: "fa-file-text-o"},
+				//         "scoreyear": {"name": "<?php echo $tr->translate("YEARLY_EXAM"); ?>",icon: "fa-file-text-o"}
+				//     }
+				// },
+			}
+		});
 	});
-}
+	function setrowdata(index) {
+		row = index;
+	}
+	var recordid = '';
+	function gotoAction() {
+		window.open(url + row);
+	}
+	var url_gettecher = '<?php echo $this->url(array("module" => "foundation", "controller" => "lecturer", "action" => "getteacher")); ?>';
+	function getRefreshTeacher() {
+		dijit.byId('teacher').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if (branch_id == '' || branch_id == -1) {
+			var teacher_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('teacher').set('store', teacher_store);
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_gettecher,
+			content: {
+				'branch_id': branch_id, 'has_addnew': 1
+			},
+			handleAs: "json",
+			load: function (data) {
+				teacher_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('teacher').set('store', teacher_store);
+				if (oldBranch == branch_id) {
+					dijit.byId('teacher').set('value', '<?php echo $this->search['teacher'] ?>');
+				}
+				document.getElementsByClassName("overlay")[0].style.display = "none";
+			},
+			error: function (err) {
+				document.getElementsByClassName("overlay")[0].style.display = "none";
+			}
+		});
+	}
+
+	var url_getRoom = '<?php echo $this->url(array("module" => "global", "controller" => "room", "action" => "getroom")); ?>';
+	function getRefreshRoom() {
+		dijit.byId('room').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if (branch_id == '' || branch_id == -1) {
+			return false;
+		}
+		dojo.xhrPost({
+			url: url_getRoom,
+			handleAs: "json",
+			content: {
+				'branch_id': branch_id, 'has_addnew': 1
+			},
+			load: function (data) {
+				room_store = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('room').set('store', room_store);
+				if (oldBranch == branch_id) {
+					dijit.byId('room').set('value', '<?php echo $this->search['room'] ?>');
+				}
+				document.getElementsByClassName("overlay")[0].style.display = "none";
+			},
+			error: function (err) {
+				document.getElementsByClassName("overlay")[0].style.display = "none";
+			}
+		});
+	}
 </script>

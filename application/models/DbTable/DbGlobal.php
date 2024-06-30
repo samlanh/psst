@@ -2792,14 +2792,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$db = new Application_Form_FrmGlobal();
 			$resultBranch = $db->getHeaderReceipt($branchId);
 
-			$dbRegister = new Registrar_Model_DbTable_DbRegister();
-			$param = array(
-				'studentId' => $student_id,
-				'returnHtml' => 1
-			);
-			$resultPaymentHistory = $dbRegister->getStudentPaymentHistory($param);
-
-
 			$str = '<div class="col-md-3 col-sm-3 col-xs-12">
   						<div class="form-group">
   							<div class="thumb-xl member-thumb m-b-10 center-block">';
@@ -2841,15 +2833,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 							</div>';
 
 			$str_parentinfo='<p class="text-muted info-list font-13">
-										<span class="title-info">' . $tr->translate("FATHER_NAME") . '</span> : <span id="lbl_father" class="inf-value">'.$rs['father_enname'] . '</span>
-										<span id="lbl_fathertel" class="inf-value" style="display:none;">' . $rs['father_phone'] . '</span>
-										<span id="lbl_mothertel" class="inf-value" style="display:none;">' . $rs['mother_phone'] . '</span>
-										<span class="title-info">'. $tr->translate("MOTHER_NAME") . '</span> : <span id="lbl_mother" class="inf-value">'. $rs['mother_enname'] . '</span>
-										<span class="title-info">'. $tr->translate("PARENT_PHONE") . '</span> : <span id="lbl_parentphone" class="inf-value">' . $rs['guardian_tel'] . '</span>
-										<span class="title-info">'. $tr->translate("STATUS") . '</span> : <span id="lbl_culturelevel" class="inf-value red bold" >' . $rs['status_student'] . '</span>
-										';
+								<span class="title-info">' . $tr->translate("FATHER_NAME") . '</span> : <span id="lbl_father" class="inf-value">'.$rs['father_enname'] . '</span>
+								<span id="lbl_fathertel" class="inf-value" style="display:none;">' . $rs['father_phone'] . '</span>
+								<span id="lbl_mothertel" class="inf-value" style="display:none;">' . $rs['mother_phone'] . '</span>
+								<span class="title-info">'. $tr->translate("MOTHER_NAME") . '</span> : <span id="lbl_mother" class="inf-value">'. $rs['mother_enname'] . '</span>
+								<span class="title-info">'. $tr->translate("PARENT_PHONE") . '</span> : <span id="lbl_parentphone" class="inf-value">' . $rs['guardian_tel'] . '</span>
+								<span class="title-info">'. $tr->translate("STATUS") . '</span> : <span id="lbl_culturelevel" class="inf-value red bold" >' . $rs['status_student'] . '</span>
+							';
 			$str_parentinfo.= '</p>';
-  		          						
 
 			$studyInfo = '<p class="text-muted info-list font-13">
 				             <span class="title-info">' . $tr->translate('DEGREE') . '</span> : <span id="lbl_degree" class="inf-value">' . $rs['degree_label'] . '</span>
@@ -2860,15 +2851,59 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$strStatus = ($rs['is_newstudent'] == 1) ? 'New Student' : 'Old Student';
 			$studentStatus = '<span class="user-badge bg-warning">' . $strStatus . '</span>';
 
+			$param = array(
+				'studentId'=>$student_id,
+				'degree'=>$degree,
+				'fetchAll'=>1
+			);
+
+			$strDiscountList = '';
+			$rsDiscount = $this->getDiscountListbyStudent($param);
+			if (!empty($rsDiscount)) {
+				$strDiscountList .= "<ul class='list-unstyled top_profiles scroll-view '>";
+				foreach($rsDiscount as $Discount){
+
+
+					if (!empty($Discount['endDay'])) {
+						$strListDay = "<a class='pull-left date'>
+											<p class='month'>" . $Discount['endDay'] . "</p>
+											<p class='day'>" . $Discount['endYear'] . "</p>
+										</a>";
+					} else {
+						$strListDay = "<a class='pull-left border-green profile_thumb'>
+										<i class='fa fa-arrow-circle-up green'></i>
+				  						</a>";
+					}
+
+					$strDiscountList.= '<li class="media event">
+						'.$strListDay.'
+						<div class="media-body">
+							<a class="title">'.$Discount['discountTitle'].'</a>
+							<p><strong class="red">'.$Discount['DisValueType'].'</strong> '.$Discount['discountName'].' ('.$Discount['discountForType'].')</p>
+							<p><small>'.$Discount['discountFor'].'</small><small class="blue"> ('.$Discount['discountPeriod'].')</small>
+							</p>
+						</div>
+					</li>';
+				}
+				$strDiscountList .= "</ul>";
+			} else {
+				$strDiscountList = "<h2><i class='fa fa-close'></i> ".$tr->translate('No Discount Record')."</h2>";
+			}
+
+			$dbRegister = new Registrar_Model_DbTable_DbRegister();
+			$param = array(
+				'studentId' => $student_id,
+				'returnHtml' => 1
+			);
+			$resultPaymentHistory = $dbRegister->getStudentPaymentHistory($param);
 		}
-
-
 
 		$result = array(
 			'studentInfo' => $str,
 			'studyinfo' => $studyInfo,
 			'parentinfo' => $str_parentinfo,
 			'studentCode' => $studentCode,
+			'resultDiscountList'=>$strDiscountList,
 			'resultPaymentHistory' => $resultPaymentHistory,
 			'studenttypeinfo' => $studentStatus,
 			'studentData' => $studentData,
@@ -4649,61 +4684,82 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= " ORDER BY pt.`title` ASC ";
 		return $db->fetchAll($sql);
 	}
-	function getDiscountList($data)
+	function getDiscountListbyStudent($data)
 	{
-		if ($data['resultList']) {
+
+		if (!empty($data['resultList'])) {
 			$sql = "
 				SELECT
 					ds.discountId AS id,
 					(SELECT dis_name FROM `rms_discount` WHERE disco_id =ds.discountId LIMIT 1) name
 				FROM
 					`rms_dis_setting` as ds WHERE 1 ";
-		}
-		$sql = "
-		SELECT
-			id,
-			discountTitle,
-			discountFor,
-			studentId,
-			discountId AS discountTypeId,
-			(SELECT
-				dis_name
-			FROM
-				`rms_discount`
-			WHERE disco_id = 5
-			LIMIT 1) discountName,
-			discountForType,
-			degree,
-			DisValueType,
-			discountValue,
-			discountPeriod,
-			startDate,
-			endDate
-		FROM
-			`rms_dis_setting` as ds WHERE 1 ";
+		} else {
+			$currentLang = $this->currentlang();
+			$colunmname = 'name_en';
+			if ($currentLang == 1) {
+				$colunmname = 'name_kh';
+			}
 
+			$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
+			$sqlforType = "(SELECT $colunmname FROM `rms_view` WHERE type=38 AND key_code=ds.discountForType LIMIT 1) ";
+			$sqlPeriod = "(SELECT $colunmname FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
+
+			$sql = "
+				SELECT
+					id,
+					discountTitle,
+					$sqlDiscountFor AS discountFor,
+					studentId,
+					discountId AS discountTypeId,
+					(SELECT
+						dis_name
+					FROM
+						`rms_discount`
+					WHERE disco_id = ds.discountId
+					LIMIT 1) discountName,
+					$sqlforType discountForType,
+					degree,
+					DisValueType,
+					discountValue,
+					CONCAT(ds.discountValue, 
+					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,	
+					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
+					DATE_FORMAT(ds.endDate,'%d-%b') endDay,
+					DATE_FORMAT(ds.endDate,'%y') endYear
+				FROM
+					`rms_dis_setting` as ds WHERE 1 ";
+		}
+		$strPeriod="";
+		$strDegree="";
+		$strStudent="";
+
+		$firstCondition = " discountFor=1";
+		$secondCondition = "  discountFor=2";
 		if (!empty($data['id'])) {//discount setting id
 			$sql .= " AND ds.id=" . $data['id'];
 		}
-		if (!empty($data['discountFor'])) {
-			$sql .= " AND ds.discountFor=" . $data['discountFor'];
-		}
-		if (!empty($data['discountTypeId'])) {//discount category
+		
+		if (!empty($data['discountTypeId'])) {//discount category id
 			$sql .= " AND ds.discountTypeId=" . $data['discountTypeId'];
 		}
 		if (!empty($data['studentId'])) {
-			$sql .= " AND ds.studentId=" . $data['studentId'];
+			$strStudent .= " AND ds.studentId=" . $data['studentId'];
 		}
+
 		if (!empty($data['degree'])) {
-			$sql .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
+			$strDegree .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
 		}
+
 		if (!empty($data['discountPeriod'])) {
-			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
+			$strPeriod .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
+		$firstWhere = " AND ((".$firstCondition . $strStudent . $strDegree . $strPeriod . ")";
+		$secondWhere = " OR (".$secondCondition.$strDegree.$strPeriod."))";
 		if (!empty($data['fetchAll'])) {
-			return $this->getAdapter()->fetchAll($sql);
+			return $this->getAdapter()->fetchAll($sql.$firstWhere.$secondWhere);
 		} else {
-			return $this->getAdapter()->fetchRow($sql);
+			return $this->getAdapter()->fetchRow($sql.$firstWhere.$secondWhere);
 		}
 	}
 

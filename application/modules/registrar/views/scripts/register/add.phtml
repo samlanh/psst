@@ -205,6 +205,11 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		padding-right: 2px;
 		padding-left: 2px
 	}
+	ul.top_profiles{
+		height:auto !important;
+	}
+	.fixed_height_160{height: 160px !important;overflow-y: scroll;}
+	.media .date{width: 60px;}
 </style>
 <div class="card">
 	<div class="card-content collapse show">
@@ -505,28 +510,17 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 									: <span id="lbl_part_time" class="inf-value"></span>
 								</p>
 							</div>
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<div class="form-group">
-									<div class="d-flex">
-										<div class="settings-main-icon ">
-											<i class="material-icons-outlined">
-											request_quote
-											</i>
+								<div class="member-card card-display-reg">
+									<div>
+										<div class="x_title">
+										<h5><?php echo $tr->translate("DISCOUNT_INFO"); ?></h5>
+											<div class="clearfix"></div>
 										</div>
-										<div class="col-md-10 col-sm-10 col-xs-12">
-											<p class="tx-20 font-weight-semibold d-flex ">
-												<?php echo $tr->translate("DISCOUNT_INFO"); ?></p>
+										<div id="lblDiscuontList" class="fixed_height_160">
 										</div>
 									</div>
+									<div style="clear: both;"></div>
 								</div>
-								<div class="text-center">
-									<div class="member-card card-display-reg">
-										<p class="text-muted info-list font-13">
-										</p>
-										<div style="clear: both;"></div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 			</div>
@@ -1079,6 +1073,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					dojo.byId("lbl_parentinfo").innerHTML = data.parentinfo;
 					dojo.byId("lblstudyinfo").innerHTML = data.studyinfo;
 					dojo.byId("lblstudenttypeinfo").innerHTML = data.studenttypeinfo;
+					dojo.byId("lblDiscuontList").innerHTML = data.resultDiscountList;
 					dojo.byId("table_paymenthistory").innerHTML = data.resultPaymentHistory;
 
 					studentData = data.studentData;

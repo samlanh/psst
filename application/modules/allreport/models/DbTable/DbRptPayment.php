@@ -293,8 +293,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		}
 
 		$strStudent = "(SELECT CONCAT(COALESCE(s.stu_code,''),' ',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,'')) FROM rms_student AS s WHERE s.stu_id=ds.studentId LIMIT 1) ";
-
-		$sqlPeriod = "(SELECT name_en FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
+		$sqlPeriod = "(SELECT $colunmname FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
 		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
 
 		$sql = "SELECT ds.id, 
@@ -310,7 +309,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,		
-					CONCAT(COALESCE($sqlPeriod),' ',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y')),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'))) AS discountPeriod, 
+					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
 					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
 					ds.createDate";
 

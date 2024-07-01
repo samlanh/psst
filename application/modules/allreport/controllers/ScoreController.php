@@ -584,37 +584,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
 	}
-	public function rptAttendenceAction()
-	{
-		if ($this->getRequest()->isPost()) {
-			$search = $this->getRequest()->getPost();
-		} else {
-			$search = array(
-				'adv_search' => '',
-				'academic_year' => '',
-				'grade' => '',
-				'session' => '',
-				'group' => '',
-				'branch_id' => 0,
-				'degree' => 0,
-				'start_date' => date('Y-m-d'),
-				'end_date' => date('Y-m-d'),
-			);
-		}
-		$this->view->search = $search;
-		$db = new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->student = $db->getStudentAttendence($search);
-
-		$form = new Application_Form_FrmSearchGlobal();
-		$forms = $form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search = $form;
-
-		$branch_id = empty($search['branch_id']) ? null : $search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view->rsfooter = $frm->getFooterAccount(2);
-	}
+	
 	public function rptMistakeAction()
 	{
 		if ($this->getRequest()->isPost()) {
@@ -646,69 +616,8 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		array_unshift($result, array('id' => '', 'name' => 'ជ្រើសរើសក្រុម'));
 		$this->view->group = $result;
 	}
-	public function rptStudentMistakeAction()
-	{
-		if ($this->getRequest()->isPost()) {
-			$search = $this->getRequest()->getPost();
-		} else {
-			$search = array(
-				'adv_search' => '',
-				'academic_year' => '',
-				'grade' => '',
-				'session' => '',
-				'group' => '',
-				'branch_id' => 0,
-				'degree' => 0,
-				'start_date' => date('Y-m-d'),
-				'end_date' => date('Y-m-d'),
-			);
-		}
-
-		$group = new Allreport_Model_DbTable_DbRptAllStudent();
-		$this->view->student = $group->getStudentMistake($search);
-		$this->view->search = $search;
-
-		$form = new Application_Form_FrmSearchGlobal();
-		$forms = $form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search = $form;
-
-		$frm = new Application_Form_FrmGlobal();
-		$this->view->rsfooteracc = $frm->getFooterAccount(2);
-	}
-	public function rptTotalStudentMistakeAction()
-	{
-		if ($this->getRequest()->isPost()) {
-			$search = $this->getRequest()->getPost();
-
-			$group = new Allreport_Model_DbTable_DbRptAllStudent();
-			$this->view->student = $rs_rows = $group->getStudentMistake($search);
-			$this->view->search = $search;
-			$this->view->datasearch = $search;
-		} else {
-			$search = array(
-				'adv_search' => '',
-				'academic_year' => '',
-				'grade' => '',
-				'session' => '',
-				'group' => '',
-				'branch_id' => 0,
-				'degree' => 0,
-			);
-		}
-
-
-
-		$form = new Application_Form_FrmSearchGlobal();
-		$forms = $form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search = $form;
-
-		$branch_id = empty($search['branch_id']) ? null : $search['branch_id'];
-		$frm = new Application_Form_FrmGlobal();
-		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
-		$this->view->rsfooteracc = $frm->getFooterAccount(2);
-	}
+	
+	
 	function mistakeCertificateAction()
 	{
 		$group_id = $this->getRequest()->getParam("id");

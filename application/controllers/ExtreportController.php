@@ -276,4 +276,57 @@ class ExtreportController extends Zend_Controller_Action
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
     }
+	function rptAttendanceDetailAction(){
+		
+		$this->_helper->layout()->disableLayout();
+		$data=$this->getRequest()->getParams();
+		unset($data['module']);
+		unset($data['controller']);
+		unset($data['action']);
+		
+		$data['groupId'] = empty($data['groupId']) ? 0 : $data['groupId'];
+		$arrFilter = array(
+			'groupId'=>$data['groupId'],
+		);
+		$dbExternal = new Application_Model_DbTable_DbExternal();
+		$this->view->row = $dbExternal->getStudentByGroupExternal($arrFilter);
+		$data['attendanceId'] = empty($data['id']) ? 0 : $data['id'];
+
+		$rs = $dbExternal->getGroupDetailByIDExternal($data['groupId'],1);
+		$this->view->rr = $rs;
+
+		$dbReport = new Application_Model_DbTable_DbReport();
+		$this->view->scheduleTime = $dbReport->getAttendanceDetailWithClassTeahchingSchedule($data);
+		
+		
+	}
+
+	function rptAttendanceSummaryAction(){
+		
+		$this->_helper->layout()->disableLayout();
+		$data=$this->getRequest()->getParams();
+		unset($data['module']);
+		unset($data['controller']);
+		unset($data['action']);
+
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$date = new DateTime();
+			$endDate = $date->format("Y-m-d");
+
+			$date->modify("-1 month");
+			$starDate = $date->format("Y-m-d");
+			$search = array(
+						'startDate'=>$starDate,
+						'endDate'=>$endDate
+					);
+		}
+		$search["groupId"] = $data['groupId'];
+		$this->view->search = $search;
+		
+		$dbExternal = new Application_Model_DbTable_DbReport();
+		$this->view->row = $dbExternal->getStudentListByTeachingSubject($search);
+	}
 }

@@ -291,6 +291,7 @@
 					'title_en'		=> $_data['title'],
 					'note'    		=> $_data['note'],
 					'product_type' 	=> $_data['product_type'],
+					'isCountStock' 	=> $_data['isCountStock'],
 					'is_onepayment' => $_data['is_onepayment'],
 					'schoolOption'  => $schooloption,
 					'images'   	 	=> $photo,
@@ -569,6 +570,7 @@
 					'title'	  => $_data['title'],
 					'title_en'=> $_data['title'],
 					'note'    => $_data['note'],
+					'isCountStock' 	=> $_data['isCountStock'],
 					'product_type' => $_data['product_type'],
 					'is_onepayment' => $_data['is_onepayment'],
 					'schoolOption'    => $schooloption,
@@ -615,6 +617,7 @@
 			}
 				
 			$_arr=array(
+					'branch_id'=> $_data['branch_search'],
 					'items_id'=> $_data['items_id'],
 					'items_type'=> $_data['items_type'],
 					'code'=> $_data['code'],
@@ -664,6 +667,7 @@
 				$schooloption = empty($itemsinfo['schoolOption'])?0:$itemsinfo['schoolOption'];
 			}
 			$_arr=array(
+				    'branch_id'=> $_data['branch_search'],
 					'items_id'=> $_data['items_id'],
 					'items_type'=> $_data['items_type'],
 					'code'=> $_data['code'],

@@ -279,8 +279,20 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'readonly'=>'true',
     			'placeholder'=>$this->tr->translate("MAX_AVERAGE"),
     	));
+
+		$_arr_stock = array(1=>$this->tr->translate("COUNT_STOCK"),0=>$this->tr->translate("NOT_COUNT_STOCK"));
+    	$isCountStock = new Zend_Dojo_Form_Element_FilteringSelect("isCountStock");
+    	$isCountStock->setMultiOptions($_arr_stock);
+    	$isCountStock->setAttribs(array(
+    			'dojoType'=>'dijit.form.FilteringSelect',
+    			'required'=>'true',
+    			'autoComplete'=>'false',
+    			'queryExpr'=>'*${0}*',
+    			'missingMessage'=>'Invalid Module!',
+    			'class'=>'fullside height-text',));
     	
     	if(!empty($data)){
+			$_branch_search->setValue($data["branch_id"]);
     		$title->setValue($data["title"]);
 			$title_en->setValue($data["title_en"]);
     		$_shortcut->setValue($data["shortcut"]);
@@ -298,6 +310,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 	    		$_cost->setValue($data["cost"]);
 	    		$_price->setValue($data["price"]);
     		}
+			$isCountStock->setValue($data["isCountStock"]);
     		$_total_score->setValue($data["total_score"]);
     		$_amount_subject->setValue($data["amount_subject"]);
     		$_max_average->setValue($data["max_average"]);
@@ -326,8 +339,8 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			$_product_type,
     			$_cost,
     			$_price,
-    			
-    			$_branch_search
+    			$_branch_search,
+				$isCountStock 
     			));
     	return $this;
     }

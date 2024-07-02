@@ -35,6 +35,11 @@ fieldset{  background:none;}
                         dijit.byId('itemId').focus();
                         return false;
 					}
+					if(dijit.byId('branch_search').get('value')==''){
+						alert('<?php echo $tr->translate('PLEASE_SELECT_BRANCH');?>');
+						dijit.byId('branch_search').focus();
+						return false;
+					}
 					loadingBlock();
 					return true;
 				} else {
@@ -196,7 +201,7 @@ fieldset{  background:none;}
 		}else{
 			addRow();
 		}
-		//getRefreshProduct();
+		getRefreshProduct();
 	});	
 </script>
 <script type="text/javascript">

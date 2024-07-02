@@ -1,0 +1,287 @@
+<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+$pageTitle = $tr->translate("STUDENT_DISCIPLINE_REPORT");
+ echo $this->headTitle($pageTitle);
+$frm = $this->form_search;
+ 
+?>
+<style>
+ul.tile_info.ul_info {
+    height: 180px;
+}
+</style>
+  <div class="card">
+		<div class="card-content collapse show">
+			<div class="card-box report-list">
+				
+				<div class="row">
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						
+						<div class="x_panel">
+							<div class="x_title">
+								<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("FILTERING");?> <small><?php echo $tr->translate("ATTENDANCE_SUMMARY");?></small></h2>
+								<ul class="nav navbar-right panel_toolbox">
+								  <li>
+									<a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+								  </li>
+								</ul>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content" style="display: none;">
+								<form  action="" dojoType="dijit.form.Form" method="post">
+									<div class="row">
+										<div class="form-group">
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<?php echo $frm->getElement("branch_id");?>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<?php echo $frm->getElement("academic_year");?>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<?php echo $frm->getElement("degree");?>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group">
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<input id="grade" />
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<?php echo $frm->getElement("start_date");?>
+											</div>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						
+						<div style="clear: both;"></div>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="x_panel well">
+									
+									<div class="x_content">
+										<table class="" style="width:100%">
+											<tbody>
+												<tr>
+													<th style="width:70%;">
+														<p class="">
+															<?php echo sprintf('%02d',$this->allClassIssuedAtt)." / ".sprintf('%02d',$this->allClass);?> <?php echo $tr->translate("CLASS");?> 
+														</p>
+													</th>
+													<th>
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+															<p class="">
+																<?php echo $tr->translate("ATTENDANCE_CLASS");?>
+															</p>
+														</div>
+													</th>
+												</tr>
+												<tr>
+													<td>
+														<div id="donutClass" class="morris-donut-inverse" style="width:100%; height:185px;"></div>
+													</td>
+													<td>
+														<ul class="tile_info ul_info">
+																<?php if(!empty($this->studentByDegree)) foreach($this->studentByDegree As $key => $rsDegree){ $mod = $key%2; ?>
+																<li class="<?php if($mod==1){ echo "odd";}?>" >
+																	<div class="row">
+																		<div class="col-md-10 col-sm-10 col-xs-10">
+																			<p><?php echo empty($rsDegree["groupCode"]) ? $rsDegree["title"] : $rsDegree["groupCode"]; ?> </p>
+																			
+																		</div>
+																		<div class="col-md-2 col-sm-2 col-xs-10">
+																			<?php echo empty($rsDegree["totalStudent"]) ? "00" : sprintf('%02d',$rsDegree["totalStudent"]);?>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-md-12 text-center">
+																			<span class="badge" style="color: #fff;background: #db3434;"><?php echo empty($rsDegree["totalAbsent"]) ? "00" : sprintf('%02d',$rsDegree["totalAbsent"]);?></span>
+																			<span class="badge" style="color: #fff;background: #0fcc6d;"><?php echo empty($rsDegree["totalPermission"]) ? "00" : sprintf('%02d',$rsDegree["totalPermission"]);?></span>
+																			<span class="badge" style="color: #fff;background: #ed9c18;"><?php echo empty($rsDegree["totalLate"]) ? "00" : sprintf('%02d',$rsDegree["totalLate"]);?></span>
+																			<span class="badge" style="color: #fff;background: #9b59b6;"><?php echo empty($rsDegree["totalEarlyLate"]) ? "00" : sprintf('%02d',$rsDegree["totalEarlyLate"]);?></span>
+																		</div>
+																	</div>
+																</li>
+																<?php } ?>
+															</ul>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										
+									</div>
+								</div>
+								
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="x_panel well tile ">
+									
+									<div class="x_content">
+										<table class="" style="width:100%">
+											<tbody>
+												<tr>
+													<th style="width:70%;">
+														
+													</th>
+													<th>
+														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+															<p class=""><?php echo $tr->translate("ATTENDANCE_SUMMARY");?></p>
+														</div>
+													</th>
+												</tr>
+												<tr>
+													<td>
+														<div id="donutStudent" class="morris-donut-inverse" style="width:100%; height:185px;"></div>
+													</td>
+													<td>
+														<table class="tile_info">
+															<tbody>
+																<?php if(!empty($this->attendanceSummary)) foreach($this->attendanceSummary as $attSum ){ ?>
+																<tr>
+																	<td>
+																	  <p><i class="fa fa-square " style="color:<?php echo empty($attSum["color"]) ? "blue" : $attSum["color"]; ?>;" ></i><?php echo $attSum["label"];?> </p>
+																	</td>
+																	<td><?php echo empty($attSum["value"]) ? "00" : sprintf('%02d',$attSum["value"])?></td>
+																</tr>
+																<?php } ?>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-12">
+						<div class="row top_tiles">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<h3 style="font-family:Times New Roman,khmer os muol light;font-size:18px;text-align: center; color: #666;padding:2px 0;"><i style="font-size:25px;margin-right:10px;" class="fa fa-gavel " aria-hidden="true"></i><?php echo $pageTitle;?></h3><hr>
+							</div>
+						</div>
+						<div class="row">
+							<?php
+								   $db_user=new Application_Model_DbTable_DbUsers();
+								   $report_url=$db_user->getArrAclReport(1,'studentattendance');
+								 
+								   if(!empty($report_url)){
+									   foreach($report_url as $url){
+									   if($url['controller']=='studentattendance' AND $url['action']!='index' 
+											AND $url['action']!='rpt-resultbyyear' AND $url['action']!='rpt-resultbysemester' 
+											AND $url['action']!='semester-outstanding-student' AND $url['action']!='monthly-outstanding-student' 
+											AND $url['action']!='rpt-score-detail' AND $url['action']!='monthly-outstanding-student-nophoto' 
+											AND $url['action']!='rpt-score-result' AND $url['action']!='rpt-monthly-score-student'
+											AND $url['action']!='rpt-student-group' AND $url['action']!='rpt-student-evaluationletter'
+											AND $url['action']!='mistake-certificate' AND $url['action']!='certificate-letterofpraise'
+											AND $url['action']!='rpt-assessmentterm' AND $url['action']!='semester-outstanding-student-nophoto'
+											AND $url['action']!='certificate' 
+											AND $url['action']!='rpt-totalattendance'
+											
+											){
+							   ?>
+							   <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">
+									<a href="<?php echo $this->url(array('module'=>$url['module'],'controller'=>$url['controller'],'action'=>$url['action'])); ?>">
+									 <div title="<?php echo $tr->translate($url['label']);?>" class="tile-stats report-list">
+										<div class="icon"><i class="fa fa-book"></i></div>
+										<div class="count">&nbsp;</div>
+											<h3><?php echo $tr->translate($url['label']);?></h3>
+									 </div>
+									</a>
+								</div>
+								<?php }?>
+						   <?php }
+						  }?>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+<div style="clear: both;"></div>
+<link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
+
+<script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.min.js"></script>
+
+<script src="<?php echo $this->baseUrl();?>/js/help.js"></script>	
+<script type="text/javascript">
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.data.ItemFileWriteStore"); 
+dojo.require("dojo.data.ItemFileWriteStore"); 
+var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+dojo.ready(function(){
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+		id: "grade",
+		name: "grade",  
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
+
+		}
+	}, "grade");
+	getallGrade();
+	<?php if (!empty($this->search['currentDate'])){?>
+		dijit.byId('start_date').attr('value','<?php echo $this->search['currentDate']?>');  
+	<?php }?> 
+	<?php if (!empty($this->search['academic_year'])){?>
+		dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year']?>');  
+	<?php }?> 
+	 $('div svg text').css({
+		"font-family" : "inherit !important",
+		"padding" : "3%"
+	});
+});
+
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id=='' || dept_id==-1){return false;}
+	dojo.xhrPost({
+		url:url_dept,
+		content:{
+			'dept_id':dept_id,
+			'noaddnew':1
+			},
+		handleAs:"json",
+		load: function(data) {
+			dijit.byId('grade').attr('value','');
+			grade_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('grade').set('store',grade_store); 
+			<?php if (!empty($this->search['grade'])){?>
+			dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+			<?php }?> 
+		},
+		error: function(err) {
+		}
+	});
+}
+
+var colorDanger = "#FF1744";
+Morris.Donut({
+  element: 'donutClass',
+  resize: true,
+  data: <?php  echo Zend_Json::encode($this->classInfo);?>
+});
+
+
+var colorDanger = "#FF1744";
+Morris.Donut({
+  element: 'donutStudent',
+  resize: true,
+  data: <?php  echo Zend_Json::encode($this->attendanceSummary);?>
+});
+
+</script>

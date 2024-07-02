@@ -62,7 +62,67 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
     	$order=" ORDER BY id DESC ";
     	return $db->fetchAll($sql.$where.$order);
     }
-	public function addDiscipline($_data){
+// 	public function addDiscipline($_data){
+// 		$db = $this->getAdapter();
+// 		$db->beginTransaction();
+// 		try{
+// 			$branch = $_data['branch_id'];
+// 			$group = $_data['group'];
+// 			$date = $_data['discipline_date'];
+// 			$for_semester = $_data['for_semester'];
+// 			$sql="select id from rms_student_attendence where branch_id = $branch and group_id = $group and for_semester = $for_semester and date_attendence = '$date' and type=2 limit 1";
+// 			$id = $db->fetchOne($sql);
+// 			if(empty($id)){
+// 				$_arr = array(
+// 						'branch_id'=>$_data['branch_id'],
+// 						'group_id'=>$_data['group'],
+// 						'date_attendence'=>date("Y-m-d",strtotime($_data['discipline_date'])),
+// 						'date_create'=>date("Y-m-d"),
+// 						'modify_date'=>date("Y-m-d"),			
+// 						'for_semester'=> $_data['for_semester'],
+// 						'note'=>$_data['note'],
+// 						'status'=>1,
+// 						'user_id'=>$this->getUserId(),
+// 						'type'=>2, 
+// 				);
+// 				$id=$this->insert($_arr);
+// 			}
+// 			$dbpush = new  Application_Model_DbTable_DbGlobal();
+// 			$stu_mistack='';
+// 			if(!empty($_data['identity'])){
+// 				$ids = explode(',', $_data['identity']);
+// 				if(!empty($ids))foreach ($ids as $i){
+// 					if(isset($_data['have_mistake'.$i])){
+// 						if (!empty($_data['mistake_type'.$i])){
+							
+// 							if(empty($stu_mistack)){
+// 								$stu_mistack=$_data['student_id'.$i];
+// 							}else{
+// 								$stu_mistack=$stu_mistack.','.$_data['student_id'.$i];
+// 							}
+							
+// 							$arr = array(
+// 									'attendence_id'=>$id,
+// 									'stu_id'=>$_data['student_id'.$i],
+// 									'attendence_status'=>$_data['mistake_type'.$i],
+// 									'description'=>$_data['comment'.$i],
+// 							);
+// 							$this->_name ='rms_student_attendence_detail';
+// 							$this->insert($arr);
+// 						}
+// 					}
+// 				}
+// 				$dbpush->pushNotification($stu_mistack,null,4,3);
+				
+// 			}
+// 		  $db->commit();
+// 		}catch (Exception $e){
+// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+// 			$db->rollBack();
+// 		}
+//    }
+
+	public function addDisciplineStudent($_data){
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try{
@@ -88,39 +148,27 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 				$id=$this->insert($_arr);
 			}
 			$dbpush = new  Application_Model_DbTable_DbGlobal();
-			$stu_mistack='';
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					if(isset($_data['have_mistake'.$i])){
-						if (!empty($_data['mistake_type'.$i])){
-							
-							if(empty($stu_mistack)){
-								$stu_mistack=$_data['student_id'.$i];
-							}else{
-								$stu_mistack=$stu_mistack.','.$_data['student_id'.$i];
-							}
-							
-							$arr = array(
-									'attendence_id'=>$id,
-									'stu_id'=>$_data['student_id'.$i],
-									'attendence_status'=>$_data['mistake_type'.$i],
-									'description'=>$_data['comment'.$i],
-							);
-							$this->_name ='rms_student_attendence_detail';
-							$this->insert($arr);
-						}
-					}
+					$arr = array(
+							'attendence_id'=>$id,
+							'stu_id'=>$_data['student_id'.$i],
+							'attendence_status'=>$_data['mistake_type'.$i],
+							'description'=>$_data['comment'.$i],
+					);
+					$this->_name ='rms_student_attendence_detail';
+					$this->insert($arr);
 				}
-				$dbpush->pushNotification($stu_mistack,null,4,3);
+				$dbpush->pushNotification($_data['student_id'.$i],null,4,3);
 				
 			}
-		  $db->commit();
+		$db->commit();
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
 		}
-   }
+	}
    public function updateStudentAttendence($_data){
 		
 		$db = $this->getAdapter();
@@ -147,18 +195,14 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				if(!empty($ids))foreach ($ids as $i){
-					if(isset($_data['have_mistake'.$i])){
-						if (!empty($_data['mistake_type'.$i])){
-							$arr = array(
-									'attendence_id'=>$_data['id'],
-									'stu_id'=>$_data['student_id'.$i],
-									'attendence_status'=>$_data['mistake_type'.$i],
-									'description'=>$_data['comment'.$i],
-							);
-							$this->_name ='rms_student_attendence_detail';
-							$this->insert($arr);
-						}
-					}
+					$arr = array(
+						'attendence_id'=>$_data['id'],
+						'stu_id'=>$_data['student_id'.$i],
+						'attendence_status'=>$_data['mistake_type'.$i],
+						'description'=>$_data['comment'.$i],
+					);
+					$this->_name ='rms_student_attendence_detail';
+					$this->insert($arr);
 				}
 			}
 		  $db->commit();
@@ -222,6 +266,35 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 		$sql.=$dbp->getDegreePermission('g.`degree`');
 		return $db->fetchRow($sql);
 	}
+	function getStudentDisplineDetail($data){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
+		$attendanceId = empty($data["attendanceId"]) ? 0 : $data["attendanceId"];
+		$sql = "
+			SELECT 
+				attD.*
+				,s.stu_code AS stu_code
+				,s.stu_khname AS stuNameKH
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+				,CONCAT(s.stu_khname,'- ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.sex AS sex
+				,CASE
+					WHEN  s.sex = 1 THEN '".$tr->translate("MALE")."'
+					WHEN  s.sex = 2 THEN '".$tr->translate("FEMALE")."'
+				END AS genderTitle
+				,COALESCE(attD.description,'') as reason
+				
+			FROM 
+				`rms_student_attendence_detail` AS attD 
+				JOIN `rms_student_attendence` AS att ON att.id = attD.attendence_id
+				LEFT JOIN `rms_student` AS s ON s.stu_id = attD.stu_id
+		";
+		$sql.=" WHERE att.status = 1  AND attD.attendence_id = $attendanceId  ";
+		$sql.=" GROUP BY attD.stu_id ";
+		return $db->fetchAll($sql);
+	}
+
 	function getStudentInfo($data){
 		$db = $this->getAdapter();
 		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];

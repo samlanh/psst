@@ -188,12 +188,12 @@ tr.EvenRow {
 										<div class="col-md-12 col-sm-12 col-xs-12">
 											<div class="form-group">
 												<input type="hidden" name="identity" id="identity" value="">
-													<table  class="collape responsiveTable" >
-														<thead id="tableHeadInfo">
-														</thead>
-														<tbody id="table_row">
-														</tbody>
-													</table>
+												<table  class="collape responsiveTable" >
+													<thead id="tableHeadInfo">
+													</thead>
+													<tbody id="table_row">
+													</tbody>
+												</table>
 											</div>
 										</div>
 									</div>
@@ -243,7 +243,6 @@ tr.EvenRow {
 	    	<div class="clearfix"></div>
 	       	<div class="card-box mt-20 ">
 	      	 	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
-              		<!-- <input type="hidden" name="identity" id="identity"  value="" > -->
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" label="<?php echo $tr->translate('SAVE_CLOSE');?>" dojoType="dijit.form.Button" />
 					<input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save_new" name="save_new" label="<?php echo $tr->translate('SAVE_NEW');?>" dojoType="dijit.form.Button" />
             	 </div>
@@ -396,26 +395,29 @@ function getInfoBygroup(){
 		}
 	});
 }
+
+// ----Add Student One by One----//
+
 	var displineType = [];
 	var title=0;
 	var keyrow=0;
 	var strHeadRow="";
 	urlGetStudentInfo = '<?php echo $this->url(array('module'=>'issue','controller'=>'discipline','action'=>'get-student-info'));?>';
 	function addRowStudent(){
-		$('#identity').val('');
-
+		
 		studentId=dijit.byId("studentId").get("value");
+
 		if(studentId==-1 || studentId==""){return false;}
 		var iden = $("#identity").val();
 		var arrays = iden.split(',');
 		if(arrays!=""){
 			 for(var i=0;i< arrays.length;i++) {
-				 readychoose = dijit.byId('student_id'+arrays[i]).get('value');
-				 if(readychoose==studentId){
+				readychoose = dijit.byId('student_id'+arrays[i]).get('value');
+				if(readychoose==studentId){
 					alert("<?php echo $tr->translate("Choosen ready")?>");
 					dijit.byId('studentId').reset();
-					 return false;
-				 }
+					return false;
+				}
 			}
 		}
 		
@@ -503,6 +505,10 @@ function getInfoBygroup(){
 		$('#identity').val(strings);
 		dojo.query("#row"+index).remove();
 	}
+
+// ----end ----//
+
+// ----Multiple Student ----//
 
 // var url_getStudentbygroup= '<?php echo $this->url(array('module'=>'issue','controller'=>'studentattendance','action'=>'get-student-bygroup')); ?>';
 // function filterStudentBygroup(){
@@ -643,7 +649,7 @@ function getInfoBygroup(){
 // 	}
 // }
 
-
+// ----end ----//
 
 url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroupByBranch(){

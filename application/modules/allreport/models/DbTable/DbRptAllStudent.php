@@ -901,80 +901,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	return $db->fetchOne($sql.$where);
     }
     
-    function getStudentAttendence($search){
-    	$db = $this->getAdapter();
-    	$_db = new Application_Model_DbTable_DbGlobal();
-    	$lang = $_db->currentlang();
-    	if($lang==1){// khmer
-    		$label = "name_kh";
-    		$grade = "rms_itemsdetail.title";
-    		$degree = "rms_items.title";
-    		$branch = "b.branch_namekh";
-    	}else{ // English
-    		$label = "name_en";
-    		$grade = "rms_itemsdetail.title_en";
-    		$degree = "rms_items.title_en";
-    		$branch = "b.branch_nameen";
-    	}
-    	$sql=" SELECT 
-					g.id as group_id,
-					g.`group_code`,
-					g.`branch_id`,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
-					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
-		
-					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-					`g`.`semester` AS `semester`,
-					(SELECT`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-					gsd.`stu_id`,
-					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`last_name`,st.`sex`
-				FROM 
-					`rms_group_detail_student` AS gsd,
-					`rms_group` AS g,
-					`rms_student` AS st,
-					rms_student_attendence AS sta
-				WHERE 
-					gsd.itemType=1 
-					AND sta.type=1
-					AND gsd.status=1
-					AND gsd.stop_type=0
-	    			AND g.`id` = gsd.`group_id`
-				 	AND sta.group_id = g.id 
-				 	AND st.`stu_id` = gsd.`stu_id` 
-				 	AND sta.status=1 
-				 	AND g.is_pass!=1 
-				 	AND st.customer_type=1
-    		";
-    	
-    	$from_date =(empty($search['start_date']))? '1': "sta.date_attendence >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "sta.date_attendence <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
-
-    	if(!empty($search['group'])){
-    		$where.= " AND g.id =".$search['group'];
-    	}
-    	if(!empty($search['academic_year'])){
-    		$where.=" AND g.academic_year =".$search['academic_year'];
-    	}
-    	if(!empty($search['degree'])){
-    		$where.=" AND `g`.`degree` =".$search['degree'];
-    	}
-    	if(!empty($search['grade'])){
-    		$where.=" AND `g`.`grade`=".$search['grade'];
-    	}
-    	if(!empty($search['session'])){
-    		$where.=" AND `g`.`session`=".$search['session'];
-    	}
-    	
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('`g`.`branch_id`');
-    	
-    	$order =" GROUP BY sta.group_id,gsd.stu_id 
-    		ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC,st.stu_khname ASC ";
-    	
-    	return $db->fetchAll($sql.$where.$order);
-    }
+    
     
     function getStatusAttendence($stu_id,$date_att,$group,$subject=null){
     	$db = $this->getAdapter();
@@ -1007,69 +934,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     }
     
     
-	function getStudentMistake($search){
-    	$db = $this->getAdapter();
-    	$sql="SELECT 
-					g.id as group_id,
-					g.`group_code`,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
-					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) AS grade,
-					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
-					`g`.`semester` AS `semester`,
-					(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-					 sdd.`stu_id`, st.`stu_code`, 
-					 st.`stu_enname`,
-					 st.last_name,
-					 st.`stu_khname`,
-					 st.`sex` 
-				FROM 
-					 rms_student_attendence AS sd 
-					 JOIN `rms_student_attendence_detail` AS sdd ON sd.`id` = sdd.`attendence_id` 
-						LEFT JOIN `rms_group` AS g ON sd.group_id = g.id 
-						LEFT JOIN `rms_student` AS st ON st.`stu_id` = sdd.`stu_id`
-				WHERE 
-					 (sd.type=2 OR sdd.`attendence_status` IN (4,5)) 
-					 AND sd.group_id = g.id 
-					 AND sd.status=1 
-    		";
-    	
-    	$from_date =(empty($search['start_date']))? '1': "sd.`date_attendence` >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "sd.`date_attendence` <= '".$search['end_date']." 23:59:59'";
-    	$where = " AND ".$from_date." AND ".$to_date;
-    	if(!empty($search['adv_search'])){
-    		$s_where = array();
-    		$s_search = addslashes(trim($search['adv_search']));
-    		$s_where[] = " st.stu_code LIKE '%{$s_search}%'";
-    		$s_where[] = " st.stu_enname LIKE '%{$s_search}%'";
-    		$s_where[] = " st.stu_khname LIKE '%{$s_search}%'";
-    		$where .=' AND ( '.implode(' OR ',$s_where).')';
-    	}
-    	
-    	if(!empty($search['group'])){
-    		$where.= " AND g.id =".$search['group'];
-    	}
-    	if(!empty($search['branch_id'])){
-    		$where.=" AND `g`.`branch_id`=".$search['branch_id'];
-    	}
-    	if(!empty($search['academic_year'])){
-    		$where.=" AND g.academic_year =".$search['academic_year'];
-    	}
-    	if(!empty($search['degree'])){
-    		$where.=" AND `g`.`degree` =".$search['degree'];
-    	}
-    	if(!empty($search['grade'])){
-    		$where.=" AND `g`.`grade`=".$search['grade'];
-    	}
-    	if(!empty($search['session'])){
-    		$where.=" AND `g`.`session`=".$search['session'];
-    	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission("g.branch_id");
-    	$order =" GROUP BY g.id,sdd.`stu_id` ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC ";
-		
-    	return $db->fetchAll($sql.$where.$order);
-    }
+	
     
     function getStatusMistakeStudent($stu_id,$date_att,$group){
     	$db = $this->getAdapter();

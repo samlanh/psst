@@ -37,6 +37,10 @@ fieldset{  background:none;}
 						dijit.byId('items_id').focus();
 						return false;
 					}
+					if(dijit.byId('branch_search').get('value')==''){
+						dijit.byId('branch_search').focus();
+						return false;
+					}
 					if(is_deplicate==2){
 						alert("<?php echo $tr->translate("THIS_PRODUCT_SET_ALREADY_EXIST");?>");
 						$("#msg_deplicate").html("<?php echo $tr->translate("THIS_PRODUCT_SET_ALREADY_EXIST");?>");

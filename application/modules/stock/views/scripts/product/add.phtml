@@ -110,6 +110,23 @@ input.btn_borwse_image {
 									</div>
 									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+											<?php echo $tr->translate("STOCK_TYPE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("isCountStock");?>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRICE");?>
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm_items->getElement("price");?>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
 											<?php echo $tr->translate("TYPE");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -226,6 +243,11 @@ input.btn_borwse_image {
 		dijit.byId('is_onepayment').set('value',1);
 		$("#title").keyup(function(){
 			deplicateItem();
+		});
+
+		var isCountStock = dijit.byId('isCountStock');
+		isCountStock.on('change', function(evt) {
+			CountStock();
 		});
 	});	
 
@@ -404,5 +426,11 @@ function deplicateItem(){
 				document.getElementsByClassName("overlay")[0].style.display="none";
 			}
 		});
+}
+
+function CountStock(){									
+	isCountStock = dijit.byId('isCountStock').get('value');
+	alert(isCountStock);
+		
 }
 </script>

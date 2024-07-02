@@ -1,5 +1,7 @@
 <?php
 class Issue_DisciplineController extends Zend_Controller_Action {
+
+	const SETTING_INPUT_DISPLINE = 2; // 1=fullListStudentGroup
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -53,11 +55,11 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try {
 				if(isset($_data['save_new'])){
-					 $rs =  $db->addDiscipline($_data);
-					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/discipline/add");
+					$db->addDisciplineStudent($_data);
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/discipline/add");
 				}else {
-					 $rs =  $db->addDiscipline($_data);
-					 Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/discipline");
+					$db->addDisciplineStudent($_data);
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/issue/discipline");
 				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -68,6 +70,7 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		$branch = $db_global->getAllBranch();
 		$this->view->branch = $branch;
+		$this->view->settingInputAttendance = self::SETTING_INPUT_DISPLINE;
 		
 	}
 	
@@ -79,7 +82,7 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			$_data['id']=$id;
 			try {
-				$rs =  $_model->updateStudentAttendence($_data);
+				 $_model->updateStudentAttendence($_data);
 				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/issue/discipline");		
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -92,7 +95,11 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 			exit();
 		}
 		$this->view->row=$result;
-		$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
+		$condiction = array(
+			"attendanceId" => $id
+		);
+		$this->view->allstudentBygroup= $_model->getStudentDisplineDetail($condiction);
+	//	$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		

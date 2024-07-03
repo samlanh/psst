@@ -3043,7 +3043,33 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= " ORDER BY g.degree,g.grade,g.group_code ASC,`g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
+	function getAllGroupForIssueScore($data)
+	{
+		$academic_year = empty($data['academic_year']) ? null : $data['academic_year'];
+		$db = $this->getAdapter();
+		$sql = "SELECT `g`.`id`, 
+	  			CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS name
+	  				FROM `rms_group` AS `g` WHERE g.status=1 ";
 
+		// if (!empty($forfilterreport)) {
+		// 	$sql .= " AND (g.is_pass=1 OR g.is_pass=2) ";// group studying/completed
+		// } else {
+		// 	$sql .= " AND (g.is_pass=0 OR g.is_pass=2) ";// group studying/not complete
+		// }
+		if (!empty($data['branch_id'])) {
+			$sql .= " AND g.branch_id = ".$data['branch_id'];
+		}
+		if (!empty($data['is_pass'])) {
+			$sql .= " AND g.is_pass = ".$data['is_pass'];
+		}
+		if (!empty($data['academic_year'])) {
+			$sql .= " AND g.academic_year = ".$data['academic_year'];
+		}
+		$sql .= $this->getAccessPermission('g.branch_id');
+		$sql .= $this->getDegreePermission('g.degree');
+		$sql .= " ORDER BY g.academic_year DESC, g.degree,g.grade,g.group_code ASC ";
+		return $db->fetchAll($sql);
+	}
 
 	function getNumberInkhmer($number)
 	{

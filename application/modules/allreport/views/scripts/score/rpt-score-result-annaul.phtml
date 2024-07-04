@@ -779,7 +779,9 @@ $footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footer
 			<td align="left">
 				<button dojoType="dijit.form.Button" id="printselected" class="button-class button-primary" iconClass="glyphicon glyphicon-print" type="button" onclick="printselected();"><?php echo $tr->translate('PRINT_SELECT_TRANSCRIPT') ?></button>
 			</td>
-			<td width="25%"></td>
+			<td align="left" width="25%">
+				<button dojoType="dijit.form.Button" id="printall_academic" class="button-class button-primary" iconClass="glyphicon glyphicon-print" type="button" onclick="printAllTranscriptAcademic();"><?php echo $tr->translate('Print Academic Transcript') ?></button>
+			</td>
 		</tr>
 	</table>
 </div>
@@ -1018,6 +1020,18 @@ $urlAcademic = $this->baseUrl() . $linkAcademic;
 		scoreId = <?php echo $this->scoreId ?>;
 		if (scoreId != '') {
 			addTab("<?php echo $tr->translate("PRINT_ALL_TRANSCRIPT");?>",'<?php echo $url_all_transcript; ?>'+'?inFrame=true');
+		}
+	}
+
+	function printAllTranscriptAcademic() {
+		<?php
+		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$url_all_transcript_transcript = $this->url(array('module' => 'allreport', 'controller' => 'score', 'action' => 'rpt-academictranscript'));
+		?>
+		scoreId = <?php echo $this->scoreId ?>;
+		if (scoreId != '') {
+			addTab("<?php echo $tr->translate("PRINT_ALL_TRANSCRIPT");?>",'<?php echo $url_all_transcript_transcript; ?>'+'?inFrame=true');
 		}
 	}
 

@@ -75,7 +75,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 			table.studentInfo {
 				page-break-inside: auto;
 				font-family:'Times New Roman', 'Khmer OS Battambang' !important;
-				font-size: 12px !important;
+				font-size: 14px !important;
 			}
 
 			.header tr {
@@ -247,9 +247,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 
 				//$title= $titleNum;
 				if ($titleNum == 1) {
-					$title = "របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ : " . $scoreInfo['groupCode'] . '_' . $studentInfo['stu_code'] . '_' . $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
+					$title = "Academic Transcript : " . $scoreInfo['groupCode'] . '_' . $studentInfo['stu_code'] . '_' . $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname'];
 				} else {
-					$title = "របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ : " . $scoreInfo['groupCode'];
+					$title = "Academic Transcript : " . $scoreInfo['groupCode'];
 				}
 				$this->headTitle($title);
 				echo $this->headTitle();
@@ -272,39 +272,37 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 						<tr>
 							<td colspan="3" align="center">
 								<div class="khmerBoldFont" style="color:#000;line-height:20px; margin: 0;font-size:14px;margin-bottom:10px;">
-									<span class="circleHeader">របាយការណ៍ការវិវឌ្ឍប្រចាំឆ្នាំ <strong>ACADEMIC TRANSCRIPT</strong></span>
+									<span class="circleHeader"><strong>ACADEMIC TRANSCRIPT</strong></span>
 								</div>
 								<table class="studentInfo" cellpadding="0" style="width:100%;line-height:15px;">
 									<tr>
-										<td align="right" width="25%">គោត្តនាម និងនាម : </td>
-										<td align="left" width="23%" class="khmerBoldFont"> &nbsp;<?php echo $studentInfo['stu_khname'] ?></td>
-										<td width="4%">&nbsp;</td>
-										<td align="right" width="25%">ថ្នាក់ទី : </td>
-										<td class="bold" align="left" width="23%"> &nbsp;<?php echo $scoreInfo['groupCode']; ?></td>
+										<td align="right" width="25%">Name : </td>
+										<td class="fontBold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname']; ?></td>
+										<td>&nbsp;</td>
+										<td align="right" width="25%">ID : </td>
+										<td class="fontBold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['stu_code']; ?></td>
 									</tr>
 									<tr>
-										<td align="right" width="25%">Student's name in Latin : </td>
-										<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['last_name'] . ' ' . $studentInfo['stu_enname']; ?></td>
+										<td align="right" width="25%">Sex : </td>
+										<td class="fontBold" align="left" width="23%"> &nbsp;<?php echo  $sexen; ?></td>
 										<td>&nbsp;</td>
-										<td align="right" width="25%">សម្រាប់ : </td>
-										<?php $scoreTitle = "ប្រចាំឆ្នាំ"; ?>
-										<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreTitle; ?></td>
+										<td align="right" width="25%">Grade : </td>
+										<td class="fontBold" align="left" width="23%"> &nbsp;<?php echo $scoreInfo['groupCode']; ?></td>
 									</tr>
 									<tr>
-										<td align="right" width="25%">អត្តលេខ / ID : </td>
-										<td class="bold" align="left" width="23%"> &nbsp;<?php echo $studentInfo['stu_code']; ?></td>
+										<td align="right" width="25%">Date Of Birth : </td>
+										<td class="fontBold" align="left" width="23%">&nbsp;
+											<?php
+												$format = 'd-M-Y';
+												$dateString = $studentInfo["dob"];
+												$date = new DateTime($dateString);
+												$dob = $date->format($format);
+												echo $dob;
+											?>
+										</td>
 										<td>&nbsp;</td>
-										<td align="right" width="25%">For : </td>
-										<?php $scoreTitleEn = "ANNUAL"; ?>
-										<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreTitleEn; ?></td>
-
-									</tr>
-									<tr>
-										<td align="right" width="25%">ភេទ / Gender : </td>
-										<td class="bold" align="left" width="23%"> &nbsp;<?php echo $sexkh . '-' . $sexen; ?></td>
-										<td>&nbsp;</td>
-										<td align="right" width="25%">ឆ្នាំសិក្សា / Academic Year : </td>
-										<td class="bold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['academicYearLabel']; ?></td>
+										<td align="right" width="25%">Academic Year : </td>
+										<td class="fontBold" align="left" width="23%">&nbsp;<?php echo $scoreInfo['academicYearLabel']; ?></td>
 									</tr>
 								</table>
 							</td>
@@ -346,13 +344,13 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 										?>
 												<?php if ($keyLang > 0) { ?>
 													<tr class="cheader" align="center">
-														<td rowspan="4" colspan="3"><?php echo ($currentLang == 1) ? 'កម្មវិធីខ្មែរ  Khmer Program Assessment' : 'កម្មវិធីអង់គ្លេស  English Program Assessment' ?></td>
+														<td rowspan="4" colspan="2"><?php echo ($currentLang == 1) ? 'Khmer Program Assessment' : 'English Program Assessment' ?></td>
 														<td ><?php echo $totalSubMaxScore; ?></td>
 														<td ><?php echo $totalAveragescoreSemester1; ?></td>
 														<td class="blank"></td>
 														<td ><?php echo $totalAveragescoreSemester2; ?></td>
 														<td class="blank"></td>
-														<td><?php echo $totalAveragescore; ?></td>
+														<td><?php echo number_format($totalAveragescore,0); ?></td>
 														<td class="blank"></td>
 													</tr>
 													<?php $totalmultiSubSubject = $totalSubMaxScore / $semesterScale; ?>
@@ -491,20 +489,20 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 													$i = 1;
 												} ?>
 												<tr class="cheader" align="center">
-														<td rowspan="2">ល.រ<br />No.</td>
-														<td rowspan="2" colspan="2">មុខវិជ្ជា Subject</td>
-														<td rowspan="2">ពិន្ទុអតិបរមា <br />Maximum Score</td>
-														<td colspan="2">ឆមាសទី១ <br />Semester I </td>
-														<td colspan="2">ឆមាសទី២ <br />Semester II </td>
-														<td colspan="2">ប្រចាំឆ្នាំ <br />Annual</td>
+														<td rowspan="2">Nº</td>
+														<td rowspan="2">Subject</td>
+														<td rowspan="2">Maximum Score</td>
+														<td colspan="2">Semester I </td>
+														<td colspan="2">Semester II </td>
+														<td colspan="2">Annual</td>
 													</tr>
 													<tr class="cheader" align="center">
-														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Letter Grade</td>
-														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Letter Grade</td>
-														<td >ពិន្ទុសរុប<br />Total Score</td>
-														<td>និទ្ទេស<br />Letter Grade</td>
+														<td >Total Score</td>
+														<td>Letter Grade</td>
+														<td >Total Score</td>
+														<td>Letter Grade</td>
+														<td >Total Score</td>
+														<td>Letter Grade</td>
 													</tr>
 											<?php }
 											$currentLang = $resultScore['subjectLang'];
@@ -521,7 +519,6 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 											?>
 											<tr class="hover blackColor">
 												<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
-												<td align="left">&nbsp;<?php echo $resultScore['sub_name']; ?>&nbsp;</td>
 												<td align="left">&nbsp;<?php echo $resultScore['sub_name_en']; ?>&nbsp;</td>
 												<td class="" align="center" style="white-space:nowrap;">&nbsp;<?php echo $maxScore; ?>&nbsp;</td>
 												<td align="center"><?php echo $resultScore['totalAvgSemester1']; ?></td>
@@ -536,13 +533,13 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 									<?php } ?>
 
 									<tr class="cheader" align="center">
-										<td rowspan="4" colspan="3"><?php echo ($currentLang == 1) ? 'កម្មវិធីខ្មែរ  Khmer Program Assessment' : 'កម្មវិធីអង់គ្លេស  English Program Assessment' ?></td>
+										<td rowspan="4" colspan="2"><?php echo ($currentLang == 1) ? 'Khmer Program Assessment' : 'English Program Assessment' ?></td>
 										<td ><?php echo $totalSubMaxScore; ?></td>
 										<td ><?php echo $totalAveragescoreSemester1; ?></td>
 										<td class="blank"></td>
 										<td ><?php echo $totalAveragescoreSemester2; ?></td>
 										<td class="blank"></td>
-										<td><?php echo $totalAveragescore; ?></td>
+										<td><?php echo number_format($totalAveragescore,0); ?></td>
 										<td class="blank"></td>
 									</tr>
 									<?php $totalmultiSubSubject = $totalSubMaxScore / $semesterScale; ?>
@@ -673,17 +670,18 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 									</tr>
 
 									<!-- Both Program -->
+									 <?php if($currentLang == 2){ ?>
 
 									<tr class="style hover" align="center">
-										<td  rowspan="4" colspan="3" class="khmerBoldFont"> 
-											ទាំងពីរកម្មវិធី <strong>Both-Programs Assessment</strong>
+										<td  rowspan="4" colspan="2" class="khmerBoldFont"> 
+											<strong>Both-Programs Assessment</strong>
 										</td>
 										<td ><strong><?php echo $totalMaxScore; ?></strong></td>
 										<td ><strong><?php echo $GrandtotalScoreSemesterI; ?></strong></td>
 										<td class="blank"></td>
 										<td ><strong><?php echo $GrandtotalScoreSemesterII; ?></strong></td>
 										<td class="blank"></td>
-										<td><strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong></td>
+										<td><strong><?php echo number_format($scoreInfo['totalScoreAvg'],0); ?></strong></td>
 										<td class="blank"></td>
 									</tr>
 									<?php $GrandMultiSubSubject = $totalMaxScore / $semesterScale; ?>
@@ -776,22 +774,23 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 											</strong>
 										</td>
 									</tr>
+									<?php } ?>
 								</table>
 								<br>
 								<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">
 									<tr>
-										<td colspan="6" class=" khmerBoldFont doubleBorder">&nbsp;ប្រព័ន្ធពិន្ទុ GRADING SYSTEM</td>
+										<td colspan="6" class=" khmerBoldFont doubleBorder">GRADING SYSTEM</td>
 									</tr>
 									<tr class="khmerBoldFont " align="center">
-										<td colspan="2">របបពិន្ទុ<br />GRADING CRITERIA</td>
-										<td>ភាគរយ<br />PERCENTAGE</td>
-										<td colspan="2">និទ្ទេស <br />GRADE</td>
-										<td><label style="white-space: nowrap;">ការសម្រេចផល និងការខិតខំប្រឹងប្រែង</label><br />ACHIEVEMENT AND EFFORT</td>
+										<td colspan="2">GRADING CRITERIA</td>
+										<td>PERCENTAGE</td>
+										<td colspan="2">GRADE</td>
+										<td><label style="white-space: nowrap;">ACHIEVEMENT AND EFFORT</label></td>
 									</tr>
 									<?php
 									$ismergRow = 0;
 
-									$reGradingResult  = $dbgb->getGradingSystem($degreeId); ?>
+									$reGradingResult  = $dbgb->getGradingSystemEng($degreeId); ?>
 
 									<?php
 									if (!empty($reGradingResult)) foreach ($reGradingResult as $keygd => $rsgd) {
@@ -816,17 +815,27 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 									<?php } ?> 
 								</table>
 								<br>
-								<table class="header" width="100%" style="width:100%; border-collapse:collapse;">
-									<tr height="170px;">
-										<td class="borderSolidBottom" width="30%">&nbsp;</td>
-										<td colspan="4">&nbsp;</td>
-										<td class="borderSolidBottom" width="30%">&nbsp;</td>
+								<table class="header" width="100%" style="width:100%; border-collapse:collapse; font-size:12px;">
+									<?php $moment = date("Y-m-d"); ?>
+									<tr >
+										<td  width="50%">&nbsp;</td>
+										<td align="center"  width="50%">
+											<label class="LabelTeacher smalFont">
+													Phnom Penh,
+												<?php echo date("l");?>,
+												<?php echo date("d");?> 
+												<?php echo date("F");?>,
+												<?php echo date("Y");?> 
+											</label>
+											<br>
+											<span class="fontBold">Interim Principal</span>
+										</td>
 									</tr>
-									<tr>
-										<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
+									<!-- <tr>
+										<td class=" ">Interim Principal</td>
 										<td colspan="4">&nbsp;</td>
-										<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
-									</tr>
+										<td class=" ">Date</td>
+									</tr> -->
 								</table>
 							</td>
 						</tr>

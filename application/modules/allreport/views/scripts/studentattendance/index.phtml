@@ -175,16 +175,9 @@ ul.tile_info.ul_info {
 								   if(!empty($report_url)){
 									   foreach($report_url as $url){
 									   if($url['controller']=='studentattendance' AND $url['action']!='index' 
-											AND $url['action']!='rpt-resultbyyear' AND $url['action']!='rpt-resultbysemester' 
-											AND $url['action']!='semester-outstanding-student' AND $url['action']!='monthly-outstanding-student' 
-											AND $url['action']!='rpt-score-detail' AND $url['action']!='monthly-outstanding-student-nophoto' 
-											AND $url['action']!='rpt-score-result' AND $url['action']!='rpt-monthly-score-student'
-											AND $url['action']!='rpt-student-group' AND $url['action']!='rpt-student-evaluationletter'
-											AND $url['action']!='mistake-certificate' AND $url['action']!='certificate-letterofpraise'
-											AND $url['action']!='rpt-assessmentterm' AND $url['action']!='semester-outstanding-student-nophoto'
-											AND $url['action']!='certificate' 
-											AND $url['action']!='rpt-totalattendance'
-											
+											AND $url['action']!='rpt-att-list' 
+											AND $url['action']!='rpt-totalattendance' 
+											AND $url['action']!='mistake-certificate' 
 											){
 							   ?>
 							   <div class="animated flipInY col-lg-6 col-md-6 col-sm-6 col-xs-12">

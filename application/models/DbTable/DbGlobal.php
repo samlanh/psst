@@ -183,6 +183,116 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		return $rs;
 	}
+	public function getGradingSystemEng($degreeId, $template = 1)
+	{//$template1=psis,2=ahs
+		if ($template == 1) {
+			if ($degreeId == 1) {
+				$rs = array(
+					array(
+						'criteria' => $this->tr->translate("CLASS PARTICIPATION"),
+						'percent' => "15%",
+						'percentage' => "90-100%",
+						'grade' => "A",
+						'interpretation' => "Very Good",
+						'achievment' => "Outstanding",
+					),
+					array(
+						'criteria' => $this->tr->translate("HOMEWORK AND ASSIGNMENT"),
+						'percent' => "15%",
+						'percentage' => "80-89%",
+						'grade' => "B",
+						'interpretation' => "Good",
+						'achievment' => "Satisfactory",
+					),
+					array(
+						'criteria' => $this->tr->translate("QUIZZES"),
+						'percent' => "15%",
+						'percentage' => "70-79%",
+						'grade' => "C",
+						'interpretation' => "Fair",
+						'achievment' => "Needs Improvement",
+					),
+					array(
+						'criteria' => $this->tr->translate("MONTHLY TEST"),
+						'percent' => $this->tr->translate("55%"),
+						'percentage' => "60-69%",
+						'grade' => "D",
+						'interpretation' => "Average",
+						'achievment' => "Unsatisfactory",
+					),
+					array(
+						'criteria' => '',
+						'percent' => "",
+						'percentage' => "50-59%",
+						'grade' => "E",
+						'interpretation' => "Poor",
+						'achievment' => "Not Applicable",
+					),
+					array(
+						'criteria' => "",
+						'percent' => "",
+						'percentage' => "0-49%",
+						'grade' => "F",
+						'interpretation' => "ធ្លាក់ Failed",
+						'achievment' => "Not Applicable",
+					),
+				);
+
+			} else {
+				$rs = array(
+					array(
+						'criteria' => $this->tr->translate("Attendance"),
+						'percent' => "5%",
+						'percentage' => "90-100%",
+						'grade' => "A",
+						'interpretation' => "Very Good",
+						'achievment' => "Outstanding",
+					),
+					array(
+						'criteria' => $this->tr->translate("Discipline"),
+						'percent' => "10%",
+						'percentage' => "80-89%",
+						'grade' => "B",
+						'interpretation' => "Good",
+						'achievment' => "Satisfactory",
+					),
+					array(
+						'criteria' => $this->tr->translate("Book Check/Oral Question"),
+						'percent' => "5%",
+						'percentage' => "70-79%",
+						'grade' => "C",
+						'interpretation' => "Fair",
+						'achievment' => "Needs Improvement",
+					),
+					array(
+						'criteria' => $this->tr->translate("Homework"),
+						'percent' => $this->tr->translate("15%"),
+						'percentage' => "60-69%",
+						'grade' => "D",
+						'interpretation' => "Average",
+						'achievment' => "Unsatisfactory",
+					),
+					array(
+						'criteria' => $this->tr->translate("Quiz"),
+						'percent' => "15%",
+						'percentage' => "50-59%",
+						'grade' => "E",
+						'interpretation' => "Poor",
+						'achievment' => "Not Applicable",
+					),
+					array(
+						'criteria' => $this->tr->translate("Monthly Exam"),
+						'percent' => "50%",
+						'percentage' => "0-49%",
+						'grade' => "F",
+						'interpretation' => "Failed",
+						'achievment' => "Not Applicable",
+					),
+				);
+			}
+		}
+		return $rs;
+	}
 	public function getGlobalDb($sql)
 	{
 		$db = $this->getAdapter();
@@ -2519,10 +2629,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = "SELECT t.id,title AS name 
   				FROM 
   					`rms_itemsdetail` AS t,
-		      		`rms_product_location`
+		      		`rms_product_location` as pl
 			   WHERE t.items_type=3 AND t.status=1 
-  					 AND ( t.is_productseat=1 OR (t.id=rms_product_location.pro_id)) ";
-		$sql .= $this->getAccessPermission("branch_id");
+  					 AND ( t.is_productseat=1 OR (t.id=pl.pro_id)) ";
+		$sql .= $this->getAccessPermission("pl.branch_id");
 
 		if ($category_id != null and $category_id > 0) {
 			$sql .= ' AND t.items_id=' . $category_id;
@@ -3043,7 +3153,28 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= " ORDER BY g.degree,g.grade,g.group_code ASC,`g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
-
+	function getAllGroupForIssueScore($data)
+	{
+		$academic_year = empty($data['academic_year']) ? null : $data['academic_year'];
+		$db = $this->getAdapter();
+		$sql = "SELECT `g`.`id`, 
+	  			CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS name
+	  				FROM `rms_group` AS `g` WHERE g.status=1 ";
+					
+		if (!empty($data['branch_id'])) {
+			$sql .= " AND g.branch_id = ".$data['branch_id'];
+		}
+		if (!empty($data['is_pass'])) {
+			$sql .= " AND g.is_pass = ".$data['is_pass'];
+		}
+		if (!empty($data['academic_year'])) {
+			$sql .= " AND g.academic_year = ".$data['academic_year'];
+		}
+		$sql .= $this->getAccessPermission('g.branch_id');
+		$sql .= $this->getDegreePermission('g.degree');
+		$sql .= " ORDER BY g.academic_year DESC, g.degree,g.grade,g.group_code ASC ";
+		return $db->fetchAll($sql);
+	}
 
 	function getNumberInkhmer($number)
 	{
@@ -4153,6 +4284,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 			$param = array(
 				'branch_id' => $data['branch_id'],
+				'isFinished'=>$data['isFinished'],
 				'option' => 1,
 			);
 			$academicYearList = $this->getAllYearByBranch($param);
@@ -4707,44 +4839,51 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 			$sql = "
 				SELECT
-					id,
-					discountTitle,
+					ds.id,
+					ds.discountTitle,
 					$sqlDiscountFor AS discountFor,
-					studentId,
-					discountId AS discountTypeId,
+					disc.studentId,
+					ds.discountId AS discountTypeId,
 					(SELECT
 						dis_name
 					FROM
 						`rms_discount`
 					WHERE disco_id = ds.discountId
 					LIMIT 1) discountName,
-					$sqlforType discountForType,
-					degree,
-					DisValueType,
-					discountValue,
+
+					$sqlforType as discountForType,
+					ds.degree,
+					ds.DisValueType as DiscountValueType,
+					ds.discountValue,
+					
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,	
 					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
+					
 					DATE_FORMAT(ds.endDate,'%d-%b') endDay,
 					DATE_FORMAT(ds.endDate,'%y') endYear
 				FROM
-					`rms_dis_setting` as ds WHERE 1 ";
+					`rms_dis_setting` as ds,
+					rms_discount_student disc
+				WHERE ds.id=disc.discountGroupId
+					AND disc.isCurrent=1
+					 ";
 		}
 		$strPeriod="";
 		$strDegree="";
 		$strStudent="";
 
-		$firstCondition = " discountFor=1";
-		$secondCondition = "  discountFor=2";
+		$firstCondition = " ds.discountFor=1";
+		$secondCondition = "  ds.discountFor=2";
 		if (!empty($data['id'])) {//discount setting id
 			$sql .= " AND ds.id=" . $data['id'];
 		}
 		
-		if (!empty($data['discountTypeId'])) {//discount category id
-			$sql .= " AND ds.discountTypeId=" . $data['discountTypeId'];
+		if (!empty($data['discountId'])) {//discount category id
+			$sql .= " AND ds.discountId=" . $data['discountId'];
 		}
 		if (!empty($data['studentId'])) {
-			$strStudent .= " AND ds.studentId=" . $data['studentId'];
+			$strStudent .= " AND disc.studentId=" . $data['studentId'];
 		}
 
 		if (!empty($data['degree'])) {

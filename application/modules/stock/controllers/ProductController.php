@@ -27,7 +27,7 @@ class Stock_ProductController extends Zend_Controller_Action {
 	    	$type=3; //Product
 	    	$rs_rows= $db->getAllProduct($search,$type);
 	    	$list = new Application_Form_Frmtable();
-	    	$collumns = array("CODE","PRODUCT_NAME","PRODUCT_CATEGORY","QTY","TYPE","ONE_PAYMENT","MODIFY_DATE","BY_USER","STATUS");
+	    	$collumns = array("CODE","PRODUCT_NAME","PRODUCT_CATEGORY","QTY","SELL_PRICE","STOCK_TYPE","TYPE","ONE_PAYMENT","MODIFY_DATE","BY_USER","STATUS");
 	    	$link=array(
 	    			'module'=>'stock','controller'=>'product','action'=>'edit',
 	    	);

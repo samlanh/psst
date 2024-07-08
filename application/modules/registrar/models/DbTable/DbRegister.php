@@ -389,6 +389,10 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					
 					$rs_item = $dbitem->getItemsDetailById($data['item_id'.$i],null,1);
 					if(!empty($rs_item)){
+
+						$data['date_start_'.$i]=($data['date_start_'.$i])=='01/01/1970'?'':$data['date_start_'.$i];
+						$data['validate_'.$i]=($data['validate_'.$i])=='01/01/1970'?'':$data['validate_'.$i];
+						
 						$_arr = array(
 								'payment_id'	=>$paymentid,
 								'feeId'			=>$data['academic_year_'.$i],
@@ -437,8 +441,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 					
 					if(!empty($rs_item) AND !empty($data['autoNextPay'.$i])){
-						//echo $data['autoNextPay' . $i];
-						//exit();
 							$_arr= array(
 								'branch_id'		=> $data['branch_id'],
 								'studentId'		=> $data['old_stu'],

@@ -87,7 +87,10 @@
 	}
 	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
 		$db = $this->getAdapter();
-		$sql=" SELECT ide.* FROM rms_itemsdetail AS ide WHERE ide.`id` = $degreeId ";
+		$sql=" SELECT ide.*,
+		(SELECT pl.branch_id FROM `rms_product_location` AS pl WHERE ide.id=pl.pro_id LIMIT 1) AS branch_id,
+		(SELECT pl.price FROM `rms_product_location` AS pl WHERE ide.id=pl.pro_id LIMIT 1) AS price
+		FROM rms_itemsdetail AS ide WHERE ide.`id` = $degreeId ";
 		if(!empty($type)){
 			$sql.=" AND ide.items_type=$type";
 		}
@@ -302,7 +305,20 @@
 			);
 			$this->_name = "rms_itemsdetail";
 			$id =  $this->insert($_arr);
-			
+
+            if($_data['isCountStock']==0){
+				$_arr = array(
+					'pro_id'     =>$id,
+					'branch_id'  =>$_data['branch_search'],
+					'pro_qty'	 =>0,
+					'price'		 =>$_data['price'],
+					'price_set'  =>$_data['price'],
+					'note'       =>'Not Count Stock',
+				);
+				$this->_name='rms_product_location';
+				$this->insert($_arr);
+			}
+				
 // 			$this->_name='rms_product_location';
 // 			$ids = explode(',', $_data['identity']);
 // 			foreach ($ids as $i){
@@ -452,6 +468,11 @@
 		$sql = " SELECT ide.id,ide.code,$grade,
 			(SELECT $degree FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
 			(SELECT SUM(pl.pro_qty) FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  $string ) AS totalqty,
+			(SELECT pl.price FROM `rms_product_location` AS pl WHERE pl.pro_id = ide.id  $string ) AS price,
+			CASE    
+			WHEN  ide.isCountStock = 0 THEN '".$tr->translate("NOT_COUNT_STOCK")."'
+			WHEN  ide.isCountStock = 1 THEN '".$tr->translate("COUNT_STOCK")."'
+			END AS stock_type,
 			CASE    
 			WHEN  ide.product_type = 1 THEN '".$tr->translate("PRODUCT_FOR_SELL")."'
 			WHEN  ide.product_type = 2 THEN '".$tr->translate("OFFICE_MATERIAL")."'
@@ -597,9 +618,20 @@
 			$where = $_db->quoteInto("id=?", $id);
 			$this->update($_arr, $where);
 
-			if (!empty($_data['identity'])){
-
-			}
+			if ($_data['isCountStock']==0){
+				$_arr = array(
+					'pro_id'     =>$id,
+					'branch_id'  =>$_data['branch_search'],
+					'price'		 =>$_data['price'],
+					'price_set'  =>$_data['price'],
+					'note'       =>'Not Count Stock',
+				);
+				$this->_name='rms_product_location';
+				$id =  $_data["id"];
+				$where = $_db->quoteInto("pro_id=?", $id);
+				$this->update($_arr, $where);
+					
+				}
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

@@ -514,58 +514,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooter = $frm->getFooterAccount(2);
 	}
-	public function rptAttListAction()
-	{
-		$id=$this->getRequest()->getParam("id");
-		$id = (empty($id))?0:$id;
-		$db = new Allreport_Model_DbTable_DbRptGroup();
-		if($this->getRequest()->isPost()){
-			$search=$this->getRequest()->getPost();
-			$groupId = (!empty($search['group']))?$search['group']:0;
-			$result = $db->getGroupDetailByID($groupId);
-		}
-		else{
-			$search = array(
-					'txtsearch' 	=> "",
-					'start_date'	=> date('Y-m-d'),
-					'end_date'		=> date('Y-m-d',strtotime('+1 month')),
-					'teacher' 		=> 0,
-					'subject' 		=> 0,
-					'showsign'		=> 1,
-					'group'       	=>'',
-					'branch_id'     =>'',
-			);
-			$result = $db->getGroupDetailByID($id);
-		}
 	
-		if(empty($result)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
-		}
-		
-		$row = $db->getStudentGroupReport($id,$search,0);
-		$this->view->rs = $row;
-		if(!empty($row)){
-			$search["branch_id"] = empty($row[0]["branch_id"]) ? $search["branch_id"] : $row[0]["branch_id"];
-			$search["group"] = empty($row[0]["group_id"]) ? $search["group"] : $row[0]["group_id"];
-			$search["academic_year"] = empty($row[0]["academic_year"]) ? 0 : $row[0]["academic_year"];
-		}
-		
-		$this->view->rr = $result;
-		$this->view->datasearch = $search;
-		$this->view->search = $search;
-		$this->view->all_teacher_by_group = $db->getAllTeacherByGroup($id);
-		$this->view->all_subject_by_group = $db->getAllSubjectByGroup($id);
-	
-		$branch_id = empty($result['branch_id'])?null:$result['branch_id'];
-		$form=new Application_Form_FrmSearchGlobal();
-		$forms=$form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-		$this->view->search = $search;
-	
-		$frm = new Application_Form_FrmGlobal();
-		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-	}
 	function getTeacherbygroupAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();

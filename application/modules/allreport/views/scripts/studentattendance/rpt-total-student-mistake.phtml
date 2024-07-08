@@ -206,9 +206,9 @@ table.tb-footer tr.style-head {
 						<?php } $i++;?>
 						<tr class="style-rowdata hover">
 							<td align="center">&nbsp;<?php echo $i;?>&nbsp;</td>
-							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_code'];?></a></td>
-							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_khname'];?>&nbsp;</a></td>
-							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'score','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['last_name'].' '.$rs['stu_enname'];?>&nbsp;</a></td>
+							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'studentattendance','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_code'];?></a></td>
+							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'studentattendance','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['stu_khname'];?>&nbsp;</a></td>
+							<td><a style=" text-decoration: none; " href="<?php echo $this->url(array('controller'=>'studentattendance','action'=>'mistake-certificate','id'=>$rs['group_id'],'stu_id'=>$rs['stu_id']));?>" target="_blank">&nbsp; <?php echo $rs['last_name'].' '.$rs['stu_enname'];?>&nbsp;</a></td>
 							<td align="center">&nbsp;<?php echo $sex;?>&nbsp;</td>
 							<?php $s=0; $m=0; $b=0;$other=0; ?>
 							<?php  

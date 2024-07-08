@@ -68,6 +68,16 @@ input.btn_borwse_image {
 						dijit.byId("items_id").focus();
 						return false;
 					}
+
+					isCountStock = dijit.byId('isCountStock').get('value');
+					if(isCountStock==0){
+						branch = dijit.byId('branch_search').get('value');
+						if(branch=="" || branch==-1){
+							alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+							dijit.byId("branch_search").focus();
+							return false;
+						}
+					}
 				
 					if(is_deplicate==2){
 						alert("<?php echo $tr->translate("This Product Already Existing");?>");
@@ -96,6 +106,12 @@ input.btn_borwse_image {
 										</div> 
 									</div>
 									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH_NAME");?></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm_items->getElement("branch_search");?>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRODUCT_CODE");?></label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm_items->getElement("code");?>
@@ -117,7 +133,7 @@ input.btn_borwse_image {
 										</div>
 									</div>
 
-									<div class="form-group">
+									<div class="form-group sell_price">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRICE");?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
@@ -249,6 +265,8 @@ input.btn_borwse_image {
 		isCountStock.on('change', function(evt) {
 			CountStock();
 		});
+		
+		CountStock();
 	});	
 
 	var template = '';
@@ -430,7 +448,15 @@ function deplicateItem(){
 
 function CountStock(){									
 	isCountStock = dijit.byId('isCountStock').get('value');
-	alert(isCountStock);
+	$(".sell_price").css("display", "flow-root");
+
+	if (isCountStock == 0) {
+		dijit.byId('price').set("required", true);
 		
+	} else {
+		$(".sell_price").css("display", "none");
+		dijit.byId('price').set("required", false);
+	}
 }
+
 </script>

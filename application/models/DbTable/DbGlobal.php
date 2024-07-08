@@ -183,6 +183,116 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		return $rs;
 	}
+	public function getGradingSystemEng($degreeId, $template = 1)
+	{//$template1=psis,2=ahs
+		if ($template == 1) {
+			if ($degreeId == 1) {
+				$rs = array(
+					array(
+						'criteria' => $this->tr->translate("CLASS PARTICIPATION"),
+						'percent' => "15%",
+						'percentage' => "90-100%",
+						'grade' => "A",
+						'interpretation' => "Very Good",
+						'achievment' => "Outstanding",
+					),
+					array(
+						'criteria' => $this->tr->translate("HOMEWORK AND ASSIGNMENT"),
+						'percent' => "15%",
+						'percentage' => "80-89%",
+						'grade' => "B",
+						'interpretation' => "Good",
+						'achievment' => "Satisfactory",
+					),
+					array(
+						'criteria' => $this->tr->translate("QUIZZES"),
+						'percent' => "15%",
+						'percentage' => "70-79%",
+						'grade' => "C",
+						'interpretation' => "Fair",
+						'achievment' => "Needs Improvement",
+					),
+					array(
+						'criteria' => $this->tr->translate("MONTHLY TEST"),
+						'percent' => $this->tr->translate("55%"),
+						'percentage' => "60-69%",
+						'grade' => "D",
+						'interpretation' => "Average",
+						'achievment' => "Unsatisfactory",
+					),
+					array(
+						'criteria' => '',
+						'percent' => "",
+						'percentage' => "50-59%",
+						'grade' => "E",
+						'interpretation' => "Poor",
+						'achievment' => "Not Applicable",
+					),
+					array(
+						'criteria' => "",
+						'percent' => "",
+						'percentage' => "0-49%",
+						'grade' => "F",
+						'interpretation' => "ធ្លាក់ Failed",
+						'achievment' => "Not Applicable",
+					),
+				);
+
+			} else {
+				$rs = array(
+					array(
+						'criteria' => $this->tr->translate("Attendance"),
+						'percent' => "5%",
+						'percentage' => "90-100%",
+						'grade' => "A",
+						'interpretation' => "Very Good",
+						'achievment' => "Outstanding",
+					),
+					array(
+						'criteria' => $this->tr->translate("Discipline"),
+						'percent' => "10%",
+						'percentage' => "80-89%",
+						'grade' => "B",
+						'interpretation' => "Good",
+						'achievment' => "Satisfactory",
+					),
+					array(
+						'criteria' => $this->tr->translate("Book Check/Oral Question"),
+						'percent' => "5%",
+						'percentage' => "70-79%",
+						'grade' => "C",
+						'interpretation' => "Fair",
+						'achievment' => "Needs Improvement",
+					),
+					array(
+						'criteria' => $this->tr->translate("Homework"),
+						'percent' => $this->tr->translate("15%"),
+						'percentage' => "60-69%",
+						'grade' => "D",
+						'interpretation' => "Average",
+						'achievment' => "Unsatisfactory",
+					),
+					array(
+						'criteria' => $this->tr->translate("Quiz"),
+						'percent' => "15%",
+						'percentage' => "50-59%",
+						'grade' => "E",
+						'interpretation' => "Poor",
+						'achievment' => "Not Applicable",
+					),
+					array(
+						'criteria' => $this->tr->translate("Monthly Exam"),
+						'percent' => "50%",
+						'percentage' => "0-49%",
+						'grade' => "F",
+						'interpretation' => "Failed",
+						'achievment' => "Not Applicable",
+					),
+				);
+			}
+		}
+		return $rs;
+	}
 	public function getGlobalDb($sql)
 	{
 		$db = $this->getAdapter();
@@ -3043,7 +3153,28 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= " ORDER BY g.degree,g.grade,g.group_code ASC,`g`.`id` DESC ";
 		return $db->fetchAll($sql);
 	}
-
+	function getAllGroupForIssueScore($data)
+	{
+		$academic_year = empty($data['academic_year']) ? null : $data['academic_year'];
+		$db = $this->getAdapter();
+		$sql = "SELECT `g`.`id`, 
+	  			CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS name
+	  				FROM `rms_group` AS `g` WHERE g.status=1 ";
+					
+		if (!empty($data['branch_id'])) {
+			$sql .= " AND g.branch_id = ".$data['branch_id'];
+		}
+		if (!empty($data['is_pass'])) {
+			$sql .= " AND g.is_pass = ".$data['is_pass'];
+		}
+		if (!empty($data['academic_year'])) {
+			$sql .= " AND g.academic_year = ".$data['academic_year'];
+		}
+		$sql .= $this->getAccessPermission('g.branch_id');
+		$sql .= $this->getDegreePermission('g.degree');
+		$sql .= " ORDER BY g.academic_year DESC, g.degree,g.grade,g.group_code ASC ";
+		return $db->fetchAll($sql);
+	}
 
 	function getNumberInkhmer($number)
 	{

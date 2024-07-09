@@ -248,6 +248,11 @@ class Allreport_StudentattendanceController extends Zend_Controller_Action {
 	{
 		$id=$this->getRequest()->getParam("id");
 		$id = (empty($id))?0:$id;
+		
+		$inFrame = $this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : true;
+		$this->view->inFrame = $inFrame;
+		
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();

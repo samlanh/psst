@@ -243,4 +243,19 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$sql.=" GROUP BY s.stu_id ";
 		return $db->fetchAll($sql);
 	}
+	public function getDiscountSetting($data)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT
+				id AS id,
+				discountTitle AS name	
+			FROM rms_dis_setting WHERE isCurrent=1 ";
+		if (!empty($data['branchId'])) {
+			$sql .= ' AND branchId =' . $data['branchId'];
+		}
+		if (!empty($data['academicYear'])) {
+			$sql .= ' AND academicYear =' . $data['academicYear'];
+		}
+		return  $db->fetchAll($sql);
+	}
 }

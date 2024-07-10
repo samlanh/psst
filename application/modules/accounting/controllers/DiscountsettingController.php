@@ -125,6 +125,11 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action
 		}
 		$this->view->rs = $rows;
 
+		$condiction = array(
+			"discountGroupId" => $id
+		);
+		$this->view->allstudentByDiscount= $db->getStudentDiscount($condiction);
+
 		$model = new Application_Model_DbTable_DbGlobal();
 		$dis = $model->getAllDiscount();
 		$this->view->discount = $dis;

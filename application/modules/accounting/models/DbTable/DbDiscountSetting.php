@@ -84,16 +84,15 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$db->beginTransaction();
 		try {
-			$degree = "";
-			if (!empty($_data['selector']))
-				foreach ($_data['selector'] as $rs) {
-					if (empty($dept)) {
-						$degree = $rs;
-					} else {
-						$degree = $dept . "," . $rs;
-					}
-				}
-			$_data['degree'] = $degree;
+		
+			$dept = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($dept)){
+	    			$dept = $rs;
+	    		}else{ 
+					$dept = $dept.",".$rs;
+	    		}
+	    	}
 
 			$_arr = array(
 				'branchId' => $_data['branch_id'],
@@ -102,7 +101,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				'discountFor' => $_data['discountFor'],
 				'studentId' => $_data['studentId'],
 				'discountForType' => $_data['discountforType'],
-				'degree' => $_data['degree'],
+				'degree' => $dept,
 				'discountId' => $_data['discount_id'],
 				'DisValueType' => $_data['DisValueType'],
 				'discountValue' => $_data['discountValue'],
@@ -114,7 +113,24 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				'status' => 1,
 				'userId' => $this->getUserId()
 			);
-			$this->insert($_arr);
+			$id=$this->insert($_arr);
+
+			if(!empty($_data['identity'])){
+				$ids = explode(',', $_data['identity']);
+				if(!empty($ids))foreach ($ids as $i){
+					$arr = array(
+
+						'discountGroupId'=>$id,
+						'studentId'      =>$_data['student_id'.$i],
+						'createDate'     => date("Y-m-d"),
+						'modifyDate'     => date("Y-m-d"),
+						'userId'         => $this->getUserId()
+					);
+					$this->_name ='rms_discount_student';
+					$this->insert($arr);
+				}
+			}
+
 			$db->commit();
 		} catch (Exception $e) {
 			$db->rollBack();
@@ -145,16 +161,14 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 	}
 	public function updateDiscountset($_data)
 	{
-		$degree = "";
-		if (!empty($_data['selector']))
-			foreach ($_data['selector'] as $rs) {
-				if (empty($dept)) {
-					$degree = $rs;
-				} else {
-					$degree = $dept . "," . $rs;
-				}
-			}
-		$_data['degree'] = $degree;
+		$dept = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($dept)){
+	    			$dept = $rs;
+	    		}else{ 
+					$dept = $dept.",".$rs;
+	    		}
+	    	}
 
 		$_arr = array(
 			'branchId' => $_data['branch_id'],
@@ -163,7 +177,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			'discountFor' => $_data['discountFor'],
 			'studentId' => $_data['studentId'],
 			'discountForType' => $_data['discountforType'],
-			'degree' => $_data['degree'],
+			'degree' => $dept,
 			'discountId' => $_data['discount_id'],
 			'DisValueType' => $_data['DisValueType'],
 			'discountValue' => $_data['discountValue'],
@@ -177,6 +191,24 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		);
 		$where = $this->getAdapter()->quoteInto("id=?", $_data["id"]);
 		$this->update($_arr, $where);
+
+		$this->_name ='rms_discount_student';
+		$this->delete("discountGroupId=".$_data['id']);
+	   
+		 if(!empty($_data['identity'])){
+			 $ids = explode(',', $_data['identity']);
+			 if(!empty($ids))foreach ($ids as $i){
+				 $arr = array(
+					'discountGroupId'=>$_data['id'],
+					'studentId'      =>$_data['student_id'.$i],
+					'createDate'     => date("Y-m-d"),
+					'modifyDate'     => date("Y-m-d"),
+					'userId'         => $this->getUserId()
+				 );
+				 $this->_name ='rms_discount_student';
+				 $this->insert($arr);
+			 }
+		 }
 	}
 
 	public function addDiscounttionset($_data)
@@ -188,5 +220,27 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			'user_id' => $this->getUserId()
 		);
 		return $this->insert($_arr);
+	}
+
+	function getStudentDiscount($data){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
+		$discountGroupId = empty($data["discountGroupId"]) ? 0 : $data["discountGroupId"];
+		$sql = "
+			SELECT 
+			    s.stu_id,
+				s.stu_code AS stu_code
+				,s.stu_khname AS stuNameKH
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+				,CONCAT(s.stu_khname,'- ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.sex AS sex
+				
+			FROM  `rms_discount_student` AS ds 
+			INNER JOIN rms_student AS s ON ds.studentId = s.stu_id
+		";
+		$sql.=" WHERE  ds.discountGroupId = $discountGroupId  ";
+		$sql.=" GROUP BY s.stu_id ";
+		return $db->fetchAll($sql);
 	}
 }

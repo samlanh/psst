@@ -11,64 +11,50 @@ class Mobileapp_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-    	$this->_redirect("mobileapp/label");
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$date = new DateTime();
+		$currentDate = $date->format('Y-m-d');
+    	$search = array(
+						'dateFiltering' => $currentDate,
+					);
+					
+		$db = new Mobileapp_Model_DbTable_DbDashboard();
+		$countingDownloaded = $db->getCountingDownloadedDevice($search);
+		$this->view->countingDownloaded = $countingDownloaded;
+		
+		$iosDeviceDownloaded = empty($countingDownloaded["iosDeviceDownloaded"]) ? "00" : sprintf('%02d',$countingDownloaded["iosDeviceDownloaded"]);
+		$androidDeviceDownloaded = empty($countingDownloaded["androidDeviceDownloaded"]) ? "00" : sprintf('%02d',$countingDownloaded["androidDeviceDownloaded"]);
+		$this->view->summaryDevice = array(
+				array("label"=>$tr->translate("IOS"),"value"=>$iosDeviceDownloaded,"color"=>"#02a687"),
+				array("label"=>$tr->translate("ANDROID"),"value"=>$androidDeviceDownloaded,"color"=>"#db8806"),
+			);
+			
+		$countingUser = $db->getCountingUserAccount($search);
+		$countStudent = empty($countingUser["countStudent"]) ? 0 : $countingUser["countStudent"];
+		$countTeacher = empty($countingUser["countTeacher"]) ? 0 : $countingUser["countTeacher"];
+		$countSchoolBus = empty($countingUser["countSchoolBus"]) ? 0 : $countingUser["countSchoolBus"];
+		$countUnknow = empty($countingUser["countUnknow"]) ? 0 : $countingUser["countUnknow"];
+		$totalAccount=$countStudent+$countTeacher+$countSchoolBus+$countUnknow;
+		$countingUser["totalAccount"] = $totalAccount;
+		
+		$this->view->countingUser =$countingUser;
+		$this->view->summaryAccount = array(
+				array("label"=>$tr->translate("STUDENT"),"value"=>$countStudent,"color"=>"#113a90"),
+				array("label"=>$tr->translate("TEACHER"),"value"=>$countTeacher,"color"=>"#f32f2f"),
+				array("label"=>$tr->translate("BUS"),"value"=>$countSchoolBus,"color"=>"#42ae5f"),
+				array("label"=>$tr->translate("Unknow"),"value"=>$countUnknow,"color"=>"#a9bdc8"),
+			);
+			
+		$search["tokenType"] = 1;
+		$deviceRs = $db->getDeviceAndAccountInfo($search);
+		
+		$this->view->deviceRs =$deviceRs;
+		//$rs = $db->updateDeviceInfo($deviceRs);
+		
+		//$deviceRs = $db->getDeviceAndAccountInfo($search);
+		//$this->view->deviceRs =$deviceRs;
+			
     }
-
-    public function addAction()
-    {
-       try{
-        $db = new Mobileapp_Model_DbTable_DbNotice();
-        if($this->getRequest()->isPost()){
-            $_data = $this->getRequest()->getPost();
-            $db->add($_data);
-            if(!empty($_data['save_close'])){
-                $this->_redirect("mobileapp/index");
-            }else{
-                Application_Form_FrmMessage::message("INSERT_SUCCESS");
-            }
-        }
-       // $frm = new Other_Form_FrmBanner();
-       // $frm_manager=$frm->FrmAddBanner();
-     //   Application_Model_Decorator::removeAllDecorator($frm_manager);
-       // $this->view->frm = $frm_manager;
-    }catch (Exception $e){
-        Application_Form_FrmMessage::message("Application Error");
-        Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-    }
-    }
-
-    public function editAction()
-    {
-       
-    $db = new Mobileapp_Model_DbTable_DbNotice();
-    if($this->getRequest()->isPost()){
-      $_data = $this->getRequest()->getPost();
-      try{
-        $db->add($_data);
-        //Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/Banner');
-        $this->_redirect("mobileapp/index");
-      }catch(Exception $e){
-        Application_Form_FrmMessage::message($this->tr->translate('EDIT_FAIL'));
-        $err =$e->getMessage();
-        Application_Model_DbTable_DbUserLog::writeMessageError($err);
-      }
-    }
-
-    $id = $this->getRequest()->getParam("id");
-    $row = $db->getById($id);
-    $this->view->row = $row;
-  
-    if(empty($row)){
-     $this->_redirect('mobileapp/index');
-    }   
-    //$fm = new Other_Form_FrmBanner();
-    //$frm = $fm->FrmAddBanner($row);
-    //Application_Model_Decorator::removeAllDecorator($frm);
-    //$this->view->frm = $frm;  
-
-
-    }
-
 
 }
 

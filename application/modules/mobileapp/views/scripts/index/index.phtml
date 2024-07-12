@@ -1,0 +1,259 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('MOBILE_APP_DASHBOARD'));
+	$countingDownloaded = $this->countingDownloaded;
+	$countingUser = $this->countingUser;
+	
+?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('MOBILE_APP_DASHBOARD');?></h4>
+	    			</div>
+	    			<div class="col-sm-4 text-right">
+	    			</div>
+	    		</div>
+	    </div>
+		<div class="card-box">
+			<div class="row">
+				<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+					<div class="row tile_count">
+						<div class="col-md-4 col-sm-4 col-xs-12 tile_stats_count">
+						  <span class="count_top"><i class="fa fa-download"></i> <?php echo $tr->translate('totalDownloaded');?></span>
+						  <div class="count"><?php echo empty($countingDownloaded["totalDownloaded"]) ? "00" : sprintf('%02d',$countingDownloaded["totalDownloaded"]); ?></div>
+						  
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-12 tile_stats_count">
+						  <span class="count_top"><i class="fa fa-calendar-check-o"></i> <?php echo $tr->translate('totalDownloadThisMonth');?></span>
+						  <div class="count"><?php echo empty($countingDownloaded["totalDownloadThisMonth"]) ? "00" : sprintf('%02d',$countingDownloaded["totalDownloadThisMonth"]); ?></div>
+						  
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-12 tile_stats_count">
+						  <span class="count_top"><i class="fa fa-download"></i> <?php echo $tr->translate('totalDownloadToday');?></span>
+						  <div class="count green"><?php echo empty($countingDownloaded["totalDownloadToday"]) ? "00" : sprintf('%02d',$countingDownloaded["totalDownloadToday"]); ?></div>
+						</div>
+				  </div>
+					<div class="x_panel well">
+						<div class="x_title">
+						  <h2><i class="fa fa-laptop"></i>&nbsp;<?php echo $tr->translate("Device Usage");?></h2>
+						  <div class="clearfix"></div>
+						</div>
+						<div class="x_content">
+							<table class="" style="width:100%">
+								<tbody>
+									<tr>
+										<th style="width:50%;">
+											
+										</th>
+										<th>
+											<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+												<p class=""><?php echo $tr->translate("DEVICE");?></p>
+											</div>
+											<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+												<p class=""><?php echo $tr->translate("DOWNLOADED");?></p>
+											</div>
+										</th>
+									</tr>
+									<tr>
+										<td>
+											<div id="donutSummary" class="morris-donut-inverse" style="width:100%; height:185px;"></div>
+										</td>
+										<td>
+											<table class="tile_info">
+												<tbody>
+													<?php if(!empty($this->summaryDevice)) foreach($this->summaryDevice AS $device){ ?>
+													<tr>
+														<td>
+														  <p><i class="fa fa-square " style="color:<?php echo empty($device["color"]) ? "blue" : $device["color"]; ?>;" ></i><?php echo $device["label"];?> </p>
+														</td>
+														<td style=" text-align: right;"><?php echo empty($device["value"]) ? "00" : sprintf('%02d',$device["value"]); ?></td>
+													</tr>
+													<?php } ?>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<table class="" style="width:100%">
+								<tbody>
+									<tr>
+										<th style="width:50%;">
+											
+										</th>
+										<th>
+											<div class="col-lg-12 col-md-12 col-sm-7 col-xs-12">
+												<p class=""><?php echo $tr->translate("USER_ACCOUNT");?></p>
+											</div>
+										</th>
+									</tr>
+									<tr>
+										<td>
+											<div id="donutSummaryAccount" class="morris-donut-inverse" style="width:100%; height:185px;"></div>
+										</td>
+										<td>
+											<table class="tile_info">
+												<tbody>
+													<?php if(!empty($this->summaryAccount)) foreach($this->summaryAccount AS $device){ ?>
+													<tr>
+														<td>
+														  <p><i class="fa fa-square " style="color:<?php echo empty($device["color"]) ? "blue" : $device["color"]; ?>;" ></i><?php echo $device["label"];?> </p>
+														</td>
+														<td style=" text-align: right;"><?php echo empty($device["value"]) ? "00" : sprintf('%02d',$device["value"]); ?></td>
+													</tr>
+													<?php } ?>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+					<div class="x_panel">
+						<div class="x_title">
+							<h2><i class="fa fa-graduation-cap"></i>&nbsp;<?php echo $tr->translate("STUDENTS_DEVICE");?><small></small></h2>
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content">
+							<section class="content">
+							  <!-- Table row -->
+							  <div class="row">
+								<div class="col-xs-12 table">
+								  <table id="datatable-responsive"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%">
+									<thead>
+									  <tr>
+										<th><?php echo $tr->translate("NUM");?></th>
+										<th style="width: 15%"><?php echo $tr->translate("accountInfo");?></th>
+										<th style="width: 15%"><?php echo $tr->translate("STUDY_INFO");?></th>
+										<th><?php echo $tr->translate("DEVICE");?></th>
+										<th><?php echo $tr->translate("ACTION");?></th>
+									  </tr>
+									</thead>
+									<tbody>
+									<?php 
+									$i=0;
+									if(!empty($this->deviceRs)) foreach($this->deviceRs as $rs){ 
+									$i++;
+									?>
+									  <tr>
+										<td align="center"><?php echo $i;?></td>
+										<td>
+											<small ><?php echo $rs["userCode"];?></small><br />
+											<small class="title"><?php echo $rs["userNameInKh"]; echo empty($rs["userNameInEn"])? "":" / ".$rs["userNameInEn"];?></small><br />
+										</td>
+										<td>
+											<small ><?php echo $rs["degreeTitle"];?></small><br />
+											<span class="title"><?php echo $rs["groupCode"]; ?></span><br />
+										</td>
+										<td>
+											<span><i class="fa fa-tablet" ></i> <?php echo $rs["device_model_name"];?></span><br />
+											<small class="text-success" title="<?php echo $tr->translate("Last Active");?>"><i class="fa fa-clock-o" ></i> <?php echo date("d-M-Y H:i:s",$rs["last_active"]);?></small><br />
+										</td>
+										<td>
+											<a href="#" onClick="showChangePasswor();" title="<?php echo $tr->translate("CHANGE_PASSWORD");?>"><i class="fa fa-key" ></i></a>
+										</td>
+									  </tr>
+									<?php } ?>
+									</tbody>
+								  </table>
+								</div>
+								<!-- /.col -->
+							  </div>
+							  <!-- /.row -->
+
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+table.tile_info {
+    padding: 10px 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" id="popupChangePassword" >
+		<form  id='frmChangePassword' name='frmChangePassword' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			 <div class="card">
+				<div class="card-content collapse show">
+					<div class="card-box">
+						 <div class="col-sm-12 border-botom">
+							<div class="col-sm-8 pd-0">
+								<h4 class="m-b-0"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>&nbsp;<?php echo $tr->translate('CHANGE_PASSWORD_STUDENT');?></h4>
+							</div>
+							<div class="col-sm-4 text-right">
+							</div>
+						</div>
+					</div>
+					<div class="card-box">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?></label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input class='fullside' type="password" required="true" name="password" id="password" placeholder="<?php echo $tr->translate("PASSWORD");?>" regExp="\w{6,}" invalidMessage="ពាក្យសំងាត់យ៉ាងតិច មាន 6 តួអក្សរ" dojoType="dijit.form.ValidationTextBox" />
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?></label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input class='fullside' type="password" required="true" name="con_password" id="con_password" placeholder="<?php echo $tr->translate("CONFIRM_PASSWORD");?>" regExp="\w{6,}" invalidMessage="ពាក្យសំងាត់យ៉ាងតិច មាន 6 តួអក្សរ" dojoType="dijit.form.ValidationTextBox" />
+								   </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				    <div class="card-box">
+		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+							<input type="button" class="button-class button-primary"  iconClass="glyphicon glyphicon-repeat" value="<?php echo $tr->translate('SAVE');?>" label="<?php echo $tr->translate('SAVE');?>" id="back" dojoType="dijit.form.Button"  />
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
+<script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.min.js"></script>
+<script type="text/javascript">
+dojo.ready(function(){
+	 $('div svg text').css({
+		"font-family" : "inherit !important",
+		"padding" : "3%"
+	});
+});
+
+var colorDanger = "#FF1744";
+Morris.Donut({
+  element: 'donutSummary',
+  resize: true,
+  data: <?php  echo Zend_Json::encode($this->summaryDevice);?>
+});
+
+
+Morris.Donut({
+  element: 'donutSummaryAccount',
+  resize: true,
+  data: <?php  echo Zend_Json::encode($this->summaryAccount);?>
+});
+
+
+function showChangePasswor(){
+	dijit.byId("popupChangePassword").show();
+}
+
+</script>

@@ -150,7 +150,19 @@ a.btnstyle:hover{color:#eee;}
 							 <input type="hidden" name="oldDiscountSettengId" id="oldDiscountSettengId" dojoType="dijit.form.TextBox" /> 
 		                   </div>
 		                </div>
-		                
+						<div class="form-group">
+		                   <div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div id="new-discount-info"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+		                   </div>
+		                </div>
 		                <div class="form-group">
 		                   <div class="col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
@@ -161,6 +173,7 @@ a.btnstyle:hover{color:#eee;}
 		                   </div>
 		                </div>
 		            </div>
+				
 		            <div class="clearfix"></div>
 	             </form>
        	 </div>
@@ -220,7 +233,7 @@ dojo.ready(function(){
 			if(oldDiscountSettengId!=discountSettengId){
 				$('#public-methods').empty().multiSelect('refresh');
 			}
-			getInfoBygroup();
+			getDiscounInfoById();
 		}
 	}, "discountSettengId");
 
@@ -235,7 +248,7 @@ dojo.ready(function(){
 		class: "fullside", 		
 		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
 		onChange: function() {  
-			
+			getNewDiscountInfoById();
 		}
 	}, "toDiscountId");
 	
@@ -278,7 +291,7 @@ function getAllDiscountSetting(){
 	});
 }
 
-function getInfoBygroup(){
+function getDiscounInfoById(){
 	url_dis_info = '<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'getdiscountinfo'));?>';
 	discountSettengId = dijit.byId('discountSettengId').get('value');
 	if(discountSettengId==''){
@@ -311,6 +324,45 @@ function getInfoBygroup(){
 					string+='</div>';
 				string+='</div>';
 			dojo.byId("discount-info").innerHTML = string;
+		},
+		error: function(err) {
+		}
+	});
+}
+
+function getNewDiscountInfoById(){
+	url_dis_info = '<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'getdiscountinfo'));?>';
+	toDiscountId = dijit.byId('toDiscountId').get('value');
+	if(toDiscountId==''){
+		alert("<?php echo $tr->translate("SELECT_DISCOUNT");?>");
+		dojo.byId("new-discount-info").innerHTML = "";
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_dis_info,	
+		content:{ 
+			'discountSettengId': toDiscountId,'string':1
+		},
+		handleAs:"json",
+		load: function(data) {
+			string='';
+				string+='<div class="card-info bg-gradient-directional-warning">';
+					string+='<div class="card-content">';
+						string+='<div class="card-body">';
+							string+='<div class="media d-flex">';
+								string+='<div class="media-body text-white text-left align-self-bottom mt-3">';
+									string+='<span class="d-block mb-1 font-medium-1"></span>';
+									string+='<h3 class="text-white mb-10"><?php echo $tr->translate("NEW_DISCOUNT_INFORMATION");?></h3>';
+										string+=data;
+								string+='</div>';
+								string+='<div class="align-self-top">';
+									string+='<i class="	glyphicon glyphicon-tags icon-opacity text-white font-large-4 float-end"></i>';
+								string+='</div>';
+							string+='</div>';
+						string+='</div>';
+					string+='</div>';
+				string+='</div>';
+			dojo.byId("new-discount-info").innerHTML = string;
 		},
 		error: function(err) {
 		}

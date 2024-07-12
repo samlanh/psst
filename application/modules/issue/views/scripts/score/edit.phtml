@@ -576,8 +576,8 @@ $db_score = new Issue_Model_DbTable_DbScore();
 			$(".annaul_exam_display").css("display", "none");
 		}
 	}
-	url_getgroup = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'group', 'action' => 'getgroupbybranch')); ?>';
-
+	
+	url_getgroup = '<?php echo $this->url(array('module' => 'issue', 'controller' => 'score', 'action' => 'getgroupbybranch')); ?>';
 	function getAllGroupByBranch() {
 		dijit.byId('group').reset();
 		branch_id = dijit.byId('branch_id').get('value');

@@ -114,14 +114,14 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 											</div>
 										</div>
 									</div>
-									<div class="form-group hidden_student">
+									<!-- <div class="form-group hidden_student">
 										<label
 											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_NAME"); ?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input id="studentId" />
 										</div>
-									</div>
+									</div> -->
 									<div class="form-group">
 										<label
 											class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_FOR_TYPE"); ?>
@@ -135,53 +135,7 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-md-12 col-sm-12 col-xs-12">
-									<div class="d-flex">
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
-										</div>
-										<div class="col-md-10 col-sm-10 col-xs-12">
-											<p class="tx-20 font-weight-semibold d-flex ">
-												<?php echo $tr->translate("DEGREE"); ?>
-											</p>
-										</div>
-									</div>
-									<div class="custom-control custom-checkbox ">
-										<input type="checkbox" class="checkbox custom-control-input"
-											onchange="checkall();" class="checkbox" id="check_all" name="check_all">
-										<label class="custom-control-label" for="check_all">
-											<?php echo $tr->translate('CHECK_ALL'); ?>
-										</label>
-									</div>
-									<div class="form-group">
-										<ul class="optListRow">
-											<?php
-											if (!empty($this->rsdegree))
-												foreach ($this->rsdegree as $rs) {
-													?>
-													<li class="opt-items">
-														<div class="custom-control custom-checkbox">
-															<input type="checkbox" class="checkbox custom-control-input"
-																id="depts<?php echo $rs['id']; ?>"
-																value="<?php echo $rs['id']; ?>" name="selector[]">
-															<label class="custom-control-label"
-																for="depts<?php echo $rs['id']; ?>">
-																<?php echo $rs['name']; ?>
-															</label>
-														</div>
-													</li>
-												<?php } ?>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 				<div class="col-md-4 col-sm-4 col-xs-12">
 					<div class="card-blogform">
 						<div class="card-body">
@@ -260,6 +214,98 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 						</div>
 					</div>
 				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="d-flex">
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+										</div>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<p class="tx-20 font-weight-semibold d-flex ">
+												<?php echo $tr->translate("DEGREE"); ?>
+											</p>
+										</div>
+									</div>
+									<div class="custom-control custom-checkbox ">
+										<input type="checkbox" class="checkbox custom-control-input"
+											onchange="checkall();" class="checkbox" id="check_all" name="check_all">
+										<label class="custom-control-label" for="check_all">
+											<?php echo $tr->translate('CHECK_ALL'); ?>
+										</label>
+									</div>
+									<div class="form-group">
+										<ul class="optListRow">
+											<?php
+											if (!empty($this->rsdegree))
+												foreach ($this->rsdegree as $rs) {
+													?>
+													<li class="opt-items">
+														<div class="custom-control custom-checkbox">
+															<input type="checkbox" class="checkbox custom-control-input"
+																id="depts<?php echo $rs['id']; ?>"
+																value="<?php echo $rs['id']; ?>" name="selector[]">
+															<label class="custom-control-label"
+																for="depts<?php echo $rs['id']; ?>">
+																<?php echo $rs['name']; ?>
+															</label>
+														</div>
+													</li>
+												<?php } ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="card-box">
+						<div class="card-blogform">
+							<div class="card-body"> 
+								<div class="row"> 
+									<div class="col-md-12 col-sm-12 col-xs-12"> 
+										<div class="d-flex"> 
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-education"></i>
+											</div> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
+												<div class="card-blogform">
+													<div class="form-group" style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+														<div class="form-group">
+															<label class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("SELECT_STUDENT");?></label>
+															<div class="col-md-7 col-sm-7 col-xs-12">
+																<input id="studentId" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div> 
+										</div>
+										<div class="form-group">
+											<div class="card-box">
+												<div class="col-md-12 col-sm-12 col-xs-12">
+													<div class="form-group">
+														<input type="hidden" name="identity" id="identity" value="">
+														<table  class="collape responsiveTable" >
+															<thead id="tableHeadInfo">
+															</thead>
+															<tbody id="table_row">
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="clearfix"></div>
 				<div class="card-box mt-20">
 					<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
@@ -330,6 +376,10 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require('dijit.form.TextBox');
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ObjectStore");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojo.NodeList-manipulate");
+
 	var disname_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode($this->discount)); ?>);
 	//var ItemTypestore = getDataStorefromJSON('id', 'name', <?php //print_r(Zend_Json::encode($this->itemType)); ?>);
 	require(["dojo/ready"], function (ready) {
@@ -360,6 +410,9 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			tabindex: "1",
 			class: 'fullside',
 			placeHolder: "<?php echo $tr->translate("SELECT_STUDENT_NAME") ?>",
+			onChange: function () {
+				addRowStudent();
+			}
 		}, "studentId");
 
 		ready(function () {
@@ -524,5 +577,95 @@ $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 		} else {
 			$(".hidden_student").css('display', 'none');
 		}
+	}
+
+	
+	var title=0;
+	var keyrow=0;
+	var strHeadRow="";
+	urlGetStudentInfo = '<?php echo $this->url(array('module'=>'issue','controller'=>'discipline','action'=>'get-student-info'));?>';
+	function addRowStudent(){
+		
+		studentId=dijit.byId("studentId").get("value");
+
+		if(studentId==-1 || studentId==""){return false;}
+		var iden = $("#identity").val();
+		var arrays = iden.split(',');
+		if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++) {
+				readychoose = dijit.byId('student_id'+arrays[i]).get('value');
+				if(readychoose==studentId){
+					alert("<?php echo $tr->translate("Choosen ready")?>");
+					dijit.byId('studentId').reset();
+					return false;
+				}
+			}
+		}
+		
+		dojo.xhrPost({
+			url: urlGetStudentInfo,
+			content:{
+				'studentId':studentId,
+				},
+			handleAs:"json",
+			load: function(data) { 
+			
+				if(data!=""){
+					
+					keyrow = keyrow+1;
+
+					if(title!=1){
+							strHeadRow = '<tr class="head-td" >';
+								strHeadRow+='<th scope="col" ><?php echo $tr->translate("DEL");?></th>';
+								strHeadRow+='<th scope="col" ><?php echo $tr->translate("NUM");?></th>';
+								strHeadRow+='<th scope="col" ><?php echo $tr->translate("STUDEN_CODE");?></th>';
+								strHeadRow+='<th scope="col" ><?php echo $tr->translate("STUDEN_NAME");?></th>';
+								strHeadRow+='<th scope="col" ><?php echo $tr->translate("GENDER");?></th>';
+							strHeadRow += '</tr>';
+							dojo.html.set(dojo.byId("tableHeadInfo"),strHeadRow, {
+									parseContent: true,
+							});
+						title=1;
+					}
+					var strStudent="";
+					strStudent += '<td width="40px" align="center"><img onclick="deleteRecord(' + keyrow + ')" src="<?php echo $this->baseUrl(); ?>/images/Delete_16.png"></td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("NUM");?>">'+keyrow+'</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("STUDEN_CODE");?>">'+data.stu_code+'</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("STUDEN_NAME");?>">';
+						strStudent+=data.stuNameKH+'-';
+						strStudent+=data.stuNameLatin;
+						strStudent+='<input dojoType="dijit.form.TextBox" type="hidden" name="student_id'+keyrow+'" id="student_id'+keyrow+'"  value="'+data.stu_id+'" >';
+					strStudent+='</td>';
+					strStudent+='<td data-label="<?php echo $tr->translate("GENDER");?>">'+data.genderTitle+'</td>';
+					tmp='<tr id="row'+keyrow+'" class="rowData" >';
+					tmp+='</tr>';
+					
+					dojo.query("#table_row").append(tmp);
+					if($("#identity").val()!="") {
+						var identity = $("#identity").val();
+						$("#identity").val(identity+','+keyrow);
+					} else {$("#identity").val(keyrow);}
+					dojo.html.set(dojo.byId("row"+keyrow),strStudent , {
+						 parseContent: true,
+					});
+					dijit.byId('studentId').reset();
+				}
+			
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});	
+	}
+
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
 	}
 </script>

@@ -132,10 +132,10 @@ class Issue_ScoreController extends Zend_Controller_Action
 			Application_Form_FrmMessage::MessageBacktoOldHistory("Can't Edit, Already Comibine");
 			exit();
 		}
-		// if ($row['is_pass'] == 1) {
-		// 	Application_Form_FrmMessage::MessageBacktoOldHistory("CLASS_COMPLETED_CAN_NOT_EDIT");
-		// 	exit();
-		// }
+		if ($row['is_pass'] == 1) {
+			// Application_Form_FrmMessage::MessageBacktoOldHistory("CLASS_COMPLETED_CAN_NOT_EDIT");
+			// exit();
+		}
 		if ($row['status'] == 0) {
 			Application_Form_FrmMessage::MessageBacktoOldHistory("Score Already Void, Can't Edit !");
 			exit();

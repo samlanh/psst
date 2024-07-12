@@ -1,0 +1,319 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('UPDATE_STUDENT_DISCOUNT')); 
+	$frm =  $this->form_search;
+?>	
+<head>
+ <link href="<?php echo $this->baseUrl()."/jsmultiselect"?>/multi-select.css" media="screen" rel="stylesheet" type="text/css" />
+<style>
+a.btnstyle{background:#337ab7;padding:6px;border-radius:5px;color:#fff;border:1px solid #265074;}
+a.btnstyle:hover{color:#eee;}
+</style>
+</head>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+           <div class="col-sm-12 border-botom">
+		   		<div class="col-sm-8 pd-0">
+		   			<h4 class="m-b-0"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('UPDATE_STUDENT_DISCOUNT');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+    	
+	    	<div class="card-box">
+	        	<div class="col-md-8 col-sm-8 col-xs-12 search-blog">
+	        		<form id="studentgroup" dojoType="dijit.form.Form" action="" method="post" enctype="application/x-www-form-urlencoded">
+						<script type="dojo/method" event="onSubmit">			
+							if(this.validate()) {
+								branch_id = dijit.byId('branch_id').get('value');
+								if(branch_id==''){
+									alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
+									dijit.byId('branch_id').focus();
+									return false;
+								}
+								
+								return true;
+	   						}else {
+								return false;
+	   						}
+						</script>
+						<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-search" aria-hidden="true"></i> <?php echo $tr->translate("SEARCH_GROUP");?> 
+		                   </label>
+		                </div>
+		                <div class="form-group">
+		                	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                	<?php echo $frm->getElement("branch_id");?>
+				                </div>
+				              </div>
+			             </div>
+						<div class="form-group">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_DISCOUNT");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="discountSettengId" />
+				                   </div>
+				                 </div>
+							</div>
+		                </div>
+		                <div class="form-group">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEARCH_STUDENT_NAME").', '.$tr->translate("STUDENT_CODE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<?php echo $frm->getElement("adv_search");?>
+				                   </div>
+				                 </div>
+			                </div>
+		                </div>
+		                <div class="form-group">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ></label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		 <input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
+											class="button-class button-primary" iconClass="glyphicon glyphicon-search"/>
+				                   </div>
+				                 </div>
+			                </div>
+		                </div>
+					</form>
+	            </div>
+				<div class="col-md-4 col-sm-4 col-xs-12 "> 
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div id="discount-info"></div>
+								 </div>
+							</div>
+						</div>
+					</div>
+				</div>
+	            <div class="clearfix"></div>
+	        </div>
+	        <div class="card-box" style="margin-top: 10px;">
+		       	<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+					<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
+						academic_year_fee = dijit.byId('academic_year_fee').get('value');
+						if(academic_year_fee=='' || academic_year_fee==-1){
+							alert('<?php echo $tr->translate("PLEASE_SELECT_STUDENT_FEE");?>');
+							dijit.byId('academic_year_fee').focus();
+							return false;
+						}
+						loadingBlock();	
+						return true;
+	   				}else {
+						return false;
+	   				}
+				</script>
+					<div class="col-md-8 col-sm-8 col-xs-12">
+		            	<div class="form-group">
+			         		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+								<a class="btnstyle" id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
+								<a class="btnstyle" id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
+								<div style="height: 10px;"></div>
+							</div>
+							 <div class="clearfix"></div>
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<select multiple id="public-methods" name="public-methods[]">
+									<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
+										<option value="<?php echo $row['stu_id'];?>">
+											<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
+										</option>
+									<?php }?>
+								</select>
+							</div>
+							 <div class="clearfix"></div>
+			         	</div>
+		            </div>
+		        	<div class="col-md-4 col-sm-4 col-xs-12">
+						<div class="form-group">
+		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("NEW_DISCOUNT_INFORMATION");?> 
+		                   </label>
+		                </div>
+		                <div class="form-group">
+		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NEW_DISCOUNT");?> :
+		                   </label>
+		                   <div class="col-md-7 col-sm-7 col-xs-12">
+						   
+						 	<input id="toDiscountId" />
+	                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
+							 <input type="hidden" name="oldDiscountSettengId" id="oldDiscountSettengId" dojoType="dijit.form.TextBox" /> 
+		                   </div>
+		                </div>
+		                
+		                <div class="form-group">
+		                   <div class="col-md-12 col-sm-12 col-xs-12">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
+									class="button-class button-primary" iconClass="	glyphicon glyphicon-floppy-saved"/>
+								</div>
+		                   </div>
+		                </div>
+		            </div>
+		            <div class="clearfix"></div>
+	             </form>
+       	 </div>
+	</div>
+</div>
+<style>
+select{ width:100%;}
+fieldset{  background:#DFF7FD;}
+table tr.head-title{ background: none repeat scroll 0% 0% rgba(213, 249, 244, 1); padding:2px;}
+table tr td.null-border{ background: #fff; border-left:none !important;}
+table .set-style td,table .set-style th{ padding: 5px; border:0px solid #ccc;}
+table .set-style tr.st1{ background: none repeat scroll 0% 0% rgba(218, 250, 255, 1);}
+table .set-style tr td a {
+    font-size: 14px;
+}
+.ms-container .ms-selectable {
+    margin: 0 3.2%;
+}
+.search-blog {
+    background: #bcd5f0;
+    border-radius: 5px;
+}
+
+.ms-container .ms-selectable li.ms-elem-selectable, .ms-container .ms-selection li.ms-elem-selection {
+    font-size: 13px;
+    white-space: nowrap;
+    color: #000;
+}
+</style>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/jquery.multi-select.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/rainbow.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()."/jsmultiselect"?>/application.js" type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require("dojo.NodeList-manipulate");
+dojo.require('dijit.form.Textarea');
+dojo.require("dojo.data.ItemFileWriteStore"); 
+
+
+dojo.ready(function(){
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                     
+		id: "discountSettengId",
+		name: "discountSettengId",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		onChange: function() {  
+			oldDiscountSettengId='<?php echo $this->search['discountSettengId'];?>';
+			discountSettengId = dijit.byId('discountSettengId').get('value');
+			dijit.byId('oldDiscountSettengId').attr('value',discountSettengId);
+
+			if(oldDiscountSettengId!=discountSettengId){
+				$('#public-methods').empty().multiSelect('refresh');
+			}
+			getInfoBygroup();
+		}
+	}, "discountSettengId");
+
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                     
+		id: "toDiscountId",
+		name: "toDiscountId",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		onChange: function() {  
+			
+		}
+	}, "toDiscountId");
+	
+	var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getAllDiscountSetting();
+  	});
+	 oldDiscountSettengId='<?php echo $this->search['discountSettengId'];?>';
+	 getAllDiscountSetting();
+});
+
+url_dic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'getdiscount'));?>';
+function getAllDiscountSetting(){
+	
+	dijit.byId('discountSettengId').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		var discount_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('discountSettengId').set('store',discount_store);  
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+	dojo.xhrPost({
+		url: url_dic,
+		content:{
+			'branchId':branch_id,
+			},
+		handleAs:"json",
+		load: function(data){
+			discount_store  = getDataStorefromJSON('id','name', data);
+			dijit.byId('discountSettengId').set('store',discount_store);  
+			dijit.byId('toDiscountId').set('store',discount_store);  
+			if(oldDiscountSettengId>0){
+				dijit.byId('discountSettengId').attr('value',oldDiscountSettengId);
+			}
+			dijit.byId('branch').set('value',branch_id);  
+		},
+		error: function(err) {
+		}
+	});
+}
+
+function getInfoBygroup(){
+	url_dis_info = '<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'getdiscountinfo'));?>';
+	discountSettengId = dijit.byId('discountSettengId').get('value');
+	if(discountSettengId==''){
+		alert("<?php echo $tr->translate("SELECT_DISCOUNT");?>");
+		dojo.byId("discount-info").innerHTML = "";
+		return false;
+	}
+	dojo.xhrPost({
+		url:url_dis_info,	
+		content:{ 
+			'discountSettengId': discountSettengId,'string':1
+		},
+		handleAs:"json",
+		load: function(data) {
+			string='';
+				string+='<div class="card-info bg-gradient-directional-warning">';
+					string+='<div class="card-content">';
+						string+='<div class="card-body">';
+							string+='<div class="media d-flex">';
+								string+='<div class="media-body text-white text-left align-self-bottom mt-3">';
+									string+='<span class="d-block mb-1 font-medium-1"></span>';
+									string+='<h3 class="text-white mb-10"><?php echo $tr->translate("DISCOUNT_INFO");?></h3>';
+										string+=data;
+								string+='</div>';
+								string+='<div class="align-self-top">';
+									string+='<i class="	glyphicon glyphicon-tags icon-opacity text-white font-large-4 float-end"></i>';
+								string+='</div>';
+							string+='</div>';
+						string+='</div>';
+					string+='</div>';
+				string+='</div>';
+			dojo.byId("discount-info").innerHTML = string;
+		},
+		error: function(err) {
+		}
+	});
+}
+</script>

@@ -56,7 +56,6 @@
 			}
 			.style1:hover{ background: #ccc; }
 			table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
-			table.content-data { page-break-inside:auto }
 			tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
 			#header{
 				display: table-header-group;
@@ -147,6 +146,7 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('COURSE_SERVICE_PRODUCT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DIS_MAX');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('AMOUNT').$tr->translate('STUDENT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_PERIOD');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('BY_USER');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
@@ -156,7 +156,7 @@
 							 <?php 
 							 	if(!empty($this->row)){foreach($this->row as $key=>$rs){
 							 ?>
-							  <tr class="hover style" align="left" >
+							  <tr class="context-menu-one hover style" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,3);return false;"  align="left" >
 								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
 								    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch']; ?></td>
 								    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" > <?php echo $rs['academicYear']; ?></td>
@@ -166,6 +166,7 @@
 								    <td class="wrapword" data-label="<?php echo $tr->translate("COURSE_SERVICE_PRODUCT");?>" ><?php echo $rs['degreeList']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_TYPE");?>" ><?php echo $rs['discName']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DIS_MAX");?>" ><?php echo $rs['DisValueType']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT");?>" ><?php echo $rs['StuAmountUsed']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_PERIOD");?>" ><?php echo $rs['discountPeriod']; ?></td>
 								    <td data-label="<?php echo $tr->translate("BY_USER");?>" ><?php echo $rs['user_name']; ?></td>
 								    <td data-label="<?php echo $tr->translate("CREATE_DATE");?>" ><?php echo $rs['createDate']; ?></td>
@@ -248,4 +249,30 @@ function getAllstudentBranch(){
 	selectedId='<?php echo $this->adv_search['studentId'];?>';
 	getAllStudentByBranch(urlGet,contentData,selectedId);
 }
+
+var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="detail"){
+					url='<?php echo $this->baseUrl()."/allreport/accounting/rptDiscountdetail/id/";?>';
+				}
+				gotoAction();
+			},
+			items:{
+				"detail": {name: "<?php echo $tr->translate("DISCOUNT_DETAIL");?>", icon: "fa-list", accesskey: "c"},
+			}
+		});
+	});
+	function setrowdata(index,type){
+		row = index;
+		typereceipt = type;
+	}
+	var recordid ='';
+	function gotoAction(){
+		 window.open(url+row, '_blank');
+	}
 </script>

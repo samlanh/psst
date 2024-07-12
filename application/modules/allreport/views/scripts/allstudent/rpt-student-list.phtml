@@ -2,6 +2,7 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	$this->headTitle($tr->translate('STUDENT_LIST_REPORT')); 
 	echo $this->headTitle();
+	$dbgb = new Application_Model_DbTable_DbGlobal();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 	$urlCertifyKhmer = $this->baseUrl()."/allreport/allstudent/certify-khmer/id/";
@@ -63,35 +64,50 @@ table.tb-footer tr.style-head {
 	</form>
 	<div id="divPrint" class="overflow-report">
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-			<table style="background:#fff; margin: 0 auto; width: 100%;color:#4839bd;font-family:Times New Roman,Khmer OS Battambang;" >
-				<?php $logo = $this->baseUrl().'/images/logo.png';
+			<table style="background:#fff; margin: 0 auto; width: 100%;color:#040404;font-family:Times New Roman,Khmer OS Battambang;" >
+				<?php
+				 $logo = $this->baseUrl().'/images/logo.png';
 					if (!empty($this->rr['branch_logo'])){
-						if (file_exists(PUBLIC_PATH."/images/".$this->rr['branch_logo'])){
-							$logo = $this->baseUrl().'/images/'.$this->rr['branch_logo'];
+						if (file_exists(PUBLIC_PATH."/images/logo/".$this->rr['branch_logo'])){
+							$logo = $this->baseUrl().'/images/logo/'.$this->rr['branch_logo'];
 						}
 					}
-					?>
+				?>
 				<tr>
-					<td> <img style="max-height:90px;" alt="<?php ?>" src="<?php echo $logo;?>"> </td>
-					<td align="center">
-						<span style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("NATIONALITY_OFKINGDOM");?></span><br />
-						<span style="color:#4839bd; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("NATION_RELIGION_KING");?></span>
-						<div><img style="height: 10px;" src="<?php echo $this->baseUrl()."/images/style.png";?>" /></div>
+					<td align="center" width="40%"> <img style="max-height:90px;" alt="<?php ?>" src="<?php //echo $logo;?>"> </td>
+					<td width="20%"></td>
+					<td align="center" width="40%">
+						<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("NATIONALITY_OFKINGDOM");?></span><br />
+						<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("NATION_RELIGION_KING");?></span>
+						<div><img style="height: 10px; " src="<?php echo $this->baseUrl()."/images/style.png";?>" /></div>
 					</td>
-					<td></td>
+				</tr>
+				<tr>
+					<td align="left" colspan="2">
+						<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';">មន្ទីរអប់រំ យុវជន និងកីឡារាជធានីភ្នំពេញ</span><br />
+						<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';">ការិយាល័យអប់រំ យុវជន និងកីឡានៃរដ្ឋបាលខណ្ឌពោធិ៍សែនជ័យ</span><br>
+						<span style=" font-size: 16px;font-family:'Times New Roman','Khmer OS Muol Light';">សាលាបញ្ញាសាស្រ្តអន្តរជាតិ សាខាអ្នកឧកញ៉ា ហុង ពីវ ឈូកវ៉ា២</span>
+					</td>
+					<td >
+					</td>
 				</tr>
 				<tr>
 					<td style="width:200px;">
 					</td>
 					<td align="center" style="font-family:'Times New Roman','Khmer OS Muol Light';" valign="top">
-						<span style="color:#4839bd; font-size: 12px;"><?php echo $tr->translate("STUDENT_LIST_REPORT");?></span>
+						<span style="font-size: 13px;"><?php echo $tr->translate("STUDENT_LIST_REPORT")." (ថ្នាក់ទី".$this->rr['group_code'].")";?></span>
 						<div >
-							<span style="font-size: 12px;"> <?php echo $tr->translate("ACADEMIC_YEAR");?></span>
-							<?php echo !empty($this->rr['academic'])?$this->rr['academic']:'';?>
+							<span style="font-size: 13px;"> <?php echo $tr->translate("ACADEMIC_YEAR");?></span>
+							<?php 
+								$yearValue = $this->rr['academic'];
+								list($fromYear, $toYear) = explode("-", $yearValue);
+							 ?>
+							<?php echo $dbgb->getNumberInkhmer(date($fromYear)); ?>-
+							<?php echo $dbgb->getNumberInkhmer(date($toYear)); ?>
 						</div>
 					</td>
 					<td style="width:200px;">
-						<table style="width: 100%;white-space: nowrap;line-height: 20px;color:#4839bd;font-size:12px;font-family:Times New Roman,Khmer OS Battambang;" >
+						<!-- <table style="width: 100%;white-space: nowrap;line-height: 20px;color:#000000;font-size:12px;font-family:Times New Roman,Khmer OS Battambang;" >
 							<tr>
 								<td><?php echo $tr->translate("DEGREE");?></td>
 								<td>: <?php echo !empty($this->rr['degree'])?$this->rr['degree']:'';?></td>
@@ -104,35 +120,46 @@ table.tb-footer tr.style-head {
 								<td><?php echo $tr->translate("CLASSES");?></td>
 								<td>: <?php echo !empty($this->rr['group_code'])?$this->rr['group_code']:'';?></td>
 							</tr>
-						</table>
+						</table> -->
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
 						<style> 
 							td{padding:0 1px; }
-							.cheader{height: 30px;font-weight: bold; background: #ccc; white-space: nowrap;}
-							table{ page-break-inside:auto;font-family:Times New Roman,'Khmer OS Battambang'; }
-							tr{ page-break-inside:avoid; page-break-after:auto }
+							.cheader{
+								height: 30px;
+								font-weight: bold; 
+								background: #ccc; 
+								white-space: nowrap;
+							}
+							table{ 
+								page-break-inside:auto;
+								font-family:'Battambang','Times New Roman'; 
+							}
+						
 							#header {
 							  display: table-header-group;
-							  page-break-inside:avoid; page-break-after:auto;
+							  page-break-inside:avoid; 
+							  page-break-after:auto;
 							}
 							table.content-data{
 								border-collapse:collapse;
 								width:100%;
-								border:1px solid #4839bd; 
-								font-family:'Times New Roman','Khmer OS Battambang';
+								border:1px solid #000000; 
+								font-family:'Battambang','Times New Roman';
 								font-size:12px;
 								white-space: nowrap;
 								margin:0 auto;
-								color:#4839bd;
+								color:#000000;
 								margin:0 auto;
 							}
 							table.content-data thead tr.style-head {
-							   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-								background: #ffdbdb;
-								text-align: center;
+							   line-height: 25px;
+							   padding:1px 0px;
+							   white-space: nowrap;
+							   height: 22px; 
+							   text-align: center;
 							}
 							table.content-data tr.style-rowdata {
 								font-size:12px; 
@@ -146,6 +173,7 @@ table.tb-footer tr.style-head {
 						</style>
 						<table class="content-data"  cellpadding="5"​  border="1" >
 							<thead>
+								
 								<tr class="style-head">
 									<td rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td colspan="7">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
@@ -215,8 +243,8 @@ table.tb-footer tr.style-head {
 														
 							</tbody>
 							<tr>
-								<td colspan="14" style="border:1px solid #fff;border-top:1px solid #4839bd;">
-									<table cellpadding="0" cellspacing="0" width="33%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px">
+								<td colspan="14" style="border:1px solid #fff;border-top:1px solid #000000;">
+									<table cellpadding="0" cellspacing="0" width="33%" style="color:#000000; font-family:'Times New Roman','Khmer OS Battambang';font-size: 12px">
 										<tr>
 											<td valign="top" style="width:33%;text-align: left;">
 											<span><?php echo $tr->translate("STUDENT_TOTAL");?></span> : 
@@ -234,8 +262,8 @@ table.tb-footer tr.style-head {
 								</td>
 							</tr>
 							<tr>
-								<td colspan="14" style="border:1px solid #fff;border-top:1px solid #4839bd;">
-									<table cellpadding="0" cellspacing="0" width="100%" style="color:#4839bd; font-family:'Times New Roman','Khmer OS Battambang';font-size: 14px">
+								<td colspan="14" style="border:1px solid #fff;border-top:1px solid #000000;">
+									<table cellpadding="0" cellspacing="0" width="100%" style="color:#000000; font-family:'Battambang','Times New Roman';font-size: 14px">
 										<tr>
 											<td width="35%" align="center">
 												<span><?php echo $tr->translate("CHECKANDAPPROVED");?></span><br />
@@ -243,7 +271,18 @@ table.tb-footer tr.style-head {
 											</td>
 											<td width="30%">&nbsp;</td>
 											<td width="35%" align="center">
-												<span><?php echo $tr->translate("CREATE_WORK_DATE");?></span><br />
+												<?php $moment = date("Y-m-d");
+												$lunar = new Application_Model_DbTable_DbLunaCalendar($moment); ?>
+												<span>
+													<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa ព.ស. b'); ?>
+												</span><br>
+												<span >
+													រាជធានីភ្នំពេញ, ថ្ងៃទី
+													<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ
+													<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ
+													<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
+												</span>
+												<br />
 												<span style="font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("TEACHER_ROOM");?></span>
 											</td>
 										</tr>

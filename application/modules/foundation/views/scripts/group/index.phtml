@@ -191,15 +191,19 @@ function getallGrade(){
 					url='<?php echo $urlCopy;?>';
 					actionType=2;
 				}else if(key=="rpt-student-group"){
+					actionType=2;
 					url='<?php echo $urlStudentGroup;?>';
 					newPageTitle="<?php echo $tr->translate("STUDENT_LIST_REPORT");?>";
 				}else if(key=="rpt-att-list"){
+					actionType=2;
 					url='<?php echo $urlAttList;?>';
 					newPageTitle="<?php echo $tr->translate("STUDENT_ATTENDANT_LIST");?>";
 				}else if(key=="rpt-totalattendance"){
+					actionType=2;
 					url='<?php echo $urlTotalAtt;?>';
 					newPageTitle="<?php echo $tr->translate("TOTAL_ATTENDANT_LIST");?>";
 				}else if(key=="rpt-student-list"){
+					actionType=2;
 					url='<?php echo $urlStudentList;?>';
 					newPageTitle="<?php echo $tr->translate("STUDENT_LIST");?>";
 				}

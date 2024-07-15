@@ -1,0 +1,234 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+$search = $this->search;
+$pageTitle = $tr->translate('MOBILE_APP_DASHBOARD');
+$formDispaly ="";
+if(!empty($search["tokenType"])){
+	if($search["tokenType"]==1){
+		$pageTitle = $tr->translate('STUDENTS_DEVICE');
+	}else if($search["tokenType"]==2){
+		$pageTitle = $tr->translate('BUS_DEVICE');
+		$formDispaly ="display:none;";
+	}else if($search["tokenType"]==3){
+		$pageTitle = $tr->translate('TEACHER_DEVICE');
+		$formDispaly ="display:none;";
+	}
+}
+echo $this->headTitle($pageTitle);
+$frm =  $this->formSearch;
+?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+			<div class="col-sm-12 border-botom">
+				<div class="col-sm-8 pd-0">
+					<h4 class="m-b-0"><i class="fa fa-tablet" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $pageTitle;?></h4>
+				</div>
+				<div class="col-sm-4 text-right">
+				</div>
+			</div>
+	    </div>
+		<div class="card-box">
+			<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("adv_search");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12" style="<?php echo $formDispaly;?>">
+                   		<?php echo $frm->getElement("degree");?>
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12" style="<?php echo $formDispaly;?>">
+                   		<input id="gradeId" />
+                   </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("start_date");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("end_date");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input type="hidden" value="<?php echo $search["tokenType"]; ?>" name="tokenType" id="tokenType" dojoType="dijit.form.TextBox" />
+                   		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<table id="datatable-responsive"  class="display nowrap dataTable dtr-inline collapsed" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th><?php echo $tr->translate("NUM");?></th>
+						<th style="width: 15%"><?php echo $tr->translate("accountInfo");?></th>
+						<?php if($search["tokenType"]==1){ ?>
+						<th style="width: 15%"><?php echo $tr->translate("STUDY_INFO");?></th>
+						<?php } ?>
+						<th><?php echo $tr->translate("DEVICE");?></th>
+						<th><?php echo $tr->translate("ACTION");?></th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php 
+				$i=0;
+				if(!empty($this->rsRecord)) foreach($this->rsRecord as $rs){ 
+				$i++;
+				?>
+					<tr>
+						<td align="center"><?php echo $i;?></td>
+						<td>
+							<small id="userCode<?php echo $i;?>"><?php echo $rs["userCode"];?></small><br />
+							<small id="userName<?php echo $i;?>" class="title"><?php echo $rs["userNameInKh"]; echo empty($rs["userNameInEn"])? "":" / ".$rs["userNameInEn"];?></small><br />
+						</td>
+						<?php if($search["tokenType"]==1){ ?>
+						<td>
+							<small id="userDegreeTitle<?php echo $i;?>"><?php echo $rs["degreeTitle"];?></small><br />
+							<span id="userGroupCode<?php echo $i;?>" class="title"><?php echo $rs["groupCode"]; ?></span><br />
+						</td>
+						<?php } ?>
+						<td>
+							<span id="userDevice<?php echo $i;?>"><i class="fa fa-tablet" ></i> <?php echo $rs["device_model_name"];?></span><br />
+							<small id="lastActive<?php echo $i;?>" class="text-success" title="<?php echo $tr->translate("Last Active");?>"><i class="fa fa-clock-o" ></i> <?php echo date("d-M-Y H:i:s",$rs["last_active"]);?></small><br />
+						</td>
+						<td>
+							<input type="hidden" value="<?php echo $rs["userId"]; ?>" name="userId<?php echo $i;?>" id="userId<?php echo $i;?>" dojoType="dijit.form.TextBox" />
+							<a href="javascript:void(0)" onClick="showChangePassword(<?php echo $i;?>);" title="<?php echo $tr->translate("CHANGE_PASSWORD");?>"><i class="fa fa-key" ></i></a>
+						</td>
+					</tr>
+				<?php } ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+</div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" id="popupChangePassword" data-dojo-props="title:'<?php echo $tr->translate("CHANNGE_PASSWORD"); ?>'">
+		<form  id='frmChangePassword' name='frmChangePassword' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			 <div class="card">
+				<div class="card-content collapse show">
+					<div class="card-box">
+						<div class="left col-md-12 col-sm-12 col-xs-12">
+                              <h2 id="userCode">Nicole Pearson</h2>
+                              <h2 id="userName">Nicole Pearson</h2>
+                              <p id="userDevice"><strong>About: </strong> Web Designer / UX / Graphic Artist / Coffee Lover </p>
+						</div>
+					</div>
+					<div class="card-box">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+								   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?></label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input class='fullside' type="password" required="true" name="password" id="password" placeholder="<?php echo $tr->translate("PASSWORD");?>" regExp="\w{6,}" invalidMessage="ពាក្យសំងាត់យ៉ាងតិច មាន 6 តួអក្សរ" dojoType="dijit.form.ValidationTextBox" />
+								   </div>
+								</div>
+								<div class="form-group">
+								   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?></label>
+								   <div class="col-md-7 col-sm-7 col-xs-12">
+										<input type="hidden" value="0" name="userId" id="userId" dojoType="dijit.form.TextBox" />
+										<input type="hidden" value="<?php echo $search["tokenType"]; ?>" name="deviceTokenType" id="deviceTokenType" dojoType="dijit.form.TextBox" />
+										<input class='fullside' type="password" required="true" name="con_password" id="con_password" placeholder="<?php echo $tr->translate("CONFIRM_PASSWORD");?>" regExp="\w{6,}" invalidMessage="ពាក្យសំងាត់យ៉ាងតិច មាន 6 តួអក្សរ" dojoType="dijit.form.ValidationTextBox" />
+								   </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				    <div class="card-box">
+		               	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+							<input type="button" class="button-class button-primary"  iconClass="glyphicon glyphicon-repeat" value="<?php echo $tr->translate('SAVE');?>" label="<?php echo $tr->translate('SAVE');?>"  dojoType="dijit.form.Button" onClick="goChangePassword();" />
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
+<script type="text/javascript">
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "gradeId",
+			name: "gradeId",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			onChange: function() {  
+
+			}
+		}, "gradeId");
+		
+		 getallGrade();
+	});
+	
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id==''){dijit.byId('degree').focus();return false;}
+		let url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+
+		contentData = {
+				'dept_id':dept_id,
+				'noaddnew':1
+			}
+			selectedId = '';
+			if('<?php echo $this->adv_search['degree']?>'==dept_id){
+				selectedId = '<?php echo $this->adv_search['gradeId']?>';
+			}
+			getGradebyDegree(url_dept,contentData,selectedId);
+	}
+	
+	function showChangePassword(rowKey){
+		dijit.byId('userId').set('value', dijit.byId("userId"+rowKey).get('value'));
+		dojo.byId("userCode").innerHTML = dojo.byId("userCode"+rowKey).innerHTML;
+		dojo.byId("userName").innerHTML = dojo.byId("userName"+rowKey).innerHTML;
+		dojo.byId("userDevice").innerHTML = dojo.byId("userDevice"+rowKey).innerHTML +' '+ dojo.byId("lastActive"+rowKey).innerHTML;
+		dijit.byId("popupChangePassword").show();
+	}
+	var voidReciept = '<?php echo $this->url(array('module'=>'mobileapp','controller'=>'index','action'=>'change-password')); ?>';
+	function goChangePassword(){
+		
+		if(dojo.byId('password').value != dojo.byId('con_password').value ){
+				alert('<?php echo $tr->translate("passwordAndConfirmPasswordNotMatch");?>');
+				dojo.byId('password').value = '';
+				dojo.byId('con_password').value = '';
+				dijit.byId('password').focus();
+				return false;
+			}
+		if(dijit.byId('frmChangePassword').validate()){
+			if(confirm("<?php echo $tr->translate("Do you want to change password");?>")){
+		}else{
+			dijit.byId('frmChangePassword').reset();
+			dijit.byId('popupChangePassword').hide();
+			return false;
+		}
+			
+			loadingBlock();
+			dojo.xhrPost({
+				url: voidReciept,
+				form: dojo.byId("frmChangePassword"),
+				handleAs:"json",
+				load: function(data){
+					dijit.byId('frmChangePassword').reset();
+					dijit.byId('popupChangePassword').hide();
+					if(data==1){
+						alert("<?php echo $tr->translate("CHANGE_PASSWORD_SUCCESS");?>");
+					}else{
+						alert("<?php echo $tr->translate("CHANGE_PASSWORD_FAIL");?>");
+					}
+					location.reload();
+					HideloadingBlock();
+				},
+				error: function(err){
+					dijit.byId('frmChangePassword').reset();
+					dijit.byId('popupChangePassword').hide();
+					HideloadingBlock();
+				}
+			});
+		}
+	}
+</script> 

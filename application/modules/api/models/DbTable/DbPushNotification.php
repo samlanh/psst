@@ -156,7 +156,8 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				"en" => $notificationSubTitle,
 			);
 	
-			
+			$apiKey = APP_API_KEY;
+			$appId = APP_ID;
 			$fields = array(
 				'app_id' => APP_ID,
 				'include_player_ids' => $androidToken,
@@ -175,7 +176,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 				'Content-Type: application/json; charset=utf-8',
-				'Authorization: Basic OGY3MGQ2M2EtMmQ3OS00MjZhLTk2MjYtYjYzMzExYTg5YWRm'
+				'Authorization: Basic '.$apiKey
 			));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -273,6 +274,85 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		
 	}
 	
+	
+	function getLastActiveDeviceInfo($data){
+		
+		$apiKey = APP_API_KEY;
+		$appId = APP_ID;
+		$curl = curl_init();
+		$playerId = "928b7d15-22df-44c8-8202-52b4bc6d8b13";
+		$playerId = empty($data["mobileToken"]) ? $playerId : $data["mobileToken"];
+		//$urlAllPlayer = "https://onesignal.com/api/v1/players?app_id=$appId";
+		$urlByOnePlayer = "https://onesignal.com/api/v1/players/$playerId?app_id=$appId";
+		curl_setopt_array($curl, [
+		  CURLOPT_URL => $urlByOnePlayer,
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 30,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "GET",
+		  CURLOPT_HTTPHEADER => [
+			"Authorization: Basic $apiKey",
+			"Content-Type: application/json; charset=utf-8",
+			"accept: application/json"
+		  ],
+		]);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+		if ($err) {
+		  //echo "cURL Error #:" . $err;
+		  return null;
+		} else {
+			$convertArr =Zend_Json::decode($response);
+			return $convertArr;
+		}
+	
+	}
+	function getTokenInfomation($data){
+		$db = $this->getAdapter();
+		$token = empty($data["mobileToken"]) ? 0 : $data["mobileToken"];
+		$sql="
+			SELECT 
+				mtk.*
+			FROM mobile_mobile_token AS mtk
+			WHERE mtk.token = '".addslashes($token)."' 
+		";
+		$sql.=" LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
+	function updateDeviceInfo($data){
+		if(!empty($data["mobileToken"])){
+			$tokenInfo = $this->getTokenInfomation($data);
+			if(!empty($tokenInfo["device_model_name"])){
+				$arr = array(
+					'last_active'		=>strtotime("now"),
+				);
+				$this->_name="mobile_mobile_token";
+				$whereRs=" token= '".addslashes($data["mobileToken"])."'";
+				$this->update($arr,$whereRs);
+			}else{
+				$result = $this->getLastActiveDeviceInfo($data);
+				if(!empty($result)){
+					$arr = array(
+						'device_os'			=>$result["device_os"],
+						'device_model_name'	=>$result["device_model"],
+						'timezone'			=>$result["timezone"],
+						'last_active'		=>$result["last_active"],
+						'created_at'		=>$result["created_at"],
+					);
+					$this->_name="mobile_mobile_token";
+					$whereRs=" token= '".addslashes($data["mobileToken"])."'";
+					$this->update($arr,$whereRs);
+				}
+			}
+		}
+		return 1;
+	}
 	
 	
 

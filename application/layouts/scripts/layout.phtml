@@ -90,7 +90,7 @@ if ($module != 'default') {
 		<!-- NProgress -->
 		<link href="<?php echo $base_url; ?>admin/vendors/nprogress/nprogress.css" rel="stylesheet">
 
-		<?php if ((($module != 'home' or $controller == "crm" or $controller == "studentpermission") and ($action == "index")) or $module == 'allreport') { ?>
+		<?php if ((($module != 'home' or $controller == "crm" or $controller == "studentpermission" ) and ($action == "index" ) ) or ($module=="mobileapp" AND $action == "list")  or $module == 'allreport' ) { ?>
 			<link href="<?php echo $this->baseUrl() . "/contextMenu/" ?>jquery.contextMenu.css" rel="stylesheet" type="text/css" />
 			<script src="<?php echo $this->baseUrl() . "/contextMenu/" ?>jquery.contextMenu.js" type="text/javascript"></script>
 			<script src="<?php echo $this->baseUrl() . "/contextMenu/" ?>jquery.ui.position.min.js" type="text/javascript"></script>
@@ -492,8 +492,13 @@ if ($module != 'default') {
 					//$("div.container.body").fadeIn(500);
 					$("div.container.body").css("visibility", "visible");
 
-					<?php if ((($module != 'home' or $controller == "crm" or $controller == "studentpermission") and ($action == "index")) or $module == 'allreport') { ?>
+					<?php if ((($module != 'home' or $controller == "crm" or $controller == "studentpermission") and ($action == "index")) or ($module=="mobileapp" AND $action == "list")  or $module == 'allreport') { ?>
 						$('#datatable-responsive').DataTable({
+							responsive: true,
+							"dom": '<"top"i>rt<"bottom"flp><"clear">',
+							searching: false,
+						});
+						$('.datatable-responsive').DataTable({
 							responsive: true,
 							"dom": '<"top"i>rt<"bottom"flp><"clear">',
 							searching: false,

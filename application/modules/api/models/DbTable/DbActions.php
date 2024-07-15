@@ -154,10 +154,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
-			
-			$dbPush = new Api_Model_DbTable_DbPushNotification();
-			$dbPush->updateDeviceInfo($search);
-			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -438,8 +434,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 			);
 		}
-		$dbPush = new Api_Model_DbTable_DbPushNotification();
-		$dbPush->updateDeviceInfo($search);
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
@@ -501,10 +495,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$db = new Api_Model_DbTable_DbApi();
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$row = $db->getAllSlider($search);
-		
-		$dbPush = new Api_Model_DbTable_DbPushNotification();
-		$dbPush->updateDeviceInfo($search);
-			
 		if ($row['status']){
 			$arrResult = array(
 					"result" => $row['value'],
@@ -623,10 +613,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		
 		$search['keyName'] = "lbl_howtouse";
 		$result['lbl_howtouse']= $db->getMobileLabel($search);
-		
-		
-		$dbPush = new Api_Model_DbTable_DbPushNotification();
-		$dbPush->updateDeviceInfo($search);
 		
 		$row = array(
 				'status' =>true,
@@ -785,10 +771,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 				"message" => $row['value'],
 			);
 		}
-		
-		$dbPush = new Api_Model_DbTable_DbPushNotification();
-		$dbPush->updateDeviceInfo($search);
-		
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
@@ -846,10 +828,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 				"message" => $row['value'],
 			);
 		}
-		
-		$dbPush = new Api_Model_DbTable_DbPushNotification();
-		$dbPush->updateDeviceInfo($search);
-		
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
@@ -869,10 +847,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 				"message" => $row['value'],
 			);
 		}
-		
-		$dbPush = new Api_Model_DbTable_DbPushNotification();
-		$dbPush->updateDeviceInfo($search);
-		
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
@@ -1170,10 +1144,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$search['recordType'] = empty($search['recordType'])?"0":$search['recordType'];
 			$db = new Api_Model_DbTable_DbApi();
 			$row = $db->setReadNotification($search);
-			
-			$dbPush = new Api_Model_DbTable_DbPushNotification();
-			$dbPush->updateDeviceInfo($search);
-							
 			if ($row['status']){
 				$arrResult = array(
 						"result" => $row['value'],
@@ -1698,10 +1668,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
-			
-			$dbPush = new Api_Model_DbTable_DbPushNotification();
-			$dbPush->updateDeviceInfo($search);
-			
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){
@@ -1788,10 +1754,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
-			
-			$dbPush = new Api_Model_DbTable_DbPushNotification();
-			$dbPush->updateDeviceInfo($search);
-		
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){
@@ -1819,10 +1781,6 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
-			
-			$dbPush = new Api_Model_DbTable_DbPushNotification();
-			$dbPush->updateDeviceInfo($search);
-		
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){

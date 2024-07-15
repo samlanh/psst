@@ -776,6 +776,66 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		}
 	}
     
-    
+    public function getDiscountsetById($id)
+	{
+		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentLang = $dbp->currentlang();
+		$colunmname = 'name_en';
+		$strDegree = 'title_en';
+		if ($currentLang == 1) {
+			$colunmname = 'name_kh';
+			$strDegree = 'title';
+		}
+
+		$strStudent = "(SELECT CONCAT(COALESCE(s.stu_code,''),' ',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,'')) FROM rms_student AS s WHERE s.stu_id=ds.studentId LIMIT 1) ";
+		$sqlPeriod = "(SELECT $colunmname FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
+		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
+
+		$sql = "SELECT  ds.id, 
+					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
+					discountTitle,
+					(CASE 
+						WHEN ds.discountFor=2 THEN $sqlDiscountFor
+						WHEN ds.discountFor=1 THEN $strStudent
+					END) AS discountForText,
+					(SELECT $colunmname FROM `rms_view` WHERE TYPE=38 AND key_code=ds.discountFor LIMIT 1) AS discountForOption,
+					(SELECT GROUP_CONCAT($strDegree) FROM `rms_items` WHERE FIND_IN_SET(id,degree)) as degreeList,
+					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
+					CONCAT(ds.discountValue, 
+					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,
+					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) StuAmountUsed,
+					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AmountStopUsed,		
+					CONCAT(COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
+					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
+					ds.createDate
+		 FROM rms_dis_setting AS ds WHERE id=" . $db->quote($id);
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql .= $dbp->getAccessPermission('branch_id');
+		$sql .= " LIMIT 1 ";
+		$row = $db->fetchRow($sql);
+		return $row;
+	}
+	function getStudentDiscountById($id){
+		$db = $this->getAdapter();
+		$sql = "
+			SELECT 
+			    s.stu_id,
+				s.stu_code AS stu_code
+				,s.stu_khname AS stuNameKH
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+				,CONCAT(s.stu_khname,'- ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.sex AS sex
+				,tel
+				
+			FROM  `rms_discount_student` AS ds 
+			INNER JOIN rms_student AS s ON ds.studentId = s.stu_id
+		";
+		$sql.=" WHERE ds.isCurrent=1 AND  ds.discountGroupId = $id  ";
+		$sql.=" GROUP BY s.stu_id ";
+		return $db->fetchAll($sql);
+	}
     
 }   

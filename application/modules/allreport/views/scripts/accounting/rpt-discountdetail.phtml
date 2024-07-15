@@ -1,53 +1,23 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('RPT_DISCOUNT_SETTING')); 
+	$this->headTitle($tr->translate('RPT_DISCOUNT_SETTING_DETAIL')); 
 	echo $this->headTitle();
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->form_search;
 	$str="";
 	$classHideHeight=classHideHeight;
+//	print_r($this->rr);
+//	 exit();
 ?>
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div class="card-box">
        	<div class="col-sm-12 border-botom">
 		   	<div class="col-sm-8 pd-0">
-	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_DISCOUNT_SETTING');?></h4>
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_DISCOUNT_SETTING_DETAIL');?></h4>
     		</div>
     		<div class="col-sm-4 text-right"></div>
     	</div>
     </div>
-	<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-		<div class="form-group">
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<?php echo $frm->getElement("title");?>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<?php echo $frm->getElement("branch_id"); ?>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<?php echo $frm->getElement("academic_year"); ?>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<?php echo $frm->getElement("discountFor"); ?>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<input id="studentId" />
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<input id="discountId" />
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-			<?php echo $frm->getElement("discountPeriod"); ?>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<?php echo $frm->getElement('status_search'); ?>
-			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
-				<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-			</div>
-		</div>
-	</form>
-	
 	<div id="divPrint">
 		<style type="text/css">
 			.style{
@@ -110,7 +80,7 @@
 				}
 
 			</style>
-		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
+		
 			<table width="100%">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
@@ -123,44 +93,86 @@
 					<td width="25%" align="left">
 					</td>
 					<td align="center" width="50%">
-						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'khmer os muol light';"><?php echo $tr->translate('RPT_DISCOUNT_SETTING');?></strong><br >
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'khmer os muol light';"><?php echo $tr->translate('RPT_DISCOUNT_SETTING_DETAIL');?></strong><br >
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 					</td>
 					<td align="right" width="25%">&nbsp;</td>
 				</tr>
+				
 				<tr>
 					<td>&nbsp;</td>
 				</tr>
 				<tr> 
 					<td colspan="3" id="exportExcel" >
-						
+						<table width="100%"  align="center" class="style">
+							<tr>
+								<td width="13%" style="white-space: nowrap;">
+									<?php echo $tr->translate("BRANCH");?>/ Branch
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['branch']; ?></strong></div></td>
+								<td width="27%">&nbsp;</td>
+								<td width="10%" style="white-space: nowrap;">
+									<?php echo $tr->translate("ACADEMIC_YEAR");?>/Year
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['academicYear']; ?></strong></div></td>
+							</tr>
+							<tr>
+								<td width="13%" style="white-space: nowrap;">
+									<?php echo $tr->translate("TITLE");?>/ Tittle
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['discountTitle']; ?></strong></div></td>
+								<td width="27%">&nbsp;</td>
+								<td width="10%" style="white-space: nowrap;">
+									<?php echo $tr->translate("DISCOUNT_FOR_TYPE");?>/Discount For
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountForText']; ?></strong></div></td>
+							</tr>
+							<tr>
+								<td width="13%" style="white-space: nowrap;">
+									<?php echo $tr->translate("DISCOUNT_TYPE");?>/ Discount Type
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['discName']; ?></strong></div></td>
+								<td width="27%">&nbsp;</td>
+								<td width="10%" style="white-space: nowrap;">
+									<?php echo $tr->translate("DISCOUNT_OPTION");?>/Discount Option
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountForOption']; ?></strong></div></td>
+							</tr>
+							<tr>
+								<td width="13%" style="white-space: nowrap;">
+									<?php echo $tr->translate("DIS_MAX");?>/ Discount Percent
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['DisValueType']; ?></strong></div></td>
+								<td width="27%">&nbsp;</td>
+								<td width="10%" style="white-space: nowrap;">
+									<?php echo $tr->translate("DISCOUNT_PERIOD");?>/Discount Period
+								</td>
+								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountPeriod']; ?></strong></div></td>
+							</tr>
+
+						</table>
 						<table class="content-data" width="100%" border="1" align="center" >
 							  <thead>
 								  <tr class="style" align="center">
 								    <td scope="col">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-								    <td scope="col">&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('ACADEMIC_YEAR');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('TITLE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_FOR_TYPE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_OPTION');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('COURSE_SERVICE_PRODUCT');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('DIS_MAX');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('AMOUNT').$tr->translate('STUDENT');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_PERIOD');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('BY_USER');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								    <td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_CODE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('SEX');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('Tel');?>&nbsp;</td>
+									
 								  </tr>
 							  </thead>
 							 <?php 
 							 	if(!empty($this->row)){foreach($this->row as $key=>$rs){
 							 ?>
-							  <tr class="context-menu-one hover style" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,3);return false;"  align="left" >
+							  <tr class=" hover style"  align="left" >
 								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
-								    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch']; ?></td>
-								    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" > <?php echo $rs['academicYear']; ?></td>
-								    <td data-label="<?php echo $tr->translate("TITLE");?>" ><?php echo $rs['discountTitle']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" ><?php echo $rs['stu_code']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" > <?php echo $rs['stuNameKH']." - ".$rs['stuNameLatin']; ?></td>
+									<td data-label="<?php echo $tr->translate("SEX");?>" > <?php if($rs['sex']==1){ echo $tr->translate("MALE"); }else{ echo $tr->translate("FEMALE"); }; ?></td>
+									<td data-label="<?php echo $tr->translate("Tel");?>" > <?php echo $rs['tel']; ?></td>
+
+								    <!-- <td data-label="<?php echo $tr->translate("TITLE");?>" ><?php echo $rs['discountTitle']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_FOR_TYPE");?>" ><?php echo $rs['discountForText']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_OPTION");?>" ><?php echo $rs['discountForOption']; ?></td>
 								    <td class="wrapword" data-label="<?php echo $tr->translate("COURSE_SERVICE_PRODUCT");?>" ><?php echo $rs['degreeList']; ?></td>
@@ -170,10 +182,10 @@
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_PERIOD");?>" ><?php echo $rs['discountPeriod']; ?></td>
 								    <td data-label="<?php echo $tr->translate("BY_USER");?>" ><?php echo $rs['user_name']; ?></td>
 								    <td data-label="<?php echo $tr->translate("CREATE_DATE");?>" ><?php echo $rs['createDate']; ?></td>
-								    <td data-label="<?php echo $tr->translate("STATUS");?>" ><?php echo $rs['status']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STATUS");?>" ><?php echo $rs['status']; ?></td> -->
 									
 							  </tr>
-							  <?php }} ?>
+							  <?php  }} ?>
 						</table>
 					</td>
 				</tr>
@@ -183,7 +195,6 @@
 					</td>
 				</tr>
 			</table>
-		</form>
 	</div>	
 </div>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>

@@ -258,12 +258,12 @@ var row=0;
 			callback: function(key, options) {
 				var m = "clicked: " + key;
 				if(key=="detail"){
-					url='<?php echo $this->baseUrl()."/allreport/accounting/rptDiscountdetail/id/";?>';
+					url='<?php echo $this->baseUrl()."/allreport/accounting/rpt-discountdetail/id/";?>';
 				}
 				gotoAction();
 			},
 			items:{
-				"detail": {name: "<?php echo $tr->translate("DISCOUNT_DETAIL");?>", icon: "fa-list", accesskey: "c"},
+				"detail": {name: "<?php echo $tr->translate("RPT_DISCOUNT_SETTING_DETAIL");?>", icon: "fa-list", accesskey: "c"},
 			}
 		});
 	});

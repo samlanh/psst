@@ -91,7 +91,7 @@ class Rsvacl_UseraccessController extends Zend_Controller_Action
     		if($id == 1){
     			$sql = "select acl.acl_id,acl.label,CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access , acl.status, acl.module, acl.is_menu
     			from rms_acl_acl as acl
-    			WHERE 1 " . $where;
+    			WHERE `status`=1 " . $where;
     		}
     		else {
     			$sql="SELECT acl.acl_id,acl.label, CONCAT(acl.module,'/', acl.controller,'/', acl.action) AS user_access, acl.status, acl.module, acl.is_menu

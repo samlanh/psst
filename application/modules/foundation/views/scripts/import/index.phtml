@@ -1,58 +1,96 @@
 <?php
-	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate('IMPORT_FILE_ITEMS_PRICE')); 
-	$url_save = $this->url(array('module'=>'foundation','controller'=>'import','action'=>'index'));
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('IMPORT_FILE_ITEMS_PRICE'));
+$url_save = $this->url(array('module' => 'foundation', 'controller' => 'import', 'action' => 'index'));
+$url_importproduct = $this->url(array('module' => 'foundation', 'controller' => 'import', 'action' => 'import-product'));
 ?>
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <style>
-				table tr th{
-					border: 1px solid #000;	
-				}
-				table {page-break-inside:auto }
-				tr{ page-break-inside:avoid; page-break-after:auto; }
-				#header {
-				  display: table-header-group;
-				  page-break-inside:avoid; page-break-after:auto;
-				}
-				table thead tr td{
-					text-align: center;
-					padding: 5px;
-				}
-				tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
-				
-				table.content-data{
-					border-collapse:collapse;
-					width:100%;
-					border:1px solid #000; 
-					font-family:'Times New Roman','Khmer OS Battambang';
-					font-size:10px;
-					white-space: normal;
-				}
-				table.content-data thead tr.style-head {
-				   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-					background: #ccd9ff;
-				}
-				table.content-data tr.style-rowdata {
-					font-size:12px; 
-					height: 23px;
-				}
+	table tr th {
+		border: 1px solid #000;
+	}
 
-	</style>
-<div class="card-box">
-               	<div class="col-sm-12 border-botom">
-		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('IMPORT_FILE_ITEMS_PRICE')?></h4>
-	    			</div>
-	    			<div class="col-sm-4 text-right">
-	    			</div>
-	    		</div>
-	    </div>
+	table {
+		page-break-inside: auto
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+	}
+
+	#header {
+		display: table-header-group;
+		page-break-inside: avoid;
+		page-break-after: auto;
+	}
+
+	table thead tr td {
+		text-align: center;
+		padding: 5px;
+	}
+
+	tr.line td {
+		border-bottom: 2px solid #000;
+		padding-top: 5px;
+	}
+
+	table.content-data {
+		border-collapse: collapse;
+		width: 100%;
+		border: 1px solid #000;
+		font-family: 'Times New Roman', 'Khmer OS Battambang';
+		font-size: 10px;
+		white-space: normal;
+	}
+
+	table.content-data thead tr.style-head {
+		line-height: 25px;
+		padding: 1px 0px;
+		white-space: nowrap;
+		height: 22px;
+		background: #ccd9ff;
+	}
+
+	table.content-data tr.style-rowdata {
+		font-size: 12px;
+		height: 23px;
+	}
+</style>
 <div class="card-box">
 	<div class="col-sm-12 border-botom">
-	<form id='add_client' action="<?php echo $url_save; ?>" enctype="multipart/form-data" dojoType="dijit.form.Form" method="post">
-	<script type="dojo/method" event="onSubmit">			
+		<div class="col-sm-8 pd-0">
+			<h4 class="m-b-0"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('IMPORT_FILE_ITEMS_PRICE') ?></h4>
+		</div>
+		<div class="col-sm-4 text-right">
+		</div>
+	</div>
+</div>
+<div class="card-box">
+	<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#panel1" role="tab" aria-expanded="true"><i
+					class="fa fa-user ml-2"></i> Import Student</a>
+		</li>
+		<li class="nav-item ">
+			<a class="nav-link" data-toggle="tab" href="#panel2" role="tab" aria-expanded="false">
+				<i class="fa fa-book ml-2"></i>Import Product</a>
+		</li>
+	</ul>
+</div>
+<div class="col-md-12">
+	<!-- Tab panels -->
+	<div class="tab-content vertical">
+		<!--Panel 1-->
+		<div class="tab-pane fade active in" id="panel1" role="tabpanel">
+			<div class="card-box">
+				<div class="col-sm-12 border-botom">
+					<form id='add_client' action="<?php echo $url_save; ?>" enctype="multipart/form-data"
+						dojoType="dijit.form.Form" method="post">
+						<script type="dojo/method" event="onSubmit">
 		if(this.validate()) {
 			branch = dijit.byId('branch').get('value');
 			if(branch==-1){
@@ -64,74 +102,158 @@
 			return false;
 		}
 	</script>
-			<table width="100%" style=" margin-top:10px;" border="1">
-				<tr>
-					<td colspan="2">
-						<h3>Sample Format Excel</h3>
-						<table class="content-data" cellpadding="4"​   border="1" >
-							<thead>
-								<tr  class="style-head">
-									<td><?php echo $tr->translate("No");?>-A</td>
-									<td><?php echo $tr->translate("STUDENT_ID");?>-B</td>
-									<td><?php echo $tr->translate("គោត្តនាម-នាម");?>-C</td>
-									<td><?php echo $tr->translate("First Name");?>-D</td>
-									<td><?php echo $tr->translate("Last Name");?>-E</td>
-									<td><?php echo $tr->translate("ភេទ");?>-F</td>
-									<td><?php echo $tr->translate("លេខទូរសព្ទ");?>-G</td>
-									<td>&nbsp;<?php echo $tr->translate("ថ្ងៃ ខែ ឆ្នំាកំណើត");?>&nbsp;-H</td>
-									<td><?php echo $tr->translate("កន្លែងកំណើត");?>-I</td>
-									<td><?php echo $tr->translate("ឈ្មោះឳពុក");?>-J</td>
-									<td><?php echo $tr->translate("លេខទូរសព្ទឳពុក");?>-K</td>
-									<td>&nbsp;<?php echo $tr->translate("ឈ្មោះម្ដាយ");?>&nbsp;-L</td>
-									<td><?php echo $tr->translate("លេខទូរសព្ទម្ដាយ");?>-M</td>
-									<td><?php echo $tr->translate("ឈ្មោះអាណាព្យាបាល");?>-N</td>
-									<td><?php echo $tr->translate("លេខទូរសព្ទអាណាព្យាបាល");?>-O</td>
-									<td><?php echo $tr->translate("Degree");?>-P</td>
-									<td><?php echo $tr->translate("Grade");?>-Q</td>
-									<td><?php echo $tr->translate("Class");?>-R</td>
-									<td><?php echo $tr->translate("first_enroll_date");?>-S</td>
-									<td><?php echo $tr->translate("first_enroll_academic_year");?>-T</td>
-									<td><?php echo $tr->translate("created_date");?>-U</td>
-									<td><?php echo $tr->translate("inactive");?>-V</td>
-									<td><?php echo $tr->translate("room_name");?>-W</td>
-								</tr>
-							</thead>
+
+						<table width="100%" style=" margin-top:10px;" border="1">
+							<tr>
+								<td colspan="2">
+									<h3>Sample Format Excel</h3>
+									<table class="content-data" cellpadding="4" ​ border="1">
+										<thead>
+											<tr class="style-head">
+												<td><?php echo $tr->translate("No"); ?>-A</td>
+												<td><?php echo $tr->translate("STUDENT_ID"); ?>-B</td>
+												<td><?php echo $tr->translate("គោត្តនាម-នាម"); ?>-C</td>
+												<td><?php echo $tr->translate("First Name"); ?>-D</td>
+												<td><?php echo $tr->translate("Last Name"); ?>-E</td>
+												<td><?php echo $tr->translate("ភេទ"); ?>-F</td>
+												<td><?php echo $tr->translate("លេខទូរសព្ទ"); ?>-G</td>
+												<td>&nbsp;<?php echo $tr->translate("ថ្ងៃ ខែ ឆ្នំាកំណើត"); ?>&nbsp;-H
+												</td>
+												<td><?php echo $tr->translate("កន្លែងកំណើត"); ?>-I</td>
+												<td><?php echo $tr->translate("ឈ្មោះឳពុក"); ?>-J</td>
+												<td><?php echo $tr->translate("លេខទូរសព្ទឳពុក"); ?>-K</td>
+												<td>&nbsp;<?php echo $tr->translate("ឈ្មោះម្ដាយ"); ?>&nbsp;-L</td>
+												<td><?php echo $tr->translate("លេខទូរសព្ទម្ដាយ"); ?>-M</td>
+												<td><?php echo $tr->translate("ឈ្មោះអាណាព្យាបាល"); ?>-N</td>
+												<td><?php echo $tr->translate("លេខទូរសព្ទអាណាព្យាបាល"); ?>-O</td>
+												<td><?php echo $tr->translate("Degree"); ?>-P</td>
+												<td><?php echo $tr->translate("Grade"); ?>-Q</td>
+												<td><?php echo $tr->translate("Class"); ?>-R</td>
+												<td><?php echo $tr->translate("first_enroll_date"); ?>-S</td>
+												<td><?php echo $tr->translate("first_enroll_academic_year"); ?>-T</td>
+												<td><?php echo $tr->translate("created_date"); ?>-U</td>
+												<td><?php echo $tr->translate("inactive"); ?>-V</td>
+												<td><?php echo $tr->translate("room_name"); ?>-W</td>
+											</tr>
+										</thead>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2"><br /><br /><br />
+									<div class="col-sm-3 text-right"></div>
+									<div class="col-sm-4 text-right">
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-5 col-xs-12">
+												<?php echo $tr->translate("BRANCH"); ?>
+											</label>
+											<div class="col-md-9">
+												<select name="branch" id="branch" dojoType="dijit.form.FilteringSelect">
+													<option value="-1"><?php echo $tr->translate("SELECT_BRANCH"); ?>
+													</option>
+													<?php if (!empty($this->branch)) {
+														foreach ($this->branch as $branch) { ?>
+															<option value="<?php echo $branch['id'] ?>">
+																<?php echo $branch['name'] ?></option>
+														<?php }
+													} ?>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6"><?php echo $tr->translate('CHOOSE_FILE') ?>(Exel)</div>
+											<div class="col-md-6"><input type="file" name="file_excel" id="file_excel"
+													required="required" class="fullside" /></div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-3"></div>
+											<div class="col-md-9" align="left">
+												<input type="submit" value="SAVE_CLOSE"
+													label="<?php echo $tr->translate('IMPORT_FILE') ?>" id="import_file"
+													dojoType="dijit.form.Button" name="import_file"
+													iconClass="dijitEditorIcon dijitEditorIconSave" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-5 text-right"></div>
+								</td>
+							</tr>
 						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2"><br /><br /><br />
-						<div class="col-sm-3 text-right"></div>	
-						<div class="col-sm-4 text-right">
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-5 col-xs-12" >
-									<?php echo $tr->translate("BRANCH");?>
-				                </label>
-								<div class="col-md-9">
-									<select name="branch" id="branch" dojoType="dijit.form.FilteringSelect" >
-										<option value="-1"><?php echo $tr->translate("SELECT_BRANCH");?></option>
-										<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
-											<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
-										<?php }}?>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-6"><?php echo $tr->translate('CHOOSE_FILE')?>(Exel)</div>
-								<div class="col-md-6"><input type="file" name="file_excel" id="file_excel" required="required" class="fullside"/></div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-3"></div>
-								<div class="col-md-9" align="left">
-									<input type="submit" value="SAVE_CLOSE" label="<?php echo $tr->translate('IMPORT_FILE')?>" id="import_file" dojoType="dijit.form.Button" name="import_file"
-										iconClass="dijitEditorIcon dijitEditorIconSave" /> 
-								</div>
-							</div>
-    					</div>
-    					<div class="col-sm-5 text-right"></div>		
-					</td>
-				</tr>
-			</table>	
-		</form>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade in" id="panel2" role="tabpanel">
+			<div class="card-box">
+				<table class="content-data" cellpadding="4" ​ border="1">
+					<thead>
+						<tr class="style-head">
+							<td><?php echo $tr->translate("No."); ?>-A</td>
+							<td><?php echo $tr->translate("Product Code"); ?>-B</td>
+							<td><?php echo $tr->translate("Product Name"); ?>-C</td>
+							<td><?php echo $tr->translate("Catgetory"); ?>-D</td>
+							<td><?php echo $tr->translate("Costing"); ?>-E</td>
+							<td><?php echo $tr->translate("Retail Price"); ?>-F</td>
+							<td><?php echo $tr->translate("Price as Set"); ?>-G</td>
+							<td><?php echo $tr->translate("Qty"); ?>-H</td>
+							<td><?php echo $tr->translate("is product set"); ?>-I</td>
+						</tr>
+					</thead>
+					<tr>
+								<td colspan="9"><br /><br /><br />
+									<div class="col-sm-3 text-right"></div>
+									<div class="col-sm-4 text-right">
+									<form id='add_product' action="<?php echo $url_importproduct; ?>" enctype="multipart/form-data"
+															dojoType="dijit.form.Form" method="post">
+															<script type="dojo/method" event="onSubmit">
+											if(this.validate()) {
+												branch_id = dijit.byId('branch_id').get('value');
+												if(branch_id==-1){
+													dijit.byId('branch_id').focus();
+													return false;
+												}
+												return true;
+											}else{
+												return false;
+											}
+										</script>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-5 col-xs-12">
+												<?php echo $tr->translate("BRANCH"); ?>
+											</label>
+											<div class="col-md-9">
+												<select name="branch_id" id="branch_id" dojoType="dijit.form.FilteringSelect">
+													<option value="-1"><?php echo $tr->translate("SELECT_BRANCH"); ?>
+													</option>
+													<?php if (!empty($this->branch)) {
+														foreach ($this->branch as $branch) { ?>
+															<option value="<?php echo $branch['id'] ?>">
+																<?php echo $branch['name'] ?></option>
+														<?php }
+													} ?>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6"><?php echo $tr->translate('CHOOSE_FILE') ?>(Exel)</div>
+											<div class="col-md-6"><input type="file" name="file_excel_product" id="file_excel_product"
+													required="required" class="fullside" /></div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-3"></div>
+											<div class="col-md-9" align="left">
+												<input type="submit" value="SAVE_CLOSE"
+													label="<?php echo $tr->translate('IMPORT_FILE') ?>" id="import_file_excel"
+													dojoType="dijit.form.Button" name="import_file"
+													iconClass="dijitEditorIcon dijitEditorIconSave" />
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-5 text-right"></div>
+								</td>
+							</tr>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>

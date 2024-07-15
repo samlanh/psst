@@ -2466,7 +2466,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			}
 			$sql .= ' AND ( ' . implode(' OR ', $s_whereee) . ')';
 		}
-		$sql .= ' ORDER BY m.schoolOption ASC,m.type DESC,m.ordering DESC, m.title ASC';
+		$sql .= ' ORDER BY m.schoolOption ASC,m.type ASC,m.ordering DESC, m.title ASC';
 		return $db->fetchAll($sql);
 	}
 	function getAllItemDetail($data = null)
@@ -2970,7 +2970,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$strDiscountList = '';
 			$rsDiscount = $this->getDiscountListbyStudent($param);
 			if (!empty($rsDiscount)) {
-				$strDiscountList .= "<ul class='list-unstyled top_profiles scroll-view '>";
+				$strDiscountList .= "<ul class='list-unstyled top_profiles scroll-view'>";
 				foreach($rsDiscount as $Discount){
 
 
@@ -4862,19 +4862,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					
 					DATE_FORMAT(ds.endDate,'%d-%b') endDay,
 					DATE_FORMAT(ds.endDate,'%y') endYear
-				FROM
-					`rms_dis_setting` as ds,
-					rms_discount_student disc
-				WHERE ds.id=disc.discountGroupId
-					AND disc.isCurrent=1
-					 ";
+				FROM `rms_dis_setting` AS ds
+					LEFT JOIN rms_discount_student disc
+					ON ds.`id`=disc.`discountGroupId`
+				WHERE disc.isCurrent=1 ";
 		}
 		$strPeriod="";
 		$strDegree="";
 		$strStudent="";
 
-		$firstCondition = " ds.discountFor=1";
-		$secondCondition = "  ds.discountFor=2";
+		
+		//$secondCondition = "  ds.discountFor=2 ";
 		if (!empty($data['id'])) {//discount setting id
 			$sql .= " AND ds.id=" . $data['id'];
 		}
@@ -4883,22 +4881,25 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= " AND ds.discountId=" . $data['discountId'];
 		}
 		if (!empty($data['studentId'])) {
-			$strStudent .= " AND disc.studentId=" . $data['studentId'];
+			$sql .= " AND disc.studentId=" . $data['studentId'];
 		}
 
 		if (!empty($data['degree'])) {
-			$strDegree .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
+			$sql .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
 		}
 
 		if (!empty($data['discountPeriod'])) {
-			$strPeriod .= " AND ds.discountPeriod=" . $data['discountPeriod'];
+			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
-		$firstWhere = " AND ((".$firstCondition . $strStudent . $strDegree . $strPeriod . ")";
-		$secondWhere = " OR (".$secondCondition.$strDegree.$strPeriod."))";
+
+		$firstCondition = " OR ds.discountFor=1 ";
+		$sql .= $firstCondition;
+		// $firstWhere = " AND ((".$firstCondition . $strStudent . $strDegree . $strPeriod . ")";
+		// $secondWhere = " OR (".$secondCondition.$strDegree.$strPeriod."))";
 		if (!empty($data['fetchAll'])) {
-			return $this->getAdapter()->fetchAll($sql.$firstWhere.$secondWhere);
+			return $this->getAdapter()->fetchAll($sql);
 		} else {
-			return $this->getAdapter()->fetchRow($sql.$firstWhere.$secondWhere);
+			return $this->getAdapter()->fetchRow($sql);
 		}
 	}
 

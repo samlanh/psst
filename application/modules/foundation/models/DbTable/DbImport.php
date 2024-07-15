@@ -25,109 +25,120 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 
 			$studentId = $this->checkStudentIdExist($param);
 
-			if (empty($studentId)) {
-				$arr = array(
-					'branch_id' => $formData['branch'],
-					'user_id' => 1,
-					'stu_code' => $data[$i]['B'],
-					'stu_khname' => $data[$i]['C'],
-					'stu_enname' => trim($data[$i]['D']),
-					'last_name' => trim($data[$i]['E']),
-					// 'sex' => ($data[$i]['F'] == "M") ? 1 : 2,
-					'tel' => $data[$i]['G'],
-					'dob' => date("Y-m-d", strtotime($data[$i]['H'])),
-					'pob' => $data[$i]['I'],
-
-					'father_enname' => $data[$i]['J'],
-					'father_khname' => $data[$i]['J'],
-					'father_phone' => $data[$i]['K'],
-
-					'mother_khname' => $data[$i]['L'],
-					'mother_enname' => $data[$i]['L'],
-					'mother_phone' => $data[$i]['M'],
-
-					'guardian_first_name' => $data[$i]['N'],
-					'guardian_enname' => $data[$i]['N'],
-					'guardian_khname' => $data[$i]['N'],
-					'guardian_tel' => $data[$i]['O'],
-					'remark' => 'version2',
-					'customer_type' => 1,
-					'status' => 1,
-					'modify_date' => date("Y-m-d H:i:s"),
-					'create_date' => date("Y-m-d", strtotime($data[$i]['S']))
-				);
-				if (!empty($data[$i]['F'])) {
-					$arr['sex'] = ($data[$i]['F'] == "M") ? 1 : 2;
+			if (!empty($studentId)) {
+				if ($data[$i]['V'] == 'quit') {
+					$array=array(
+						'stop_type'=>1,
+						'note'=>'version3'
+					);
+					$where="stu_id=".$studentId." AND academic_year=2";
+					$this->_name = 'rms_group_detail_student';
+					$this->update($array,$where);
 				}
-				$this->_name = 'rms_student';
-				$studentId = $this->insert($arr);
 			}
 
-			$degreeId = $this->degreeList($data[$i]['P']);
-			$gradeId =$data[$i]['Q'];
+			// 	$arr = array(
+			// 		'branch_id' => $formData['branch'],
+			// 		'user_id' => 1,
+			// 		'stu_code' => $data[$i]['B'],
+			// 		'stu_khname' => $data[$i]['C'],
+			// 		'stu_enname' => trim($data[$i]['D']),
+			// 		'last_name' => trim($data[$i]['E']),
+			// 		// 'sex' => ($data[$i]['F'] == "M") ? 1 : 2,
+			// 		'tel' => $data[$i]['G'],
+			// 		'dob' => date("Y-m-d", strtotime($data[$i]['H'])),
+			// 		'pob' => $data[$i]['I'],
 
-			$param = array(
-				'room_name'=>$data[$i]['W']
-			);
-			$roomId = $this->getRoomId($param);
+			// 		'father_enname' => $data[$i]['J'],
+			// 		'father_khname' => $data[$i]['J'],
+			// 		'father_phone' => $data[$i]['K'],
 
-			$param = array(
-					'branch_id'=>$formData['branch'],
-					'group_code'=>$data[$i]['R'],
-					'room_id'=>$roomId,
-					'academic_year'=>2,
-					'degree'=>$degreeId,
-					'grade'=>$gradeId,
-					'is_pass'=>1,
-					'is_use'=>1,
-					'tuitionfee_id'=>2,
-					'school_option'=>1,
-					'note'=>'version2',
+			// 		'mother_khname' => $data[$i]['L'],
+			// 		'mother_enname' => $data[$i]['L'],
+			// 		'mother_phone' => $data[$i]['M'],
 
-			);
-			$groupResult = $this->checkGroupExits($param);
-			if (!empty($groupResult)) {
-				$groupId = $groupResult['id'];
-			}else{
-				$groupId = $this->insertGroup($param);
+			// 		'guardian_first_name' => $data[$i]['N'],
+			// 		'guardian_enname' => $data[$i]['N'],
+			// 		'guardian_khname' => $data[$i]['N'],
+			// 		'guardian_tel' => $data[$i]['O'],
+			// 		'remark' => 'version2',
+			// 		'customer_type' => 1,
+			// 		'status' => 1,
+			// 		'modify_date' => date("Y-m-d H:i:s"),
+			// 		'create_date' => date("Y-m-d", strtotime($data[$i]['S']))
+			// 	);
+			// 	if (!empty($data[$i]['F'])) {
+			// 		$arr['sex'] = ($data[$i]['F'] == "M") ? 1 : 2;
+			// 	}
+			// 	$this->_name = 'rms_student';
+			// 	$studentId = $this->insert($arr);
 			}
 
-			$this->_name='rms_group_detail_student';
-			$arr = array(
-					'branch_id'		=>$formData['branch'],
-					'studentId'		=>$studentId,//$_data['stu_id_'.$k],
-					'itemType'		=>1,
-					'groupId'		=>$groupId,
-					'academicYear'	=>2,
-					'feeId'			=>2,//feeId
-					'oldFeeId'		=>1,//Old Fee Id
-					'schoolOption'  =>1,
-					'degree'		=>$degreeId,
-					'grade'			=>$gradeId,
-					'session'		=>'',
-					'startDate'		=>'',
-					'endDate'		=>'',
-					'balance'		=>0,
-					'discountType'	=>'',
-					'discountAmount'=>'',
-					'user_id'		=>$this->getUserId(),
-					'status'		=>1,
-					'create_date'	=>date('Y-m-d H:i:s'),
-					'modify_date'	=>date('Y-m-d H:i:s'),
-					'old_group'		=>'',
-					'isSetGroup'	=>empty($groupId)?0:1,
-					'stopType'		=>0,
-					'isCurrent'		=>1,
-					'isNewStudent'	=>0,
-					'isMaingrade'	=>1,//not sure
-					'entryFrom'	=>4,//not sure
-					'remark'	=>'version2'
-			);
-			if($data[$i]['V']=='quit'){
-				$arr['stopType'] = 1;
-			}
-			$dbg->AddItemToGroupDetailStudent($arr);
-    	}
+			// $degreeId = $this->degreeList($data[$i]['P']);
+			// $gradeId =$data[$i]['Q'];
+
+			// $param = array(
+			// 	'room_name'=>$data[$i]['W']
+			// );
+			// $roomId = $this->getRoomId($param);
+
+			// $param = array(
+			// 		'branch_id'=>$formData['branch'],
+			// 		'group_code'=>$data[$i]['R'],
+			// 		'room_id'=>$roomId,
+			// 		'academic_year'=>2,
+			// 		'degree'=>$degreeId,
+			// 		'grade'=>$gradeId,
+			// 		'is_pass'=>1,
+			// 		'is_use'=>1,
+			// 		'tuitionfee_id'=>2,
+			// 		'school_option'=>1,
+			// 		'note'=>'version2',
+
+			// );
+			// $groupResult = $this->checkGroupExits($param);
+			// if (!empty($groupResult)) {
+			// 	$groupId = $groupResult['id'];
+			// }else{
+			// 	$groupId = $this->insertGroup($param);
+			// }
+
+			// $this->_name='rms_group_detail_student';
+			// $arr = array(
+			// 		'branch_id'		=>$formData['branch'],
+			// 		'studentId'		=>$studentId,//$_data['stu_id_'.$k],
+			// 		'itemType'		=>1,
+			// 		'groupId'		=>$groupId,
+			// 		'academicYear'	=>2,
+			// 		'feeId'			=>2,//feeId
+			// 		'oldFeeId'		=>1,//Old Fee Id
+			// 		'schoolOption'  =>1,
+			// 		'degree'		=>$degreeId,
+			// 		'grade'			=>$gradeId,
+			// 		'session'		=>'',
+			// 		'startDate'		=>'',
+			// 		'endDate'		=>'',
+			// 		'balance'		=>0,
+			// 		'discountType'	=>'',
+			// 		'discountAmount'=>'',
+			// 		'user_id'		=>$this->getUserId(),
+			// 		'status'		=>1,
+			// 		'create_date'	=>date('Y-m-d H:i:s'),
+			// 		'modify_date'	=>date('Y-m-d H:i:s'),
+			// 		'old_group'		=>'',
+			// 		'isSetGroup'	=>empty($groupId)?0:1,
+			// 		'stopType'		=>0,
+			// 		'isCurrent'		=>1,
+			// 		'isNewStudent'	=>0,
+			// 		'isMaingrade'	=>1,//not sure
+			// 		'entryFrom'	=>4,//not sure
+			// 		'remark'	=>'version2'
+			// );
+			// if($data[$i]['V']=='quit'){
+			// 	$arr['stopType'] = 1;
+			// }
+			// $dbg->AddItemToGroupDetailStudent($arr);
+    	// }
     }
 	function getRoomId($data){
 		$sql = "SELECT room_id FROM rms_room WHERE 1 ";
@@ -213,6 +224,74 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 		// echo $sql;
 		// exit();
 		return $db->fetchRow($sql);
+	}
+	function importProduct($formData,$data)
+	{
+		
+		$count = count($data);
+		for ($i = 2; $i <= $count; $i++) {
+			$param = array(
+				'title'=>$data[$i]['D'],
+				'title_en'=>$data[$i]['D'],
+				'schoolOption'=>'1',
+
+			);
+			$categoryId = $this->checkProductCategory($param);
+
+				$array = array(
+					'items_id' => $categoryId,
+					'code' => $data[$i]['B'],
+					'title' => $data[$i]['C'],
+					'title_en' => $data[$i]['C'],
+					'product_type' => 1,
+					'items_type' => 3,//product
+					'schoolOption' => '1',
+					'is_onepayment' => 1,
+					'degreeOption' => '1,2,3,4',
+				);
+
+				$this->_name='rms_itemsdetail';
+				$proId = $this->insert($array);
+
+				$arr = array(
+					'pro_id'=>$proId,
+					'branch_id'=>$data['branch_id'],
+					'pro_qty'=>0,
+					'costing'=>$data[$i]['E'],
+					'price'=>$data[$i]['F'],
+					'price_set'=>$data[$i]['G'],
+				);
+				$this->_name='rms_product_location';
+			$this->insert($arr);
+		}
+	}
+	function checkProductCategory($data){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT 
+				i.id FROM rms_items AS i
+			WHERE 1 ";
+		
+		if (!empty($data['title'])){
+			$sql.=" AND i.title= '".$data['title']."'";
+		}
+		if (!empty($data['title_en'])){
+			$sql.=" AND i.title_en = '".$data['title_en']."'";
+		}
+		$sql.=" LIMIT 1 ";
+		$itemId= $db->fetchOne($sql);
+		if (empty($itemId)) {
+			$arr = array(
+				'title'=>$data['title'],
+				'title_en'=>$data['title_en'],
+				'schoolOption'=>$data['schoolOption'],
+				'type'=>3,
+			);
+			$this->_name = 'rms_items';
+			return $this->insert($arr);
+		} else {
+			return $itemId;
+		}
 	}
 }   
 

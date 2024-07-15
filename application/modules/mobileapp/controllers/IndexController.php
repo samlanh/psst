@@ -41,20 +41,79 @@ class Mobileapp_IndexController extends Zend_Controller_Action
 		$this->view->summaryAccount = array(
 				array("label"=>$tr->translate("STUDENT"),"value"=>$countStudent,"color"=>"#113a90"),
 				array("label"=>$tr->translate("TEACHER"),"value"=>$countTeacher,"color"=>"#f32f2f"),
-				array("label"=>$tr->translate("BUS"),"value"=>$countSchoolBus,"color"=>"#42ae5f"),
+				array("label"=>$tr->translate("SCHOOL_BUS"),"value"=>$countSchoolBus,"color"=>"#42ae5f"),
 				array("label"=>$tr->translate("Unknow"),"value"=>$countUnknow,"color"=>"#a9bdc8"),
 			);
 			
 		$search["tokenType"] = 1;
+		$search["limitRecord"] = 50;
 		$deviceRs = $db->getDeviceAndAccountInfo($search);
-		
 		$this->view->deviceRs =$deviceRs;
+		
+		$search["tokenType"] = 3;
+		$deviceRs = $db->getDeviceAndAccountInfo($search);
+		$this->view->teacherDevice =$deviceRs;
+		
 		//$rs = $db->updateDeviceInfo($deviceRs);
 		
 		//$deviceRs = $db->getDeviceAndAccountInfo($search);
 		//$this->view->deviceRs =$deviceRs;
 			
     }
+	public function addAction()
+	{
+		$this->_redirect('/mobileapp/index');
+	}
+	 public function listAction()
+    {
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$db = new Mobileapp_Model_DbTable_DbDashboard();
+		
+		$tokenType=$this->getRequest()->getParam("recordtype");
+		$tokenType = empty($tokenType) ? 0 : $tokenType;
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+		}
+		else{
+			$search = array(
+					'adv_search' => '',
+					'degree'=> '',
+					'start_date'=> date('Y-m-d'),
+					'end_date'=>date('Y-m-d'),
+					'status'=> -1,
+					'tokenType'=> $tokenType
+				);
+		}
+		$this->view->search =$search;
+		$rsRecord = $db->getDeviceAndAccountInfo($search);
+		$this->view->rsRecord =$rsRecord;
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->formSearch=$form;
+    }
+	
+	function changePasswordAction(){
+		if($this->getRequest()->isPost()){
+			try{
+				$data = $this->getRequest()->getPost();
+				$db = new Mobileapp_Model_DbTable_DbDashboard();
+				$data["tokenType"] = empty($data["deviceTokenType"]) ? 0 : $data["deviceTokenType"];
+				$row = 0;
+				if($data["tokenType"]==1){
+					$row = $db->updateStudentPassword($data);
+				}else if($data["tokenType"]==3){
+					$row = $db->updateTeacherPassword($data);
+				}
+				print_r(Zend_Json::encode($row));
+    			exit();
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			}
+		}
+	}
 
 }
 

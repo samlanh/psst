@@ -1,0 +1,278 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle($tr->translate('RPT_DISCOUNT_SETTING')); 
+	echo $this->headTitle();
+	$base_url = Application_Form_FrmMessage::getUrl("/");
+	$frm = $this->form_search;
+	$str="";
+	$classHideHeight=classHideHeight;
+?>
+<div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
+	<div class="card-box">
+       	<div class="col-sm-12 border-botom">
+		   	<div class="col-sm-8 pd-0">
+	    		<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_DISCOUNT_SETTING');?></h4>
+    		</div>
+    		<div class="col-sm-4 text-right"></div>
+    	</div>
+    </div>
+	<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("title");?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("branch_id"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("academic_year"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement("discountFor"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="studentId" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="discountId" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+			<?php echo $frm->getElement("discountPeriod"); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<?php echo $frm->getElement('status_search'); ?>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</div>
+		</div>
+	</form>
+	
+	<div id="divPrint">
+		<style type="text/css">
+			.style{
+				line-height: 20px;font-size: 12px !important;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+			.style1:hover{ background: #ccc; }
+			table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
+			tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
+			#header{
+				display: table-header-group;
+				page-break-inside:avoid; page-break-after:auto;
+				margin-top: 100px;
+			}
+			@media print {
+			div.divFooter {
+				position: fixed;
+				top: 0;
+				width: 100%;
+				height: 100px;
+				bottom:0px;
+				margin:0;
+			}
+			}
+			.center{text-align: center !important;}
+			table.content-data{
+				border-collapse:collapse;
+				border:1px solid #000; 
+				font-size:12px;
+			}
+			table.content-data thead tr.style {
+			line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+				background: #c1d0f3;
+				font-weight:600;
+			}
+			tr.style {
+			 white-space: nowrap;
+			}
+		
+			
+			table tr td{
+				padding:0 2px;
+			}
+			.wrapword{
+				white-space: normal;
+				width:200px;
+				word-break: break-all;
+			}
+			@media print{
+						@page{
+							margin:0.3cm 0.7cm 0cm 0.7cm;
+							page-break-before: avoid;
+							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+							-ms-transform: scale(0.5);   /* IE 9 */
+							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+							transform: scale(0.5);
+							page: A4;
+						}
+				}
+
+			</style>
+		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
+			<table width="100%">
+				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr class="line"><td colspan="3"></td></tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="25%" align="left">
+					</td>
+					<td align="center" width="50%">
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'khmer os muol light';"><?php echo $tr->translate('RPT_DISCOUNT_SETTING');?></strong><br >
+						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
+					</td>
+					<td align="right" width="25%">&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr> 
+					<td colspan="3" id="exportExcel" >
+						
+						<table class="content-data" width="100%" border="1" align="center" >
+							  <thead>
+								  <tr class="style" align="center">
+								    <td scope="col">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+								    <td scope="col">&nbsp;<?php echo $tr->translate('BRANCH');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('ACADEMIC_YEAR');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('TITLE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_FOR_TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_OPTION');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('COURSE_SERVICE_PRODUCT');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DIS_MAX');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('AMOUNT').$tr->translate('STUDENT');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_PERIOD');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('BY_USER');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
+								  </tr>
+							  </thead>
+							 <?php 
+							 	if(!empty($this->row)){foreach($this->row as $key=>$rs){
+							 ?>
+							  <tr class="context-menu-one hover style" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,3);return false;"  align="left" >
+								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
+								    <td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo $rs['branch']; ?></td>
+								    <td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" > <?php echo $rs['academicYear']; ?></td>
+								    <td data-label="<?php echo $tr->translate("TITLE");?>" ><?php echo $rs['discountTitle']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DISCOUNT_FOR_TYPE");?>" ><?php echo $rs['discountForText']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DISCOUNT_OPTION");?>" ><?php echo $rs['discountForOption']; ?></td>
+								    <td class="wrapword" data-label="<?php echo $tr->translate("COURSE_SERVICE_PRODUCT");?>" ><?php echo $rs['degreeList']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DISCOUNT_TYPE");?>" ><?php echo $rs['discName']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DIS_MAX");?>" ><?php echo $rs['DisValueType']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT");?>" ><?php echo $rs['StuAmountUsed']; ?></td>
+								    <td data-label="<?php echo $tr->translate("DISCOUNT_PERIOD");?>" ><?php echo $rs['discountPeriod']; ?></td>
+								    <td data-label="<?php echo $tr->translate("BY_USER");?>" ><?php echo $rs['user_name']; ?></td>
+								    <td data-label="<?php echo $tr->translate("CREATE_DATE");?>" ><?php echo $rs['createDate']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STATUS");?>" ><?php echo $rs['status']; ?></td>
+									
+							  </tr>
+							  <?php }} ?>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" width="100%">
+						<?php echo $this->rsfooteracc;?>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>	
+</div>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require("dojo.data.ItemFileWriteStore"); 
+var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		required: false,  
+		autoComplete: false,
+		queryExpr: "*${0}*",                      
+	    id: "studentId",
+	    name: "studentId",  
+	    tabindex: "1",         
+	    class: 'fullside',  
+	    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>", 
+	    
+	}, "studentId");
+
+	new dijit.form.FilteringSelect({
+		store: disname_store,
+		required: false,   
+		autoComplete: false,
+		queryExpr: "*${0}*",  
+		id: "discountId",
+		name: "discountId", 
+		value:"<?php echo $this->adv_search['discountId'];?>",          
+		class: "fullside", 
+		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		onChange: function() {  
+		}
+	}, "discountId");
+
+	branchId = dijit.byId('branch_id');
+	branchId.on('change',function(evt){
+		branchId = dijit.byId('branch_id').get('value');
+		if(branchId==''){
+			dijit.byId("branch_id").focus();
+			return false;
+		}
+		getAllstudentBranch();
+		
+	});
+
+	getAllstudentBranch();
+});
+
+function getAllstudentBranch(){
+	dijit.byId("studentId").reset();
+	branchId = dijit.byId('branch_id').get('value');
+	if(branchId==''){
+		 dijit.byId('branch_id').focus();
+		 return false;
+	}
+	
+	var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
+	
+	contentData = {
+			'branchId':branchId,
+			'customerType':1
+			}
+	selectedId='<?php echo $this->adv_search['studentId'];?>';
+	getAllStudentByBranch(urlGet,contentData,selectedId);
+}
+
+var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="detail"){
+					url='<?php echo $this->baseUrl()."/allreport/accounting/rptDiscountdetail/id/";?>';
+				}
+				gotoAction();
+			},
+			items:{
+				"detail": {name: "<?php echo $tr->translate("DISCOUNT_DETAIL");?>", icon: "fa-list", accesskey: "c"},
+			}
+		});
+	});
+	function setrowdata(index,type){
+		row = index;
+		typereceipt = type;
+	}
+	var recordid ='';
+	function gotoAction(){
+		 window.open(url+row, '_blank');
+	}
+</script>

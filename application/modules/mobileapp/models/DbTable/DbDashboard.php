@@ -10,8 +10,12 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 	
 	function getLastActiveDeviceInfo($data){
 		
-		$apiKey = "OWY1Nzg2YjgtMjhhZi00Njk1LTg5YTQtNTQwY2NkM2U2NTQ1";
-		$appId = "3c593dd9-4549-422c-ac11-4e202953100c";
+		//$apiKey = "OWY1Nzg2YjgtMjhhZi00Njk1LTg5YTQtNTQwY2NkM2U2NTQ1";
+		//$appId = "3c593dd9-4549-422c-ac11-4e202953100c";
+		
+		$apiKey = APP_API_KEY;
+		$appId = APP_ID;
+			
 		$curl = curl_init();
 		$playerId = "928b7d15-22df-44c8-8202-52b4bc6d8b13";
 		$playerId = empty($data["token"]) ? $playerId : $data["token"];
@@ -128,7 +132,11 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		$dateFiltering = empty($search['dateFiltering']) ? $currentDate : $search['dateFiltering'];
 		$search['forDeviceCondiction'] = empty($search['forDeviceCondiction']) ? 1 : $search['forDeviceCondiction'];
 		
-		$querySelect="";
+		$querySelect="
+					,'' AS userCode
+					,'' AS userNameInKh
+					,'' AS userNameInEn
+				";
 		$queryJoinTable="";
 		$queryWhere="";
 		if(!empty($search['tokenType'])){
@@ -147,12 +155,27 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 				  ON s.stu_id = mtk.stu_id AND mtk.tokenType = 1
 				";
 				$queryWhere="";
+				if(!empty($search['adv_search'])){
+					$s_where = array();
+					$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+					$s_where[]=" REPLACE(mtk.device_model_name,' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE(s.stu_code,' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE(s.stu_khname,' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE(CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')),' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE((SELECT g.group_code FROM `rms_group` AS g WHERE g.id = gds.`group_id` LIMIT 1),' ','') LIKE '%{$s_search}%'";
+					$queryWhere.=' AND ( '.implode(' OR ',$s_where).')';
+				}
+				
 				if(!empty($search['degree'])){
 					$queryWhere.=" AND gds.degree = ".$search['degree'];
+				}
+				if(!empty($search['gradeId'])){
+					$queryWhere.=" AND gds.`grade` = ".$search['gradeId'];
 				}
 				$queryWhere.=$dbp->getAccessPermission('s.branch_id');
 				$queryWhere.=$dbp->getDegreePermission('COALESCE(gds.degree,0)');
 			}else if($search['tokenType']==2){
+			}else if($search['tokenType']==3){
 				$querySelect="
 					,t.teacher_code AS userCode
 					,t.teacher_name_kh AS userNameInKh
@@ -161,6 +184,16 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 				$queryJoinTable="
 					LEFT JOIN rms_teacher AS t ON t.id = mtk.stu_id AND mtk.tokenType = 3
 				";
+				$queryWhere="";
+				if(!empty($search['adv_search'])){
+					$s_where = array();
+					$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+					$s_where[]=" REPLACE(mtk.device_model_name,' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE(t.teacher_code,' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE(t.teacher_name_kh,' ','') LIKE '%{$s_search}%'";
+					$s_where[]=" REPLACE(t.teacher_name_en,' ','') LIKE '%{$s_search}%'";
+					$queryWhere.=' AND ( '.implode(' OR ',$s_where).')';
+				}
 			}
 		}
 		
@@ -168,6 +201,7 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 			SELECT 
 				mtk.`id` AS deviceId
 				,mtk.stu_id AS userId
+				,mtk.tokenType AS tokenType
 				,CASE 
 				  WHEN mtk.tokenType = 1 THEN '".$tr->translate("STUDENT")."'
 				  WHEN mtk.tokenType = 2 THEN '".$tr->translate("BUS")."'
@@ -198,13 +232,59 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 		if(!empty($search['tokenType'])){
 			$sql.=" AND mtk.tokenType = ".$search['tokenType'];
 		}
+		$from_date =(empty($search['start_date']))? '1': " DATE_FORMAT(FROM_UNIXTIME(mtk.last_active), '%\Y-%\m-%\d %\H:%\i:%\s') >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " DATE_FORMAT(FROM_UNIXTIME(mtk.last_active), '%\Y-%\m-%\d %\H:%\i:%\s') <= '".$search['end_date']." 23:59:59'";
+		$sql.= " AND ".$from_date." AND ".$to_date;
+		
 		$sql.="";
 		$order=" ORDER BY mtk.last_active DESC ";
 		
 		$sql.=$order;
+		
+		if(!empty($search['limitRecord'])){
+			$sql.=" LIMIT ".$search['limitRecord'];
+		}
 		return $db->fetchAll($sql);
 	}
 	
+	function updateStudentPassword($data){
+		$_db= $this->getAdapter();		
+		$_db->beginTransaction();
+		try{
+			$arr = array(
+				'password'			=>md5($data["password"]),
+			);
+			$this->_name="rms_student";
+			$whereRs=" stu_id=".$data['userId'];
+			$this->update($arr,$whereRs);
+			
+			$_db->commit();
+			return 1;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			return 0;
+    	}
+	}
 	
+	function updateTeacherPassword($data){
+		$_db= $this->getAdapter();		
+		$_db->beginTransaction();
+		try{
+			$arr = array(
+				'password'			=>md5($data["password"]),
+			);
+			$this->_name="rms_teacher";
+			$whereRs=" id=".$data['userId'];
+			$this->update($arr,$whereRs);
+			
+			$_db->commit();
+			return 1;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$_db->rollBack();
+			return 0;
+    	}
+	}
 
 }

@@ -4,9 +4,24 @@
 	echo $this->headTitle($tr->translate("ADD_TECHER_NAME"));
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	$frm= $this->frm_update;
+
+	$dept = '';
+	if (!empty($this->rs['degreeList'])) {
+		$dept =  explode(",", $this->rs['degreeList']);
+	}
+	$array = array();
+	if (!empty($dept)) {
+		foreach ($dept as $ss) {
+			$array[$ss] = $ss;
+		}
+	}
 ?>
-
-
+<style>
+	.optListRow li.opt-items input[type=checkbox],
+	input[type=radio] {
+		margin: -9px 0 0 !important;
+	}
+</style>
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -79,10 +94,6 @@
 											<div class="col-md-10 col-sm-10 col-xs-12"> 
 												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("LECTURER_INFO");?></p>
 											</div> 
-										</div>
-										<div class="form-group">
-										   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("LECTURER_INFO");?> 
-										   </label>
 										</div>
 										<div class="form-group">
 											<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
@@ -441,6 +452,50 @@
 										   <div class="col-md-7 col-sm-7 col-xs-12">
 												<?php echo $frm->getElement("active_type");?>
 										   </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="degreee" class="col-md-4 col-sm-4 col-xs-12">
+						<div class="card-blogform">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="d-flex">
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+											</div>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE"); ?></p>
+											</div>
+										</div>
+										<br />
+										<div class="custom-control custom-checkbox ">
+											<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all" name="check_all">
+											<label class="custom-control-label" for="check_all">
+												<?php echo $tr->translate('CHECK_ALL'); ?>
+											</label>
+										</div>
+										<div class="form-group">
+											<ul class="optListRow">
+												<?php
+												if (!empty($this->faculty)) foreach ($this->faculty as $rs) {
+												?>
+													<li class="opt-items">
+														<div class="custom-control custom-checkbox">
+															<input <?php if (in_array($rs['id'], $array)) {
+																		echo "checked";
+																	} ?> type="checkbox" class="checkbox custom-control-input" id="depts<?php echo $rs['id']; ?>" value="<?php echo $rs['id']; ?>" name="selector[]">
+															<label class="custom-control-label" for="depts<?php echo $rs['id']; ?>">
+																<?php echo $rs['name']; ?>
+															</label>
+														</div>
+													</li>
+
+												<?php } ?>
+											</ul>
 										</div>
 									</div>
 								</div>

@@ -24,7 +24,7 @@ class Global_YearstudyController extends Zend_Controller_Action {
  			$rs_rows= $db->getAllYearStudy($search);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("FROM_YEAR","TO_YEAR","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("FROM_YEAR","TO_YEAR","DEGREE","CREATED_DATE","BY_USER","Default","STATUS");
 			$link=array(
 				'module'=>'global','controller'=>'yearstudy','action'=>'edit',
 			);
@@ -58,7 +58,9 @@ class Global_YearstudyController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}		
 		}
-		
+
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->faculty = $_db->getAllDegreeName();
 		
 		$tsub=new Accounting_Form_FrmYearStudy();
 		$frm=$tsub->FrmYearStudy();
@@ -90,10 +92,15 @@ class Global_YearstudyController extends Zend_Controller_Action {
 			}		
 		}
 		$row=$db->getAcademicYearById($id);
+		$this->view->rs =$row;
+
 		if(empty($row)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/global/yearstudy");
 			exit();
 		}
+
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->faculty = $_db->getAllDegreeName();
 		
 		$tsub=new Accounting_Form_FrmYearStudy();
 		$frm=$tsub->FrmYearStudy($row);

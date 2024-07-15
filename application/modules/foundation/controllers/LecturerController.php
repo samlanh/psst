@@ -76,6 +76,9 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		}
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
+		
+		$this->view->faculty = $_db->getAllDegreeName();
+
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$optionNation = $_db->getViewByType(21);//Nation
 		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
@@ -122,7 +125,8 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			}
 		}
  		$_db = new Application_Model_DbTable_DbGlobal();
- 		
+ 		$this->view->faculty = $_db->getAllDegreeName();
+
  		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
  		$optionNation = $_db->getViewByType(21);//Nation
  		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));
@@ -184,7 +188,9 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 			}
 		}
 		$_db = new Application_Model_DbTable_DbGlobal();
-			
+		
+		$this->view->faculty = $_db->getAllDegreeName();
+
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$optionNation = $_db->getViewByType(21);//Nation
 		array_unshift($optionNation,array ( 'id' => -1,'name' => $tr->translate("ADD_NEW")));

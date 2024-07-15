@@ -70,7 +70,9 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$_sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
 		$sex_opt = array(
 				1=>$tr->translate("MALE"),
-				2=>$tr->translate("FEMALE"));
+				2=>$tr->translate("FEMALE"),
+				''=>$tr->translate("N/A")
+			);
 		$_sex->setMultiOptions($sex_opt);
 		
 		$date_of_birth = new Zend_Dojo_Form_Element_DateTextBox('date_of_birth');

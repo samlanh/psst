@@ -60,6 +60,10 @@ class Mobileapp_IndexController extends Zend_Controller_Action
 		//$this->view->deviceRs =$deviceRs;
 			
     }
+	public function addAction()
+	{
+		$this->_redirect('/mobileapp/index');
+	}
 	 public function listAction()
     {
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();

@@ -10,8 +10,12 @@ class Mobileapp_Model_DbTable_DbDashboard extends Zend_Db_Table_Abstract
 	
 	function getLastActiveDeviceInfo($data){
 		
-		$apiKey = "OWY1Nzg2YjgtMjhhZi00Njk1LTg5YTQtNTQwY2NkM2U2NTQ1";
-		$appId = "3c593dd9-4549-422c-ac11-4e202953100c";
+		//$apiKey = "OWY1Nzg2YjgtMjhhZi00Njk1LTg5YTQtNTQwY2NkM2U2NTQ1";
+		//$appId = "3c593dd9-4549-422c-ac11-4e202953100c";
+		
+		$apiKey = APP_API_KEY;
+		$appId = APP_ID;
+			
 		$curl = curl_init();
 		$playerId = "928b7d15-22df-44c8-8202-52b4bc6d8b13";
 		$playerId = empty($data["token"]) ? $playerId : $data["token"];

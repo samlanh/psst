@@ -1,5 +1,6 @@
 <?php
 class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action {
+	const REDIRECT_URL = '/accounting/updatestudentdiscount';
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -85,12 +86,12 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 				$_data = $this->getRequest()->getPost();
 				$db = new Accounting_Model_DbTable_DbDiscountSetting();
 				$db->updateStudentDiscount($_data);
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				if(isset($_data['save_close'])){
-					$this->_redirect('/accounting/updatestudentdiscount');
-				}else{
-					$this->_redirect('/accounting/updatestudentdiscount/add');
-				}
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+				// if(isset($_data['save_close'])){
+					
+				// }else{
+				// 	Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+				// }
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

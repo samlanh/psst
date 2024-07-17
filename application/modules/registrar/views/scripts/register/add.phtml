@@ -1192,6 +1192,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					term_option = data[i].termTypeList;
 					academicOption = data[i].academicYearList;
 					term_study_option = data[i].studyPeriodList;
+					discountOptionList = data[i].discountOptionList;
 					serviceId = data[i].itemDetailId;
 					dataLabel = data[i].itemDetaillabel;
 					addRow(serviceId, dataLabel, data[i]);
@@ -1251,14 +1252,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<td><div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('QTY'); ?></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('QTY'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');getValidate(' + col + ');" name="qty_' + col + '" id="qty_' + col + '" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('PRICE'); ?></span></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('PRICE'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');" name="price_' + col + '" id="price_' + col + '"  value="0" dojoType="dijit.form.NumberTextBox" />';
 		template += '<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_' + col + '" id="subtotal_' + col + '"  /></div></td>';
-
-		template += '<td class="bgBox removePadding"><select onchange="getDiscountforStudent('+col+');" placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE'); ?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type' + col + '" name="discount_type' + col + '" >';
-		template += '<option value="0"></option>';
-		<?php if (!empty($this->rsdiscount))
-			foreach ($this->rsdiscount as $rsdis) { ?>
-				template += '<option value="' + <?php echo $rsdis['id'] ?> + '"><?php echo addslashes($rsdis['dis_name']); ?></option>';
-			<?php } ?>
-		template += '</select>';
+		template += '<td class="bgBox removePadding"><select onchange="getDiscountforStudent('+col+');" placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE'); ?>" class="fullside" required="false" dojoType="dijit.form.FilteringSelect" id="discount_type' + col + '" name="discount_type' + col + '" >' + discountOptionList + '</select>';
 		template += strCol6 + '<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('DISCOUNT_AMOUNT'); ?>" onkeyup="calculateTotal(' + col + ');"  name="discount_amount' + col + '" value="0" id="discount_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += strCol6 + '<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('PERCENTAGE'); ?>" onkeyup="calculateTotal(' + col + ');" name="discount_' + col + '" value="<?php echo 0; ?>" id="discount_' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '</td>';
@@ -1527,11 +1521,11 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			dijit.byId('discount_' + index).get('value').focus();
 		}
 		discount_percent = isNaN(discount_percent) ? 0 : discount_percent;
-		totalDiscountPercent = (total_pay * discount_percent / 100);
+		totalDiscountPercent = Math.round((total_pay * discount_percent / 100));
 		total_pay = total_pay - totalDiscountPercent;
 
 		totalDiscount = discount + totalDiscountPercent;
-
+		
 		dijit.byId('total_discount' + index).attr('value', totalDiscount);
 		dijit.byId('total_amount' + index).attr('value', total_pay);
 		dijit.byId('paid_amount' + index).attr('value', total_pay);

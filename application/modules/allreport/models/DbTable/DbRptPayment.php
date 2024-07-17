@@ -808,7 +808,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) StuAmountUsed,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AmountStopUsed,		
-					CONCAT(COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
+					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
 					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
 					ds.createDate
 		 FROM rms_dis_setting AS ds WHERE id=" . $db->quote($id);
@@ -834,7 +834,6 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			INNER JOIN rms_student AS s ON ds.studentId = s.stu_id
 		";
 		$sql.=" WHERE ds.isCurrent=1 AND  ds.discountGroupId = $id  ";
-		$sql.=" GROUP BY s.stu_id ";
 		return $db->fetchAll($sql);
 	}
     

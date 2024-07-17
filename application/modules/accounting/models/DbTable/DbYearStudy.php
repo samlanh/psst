@@ -10,6 +10,17 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 	public function addNewAcademicYear($_data){
 		$db = $this->getAdapter();
 		try{
+
+			$dept = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($dept)){
+	    			$dept = $rs;
+	    		}else{ $dept = $dept.",".$rs;
+	    		}
+	    	}
+
+			$isCurrent = empty($_data['isCurrent'])?0:1;
+
 			$sql="SELECT id FROM rms_academicyear WHERE 1 ";
 				$sql.=" AND fromYear='".$_data['fromYear']."'";
 				$sql.=" AND toYear='".$_data['toYear']."'";
@@ -20,6 +31,8 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 			$_arr=array(
 					'fromYear'	  => $_data['fromYear'],
 					'toYear'	  => $_data['toYear'],
+					'degreeList'  => $dept,
+					'isCurrent'  => $isCurrent,
 					'createDate' => date("Y-m-d H:i:s"),
 					'modifyDate' => date("Y-m-d H:i:s"),
 					'status'  	  => 1,
@@ -33,6 +46,17 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 	public function updateAcademicYear($_data){
 		$db = $this->getAdapter();
 		try{
+
+			$dept = "";
+	    	if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+	    		if (empty($dept)){
+	    			$dept = $rs;
+	    		}else{ $dept = $dept.",".$rs;
+	    		}
+	    	}
+			$isCurrent = empty($_data['isCurrent'])?0:1;
+			$status = empty($_data['status'])?0:1;
+
 			$sql="SELECT id FROM rms_academicyear WHERE 1 ";
 				$sql.=" AND fromYear='".$_data['fromYear']."'";
 				$sql.=" AND toYear='".$_data['toYear']."'";
@@ -44,8 +68,10 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 			$_arr=array(
 					'fromYear'	  => $_data['fromYear'],
 					'toYear'	  => $_data['toYear'],
-					'modifyDate' => date("Y-m-d H:i:s"),
-					'status'  	  => $_data['status'],
+					'degreeList'  => $dept,
+					'isCurrent'   => $isCurrent,
+					'modifyDate'  => date("Y-m-d H:i:s"),
+					'status'  	  => $status,
 					'userId'	  => $this->getUserId()
 			);
 			$where=" id = ".$_data['id'];
@@ -67,12 +93,19 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 	function getAllYearStudy($search){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
+		$default = ' <span class="glyphicon glyphicon-check"></span>';
+		$notDefault = '<span class="glyphicon glyphicon-unchecked"></span>';
 		$sql = " SELECT 
 					 id,
 					fromYear,
 					toYear,
+					(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,degreeList) LIMIT 1) AS degreeList,
 					createDate,
-				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=userId )AS user_name
+				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=userId )AS user_name,
+				    CASE
+						WHEN  isCurrent = 1 THEN '$default'
+		   				WHEN  isCurrent = 0 THEN '$notDefault'
+					END AS isCurrent
 			";
 		$sql.=$dbp->caseStatusShowImage("status");
 		$sql.=" FROM rms_academicyear ";

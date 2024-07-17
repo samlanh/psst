@@ -146,7 +146,8 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('COURSE_SERVICE_PRODUCT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DIS_MAX');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('AMOUNT').$tr->translate('STUDENT');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('AMOUNT_STU_USED');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('AMOUNT_STOP_USED');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_PERIOD');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('BY_USER');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
@@ -167,6 +168,7 @@
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_TYPE");?>" ><?php echo $rs['discName']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DIS_MAX");?>" ><?php echo $rs['DisValueType']; ?></td>
 									<td data-label="<?php echo $tr->translate("STUDENT");?>" ><?php echo $rs['StuAmountUsed']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT");?>" ><?php echo $rs['AmountStopUsed']; ?></td>
 								    <td data-label="<?php echo $tr->translate("DISCOUNT_PERIOD");?>" ><?php echo $rs['discountPeriod']; ?></td>
 								    <td data-label="<?php echo $tr->translate("BY_USER");?>" ><?php echo $rs['user_name']; ?></td>
 								    <td data-label="<?php echo $tr->translate("CREATE_DATE");?>" ><?php echo $rs['createDate']; ?></td>

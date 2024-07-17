@@ -1447,7 +1447,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
 		   		sgd.academic_year,
 		   		sgd.is_newstudent,
-		   		(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sgd.academic_year LIMIT 1)) AS academic_year_label,
+		   		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sgd.academic_year LIMIT 1) AS academic_year_label,
+		   		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll,
 		   		sgd.feeId AS fee_id,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=sgd.group_id AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) AS group_name
 	   		FROM 
@@ -1483,7 +1484,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		t.id,
 	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=t.session_result LIMIT 1) as session_label,
 	   	'N/A' AS room_label,
-	   	'1' AS is_newstudent
+	   	'1' AS is_newstudent,
+		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll
+		   		
 	   	FROM rms_student as s,
 	   		rms_student_test_result As t
 	   	WHERE 
@@ -1515,7 +1518,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	'N/A' AS status_student,
 	   	'N/A' as session_label,
 	   	'1' AS is_newstudent,
-	   	'N/A' AS room_label
+	   	'N/A' AS room_label,
+		'N/A' AS academicYearEnroll
    	FROM rms_student as s
    	WHERE
 	    s.customer_type=2
@@ -2169,6 +2173,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			return $options;
 		}
 
+	}
+	function getDiscountOptionList($data)
+	{
+	
 	}
 	function getAllTerm()
 	{
@@ -2936,6 +2944,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 											<span class="title-info">' . $tr->translate("NAME_ENGLISH") . '</span><span id="lbl_nameen" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["last_name"] . " " . $rs["stu_enname"] . '</a></span>
 											<span class="title-info">' . $tr->translate("DOB") . '</span><span id="lbl_dob" class="inf-value" >: ' . $rs['dob'] . '</span>
 											<span class="title-info">' . $tr->translate("PHONE") . '</span><span id="lbl_phone" class="inf-value">: ' . $rs['tel'] . '</span>
+											<span class="title-info">' . $tr->translate("Enroll Year") . '</span><span id="lbl_phone" class="inf-value">: ' . $rs['academicYearEnroll'] . '</span>
 										</p>
 										</div>
 									</div>
@@ -4298,6 +4307,18 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 			$termStudy = $this->getAllStudyPeriod($param);//វគ្គចូលរៀន
 			$items[$key]['studyPeriodList'] = $termStudy;
+
+
+			$param = array(
+				'studentId'=>$data['studentId'],
+				'grade'=>$data['grade'],
+				'optionList'=>1,
+				'fetchAll'=>1
+			);
+			$discountOptionList= $this->getDiscountListbyStudent($param);//វគ្គចូលរៀន
+			$items[$key]['discountOptionList'] = $discountOptionList;
+			
+			
 		}
 
 
@@ -4897,7 +4918,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		// $firstWhere = " AND ((".$firstCondition . $strStudent . $strDegree . $strPeriod . ")";
 		// $secondWhere = " OR (".$secondCondition.$strDegree.$strPeriod."))";
 		if (!empty($data['fetchAll'])) {
-			return $this->getAdapter()->fetchAll($sql);
+			$result =  $this->getAdapter()->fetchAll($sql);
+			if (!empty($result) AND !empty($data['optionList'])) {
+				$options = '';
+				foreach ($result as $value) {
+					$options .= '<option value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'].'('.$value['DisValueType'].')', ENT_QUOTES) . '</option>';
+				}
+			return $options;
+			} else {
+				return $result;
+			}
 		} else {
 			return $this->getAdapter()->fetchRow($sql);
 		}

@@ -1,7 +1,7 @@
 <?php
 	$request = Zend_Controller_Front::getInstance ()->getRequest ();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("DISCOUNT_STUDENT"));
+	echo $this->headTitle($tr->translate("UPDATE_STUDENT_DISCOUNT"));
 ?>	
 <?php $frm =  $this->form_search;?>
 
@@ -10,7 +10,7 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-tags " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('DISCOUNT_STUDENT');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-tags " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('UPDATE_STUDENT_DISCOUNT');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>

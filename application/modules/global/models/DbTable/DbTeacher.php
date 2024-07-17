@@ -11,7 +11,14 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();		
 		$_db->beginTransaction();
 			try{
-				
+					$dept = "";
+					if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+						if (empty($dept)){
+							$dept = $rs;
+						}else{ $dept = $dept.",".$rs;
+						}
+					}
+
 					$part= PUBLIC_PATH.'/images/photo/';
 					if (!file_exists($part)) {
 						mkdir($part, 0777, true);
@@ -95,7 +102,9 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 							'photo'  			 => $photo,
 					        'create_date' 		 => date("Y-m-d"),
 					        'user_id'	  		 => $this->getUserId(),
-							'signature'  			 => $photoSignature,
+							'signature'  		 => $photoSignature,
+							'degreeList'  		 => $dept,
+							
 						);
 					
 						$id = $this->insert($_arr);
@@ -142,6 +151,14 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		$_db= $this->getAdapter();		
 		$_db->beginTransaction();
 		try{	
+				$dept = "";
+				if (!empty($_data['selector'])) foreach ( $_data['selector'] as $rs){
+					if (empty($dept)){
+						$dept = $rs;
+					}else{ $dept = $dept.",".$rs;
+					}
+				}
+
 				$part= PUBLIC_PATH.'/images/photo/';
 				if (!file_exists($part)) {
 					mkdir($part, 0777, true);
@@ -187,6 +204,7 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 						'status'   			 => $_data['status'],
 				        'create_date' 		 => date("Y-m-d"),
 				        'user_id'	  		 => $this->getUserId(),
+						'degreeList'  		 => $dept,
 					);
 					if(!empty($_data['password'])){
 						$_arr['password']=md5($_data['password']);

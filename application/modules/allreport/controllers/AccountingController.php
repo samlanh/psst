@@ -303,47 +303,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
-		
-	//	print_r($row); exit();
-
-		// try{
-		// 	if($this->getRequest()->isPost()){
-		// 		$search=$this->getRequest()->getPost();
-		// 	}
-		// 	else{
-		// 		$search = array(
-		// 			'title' => '',
-		// 			'academic_year' => '0',
-		// 			'branch' => '',
-		// 			'studentId' => '',
-		// 			'discountId' => '',
-		// 			'discountFor' => '0',
-		// 			'discountPeriod' => '0',
-		// 			'status_search' => -1
-		// 		);
-		// 	}
-		// 	$this->view->search = $search;
-		// 	$db = new Allreport_Model_DbTable_DbRptPayment();
-		// 	$this->view->row = $db->getDiscountSetting($search);
-		// }catch(Exception $e){
-		// 	Application_Form_FrmMessage::message("Application Error");
-		// 	Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		// }
-		
-		// $this->view->adv_search = $search;
-		// $frm = new Global_Form_FrmSearchMajor();
-		// $frms =$frm->FrmsearchDiscount();
-		// Application_Model_Decorator::removeAllDecorator($frms);
-		// $this->view->form_search = $frms;
-			
-		// $model = new Application_Model_DbTable_DbGlobal();
-		// $disc = $model->getAllDiscount();
-		// $this->view->discount = $disc;
-		 
-		// $branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-		// $frm = new Application_Form_FrmGlobal();
-		// $this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-		// $this->view->rsfooteracc = $frm->getFooterAccount();
+	
 	}
 	function submitlistAction(){
 		if($this->getRequest()->isPost()){

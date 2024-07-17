@@ -103,12 +103,20 @@ a.btnstyle:hover{color:#eee;}
 		       	<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">			
 					if(this.validate()) {
-						academic_year_fee = dijit.byId('academic_year_fee').get('value');
-						if(academic_year_fee=='' || academic_year_fee==-1){
-							alert('<?php echo $tr->translate("PLEASE_SELECT_STUDENT_FEE");?>');
-							dijit.byId('academic_year_fee').focus();
+						discountSettengId = dijit.byId('discountSettengId').get('value');
+						if(discountSettengId=='' || discountSettengId==-1){
+							alert('<?php echo $tr->translate("SELECT_DISCOUNT");?>');
+							dijit.byId('discountSettengId').focus();
 							return false;
 						}
+
+						toDiscountId = dijit.byId('toDiscountId').get('value');
+						if(toDiscountId=='' || toDiscountId==-1){
+							alert('<?php echo $tr->translate("SELECT_DISCOUNT");?>');
+							dijit.byId('toDiscountId').focus();
+							return false;
+						}
+
 						loadingBlock();	
 						return true;
 	   				}else {
@@ -167,7 +175,7 @@ a.btnstyle:hover{color:#eee;}
 		                   <div class="col-md-12 col-sm-12 col-xs-12">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
+									<input type="submit" id="save_close" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE");?>" 
 									class="button-class button-primary" iconClass="	glyphicon glyphicon-floppy-saved"/>
 								</div>
 		                   </div>

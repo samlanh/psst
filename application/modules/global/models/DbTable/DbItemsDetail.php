@@ -88,6 +88,7 @@
 	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
 		$db = $this->getAdapter();
 		$sql=" SELECT ide.*,
+		ide.branch_id as branchSet,
 		(SELECT pl.branch_id FROM `rms_product_location` AS pl WHERE ide.id=pl.pro_id LIMIT 1) AS branch_id,
 		(SELECT pl.price FROM `rms_product_location` AS pl WHERE ide.id=pl.pro_id LIMIT 1) AS price
 		FROM rms_itemsdetail AS ide WHERE ide.`id` = $degreeId ";

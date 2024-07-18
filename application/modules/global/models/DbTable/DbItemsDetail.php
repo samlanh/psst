@@ -550,7 +550,7 @@
 		$lang = $dbgb->currentlang();
 		if($lang==1){
 			$title = "td.title";
-		}elseif($lang==1){
+		}elseif($lang==2){
 			$title = "td.title_en";
 		}
 		$sql = "SELECT td.id, $title AS product_name,

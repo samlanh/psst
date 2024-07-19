@@ -70,13 +70,13 @@ function setDatatoReceipt(){
 		dojo.byId("lb_paymentnumber").innerHTML = '<?php echo $result['bankName'].' '.$result['number'];?>';
 		dojo.byId("lb_byuser").innerHTML = '<?php echo $result['user'];?>';
 
-		dojo.byId("lb_grade").innerHTML = '<?php echo empty($result['grade'])?"&nbsp;":$result['grade']; echo empty($result['group_name'])?"":" (".$result['group_name'].")";?>';
 		dojo.byId("lb_academic_year").innerHTML = '<?php echo empty($result['academic_year'])?"&nbsp;":$result['academic_year'];echo empty($result['session_type'])?"&nbsp;":$result['session_type'];?>';
 		dojo.byId("lb_part_time").innerHTML = '<?php echo empty($result['parttimeTitle'])?"&nbsp;":$result['parttimeTitle'];?>';
-		dojo.byId("lb_group").innerHTML = '<?php echo empty($result['group_id'])?"&nbsp;":$result['group_name'];?>';
-
+		//dojo.byId("lb_group").innerHTML = '<?php //echo empty($result['group_id'])?"&nbsp;":$result['group_name'];?>';
+		dojo.byId("lb_group").innerHTML = '<?php echo empty($result['group_name'])?$result['grade']:$result['group_name'];?>';
+		
 		<?php if($receiptType==4){?>
-		template="";
+				template="";
 				 temp='<table class="tableDetail" width="100%" align="center" style="white-space:nowrap; padding: 0px; margin: 0px;font-family: '+"'Times New Roman','Khmer OS Battambang'"+';" id="table">'
 					  temp+='<tr class="hearder_table" style="font-size:inherit !important;text-align:center;">';
 						  temp+='<td>លេខរៀង<br />No.</td>';
@@ -125,6 +125,71 @@ function setDatatoReceipt(){
 						temp+='<td align="center">'+period+'</td>';
 						
 					  
+					  temp+='</tr>';
+					  i++;
+					<?php } ?>
+			temp+='</table>';
+			dojo.byId('t_amountmoneytype').innerHTML = temp;
+		<?php }
+		elseif($receiptType==2){
+		?>
+			template="";
+				 temp='<table class="tableDetail" width="100%" id="table">'
+					  temp+='<tr class="hearder_table">';
+						  temp+='<td style="border:1px solid #000;">លរ<small>No. </small></td>';
+						  temp+='<td style="border:1px solid #000;">ពណ៍នា<small>Description</small></td>';
+						  temp+='<td style="border:1px solid #000;">បង់ជា<small>Pay as</small></td>';
+						  temp+='<td style="border:1px solid #000;">សុពលភាព<small>Valid Date</small></td>';
+						  temp+='<td style="border:1px solid #000;">បរិមាណ<small>Qty</small></td>';
+						  temp+='<td style="border:1px solid #000;">តម្លៃរាយ<small>Unit Price</small></td>';
+						  temp+='<td style="border:1px solid #000;">បញ្ចុះតម្លៃ<small>Discount</small></td>';
+						  temp+='<td style="border:1px solid #000;">សេវាផ្សេងៗ<small>Other Fee</small></td>';
+						  temp+='<td style="border:1px solid #000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></td>';
+						  //temp+='<td style="border:1px solid #000;">បានបង់<small>Paid($)</small></td>';
+						 //temp+='<td style="border:1px solid #000;">សម្គាល់<small>Note</small></td>';
+					  temp+='</tr>';
+					i=1;  
+					<?php foreach($this->row  as $key=> $rs) { 
+						$label="";
+						if($rs['service_type']==1){
+							$label="School Fee ";
+						}
+						?>
+						
+						var items_type ='<?php echo $rs['service_type']; ?>';
+						var term_label = "-";
+						if(items_type!=3){
+							term_label = '';
+						}
+					  temp+='<tr style="font-size:11px;line-height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
+					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
+					 
+					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;"><label class="notedDescription">&nbsp;'+item_label+'</label></td>'; 
+					  term = '<?php echo $rs['payment_term'];?>';
+					  temp+='<td align="center" style="border:1px solid #000;line-height:10px;">'+term+'</td>';
+					  period='<?php if($rs['is_onepayment']!=1 AND $rs['paymentTermId']!=5){echo '<span class="spanBlog">'.$rs['start_date'].'</span>'; echo empty($rs['validate'])?"":'<span class="spanBlog">'.$rs['validate'].'</span>';}else{echo'&nbsp;';}?>';	
+					  temp+='<td align="center" style="border:1px solid #000;">'+period+'</span></td>';
+					  fee='<?php echo number_format($rs['fee'],2);?>';
+					  temp+='<td style="border:1px solid #000;">'+<?php echo number_format($rs['qty'],2);?>+'</td>';
+					  temp+='<td style="border:1px solid #000;">'+fee+'</td>';
+					  	
+					  	
+					  	discount_amount = '<?php echo ($rs['discount_amount']>0)?$rs['discount_amount'].',':''; echo ($rs['discount_percent']>0)?$rs['discount_percent']."%":"";?>';
+					  temp+='<td style="border:1px solid #000;">'+discount_amount+'</td>';
+						  
+					  	extra_fee='<?php echo number_format($rs['extra_fee'],2);?>';
+					  temp+='<td align="center" style="border:1px solid #000;">'+extra_fee+'</td>';
+
+					  totalpayment='<?php echo number_format($rs['totalpayment'],2);?>';
+						  temp+='<td align="center" style="border:1px solid #000;">'+totalpayment+'</td>';
+					
+						//paid='<?php //echo number_format($rs['paidamount'],2);?>';
+					 	//temp+='<td style="border:1px solid #000;">'+paid+'</td>';		
+					  
+					  
+					  //var htmlString = $( '#noteContent'+'<?php //echo $key;?>').html();
+  
+					  //temp+='<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;white-space: pre-line;text-align:left;">'+htmlString+'</td>';
 					  temp+='</tr>';
 					  i++;
 					<?php } ?>

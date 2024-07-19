@@ -1204,7 +1204,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql = "SELECT id,
 		   	$titleQuery AS name,
-		   	CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),'',generation,'') AS years
+		   	CONCAT_WS(',',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),generation) AS years,
+			generation as feeType
+
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
 	   	$branch_id ";
@@ -1241,10 +1243,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$order = ' ORDER BY id DESC';
 		$result = $db->fetchAll($sql . $order);
 		if (!empty($data['option'])) {
+			
 			$options = '';
 			if (!empty($result))
 				foreach ($result as $value) {
-					$options .= '<option value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+					$options .= '<option  data-jsondata="" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 				}
 			return $options;
 		}
@@ -2130,8 +2133,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$db = $this->getAdapter();
 		$sql = " SELECT id,
-  		CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name 
-  		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
+			CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name, 
+			academic_year AS academicYear,
+			DATE_FORMAT(start_date, '%Y-%m-%d') startDate,
+			DATE_FORMAT(end_date, '%Y-%m-%d') endDate
+
+  			FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
 		if (!empty($data['branch_id'])) {
 			$sql .= " AND branch_id = " . $data['branch_id'];
 		}
@@ -2151,14 +2158,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		if (!empty($data['grade'])) {//correct
 			if (!empty($data['serviceType']) and $data['serviceType'] == 1) {// SCHOOL FEE ONLY 
-
-				//$sql.=" AND  degreeId IN (SELECT items_id FROM `rms_itemsdetail` WHERE id=".$data['grade']." )";
-
 				$sql .= " AND FIND_IN_SET((SELECT items_id FROM `rms_itemsdetail` WHERE id=" . $data['grade'] . " ), degreeId) ";
 			}
 		}
 
-		// return $sql;
+		$sql .= " ORDER BY academic_year DESC ";
 		$rows = $db->fetchAll($sql);
 		if (empty($data['option'])) {
 			return $rows;
@@ -2167,7 +2171,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$options = " <option value=''>" . $tr->translate("SELECT_TERM") . "</option> ";
 			if (!empty($rows)) {
 				foreach ($rows as $row) {
-					$options .= '<option value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+					$options .= '<option data-start-date="'.$row['startDate'].'" data-end-date="'.$row['endDate'].'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
 				}
 			}
 			return $options;
@@ -4197,14 +4201,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql = "SELECT
 			  	distinct(tfd.`payment_term`) AS id,
-			  	(SELECT $label FROM rms_view WHERE `type`=6 AND key_code =tfd.`payment_term` AND `status`=1 LIMIT 1) as name
+			  	(SELECT $label FROM rms_view WHERE `type`=6 AND key_code =tfd.`payment_term` AND `status`=1 LIMIT 1) as name,
+				tf.id as feeId
 		  	FROM
 			  	rms_tuitionfee AS tf,
 			  	rms_tuitionfee_detail AS tfd
 		  	WHERE
 			  	tf.id = tfd.fee_id
 			  	AND tf.status=1
-			  	AND tfd.tuition_fee>0 ";
+			  	AND tfd.tuition_fee!=0 ";
 		if (!empty($data['itemId'])) {
 			$sql .= " AND tfd.class_id=" . $data['itemId'];
 		}
@@ -4219,8 +4224,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$options = '';
 		if (!empty($rows))
-			foreach ($rows as $value) {
-				$options .= '<option value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+			
+			foreach ($rows as $value) {///
+				$param = array(
+					'periodId'=>$value['id'],
+					'feeId'=>$value['feeId'],
+				);
+				$resultPeriods = $this->getAllStudyPeriod($param);
+				// $resultList = array();
+				// if (!empty($resultPeriods)) {
+				// 	foreach($resultPeriods as $resultPeriod){
+
+				// 	}
+				// }
+				$dataJson = Zend_Json::encode($resultPeriods);
+				$options .= '<option data-period-list="'.$dataJson.'"  value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 			}
 
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -4302,12 +4320,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$param = array(
 				'branch_id' => $data['branch_id'],
 				'academic_year' => $item['academic_year'],
-				// 	  			'periodId'=>$item['feeId'],
+				'option'=>1,
 			);
 
 			$termStudy = $this->getAllStudyPeriod($param);//វគ្គចូលរៀន
 			$items[$key]['studyPeriodList'] = $termStudy;
-
 
 			$param = array(
 				'studentId'=>$data['studentId'],
@@ -4900,21 +4917,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['degree'])) {
 			$sql .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
 		}
+		if (!empty($data['grade'])) {
+			$sql .= " AND FIND_IN_SET((SELECT d.items_id FROM `rms_itemsdetail` d WHERE d.id=".$data['grade']." LIMIT 1),ds.degree)";
+		}
 
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
 		$sql.=" OR ds.discountFor=1";
 
-		// $firstWhere = " AND ((".$firstCondition . $strStudent . $strDegree . $strPeriod . ")";
-		// $secondWhere = " OR (".$secondCondition.$strDegree.$strPeriod."))";
 		if (!empty($data['fetchAll'])) {
 			
 			$result =  $this->getAdapter()->fetchAll($sql);
 			if (!empty($result) AND !empty($data['optionList'])) {
 				$options = '';
+				$options .= '<option data-discountype="" data-discount-value="" value="" ></option>';
 				foreach ($result as $value) {
-					$options .= '<option data-discountype="'.$value['DiscountValueType'].'" data-discount-value="'.$value['discountValue'].'" value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'], ENT_QUOTES) . '</option>';
+					$options .= '<option selected="selected" data-discountype="'.$value['DiscountValueType'].'" data-discount-value="'.$value['discountValue'].'" value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'], ENT_QUOTES) . '</option>';
 				}
 			return $options;
 			} else {

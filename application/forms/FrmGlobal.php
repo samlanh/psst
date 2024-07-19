@@ -618,223 +618,279 @@ class Application_Form_FrmGlobal
 				</div>";
 			}
 			return $str;
-		} elseif ($receipt_type == 2) { //newworld
+		} elseif ($receipt_type == 2) { //psis chv
+			defined('NEW_STU_ID_FROM_TEST') || define('NEW_STU_ID_FROM_TEST', Setting_Model_DbTable_DbGeneral::geValueByKeyName('new_stuid_test')); //0=default,1=show stu_id register to enter
+			defined('SHOW_GROUP_INPAYMENT') || define('SHOW_GROUP_INPAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_groupin_payment'));
+			defined('AMOUNT_RECEIPT') || define('AMOUNT_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_print'));
+			defined('SHOW_PIC_INRECEIPT') || define('SHOW_PIC_INRECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_pic_receipt'));
+			defined('PADDINGTOP_RECEIPT') || define('PADDINGTOP_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('receipt_paddingtop'));
+			defined('SHOW_HEADER_RECEIPT') || define('SHOW_HEADER_RECEIPT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('show_header_receipt'));
+
+			$paddingTop = PADDINGTOP_RECEIPT . 'px';
+			$showPic = SHOW_PIC_INRECEIPT;
+			$showPic = ($showPic == 1) ? 'display:block;' : 'display:none;';
+			$settingAmtReceipt = AMOUNT_RECEIPT;
+			$pageSetup = ($settingAmtReceipt == 1) ? 'page:A5;size:landscape;' : 'page:A4;size:portrait;';
+
+			$showReport = (SHOW_HEADER_RECEIPT == 1) ? 'visibility:visible' : 'visibility:hidden';
+
 			$str = "<style>
-			.hearder_table{height:20px !important;}
-			.defaulheight{line-height:10px !important;}
-			.bold{
-			font-weight:bold;
-			}
-			.blogbranchlogo{
-			margin:0 auto;position:absolute;top:10px !important;left:100px;
-			}
-			</style>
-			<div id='PrintReceipt' style='width:100% !important; padding:0px;height:13.7cm;position:relative'>
-			<style>
-			.noted{
-			white-space: pre-wrap;
-			word-wrap: break-word;
-			word-break: break-all;
-			white-space: pre;
-			font:12px 'Khmer OS Battambang';
-			border: 1px solid #000;
-			line-height:20px;
-			font-weight: normal !important;
-			padding:2px;
-			white-space: normal;
-			}
-			.blogbranchlogo{
-			margin:0 auto;position:absolute;top:10px;left:100px;
-			}
-			.boxnorefund{
-				color: #fff;
-				background: #d42727;
-				border: 2px solid fff;
-				font-size: 11px;
-				padding:10px 2px;
-				border-radius: 2px;
-				border: 6px double #fff;
-				font-weight:bold !important;
-				font-family:Times New Roman;
-			}
-			table{ border-collapse:collapse; margin:0 auto;
-								border-color:#000;font-size:12px; }
-			#printfooter {
-				display: block ;
-				width:100%;
-			}
-			
-			@page {
-			/* Chrome sets own margins, we change these printer settings */
-			margin:0.5cm 1cm 0.3cm 1cm; '
-			page-break-before: avoid;
-			/*size: 21cm 14.8cm; */
-			}
-				
-			</style>
-			<table width='100%'  class='print' cellspacing='0'  cellpadding='0' style='height:10cm;font-family:Khmer OS Battambang,Times New Roman !important; font-size:11px !important; margin-top: -5px;white-space:nowrap;'>
-				<tr>
-					<td width='30%' style='position:relative'>
-						<div id='lbl_branchlogo'>
+					.hearder_table{height:20px !important;}
+					.defaulheight{line-height:10px !important;}
+					.bold{
+						font-weight:bold;
+					}
+					.blogbranchlogo{
+						margin:0 auto;position:absolute;top:10px !important;left:100px;
+					}
+				</style>
+				<div id='PrintReceipt' style='width:100%cm !important; padding: 0px;'>
+					<style>
+						.noted{
+							white-space: pre-wrap;
+							word-wrap: break-word;
+							word-break: break-all;
+							white-space: pre;
+							font:12px 'Khmer OS Battambang';
+							border: 1px solid #000;
+							line-height:15px;
+							font-weight: normal !important;
+							padding:2px;
+							white-space: normal;
+							width:95%;
+						}
+						.notedDescription{
+							white-space: pre-wrap;
+							word-wrap: break-word;
+							word-break: break-all;
+							white-space: pre;
+							font:12px 'Khmer OS Battambang';
+							font-size:10px;
+							line-height:15px;
+							font-weight: normal !important;
+							white-space: normal;
+							width:200px;
+						}
+						table.print{ border-collapse:collapse; margin:0 auto;
+								border-color:#000;font-size:10px;
+								line-height:18px;
+			 			}
+						.blogbranchlogo{
+							margin:0 auto;position:absolute;top:10px;left:100px;
+						}
+						.boxnorefund{
+							color: #fff;
+							background: #d42727;
+							border: 2px solid fff;
+							font-size: 10px;
+							padding:10px 2px;
+							border-radius: 2px;
+							border: 6px double #fff;
+							font-weight:bold !important;
+							font-family:Times New Roman;
+						}
+						.hearder_table small{
+							display:block;
+							line-height:10px;
+						}
+						table.tableDetail{
+							border-collapse: collapse; border: solid 1px #000; line-height:22px;
+							font-size:10px;font-family: Khmer OS Battambang;
+							text-align:center;
+						}
+						table tr.hearder_table{
+								background:#f2f2f2;
+								font-weight:bold;
+								line-height:17px;
+								text-align:center;
+								white-space:nowrap;
+								font-size:10px;
+							}
+						.spanBlog{
+							display:block !important;
+							line-height:12px;
+							font-size:10px;
+						}
+						.print label{
+							margin-bottom: 0px !important;
+						}
+						@media print{
+							@page{
+								margin:0cm 0.7cm 0cm 0.7cm;
+								$pageSetup
+								page-break-before: avoid;
+								transform: scale(0.5);
+							}
+							a{text-decoration:none;color:#000;}
+						}
+						#page {
+						   border-collapse: collapse;
+						}
+						#page td {
+						   padding: 0; 
+						   margin: 0;
+						}
+						.no_display{
+							display: none;
+						}
+						.display-top{position:relative;vertical-align: top}
+						.display-top div{ position:absolute;}
+						.smallsize{font-size:10px;}
+						.lbl_periodstudy ul{
+							padding-left: 5px;
+    						margin: 0;}
+						.lbl_periodstudy ul li{
+							list-style:none;
+							line-height:10px;
+						}
+					</style>
+					<table broder='1' width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
+						<tr style='height:$paddingTop'>
+							<td id='lbl_header' align='center' valign='top' style='" . $showReport . "' colspan='5'>
+							</td>
+						</tr>
+						<tr>
+							<td colspan='4'></td>
+							<td  class='smallsize'>លេខបង្កាន់ដៃ/Receipt No : <strong><label id='lb_receipt_no'></label></strong></td>
+						</tr>
+						<tr>
+							<td colspan='4'></td>
+							<td class='smallsize'>ថ្ងៃបង់ប្រាក់/Pay Date : <label id='lb_date' class='one bold'></label></td>
+						</tr>
+						<tr>
+							<td width='18%'></td>
+							<td width='20%'>&nbsp;</td>
+							<td align='center' valign='bottom'>
+								<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:11px;position:relative;'><u>បង្កាន់ដៃបង់ប្រាក់</u></div>
+							</td>
+							<td width='20%'></td>
+							<td width='18%'></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td align='center' valign='bottom'>
+								<div style='font-family:Times New Roman;font-size:11px;font-weight:bold'>Official Receipt</div>
+							</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>អត្តលេខ,Student ID/Test ID</td>
+							<td> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
+							<td></td>
+							<td>ឆ្នាំសិក្សា/Academic Year</td>
+							<td>: <label id='lb_academic_year' class='one'>&nbsp;</label></td>
+						</tr>
+						<tr>
+							<td style='vertical-align: top;'>គោត្តនាម-នាម</td>
+							<td> : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top;' ></label></td>
+							<td></td>
+							<td>ថ្នាក់/Class</td>
+							<td style='white-space: nowrap;'>: <label id='lb_group' class='one'></label><label id='lb_grade' class='one'>&nbsp;</label></td>
+						</tr>
+						<tr>
+							<td>Full Name</td>
+							<td> : &nbsp;<label id='lb_namelatin' class='one' style='display: inline-block; vertical-align: top;'></label></td>
+							<td></td>
+							<td>ប្រភេទ/Type ​</td>
+							<td> : &nbsp;<label id='lb_fee_title' class='one bold'></label></td>
+						</tr>
+					<tr>
+						<td colspan='5' style='padding-top:10px;'><div id='t_amountmoneytype'></div></td>
+					</tr>
+					<tr>
+						<td colspan='3'></td>
+						<td><div style='font-weight: bold;font-size:10px;'><strong>បានបង់/Paid Amount</strong>: $</div></td>
+						<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:10px;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
+					</tr>
+					<tr>
+						<td valign='top' style='font-size:10px;'>
+							<div style='width:99%;float: left;'>
+								<div style='font-size:8px;min-height:60px;border:1px solid #000;' class='noted' >ថ្ងៃត្រូវបង់ថ្លៃសិក្សា/Schedule Tuition Due
+									<div id='lbl_period_year' class='lbl_periodstudy' >
+										<ul>
+											<li>ត្រីមាសទី ២(2/4)                   01-11-2024</li>
+											<li>ត្រីមាសទី ២(2/4)                   01-11-2024</li>
+											<li>ត្រីមាសទី ២(2/4)                   01-11-2024</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td colspan='2' valign='top' class='display-top' style='font-size:10px;' >
+							<div style='font-size:10px;min-height:60px;border:1px solid #000;'  class='noted' >សម្គាល់/Note
+								<label id='lbl_note'><lable>
+							</div>
+						</td>
+						<td class='display-top'><div>បង់ជា/Payment by</div></td>
+						<td align='right' class='display-top'>&nbsp;&nbsp;<label id='lb_paymentmethod'></label></td>
+					</tr>
+					<tr>
+						<td colspan='3'></td>
+						<td><strong>បេឡាករ/Cashier</strong></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan='3'></td>
+						<td>
+							<label id='lb_byuser'></label>";
+				$str .= "</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan='4'></td>
+						<td><div style='font-size:10px;border-bottom: 1px solid #000;margin-top:15px;'></div></td>
+					</tr>
+			</table>
+				<div class='no_display'>
+					<div id='printfooter' style='display:block;font-family:khmer os battambang;position: absolute; bottom:0px;width:100%'>
+						<table style='width:100%;margin-top:10px;background: #fff;border-top: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'>
+							<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
+								<td >&#9742; <label id='lbl_branchphone' style='width:20%;display:in-line;'></label> &#9993; <label id='lbl_email' style='width:20%;display:in-line;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
+							</tr>
+							
+						</table>
+						<div style='float:right;border:1px solid #000;width:70px;height:85px;text-align:right; $showPic '>
 						</div>
-						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:12px;'>
+						<div style='font-size:10px;min-height:40px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
+						<label id='lb_paymentnumber'></label>
+						<label id='lb_total_payment'></label>
+						<label id='lb_study_year' class='one bold'></label>
+						<label id='lb_session' class='one bold'></label>
+						<label id='lb_part_time' class='one'>&nbsp;</label>
+						<label id='lb_sex' class='one bold'></label>
+						<label id='lb_phone' class='one bold'></label>
+						<label id='lb_photo'></label>
+						<label id='lb_balance_due'></label>
+						<span id='lbParentName' >&nbsp;</span>
+						<span id='lbParentPhone' >&nbsp;</span>
+						<span id='lbFather' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
+						<span id='lbFatherTel'></span>
+						<span id='lbMother' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
+						<span id='lbMotherTel'></span>
+						<div id='lbl_branchlogo'></div>
+						<div class='blogbranchlogo' style='font-family:Khmer OS Muol Light;font-size:10px;'>
 						<label id='lb_branchname'></label>
+						<label id='lb_fine'></label>
+						<label id='lb_credit_memo'></label>
 						<div style='line-height:10px;'><label id='lb_branchnameen'></label></div>
 						</div>
-					</td>
-					<td align='center' valign='bottom' width='40%'>
-						<div style='font-family:Khmer OS Muol Light;line-height:15px;font-size:12px;position:relative'>បង្កាន់ដៃបង់ប្រាក់</div>
-						<div style='font-family:Times New Roman;font-size:12px;font-weight:bold'>Official Receipt</div>
-					</td>
-					<td width='30%'>&nbsp;</td>
-				</tr>
-			<tr>
-			<td align='center' valign='bottom' colspan='3'>
-			<table  width='100%' style='font-size: 11px;line-height:9px !important;'>
-			<tr>
-			<td width='15%'>Student ID/Test ID </td>
-			<td width='25%'> : &nbsp;<label id='lb_stu_id' class='one bold'></label></td>
-			<td width='15%'><div style='font-size: 12px;font-family:Times New Roman;'><u>Receipt N<sup>o</sup></u></div></td>
-			<td width='25%'> : &nbsp;<label id='lb_receipt_no'></label></td>
-			<td rowspan='4' width='25%'><div style='display:none;border:1px solid #000;margin:0 auto;position:absolute;top:35px;width:70px;height:85px;right:0.2cm'><label id='lb_photo'></label></div></td>
-			</tr>
-			<tr>
-			<td>Student Name</td>
-			<td colspan='1'> : &nbsp;<label id='lb_name' class='one bold'></label></td>
-			<td><div style='font-size: 12px;font-weight: bold;font-family: Times New Roman'>Pay Date</div></td>
-			<td> : &nbsp;<label id='lb_date' class='one bold'></label></td>
-			</tr>
-			<tr>
-			<td>Gender </td>
-			<td> : &nbsp;<label id='lb_sex' class='one bold'></label></td>
-			<td>Print Date</td>
-			<td> : &nbsp;" . date('d-m-Y g:i A') . "</td>
-			</tr>
-			<tr>
-			<td>Tel</td>
-			<td> : &nbsp;<label id='lb_phone' class='one bold'></label><label id='lb_session' class='one bold'></label><label id='lb_study_year' class='one bold'></label></td>
-			<td>Print By :</td>
-			<td> : &nbsp;" . $username . "</td>
-			</tr>
-			</table>
-			</td>
-			</tr>
-			<tr>
-			<td colspan='3'><div id='t_amountmoneytype'></div></td>
-			</tr>
-			<tr height='50px'>
-				<td valign='top' style='font-size:10px;'>Note
-					<div style='width:99%;float: left;'>
-					<div style='font-size:10px;min-height:70px;border:1px solid #000;' id='lbl_note' class='noted' ></div>
 					</div>
-				</td>
-				<td valign='top' style='font-size:10px;'>
-					Say in US Dollars
-					<div style='font-size:10px;min-height: 70px;border:1px solid #000;' id='lb_read_khmer' class='noted' ></div>
-				</td>
-				<td rowspan='2'>
-					<table width='98%' style='margin-left:4px;marin-top:5px;font-size:inherit; white-space:nowrap;line-height:12px;border-collapse:collapse;'>
-						<tr>
-							<td>Penalty</td>
-							<td>: $</td>
-							<td align='right'>&nbsp;&nbsp; <label id='lb_fine'></label></td>
-						</tr>
-						<tr>
-							<td>Total Payment</td>
-							<td>: $</td>
-							<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <label id='lb_total_payment'></label></td>
-						</tr>
-						<tr>
-							<td><div>Credit Memo</div></td>
-							<td>: $</td>
-							<td align='right'>&nbsp;&nbsp; <label id='lb_credit_memo'></label></td>
-						</tr>
-						<tr>
-							<td><div><strong>Paid Amount</strong></div></td>
-							<td>: $</td>
-							<td align='right' style='font-weight: bold;font-family:Times New Roman;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
-						</tr>
-						<tr>
-							<td><div>Balance</div></td>
-							<td>: $</td>
-							<td align='right'>&nbsp;&nbsp;<label id='lb_balance_due'></label></td>
-						</tr>
-						<tr>
-							<td><div>Payment Method</div></td>
-							<td></td>
-							<td align='right'>&nbsp;&nbsp;<label id='lb_paymentmethod'></label></td>
-						</tr>
-						<tr>
-							<td><div>Number/Bank</div></td>
-							<td></td>
-							<td align='right'>&nbsp;&nbsp;<label id='lb_paymentnumber'></label></td>
-						</tr>
-						<tr>
-							<td colspan='3'><div class='boxnorefund'>Non-Refundable / Transferable</div></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td valign='top' colspan='2'>
-					<table width='100%' style='font-size:12px; white-space:nowrap;line-height:12px;'>
-						<tr>
-							<td width='33%' align='center'>Cashier
-								<div style='font-size:10px;border-bottom: 1px solid #000;margin-top:40px;'><label id='lb_byuser'></label></div>
-								Signature/Name/Date
-							</td>
-							<td width='33%' align='center'>Head of Cashier
-								<div style='border-bottom: 1px solid #000;width:85%;margin-top:40px;'><label>&nbsp;</label></div>
-								Signature/Name/Date
-							</td>
-							<td width='33%' align='center'>Customer
-								<div style='border-bottom: 1px solid #000;width:85%;margin:0 auto;margin-top:40px;'>&nbsp;</div>
-								Signature/Name/Date
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-			<td valign='top' colspan='3'>
-				<table class='defaulheight' width='100%' border='0' style='font-family: Khmer OS Battambang,Times New Roman;font-size:12px;white-space:nowrap;margin-top:-5px;line-height: 11px;'>
-			<tr>
-			<td colspan='5'>";
-			$str .= "
-					</td>
-					<td valign='top'>
-					</td>
-				</tr>
-			</table>
-			</td>
-			</tr>
-			</table>
-				<div id='printfooter' style='display:block;font-family:khmer os battambang;position: absolute; bottom:0px;width:100%'>
-					<table style='width:100%;margin-top:10px;background: #fff;border-top: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang'; font-size:8px;line-height: 12px;white-space:nowrap;'>
-						<tr style='text-align:center;white-space:nowrap;line-height: 15px;font-size:7px !important;font-family: 'Times New Roman','Khmer OS Battambang'>
-							<td >&#9742; <label id='lbl_branchphone' style='width:20%;display:in-line;'></label> &#9993; <label id='lbl_email' style='width:20%;display:in-line;'></label> &#127758 <label id='lbl_website'style='width:20%;display:in-line;'></label> &#127963 <label id='lbl_address' style='font-family:'Times New Roman,Khmer OS Battambang !important'></label> </td>
-						</tr>
-					</table>
 				</div>
-				
-				<div class='no_display'>
-					<span id='lb_grade'></span>
-					<span id='lb_academic_year'></span>
-					<span id='lbParentName' >&nbsp;</span>
-					<span id='lbParentPhone' >&nbsp;</span>
-					
-				</div>
-				
-			</div>
-			
-			";
-			$key = new Application_Model_DbTable_DbKeycode();
-			$result = $key->getKeyCodeMiniInv(TRUE);
-			if ($result['receipt_print'] > 1) {
+			</div>";
+			if ($settingAmtReceipt > 1) {
 				$str .= "<div id='divPrint1'>
-						<div style='border:1px dashed #000; vertical-align: middle;margin:10px 0px 10px 0px'></div>
-						<div id='printblog2'></div>
-					</div>";
+				<div style='vertical-align: middle;margin:10px 0px 10px 0px'></div>
+				<div id='printblog2'></div>
+				</div>";
 			}
 			return $str;
 		} elseif ($receipt_type == 3) { //psis
@@ -1075,7 +1131,7 @@ class Application_Form_FrmGlobal
 						</table>
 						<span id='lbParentName' >&nbsp;</span>
 						<span id='lbParentPhone' >&nbsp;</span>
-						
+						<label id='lb_fee_title' class='one bold'></label>
 						<span id='lbFather' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />
 						<span id='lbFatherTel'></span>
 						<span id='lbMother' style='display: inline-block; vertical-align: top; line-height: 16px;'></span><br />

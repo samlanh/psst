@@ -110,18 +110,27 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $dbclass = new Application_Model_GlobalClass();
 	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
 	   
-	  $data =  array(
-	   		'branch_id'=>1,
-	  		'studentId'=>3,
-	  		'grade'=>'',
-	  		'studentType'=>1,
-	  		'isCurrent'=>1,
-	  		'stopType'=>0,
-	  		'isAutopayment'=>3,
-	   		'isInititilize'=>1);
-// 	   $db = new Application_Model_DbTable_DbGlobal();
+	//   $data =  array(
+	//    		'branch_id'=>1,
+	//   		'studentId'=>3,
+	//   		'grade'=>'',
+	//   		'studentType'=>1,
+	//   		'isCurrent'=>1,
+	//   		'stopType'=>0,
+	//   		'isAutopayment'=>3,
+	//    		'isInititilize'=>1);
+	   $db = new Application_Model_DbTable_DbGlobal();
 // 	   $result=$db->getServiceForPaymentRecord($data);
 // 	print_r($result);exit();
+	$param = array(
+		'branch_id' => 1,
+		'isFinished'=>0,
+		//'option' => 1,
+	);
+		$academicYearList = $db->getAllYearByBranch($param);
+		print_r($academicYearList);
+		echo "<br />abc<br />";
+		print_r(Zend_Json::encode($academicYearList));
     }
     public function addregistraAction(){
     	if($this->getRequest()->isPost()){

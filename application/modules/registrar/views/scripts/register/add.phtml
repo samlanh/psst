@@ -602,6 +602,12 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 											</label>
 											<small>Academic Year Fee/Pay As</small>
 										</th>
+										<th width="160px">
+											<label class="control-td">
+												សុពលភាព
+											</label>
+											<small>Valid Date</small>
+										</th>
 										<th width="120px">
 											<label class="control-td">
 												ចំនួន/តម្លៃ
@@ -626,12 +632,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 											</label>
 											<small>Total Pay/Paid</small>
 										</th>
-										<th width="160px">
-											<label class="control-td">
-												សុពលភាព
-											</label>
-											<small>Valid Date</small>
-										</th>
+										
 										<th>
 											<label class="control-td">
 												សម្គាល់
@@ -874,7 +875,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dojo.NodeList-manipulate");
 
-
 	var Itemstore = getDataStorefromJSON('id', 'name', []);
 	require(["dojo/ready"], function (ready) {
 		ready(function () {
@@ -1086,13 +1086,13 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					dijit.byId("degree").set('value', studentData.degree);
 					dijit.byId("grade").set('value', studentData.grade);
 
-					grouplabel = studentData.groupCode;
+					/*grouplabel = studentData.groupCode;
 					if (grouplabel == null) {
 						grouplabel = '';
 					} else {
 						grouplabel = '(' + grouplabel + ')';
 					}
-					dojo.byId("lb_grade").innerHTML = grouplabel;
+					dojo.byId("lb_grade").innerHTML = grouplabel;*/
 
 					if (studentData.isSetStudentid == 0) {
 						$(".stuCodeControl").css("display", "flow-root");
@@ -1182,9 +1182,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	}
 
 	function prepareAddNewRow(urlRequest, contentData) {
-
 		//dijit.byId("item").reset();
-
 		dojo.xhrPost({
 			url: urlRequest,
 			content: contentData,
@@ -1192,9 +1190,10 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			load: function (data) {
 				HideloadingBlock();
 				for (i = 0; i < data.length; i++) {
-					term_option = data[i].termTypeList;
 					academicOption = data[i].academicYearList;
-					term_study_option = data[i].studyPeriodList;
+					term_option = data[i].termTypeList;
+					term_study_option =data[i].studyPeriodList;
+
 					discountOptionList = data[i].discountOptionList;
 					serviceId = data[i].itemDetailId;
 					dataLabel = data[i].itemDetaillabel;
@@ -1251,26 +1250,23 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
 		template += '<td ><div class="form-group"><select class="fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
-		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false" dojoType="dijit.form.FilteringSelect" name="term_' + col + '" id="term_' + col + '" >' + term_option + '</select></div></td>';
+		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >' + term_option + '</select></div></td>';
+		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
+		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
+		template += strCol6 + '<input class="fullwidth" type="text" placeHolder="<?php echo $tr->translate('END_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="validate_' + col + '" id="validate_' + col + '" dojoType="dijit.form.DateTextBox" /></div></td>';
 		template += '<td><div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('QTY'); ?></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('QTY'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');getValidate(' + col + ');" name="qty_' + col + '" id="qty_' + col + '" value="1" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group input-box"><span class="prefix"><?php echo $tr->translate('PRICE'); ?></span></span><input required="true" type="text" placeHolder="<?php echo $tr->translate('PRICE'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');" name="price_' + col + '" id="price_' + col + '"  value="0" dojoType="dijit.form.NumberTextBox" />';
 		template += '<input type="hidden" dojoType="dijit.form.TextBox" class="fullside" readonly="readonly" name="subtotal_' + col + '" id="subtotal_' + col + '"  /></div></td>';
-		template += '<td class="bgBox removePadding"><select onchange="getDiscountforStudent('+col+');" placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE'); ?>" class="fullside custome-select-opt" required="false"  id="discount_type' + col + '" name="discount_type' + col + '" >' + discountOptionList + '</select>';
+		template += '<td class="bgBox removePadding"><select onchange="getDiscountforStudent('+col+');" placeHolder="<?php echo $tr->translate('DISCOUNT_TYPE'); ?>" class="custome-select-opt fullside" required="false"  id="discount_type' + col + '" name="discount_type' + col + '" >' + discountOptionList + '</select>';
 		template += strCol6 + '<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('DISCOUNT_AMOUNT'); ?>" onkeyup="calculateTotal(' + col + ');"  name="discount_amount' + col + '" value="0" id="discount_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += strCol6 + '<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('PERCENTAGE'); ?>" onkeyup="calculateTotal(' + col + ');" name="discount_' + col + '" value="<?php echo 0; ?>" id="discount_' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '</td>';
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" name="total_discount' + col + '" id="total_discount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');" name="extra_fee' + col + '" id="extra_fee' + col + '" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
-
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal(' + col + ');netTotal(' + col + ');"  name="total_amount' + col + '" value="0" id="total_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID'); ?>" class="fullside" onkeyup="paidAmount(' + col + ');"  name="paid_amount' + col + '" id="paid_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="0" name="isoldBalance' + col + '" id="isoldBalance' + col + '" dojoType="dijit.form.TextBox"  /></div></td>';
-
-		template += '<td class="bgBox removePadding"><div class="form-group" ><select placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" dojoType="dijit.form.FilteringSelect" >' + term_study_option + '</select></div>';
-		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
-		template += strCol6 + '<input class="fullwidth" type="text" placeHolder="<?php echo $tr->translate('END_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="validate_' + col + '" id="validate_' + col + '" dojoType="dijit.form.DateTextBox" /></div></td>';
-
 		template += '<td><input type="text" class="fullside" name="remark' + col + '" id="remark' + col + '" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE"); ?>" style="min-height:60px;" />';
-		template += '<input type="hidden" value="' + serviceId + '" dojoType="dijit.form.TextBox" name="item_id' + col + '" id="item_id' + col + '"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_' + col + '" id="service_type_' + col + '"/></td>';
+		template += '<input type="hidden" value="' + serviceId + '" dojoType="dijit.form.TextBox" name="item_id' + col + '" id="item_id' + col + '"/><input type="text" dojoType="dijit.form.TextBox" name="service_type_' + col + '" id="service_type_' + col + '"/></td>';
 
 		classOddRow = 'listBox evenRow';
 		if (numberRange % 2 == 0) {
@@ -1297,6 +1293,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	$("#discount_type"+col).select2({
 		allowClear: "true"
 	});
+	$("#term_study"+col).select2();
+	$("#term_"+col).select2();
+	
 		if (dataRow != null) {
 			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
 			if (dataRow.feeId > 0) {
@@ -1307,21 +1306,15 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				dijit.byId('date_start_' + col).attr('value', '');
 				dijit.byId('validate_' + col).attr('value', '');
 			}
-
-			/*if(dataRow.discountType>0 && dataRow.discountType!=null){
-				dijit.byId('discount_type'+col).attr('value',dataRow.discountType);
-				dijit.byId('discount_'+col).attr('value',dataRow.discountValue);
-			}*/
-
-			if (balance > 0 && balance != null) {
+			
+			if (balance!=0) {
 				dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
 				dijit.byId('validate_' + col).attr('value', dataRow.endDate);
 				dijit.byId('price_' + col).attr('value', balance);
-				dijit.byId('total_amount' + col).attr('value', balance);
-				dijit.byId('paid_amount' + col).attr('value', balance);
-				dijit.byId('isoldBalance' + col).attr('value', 1);
 				dojo.style('paid_amount' + col, "color", "red");
-				dijit.byId('term_study' + col).set('readOnly', true);
+				dijit.byId('isoldBalance' + col).attr('value', 1);
+				//dijit.byId('term_study' + col).set('readOnly', true);
+				$("#term_study").select2({disabled:'readonly'});
 				dijit.byId('remark' + col).attr('value', 'Previous Balance');
 				dijit.byId('date_start_' + col).set('readOnly', true);
 				dijit.byId('validate_' + col).set('readOnly', true);
@@ -1332,15 +1325,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				}
 				getservicefee(col);
 			}
-			/*if(dataRow.discountSelectedList.discountId>0){
-				alert(dataRow.discountSelectedList.discountValue);
-				if(dataRow.discountSelectedList.discountType==1){
-					dijit.byId('discount_' + col).attr('value',dataRow.discountSelectedList.discountValue);
-				}else{
-					dijit.byId('discount_amount' + col).attr('value',dataRow.discountSelectedList.discountValue);
-				}
-				//dijit.byId('discount_type' + col).attr('value',dataRow.discountSelectedList.discountId);
-			}*/
 			getDiscountforStudent(col);
 
 		} else {
@@ -1348,8 +1332,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			getValidate(col);
 		}
 	}
-
-
 
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
@@ -1366,7 +1348,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		start_date = dijit.byId('date_start_' + key).get('value');
 		if (start_date != null) {
 			amount = dijit.byId('qty_' + key).get('value');
-			term = dijit.byId('term_' + key).get('value');
+			term = $('#term_' + key).val();
 			if (term != 1) {
 				return;
 			}
@@ -1412,42 +1394,14 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		}
 	}
 
-	var url_get_start_end_date = "<?php echo $this->url(array('module' => 'registrar', 'controller' => 'register', 'action' => 'getstartdateenddate')); ?>";
-	function getTermStudy(key) {
-		term_study = dijit.byId('term_study' + key).get('value');
-		if (term_study == '') {
-			return false;
-		} else if (term_study == 5) {
-			dijit.byId("date_start_" + key).reset();
-			dijit.byId("validate_" + key).reset();
-			return false;
-		}
-		if (term_study > 0) {
-			dojo.xhrPost({
-				url: url_get_start_end_date,
-				content: {
-					'term_study': term_study,
-				},
-				handleAs: "json",
-				load: function (data) {
-					if (data) {
-						dijit.byId("date_start_" + key).attr("value", data.start_date);
-						dijit.byId("validate_" + key).attr("value", data.end_date);
-						return false;
-					}
-				},
-				error: function (err) {
-				}
-			});
-		}
-	}
+	
 	var url_service_fee = "<?php echo $this->url(array('module' => 'accounting', 'controller' => 'servicecharge', 'action' => 'getservicefee')); ?>";
 	function getservicefee(key) {
 		if (dijit.byId('isoldBalance' + key).get('value') == 1) {
 			return;
 		}
-		periodStore = getDataStorefromJSON('id', 'name', []);
-		dijit.byId("term_study" + key).set('store', periodStore);
+		//periodStore = getDataStorefromJSON('id', 'name', []);
+		//dijit.byId("term_study" + key).set('store', periodStore);
 
 		stu_type = dijit.byId('student_type').get('value');
 		studentid = dijit.byId('old_stu').get('value');
@@ -1457,8 +1411,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		item_id = dijit.byId('item_id' + key).get('value');
 		serviceType = dijit.byId('service_type_' + key).get('value');
 
-		term = dijit.byId('term_' + key).get('value');
-
+		term = $('#term_' + key).val();
+		
 		if (term == '') {
 			return false;
 		}
@@ -1481,11 +1435,10 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				'year': study_year,
 				'studentid': studentid,
 				'branch_id': branch_id,
-				//'option':1
+				'option':1
 			},
 			handleAs: "json",
 			load: function (data) {
-
 				resultFee = data.resultFee;
 				dijit.byId("remark" + key).attr("value", '');
 				dijit.byId("price_" + key).attr("value", resultFee.price);
@@ -1504,9 +1457,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					dijit.byId('date_start_' + key).reset();
 					dijit.byId('validate_' + key).reset();
 				}
-				periodStore = getDataStorefromJSON('id', 'name', data.resultPeriod);
-				dijit.byId("term_study" + key).set('store', periodStore);
-
+				$('#term_study'+key).empty().trigger("change");
+				$('#term_study'+key).append(data.resultPeriod).trigger('change');
 			},
 			error: function (err) {
 			}
@@ -1517,28 +1469,25 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		qty = dijit.byId('qty_' + index).get('value');
 		qty = isNaN(qty) ? 0 : qty;
 		subtotal = price * qty;
+		
 		dijit.byId('subtotal_' + index).attr('value', subtotal);
+		
 		additional_fee = dijit.byId('extra_fee' + index).get('value');
 		additional_fee = isNaN(additional_fee) ? 0 : additional_fee;
 		total = subtotal + additional_fee;
-		discount = dijit.byId('discount_amount' + index).get('value');
+		discount = $('#discount_amount' + index).get('value');
 		discount = isNaN(discount) ? 0 : discount;
 		if (discount > total) {
 			alert("the value must be <=" + total);
-			dijit.byId('discount_amount' + index).attr('value', '');
-			calculateTotal(index);
-			dijit.byId('discount_amount' + index).get('value').focus();
 		}
 
 		total_pay = parseFloat(total) - parseFloat(discount);
 		discount_percent = dijit.byId('discount_' + index).get('value');
 		if (discount_percent > 100) {
 			alert("the value must be <=100% !");
-			dijit.byId('discount_' + index).attr('value', '');
-			calculateTotal(index);
-			dijit.byId('discount_' + index).get('value').focus();
 		}
 		discount_percent = isNaN(discount_percent) ? 0 : discount_percent;
+		
 		totalDiscountPercent = Math.round((total_pay * discount_percent / 100));
 		total_pay = total_pay - totalDiscountPercent;
 
@@ -1575,9 +1524,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		credit_memo = dijit.byId('credit_memo').get('value');
 		credit_memo = isNaN(credit_memo) ? 0 : credit_memo;
 		netPaidAmount = PaidAmount - credit_memo;
-		if (netPaidAmount < 0) {
-			netPaidAmount = 0;
-		}
 
 		dijit.byId('paid_amount').attr('value', netPaidAmount.toFixed(2));
 		balance = totalPayment - netPaidAmount;
@@ -1650,8 +1596,11 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			dojo.byId("lb_name").innerHTML = lblNamekh;
 			dojo.byId("lb_namelatin").innerHTML = dojo.byId("lbl_nameen").innerHTML;
 
-			dojo.byId("lb_group").innerHTML = dijit.byId("group_id").attr('displayedValue');
-
+			dojo.byId("lb_group").innerHTML = $("#lbl_group").text();
+			classlbl = ($("#lbl_group").text()!='')?$("#lbl_group").text():$("#lbl_grade").text();
+			dojo.byId("lb_group").innerHTML=classlbl;
+			
+			
 			dojo.byId("lb_phone").innerHTML = dojo.byId("lbl_phone").innerHTML;
 			dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
 			dojo.byId("lb_total_payment").innerHTML = dojo.number.format(dijit.byId("grand_total").get('value'), { places: 2 });
@@ -1686,13 +1635,14 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				temp += '<td style="border:1px solid #000;">លរ  <small>No. </small></td>';
 				temp += '<td style="border:1px solid #000;width:200px;"><strong style="color:#000;">ពណ៍នា <small>Description<small></strong></td>';
 				temp += '<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Pay as</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណxតម្លៃរាយ<small>QtyxUnit Price</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណ<small>Qty</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">តម្លៃរាយ<small>Unit Price</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បញ្ចុះតម្លៃ<small>Discount</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Fee</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></strong></td>';
 				//temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid($)</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
+				//temp += '<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
 				temp += '</tr>';
 
 				i = 1;
@@ -1712,27 +1662,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					}
 					temp += '<td align="left" style="border:1px solid #000;line-height:10px" class="notedDescription"><label class="notedDescription">&nbsp;' + item_label + '<label></td>';
 					temp += '<td align="center" style="border:1px solid #000;white-space:nowrap;">' + term_label + '</td>';
-					temp += '<td style="border:1px solid #000;">' + dijit.byId("qty_" + rowIDArray[n]).get('value') + ' x ' + dojo.number.format(dijit.byId('price_' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
-
-					discountLable = '';
-					if (dijit.byId("total_discount" + rowIDArray[n]).get('value') > 0) {
-						var disc_amounts = dijit.byId("discount_amount" + rowIDArray[n]).get('value')
-						disc_amount = disc_amounts>0 ? '$ ' + disc_amounts:'';
-
-						var percentage = dijit.byId("discount_" + rowIDArray[n]).get('value');
-						percentage = percentage>0?  percentage+'%':'';
-
-						var sign = '';
-						if (disc_amounts!='' && percentage!='') {
-							sign = '+';
-						}
-						discountLable = disc_amount + sign + percentage;
-					}
-
-					temp += '<td style="border:1px solid #000;"><span class="spanBlog">' + dijit.byId("discount_type" + rowIDArray[n]).attr('displayedValue') + '</span><span class="spanBlog">' + discountLable + '</span></td>';
-					temp += '<td align="center" style="border:1px solid #000;">' + dojo.number.format(dijit.byId('extra_fee' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
-					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId("total_amount" + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
-					//temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 					onepaymentType = dijit.byId("term_" + rowIDArray[n]).get('value');
 					
 					if (onepaymentType == 5) {//one payment only
@@ -1747,7 +1676,28 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 						epx_date='';
 					}
 					temp += '<td align="center" style="border:1px solid #000;"><span class="spanBlog">' + start_date + '</span><span class="spanBlog">' + epx_date + '</span></td>';
-					temp += '<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">' + dijit.byId("remark" + rowIDArray[n]).get('value') + '</td>';
+					//temp += '<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">' + dijit.byId("remark" + rowIDArray[n]).get('value') + '</td>';
+					temp += '<td style="border:1px solid #000;">' + dijit.byId("qty_" + rowIDArray[n]).get('value') + '</td>';
+					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId('price_' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
+
+					discountLable = '';
+					if (dijit.byId("total_discount" + rowIDArray[n]).get('value') > 0) {
+						var disc_amounts = dijit.byId("discount_amount" + rowIDArray[n]).get('value')
+						disc_amount = disc_amounts>0 ? '$ ' + disc_amounts:'';
+
+						var percentage = dijit.byId("discount_" + rowIDArray[n]).get('value');
+						percentage = percentage>0?  percentage+'%':'';
+
+						var sign = '';
+						if (!isNaN(disc_amounts) && disc_amounts!='' && !isNaN(percentage) && percentage!='') {
+							sign = '+';
+						}
+						discountLable = disc_amount + sign + percentage;
+					}
+					temp += '<td style="border:1px solid #000;"><span class="spanBlog">' + discountLable + '</span></td>';
+					temp += '<td align="center" style="border:1px solid #000;">' + dojo.number.format(dijit.byId('extra_fee' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
+					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId("total_amount" + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
+					//temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
 					temp += '</tr>';
 					i++;
 				}
@@ -1880,20 +1830,26 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				document.getElementsByClassName("overlay")[0].style.display = "none";
 			},
 			error: function (err) {
-				alert(err);
 				document.getElementsByClassName("overlay")[0].style.display = "none";
 			}
 		});
 	}
+
+function getTermStudy(key) {
+	start_date = ($("#term_study"+key).find(':selected').data('start-date')); 
+	end_date = ($("#term_study"+key).find(':selected').data('end-date')); 
+	dijit.byId("date_start_" + key).attr("value", start_date);
+	dijit.byId("validate_" + key).attr("value", end_date);
+}
 function getDiscountforStudent(index){
 	discountType = ($("#discount_type"+index).find(':selected').data('data-discountype')); 
 	discountValue = ($("#discount_type"+index).find(':selected').data('discount-value')); 
-	if(discountType==1){
-		dijit.byId('discount_'+index).attr('value',discountValue);
-		dijit.byId('discount_amount'+index).attr('value','');
-	}else{
+	if(discountType==1){//
 		dijit.byId('discount_amount'+index).attr('value',discountValue);
 		dijit.byId('discount_'+index).attr('value','');
+	}else{
+		dijit.byId('discount_'+index).attr('value',discountValue);
+		dijit.byId('discount_amount'+index).attr('value','');
 	}
 }
 </script>

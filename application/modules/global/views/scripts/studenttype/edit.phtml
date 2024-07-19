@@ -1,0 +1,76 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('EDIT_STUDENT_TYPE')); 
+	 $rs=$this->rs;
+?>
+<div class="card">
+	<div class="card-content collapse show">
+		<div class="card-box">
+               	<div class="col-sm-12 border-botom">
+		    		<div class="col-sm-8 pd-0">
+		    			<h4 class="m-b-0"><i class="fa fa-edit " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('EDIT_STUDENT_TYPE');?></h4>
+    				</div>
+    			<div class="col-sm-4 text-right"></div>
+    		</div>
+    	</div>
+		<form id='edit_discount'  action="" method="post" dojoType="dijit.form.Form" enctype="application/x-www-form-urlencoded" dojoType="dijit.form.Form">
+			<script type="dojo/method" event="onSubmit">   
+   				if(this.validate()) {
+					loadingBlock();
+					dijit.byId("save_close").attr("disabled",true);
+    				return true;
+   				}else {
+    				return false;
+   				}
+			</script>
+			<div class="card-box">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="d-flex"> 
+										<div class="settings-main-icon ">
+											<i class="glyphicon glyphicon-tower"></i>
+										</div> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEPARTMENT");?></p>
+										</div> 
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("KH_NAME");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="name_kh" name="name_kh" value="<?php echo $rs["name_kh"]?>" type="text">
+											<input dojoType="dijit.form.TextBox" required="true" class="fullside" id="id" name="id" value="<?php echo $rs["key_code"]?>" type="hidden">
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NAME_ENGLISH");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input dojoType="dijit.form.ValidationTextBox" required="true" class="fullside" id="name_en" name="name_en" value="<?php echo $rs["name_en"]?>" type="text">
+									   </div>
+									</div>
+									<div class="form-group">
+										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
+											<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($rs["status"])){ echo "checked";} ?> > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
+									</div>
+									<div class="clearfix"></div>
+									<div class="card-box mt-20">
+										<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+											 <input type="submit" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-remove" value="save_close" name="save_close" id="save_close" label="<?php echo $tr->translate('EDIT');?>" dojoType="dijit.form.Button"  />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	            </div>
+	         </div>
+		</form>
+	</div>
+</div>

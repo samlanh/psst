@@ -292,7 +292,7 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
     			'class'=>'fullside height-text',));
     	
     	if(!empty($data)){
-			$_branch_search->setValue($data["branch_id"]);
+			$_branch_search->setValue($data["branchSet"]);
     		$title->setValue($data["title"]);
 			$title_en->setValue($data["title_en"]);
     		$_shortcut->setValue($data["shortcut"]);

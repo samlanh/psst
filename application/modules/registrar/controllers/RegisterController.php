@@ -319,21 +319,21 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	function getdiscountstudentAction()
-	{
-		if($this->getRequest()->isPost()){
-			$data = $this->getRequest()->getPost();
-			$db = new Application_Model_DbTable_DbGlobal();
-			$param =array(
-				'Id'=> $data['itemId']
-			);
-			$result = $db->getItemDetailRow($param);
-			$data['degree'] = $result['items_id'];
+	// function getdiscountstudentAction()
+	// {
+	// 	if($this->getRequest()->isPost()){
+	// 		$data = $this->getRequest()->getPost();
+	// 		$db = new Application_Model_DbTable_DbGlobal();
+	// 		$param =array(
+	// 			'Id'=> $data['itemId']
+	// 		);
+	// 		$result = $db->getItemDetailRow($param);
+	// 		$data['degree'] = $result['items_id'];
 
-			$result = $db->getDiscountListbyStudent($data);
-			print_r(Zend_Json::encode($result));
-			exit();
-		}
-	}
+	// 		$result = $db->getDiscountListbyStudent($data);
+	// 		print_r(Zend_Json::encode($result));
+	// 		exit();
+	// 	}
+	// }
 
 }

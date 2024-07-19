@@ -333,6 +333,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 							$this->update($data_gro, $where);
 
 							if(!empty($_data['toDiscountId'])){
+								
 								$arr = array(
 									'discountGroupId'=>$toDiscountId,
 									'studentId'      =>$stu_id,

@@ -4315,12 +4315,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'optionList'=>1,
 				'fetchAll'=>1
 			);
-			$discountOptionList= $this->getDiscountListbyStudent($param);//វគ្គចូលរៀន
-			$items[$key]['discountOptionList'] = $discountOptionList;
-			
-			
+			$items[$key]['discountOptionList'] =$this->getDiscountListbyStudent($param);//វគ្គចូលរៀន
 		}
-
 
 		return $items;
 	}
@@ -4888,10 +4884,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					ON ds.`id`=disc.`discountGroupId`
 				WHERE disc.isCurrent=1 ";
 		}
-		$strPeriod="";
-		$strDegree="";
-		$strStudent="";
-
 		
 		//$secondCondition = "  ds.discountFor=2 ";
 		if (!empty($data['id'])) {//discount setting id
@@ -4912,17 +4904,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
+		$sql.=" OR ds.discountFor=1";
 
-		$firstCondition = " OR ds.discountFor=1 ";
-		$sql .= $firstCondition;
 		// $firstWhere = " AND ((".$firstCondition . $strStudent . $strDegree . $strPeriod . ")";
 		// $secondWhere = " OR (".$secondCondition.$strDegree.$strPeriod."))";
 		if (!empty($data['fetchAll'])) {
+			
 			$result =  $this->getAdapter()->fetchAll($sql);
 			if (!empty($result) AND !empty($data['optionList'])) {
 				$options = '';
 				foreach ($result as $value) {
-					$options .= '<option value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'].'('.$value['DisValueType'].')', ENT_QUOTES) . '</option>';
+					$options .= '<option data-discountype="'.$value['DiscountValueType'].'" data-discount-value="'.$value['discountValue'].'" value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'], ENT_QUOTES) . '</option>';
 				}
 			return $options;
 			} else {

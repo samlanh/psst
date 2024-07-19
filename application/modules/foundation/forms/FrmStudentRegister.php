@@ -376,6 +376,16 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside'));
 		
+	
+		$studentType = new Zend_Dojo_Form_Element_FilteringSelect("studentType");	
+		$studentType->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'required'=>'true',
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$studentType->setMultiOptions($_db->getViewByType(40,1));
 		
 		$id = new Zend_Form_Element_hidden('id');
 		$id->setAttribs(array('dojoType'=>"dijit.form.TextBox",
@@ -444,6 +454,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$father_khname->setValue($data['father_khname']);
 			$mother_khname->setValue($data['mother_khname']);
 			$guardian_khname->setValue($data['guardian_khname']);
+			$studentType->setValue($data['studentType']);
 			
 		}
 	
@@ -501,6 +512,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$father_khname,
 						$mother_khname,
 						$guardian_khname,
+						$studentType
 						
 						)
 				);

@@ -663,7 +663,7 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$studentType = new Zend_Dojo_Form_Element_FilteringSelect("studentType");	
 		$studentType->setAttribs(array(
 				'dojoType'=>$this->filter,
-				'required'=>'true',
+				'required'=>'false',
 				'class'=>'fullside',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',

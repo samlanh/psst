@@ -88,6 +88,7 @@
 	public function getItemsDetailById($degreeId,$type=null,$is_set=null){
 		$db = $this->getAdapter();
 		$sql=" SELECT ide.*,
+		ide.branch_id as branchSet,
 		(SELECT pl.branch_id FROM `rms_product_location` AS pl WHERE ide.id=pl.pro_id LIMIT 1) AS branch_id,
 		(SELECT pl.price FROM `rms_product_location` AS pl WHERE ide.id=pl.pro_id LIMIT 1) AS price
 		FROM rms_itemsdetail AS ide WHERE ide.`id` = $degreeId ";
@@ -549,7 +550,7 @@
 		$lang = $dbgb->currentlang();
 		if($lang==1){
 			$title = "td.title";
-		}elseif($lang==1){
+		}elseif($lang==2){
 			$title = "td.title_en";
 		}
 		$sql = "SELECT td.id, $title AS product_name,

@@ -65,6 +65,8 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 				$search = array(
 					'adv_search' => '',
 					'branch_id' => '',
+					'academic_year' => '',
+					'academicYearEnroll' => '',
 					'degree' => '',
 					'grade' => '',
 					'discountSettengId'=> '',
@@ -81,17 +83,20 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 		$this->view->form_search=$form;
 	}
 	public function submitAction(){
+		
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
 				$db = new Accounting_Model_DbTable_DbDiscountSetting();
 				$db->updateStudentDiscount($_data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
-				// if(isset($_data['save_close'])){
-					
-				// }else{
-				// 	Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
-				// }
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+					//$this->_redirect('/accounting/updatestudentdiscount');
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+					//$this->_redirect('/accounting/updatestudentdiscount/add');
+				}
+				
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

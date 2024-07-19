@@ -294,6 +294,19 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}
+		if(!empty($search['academic_year'])){
+			$sql.=" AND sd.academic_year =".$search['academic_year'];
+		}
+		if(!empty($search['degree'])){
+			$sql.=" AND sd.degree =".$search['degree'];
+		}
+		if(!empty($search['grade'])){
+			$sql.=" AND sd.grade =".$search['grade'];
+		}
+		if(!empty($search['academicYearEnroll'])){
+			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
+		}
+	
 		$where="";
 		if(!empty($search['adv_search'])){
 			$s_where = array();
@@ -307,8 +320,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		}
 		
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-		$where.=" ORDER BY s.stu_id DESC ";
-		$where.=" LIMIT 200 ";
+		$where.=" ORDER BY sd.degree,sd.grade,s.stu_id DESC ";
+	//	$where.=" LIMIT 200 ";
 		return $db->fetchAll($sql.$where);
 	}
 	public function updateStudentDiscount($_data){
@@ -333,6 +346,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 							$this->update($data_gro, $where);
 
 							if(!empty($_data['toDiscountId'])){
+								
 								$arr = array(
 									'discountGroupId'=>$toDiscountId,
 									'studentId'      =>$stu_id,

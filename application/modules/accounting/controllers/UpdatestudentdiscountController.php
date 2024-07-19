@@ -65,6 +65,8 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 				$search = array(
 					'adv_search' => '',
 					'branch_id' => '',
+					'academic_year' => '',
+					'academicYearEnroll' => '',
 					'degree' => '',
 					'grade' => '',
 					'discountSettengId'=> '',

@@ -40,15 +40,10 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
-				$sms="INSERT_SUCCESS";
 				$_db = new Global_Model_DbTable_DbStuentType();
 				$_db->addStudentType($_data);
-				if(isset($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,"/global/studenttype");
-				}else{
-					Application_Form_FrmMessage::Sucessfull($sms,"/global/studenttype/add");
-				}
-				Application_Form_FrmMessage::message($sms);				
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/studenttype");
+						
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

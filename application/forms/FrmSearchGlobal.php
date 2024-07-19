@@ -77,6 +77,22 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
 		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
 		$_academic->setMultiOptions($opt);
+
+		$academicYearEnroll = new Zend_Dojo_Form_Element_FilteringSelect('academicYearEnroll');
+		$academicYearEnroll->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SELECT_ENROLL_YEAR"),
+				'class'=>'fullside',
+				'required'=>'false',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		
+		$academicYearEnroll->setValue($request->getParam("academicYearEnroll"));
+		$rows =  $_dbgb->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_ENROLL_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$academicYearEnroll->setMultiOptions($opt);
 		
 		$_room = new Zend_Dojo_Form_Element_FilteringSelect('room');
 		$_room->setAttribs(array(
@@ -643,6 +659,16 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		);
 		$_mention->setMultiOptions($_mention_opt);
 		$_mention->setValue($request->getParam("mention"));
+
+		$studentType = new Zend_Dojo_Form_Element_FilteringSelect("studentType");	
+		$studentType->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'required'=>'true',
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$studentType->setMultiOptions($_dbgb->getViewByType(40,1));
 				
 		$this->addElements(array(
 				$_type,
@@ -685,7 +711,9 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_department,
 				$_score_result_status,
 				$_resultStatus,
-				$_mention
+				$_mention,
+				$studentType,
+				$academicYearEnroll
 				)
 			);
 		return $this;

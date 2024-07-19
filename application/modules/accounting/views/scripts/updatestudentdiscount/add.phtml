@@ -23,7 +23,7 @@ a.btnstyle:hover{color:#eee;}
     	</div>
     	
 	    	<div class="card-box">
-	        	<div class="col-md-8 col-sm-8 col-xs-12 search-blog">
+	        	<div class="col-md-8 col-sm-8 col-xs-12 ">
 	        		<form id="studentgroup" dojoType="dijit.form.Form" action="" method="post" enctype="application/x-www-form-urlencoded">
 						<script type="dojo/method" event="onSubmit">			
 							if(this.validate()) {
@@ -31,6 +31,13 @@ a.btnstyle:hover{color:#eee;}
 								if(branch_id==''){
 									alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
 									dijit.byId('branch_id').focus();
+									return false;
+								}
+
+								grade = dijit.byId('grade').get('value');
+								if(grade==''){
+									alert('<?php echo $tr->translate("PLEASE_SELECT_GRADE");?>');
+									dijit.byId('grade').focus();
 									return false;
 								}
 								
@@ -51,6 +58,41 @@ a.btnstyle:hover{color:#eee;}
 				                </div>
 				              </div>
 			             </div>
+						 <div class="form-group">
+		                	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                	<?php echo $frm->getElement("academic_year");?>
+				                </div>
+				              </div>
+			             </div>
+						 <div class="form-group">
+		                	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR_ENROLL");?> </label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                	<?php echo $frm->getElement("academicYearEnroll");?>
+				                </div>
+				              </div>
+			             </div>
+						 <div class="form-group">
+		                	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                	<?php echo $frm->getElement("degree");?>
+				                </div>
+				              </div>
+			             </div>
+						 <div class="form-group">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="form-group">
+				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GRADE");?>  :
+				                   </label>
+				                   <div class="col-md-7 col-sm-7 col-xs-12">
+				                   		<input id="grade" />
+				                   </div>
+				                 </div>
+							</div>
+		                </div>
 						<div class="form-group">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="form-group">
@@ -62,6 +104,14 @@ a.btnstyle:hover{color:#eee;}
 				                 </div>
 							</div>
 		                </div>
+						<div class="form-group">
+		                	<div class="col-md-12 col-sm-12 col-xs-12">
+				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_TYPE");?> </label>
+				                <div class="col-md-7 col-sm-7 col-xs-12">
+				                	<?php echo $frm->getElement("studentType");?>
+				                </div>
+				            </div>
+			            </div>
 		                <div class="form-group">
 							<div class="col-md-12 col-sm-12 col-xs-12">
 								<div class="form-group">
@@ -259,14 +309,55 @@ dojo.ready(function(){
 			getNewDiscountInfoById();
 		}
 	}, "toDiscountId");
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                     
+		id: "grade",
+		name: "grade",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
+			//getNewDiscountInfoById();
+		}
+	}, "grade");
 	
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
 		 getAllDiscountSetting();
   	});
 	 oldDiscountSettengId='<?php echo $this->search['discountSettengId'];?>';
+	 oldGrade='<?php echo $this->search['grade'];?>';
 	 getAllDiscountSetting();
+	 getallGrade();
 });
+
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var urlGetGrade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dijit.byId('grade').attr('value','');   
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){return false;}
+		dojo.xhrPost({
+			url:urlGetGrade,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store);  
+				if(oldGrade>0){
+					dijit.byId('grade').attr('value',oldGrade);
+				} 
+			},
+			error: function(err) {
+			}
+		});
+}
 
 url_dic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'getdiscount'));?>';
 function getAllDiscountSetting(){

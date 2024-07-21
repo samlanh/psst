@@ -663,12 +663,21 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$studentType = new Zend_Dojo_Form_Element_FilteringSelect("studentType");	
 		$studentType->setAttribs(array(
 				'dojoType'=>$this->filter,
-				'required'=>'true',
+				'required'=>'false',
 				'class'=>'fullside',
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));
 		$studentType->setMultiOptions($_dbgb->getViewByType(40,1));
+
+		$updateOption=  new Zend_Dojo_Form_Element_FilteringSelect('updateOption');
+		$updateOption->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$updateopt = array(
+				''=>$this->tr->translate("SELECT_TYPE"),
+				1=>$this->tr->translate("ADD_TO_DISCOUNT"),
+				2=>$this->tr->translate("CHANGE_DISCOUNT"));
+		$updateOption->setMultiOptions($updateopt);
+		$updateOption->setValue($request->getParam("updateOption"));
 				
 		$this->addElements(array(
 				$_type,
@@ -713,7 +722,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_resultStatus,
 				$_mention,
 				$studentType,
-				$academicYearEnroll
+				$academicYearEnroll,
+				$updateOption
 				)
 			);
 		return $this;

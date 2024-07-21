@@ -1462,6 +1462,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				sgd.itemType=1
    				AND s.stu_id=$stu_id 
 	   			AND sgd.is_current=1 
+				AND sgd.is_pass=0
 				AND sgd.is_maingrade=1
 	   	LIMIT 1 ";
 		return $db->fetchRow($sql);

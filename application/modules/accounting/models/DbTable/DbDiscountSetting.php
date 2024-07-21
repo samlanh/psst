@@ -243,6 +243,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$sql.=" GROUP BY s.stu_id ";
 		return $db->fetchAll($sql);
 	}
+	
 	public function getDiscountSetting($data)
 	{
 		$db = $this->getAdapter();
@@ -257,6 +258,67 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$sql .= ' AND academicYear =' . $data['academicYear'];
 		}
 		return  $db->fetchAll($sql);
+	}
+	function getSearchStudent($search){
+		$db=$this->getAdapter();
+		$sql="SELECT 
+				s.stu_id,
+				s.stu_code,
+				s.stu_enname,
+				s.stu_khname,
+				s.last_name,
+				s.sex,
+				sd.degree,
+				sd.grade,
+				sd.feeId AS fee_id,
+				sd.academic_year,
+				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+			  FROM 
+			    rms_student AS s,
+			  	`rms_group_detail_student` AS sd
+		 	  WHERE 
+				sd.itemType=1 
+				AND s.stu_id = sd.stu_id
+				AND s.`status`=1 
+				AND s.customer_type = 1 
+				AND sd.stop_type=0
+				AND sd.is_pass=0
+				AND s.stu_id=sd.stu_id
+				AND sd.is_current=1 ";
+
+		if(!empty($search['branch_id'])){
+			$sql.=" AND s.branch_id =".$search['branch_id'];
+		}
+		if(!empty($search['academic_year'])){
+			$sql.=" AND sd.academic_year =".$search['academic_year'];
+		}
+		if(!empty($search['degree'])){
+			$sql.=" AND sd.degree =".$search['degree'];
+		}
+		if(!empty($search['grade'])){
+			$sql.=" AND sd.grade =".$search['grade'];
+		}
+		if(!empty($search['academicYearEnroll'])){
+			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
+		}
+		if($search['studentType'] > -1 ){
+			$sql.=" AND s.studentType =".$search['studentType'];
+		}
+		$where="";
+		if(!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['adv_search']));
+			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(s.last_name,s.stu_enname) LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
+		$where.=" ORDER BY sd.degree,sd.grade,s.stu_id DESC ";
+		return $db->fetchAll($sql.$where);
 	}
 	function getSearchStudentbyDiscount($search){
 		$db=$this->getAdapter();
@@ -306,7 +368,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['academicYearEnroll'])){
 			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
 		}
-	
+		if($search['studentType'] > -1 ){
+			$sql.=" AND s.studentType =".$search['studentType'];
+		}
 		$where="";
 		if(!empty($search['adv_search'])){
 			$s_where = array();
@@ -322,43 +386,110 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
 		$where.=" ORDER BY sd.degree,sd.grade,s.stu_id DESC ";
 	//	$where.=" LIMIT 200 ";
+	//	echo $sql.$where;
 		return $db->fetchAll($sql.$where);
 	}
 	public function updateStudentDiscount($_data){
 		$db = $this->getAdapter();
+		$dbg = new Application_Model_DbTable_DbGlobal();
 		try{
 			if(!empty($_data['public-methods'])){
 				
 				if(!empty($_data['toDiscountId'])){
+					if($_data['type']==2){  // Change Discount
 
-					$oldDiscountSettengId = empty($_data['oldDiscountSettengId'])?0:$_data['oldDiscountSettengId'];
-					$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
-				
-					$all_stu_id = $_data['public-methods'];
+						$oldDiscountSettengId = empty($_data['oldDiscountSettengId'])?0:$_data['oldDiscountSettengId'];
+						$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
 					
-					foreach ($all_stu_id as $stu_id){
-						if(!empty($_data['oldDiscountSettengId'])){
-							$this->_name = 'rms_discount_student';
-							$data_gro = array(
-									'isCurrent'=> 0,
-							);
-							$where = ' studentId = '.$stu_id."  AND isCurrent=1 AND discountGroupId = $oldDiscountSettengId ";
-							$this->update($data_gro, $where);
+						$all_stu_id = $_data['public-methods'];
+						
+						foreach ($all_stu_id as $stu_id){
+							if(!empty($_data['oldDiscountSettengId'])){
 
-							if(!empty($_data['toDiscountId'])){
-								
-								$arr = array(
-									'discountGroupId'=>$toDiscountId,
-									'studentId'      =>$stu_id,
-									'isCurrent'		 => 1,
-									'createDate'     => date("Y-m-d"),
-									'modifyDate'     => date("Y-m-d"),
-									'userId'         => $this->getUserId()
-								 );
-								 $this->_name ='rms_discount_student';
-								 $this->insert($arr);
+								//Update Old Student in old Discount
+								$this->_name = 'rms_discount_student';
+								$data_gro = array(
+										'isCurrent'=> 0,
+								);
+								$where = ' studentId = '.$stu_id."  AND isCurrent=1 AND discountGroupId = $oldDiscountSettengId ";
+								$this->update($data_gro, $where);
+
+								//Check Exist Student Discount
+								$param = array(
+									'discountGroupId'=> $toDiscountId,
+									'studentId'      => $stu_id,
+								);
+								$existDiscount=$this->IfExistDiscount($param);
+
+								if(empty($existDiscount)){  /// empty Student Discount
+
+									$stu_info=$dbg->getStudentinfoGlobalById($stu_id);
+									if(!empty($_data['toDiscountId'])){
+										$arr = array(
+											'discountGroupId'=>$toDiscountId,
+											'studentId'      =>$stu_id,
+											'degreeId'       =>$stu_info['degree'],
+											'grade'          =>$stu_info['grade'],
+											'isCurrent'		 => 1,
+											'createDate'     => date("Y-m-d"),
+											'modifyDate'     => date("Y-m-d"),
+											'userId'         => $this->getUserId()
+										);
+										$this->_name ='rms_discount_student';
+										$this->insert($arr);
+									}
+								}else{  /// exist Student Discount
+
+									$this->_name = 'rms_discount_student';
+									$data_gro = array(
+											'isCurrent'=> 1,
+									);
+									$where = ' studentId = '.$stu_id."  AND isCurrent=0 AND discountGroupId = $toDiscountId ";
+									$this->update($data_gro, $where);
+								}	
 							}
 						}
+					}elseif($_data['type']==1){  // ADD Student to discount
+						
+						$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
+						$all_stu_id = $_data['public-methods'];
+							foreach ($all_stu_id as $stu_id){
+								//Check Exist Student Discount
+								$param = array(
+									'discountGroupId'=> $toDiscountId,
+									'studentId'      => $stu_id,
+								);
+								$existDiscount=$this->IfExistDiscount($param);
+
+								if(empty($existDiscount)){  /// empty Student Discount
+
+									$stu_info=$dbg->getStudentinfoGlobalById($stu_id);
+									if(!empty($_data['toDiscountId'])){
+										$arr = array(
+											'discountGroupId'=>$toDiscountId,
+											'studentId'      =>$stu_id,
+											'degreeId'       =>$stu_info['degree'],
+											'grade'          =>$stu_info['grade'],
+											'isCurrent'		 => 1,
+											'createDate'     => date("Y-m-d"),
+											'modifyDate'     => date("Y-m-d"),
+											'userId'         => $this->getUserId()
+										);
+										$this->_name ='rms_discount_student';
+										$this->insert($arr);
+									}
+								}else{  /// exist Student Discount
+									$stu_info=$dbg->getStudentinfoGlobalById($stu_id);
+									$this->_name = 'rms_discount_student';
+									$data_gro = array(
+											'degreeId'       =>$stu_info['degree'],
+											'grade'          =>$stu_info['grade'],
+											'isCurrent'=> 1,
+									);
+									$where = ' studentId = '.$stu_id."  AND discountGroupId = $toDiscountId ";
+									$this->update($data_gro, $where);
+								}	
+							}
 					}
 				}
 			}
@@ -368,7 +499,17 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			echo $e->getMessage(); exit();
 		}
 	}
-
+	function IfExistDiscount($data){
+		$db = $this->getAdapter();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();	
+		$discountGroupId = empty($data["discountGroupId"]) ? 0 : $data["discountGroupId"];
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$sql = " SELECT * FROM  `rms_discount_student` ";
+		$sql.=" WHERE discountGroupId = $discountGroupId  ";
+		$sql.=" AND studentId = $studentId  ";
+		
+		return $db->fetchRow($sql);
+	}
 	function getDiscountInforByID($discountId,$string=null){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();

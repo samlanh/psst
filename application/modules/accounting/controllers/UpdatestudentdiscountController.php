@@ -58,18 +58,24 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 			if($this->getRequest()->isPost()){
 				$_data=$this->getRequest()->getPost();
 				$search = $_data;
-			//	print_r($search);exit();
-				$rs =$db->getSearchStudentbyDiscount($search);
+				if($search['updateOption']==1){     //Add Student To Discount
+					$rs =$db->getSearchStudent($search);
+				}elseif($search['updateOption']==2){ //Change Discount Student
+					$rs =$db->getSearchStudentbyDiscount($search);
+				}
 				$this->view->rs = $rs;
 			}else{
 				$search = array(
-					'adv_search' => '',
-					'branch_id' => '',
-					'academic_year' => '',
+					'adv_search'  		 => '',
+					'branch_id'			 => '',
+					'academic_year' 	 => '',
+					'degree' 			 => '',
+					'grade' 			 => '',
 					'academicYearEnroll' => '',
-					'degree' => '',
-					'grade' => '',
-					'discountSettengId'=> '',
+					'studentType' 		 => -1,
+					'discountSettengId'  => '',
+					'updateOption'  	 => '',
+					
 				);
 			}
 			$this->view->search=$search;

@@ -80,7 +80,7 @@ html[dir="rtl"] .select2-container .select2-choice {
 
     white-space: nowrap;
 
-    text-overflow: ellipsis;
+    /*text-overflow: ellipsis;*/
     float: none;
     width: auto;
 }
@@ -179,7 +179,7 @@ html[dir="rtl"] .select2-container .select2-choice > .select2-chosen {
 
 .select2-container .select2-choice .select2-arrow {
     display: inline-block;
-    width: 18px;
+    width: 17px;
     height: 100%;
     position: absolute;
     right: 0;

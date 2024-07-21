@@ -352,7 +352,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 										dojoType="dijit.form.TextBox" />
 								</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input id="study_year" />
+									<select class="custome-select-opt fullside" onchange="" placeHolder="<?php echo $tr->translate("SELECT_ACADEMIC_YEAR"); ?>" required="false" name="study_year" id="study_year" ></select>
 								</div>
 							</div>
 							<div class="form-group">
@@ -878,6 +878,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	var Itemstore = getDataStorefromJSON('id', 'name', []);
 	require(["dojo/ready"], function (ready) {
 		ready(function () {
+			$("#study_year").select2();
 			getallstudentname();
 			getItemDetail(-1, 1, 2);
 			getAllAcademicBy();
@@ -916,19 +917,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			queryExpr: "*${0}*",
 			autoComplete: false,
 			required: false,
-			id: "study_year",
-			name: "study_year",
-			class: "fullside",
-			placeHolder: "<?php echo $tr->translate("SELECT_ACADEMIC_YEAR"); ?>",
-			onChange: function () {
-				academic_year = dijit.byId('study_year').get('value');
-			}
-		}, "study_year");
-
-		new dijit.form.FilteringSelect({
-			queryExpr: "*${0}*",
-			autoComplete: false,
-			required: false,
 			id: "group_id",
 			name: "group_id",
 			class: 'fullside',
@@ -946,11 +934,22 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			return false;
 		}
 		let url_getacademic = '<?php echo $this->url(array('module' => 'accounting', 'controller' => 'fee', 'action' => 'getfeeid')); ?>';
-		contentData = {
+			contentData = {
 			'branch_id': branch_id,
+			'option':1,
 			'isFinished': 0
 		}
-		getAllAcademicByBranch(url_getacademic, contentData);
+		dojo.xhrPost({
+			url: url_getacademic,
+			content:contentData,
+			handleAs:"json",
+			load: function(data){
+				$('#study_year').empty().trigger("change");
+				$('#study_year').append(data).trigger('change');
+			},
+			error: function(err) {
+			}
+		});
 	}
 
 	function getItemDetail(dept_id, a, type = 1) {
@@ -1081,8 +1080,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					dojo.byId("table_paymenthistory").innerHTML = data.resultPaymentHistory;
 
 					studentData = data.studentData;
-
-					dijit.byId('study_year').set('value', studentData.feeId);
+					$('#study_year').val(studentData.feeId).trigger('change');
 					dijit.byId("degree").set('value', studentData.degree);
 					dijit.byId("grade").set('value', studentData.grade);
 
@@ -1216,7 +1214,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	function addRow(serviceId, dataLabel, dataRow = null) {
 		//col++;
 		strCol6 = '<div class="col-md-6 col-sm-6 col-xs-12">';
-		study_year = dijit.byId('study_year').get('value');
+		study_year = $('#study_year').val();
 
 		customer_type = dijit.byId('customer_type').get('value');
 		student_type = dijit.byId('student_type').get('value');
@@ -1249,7 +1247,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' />';
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
-		template += '<td ><div class="form-group"><select class="fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" dojoType="dijit.form.FilteringSelect" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
+		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
 		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >' + term_option + '</select></div></td>';
 		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
@@ -1266,7 +1264,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal(' + col + ');netTotal(' + col + ');"  name="total_amount' + col + '" value="0" id="total_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID'); ?>" class="fullside" onkeyup="paidAmount(' + col + ');"  name="paid_amount' + col + '" id="paid_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="0" name="isoldBalance' + col + '" id="isoldBalance' + col + '" dojoType="dijit.form.TextBox"  /></div></td>';
 		template += '<td><input type="text" class="fullside" name="remark' + col + '" id="remark' + col + '" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE"); ?>" style="min-height:60px;" />';
-		template += '<input type="hidden" value="' + serviceId + '" dojoType="dijit.form.TextBox" name="item_id' + col + '" id="item_id' + col + '"/><input type="text" dojoType="dijit.form.TextBox" name="service_type_' + col + '" id="service_type_' + col + '"/></td>';
+		template += '<input type="hidden" value="' + serviceId + '" dojoType="dijit.form.TextBox" name="item_id' + col + '" id="item_id' + col + '"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_' + col + '" id="service_type_' + col + '"/></td>';
 
 		classOddRow = 'listBox evenRow';
 		if (numberRange % 2 == 0) {
@@ -1290,6 +1288,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			parseContent: true,
 		});
 		
+	$("#academic_year_"+col).select2();
 	$("#discount_type"+col).select2({
 		allowClear: "true"
 	});
@@ -1299,7 +1298,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		if (dataRow != null) {
 			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
 			if (dataRow.feeId > 0) {
-				dijit.byId('academic_year_' + col).attr('value', dataRow.feeId);
+				$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
 			}
 			if (dataRow.is_onepayment == 1) {
 				dijit.byId('term_' + col).attr('value', 5);
@@ -1425,7 +1424,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			dijit.byId("price_" + key).set('readOnly', true);
 		}
 
-		study_year = dijit.byId('academic_year_' + key).get('value');
+		study_year = $('#academic_year_' + key).val();
 		dojo.xhrPost({
 			url: url_service_fee,
 			content: {
@@ -1566,8 +1565,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		var receipt_type = <?php echo RECEIPT_TYPE; ?>;
 		if (dijit.byId('office_receipt').validate()) {
 
-			study_year = dijit.byId("study_year").get("value");
-			if (study_year == 1) { dijit.byId("study_year").focus(); }
 			var identity = $('#identity').val();
 			if (identity == '') {
 				alert("There is no record to save");
@@ -1610,10 +1607,10 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'), { places: 2 });
 			dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 
-			academicYearLabel = dijit.byId('study_year').attr("displayedValue");
+			academicYearLabel = $('#study_year').select2('data').text;
 			dojo.byId("lb_academic_year").innerHTML = academicYearLabel;
 
-			dojo.byId("lb_part_time").innerHTML = dojo.byId("lbl_part_time").innerHTML;;
+			dojo.byId("lb_part_time").innerHTML = dojo.byId("lbl_part_time").innerHTML;
 
 			let bankName = (dijit.byId("bank_name").get('value') == 0) ? '' : dijit.byId("bank_name").attr('displayedValue');
 
@@ -1651,8 +1648,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					var items_type = dijit.byId("service_type_" + rowIDArray[n]).get("value");
 					var isoldBalance = dijit.byId("isoldBalance" + rowIDArray[n]).get("value");
 					var term_label = "-";
+					var textTerm= $("#term_" + rowIDArray[n]).text();
 					if (items_type != 3 && isoldBalance == 0) {
-						term_label = dijit.byId("term_" + rowIDArray[n]).attr('displayedValue');
+						term_label = $("#term_" + rowIDArray[n]).text();
 					}
 					temp += '<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">' + i + '</td>';
 
@@ -1662,7 +1660,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					}
 					temp += '<td align="left" style="border:1px solid #000;line-height:10px" class="notedDescription"><label class="notedDescription">&nbsp;' + item_label + '<label></td>';
 					temp += '<td align="center" style="border:1px solid #000;white-space:nowrap;">' + term_label + '</td>';
-					onepaymentType = dijit.byId("term_" + rowIDArray[n]).get('value');
+					onepaymentType = $("#term_" + rowIDArray[n]).val();
 					
 					if (onepaymentType == 5) {//one payment only
 						start_date = '';
@@ -1676,7 +1674,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 						epx_date='';
 					}
 					temp += '<td align="center" style="border:1px solid #000;"><span class="spanBlog">' + start_date + '</span><span class="spanBlog">' + epx_date + '</span></td>';
-					//temp += '<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">' + dijit.byId("remark" + rowIDArray[n]).get('value') + '</td>';
 					temp += '<td style="border:1px solid #000;">' + dijit.byId("qty_" + rowIDArray[n]).get('value') + '</td>';
 					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId('price_' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
 
@@ -1697,7 +1694,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					temp += '<td style="border:1px solid #000;"><span class="spanBlog">' + discountLable + '</span></td>';
 					temp += '<td align="center" style="border:1px solid #000;">' + dojo.number.format(dijit.byId('extra_fee' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
 					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId("total_amount" + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
-					//temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';				  				  
+					//temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';	
+					//temp += '<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">' + dijit.byId("remark" + rowIDArray[n]).get('value') + '</td>';
 					temp += '</tr>';
 					i++;
 				}
@@ -1762,9 +1760,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	function submitAction() {
 		if (dijit.byId('office_receipt').validate()) {
 
-			year = dijit.byId('study_year').get('value');
+			year = $('#study_year').val();
 			if (year == -1) {
-				dijit.byId("study_year").focus();
+				$("#study_year").focus();
 				return false;
 			}
 			var identity = $('#identity').val();

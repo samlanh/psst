@@ -1205,7 +1205,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = "SELECT id,
 		   	$titleQuery AS name,
 		   	CONCAT_WS(',',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),generation) AS years,
-			generation as feeType
+			generation as feeType,
+			academic_year as academicYear,
+			term_study as termStudy
 
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
@@ -1247,7 +1249,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$options = '';
 			if (!empty($result))
 				foreach ($result as $value) {
-					$options .= '<option  data-jsondata="" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+					$options .= '<option  data-academic-year="' . $value['academicYear'] . '" data-fee-title="' . $value['feeType'] . '" data-term-study="' . $value['termStudy'] . '" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 				}
 			return $options;
 		}
@@ -2949,7 +2951,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 											<span class="title-info">' . $tr->translate("NAME_ENGLISH") . '</span><span id="lbl_nameen" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["last_name"] . " " . $rs["stu_enname"] . '</a></span>
 											<span class="title-info">' . $tr->translate("DOB") . '</span><span id="lbl_dob" class="inf-value" >: ' . $rs['dob'] . '</span>
 											<span class="title-info">' . $tr->translate("PHONE") . '</span><span id="lbl_phone" class="inf-value">: ' . $rs['tel'] . '</span>
-											<span class="title-info">' . $tr->translate("Enroll Year") . '</span><span id="lbl_phone" class="inf-value">: ' . $rs['academicYearEnroll'] . '</span>
+											<span class="title-info">' . $tr->translate("Year Enrolled") . '</span><span id="lbl_phone" class="inf-value groupinfo">: ' . $rs['academicYearEnroll'] . '</span>
 										</p>
 										</div>
 									</div>

@@ -64,7 +64,8 @@ class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
 					'branch_id' => '',
 					'degree' => '',
 					'grade' => '',
-					'fromFeeid'=> ''
+					'fromFeeid'=> '',
+					'limit'=> ''
 				);
 			}
 			$this->view->search=$search;

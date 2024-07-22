@@ -59,7 +59,7 @@
 			
 		";
 		if(!empty($type)){
-			if($type==3){
+			if($type==3 || $type==2){
 				$sql.= " ,(SELECT ip.title FROM rms_items AS ip WHERE ip.id = d.parent AND d.type =ip.type LIMIT 1) AS category ";
 			}
 			

@@ -31,7 +31,7 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree(null);
+    	$frm->FrmAddDegree(null,3);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
@@ -67,7 +67,7 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree(null);
+    	$frm->FrmAddDegree(null,3);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
@@ -95,7 +95,7 @@ class Stock_ProductcateController extends Zend_Controller_Action {
     	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree($row);
+    	$frm->FrmAddDegree($row,3);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }

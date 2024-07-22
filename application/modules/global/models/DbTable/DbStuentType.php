@@ -7,19 +7,19 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
     	return $session_user->user_id;  	 
     }
-	public function addStudentType($_data){
+	public function addViewItemsByType($_data){
 		$db = $this->getAdapter();
 		try{
-	 
+			$type = empty($_data["type"]) ? 0 : $_data["type"];
 			$dbg= New Application_Model_DbTable_DbGlobal;
-			$keyCode = $dbg->getLastKeycodeByType(40);
+			$keyCode = $dbg->getLastKeycodeByType($type);
 
 	  		$arr = array(
 	  				'name_kh'	    => $_data['name_kh'],
 	  				'name_en'	    => $_data['name_en'],
 	  				'shortcut'	    => empty($_data['shortcut']) ? "" : $_data['shortcut'],
 	  				'note'	    	=> empty($_data['note']) ? "" : $_data['note'],
-					'type'		    => 40,
+					'type'		    => $type,
 					'status'		=> 1,
 	  				'key_code'		=> $keyCode,
 				
@@ -31,17 +31,20 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	}
-	public function getStudentTypeById($id){
+	public function getViewItemsByTypeInfo($_data){
+		
+		$id = empty($_data["id"]) ? 0 : $_data["id"];
+		$type = empty($_data["type"]) ? 0 : $_data["type"];
 		$db = $this->getAdapter();
-		$sql = " SELECT * FROM rms_view WHERE type=40 AND key_code = ".$db->quote($id);
+		$sql = " SELECT * FROM rms_view WHERE type=".$type." AND key_code = ".$db->quote($id);
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		return $row;
 	}
-	public function updateStudentType($_data){
+	public function updateViewItemsByType($_data){
 		$db = $this->getAdapter();
 		$status = empty($_data['status'])?0:1;
-		
+		$type = empty($_data["type"]) ? 0 : $_data["type"];
 		$_arr=array(
 				'name_kh'	    => $_data['name_kh'],
 				'name_en'	    => $_data['name_en'],
@@ -50,11 +53,11 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
   				'status'	    => $status,
 				
 		);
-		$where=$this->getAdapter()->quoteInto(" type=40 AND key_code=?", $_data["id"]);
+		$where=$this->getAdapter()->quoteInto(" type=".$type." AND key_code=?", $_data["id"]);
 		$this->_name = "rms_view";
 		$this->update($_arr,$where);
 	}
-	function getAllStudentType($search){
+	function getAllViewItemsByType($search){
 		$db = $this->getAdapter();
 		$sql = "SELECT 
 				  key_code AS id,
@@ -62,9 +65,10 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 				  name_kh,
 				  name_en
 				";
+		$type = empty($search["type"]) ? 0 : $search["type"];
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->caseStatusShowImage("status");
-		$sql.=" FROM `rms_view`  WHERE type =40  ";
+		$sql.=" FROM `rms_view`  WHERE type =$type  ";
 		
 		$where = '';
 		$order = ' ORDER BY key_code DESC ';

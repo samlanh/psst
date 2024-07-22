@@ -1,5 +1,5 @@
 <?php
-class Global_StudenttypeController extends Zend_Controller_Action {
+class Global_FamilytypeController extends Zend_Controller_Action {
     public function init()
     {    	
     	header('content-type: text/html; charset=utf8');
@@ -18,15 +18,14 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 						'title' => '',
 						'status' => -1);
 			}
-			
-			$search["type"] = 40;
+			$search["type"] = 41;
  			$db = new Global_Model_DbTable_DbStuentType();
  			$rs_rows= $db->getAllViewItemsByType($search);
 		
 			$list = new Application_Form_Frmtable();
 			$collumns = array("SHORTCUT","KH_NAME","NAME_EN","STATUS");
 			$link=array(
-					'module'=>'global','controller'=>'studenttype','action'=>'edit',
+					'module'=>'global','controller'=>'familytype','action'=>'edit',
 			);
 			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('name_kh'=>$link,'name_en'=>$link));
 		}catch (Exception $e){
@@ -43,9 +42,9 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$_db = new Global_Model_DbTable_DbStuentType();
-				$_data["type"] = 40;
+				$_data["type"] = 41;
 				$_db->addViewItemsByType($_data);
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/studenttype");
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/global/familytype");
 						
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -54,7 +53,7 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 		}
 	}
 	public function editAction(){
-		$type = 40;
+		$type = 41;
 		if($this->getRequest()->isPost())
 		{
 			try{
@@ -62,7 +61,7 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 				$db = new Global_Model_DbTable_DbStuentType();
 				$_data["type"] = $type;
 				$db->updateViewItemsByType($_data);
-				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/studenttype/index");
+				Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/global/familytype/index");
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -77,17 +76,5 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 		);
 		$this->view->rs=$db->getViewItemsByTypeInfo($arr);
 	}
-	
-	function addViewPopupAction(){
-    	if($this->getRequest()->isPost()){
-    		$data=$this->getRequest()->getPost();
-			$data["viewType"] = empty($data["viewType"]) ? 40 : $data["viewType"];
-    		
-			$db = new Global_Model_DbTable_DbStuentType();
-    		$id = $db->addPopupView($data);
-    		print_r(Zend_Json::encode($id));
-    		exit();
-    	}
-    }
 	
 }

@@ -16,6 +16,20 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     	$_dbuser = new Application_Model_DbTable_DbUsers();
     	$userid = $_dbgb->getUserId();
     	$userinfo = $_dbuser->getUserInfo($userid);
+		
+		$parentId = new Zend_Dojo_Form_Element_FilteringSelect('parentId');
+		$parentId->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>'false',
+			'required'=>'false',
+			'queryExpr'=>'*${0}*',
+		));
+		$Option = $_dbgb->getAllItems(3);
+		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
+		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
+		$parentId->setMultiOptions($_arr_opt);
+		$parentId->setValue($request->getParam("parentId"));
     	
     	$title = new Zend_Dojo_Form_Element_TextBox('title');
     	$title->setAttribs(array(
@@ -211,6 +225,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     		$note->setValue($data["note"]);
     		$_status->setValue($data["status"]);
     		$id->setValue($data["id"]);
+    		$parentId->setValue($data["parent"]);
     	}
     	
     	$this->addElements(array(
@@ -231,7 +246,8 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     			$advance_search,
     			$_status_search,
     			$_schoolOption_search,
-    			$_type_search
+    			$_type_search,
+    			$parentId
     			));
     	return $this;
     }

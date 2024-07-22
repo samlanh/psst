@@ -830,6 +830,13 @@ table#table_row_study tr td {
 					                   		<?php echo $frm->getElement("student_id");?>
 					                   </div>
 					                </div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<input id="studentType" /><?php //echo $frm->getElement("studentType");?>
+										</div>
+									</div>
 					                <?php if (EDUCATION_LEVEL==1){?>
 					                <div class="form-group">
 					                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CULTURE_LEVEL");?>  :
@@ -882,30 +889,6 @@ table#table_row_study tr td {
 						           </div>  
 				            </div>
 				            <div class="col-md-4 col-sm-4 col-xs-12">
-								<div class="card-blogform">
-									<div class="card-body">
-										<div class="form-group">
-											<div class="d-flex"> 
-												<div class="settings-main-icon ">
-													<i class="material-icons-outlined">
-														sell
-													</i>
-												</div> 
-												<div class="col-md-10 col-sm-10 col-xs-12"> 
-													<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_TYPE");?></p>
-												</div> 
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("studentType");?>
-											</div>
-										</div> 
-									</div>
-				                </div>
-
 				            	<div class="displaynone">
 					            	<div class="form-group">
 					                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-graduation-cap" aria-hidden="true"></i> <?php echo $tr->translate("SCHOLARSHIP");?></label>
@@ -1158,6 +1141,55 @@ table#table_row_study tr td {
 		</form>
 	</div>
 </div>
+
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:500px;" id="popupStudentType" >
+		<form style="background-color: buttonface;" id='frmStudentType' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			
+			<div class="card-blogform">
+				<div class="card-body">
+				  <div class="form-group">
+						<div class="d-flex"> 
+							<div class="settings-main-icon ">
+								<i class="material-icons-outlined">
+								library_books
+								</i>
+							</div> 
+							<div class="col-md-10 col-sm-10 col-xs-12"> 
+								<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ADD_STUDENT_TYPE");?></p>
+							</div> 
+						</div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("KH_NAME");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="popTitleKh" name="popTitleKh" value="" type="text">
+					   </div>
+					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("EN_NAME");?>  :
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="popTitleEn" name="popTitleEn" value="" type="text">
+					   </div>
+					</div>
+					
+					<div class="clearfix"></div>
+					<div class="card-box">
+						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<input type="hidden" name="viewType" id="viewType" value="40" dojoType="dijit.form.TextBox" />
+							<input type="button" class="button-class button-danger" iconClass="glyphicon glyphicon-off" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hideStudentType" name="hideStudentType" dojoType="dijit.form.Button" onclick="hideDialogPopup('popupStudentType');"/>
+							<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save" label="<?php echo $tr->translate('SAVE');?>" id="saveStudentType" name="saveStudentType" dojoType="dijit.form.Button" onclick="addStudentTypePop();"/>
+						</div>
+					</div>
+			
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.NumberTextBox");
@@ -1177,6 +1209,8 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 
 var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var nation_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->nation));?> );
+var studenTypestore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode($this->studentTypeOption));?>);
+
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
 		queryExpr: "*${0}*",
@@ -1495,7 +1529,7 @@ dojo.ready(function(){
 		id: "distric_note",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
+		missingMessage:"អ្នកភ្លេចបំពេញ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
 			onChange: function() {
 				distric_note = dijit.byId('distric_note').get('value');
 				if(distric_note==-1){
@@ -1514,7 +1548,7 @@ dojo.ready(function(){
 		id: "commun_note",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
+		missingMessage:"អ្នកភ្លេចបំពេញ ឃុំ/សង្កាត់",	
 			onChange: function() {
 				commun_note = dijit.byId('commun_note').get('value');
 				if(commun_note==-1){
@@ -1535,7 +1569,7 @@ dojo.ready(function(){
 		id: "village_note",
 		searchAttr: "name",
 		class: 'fullside',
-		missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
+		missingMessage:"អ្នកភ្លេចបំពេញ ឈ្មោះភូមិ!",	
 			onChange: function() {
 				vill = dijit.byId('village_note').get('value');
 				if(vill==-1){
@@ -1543,7 +1577,25 @@ dojo.ready(function(){
 				}
 			}
 		}, "village_note");
-		filterDistrict();
+		
+	new dijit.form.FilteringSelect({
+		store: studenTypestore,
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: true,                        
+		id: "studentType",
+		name: "studentType",           
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("STUDENT_TYPE");?>", 
+		onChange: function() {          
+			studentType = dijit.byId('studentType').get('value');
+			if(studentType==-1){
+				dijit.byId("popupStudentType").show();
+			}
+		} 
+	}, "studentType");
+		
+	filterDistrict();
 
 
 	var branch_id = dijit.byId('branch_id');
@@ -2531,6 +2583,33 @@ function initialize() {
 	    	dijit.byId("recordEdit").attr("value",detailid);
 	    	dijit.byId('rowIndex').attr("value",index);
 	    }
+		
+function addStudentTypePop(){
+	var urlAddViewType = '<?php echo $this->url(array("module"=>"global","controller"=>"studenttype","action"=>"add-view-popup")); ?>';
+	if(dijit.byId('frmStudentType').validate()){	
+		loadingBlock();
+		dojo.xhrPost({
+			url:urlAddViewType,
+			form: dojo.byId("frmStudentType"),
+			handleAs:"json",
+			load: function(data) {
+				var newItemsMaker = { 
+					id: data,
+					name: dijit.byId('popTitleKh').get('value')
+				};
+				addDataToSelectbox(dijit.byId('studentType'), studenTypestore, newItemsMaker, data);
+				
+				dijit.byId('frmStudentType').reset();
+				dijit.byId("popupStudentType").hide();
+			    HideloadingBlock();
+			},
+			error: function(err) {
+				alert(err);
+				HideloadingBlock();
+			}
+		});
+	}
+}
 </script>
 <script>
 <?php $successAudio = $this->baseUrl()."/images/frontFile/audio/no_sound.mp3";

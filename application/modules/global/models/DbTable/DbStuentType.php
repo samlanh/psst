@@ -74,5 +74,27 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 			$where.=' AND status='.$search['status'];
 		}
 		return $db->fetchAll($sql.$where.$order);
-	}	
+	}
+	
+	
+	public function addPopupView($_data){
+		$db = $this->getAdapter();
+		try{
+	 
+			$dbg= New Application_Model_DbTable_DbGlobal;
+			$keyCode = $dbg->getLastKeycodeByType($_data['viewType']);
+	  		$arr = array(
+	  				'name_kh'	    => $_data['popTitleKh'],
+	  				'name_en'	    => $_data['popTitleEn'],
+					'type'		    => $_data['viewType'],
+					'status'		=> 1,
+	  				'key_code'		=> $keyCode,
+	  		);
+			$this->insert($arr);
+			return $keyCode;
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+		}
+	}
 }

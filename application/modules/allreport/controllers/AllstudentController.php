@@ -5,6 +5,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
      /* Initialize action controller here */
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+		defined('BRANCH_DISPLAY_SETTING') || define('BRANCH_DISPLAY_SETTING', Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting'));
 	}
 	public function indexAction()
 	{

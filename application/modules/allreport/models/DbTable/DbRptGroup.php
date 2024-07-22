@@ -188,22 +188,24 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	public function getGroupDetailReport($search){//using
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();
+	//	$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
+
 	   	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
 	   	if($lang==1){// khmer
 	   		$label = "name_kh";
 	   		$grade = "rms_itemsdetail.title";
 	   		$degree = "rms_items.title";
-	   		$branch = "b.branch_namekh";
+
 	   	}else{ // English
 	   		$label = "name_en";
 	   		$grade = "rms_itemsdetail.title_en";
 	   		$degree = "rms_items.title_en";
-	   		$branch = "b.branch_nameen";
 	   	}
 	   	//(SELECT	$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`)) LIMIT 1) AS `session`,
 	   	$sql = "SELECT
 				   	`g`.`id`,
-				   	(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
+				   	(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
 				   	`g`.`group_code` AS `group_code`,
 				   	(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic,
 				   	`g`.`semester` AS `semester`,

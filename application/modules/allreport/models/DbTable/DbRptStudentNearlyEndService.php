@@ -17,21 +17,20 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	}
 
     	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
     	if($lang==1){// khmer
     		$label = "name_kh";
-    		$branch = "branch_namekh";
     		$item_detail = "item.title";
     		$item = "title";
     	}else{ // English
     		$label = "name_en";
-    		$branch = "branch_nameen";
     		$item_detail = "item.title_en";
     		$item = "title_en";
     	}
     	
     	$sql="SELECT 
 				 spd.`id` AS payment_id_detail,
-    		     (SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
+    		     (SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
 				 s.stu_code AS stu_code,
 				 s.stu_khname AS stu_khname,
 				 s.stu_enname AS first_name,

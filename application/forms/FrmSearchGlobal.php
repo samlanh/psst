@@ -678,6 +678,19 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				2=>$this->tr->translate("CHANGE_DISCOUNT"));
 		$updateOption->setMultiOptions($updateopt);
 		$updateOption->setValue($request->getParam("updateOption"));
+
+		$limit=  new Zend_Dojo_Form_Element_FilteringSelect('limit');
+		$limit->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$limitopt = array(
+				''=>$this->tr->translate("Unlimited"),
+				50=>$this->tr->translate("Limit 50"),
+				100=>$this->tr->translate("Limit 100"),
+				200=>$this->tr->translate("Limit 200"),
+			//
+				
+			);
+		$limit->setMultiOptions($limitopt);
+		$limit->setValue($request->getParam("limit"));
 				
 		$this->addElements(array(
 				$_type,
@@ -723,7 +736,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$_mention,
 				$studentType,
 				$academicYearEnroll,
-				$updateOption
+				$updateOption,
+				$limit
 				)
 			);
 		return $this;

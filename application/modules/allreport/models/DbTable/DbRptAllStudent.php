@@ -8,6 +8,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
     	$field = 'name_en';
     	
     	
@@ -15,7 +16,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$label = "name_kh";
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
-    		$branch = "branch_namekh";
     		
     		$village_name = "village_namekh";
     		$commune_name = "commune_namekh";
@@ -28,7 +28,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
-    		$branch = "branch_nameen";
     		
     		$village_name = "village_name";
     		$commune_name = "commune_name";
@@ -475,11 +474,12 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
     	if($lang==1){// khmer
     		$label = "name_kh";
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
-    		$branch = "branch_namekh";
+    		
     	
     		$village_name = "village_namekh";
     		$commune_name = "commune_namekh";
@@ -490,7 +490,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
-    		$branch = "branch_nameen";
+    		
     	
     		$village_name = "village_name";
     		$commune_name = "commune_name";
@@ -1048,20 +1048,21 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$to_date = $search['end_date'];
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$lang = $dbp->currentlang();
+		$branch= $dbp->getBranchDisplay();
     	if($lang==1){// khmer
 	   		$label = "name_kh";
 	   		$grade = "rms_itemsdetail.title";
 	   		$degree = "rms_items.title";
-	   		$branch = "b.branch_namekh";
+	   		
 	   	}else{ // English
 	   		$label = "name_en";
 	   		$grade = "rms_itemsdetail.title_en";
 	   		$degree = "rms_items.title_en";
-	   		$branch = "b.branch_nameen";
+	   		
 	   	}
 		$sql ="SELECT 
     				s.branch_id,
-			    	(SELECT $branch FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
+			    	(SELECT b.$branch FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
 			    	(SELECT b.photo FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_logo,
 			    	s.stu_code,
 			    	s.stu_khname,
@@ -1179,16 +1180,16 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
     	if($lang==1){// khmer
     		$label = "name_kh";
-    		$branch = "branch_namekh";
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
 			
     	}else{ // English
     		$label = "name_en";
-    		$branch = "branch_nameen";
     		$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
     	}
     	$sql = "SELECT 
     			s.stu_id,s.stu_code,s.stu_khname,s.last_name,s.stu_enname,s.sex,s.tel,s.email,
@@ -1276,16 +1277,17 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
     	if($lang==1){// khmer
     		$label = "name_kh";
-    		$branch = "branch_namekh";
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
+			
     	}else{ // English
     		$label = "name_en";
-    		$branch = "branch_nameen";
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
+
     	}
     	$sql="SELECT 
 				s.branch_id,
@@ -1573,13 +1575,13 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
+		$branch= $dbp->getBranchDisplay();
 		$month='month_en';
 		$label="name_en";
-		$branch = "branch_nameen";
+		
 		if ($currentLang==1){
 			$month='month_kh';
 			$label="name_kh";
-			$branch = "branch_namekh";
 		}
 		$sql = "select 
 					id,

@@ -67,7 +67,12 @@ ul.opt-school {
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												&nbsp;
 											</div>
-
+											<div class="form-group">
+												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?></label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm_degree->getElement("parentId");?>
+												</div>
+											</div>
 											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE");?> <span class="required">*</span></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">

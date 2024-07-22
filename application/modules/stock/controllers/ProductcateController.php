@@ -24,7 +24,7 @@ class Stock_ProductcateController extends Zend_Controller_Action {
       
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("TITLE","TITLE_EN","BY_USER","STATUS");
+    	$collumns = array("TITLE","TITLE_EN","PRODUCT_CATEGORY","BY_USER","STATUS");
     	$link=array(
     			'module'=>'stock','controller'=>'productcate','action'=>'edit',
     	);

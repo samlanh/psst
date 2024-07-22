@@ -2444,9 +2444,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 
-	function getAllItems($type = null, $branchlists = null, $schooloption = null)
+	function getAllItems($type = null, $branchlists = null, $schooloption = null,$parent = 0, $spacing = '', $cate_tree_array = '')
 	{
 		$db = $this->getAdapter();
+		if (!is_array($cate_tree_array))
+			$cate_tree_array = array();
 
 		$currentLang = $this->currentlang();
 		$colunmname = 'title_en';
@@ -2456,6 +2458,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$this->_name = "rms_items";
 		$sql = "SELECT m.id, m.$colunmname AS name FROM $this->_name AS m WHERE m.status=1 ";
+		$sql .= " AND m.parent=$parent";
 		if (!empty($type)) {
 			$sql .= " AND m.type=$type";
 		}
@@ -2501,7 +2504,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= ' AND ( ' . implode(' OR ', $s_whereee) . ')';
 		}
 		$sql .= ' ORDER BY m.schoolOption ASC,m.type ASC,m.ordering DESC, m.title ASC';
-		return $db->fetchAll($sql);
+		$query = $db->fetchAll($sql);
+		
+		$rowCount = count($query);
+		$id = '';
+		if ($rowCount > 0) {
+			foreach ($query as $row) {
+				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+				$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+			}
+		}
+		
+		return $cate_tree_array;
+		
 	}
 	function getAllItemDetail($data = null)
 	{

@@ -8,9 +8,11 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	}
 	function getAllTransfer($search=null){
 		$db = $this->getAdapter();
+		$_db=new Application_Model_DbTable_DbGlobal();
+		$branch= $_db->getBranchDisplay();
 		$sql="SELECT 
 				c.id,
-				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				
+				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,				
 				(SELECT stu_code FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_id, 
 				(SELECT CONCAT(stu_khname,'-',stu_enname) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.student_id LIMIT 1) AS stu_idname,
 				(SELECT CONCAT(stu_code) AS student_name FROM `rms_student` WHERE rms_student.stu_id = c.stu_name LIMIT 1) AS stu_idto,

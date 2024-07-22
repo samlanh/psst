@@ -13,17 +13,16 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	$_db=new Application_Model_DbTable_DbGlobal();
     	$branch_id = $_db->getAccessPermission();
     	$lang = $_db->currentlang();
+		$branch= $_db->getBranchDisplay();
     	if($lang==1){// khmer
     		$label = "name_kh";
     		$grade = "rms_itemsdetail.title";
     		$degree = "rms_items.title";
-    		$branch = "branch_namekh";
     		$str = 'title_kh';
     	}else{ // English
     		$label = "name_en";
     		$grade = "rms_itemsdetail.title_en";
     		$degree = "rms_items.title_en";
-    		$branch = "branch_nameen";
     		$str = 'title_eng';
     	}
     	

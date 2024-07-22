@@ -8,7 +8,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
     {
     	$this->tr=Application_Form_FrmLanguages::getCurrentlanguage();	
     }
-    function FrmAddDegree($data){
+    function FrmAddDegree($data,$frmType=1){
     	
     	$request=Zend_Controller_Front::getInstance()->getRequest();
     	
@@ -25,7 +25,7 @@ class Global_Form_FrmItems extends Zend_Dojo_Form
 			'required'=>'false',
 			'queryExpr'=>'*${0}*',
 		));
-		$Option = $_dbgb->getAllItems(3);
+		$Option = $_dbgb->getAllItems($frmType);
 		$_arr_opt = array(""=>$this->tr->translate("PLEASE_SELECT"));
 		if(!empty($Option))foreach($Option AS $row) $_arr_opt[$row['id']]=$row['name'];
 		$parentId->setMultiOptions($_arr_opt);

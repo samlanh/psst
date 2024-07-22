@@ -302,10 +302,11 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['academicYearEnroll'])){
 			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
 		}
-		if($search['studentType'] > -1 ){
+
+		if(!empty($search['studentType'])){
 			$sql.=" AND s.studentType =".$search['studentType'];
 		}
-		$where="";
+		$where=" ";
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
@@ -318,6 +319,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		}
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
 		$where.=" ORDER BY sd.degree,sd.grade,s.stu_id DESC ";
+		if(!empty($search['limit'])){
+			$where.=" LIMIT  ".$search['limit'];
+		}
 		return $db->fetchAll($sql.$where);
 	}
 	function getSearchStudentbyDiscount($search){
@@ -368,7 +372,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['academicYearEnroll'])){
 			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
 		}
-		if($search['studentType'] > -1 ){
+		if(!empty($search['studentType'])){
 			$sql.=" AND s.studentType =".$search['studentType'];
 		}
 		$where="";
@@ -385,6 +389,10 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
 		$where.=" ORDER BY sd.degree,sd.grade,s.stu_id DESC ";
+
+		if(!empty($search['limit'])){
+			$where.=" LIMIT ".$search['limit'];
+		}
 	//	$where.=" LIMIT 200 ";
 	//	echo $sql.$where;
 		return $db->fetchAll($sql.$where);

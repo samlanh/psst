@@ -24,14 +24,14 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
        $rs_rows = $db_dept->getAllItemsOption($search,$type);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("SELECT_SERVICE_TYPE","SERVICE_TYPE_EN","BY_USER","STATUS");
+    	$collumns = array("SELECT_SERVICE_TYPE","SERVICE_TYPE_EN","PARENT","BY_USER","STATUS");
     	$link=array(
     			'module'=>'accounting','controller'=>'servicecate','action'=>'edit',
     	);
     	$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'title_en'=>$link,'schoolOption'=>$link));
     	
     	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree(null);
+    	$frm->FrmAddDegree(null,2);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
@@ -62,7 +62,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree(null);
+    	$frm->FrmAddDegree(null,2);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }
@@ -96,7 +96,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	$this->view->schoolOption = $_dbgb->getAllSchoolOption();
     	
     	$frm = new Global_Form_FrmItems();
-    	$frm->FrmAddDegree($row);
+    	$frm->FrmAddDegree($row,2);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_degree = $frm;
     }

@@ -51,9 +51,20 @@
 	}
 	function getAllItemsOption($search = '',$type=null){
 		$db = $this->getAdapter();
-		$sql = "SELECT d.id,d.title,d.title_en,
-			(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name
-				  ";
+		$sql = "
+		SELECT 
+			d.id
+			,d.title
+			,d.title_en
+			
+		";
+		if(!empty($type)){
+			if($type==3){
+				$sql.= " ,(SELECT ip.title FROM rms_items AS ip WHERE ip.id = d.parent AND d.type =ip.type LIMIT 1) AS category ";
+			}
+			
+		}
+		$sql.=" ,(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->caseStatusShowImage("d.status");
 		$sql.=" FROM `rms_items` AS d WHERE 1 ";
@@ -71,6 +82,9 @@
 		}
 		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$db->quote($search['status_search']);
+		}
+		if(!empty($search['parentId'])){
+			$where.= " AND d.parent = ".$search['parentId'];
 		}
 		$where.= $dbp->getSchoolOptionAccess('d.schoolOption');
 		
@@ -102,7 +116,9 @@
 		$_db= $this->getAdapter();
 		$show = SHOW_IN_DEGREE;
 		try{
+			$_data['parentId'] = empty($_data['parentId']) ? 0 : $_data['parentId'];
 			$_arr=array(
+					'parent'	  	=> $_data['parentId'],
 					'title'	  		=> $_data['title'],
 					'title_en'	  	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],
@@ -180,8 +196,10 @@
 		$show = SHOW_IN_DEGREE;
 		try{
 			
+			$_data['parentId'] = empty($_data['parentId']) ? 0 : $_data['parentId'];
 			$status = empty($_data['status'])?0:1;
 			$_arr=array(
+					'parent'	  	=> $_data['parentId'],
 					'title'	  		=> $_data['title'],
 					'title_en'	  	=> $_data['title_en'],
 					'shortcut' 		=> $_data['shortcut'],

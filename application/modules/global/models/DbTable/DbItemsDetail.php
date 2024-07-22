@@ -501,7 +501,17 @@
 		}
 		
 		if(!empty($search['items_search'])){
-			$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
+			//$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
+			$arrCon = array(
+				"categoryId" => $search['items_search'],
+				"itemsType" => $items_type,
+			);
+			$condiction = $dbgb->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND ide.items_id IN ($condiction)";
+			}else{
+				$where.=" AND ide.items_id=".$search['items_search'];
+			}
 		}
 		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$db->quote($search['status_search']);

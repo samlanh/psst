@@ -1160,6 +1160,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			dijit.byId('old_stu').focus(); return false;
 		}
 		student_type = dijit.byId('student_type').get('value');
+		feeId = $('#study_year').val();
+		
 		isAutopayment = '3';
 		if (student_type == 2) {//test
 			isAutopayment = 2;
@@ -1169,6 +1171,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		var urlget = "<?php echo $this->url(array('module' => 'registrar', 'controller' => 'register', 'action' => 'getitemforpaymentrecord')); ?>";
 		contentData = {
 			'branch_id': branch_id,
+			'feeId': feeId,
 			'studentId': studentId,
 			'grade': serviceId,
 			'studentType': student_type,
@@ -1200,13 +1203,13 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 					academicOption = data[i].academicYearList;
 					term_option = data[i].termTypeList;
-					alert(data[i].termTypeList);
+					
 					term_study_option =data[i].studyPeriodList;
 
 					discountOptionList = data[i].discountOptionList;
 					serviceId = data[i].itemDetailId;
 					dataLabel = data[i].itemDetaillabel;
-					addRow(serviceId, dataLabel, data[i],data[i].termTypeList);
+					addRow(serviceId, dataLabel, data[i]);
 				}
 			},
 			error: function (err) {
@@ -1222,7 +1225,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	tmp = '';
 	temp = '';
 
-	function addRow(serviceId, dataLabel, dataRow = null,termOption) {
+	function addRow(serviceId, dataLabel, dataRow = null) {
 		//col++;
 		strCol6 = '<div class="col-md-6 col-sm-6 col-xs-12">';
 		study_year = $('#study_year').val();
@@ -1259,7 +1262,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
 		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
-		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >'+termOption+'</select></div></td>';
+		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >'+term_option+'</select></div></td>';
 		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" placeHolder="<?php echo $tr->translate('END_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="validate_' + col + '" id="validate_' + col + '" dojoType="dijit.form.DateTextBox" /></div></td>';

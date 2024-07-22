@@ -68,4 +68,16 @@ class Global_StudenttypeController extends Zend_Controller_Action {
 		$this->view->rs=$db->getStudentTypeById($id);
 	}
 	
+	function addViewPopupAction(){
+    	if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+			$data["viewType"] = empty($data["viewType"]) ? 40 : $data["viewType"];
+    		
+			$db = new Global_Model_DbTable_DbStuentType();
+    		$id = $db->addPopupView($data);
+    		print_r(Zend_Json::encode($id));
+    		exit();
+    	}
+    }
+	
 }

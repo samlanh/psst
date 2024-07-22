@@ -264,19 +264,19 @@ $urloutstandingyear = $this->baseUrl() . "/allreport/score/yearly-outstanding-st
 											<td data-label="<?php echo $tr->translate("ROOM"); ?>" align="left">
 												&nbsp;&nbsp;<?php echo $rs['room_name']; ?>&nbsp;</td>
 											<td data-label="<?php echo $tr->translate("NEW_STUDENT"); ?>">
-												&nbsp;<?php echo $rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+												&nbsp;<?php echo $rs['New_Student']; ?>
 											</td>
 											<td data-label="<?php echo $tr->translate("OLD_STUDENT"); ?>">
-												&nbsp;<?php echo $rs['Num_Student'] - $rs['New_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+												&nbsp;<?php echo $rs['Num_Student'] - $rs['New_Student']; ?>
 											</td>
 											<td data-label="<?php echo $tr->translate("TOTAL_STUDENT"); ?>">
-												&nbsp;<?php echo $rs['Num_Student']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+												&nbsp;<?php echo $rs['Num_Student']; ?>
 											</td>
 											<td data-label="<?php echo $tr->translate("STUDENT_DROP"); ?>">
-												&nbsp;<?php echo $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+												&nbsp;<?php echo $rs['student_drop']; ?>
 											</td>
 											<td data-label="<?php echo $tr->translate("STUDENT_STUDY"); ?>">
-												&nbsp;<?php echo $rs['Num_Student'] - $rs['student_drop']; ?>&nbsp;<?php echo $tr->translate("STUDENT_UNIT"); ?>
+												&nbsp;<?php echo $rs['Num_Student'] - $rs['student_drop']; ?>
 											</td>
 											<td data-label="<?php echo $tr->translate("STATUS"); ?>" align="left">
 												&nbsp;<?php echo $rs['status']; ?>&nbsp;</td>

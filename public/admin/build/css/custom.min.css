@@ -1653,15 +1653,15 @@ li.odd {
 
 .select2-container a.select2-choice {
 	border: 1px solid #8ba0bd;
-    background: #fff;
-    border-radius: 2px;
-    color: inherit;
-    line-height: inherit;
-    height: inherit;
-    padding: 0px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgb(249 249 249) 30%, rgb(253 253 253) 100%);
-    display: inline-grid;
-    width: 100%;
+	background: #fff;
+	border-radius: 2px;
+	color: inherit;
+	line-height: inherit;
+	height: inherit;
+	padding: 0px;
+	display: inline-grid;
+	width: 100%;
+	padding-left: 1px;
 }
 div.custome-select-opt span.select2-arrow {
     background: #3b7acc !important;

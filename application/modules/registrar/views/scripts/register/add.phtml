@@ -1274,7 +1274,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += strCol6 + '<input type="text" class="fullwidth" placeHolder="<?php echo $tr->translate('PERCENTAGE'); ?>" onkeyup="calculateTotal(' + col + ');" name="discount_' + col + '" value="<?php echo 0; ?>" id="discount_' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '</td>';
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" name="total_discount' + col + '" id="total_discount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
-		template += '<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');" name="extra_fee' + col + '" id="extra_fee' + col + '" value="0" dojoType="dijit.form.NumberTextBox"  /></div></td>';
+		template += '<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');" name="extra_fee' + col + '" id="extra_fee' + col + '" value="" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal(' + col + ');netTotal(' + col + ');"  name="total_amount' + col + '" value="0" id="total_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID'); ?>" class="fullside" onkeyup="paidAmount(' + col + ');"  name="paid_amount' + col + '" id="paid_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="0" name="isoldBalance' + col + '" id="isoldBalance' + col + '" dojoType="dijit.form.TextBox"  /></div></td>';
 		template += '<td><input type="text" class="fullside" name="remark' + col + '" id="remark' + col + '" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE"); ?>" style="min-height:60px;" />';
@@ -1632,9 +1632,11 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			dojo.byId("lb_balance_due").innerHTML = dojo.number.format(dijit.byId("balance_due").get('value'), { places: 2 });
 			dojo.byId("lb_paymentmethod").innerHTML = dijit.byId("payment_method").attr('displayedValue');
 
-			academicYearLabel = $('#study_year').select2('data').text;
-			dojo.byId("lb_academic_year").innerHTML = academicYearLabel;
-			dojo.byId("lb_fee_title").innerHTML = $("#lbl_student_type").text();
+			
+			dojo.byId("lb_academic_year").innerHTML =  $('#study_year option:selected').attr('data-academic-year-title');
+			dojo.byId("lb_fee_type").innerHTML = $('#study_year option:selected').attr('data-term-study');
+			//dojo.byId("lb_academic_year").innerHTML =  $('#study_year').select2('data').text;
+			//dojo.byId("lb_fee_title").innerHTML = $("#lbl_student_type").text();
 
 			dojo.byId("lb_part_time").innerHTML = dojo.byId("lbl_part_time").innerHTML;
 
@@ -1659,7 +1661,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				temp += '<td style="border:1px solid #000;width:200px;"><strong style="color:#000;">ពណ៍នា <small>Description<small></strong></td>';
 				temp += '<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Pay as</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណ<small>Qty</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណ<small>Quantity</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">តម្លៃរាយ<small>Unit Price</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បញ្ចុះតម្លៃ<small>Discount</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Fee</small></strong></td>';
@@ -1717,7 +1719,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 						discountLable = disc_amount + sign + percentage;
 					}
 					temp += '<td style="border:1px solid #000;"><span class="spanBlog">' + discountLable + '</span></td>';
-					temp += '<td align="center" style="border:1px solid #000;">' + dojo.number.format(dijit.byId('extra_fee' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
+					otherFee = !isNaN(dijit.byId('extra_fee' + rowIDArray[n]).get('value'))?dojo.number.format(dijit.byId('extra_fee' + rowIDArray[n]).get('value'), { places: 2 }):'';
+					temp += '<td align="center" style="border:1px solid #000;">' +otherFee+ '</td>';
 					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId("total_amount" + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
 					//temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';	
 					//temp += '<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">' + dijit.byId("remark" + rowIDArray[n]).get('value') + '</td>';

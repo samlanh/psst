@@ -1685,12 +1685,13 @@ div.custome-select-opt span.select2-arrow b {
 }
 
 .select2-drop-active .select2-results li .select2-result-label {
-    white-space: normal;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
+    /* overflow: hidden; */
     font-size: 90%;
     width: 100%;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    /* display: -webkit-box !important; */
+    /* -webkit-line-clamp: 2; */
+    /* -webkit-box-orient: vertical; */
+    padding: 5px 0;
 }

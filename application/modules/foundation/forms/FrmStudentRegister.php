@@ -385,7 +385,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
 		));
-		$studentType->setMultiOptions($_db->getViewByType(40,1));
+		$condictionArr = array("addonsItem"=>"addNEw");
+		$studentType->setMultiOptions($_db->getViewByType(40,1,$condictionArr));
 		
 		$id = new Zend_Form_Element_hidden('id');
 		$id->setAttribs(array('dojoType'=>"dijit.form.TextBox",
@@ -454,6 +455,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$father_khname->setValue($data['father_khname']);
 			$mother_khname->setValue($data['mother_khname']);
 			$guardian_khname->setValue($data['guardian_khname']);
+			$data['studentType'] = empty($data['studentType']) ? 0 : $data['studentType'];
 			$studentType->setValue($data['studentType']);
 			
 		}

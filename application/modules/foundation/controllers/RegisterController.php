@@ -106,6 +106,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
 		
+		$rsStudentType= $_db->getViewByType(40,null);
+		array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($rsStudentType, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
+		$this->view->studentTypeOption = $rsStudentType;
+		
 		$this->view->province = $db->getProvince();
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister();
@@ -166,6 +171,12 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 		$this->view->province = $db->getProvince();
+		
+		$rsStudentType= $_db->getViewByType(40,null);
+		array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($rsStudentType, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
+		$this->view->studentTypeOption = $rsStudentType;
+		
 		
 		$student_rs =  $db->getStudentById($id);
 		$this->view->rs = $student_rs;
@@ -301,6 +312,11 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		array_unshift($row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($row, array ( 'id' => 0,'name' => $this->tr->translate("SELECT")));
 		$this->view->doc_type = $row;
+		
+		$rsStudentType= $_db->getViewByType(40,null);
+		array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($rsStudentType, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
+		$this->view->studentTypeOption = $rsStudentType;
 		
 		$this->view->degree = $_db->getAllItems(1,null);
 		

@@ -1135,7 +1135,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		return $options;
 	}
-	function getViewByType($type, $is_opt = null)
+	function getViewByType($type, $is_opt = null,$condictionArr = array())
 	{
 		$db = $this->getAdapter();
 
@@ -1148,8 +1148,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = "SELECT key_code as id ,$field AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY key_code ASC ";//ORDER BY name_kh ASC
 		$rows = $db->fetchAll($sql);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$options = array(-1 => $tr->translate("CHOOSE"));
+		$options = array("" => $tr->translate("CHOOSE"));
 		if ($is_opt != null) {
+			$condictionArr["addonsItem"] = empty($condictionArr["addonsItem"]) ? "" : $condictionArr["addonsItem"];
+			if($condictionArr["addonsItem"]=="addNEw"){
+				$options["-1"] = $tr->translate("ADD_NEW");
+			}
 			if (!empty($rows))
 				foreach ($rows as $row) {
 					$options[$row['id']] = $row['name'];

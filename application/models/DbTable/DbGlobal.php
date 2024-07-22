@@ -1446,6 +1446,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=sgd.grade LIMIT 1) as grade_label,
 				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=sgd.degree LIMIT 1) as degree_label,
 		   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,	
+				(SELECT name_kh FROM `rms_view` WHERE type=40 AND key_code=s.studentType LIMIT 1) as studentType,	
 				(SELECT p.`title`  FROM `rms_parttime_list` AS p WHERE p.`id` = sgd.`session` LIMIT 1) as parttime_label,		   		
 		   		(SELECT SUM(total_amountafter) FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS total_amountafter,
 		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS credit_memo_id,
@@ -2949,10 +2950,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 											<span class="title-info">' . $tr->translate("STUDENT_CODE") . '</span><span id="lbl_stucode" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["stu_code"] . '</a></span>
 											<span class="title-info">' . $tr->translate("STUDENT_NAMEKHMER") . '</span><span id="lbl_namekh" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["stu_khname"] . '</a></span>
 											<span class="title-info">' . $tr->translate("NAME_ENGLISH") . '</span><span id="lbl_nameen" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["last_name"] . " " . $rs["stu_enname"] . '</a></span>
-											<span class="title-info">' . $tr->translate("DOB") . '</span><span id="lbl_dob" class="inf-value" >: ' . $rs['dob'] . '</span>
 											<span class="title-info">' . $tr->translate("PHONE") . '</span><span id="lbl_phone" class="inf-value">: ' . $rs['tel'] . '</span>
 											<span class="title-info">' . $tr->translate("Year Enrolled") . '</span><span id="lbl_phone" class="inf-value groupinfo">: ' . $rs['academicYearEnroll'] . '</span>
+											<span class="title-info">' . $tr->translate("STUDENT_TYPE") . '</span>:<span id="lbl_student_type" class="inf-value" >' . $rs['studentType'] . '</span>
 										</p>
+										<span class="title-info hidden">' . $tr->translate("DOB") . '</span><span id="lbl_dob" class="inf-value hidden" >: ' . $rs['dob'] . '</span>
 										</div>
 									</div>
 								</div>
@@ -4240,8 +4242,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 				// 	}
 				// }
-				$dataJson = Zend_Json::encode($resultPeriods);
-				$options .= '<option data-period-list="'.$dataJson.'"  value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+				//$dataJson = Zend_Json::encode($resultPeriods);
+				// data-period-list="'.$dataJson.'" 
+				$options .= '<option value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 			}
 
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -4261,9 +4264,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 			$resultItems = array();
 			if ($data['isInititilize'] == 1) {
-				$resultItems = $this->getItemForPayment($data);
+				$resultItems = $this->getItemForPayment($data);//result now year
 			}
-			if (!empty($data['grade'])) {
+			if(!empty($data['grade'])) {
 				$data['Id'] = $data['grade'];
 				unset($data['isAutopayment']);
 			}

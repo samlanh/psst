@@ -878,7 +878,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	var Itemstore = getDataStorefromJSON('id', 'name', []);
 	require(["dojo/ready"], function (ready) {
 		ready(function () {
-			$("#study_year").select2();
+			$("#study_year").select2(
+				{dropdownAutoWidth : true}
+			);
 			getallstudentname();
 			getItemDetail(-1, 1, 2);
 			getAllAcademicBy();
@@ -1123,8 +1125,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			}
 		});
 	}
-	var academicOption = '';
-	term_option = '<?php echo $this->term_option; ?>';
+	//var academicOption = '';
+	//var term_option = '<?php //echo $this->term_option; ?>';
 
 	function getExistingService() {//get existing server and default server
 		var col = 0;
@@ -1179,23 +1181,32 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		prepareAddNewRow(urlget, contentData);
 	}
 
+	let term_study_option = '';//period list..
+	let term_option = '';//year,semester..
 	function prepareAddNewRow(urlRequest, contentData) {
 		//dijit.byId("item").reset();
+		term_option = '';//year,semester..
+		term_study_option = '';//period list..
 		dojo.xhrPost({
 			url: urlRequest,
 			content: contentData,
 			handleAs: "json",
 			load: function (data) {
 				HideloadingBlock();
+				
 				for (i = 0; i < data.length; i++) {
+					term_option = '';//year,semester..
+					term_study_option = '';//period list..
+
 					academicOption = data[i].academicYearList;
 					term_option = data[i].termTypeList;
+					alert(data[i].termTypeList);
 					term_study_option =data[i].studyPeriodList;
 
 					discountOptionList = data[i].discountOptionList;
 					serviceId = data[i].itemDetailId;
 					dataLabel = data[i].itemDetaillabel;
-					addRow(serviceId, dataLabel, data[i]);
+					addRow(serviceId, dataLabel, data[i],data[i].termTypeList);
 				}
 			},
 			error: function (err) {
@@ -1211,7 +1222,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	tmp = '';
 	temp = '';
 
-	function addRow(serviceId, dataLabel, dataRow = null) {
+	function addRow(serviceId, dataLabel, dataRow = null,termOption) {
 		//col++;
 		strCol6 = '<div class="col-md-6 col-sm-6 col-xs-12">';
 		study_year = $('#study_year').val();
@@ -1248,7 +1259,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
 		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
-		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >' + term_option + '</select></div></td>';
+		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >'+termOption+'</select></div></td>';
 		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" placeHolder="<?php echo $tr->translate('END_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="validate_' + col + '" id="validate_' + col + '" dojoType="dijit.form.DateTextBox" /></div></td>';
@@ -1288,12 +1299,24 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			parseContent: true,
 		});
 		
-	$("#academic_year_"+col).select2();
+	$("#academic_year_"+col).select2(
+		{dropdownAutoWidth : true}
+	);
 	$("#discount_type"+col).select2({
+		dropdownAutoWidth : true,
 		allowClear: "true"
 	});
-	$("#term_study"+col).select2();
-	$("#term_"+col).select2();
+	$("#term_study"+col).select2(
+		{dropdownAutoWidth : true}
+	);
+	$("#term_"+col).select2(
+		{dropdownAutoWidth : true}
+	);
+
+	//alert(term_option);
+	//$('#term_'+col).empty().trigger("change");
+	//$('#term_'+col).append(term_option).trigger('change');
+	
 	
 		if (dataRow != null) {
 			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
@@ -1597,7 +1620,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			classlbl = ($("#lbl_group").text()!='')?$("#lbl_group").text():$("#lbl_grade").text();
 			dojo.byId("lb_group").innerHTML=classlbl;
 			
-			
 			dojo.byId("lb_phone").innerHTML = dojo.byId("lbl_phone").innerHTML;
 			dojo.byId("lb_read_khmer").innerHTML = dijit.byId("money_in_khmer").attr('displayedValue');
 			dojo.byId("lb_total_payment").innerHTML = dojo.number.format(dijit.byId("grand_total").get('value'), { places: 2 });
@@ -1609,6 +1631,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 			academicYearLabel = $('#study_year').select2('data').text;
 			dojo.byId("lb_academic_year").innerHTML = academicYearLabel;
+			dojo.byId("lb_fee_title").innerHTML = $("#lbl_student_type").text();
 
 			dojo.byId("lb_part_time").innerHTML = dojo.byId("lbl_part_time").innerHTML;
 
@@ -1648,9 +1671,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					var items_type = dijit.byId("service_type_" + rowIDArray[n]).get("value");
 					var isoldBalance = dijit.byId("isoldBalance" + rowIDArray[n]).get("value");
 					var term_label = "-";
-					var textTerm= $("#term_" + rowIDArray[n]).text();
 					if (items_type != 3 && isoldBalance == 0) {
-						term_label = $("#term_" + rowIDArray[n]).text();
+						term_label =  $('#term_'+rowIDArray[n]).select2('data').text;
 					}
 					temp += '<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">' + i + '</td>';
 

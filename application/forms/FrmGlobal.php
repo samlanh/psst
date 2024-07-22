@@ -816,11 +816,6 @@ class Application_Form_FrmGlobal
 							<div style='width:99%;float: left;'>
 								<div style='font-size:8px;min-height:60px;border:1px solid #000;' class='noted' >ថ្ងៃត្រូវបង់ថ្លៃសិក្សា/Schedule Tuition Due
 									<div id='lbl_period_year' class='lbl_periodstudy' >
-										<ul>
-											<li>ត្រីមាសទី ២(2/4)                   01-11-2024</li>
-											<li>ត្រីមាសទី ២(2/4)                   01-11-2024</li>
-											<li>ត្រីមាសទី ២(2/4)                   01-11-2024</li>
-										</ul>
 									</div>
 								</div>
 							</div>

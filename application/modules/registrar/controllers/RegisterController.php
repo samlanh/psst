@@ -122,15 +122,15 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $db = new Application_Model_DbTable_DbGlobal();
 // 	   $result=$db->getServiceForPaymentRecord($data);
 // 	print_r($result);exit();
-	$param = array(
-		'branch_id' => 1,
-		'isFinished'=>0,
-		//'option' => 1,
-	);
-		$academicYearList = $db->getAllYearByBranch($param);
-		print_r($academicYearList);
-		echo "<br />abc<br />";
-		print_r(Zend_Json::encode($academicYearList));
+	// $param = array(
+	// 	'branch_id' => 1,
+	// 	'isFinished'=>0,
+	// 	//'option' => 1,
+	// );
+	// 	$academicYearList = $db->getAllYearByBranch($param);
+	// 	print_r($academicYearList);
+	// 	echo "<br />abc<br />";
+	// 	print_r(Zend_Json::encode($academicYearList));
     }
     public function addregistraAction(){
     	if($this->getRequest()->isPost()){

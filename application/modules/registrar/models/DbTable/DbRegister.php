@@ -647,8 +647,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	}
     	return $pre.$new_acc_no;
     }
-    
-    
 	
 	function getStudentPaymentHistory($data){
 		$db = $this->getAdapter();

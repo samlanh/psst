@@ -8,9 +8,11 @@ class Accounting_Model_DbTable_DbCreditmemo extends Zend_Db_Table_Abstract
 	}
 	function getAllCreditmemo($search=null){
 		$db = $this->getAdapter();
+		$_db=new Application_Model_DbTable_DbGlobal();
+		$branch= $_db->getBranchDisplay();
 		$sql="SELECT 
 				c.id,
-				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
+				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = c.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
 				CONCAT(stu_khname,'-',stu_enname) AS student_name,
 				total_amount,

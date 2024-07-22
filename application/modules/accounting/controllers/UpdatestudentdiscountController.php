@@ -72,9 +72,11 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 					'degree' 			 => '',
 					'grade' 			 => '',
 					'academicYearEnroll' => '',
-					'studentType' 		 => -1,
+					'studentType' 		 => '',
 					'discountSettengId'  => '',
 					'updateOption'  	 => '',
+					'limit'  			 => '',
+					
 					
 				);
 			}

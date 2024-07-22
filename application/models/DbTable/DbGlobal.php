@@ -2684,7 +2684,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= $this->getAccessPermission("pl.branch_id");
 
 		if ($category_id != null and $category_id > 0) {
-			$sql .= ' AND t.items_id=' . $category_id;
+			//$sql .= ' AND t.items_id=' . $category_id;
+			$sql .=" AND 
+				(
+				(SELECT i.parent FROM `rms_items` AS i WHERE i.id =t.id AND i.type=3 LIMIT 1 ) = $category_id  
+					OR t.items_id = $category_id
+				) 
+				
+			
+			";
 		}
 		if (empty($product_type)) {
 			$sql .= " AND t.product_type=1 ";

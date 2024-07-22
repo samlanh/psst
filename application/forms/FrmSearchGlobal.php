@@ -682,10 +682,11 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$limit=  new Zend_Dojo_Form_Element_FilteringSelect('limit');
 		$limit->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$limitopt = array(
-				''=>$this->tr->translate("Unlimited"),
-				50=>$this->tr->translate("Limit 50"),
-				100=>$this->tr->translate("Limit 100"),
-				200=>$this->tr->translate("Limit 200"),
+				25=>25,
+				50=>50,
+				100=>100,
+				150=>150,
+				200=>200,
 			//
 				
 			);

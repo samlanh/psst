@@ -155,7 +155,10 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
 		$where.=" ORDER BY s.stu_id DESC ";
-		$where.=" LIMIT 200 ";
+		
+		if(!empty($search['limit'])){
+			$where.=" LIMIT ".$search['limit'];
+		}
 		return $db->fetchAll($sql.$where);
 	}
 }

@@ -22,7 +22,7 @@ class Global_StudenttypeController extends Zend_Controller_Action {
  			$rs_rows= $db->getAllStudentType($search);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("KH_NAME","NAME_EN","STATUS");
+			$collumns = array("SHORTCUT","KH_NAME","NAME_EN","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'studenttype','action'=>'edit',
 			);

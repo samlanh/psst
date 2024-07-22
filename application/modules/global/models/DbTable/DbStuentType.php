@@ -17,11 +17,14 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 	  		$arr = array(
 	  				'name_kh'	    => $_data['name_kh'],
 	  				'name_en'	    => $_data['name_en'],
+	  				'shortcut'	    => empty($_data['shortcut']) ? "" : $_data['shortcut'],
+	  				'note'	    	=> empty($_data['note']) ? "" : $_data['note'],
 					'type'		    => 40,
 					'status'		=> 1,
 	  				'key_code'		=> $keyCode,
 				
 	  		);
+			$this->_name = "rms_view";
 			$this->insert($arr);
 		}catch (Exception $e){
 			$db->rollBack();
@@ -38,19 +41,24 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 	public function updateStudentType($_data){
 		$db = $this->getAdapter();
 		$status = empty($_data['status'])?0:1;
+		
 		$_arr=array(
 				'name_kh'	    => $_data['name_kh'],
 				'name_en'	    => $_data['name_en'],
+				'shortcut'	    => empty($_data['shortcut']) ? "" : $_data['shortcut'],
+				'note'	    	=> empty($_data['note']) ? "" : $_data['note'],
   				'status'	    => $status,
 				
 		);
 		$where=$this->getAdapter()->quoteInto(" type=40 AND key_code=?", $_data["id"]);
+		$this->_name = "rms_view";
 		$this->update($_arr,$where);
 	}
 	function getAllStudentType($search){
 		$db = $this->getAdapter();
 		$sql = "SELECT 
 				  key_code AS id,
+				  shortcut,
 				  name_kh,
 				  name_en
 				";
@@ -68,6 +76,7 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 			$s_search = addslashes(trim($search['title']));
 			$s_where[] = " name_kh LIKE '%{$s_search}%'";
 			$s_where[] = " name_en LIKE '%{$s_search}%'";
+			$s_where[] = " shortcut LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if($search['status']>-1 AND $search['status']!=''){
@@ -86,6 +95,8 @@ class Global_Model_DbTable_DbStuentType extends Zend_Db_Table_Abstract
 	  		$arr = array(
 	  				'name_kh'	    => $_data['popTitleKh'],
 	  				'name_en'	    => $_data['popTitleEn'],
+	  				'note'	    	=> empty($_data['popNote'])? "" : $_data['popNote'],
+	  				'shortcut'	    	=> empty($_data['popShortcut'])? "" : $_data['popShortcut'],
 					'type'		    => $_data['viewType'],
 					'status'		=> 1,
 	  				'key_code'		=> $keyCode,

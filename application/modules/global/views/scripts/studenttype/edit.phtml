@@ -53,6 +53,20 @@
 									   </div>
 									</div>
 									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SHORCUT");?> <span class="required">*</span>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="shortcut" name="shortcut" type="text" value="<?php echo $rs["shortcut"]?>" maxlength="8" data-dojo-props="regExp: '[a-zA-Z0-9$%!_]{1,8}', invalidMessage: 'The value must be at least 1 character and maximum 8'">
+									   </div>
+									</div>
+									<div class="form-group">
+									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<input dojoType="dijit.form.Textarea"  class="fullside" id="note" name="note" value="<?php echo $rs["note"]?>" type="text">
+									   </div>
+									</div>
+									<div class="form-group">
 										<label class="control-label custom-switch float-end "> 
 											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
 											<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($rs["status"])){ echo "checked";} ?> > 
@@ -74,3 +88,6 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+	dojo.require("dijit.form.Textarea");
+</script>

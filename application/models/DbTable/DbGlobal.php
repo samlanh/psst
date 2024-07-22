@@ -20,6 +20,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		return $lang;
 	}
+	public function getBranchDisplay()
+	{
+		$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
+		$lang = $this->currentlang();
+		if($branch_display_setting==2){
+			$string = "abbreviations";
+		}else{
+			if($lang==1){// khmer
+				$string = "branch_namekh";
+			}else{ // English
+				$string = "branch_nameen";
+			}
+		}	
+		return $string;
+	}
 	public function getGradingSystem($degreeId, $template = 1)
 	{//$template1=psis,2=ahs
 		if ($template == 1) {
@@ -1135,7 +1150,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		return $options;
 	}
-	function getViewByType($type, $is_opt = null)
+	function getViewByType($type, $is_opt = null,$condictionArr = array())
 	{
 		$db = $this->getAdapter();
 
@@ -1148,8 +1163,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = "SELECT key_code as id ,$field AS name FROM rms_view WHERE `type`=$type AND `status`=1 ORDER BY key_code ASC ";//ORDER BY name_kh ASC
 		$rows = $db->fetchAll($sql);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$options = array(-1 => $tr->translate("CHOOSE"));
+		$options = array("" => $tr->translate("CHOOSE"));
 		if ($is_opt != null) {
+			$condictionArr["addonsItem"] = empty($condictionArr["addonsItem"]) ? "" : $condictionArr["addonsItem"];
+			if($condictionArr["addonsItem"]=="addNEw"){
+				$options["-1"] = $tr->translate("ADD_NEW");
+			}
 			if (!empty($rows))
 				foreach ($rows as $row) {
 					$options[$row['id']] = $row['name'];
@@ -2426,9 +2445,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 
-	function getAllItems($type = null, $branchlists = null, $schooloption = null)
+	function getAllItems($type = null, $branchlists = null, $schooloption = null,$parent = 0, $spacing = '', $cate_tree_array = '')
 	{
 		$db = $this->getAdapter();
+		if (!is_array($cate_tree_array))
+			$cate_tree_array = array();
 
 		$currentLang = $this->currentlang();
 		$colunmname = 'title_en';
@@ -2438,6 +2459,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$this->_name = "rms_items";
 		$sql = "SELECT m.id, m.$colunmname AS name FROM $this->_name AS m WHERE m.status=1 ";
+		$sql .= " AND m.parent=$parent";
 		if (!empty($type)) {
 			$sql .= " AND m.type=$type";
 		}
@@ -2483,7 +2505,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= ' AND ( ' . implode(' OR ', $s_whereee) . ')';
 		}
 		$sql .= ' ORDER BY m.schoolOption ASC,m.type ASC,m.ordering DESC, m.title ASC';
-		return $db->fetchAll($sql);
+		$query = $db->fetchAll($sql);
+		
+		$rowCount = count($query);
+		$id = '';
+		if ($rowCount > 0) {
+			foreach ($query as $row) {
+				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+				$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+			}
+		}
+		
+		return $cate_tree_array;
+		
 	}
 	function getAllItemDetail($data = null)
 	{
@@ -2651,7 +2685,18 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= $this->getAccessPermission("pl.branch_id");
 
 		if ($category_id != null and $category_id > 0) {
-			$sql .= ' AND t.items_id=' . $category_id;
+			//$sql .= ' AND t.items_id=' . $category_id;
+			
+			$arrCon = array(
+				"categoryId" => $category_id,
+				"itemsType" => 3,
+			);
+			$condiction = $this->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$sql.=" AND t.items_id IN ($condiction)";
+			}else{
+				$sql.=" AND t.items_id=".$category_id;
+			}
 		}
 		if (empty($product_type)) {
 			$sql .= " AND t.product_type=1 ";
@@ -4949,6 +4994,29 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			return $this->getAdapter()->fetchRow($sql);
 		}
 	}
+	
+	function getChildItems($arr = array(),$idetity = null){
+		$db = $this->getAdapter();
+		$parentId = empty($arr["categoryId"]) ? 0 : $arr["categoryId"];
+		$itemsType = empty($arr["itemsType"]) ? 1 : $arr["itemsType"];
+		
+		$sql=" SELECT 
+				i.`id` 
+			FROM `rms_items` AS i 
+			WHERE i.`parent` = $parentId AND i.`status`=1 ";
+		$child = $db->fetchAll($sql);
+		if(!empty($child)){
+			foreach ($child as $va) {
+				if (empty($idetity)){
+					$idetity=$parentId.",".$va['id'];
+				}else{$idetity=$idetity.",".$va['id'];
+				}
+				$arr["categoryId"] = empty($va['id']) ? 0 : $va['id'];
+				$idetity = $this->getChildItems($arr,$idetity);
+			}
+		}
+		return $idetity;
+	  }
 
 }
 ?>

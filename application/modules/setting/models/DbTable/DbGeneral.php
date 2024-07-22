@@ -331,6 +331,16 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'footerScoreDocument'";
 				$this->update($arr, $where);
 			}
+
+			$rows = $this->geLabelByKeyName('branch_display_setting');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['branch_display_setting'],'keyName'=>'branch_display_setting','note'=>"Show Branch As FullName/Show Branch Name As Shortcut ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['branch_display_setting']);
+				$where=" keyName= 'branch_display_setting'";
+				$this->update($arr, $where);
+			}
 	
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

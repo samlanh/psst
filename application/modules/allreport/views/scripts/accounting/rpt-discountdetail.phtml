@@ -107,45 +107,45 @@
 						<table width="100%"  align="center" class="style">
 							<tr>
 								<td width="13%" style="white-space: nowrap;">
-									<?php echo $tr->translate("BRANCH");?>/ Branch
+									<?php echo $tr->translate("BRANCH");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['branch']; ?></strong></div></td>
 								<td width="27%">&nbsp;</td>
 								<td width="10%" style="white-space: nowrap;">
-									<?php echo $tr->translate("ACADEMIC_YEAR");?>/Year
+									<?php echo $tr->translate("ACADEMIC_YEAR");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['academicYear']; ?></strong></div></td>
 							</tr>
 							<tr>
 								<td width="13%" style="white-space: nowrap;">
-									<?php echo $tr->translate("TITLE");?>/ Tittle
+									<?php echo $tr->translate("TITLE");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['discountTitle']; ?></strong></div></td>
 								<td width="27%">&nbsp;</td>
 								<td width="10%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DISCOUNT_FOR_TYPE");?>/Discount For
+									<?php echo $tr->translate("DISCOUNT_FOR_TYPE");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountForText']; ?></strong></div></td>
 							</tr>
 							<tr>
 								<td width="13%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DISCOUNT_TYPE");?>/ Discount Type
+									<?php echo $tr->translate("DISCOUNT_TYPE");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['discName']; ?></strong></div></td>
 								<td width="27%">&nbsp;</td>
 								<td width="10%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DISCOUNT_OPTION");?>/Discount Option
+									<?php echo $tr->translate("DISCOUNT_OPTION");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountForOption']; ?></strong></div></td>
 							</tr>
 							<tr>
 								<td width="13%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DIS_MAX");?>/ Discount Percent
+									<?php echo $tr->translate("DIS_MAX");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['DisValueType']; ?></strong></div></td>
 								<td width="27%">&nbsp;</td>
 								<td width="10%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DISCOUNT_PERIOD");?>/Discount Period
+									<?php echo $tr->translate("DISCOUNT_PERIOD");?>
 								</td>
 								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountPeriod']; ?></strong></div></td>
 							</tr>
@@ -159,6 +159,8 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('SEX');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('Tel');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DEGREE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('GRADE');?>&nbsp;</td>
 									
 								  </tr>
 							  </thead>
@@ -168,9 +170,11 @@
 							  <tr class=" hover style"  align="left" >
 								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" ><?php echo $rs['stu_code']; ?></td>
-								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" > <?php echo $rs['stuNameKH']." - ".$rs['stuNameLatin']; ?></td>
+								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" > <?php echo $rs['stu_name']; ?></td>
 									<td data-label="<?php echo $tr->translate("SEX");?>" > <?php if($rs['sex']==1){ echo $tr->translate("MALE"); }else{ echo $tr->translate("FEMALE"); }; ?></td>
 									<td data-label="<?php echo $tr->translate("Tel");?>" > <?php echo $rs['tel']; ?></td>
+									<td data-label="<?php echo $tr->translate("DEGREE");?>" ><?php echo $rs['degree']; ?></td>
+									<td data-label="<?php echo $tr->translate("GRADE");?>" ><?php echo $rs['grade']; ?></td>
 							  </tr>
 							  <?php  }} ?>
 						</table>

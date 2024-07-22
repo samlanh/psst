@@ -260,6 +260,14 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				2=>$this->tr->translate("MON_FRI"),
 				);
 		$studydaySchedule->setMultiOptions($dayOpt);
+
+		$branch_display_setting=  new Zend_Dojo_Form_Element_FilteringSelect('branch_display_setting');
+		$branch_display_setting->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$branch_opt = array(
+				1=>$this->tr->translate("DISPLAY_FULL_NAME"),
+				2=>$this->tr->translate("DISPLAY_SHORTCUT"),
+				);
+		$branch_display_setting->setMultiOptions($branch_opt);
 		
 		
 		if($data!=null){
@@ -299,6 +307,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$paymentDate->setValue($data['payment_date']['keyValue']);
 			$studydaySchedule->setValue($data['studyday_schedule']['keyValue']);
 
+			$branch_display_setting->setValue($data['branch_display_setting']['keyValue']);
+
 		}
 		$this->addElements(array(
 				$studentPrefixOpt,
@@ -333,6 +343,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$docTeacher
 				,$paymentDate
 				,$studydaySchedule
+				,$branch_display_setting
 				));
 		
 		return $this;

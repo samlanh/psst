@@ -2685,14 +2685,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		if ($category_id != null and $category_id > 0) {
 			//$sql .= ' AND t.items_id=' . $category_id;
-			$sql .=" AND 
-				(
-				(SELECT i.parent FROM `rms_items` AS i WHERE i.id =t.id AND i.type=3 LIMIT 1 ) = $category_id  
-					OR t.items_id = $category_id
-				) 
-				
 			
-			";
+			$arrCon = array(
+				"categoryId" => $category_id,
+				"itemsType" => 3,
+			);
+			$condiction = $this->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$sql.=" AND t.items_id IN ($condiction)";
+			}else{
+				$sql.=" AND t.items_id=".$category_id;
+			}
 		}
 		if (empty($product_type)) {
 			$sql .= " AND t.product_type=1 ";
@@ -4988,6 +4991,29 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			return $this->getAdapter()->fetchRow($sql);
 		}
 	}
+	
+	function getChildItems($arr = array(),$idetity = null){
+		$db = $this->getAdapter();
+		$parentId = empty($arr["categoryId"]) ? 0 : $arr["categoryId"];
+		$itemsType = empty($arr["itemsType"]) ? 1 : $arr["itemsType"];
+		
+		$sql=" SELECT 
+				i.`id` 
+			FROM `rms_items` AS i 
+			WHERE i.`parent` = $parentId AND i.`status`=1 ";
+		$child = $db->fetchAll($sql);
+		if(!empty($child)){
+			foreach ($child as $va) {
+				if (empty($idetity)){
+					$idetity=$parentId.",".$va['id'];
+				}else{$idetity=$idetity.",".$va['id'];
+				}
+				$arr["categoryId"] = empty($va['id']) ? 0 : $va['id'];
+				$idetity = $this->getChildItems($arr,$idetity);
+			}
+		}
+		return $idetity;
+	  }
 
 }
 ?>

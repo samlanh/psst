@@ -285,6 +285,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 
 		$currentLang = $dbp->currentlang();
+		$branch= $dbp->getBranchDisplay();
 		$colunmname = 'name_en';
 		$strDegree = 'title_en';
 		if ($currentLang == 1) {
@@ -297,7 +298,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
 
 		$sql = "SELECT ds.id, 
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
+					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
 					discountTitle,
 					(CASE 
@@ -782,6 +783,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 
 		$currentLang = $dbp->currentlang();
+		$branch= $dbp->getBranchDisplay();
 		$colunmname = 'name_en';
 		$strDegree = 'title_en';
 		if ($currentLang == 1) {
@@ -794,7 +796,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
 
 		$sql = "SELECT  ds.id, 
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
+					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
 					discountTitle,
 					(CASE 
@@ -820,15 +822,26 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 	}
 	function getStudentDiscountById($id){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentLang = $dbp->currentlang();
+		
+		$grade = 'title_en';
+		$degree = 'title_en';
+		if ($currentLang == 1) {
+			$grade = 'title';
+			$degree = 'title';
+		}
 		$sql = "
 			SELECT 
 			    s.stu_id,
 				s.stu_code AS stu_code
-				,s.stu_khname AS stuNameKH
-				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stuNameLatin
+			
 				,CONCAT(s.stu_khname,'- ',s.last_name,' ' ,s.stu_enname) AS stu_name
 				,s.sex AS sex
 				,tel
+				,(SELECT $degree FROM `rms_items` WHERE rms_items.id=ds.degreeId LIMIT 1 ) AS degree
+				,(SELECT $grade FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=ds.grade LIMIT 1) AS grade
 				
 			FROM  `rms_discount_student` AS ds 
 			INNER JOIN rms_student AS s ON ds.studentId = s.stu_id

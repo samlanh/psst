@@ -40,6 +40,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.mother_phone,
     				s.guardian_tel,
     				(SELECT $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
+    				(SELECT $label from rms_view where type=40 and key_code=s.studentType LIMIT 1) as studentType,
     				sp.data_from,
     				sp.receipt_number,
     				sp.create_date,

@@ -1963,6 +1963,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		} else if ($image['size'] >= 102400) {
 			// Save the image to file and free memory quality 90%
 			imagejpeg($im, $uploadimage, 70);
+		}else{
+			imagejpeg($im, $uploadimage, 70);
 		}
 		//  imagedestroy($uploadimage);
 		return $new_name;

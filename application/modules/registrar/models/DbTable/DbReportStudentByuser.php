@@ -278,11 +278,11 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					s.last_name,
 					
 					CASE
-								WHEN s.primary_phone = 1 THEN s.tel
-								WHEN s.primary_phone = 2 THEN s.father_phone
-								WHEN s.primary_phone = 3 THEN s.mother_phone
-								ELSE s.guardian_tel
-						END as tel,
+						WHEN s.primary_phone = 1 THEN s.tel
+						WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+						WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+						ELSE COALESCE(fam.guardianPhone,'')
+					END as tel,
 						
 					(SELECT name_en from rms_view where type=2 and key_code=s.sex) as sex,
 					(SELECT title FROM `rms_items` WHERE rms_items.id=bt.degree LIMIT 1 ) AS degree,
@@ -292,10 +292,10 @@ class Registrar_Model_DbTable_DbReportStudentByuser extends Zend_Db_Table_Abstra
 					bt.bank_transaction_id,
 					(SELECT CONCAT((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1),'(',generation,')') FROM rms_tuitionfee WHERE `status`=1 AND id=bt.academic_year LIMIT 1) AS year
 			FROM
-				rms_student AS s,
-				rms_banktransaction AS bt
+				rms_student AS s JOIN rms_banktransaction AS bt ON s.stu_id = bt.stu_id 
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 			WHERE
-				s.stu_id = bt.stu_id
+				1
 			$branch_id  ";
 	
 			$where = " AND ".$from_date." AND ".$to_date;

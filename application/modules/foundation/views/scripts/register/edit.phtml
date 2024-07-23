@@ -68,7 +68,7 @@
 		            </li>
 		            <li class="nav-item">
 		                <a class="nav-link" data-toggle="tab" href="#panel24" role="tab">
-		                <i class="fa fa-users ml-2"></i> <?php echo $tr->translate("STUDY_INFO");?>
+		                <i class="fa fa-briefcase ml-2"></i> <?php echo $tr->translate("STUDY_INFO");?>
 		                </a>
 		            </li>
 					<li class="nav-item">
@@ -141,7 +141,7 @@
 						                   </div>
 						                </div>
 						                <div class="form-group">
-						                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> <input type="radio" data-dojo-type="dijit/form/RadioButton" name="primary_phone" value="1" <?php //if($this->rs['primary_phone']==1){echo "checked";}?> /> :
+						                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PHONE");?> :
 						                   </label>
 						                   <div class="col-md-7 col-sm-7 col-xs-12">
 						                   		<?php echo $frm->getElement("phone");?>
@@ -188,6 +188,13 @@
 												<select class="custome-select-opt fullside" onchange="getFamilyInfo()" placeHolder="<?php echo $tr->translate("SELECT_FAMILY"); ?>" required="false" name="familyId" id="familyId" ></select>
 						                   </div>
 						                </div>
+										<div class="form-group">
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PRIMARY_PHONE");?> :
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+												<?php echo $frm->getElement("primary_phone");?>
+										   </div>
+										</div>
 										<div class="table-responsive">
 											<table class="table">
 											  <tbody>

@@ -33,10 +33,10 @@ class Allreport_Model_DbTable_DbRptScanning extends Zend_Db_Table_Abstract
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
 				(SELECT first_name FROM rms_users WHERE s.setBy=rms_users.id LIMIT 1 ) AS userName,
 				CASE
-					WHEN primary_phone = 1 THEN s.tel
-					WHEN primary_phone = 2 THEN s.father_phone
-					WHEN primary_phone = 3 THEN s.mother_phone
-					ELSE s.guardian_tel
+					WHEN s.primary_phone = 1 THEN s.tel
+					WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+					WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+					ELSE COALESCE(fam.guardianPhone,'')
 				END as tel,
 				s.dateUpdatedCovidFeature				
 			";
@@ -50,7 +50,12 @@ class Allreport_Model_DbTable_DbRptScanning extends Zend_Db_Table_Abstract
 		   	WHEN  s.is_covidTested = 0 THEN '".$tr->translate("NOT_YET_TEST_COVID")."'
 			 	END AS is_covidTestedTitle ";
 			
-		$sql.=" FROM `rms_student` as s WHERE s.setBy>0 ";
+		$sql.=" 
+			FROM 
+					`rms_student` as s 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+			WHERE s.setBy>0 
+		";
 			
 		$where="";  
 		$from_date =(empty($search['start_date']))? '1': "s.dateUpdatedCovidFeature >= '".$search['start_date']." 00:00:00'";

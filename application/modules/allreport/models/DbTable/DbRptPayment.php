@@ -34,11 +34,14 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				s.photo,
     				s.tel,
     				s.dob,
-    				s.father_enname AS father_enname,
-    				s.mother_enname AS mother_enname,
-    				s.father_phone,
-    				s.mother_phone,
-    				s.guardian_tel,
+					
+    				fam.fatherName AS father_enname,
+    				fam.motherName AS mother_enname,
+    				
+					fam.fatherPhone AS father_phone,
+    				fam.motherPhone AS mother_phone,
+    				fam.guardianPhone AS guardian_tel,
+					
     				(SELECT $label from rms_view where type=2 and key_code=s.sex LIMIT 1) as sex,
     				(SELECT $label from rms_view where type=40 and key_code=s.studentType LIMIT 1) as studentType,
     				sp.data_from,
@@ -67,12 +70,12 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.grade=sp.grade AND ds.degree=sp.degree ORDER BY ds.gd_id DESC LIMIT 1) LIMIT 1) AS group_name
     			FROM
-    				rms_student_payment as sp,
-					rms_student as s,
-    				rms_student_paymentdetail as spd
+    				rms_student_payment as sp JOIN rms_student_paymentdetail as spd ON sp.id = spd.payment_id
+					JOIN rms_student as s ON sp.student_id=s.stu_id 
+    				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
     			WHERE 
-    				sp.student_id=s.stu_id 
-    				and sp.id=$id  ";
+    				1
+    				AND sp.id=$id  ";
     	$sql.=$_db->getAccessPermission('sp.branch_id');
     	$sql.=" LIMIT 1 ";
     		return $db->fetchRow($sql);

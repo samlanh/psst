@@ -25,10 +25,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql = "SELECT  s.stu_id,
 							s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
 							CASE
-								WHEN primary_phone = 1 THEN s.tel
-								WHEN primary_phone = 2 THEN s.father_phone
-								WHEN primary_phone = 3 THEN s.mother_phone
-								ELSE s.guardian_tel
+								WHEN s.primary_phone = 1 THEN s.tel
+								WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+								WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+								ELSE COALESCE(fam.guardianPhone,'')
 							END as tel,
 							ds.stop_type AS is_subspend,
 							s.sex as sexcode,
@@ -42,14 +42,11 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
 						    ds.group_id,
 						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
-						FROM rms_student AS s,
-							rms_group_detail_student AS ds
-						  WHERE  
-						   ds.itemType=1 
-						   AND ds.is_maingrade=1 
-						   AND ds.is_current=1 
-						   AND s.stu_id=ds.stu_id 
-		                   AND s.status = 1 
+						FROM 
+							rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND s.stu_id=ds.stu_id AND ds.is_maingrade=1  AND ds.is_current=1 
+							LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+						WHERE  
+						   1 AND s.status = 1 
 						AND s.customer_type = 1 ";
 		$orderby = " ORDER BY s.stu_khname ASC ";
 		if (!empty($search['adv_search'])) {
@@ -57,23 +54,27 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_search = addslashes(trim($search['adv_search']));
 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
 
-			$s_where[] = " REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(father_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(mother_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(guardian_khname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(home_num,' ','')  		LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(street_num,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(village_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(commune_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(district_name,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " CONCAT(s.last_name,s.stu_enname) LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.tel,' ','')  			LIKE '%{$s_search}%'";
+			
+			$s_where[]=" REPLACE(COALESCE(fam.fatherPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.motherPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.fatherName,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.fatherNameKh,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.motherName,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianName,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianNameKh,''),' ','') LIKE '%{$s_search}%'";
+			
+			$s_where[] = " REPLACE(s.home_num,' ','')  		LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.street_num,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.village_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.commune_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.district_name,' ','')  LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE((SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1),' ','')  LIKE '%{$s_search}%'";
 			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
@@ -132,8 +133,22 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$occuTitle = 'occu_name';
 		}
 
-		$sql = "SELECT s.*,
- 				 DATE_FORMAT(`s`.`dob`,'%d/%M/%Y') AS `dob`,
+		$sql = "SELECT 
+				s.*
+				,fam.fatherNameKh AS father_khname 
+				,fam.fatherName AS father_enname  
+				,fam.fatherNation AS father_nation
+				,fam.fatherPhone AS father_phone
+				
+				,fam.motherNameKh AS mother_khname 
+				,fam.motherName AS mother_enname  
+				,fam.motherPhone AS mother_phone  
+				
+				,fam.guardianNameKh AS guardian_khname 
+				,fam.guardianName AS guardian_enname 
+				,fam.guardianPhone AS guardian_tel
+				
+ 				 ,DATE_FORMAT(`s`.`dob`,'%d/%M/%Y') AS `dob`,
  				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
  				(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
  				(SELECT school_nameen FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_nameen,
@@ -146,9 +161,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
  				(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
     			(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
-    			(SELECT $view FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
-    			(SELECT $view FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
-    			(SELECT $view FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
+    			(SELECT $view FROM rms_view where type=21 and key_code=fam.fatherNation LIMIT 1) AS father_nation,
+    			(SELECT $view FROM rms_view where type=21 and key_code=fam.motherNation LIMIT 1) AS mother_nation,
+    			(SELECT $view FROM rms_view where type=21 and key_code=fam.guardianNation LIMIT 1) AS guardian_nation,
     			
 				(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 		    	(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
@@ -161,19 +176,18 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			  
 				
-				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.fatherJob LIMIT 1) fath_job,
+				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.motherJob LIMIT 1) moth_job,
+				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.guardianJob LIMIT 1) guard_job,
+				 
 				 (SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
 				 (SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 				  
 				FROM 
-					rms_student as s,
-					rms_group_detail_student AS ds
+					rms_student as s JOIN rms_group_detail_student AS ds ON ds.itemType=1  AND s.stu_id = ds.stu_id  AND ds.is_maingrade=1 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 				WHERE 
-					ds.itemType=1 
-					AND s.stu_id = ds.stu_id 
-					AND ds.is_maingrade=1 
+					1
 					AND s.stu_id=$stu_id  ";
 		$where = '';
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -205,48 +219,60 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$occuTitle = 'occu_name';
 		}
 
-		$sql = "SELECT s.*,
-		DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
-		(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
-		(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
-		(SELECT school_nameen FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_nameen,
-		(SELECT photo FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS photo_branch,
-		(SELECT br_address FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS br_address,
-		(SELECT branch_tel FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_tel,
-		(SELECT email FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS email_branch,
-		(SELECT website FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS website,
-		(SELECT $view from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
+		$sql = "
+		SELECT 
+			s.*
+			,fam.fatherNameKh AS father_khname 
+			,fam.fatherName AS father_enname  
+			,fam.fatherNation AS father_nation
+			,fam.fatherPhone AS father_phone
 			
-		(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
-		(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
-		(SELECT $view FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS father_nation,
-		(SELECT $view FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS mother_nation,
-		(SELECT $view FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardian_nation,
+			,fam.motherNameKh AS mother_khname 
+			,fam.motherName AS mother_enname  
+			,fam.motherPhone AS mother_phone  
+			
+			,fam.guardianNameKh AS guardian_khname 
+			,fam.guardianName AS guardian_enname 
+			,fam.guardianPhone AS guardian_tel
+			,DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
+			(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,
+			(SELECT school_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_namekh,
+			(SELECT school_nameen FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS school_nameen,
+			(SELECT photo FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS photo_branch,
+			(SELECT br_address FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS br_address,
+			(SELECT branch_tel FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_tel,
+			(SELECT email FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS email_branch,
+			(SELECT website FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS website,
+			(SELECT $view from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
+			
+			(SELECT $view FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
+			(SELECT $view FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation,
+			(SELECT $view FROM rms_view where type=21 and key_code=fam.fatherNation LIMIT 1) AS father_nation,
+			(SELECT $view FROM rms_view where type=21 and key_code=fam.motherNation LIMIT 1) AS mother_nation,
+			(SELECT $view FROM rms_view where type=21 and key_code=fam.guardianNation LIMIT 1) AS guardian_nation,
 		 
-		(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
-		(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
-		(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
-		(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
-		ds.group_id,
-		(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
-		(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS year_name,
-		(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
-		(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+			(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
+			(SELECT $comm FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name,
+			(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
+			(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
+			ds.group_id,
+			(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
+			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS year_name,
+			(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
+			(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
 			
 	
-		(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-		(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-		(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
-		(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
-		(SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
+			(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.fatherJob LIMIT 1) fath_job,
+			(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.motherJob LIMIT 1) moth_job,
+			(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.guardianJob LIMIT 1) guard_job,
+			
+			(SELECT k.title FROM `rms_know_by` AS k WHERE k.id = s.know_by LIMIT 1) AS know_by,
+			(SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 	
 		FROM
-			rms_student as s,
-			rms_group_detail_student AS ds
+			rms_student as s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND s.stu_id = ds.stu_id AND ds.is_maingrade=1
 		WHERE
-			ds.itemType=1
-			AND s.stu_id = ds.stu_id
-			AND ds.is_maingrade=1
+			1
 			AND s.studentToken='" . addslashes($stToken) . "'";
 		$where = '';
 		$dbp = new Application_Model_DbTable_DbGlobal();

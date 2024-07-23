@@ -34,10 +34,10 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
 					CASE
-						WHEN primary_phone = 1 THEN s.tel
-						WHEN primary_phone = 2 THEN s.father_phone
-						WHEN primary_phone = 3 THEN s.mother_phone
-						ELSE s.guardian_tel
+						WHEN s.primary_phone = 1 THEN s.tel
+						WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+						WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+						ELSE COALESCE(fam.guardianPhone,'')
 					END as tel,
 					ds.stop_type AS is_subspend,
 					CASE
@@ -53,14 +53,11 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
 					ds.group_id,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
-				FROM rms_student AS s,
-					rms_group_detail_student AS ds
-				  WHERE  
-				   ds.itemType=1
-				   AND ds.is_maingrade=1 
-				   AND ds.is_current=1 
-				   AND s.stu_id=ds.stu_id 
-				   AND s.status = 1 
+				FROM 
+					rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND ds.is_maingrade=1 AND ds.is_current=1 AND s.stu_id=ds.stu_id 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+				WHERE  
+				   1 AND s.status = 1 
 				 ";
 		$where = " ";
 		$orderby = " ORDER BY s.stu_khname ASC ";
@@ -69,19 +66,16 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" CONCAT(last_name,stu_enname) LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(tel,' ','')  			LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(s.last_name,s.stu_enname) LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.tel,' ','')  			LIKE '%{$s_search}%'";
 			
-			$s_where[]=" REPLACE(father_phone,' ','')  	LIKE '%{$s_search}%'";
-			
-			$s_where[]=" REPLACE(mother_phone,' ','')  	LIKE '%{$s_search}%'";
-			
-			$s_where[]=" REPLACE(guardian_tel,' ','')  	LIKE '%{$s_search}%'";
-			
+			$s_where[]=" REPLACE(COALESCE(fam.fatherPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.motherPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianPhone,''),' ','') LIKE '%{$s_search}%'";
 			
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
@@ -198,10 +192,10 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
 					CASE
-						WHEN primary_phone = 1 THEN s.tel
-						WHEN primary_phone = 2 THEN s.father_phone
-						WHEN primary_phone = 3 THEN s.mother_phone
-						ELSE s.guardian_tel
+						WHEN s.primary_phone = 1 THEN s.tel
+						WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+						WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+						ELSE COALESCE(fam.guardianPhone,'')
 					END as parentTel,
 					ds.stop_type AS is_subspend,
 					CASE
@@ -216,7 +210,7 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 						WHEN s.customer_type = 3 THEN '".$tr->translate("CRM")."'
 						WHEN s.customer_type = 4 THEN '".$tr->translate("Student Test")."'
 					END as typeStudent,
-		ds.feeId AS currentFeeId,
+					ds.feeId AS currentFeeId,
 					(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
 					(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
 					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
@@ -235,13 +229,11 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					COALESCE((SELECT SUM(sp.balance_due) FROM rms_student_payment AS sp WHERE sp.student_id=s.stu_id LIMIT 1 ),0) AS studentBalancePayment
 				  
 					
-				FROM rms_student AS s,
-					rms_group_detail_student AS ds
-				  WHERE  
-				   ds.itemType=1
-				   AND ds.is_maingrade=1 
-				   AND ds.is_current=1 
-				   AND s.stu_id=ds.stu_id 
+				FROM 
+					rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1  AND ds.is_maingrade=1  AND ds.is_current=1 AND s.stu_id=ds.stu_id 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+				WHERE  
+				   1
 				   AND s.status = 1 
 				   AND s.stu_id = $stuId
 				 ";
@@ -271,10 +263,10 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 					(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sexTitle,
 					CASE
-						WHEN primary_phone = 1 THEN s.tel
-						WHEN primary_phone = 2 THEN s.father_phone
-						WHEN primary_phone = 3 THEN s.mother_phone
-						ELSE s.guardian_tel
+						WHEN s.primary_phone = 1 THEN s.tel
+						WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+						WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+						ELSE COALESCE(fam.guardianPhone,'')
 					END as parentTel,
 					'0' AS is_subspend,
 					CASE
@@ -309,8 +301,10 @@ class Registrar_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 					COALESCE((SELECT SUM(sp.balance_due) FROM rms_student_payment AS sp WHERE sp.student_id=s.stu_id LIMIT 1 ),0) AS studentBalancePayment
 				  
 					
-				FROM rms_student AS s
-				  WHERE  
+				FROM 
+					rms_student AS s 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+				WHERE  
 				    s.customer_type = 2
 				   AND s.status = 1 
 				   AND s.stu_id = $stuId

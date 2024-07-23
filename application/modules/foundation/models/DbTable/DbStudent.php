@@ -55,10 +55,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				CASE
-					WHEN primary_phone = 1 THEN s.tel
-					WHEN primary_phone = 2 THEN s.father_phone
-					WHEN primary_phone = 3 THEN s.mother_phone
-					ELSE s.guardian_tel
+					WHEN s.primary_phone = 1 THEN s.tel
+					WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+					WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+					ELSE COALESCE(fam.guardianPhone,'')
 				END as tel,
 				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=COALESCE(ds.academic_year,0) LIMIT 1) AS academic,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=COALESCE(ds.group_id,0) LIMIT 1) AS group_name,
@@ -69,34 +69,39 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$sql.=" FROM 
 					rms_student AS s
-					LEFT JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1
+					LEFT JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 				WHERE  s.customer_type=1 ";
 		$orderby = " ORDER BY s.stu_id DESC ";
 
 		if(!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-			$s_where[]=" REPLACE(stu_code,' ','')   	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_khname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(stu_enname,' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_khname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_enname,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(CONCAT(last_name,stu_enname),' ','')  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(CONCAT(stu_enname,last_name),' ','')  	LIKE '%{$s_search}%'";
-			$s_where[]=" CONCAT(stu_enname,' ',last_name)  	LIKE '%{$s_search}%'";
-			$s_where[]=" CONCAT(last_name,' ',stu_enname)  	LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(tel,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(father_phone,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(mother_phone,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(guardian_tel,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(father_enname,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(mother_enname,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(guardian_enname,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(remark,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(home_num,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(street_num,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(village_name,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(commune_name,' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(district_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(s.stu_enname,' ',s.last_name)  	LIKE '%{$s_search}%'";
+			$s_where[]=" CONCAT(s.last_name,' ',s.stu_enname)  	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.tel,' ','') LIKE '%{$s_search}%'";
+			
+			$s_where[]=" REPLACE(COALESCE(fam.fatherPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.motherPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianPhone,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.fatherName,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.fatherNameKh,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.motherName,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianName,''),' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(COALESCE(fam.guardianNameKh,''),' ','') LIKE '%{$s_search}%'";
+			
+			$s_where[]=" REPLACE(s.remark,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.home_num,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.street_num,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.village_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.commune_name,' ','') LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.district_name,' ','') LIKE '%{$s_search}%'";
 			
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
@@ -149,17 +154,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		
 		$sql = "SELECT s.*,
-					
 					(SELECT $viewTitle FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality_title,
 	    			(SELECT $viewTitle FROM rms_view where type=21 and key_code=s.nation LIMIT 1) AS nation_title,
-	    			(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) fath_job,
-					(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) moth_job,
-					(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) guard_job,
+	    			(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.fatherJob LIMIT 1) fath_job,
+					(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.motherJob LIMIT 1) moth_job,
+					(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.guardianJob LIMIT 1) guard_job,
 					(SELECT v.$village_name FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_title,
 			    	(SELECT c.$commune_name FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_title,
 			    	(SELECT d.$district_name FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_title,
 					(SELECT $province FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_title
-				FROM rms_student as s
+				FROM rms_student as s 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 				WHERE s.stu_id =".$id." 
 				AND s.customer_type=1";
 			$dbp = new Application_Model_DbTable_DbGlobal();
@@ -193,7 +198,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		return $db->fetchOne($sql);
 	}
-	public function addStudent($_data){
+	public function addStudent($_data)
+	{
 			$_db = $this->getAdapter();
 			$_db->beginTransaction();
 			
@@ -243,72 +249,51 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$dbg->updateAmountStudetByDegree($_data);//For Insert To Tale Count ID
 				$stuToken = $dbg->getStudentToken();
 				$_arr= array(
-						'branch_id'		=>$_data['branch_id'],
-						'stu_code'		=>$stu_code,
-						'user_id'		=>$this->getUserId(),
-						'stu_khname'	=>$_data['name_kh'],
-						'last_name'		=>ucfirst($_data['last_name']),
-						'stu_enname'	=>ucfirst($_data['name_en']),
-						'sex'			=>$_data['sex'],
-						'nationality'	=>$_data['studen_national'],
-						'nation'		=>$_data['nation'],
-						'dob'			=>$_data['date_of_birth'],
-						'tel'			=>$_data['phone'],
-						'primary_phone'	=>$_data['primary_phone'],
-						'pob'			=>$_data['pob'],
-						'home_num'		=>$_data['home_note'],
-						'street_num'	=>$_data['way_note'],
-						'village_name'	=>$_data['village_note'],
-						'commune_name'	=>$_data['commun_note'],
-						'district_name'	=>$_data['distric_note'],
-						'province_id'	=>$_data['student_province'],
+						'branch_id'		=>$_data['branch_id']
+						,'stu_code'		=>$stu_code
+						,'user_id'		=>$this->getUserId()
+						,'stu_khname'	=>$_data['name_kh']
+						,'last_name'		=>ucfirst($_data['last_name'])
+						,'stu_enname'	=>ucfirst($_data['name_en'])
+						,'sex'			=>$_data['sex']
+						,'nationality'	=>$_data['studen_national']
+						,'nation'		=>$_data['nation']
+						,'dob'			=>$_data['date_of_birth']
+						,'tel'			=>$_data['phone']
+						,'primary_phone'	=>$_data['primary_phone']
+						,'pob'			=>$_data['pob']
+						,'home_num'		=>$_data['home_note']
+						,'street_num'	=>$_data['way_note']
+						,'village_name'	=>$_data['village_note']
+						,'commune_name'	=>$_data['commun_note']
+						,'district_name'	=>$_data['distric_note']
+						,'province_id'	=>$_data['student_province']
 						
-						'father_khname'	=>$_data['father_khname'],
-						'father_enname'	=>$_data['fa_name_en'],
-						'father_dob'	=>$_data['fa_dob'],
-						'father_nation'	=>$_data['fa_national'],
-						'father_job'	=>$_data['fa_job'],
-						'father_phone'	=>$_data['fa_phone'],
 						
-						'mother_khname'	=>$_data['mother_khname'],
-						'mother_enname'	=>$_data['mom_name_en'],
-						'mother_dob'	=>$_data['mo_dob'],
-						'mother_nation'	=>$_data['mom_nation'],
-						'mother_job'	=>$_data['mo_job'],
-						'mother_phone'	=>$_data['mon_phone'],
+						,'lang_level'	=>$_data['lang_level']
+						,'from_school'	=>$_data['from_school']
+						,'know_by'		=>$_data['know_by']
+						,'sponser'		=>$_data['sponser']
+						,'sponser_phone'	=>$_data['sponser_phone'] 
+						
+						,'status'		=>1
+						,'remark'		=>$_data['remark']
+						,'create_date'	=>date("Y-m-d H:i:s")
+						,'photo'  			 => $photo
+						,'customer_type'			=>1//Student
+						
+						,'date_bacc'	=>$_data['date_baccexam']
+						,'province_bacc'	=>$_data['school_province']
+						,'center_bacc'	=>$_data['center_baccexam']
+						,'room_bacc'	=>$_data['room_baccexam']
+						,'table_bacc'	=>$_data['table_baccexam']
+						,'grade_bacc'	=>$_data['grade_baccexam']
+						,'score_bacc'	=>$_data['score_baccexam']
+						,'certificate_bacc'	=>$_data['certificate_baccexam']
+						,'studentToken'=>$stuToken
 
-						'guardian_khname'=>$_data['guardian_khname'],
-						'guardian_enname'=>$_data['guardian_name_en'],
-						'guardian_dob'	=>$_data['guardian_dob'],
-						'guardian_nation'=>$_data['guardian_national'],
-						'guardian_job'	=>$_data['gu_job'],
-						'guardian_tel'	=>$_data['guardian_phone'],
-						
-						/////other infomation tab /////
-						'lang_level'	=>$_data['lang_level'],
-						'from_school'	=>$_data['from_school'],
-						'know_by'		=>$_data['know_by'],
-						'sponser'		=>$_data['sponser'],
-						'sponser_phone'	=>$_data['sponser_phone'],
-						//////////////////////////////////////////////				
-						'status'		=>1,
-						'remark'		=>$_data['remark'],
-						'create_date'	=>date("Y-m-d H:i:s"),
-						'photo'  			 => $photo,
-						'customer_type'			=>1,//Student
-						
-						'date_bacc'	=>$_data['date_baccexam'],
-						'province_bacc'	=>$_data['school_province'],
-						'center_bacc'	=>$_data['center_baccexam'],
-						'room_bacc'	=>$_data['room_baccexam'],
-						'table_bacc'	=>$_data['table_baccexam'],
-						'grade_bacc'	=>$_data['grade_baccexam'],
-						'score_bacc'	=>$_data['score_baccexam'],
-						'certificate_bacc'	=>$_data['certificate_baccexam'],
-						'studentToken'=>$stuToken,
-
-						//Discount Type
-						'studentType'	=>$_data['studentType']
+						,'studentType'	=>$_data['studentType']
+						,'familyId'	=>$_data['familyId']
 
 						);
 				if (EDUCATION_LEVEL==1){
@@ -329,44 +314,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					}
 				}
 				
-				$part= PUBLIC_PATH.'/images/photo/';
-				if (!file_exists($part)) {
-					mkdir($part, 0777, true);
-				}
-				$dbg = new Application_Model_DbTable_DbGlobal();
-				$name = $_FILES['father_photo']['name'];
-				//$size = $_FILES['father_photo']['size'];
-				if(!empty($_data['old_father_photo'])){
-					$_arr['father_photo'] = $_data['old_father_photo'];
-				}
-				if (!empty($name)){
-					$tem =explode(".", $name);
-					$new_image_name = "fatherprofile".date("Y").date("m").date("d").time().".".end($tem);
-					$photopj = $dbg->resizeImase($_FILES['father_photo'], $part,$new_image_name);
-					$_arr['father_photo']=$photopj;
-				}
-				$name = $_FILES['mother_photo']['name'];
-				//$size = $_FILES['mother_photo']['size'];
-				if(!empty($_data['old_mother_photo'])){
-					$_arr['mother_photo'] = $_data['old_mother_photo'];
-				}
-				if (!empty($name)){
-					$tem =explode(".", $name);
-					$new_image_name = "motherprofile".date("Y").date("m").date("d").time().".".end($tem);
-					$photopj = $dbg->resizeImase($_FILES['mother_photo'], $part,$new_image_name);
-					$_arr['mother_photo']=$photopj;
-				}
-				$name = $_FILES['guardian_photo']['name'];
-				//$size = $_FILES['guardian_photo']['size'];
-				if(!empty($_data['old_guardian_photo'])){
-					$_arr['guardian_photo'] = $_data['old_guardian_photo'];
-				}
-				if (!empty($name)){
-					$tem =explode(".", $name);
-					$new_image_name = "guardianprofile".date("Y").date("m").date("d").time().".".end($tem);
-					$photopj = $dbg->resizeImase($_FILES['guardian_photo'], $part,$new_image_name);
-					$_arr['guardian_photo']=$photopj;
-				}
 				$id = $this->insert($_arr);
 				
 				$this->_name = 'rms_student_document';
@@ -458,7 +405,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						}
 					}
 				}
-				
 				$_db->commit();
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -484,7 +430,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					,'nation'		=>$_data['nation']
 					,'dob'			=>$_data['date_of_birth']
 					,'tel'			=>$_data['phone']
-					//,'primary_phone'	=>$_data['primary_phone']
+					,'primary_phone'	=>$_data['primary_phone']
 					
 					,'pob'			=>$_data['pob']
 					,'home_num'		=>$_data['home_note']
@@ -775,23 +721,37 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$sql="
 			SELECT 
-				*
+				s.*
+				,fam.fatherNameKh AS father_khname 
+				,fam.fatherName AS father_enname  
+				,fam.fatherNation AS father_nation
+				,fam.fatherPhone AS father_phone
+				
+				,fam.motherNameKh AS mother_khname 
+				,fam.motherName AS mother_enname  
+				,fam.motherPhone AS mother_phone  
+				
+				,fam.guardianNameKh AS guardian_khname 
+				,fam.guardianName AS guardian_enname 
+				,fam.guardianPhone AS guardian_tel  
+				
 				,(SELECT province_kh_name FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS province_name
-				,(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job
-				,(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job
-				,(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS gu_job
+				,(SELECT occu_name FROM rms_occupation WHERE occupation_id=fam.fatherJob LIMIT 1) AS fa_job
+				,(SELECT occu_name FROM rms_occupation WHERE occupation_id=fam.motherJob LIMIT 1) AS mo_job
+				,(SELECT occu_name FROM rms_occupation WHERE occupation_id=fam.guardianJob LIMIT 1) AS gu_job
 			
 				,(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=(SELECT gds.grade FROM rms_group_detail_student AS gds WHERE gds.itemType=1 AND gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC LIMIT 1) AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name
 				,(SELECT rms_items.title FROM rms_items WHERE rms_items.id=(SELECT gds.degree FROM rms_group_detail_student AS gds WHERE gds.itemType=1 AND  gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC  LIMIT 1) AND rms_items.type=1 LIMIT 1) AS degree_name
 				,(SELECT rms_items.title FROM rms_items WHERE rms_items.id=(SELECT gds.degree FROM rms_group_detail_student AS gds WHERE gds.itemType=1 AND  gds.stu_id=s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 ORDER BY gds.gd_id DESC LIMIT 1) AND rms_items.type=1 LIMIT 1) AS degreeTitle
 				
 				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.nationality) AS nationality
-				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.father_nation) AS father_nation
-				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.mother_nation) AS mother_nation
-				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=s.guardian_nation) AS guardian_nation
+				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=fam.fatherNation) AS father_nation
+				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=fam.motherNation) AS mother_nation
+				,(SELECT name_kh FROM rms_view WHERE rms_view.type=21 AND rms_view.key_code=fam.guardianNation) AS guardian_nation
 			
 			FROM 
-				rms_student AS s
+				rms_student AS s 
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 			WHERE s.stu_id=$id
 		";
 		

@@ -1191,6 +1191,13 @@ table#table_row_study {
 							<input dojoType="dijit.form.ValidationTextBox" required="true"  class="fullside" id="popTitleEn" name="popTitleEn" value="" type="text">
 					   </div>
 					</div>
+					<div class="form-group">
+					   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SHORCUT");?> <span class="required">*</span>
+					   </label>
+					   <div class="col-md-7 col-sm-7 col-xs-12">
+							<input dojoType="dijit.form.ValidationTextBox" required="1" class="fullside" id="popShortcut" name="popShortcut" type="text" maxlength="8" data-dojo-props="regExp: '[a-zA-Z0-9$%!_]{1,8}', invalidMessage: 'The value must be at least 1 character and maximum 8'">
+					   </div>
+					</div>
 					
 					<div class="clearfix"></div>
 					<div class="card-box">

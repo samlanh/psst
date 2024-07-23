@@ -101,8 +101,11 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   $key = new Application_Model_DbTable_DbKeycode();
 	   $this->view->data=$key->getKeyCodeMiniInv(TRUE);
 	   
-	   $db = new Application_Model_DbTable_DbGlobal();
-		$this->view->rsBank = $db->getAllBank();
+	   $this->view->rsBank = $_db->getAllBank();
+
+		$academicType = $_db->getViewById(6,1);
+
+	  $this->view->academicTerm = array_slice($academicType,2,3,true);
 	   
 	   $frmreceipt = new Application_Form_FrmGlobal();
 	   $this->view->officailreceipt = $frmreceipt->getFormatReceipt();
@@ -120,8 +123,20 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	//   		'isAutopayment'=>3,
 	//    		'isInititilize'=>1);
 	   $db = new Application_Model_DbTable_DbGlobal();
-// 	   $result=$db->getServiceForPaymentRecord($data);
-// 	print_r($result);exit();
+		// $param = array(
+		// 	'academicYear'=>2,
+		// 	'itemType'=>1
+		// );
+		// $result = $db->getAllTermbyItemdetail($param);
+		// print_r($result);
+		// echo "<br />";
+		// print_r(array_column($result,'name'));
+		// echo "<br />";
+		//print_r(array_filter(array_combine(array_keys($result), array_column($result, 'name'))));
+		// print_r(array_diff(array_combine(array_keys($result), array_column($result, 'name')), [null]));
+		//$result = array_column_keys($items, 'id', 'any_key');
+// 	    $result=$db->getServiceForPaymentRecord($data);
+// 	    print_r($result);exit();
 	// $param = array(
 	// 	'branch_id' => 1,
 	// 	'isFinished'=>0,

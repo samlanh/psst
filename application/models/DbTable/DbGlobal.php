@@ -1262,13 +1262,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql .= " GROUP BY academic_year, term_study, generation ";
 		$order = ' ORDER BY id DESC';
-		$result = $db->fetchAll($sql . $order);
+		$result = $db->fetchAll($sql.$order);
 		if (!empty($data['option'])) {
-			
 			$options = '';
 			if (!empty($result))
 				foreach ($result as $value) {
-					$options .= '<option  data-academic-year-title="' . $value['academicYearTitle'] . '" data-fee-title="' . $value['feeTitle'] . '" data-term-study="' . $value['termStudy'] . '" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+					$param = array(
+						'branch_id'=>empty($data['branch_id'])?:$data['branch_id'],
+						'academic_year'=>$value['id'],
+						'degree'=>empty($data['degree'])?'':$data['degree'],
+						'serviceType'=>1
+					);
+					$resultPeriodJson =  htmlspecialchars(json_encode($this->getAllStudyPeriod($param)));
+					$options .= '<option data-datajson="'.$resultPeriodJson.'"  data-academic-year-title="' . $value['academicYearTitle'] . '" data-fee-title="' . $value['feeTitle'] . '" data-term-study="' . $value['termStudy'] . '" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 				}
 			return $options;
 		}
@@ -2158,10 +2164,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = " SELECT id,
 			CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name, 
 			academic_year AS academicYear,
+			periodId,
 			DATE_FORMAT(start_date, '%Y-%m-%d') startDate,
 			DATE_FORMAT(end_date, '%Y-%m-%d') endDate
-
-  			FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
+  		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
 		if (!empty($data['branch_id'])) {
 			$sql .= " AND branch_id = " . $data['branch_id'];
 		}
@@ -2171,13 +2177,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['feeId'])) {//correct
 			$result = $this->getFeeStudyinfoByIdGloable($data['feeId']);
 			$academicYear = $result['academicYearId'];
-			if (!empty($academicYear)) {
+			if (!empty($academicYear)){
 				$sql .= " AND academic_year = " . $academicYear;
 			}
 		}
-
 		if (!empty($data['periodId'])) {//correct
 			$sql .= " AND periodId = " . $data['periodId'];
+		}
+		if (!empty($data['degree'])) {//correct
+			$degreeId = $data['degree'];
+			$sql .= " AND  FIND_IN_SET($degreeId,degreeId) ";
 		}
 		if (!empty($data['grade'])) {//correct
 			if (!empty($data['serviceType']) and $data['serviceType'] == 1) {// SCHOOL FEE ONLY 
@@ -4271,14 +4280,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 
 		$rows = $db->fetchAll($sql);
-
+		//return $rows;
 		$options = '';
-		if (!empty($rows))
-			
+		if (!empty($rows)) {
+
 			foreach ($rows as $value) {///
 				$param = array(
-					'periodId'=>$value['id'],
-					'feeId'=>$value['feeId'],
+					'periodId' => $value['id'],
+					'feeId' => $value['feeId'],
 				);
 				$resultPeriods = $this->getAllStudyPeriod($param);
 				// $resultList = array();
@@ -4292,12 +4301,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				$options .= '<option value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 			}
 
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		if ($data['itemType'] == 3) {
-			$options .= '<option value="5" >' . $tr->translate('ONE_PAYMENTONLY') . '</option>';
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			if ($data['itemType'] == 3) {
+				$options .= '<option value="5" >' . $tr->translate('ONE_PAYMENTONLY') . '</option>';
+			}
+			$options .= '<option value="6" >' . $tr->translate('OTHER') . '</option>';
+			return $options;
+		} {
+			return $rows;
 		}
-		$options .= '<option value="6" >' . $tr->translate('OTHER') . '</option>';
-		return $options;
 	}
 
 	function getServiceForPaymentRecord($data)

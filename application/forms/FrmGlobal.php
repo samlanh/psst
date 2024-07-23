@@ -743,6 +743,7 @@ class Application_Form_FrmGlobal
 							list-style:none;
 							line-height:10px;
 						}
+						.displayinline{white-space:nowrap;}
 					</style>
 					<table broder='1' width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
 						<tr style='height:$paddingTop'>
@@ -815,14 +816,16 @@ class Application_Form_FrmGlobal
 					<tr>
 						<td valign='top' style='font-size:10px;'>
 							<div style='width:99%;float: left;'>
-								<div style='font-size:8px;min-height:60px;border:1px solid #000;' class='noted' >ថ្ងៃត្រូវបង់ថ្លៃសិក្សា/Schedule Tuition Due
+								<div style='font-size:8px;min-height:60px;border:1px solid #000;' class='noted' >
+									<div class='displayinline'>ថ្ងៃត្រូវបង់ថ្លៃសិក្សា/Schedule Tuition Due</div>
 									<div id='lbl_period_year' class='lbl_periodstudy' >
 									</div>
 								</div>
 							</div>
 						</td>
 						<td colspan='2' valign='top' class='display-top' style='font-size:10px;' >
-							<div style='font-size:10px;min-height:60px;border:1px solid #000;'  class='noted' >សម្គាល់/Note
+							<div style='font-size:10px;min-height:60px;border:1px solid #000;'  class='noted' >
+								<div class='displayinline'>សម្គាល់/Note</div>
 								<label id='lbl_note'><lable>
 							</div>
 						</td>

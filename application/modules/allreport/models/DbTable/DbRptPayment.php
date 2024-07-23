@@ -55,10 +55,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			   (SELECT $label FROM rms_view where rms_view.type = 8 and key_code=sp.payment_method LIMIT 1) AS payment_method,
     			   (SELECT bank_name from `rms_bank` where id=sp.bank_id LIMIT 1) AS bankName,
     			   sp.number,
-    				(SELECT (SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = rms_tuitionfee.academic_year LIMIT 1)
-					 FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) AS academic_year,
-					 (SELECT title_kh FROM `rms_studytype` AS ac WHERE ac.id = (SELECT rms_tuitionfee.term_study FROM rms_tuitionfee where rms_tuitionfee.id=sp.academic_year LIMIT 1) LIMIT 1)
-					  AS session_type,
+				    (SELECT CONCAT_WS('-',ac.fromYear,ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = t.academic_year LIMIT 1) as academic_year,
+				    (SELECT title_kh FROM `rms_studytype` AS ac WHERE ac.id = t.term_study LIMIT 1) AS term_study,
+					
 					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 					(SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
 					(SELECT $label from rms_view where rms_view.type = 4 AND key_code=sp.session LIMIT 1) as session,
@@ -67,12 +66,14 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.grade=sp.grade AND ds.degree=sp.degree ORDER BY ds.gd_id DESC LIMIT 1) LIMIT 1) AS group_name
     			FROM
-    				rms_student_payment as sp,
-					rms_student as s,
-    				rms_student_paymentdetail as spd
+    				
+					(rms_student_payment AS sp
+					JOIN rms_student_paymentdetail AS spd  ON (spd.payment_id = sp.id))
+    				JOIN rms_student AS s  ON (sp.student_id=s.stu_id)
+					LEFT JOIN rms_tuitionfee t
+					ON (t.id=sp.academic_year)
     			WHERE 
-    				sp.student_id=s.stu_id 
-    				and sp.id=$id  ";
+    				sp.id=$id  ";
     	$sql.=$_db->getAccessPermission('sp.branch_id');
     	$sql.=" LIMIT 1 ";
     		return $db->fetchRow($sql);

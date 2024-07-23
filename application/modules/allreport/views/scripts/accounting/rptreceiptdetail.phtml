@@ -57,7 +57,7 @@ function setDatatoReceipt(){
 		dojo.byId("lb_name").innerHTML = '<?php echo $result['stu_khname'];?>';
 		dojo.byId("lb_namelatin").innerHTML = '<?php echo $result['last_name'].' '.$result['stu_enname'];?>';		
 		dojo.byId("lb_phone").innerHTML = '<?php echo $result['tel'];?>';	
-		dojo.byId("lb_fee_title").innerHTML = '<?php echo ($result['studentType']);?>';
+		dojo.byId("lb_fee_type").innerHTML = '<?php echo $result['term_study'];?>';
 		
 		//dojo.byId("lb_read_khmer").innerHTML = '<?php //echo $result['stu_code'];?>';	
 		<?php if($result['photo']){?>

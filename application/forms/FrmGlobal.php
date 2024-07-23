@@ -793,15 +793,16 @@ class Application_Form_FrmGlobal
 							<td style='vertical-align: top;'>គោត្តនាម-នាម</td>
 							<td> : &nbsp;<label id='lb_name' class='one bold' style='display: inline-block; vertical-align: top;' ></label></td>
 							<td></td>
-							<td>ថ្នាក់/Class</td>
-							<td style='white-space: nowrap;'>: <label id='lb_group' class='one'></label><label id='lb_grade' class='one'>&nbsp;</label></td>
+							<td>ពេលសិក្សា/Study Time​</td>
+							<td> : &nbsp;<label id='lb_fee_type' class='one bold'></label></td>
 						</tr>
 						<tr>
 							<td>Full Name</td>
 							<td> : &nbsp;<label id='lb_namelatin' class='one' style='display: inline-block; vertical-align: top;'></label></td>
 							<td></td>
-							<td>ប្រភេទ/Type ​</td>
-							<td> : &nbsp;<label id='lb_fee_title' class='one bold'></label></td>
+							
+							<td>ថ្នាក់/Class</td>
+							<td style='white-space: nowrap;'>: <label id='lb_group' class='one'></label><label id='lb_grade' class='one'>&nbsp;</label></td>
 						</tr>
 					<tr>
 						<td colspan='5' style='padding-top:10px;'><div id='t_amountmoneytype'></div></td>
@@ -859,6 +860,7 @@ class Application_Form_FrmGlobal
 						<label id='lb_paymentnumber'></label>
 						<label id='lb_total_payment'></label>
 						<label id='lb_study_year' class='one bold'></label>
+						<label id='lb_fee_title' class='one bold'></label>
 						<label id='lb_session' class='one bold'></label>
 						<label id='lb_part_time' class='one'>&nbsp;</label>
 						<label id='lb_sex' class='one bold'></label>
@@ -1124,6 +1126,8 @@ class Application_Form_FrmGlobal
 							</tr>
 							
 						</table>
+						<label id='lb_fee_title' class='one bold'></label>
+						<label id='lb_fee_type' class='one bold'></label>
 						<span id='lbParentName' >&nbsp;</span>
 						<span id='lbParentPhone' >&nbsp;</span>
 						<label id='lb_fee_title' class='one bold'></label>

@@ -1224,9 +1224,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = "SELECT id,
 		   	$titleQuery AS name,
 		   	CONCAT_WS(',',(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1),generation) AS years,
-			generation as feeType,
-			academic_year as academicYear,
-			term_study as termStudy
+			generation as feeTitle,
+			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=academic_year LIMIT 1) academicYearTitle,
+			( SELECT $label FROM rms_studytype AS st WHERE st.id =rms_tuitionfee.term_study LIMIT 1 ) AS termStudy
 
 	   	FROM rms_tuitionfee WHERE 
 	   	 type=1 AND `status`=1
@@ -1268,7 +1268,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$options = '';
 			if (!empty($result))
 				foreach ($result as $value) {
-					$options .= '<option  data-academic-year="' . $value['academicYear'] . '" data-fee-title="' . $value['feeType'] . '" data-term-study="' . $value['termStudy'] . '" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+					$options .= '<option  data-academic-year-title="' . $value['academicYearTitle'] . '" data-fee-title="' . $value['feeTitle'] . '" data-term-study="' . $value['termStudy'] . '" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 				}
 			return $options;
 		}
@@ -2994,12 +2994,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 								<div class="text-center">
 									<div class="member-card card-display-reg">
 										<p class="text-muted info-list font-13">
-											<span class="title-info">' . $tr->translate("STUDENT_CODE") . '</span><span id="lbl_stucode" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["stu_code"] . '</a></span>
-											<span class="title-info">' . $tr->translate("STUDENT_NAMEKHMER") . '</span><span id="lbl_namekh" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["stu_khname"] . '</a></span>
-											<span class="title-info">' . $tr->translate("NAME_ENGLISH") . '</span><span id="lbl_nameen" class="inf-value" >: <a target="_blank" href="' . $link . '">' . $rs["last_name"] . " " . $rs["stu_enname"] . '</a></span>
-											<span class="title-info">' . $tr->translate("PHONE") . '</span><span id="lbl_phone" class="inf-value">: ' . $rs['tel'] . '</span>
-											<span class="title-info">' . $tr->translate("Year Enrolled") . '</span><span id="lbl_phone" class="inf-value groupinfo">: ' . $rs['academicYearEnroll'] . '</span>
-											<span class="title-info">' . $tr->translate("STUDENT_TYPE") . '</span>:<span id="lbl_student_type" class="inf-value" >' . $rs['studentType'] . '</span>
+											<span class="title-info">' . $tr->translate("STUDENT_CODE") . '</span>: <span id="lbl_stucode" class="inf-value" ><a target="_blank" href="' . $link . '">' . $rs["stu_code"] . '</a></span>
+											<span class="title-info">' . $tr->translate("STUDENT_NAMEKHMER") . '</span>: <span id="lbl_namekh" class="inf-value" ><a target="_blank" href="' . $link . '">' . $rs["stu_khname"] . '</a></span>
+											<span class="title-info">' . $tr->translate("NAME_ENGLISH") . '</span>: <span id="lbl_nameen" class="inf-value" ><a target="_blank" href="' . $link . '">' . $rs["last_name"] . " " . $rs["stu_enname"] . '</a></span>
+											<span class="title-info">' . $tr->translate("PHONE") . '</span>: <span id="lbl_phone" class="inf-value">' . $rs['tel'] . '</span>
+											<span class="title-info">' . $tr->translate("Year Enrolled") . '</span>: <span id="lbl_phone" class="inf-value groupinfo">' . $rs['academicYearEnroll'] . '</span>
+											<span class="title-info">' . $tr->translate("STUDENT_TYPE") . '</span>: <span id="lbl_student_type" class="inf-value" >' . $rs['studentType'] . '</span>
 										</p>
 										<span class="title-info hidden">' . $tr->translate("DOB") . '</span><span id="lbl_dob" class="inf-value hidden" >: ' . $rs['dob'] . '</span>
 										</div>

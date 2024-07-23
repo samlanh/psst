@@ -638,7 +638,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$income_no = $db->fetchOne($sql1);
     	
     	$new_acc_no= (int)$payment_no + (int)$income_no +  1;
-    	$new_acc_no = $new_acc_no-506;//for psis
+		$recieptStart = 0;//psis=-506;
+    	$new_acc_no = $new_acc_no+$recieptStart;//for psis
     	
     	$acc_length = strlen((int)$new_acc_no+1);
     	$pre=0;

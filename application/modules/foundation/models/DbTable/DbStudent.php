@@ -470,75 +470,57 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		try{	
+			
+			$_arr=array(
+ 					'branch_id'		=>$_data['branch_id']
+ 					,'stu_code'		=>$_data['student_id']
+					,'user_id'		=>$this->getUserId()
+					,'stu_khname'	=>$_data['name_kh']
+					,'last_name'		=>ucfirst($_data['last_name'])
+					,'stu_enname'	=>ucfirst($_data['name_en'])
+					,'sex'			=>$_data['sex']
+					
+					,'nationality'	=>$_data['studen_national']
+					,'nation'		=>$_data['nation']
+					,'dob'			=>$_data['date_of_birth']
+					,'tel'			=>$_data['phone']
+					//,'primary_phone'	=>$_data['primary_phone']
+					
+					,'pob'			=>$_data['pob']
+					,'home_num'		=>$_data['home_note']
+					,'street_num'	=>$_data['way_note']
+					,'village_name'	=>$_data['village_note']
+					,'commune_name'	=>$_data['commun_note']
+					,'district_name'	=>$_data['distric_note']
+					,'province_id'	=>$_data['student_province']
+					
+					/////other infomation tab /////
+					,'lang_level'	=>$_data['lang_level']
+					,'from_school'	=>$_data['from_school']
+					,'know_by'		=>$_data['know_by']
+					,'sponser'		=>$_data['sponser']
+					,'sponser_phone'	=>$_data['sponser_phone']
+					
+					,'status'		=>$_data['status']
+					,'remark'		=>$_data['remark']
+					,'date_bacc'	=>$_data['date_baccexam']
+					,'province_bacc'	=>$_data['school_province']
+					,'center_bacc'	=>$_data['center_baccexam']
+					,'room_bacc'	=>$_data['room_baccexam']
+					,'table_bacc'	=>$_data['table_baccexam']
+					,'grade_bacc'	=>$_data['grade_baccexam']
+					,'score_bacc'	=>$_data['score_baccexam']
+					,'certificate_bacc'	=>$_data['certificate_baccexam']
+					
+					,'studentType'	=>$_data['studentType']
+					,'familyId'	=>$_data['familyId']
+				);
+			if (EDUCATION_LEVEL==1){
+				$_arr['calture'] = $_data['calture'];
+			}
 			$part= PUBLIC_PATH.'/images/photo/';
 			if (!file_exists($part)) {
 				mkdir($part, 0777, true);
-			}
-			$_arr=array(
- 					'branch_id'		=>$_data['branch_id'],
- 					'stu_code'		=>$_data['student_id'],
-					'user_id'		=>$this->getUserId(),
-					'stu_khname'	=>$_data['name_kh'],
-					'last_name'		=>ucfirst($_data['last_name']),
-					'stu_enname'	=>ucfirst($_data['name_en']),
-					'sex'			=>$_data['sex'],
-					
-					'nationality'	=>$_data['studen_national'],
-					'nation'		=>$_data['nation'],
-					'dob'			=>$_data['date_of_birth'],
-					'tel'			=>$_data['phone'],
-					//'primary_phone'	=>$_data['primary_phone'],
-					'pob'			=>$_data['pob'],
-					'home_num'		=>$_data['home_note'],
-					'street_num'	=>$_data['way_note'],
-					'village_name'	=>$_data['village_note'],
-					'commune_name'	=>$_data['commun_note'],
-					'district_name'	=>$_data['distric_note'],
-					'province_id'	=>$_data['student_province'],
-					
-					'father_khname'	=>$_data['father_khname'],
-					'father_enname'	=>$_data['fa_name_en'],
-					'father_dob'	=>$_data['fa_dob'],
-					'father_nation'	=>$_data['fa_national'],					
-					'father_job'	=>$_data['fa_job'],					
-					'father_phone'	=>$_data['fa_phone'],
-					
-					'mother_khname'	=>$_data['mother_khname'],
-					'mother_enname'	=>$_data['mom_name_en'],
-					'mother_dob'	=>$_data['mo_dob'],
-					'mother_nation'	=>$_data['mom_nation'],
-					'mother_job'	=>$_data['mo_job'],
-					'mother_phone'	=>$_data['mon_phone'],
-					
-					'guardian_khname'=>$_data['guardian_khname'],
-					'guardian_enname'=>$_data['guardian_name_en'],
-					'guardian_dob'	=>$_data['guardian_dob'],
-					'guardian_nation'=>$_data['guardian_national'],
-					'guardian_job'	=>$_data['gu_job'],
-					'guardian_tel'	=>$_data['guardian_phone'],
-					
-					/////other infomation tab /////
-					'lang_level'	=>$_data['lang_level'],
-					'from_school'	=>$_data['from_school'],
-					'know_by'		=>$_data['know_by'],
-					'sponser'		=>$_data['sponser'],
-					'sponser_phone'	=>$_data['sponser_phone'],
-					//////////////////////////////////////////////
-					'status'		=>$_data['status'],
-					'remark'		=>$_data['remark'],
-					'date_bacc'	=>$_data['date_baccexam'],
-					'province_bacc'	=>$_data['school_province'],
-					'center_bacc'	=>$_data['center_baccexam'],
-					'room_bacc'	=>$_data['room_baccexam'],
-					'table_bacc'	=>$_data['table_baccexam'],
-					'grade_bacc'	=>$_data['grade_baccexam'],
-					'score_bacc'	=>$_data['score_baccexam'],
-					'certificate_bacc'	=>$_data['certificate_baccexam'],
-					////--
-					'studentType'	=>$_data['studentType']
-					);
-			if (EDUCATION_LEVEL==1){
-				$_arr['calture'] = $_data['calture'];
 			}
 			$photo = "";
 			$name = $_FILES['photo']['name'];
@@ -563,36 +545,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
 					$_arr['audioTitle']=$newFileName;
 				}
-			}
-			
-			$part= PUBLIC_PATH.'/images/photo/';
-			if (!file_exists($part)) {
-				mkdir($part, 0777, true);
-			}
-			$dbg = new Application_Model_DbTable_DbGlobal();
-			$name = $_FILES['father_photo']['name'];
-			$size = $_FILES['father_photo']['size'];
-			if (!empty($name)){
-				$tem =explode(".", $name);
-				$new_image_name = "fatherprofile".date("Y").date("m").date("d").time().".".end($tem);
-				$photopj = $dbg->resizeImase($_FILES['father_photo'], $part,$new_image_name);
-				$_arr['father_photo']=$photopj;
-			}
-			$name = $_FILES['mother_photo']['name'];
-			$size = $_FILES['mother_photo']['size'];
-			if (!empty($name)){
-				$tem =explode(".", $name);
-				$new_image_name = "motherprofile".date("Y").date("m").date("d").time().".".end($tem);
-				$photopj = $dbg->resizeImase($_FILES['mother_photo'], $part,$new_image_name);
-				$_arr['mother_photo']=$photopj;
-			}
-			$name = $_FILES['guardian_photo']['name'];
-			$size = $_FILES['guardian_photo']['size'];
-			if (!empty($name)){
-				$tem =explode(".", $name);
-				$new_image_name = "guardianprofile".date("Y").date("m").date("d").time().".".end($tem);
-				$photopj = $dbg->resizeImase($_FILES['guardian_photo'], $part,$new_image_name);
-				$_arr['guardian_photo']=$photopj;
 			}
 			
 			$stu_id = $_data["id"];

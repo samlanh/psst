@@ -107,7 +107,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 		$rsStudentType= $_db->getViewByType(40,null);
-		array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		//array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($rsStudentType, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
 		$this->view->studentTypeOption = $rsStudentType;
 		
@@ -173,7 +173,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->province = $db->getProvince();
 		
 		$rsStudentType= $_db->getViewByType(40,null);
-		array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		//array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($rsStudentType, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
 		$this->view->studentTypeOption = $rsStudentType;
 		
@@ -314,7 +314,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->doc_type = $row;
 		
 		$rsStudentType= $_db->getViewByType(40,null);
-		array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		//array_unshift($rsStudentType, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($rsStudentType, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
 		$this->view->studentTypeOption = $rsStudentType;
 		

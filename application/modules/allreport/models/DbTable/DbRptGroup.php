@@ -188,7 +188,6 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 	public function getGroupDetailReport($search){//using
 	   	$db = $this->getAdapter();
 	   	$_db = new Application_Model_DbTable_DbGlobal();
-	//	$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
 
 	   	$lang = $_db->currentlang();
 		$branch= $_db->getBranchDisplay();

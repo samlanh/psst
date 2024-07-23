@@ -267,16 +267,23 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				s.stu_enname,
 				s.stu_khname,
 				s.last_name,
-				s.sex,
+				CASE
+				    WHEN s.sex =1  THEN 'M'
+				    WHEN s.sex =2  THEN 'F'
+				    ELSE ''
+				END AS sex,
 				sd.degree,
 				sd.grade,
 				sd.feeId AS fee_id,
 				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
+				(SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1) AS groupCode,
+				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
+				COALESCE((SELECT name_kh FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 			  FROM 
 			    rms_student AS s,
-			  	`rms_group_detail_student` AS sd
+			  	rms_group_detail_student AS sd
 		 	  WHERE 
 				sd.itemType=1 
 				AND s.stu_id = sd.stu_id
@@ -332,17 +339,24 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				s.stu_enname,
 				s.stu_khname,
 				s.last_name,
-				s.sex,
+				CASE
+				    WHEN s.sex =1  THEN 'M'
+				    WHEN s.sex =2  THEN 'F'
+				    ELSE ''
+				END AS sex,
 				sd.degree,
 				sd.grade,
 				sd.feeId AS fee_id,
 				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
+				(SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1) AS groupCode,
+				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
+				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 			  FROM 
 			  	rms_student AS s,
-			  	`rms_group_detail_student` AS sd,
-			  	`rms_discount_student` AS dc
+			  	rms_group_detail_student AS sd,
+			  	rms_discount_student AS dc
 		 	  WHERE 
 				sd.itemType=1 
 				AND s.stu_id = sd.stu_id
@@ -393,8 +407,6 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['limit'])){
 			$where.=" LIMIT ".$search['limit'];
 		}
-	//	$where.=" LIMIT 200 ";
-	//	echo $sql.$where;
 		return $db->fetchAll($sql.$where);
 	}
 	public function updateStudentDiscount($_data){

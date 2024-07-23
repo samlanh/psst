@@ -133,4 +133,19 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 			exit();
 		}
 	}
+	function getAllStudentAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbDiscountSetting();
+
+			if($data['updateOption']==1){  //Add Student To Discount
+				$student =$db->getSearchStudent($data);
+			}elseif($data['updateOption']==2){ //Change Discount Student
+				$student =$db->getSearchStudentbyDiscount($data);
+			}
+			print_r(Zend_Json::encode($student));
+			exit();
+		}
+	}
+	
 }

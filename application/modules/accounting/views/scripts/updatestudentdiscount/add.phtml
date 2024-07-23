@@ -208,16 +208,24 @@ a.btnstyle:hover{color:#eee;}
 											</div>
 										</div>
 										<div class="form-group">
+											<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
+											<?php echo $tr->translate("STUDENT_INFO");?>
+											</label>
+											<div class="col-md-7 col-sm-7 col-xs-12">
+												<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('GET_STUDENT');?>" dojoType="dijit.form.Button" onclick="getStudentFromGroup();"/>
+											</div>
+										</div>
+										<!-- <div class="form-group">
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												<div class="form-group">
 													<label class="control-label  col-md-5 col-sm-5 col-xs-12" ></label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
+														<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate('GET_STUDENT');?>" id="search"
 															class="button-class button-primary" iconClass="glyphicon glyphicon-search"/>
 												</div>
 												</div>
 											</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -239,6 +247,50 @@ a.btnstyle:hover{color:#eee;}
 				
 	         <div class="clearfix"></div>
 	        </div>
+<style>
+ul.listFor {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    border: solid 1px #02014a;
+    width: 100%;
+    display: block;
+    background: #feffca;
+    border-radius: 5px;
+}
+li.row-value {
+    display: inline-block;
+    width: 50%;
+}
+li.row-value span.title {
+    min-width: 22%;
+    display: inline-block;
+    font-weight: 600;
+    color: #0063a5;
+}
+li.row-value span.value {
+    color: #02014a;
+}
+
+table#table {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    font-size: 12px;
+    background-color: white;
+    width: 99.5%;
+    font-family: 'Times New Roman','Khmer OS Battambang';
+}
+table#table tr.header-row td {
+    background: #02014a;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    padding: 5px 1px;
+}
+table#table tr td {
+    padding: 3px 1px;
+}
+</style>
 	        <div class="card-box" style="margin-top: 10px;">
 		       	<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 					<script type="dojo/method" event="onSubmit">			
@@ -273,7 +325,12 @@ a.btnstyle:hover{color:#eee;}
 	   				}
 				</script>
 					<div class="col-md-8 col-sm-8 col-xs-12">
-		            	<div class="form-group">
+						<div class="form-group">
+			                <div id="data_table" style="min-height: 300px !important;overflow-y: auto; padding: 5px; border: solid 1px #ccc;" class="col-md-12 col-sm-12 col-xs-12">
+			                </div>
+							<input type="hidden" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
+			            </div>
+		            	<!-- <div class="form-group">
 			         		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
 								<a class="btnstyle" id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
 								<a class="btnstyle" id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
@@ -290,7 +347,7 @@ a.btnstyle:hover{color:#eee;}
 								</select>
 							</div>
 							 <div class="clearfix"></div>
-			         	</div>
+			         	</div> -->
 		            </div>
 		        	<div class="col-md-4 col-sm-4 col-xs-12">
 						<div class="card-blogform">
@@ -314,6 +371,7 @@ a.btnstyle:hover{color:#eee;}
 												<input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
 												<input type="hidden" name="oldDiscountSettengId" id="oldDiscountSettengId" dojoType="dijit.form.TextBox" /> 
 												<input type="hidden" name="type" id="type" dojoType="dijit.form.TextBox" /> 
+												<input dojoType="dijit.form.TextBox" type="hidden" name="identity" id="identity" />
 											</div>
 										</div>
 										<div class="form-group">
@@ -457,6 +515,134 @@ dojo.ready(function(){
 	 getallGrade();
 	 OptionChange();
 });
+
+
+var url_get_all_student_from_group = "<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentdiscount','action'=>'get-all-student')); ?>";
+function getStudentFromGroup(){
+	loadingBlock()
+	$("#identity").val('');
+
+	updateOption = dijit.byId('updateOption').get('value');
+	branch_id = dijit.byId('branch_id').get('value');
+	discountSettengId = dijit.byId('discountSettengId').get('value');
+	academicYearEnroll = dijit.byId('academicYearEnroll').get('value');
+	studentType = dijit.byId('studentType').get('value');
+
+	academic_year = dijit.byId('academic_year').get('value');
+	degree = dijit.byId('degree').get('value');
+	grade = dijit.byId('grade').get('value');
+	adv_search = dijit.byId('adv_search').get('value');
+	limit = dijit.byId('limit').get('value');
+
+	// if(from_group==0 || from_group==""){
+	// 	alert('<?php echo $tr->translate('PLEASE_SELECT_GROUP'); ?>');
+	// 	dijit.byId('from_group').focus();
+	// 	dojo.byId('data_table').innerHTML = "";
+	// 	HideloadingBlock();
+	// 	return false;
+	// }
+
+	dojo.xhrPost({
+		url:url_get_all_student_from_group,
+		content:{
+			'updateOption':updateOption,
+			'branch_id':branch_id,
+			'discountSettengId':discountSettengId,
+			'academicYearEnroll':academicYearEnroll,
+			'studentType':studentType,
+
+			'academic_year':academic_year,
+			'degree':degree,
+			'grade':grade,
+			'adv_search':adv_search,
+			'limit':limit,
+			
+			},
+		handleAs:"json",
+		load: function(respone){
+			tem='<table border="1"   id="table" >'
+				+'<thead><tr align="center" class="header-row">'
+					+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
+					+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td>'
+				    +'<td><?php echo $tr->translate('NUM');?></td>'
+					+'<td><?php echo $tr->translate('STUDENT_CODE');?></td>'
+					+'<td><?php echo $tr->translate('STUDENT_NAMEKHMER');?></td>'
+					+'<td><?php echo $tr->translate('NAME_EN');?></td>'
+					+'<td ><?php echo $tr->translate('SEX');?></td>'
+					+'<td ><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>'
+					+'<td ><?php echo $tr->translate('STUDENT_TYPE');?></td>'
+					+'<td ><?php echo $tr->translate('GROUP');?></td>'
+					+'</tr>'
+				+'</thead>';
+			if(respone!=""){
+				num=0;
+				all_student = respone.length;
+				for(var i=0;i<respone.length;i++){
+					inx = i+1;
+					tem += '<tr style="border:1px solid #000;">';
+					tem += '<td align="center" colspan="2"><input style="height: 13px;" type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
+					tem += '<td align="center">&nbsp;'+inx+'&nbsp;<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" /></td>';
+					tem += '<td>&nbsp;'+respone[i].stu_code+'</td>';
+					tem += '<td>&nbsp;'+respone[i].stu_khname+'</label></td>';
+					tem += '<td>&nbsp;'+respone[i].last_name+" "+respone[i].stu_enname+'</td>';
+					tem += '<td align="center">&nbsp;'+respone[i].sex+'</td>';
+					tem += '<td align="center">'+respone[i].startYear+'</td>';
+					tem += '<td align="center">'+respone[i].studentType+'</td>';
+					tem += '<td align="center">'+respone[i].groupCode+'</td>';
+					tem += '</tr>';
+					if($("#identity").val()!="") {
+						var identity = $("#identity").val();
+						$("#identity").val(identity+','+inx);
+					} else {$("#identity").val(inx);}
+				}
+			}
+			tem+='</table>';
+			dojo.byId('data_table').innerHTML = tem;
+			HideloadingBlock();
+		},
+		error: function(err) {
+			HideloadingBlock();
+		}
+	});
+}
+
+
+function setValue(i){
+	$('#identity').val('');
+	for(var j=1;j<=i;j++){
+		if(dojo.byId('checkbox'+j).checked){
+			if($("#identity").val()!="") {
+				var iden = $("#identity").val();
+				$("#identity").val(iden+','+j);
+			} else{
+				$("#identity").val(j);
+			}
+		}
+	}
+	//countStudentSelected();
+}
+// function countStudentSelected(){
+// 	$('#lblStudentSelected').html('');
+// 	identitys = $('#identity').val();
+// 	if(identitys!=''){
+// 		arraysStu = identitys.split(',');
+// 		$('#lblStudentSelected').html(arraysStu.length);
+// 	}
+// }
+function check(i){
+	if($('#checkall').is(":checked")){setValue
+		for(var j=1;j<=i;j++){
+			$('#checkbox'+j).each(function() { //loop through each checkbox
+	            this.checked = true;  
+			});
+		}
+	}else{
+		for(var j=1;j<=i;j++){
+			$("#checkbox"+j).removeAttr("checked");
+		}
+	}
+}
+
 
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var urlGetGrade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';

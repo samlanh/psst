@@ -1,0 +1,137 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("FAMILY"));
+	$urlEdit = $this->baseUrl()."/foundation/family/edit/id/";
+?>	
+<?php $frm =  $this->frm_search;?>
+<div class="card pb-10 pt-10 pl-10 pr-10">
+	<div class="card-content collapse show">
+		<div class="card-box">
+       		<div class="col-sm-12 border-botom">
+		    	<div class="col-sm-8 pd-0">
+	    			<h4 class="m-b-0"><i class="fa fa-server " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('FAMILY');?></h4>
+    			</div>
+    			<div class="col-sm-4 text-right">
+    			</div>
+    		</div>
+    	</div>
+		<div class="card-box">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+				<div class="form-group">
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("adv_search");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('familyType');?>
+                   </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("provinceId");?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<input id="districtId"  />
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('status');?>
+                   </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('start_date');?>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement('end_date');?>
+                   </div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+                   		<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
+                </div>
+			</form>
+		</div>
+		<div class="card-box">
+			<?php echo $this->list?>
+		</div>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script type="text/javascript">
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dojo.data.ItemFileWriteStore");  
+
+var districtStore  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+
+dojo.ready(function(){
+	new dijit.form.FilteringSelect({
+		store: districtStore,
+		autoComplete:false,
+		queryExpr:'*${0}*',
+		required: false,		           
+		name: "districtId",
+		id: "districtId",
+		searchAttr: "name",
+		class: 'fullside',
+			  
+	}, "districtId");
+	
+	filterDistrict();
+}); 
+var oldProvince = '<?php echo empty($this->search["provinceId"]) ? 0 : $this->search["provinceId"]; ?>';
+var oldDistrict = '<?php echo empty($this->search["districtId"]) ? 0 : $this->search["districtId"]; ?>';
+urlGetDistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';
+function filterDistrict(){
+	var provinceId = dijit.byId('provinceId').get('value');
+	if(provinceId==0){
+		return false;
+	}
+	dojo.xhrPost({
+		url: urlGetDistrict,	
+		content:{ 
+			'pro_id': provinceId
+		},
+		handleAs:"json",
+		load: function(data) {	
+			districtStore  = getDataStorefromJSON('id','name', data);		
+		    dijit.byId('districtId').set('store', districtStore);
+			if(oldProvince == provinceId){
+				dijit.byId('districtId').set('value', oldDistrict);
+			}
+			
+		    document.getElementsByClassName("overlay")[0].style.display="none";	
+		},
+		error: function(err) {
+		}
+	});	
+}
+	
+	
+	var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var newPageTitle="";
+				var actionType=1;
+				var m = "clicked: " + key;
+				if(key=="edit"){
+					url='<?php echo $urlEdit;?>';
+					actionType=2;
+				}
+				if(actionType==1){
+					addTab(newPageTitle,url+row+'?inFrame=true');
+				}else{
+					gotoAction();
+				}
+			},
+			items: {
+				"edit": {name: "<?php echo $tr->translate("EDIT");?>", icon: "edit"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.open(url+row, '_self');
+	}
+</script>

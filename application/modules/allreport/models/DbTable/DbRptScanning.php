@@ -121,10 +121,10 @@ class Allreport_Model_DbTable_DbRptScanning extends Zend_Db_Table_Abstract
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 LIMIT 1) LIMIT 1) AS group_name,
 				CASE
-					WHEN primary_phone = 1 THEN s.tel
-					WHEN primary_phone = 2 THEN s.father_phone
-					WHEN primary_phone = 3 THEN s.mother_phone
-					ELSE s.guardian_tel
+					WHEN s.primary_phone = 1 THEN s.tel
+					WHEN s.primary_phone = 2 THEN fam.fatherPhone
+					WHEN s.primary_phone = 3 THEN fam.motherPhone
+					ELSE fam.guardianPhone
 				END as tel,
 				s.dateUpdatedCovidFeature				
 			";
@@ -145,9 +145,11 @@ class Allreport_Model_DbTable_DbRptScanning extends Zend_Db_Table_Abstract
 			 	END AS scanTypeTitle ";
 				
 			
-		$sql.=" FROM 
-		rms_scan_transaction AS sct,
-		`rms_student` as s WHERE sct.stu_id=s.stu_id  ";
+		$sql.=" 
+		FROM 
+			rms_scan_transaction AS sct JOIN `rms_student` as s ON sct.stu_id=s.stu_id
+			LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+		WHERE 1  ";
 			
 		$where="";  
 		$from_date =(empty($search['start_date']))? '1': "sct.create_date >= '".$search['start_date']." 00:00:00'";

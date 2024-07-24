@@ -165,11 +165,12 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'stuOrderBy'	=>0,
 					'start_date'	=> date('Y-m-d'),
 					'end_date'		=> date('Y-m-d'),
+					'forActiveStudent'	=>1,
 			);
 		}
 	
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();
-		$rs_rows = $group->getAllStudentpro($search);
+		$rs_rows = $group->getAllStudent($search);
 		$this->view->rs = $rs_rows;
 		$this->view->search=$search;
 		
@@ -550,6 +551,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 				'degree'=>0,
 				'study_type'=>'',
 				'pay_status'	=> 0,
+				'schoolOption'	=> 2,
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
 			);

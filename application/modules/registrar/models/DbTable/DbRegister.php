@@ -415,6 +415,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'is_start'		=>1,
 								'note'			=>$data['remark'.$i],
 								'is_parent'     =>$spd_id,
+								'academicFeeTermId'=>$data["term_study".$i],
 							);
 						$this->_name="rms_student_paymentdetail";
 						$paymentDetailId = $this->insert($_arr);

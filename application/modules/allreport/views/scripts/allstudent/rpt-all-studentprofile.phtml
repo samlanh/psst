@@ -201,16 +201,16 @@
 								<td class="verites-col">&nbsp;<span class="verites"><?php echo ($row['dob']=='00-00-0000')?'':$row['dob'];?></span></td>
 								<td style="white-space: normal;">&nbsp;<?php echo $row['pob'];?>&nbsp;</td>
 								<td class="verites-col"><span class="verites"><?php echo $row['father_enname'];?></span></td>
-								<td class="verites-col"><span class="verites"><?php echo $row['fa_job'];?></span></td>
+								<td class="verites-col"><span class="verites"><?php echo $row['fatherJobTitle'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['mother_enname'];?></span></td>
-								<td class="verites-col"><span class="verites"><?php echo $row['mo_job'];?></span></td>
+								<td class="verites-col"><span class="verites"><?php echo $row['motherJobTitle'];?></span></td>
 								<td style="white-space: normal;">&nbsp;
 								<?php if (!empty($row['home_num'])){ echo "ផ្ទះលេខ ".$row['home_num']." ";}?>
 								<?php if (!empty($row['street_num'])){ echo "ផ្លូវលេខ ".$row['street_num']." ";}?>
-								<?php if (!empty($row['village_namekh'])){ echo "ភូមិ ".$row['village_namekh']." ";}?>
-								<?php if (!empty($row['commune_namekh'])){ echo "ឃុំ/សង្កាត់  ".$row['commune_namekh']." ";}?>
-								<?php if (!empty($row['district_namekh'])){ echo "ស្រុក/ខណ្ឌ ".$row['district_namekh']." ";}?>
-								<?php if (!empty($row['province_kh_name'])){ echo "រាជធានី/ខេត្ត ".$row['province_kh_name']." ";}?>
+								<?php if (!empty($row['villageNameKh'])){ echo "ភូមិ ".$row['villageNameKh']." ";}?>
+								<?php if (!empty($row['communeNameKh'])){ echo "ឃុំ/សង្កាត់  ".$row['communeNameKh']." ";}?>
+								<?php if (!empty($row['districtNameKh'])){ echo "ស្រុក/ខណ្ឌ ".$row['districtNameKh']." ";}?>
+								<?php if (!empty($row['provinceNameKh'])){ echo "រាជធានី/ខេត្ត ".$row['provinceNameKh']." ";}?>
 								&nbsp;</td>
 								<td style="white-space: normal;">&nbsp;<?php //if ($row['is_stu_new']==1){ if (!empty($row['from_school'])){ echo $row['from_school'];}else{ echo "ថ្មី";} }else{echo "";} // "អ៊ិ.អិល.ធី"?>&nbsp;</td>	
 								<td>&nbsp;&nbsp;</td>	

@@ -35,6 +35,27 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}	
 		return $string;
 	}
+	
+	public function getViewLabelDisplay($viewFor = "full")
+	{
+		$dbSett = new Setting_Model_DbTable_DbGeneral();
+		$labelViewSetting=1;
+		if($viewFor=="shortcut"){
+			$labelViewSetting=2;
+		}
+		
+		$lang = $this->currentlang();
+		if($labelViewSetting==2){
+			$string = "shortcut";
+		}else{
+			$string = "name_en";
+			if($lang==1){// khmer
+				$string = "name_kh";
+			}
+		}	
+		return $string;
+	}
+	
 	public function getGradingSystem($degreeId, $template = 1)
 	{//$template1=psis,2=ahs
 		if ($template == 1) {
@@ -1463,7 +1484,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$field = 'name_kh';
 		}
 
-		$sql = "SELECT s.*,
+		$sql = "
+			SELECT 
+				s.*,
 	   			DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
 	   			sgd.grade,
 	   			sgd.degree,
@@ -1482,11 +1505,26 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll,
 		   		sgd.feeId AS fee_id,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=sgd.group_id AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) AS group_name
+				
+				,fam.fatherNameKh AS father_khname 
+				,fam.fatherName AS father_enname  
+				,fam.fatherNation AS father_nation
+				,fam.fatherPhone AS father_phone
+				
+				,fam.motherNameKh AS mother_khname 
+				,fam.motherName AS mother_enname  
+				,fam.motherNation AS mother_nation  
+				,fam.motherPhone AS mother_phone  
+				
+				,fam.guardianNameKh AS guardian_khname 
+				,fam.guardianName AS guardian_enname 
+				,fam.guardianNation AS guardian_nation 
+				,fam.guardianPhone AS guardian_tel
+			
 	   		FROM 
-	   			rms_student AS s
-	   			LEFT JOIN rms_group_detail_student AS sgd
-	   			ON s.stu_id=sgd.stu_id
-   			WHERE 
+	   			rms_student AS s LEFT JOIN rms_group_detail_student AS sgd ON s.stu_id=sgd.stu_id
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+			WHERE 
 				sgd.itemType=1
    				AND s.stu_id=$stu_id 
 	   			AND sgd.is_current=1 
@@ -1503,26 +1541,44 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if ($currentLang == 1) {
 			$colunmname = 'title';
 		}
-		$sql = "SELECT s.*,
-	   	'N/A' as group_name,
-	   	(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
-	   	(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
-	   	(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
-	   	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
-		(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
-		(SELECT p.`title`  FROM `rms_parttime_list` AS p WHERE p.`id` = (SELECT sd.`session` FROM `rms_group_detail_student` AS sd WHERE sd.`stu_id` =s.stu_id AND sd.`test_restult_id`= t.id  LIMIT 1 ) LIMIT 1) as parttime_label,
-		t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
-		'N/A' AS status_student,
-		t.id,
-	    (SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=t.session_result LIMIT 1) as session_label,
-	   	'N/A' AS room_label,
-	   	'1' AS is_newstudent,
-		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll
+		$sql = "
+		SELECT 
+			s.*,
+			'N/A' as group_name,
+			(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
+			(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
+			(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
+			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=t.grade_result LIMIT 1) as grade_label,
+			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.id=t.degree_result LIMIT 1) as degree_label,
+			(SELECT p.`title`  FROM `rms_parttime_list` AS p WHERE p.`id` = (SELECT sd.`session` FROM `rms_group_detail_student` AS sd WHERE sd.`stu_id` =s.stu_id AND sd.`test_restult_id`= t.id  LIMIT 1 ) LIMIT 1) as parttime_label,
+			t.degree_result AS degree,t.grade_result AS grade,t.session_result AS session,
+			'N/A' AS status_student,
+			t.id,
+			(SELECT name_kh FROM `rms_view` WHERE type=4 AND key_code=t.session_result LIMIT 1) as session_label,
+			'N/A' AS room_label,
+			'1' AS is_newstudent,
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll
+		
+			,fam.fatherNameKh AS father_khname 
+			,fam.fatherName AS father_enname  
+			,fam.fatherNation AS father_nation
+			,fam.fatherPhone AS father_phone
+			
+			,fam.motherNameKh AS mother_khname 
+			,fam.motherName AS mother_enname  
+			,fam.motherNation AS mother_nation  
+			,fam.motherPhone AS mother_phone  
+			
+			,fam.guardianNameKh AS guardian_khname 
+			,fam.guardianName AS guardian_enname 
+			,fam.guardianNation AS guardian_nation 
+			,fam.guardianPhone AS guardian_tel
 		   		
-	   	FROM rms_student as s,
-	   		rms_student_test_result As t
+	   	FROM 
+			rms_student as s JOIN rms_student_test_result As t ON t.stu_test_id=s.stu_id 
+			LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 	   	WHERE 
-		   	t.stu_test_id=s.stu_id  
+		   	1 
 		    AND t.is_current=1 AND updated_result=1
 		   	AND s.stu_id=$stu_id LIMIT 1 ";
 		return $db->fetchRow($sql);
@@ -1968,6 +2024,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			imagejpeg($im, $uploadimage, 60);
 		} else if ($image['size'] >= 102400) {
 			// Save the image to file and free memory quality 90%
+			imagejpeg($im, $uploadimage, 70);
+		}else{
 			imagejpeg($im, $uploadimage, 70);
 		}
 		//  imagedestroy($uploadimage);
@@ -2454,7 +2512,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 
-	function getAllItems($type = null, $branchlists = null, $schooloption = null,$parent = 0, $spacing = '', $cate_tree_array = '')
+	function getAllItems($type = null, $branchlists = null, $schooloption = null,$parent = 0, $spacing = '', $cate_tree_array = '',$isparent=null)
 	{
 		$db = $this->getAdapter();
 		if (!is_array($cate_tree_array))
@@ -2472,6 +2530,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($type)) {
 			$sql .= " AND m.type=$type";
 		}
+		
 		$user = $this->getUserInfo();
 		$level = $user['level'];
 		if ($level != 1) {
@@ -2514,6 +2573,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= ' AND ( ' . implode(' OR ', $s_whereee) . ')';
 		}
 		$sql .= ' ORDER BY m.schoolOption ASC,m.type ASC,m.ordering DESC, m.title ASC';
+		
 		$query = $db->fetchAll($sql);
 		
 		$rowCount = count($query);
@@ -2521,7 +2581,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if ($rowCount > 0) {
 			foreach ($query as $row) {
 				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
-				$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+				if(!$isparent!=null){
+					$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+				}
 			}
 		}
 		

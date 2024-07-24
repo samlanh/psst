@@ -99,10 +99,8 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 				$db->updateStudentDiscount($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
-					//$this->_redirect('/accounting/updatestudentdiscount');
 				}else{
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
-					//$this->_redirect('/accounting/updatestudentdiscount/add');
 				}
 				
 			}catch(Exception $e){
@@ -133,4 +131,19 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 			exit();
 		}
 	}
+	function getAllStudentAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbDiscountSetting();
+
+			if($data['updateOption']==1){  //Add Student To Discount
+				$student =$db->getSearchStudent($data);
+			}elseif($data['updateOption']==2){ //Change Discount Student
+				$student =$db->getSearchStudentbyDiscount($data);
+			}
+			print_r(Zend_Json::encode($student));
+			exit();
+		}
+	}
+	
 }

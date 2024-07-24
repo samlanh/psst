@@ -545,6 +545,26 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 							<div class="col-md-3 col-sm-3 col-xs-12">
 								<div class="form-group">
 									<label
+										class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CATEGORY"); ?>vsss</label>
+									<div class="col-md-9 col-sm-9 col-xs-12">
+										<select style="height: 30px;" required="false" type="text" name="parentcategory"
+											id="parentcategory" class="fullside" dojoType="dijit.form.FilteringSelect"
+											autoComplete="false" queryExpr="*${0}*" onchange="getItemDetail(1,1,2);">
+											<option value="-1"></option>
+											<?php
+											
+											if (!empty($this->rsmaincategory)) {
+												foreach ($this->rsmaincategory as $rsmain) { ?>
+													<option value="<?php echo $rsmain['id'] ?>"><?php echo $rsmain['name'] ?></option>
+												<?php }
+											} ?>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3 col-sm-3 col-xs-12">
+								<div class="form-group">
+									<label
 										class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CATEGORY"); ?></label>
 									<div class="col-md-9 col-sm-9 col-xs-12">
 										<select style="height: 30px;" required="false" type="text" name="category"
@@ -1465,8 +1485,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		if (dijit.byId('isoldBalance' + key).get('value') == 1) {
 			return;
 		}
-		//periodStore = getDataStorefromJSON('id', 'name', []);
-		//dijit.byId("term_study" + key).set('store', periodStore);
 
 		stu_type = dijit.byId('student_type').get('value');
 		studentid = dijit.byId('old_stu').get('value');
@@ -1827,7 +1845,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	}
 	function submitAction() {
 		if (dijit.byId('office_receipt').validate()) {
-
 			year = $('#study_year').val();
 			if (year == -1) {
 				$("#study_year").focus();
@@ -1892,7 +1909,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					isDuplicate = 0;
 					$("#message").html('');
 				}
-
 				document.getElementsByClassName("overlay")[0].style.display = "none";
 			},
 			error: function (err) {

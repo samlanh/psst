@@ -99,10 +99,8 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 				$db->updateStudentDiscount($_data);
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
-					//$this->_redirect('/accounting/updatestudentdiscount');
 				}else{
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
-					//$this->_redirect('/accounting/updatestudentdiscount/add');
 				}
 				
 			}catch(Exception $e){

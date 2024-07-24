@@ -266,6 +266,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 		$branch_opt = array(
 				1=>$this->tr->translate("DISPLAY_FULL_NAME"),
 				2=>$this->tr->translate("DISPLAY_SHORTCUT"),
+				3=>$this->tr->translate("DISPLAY_CODE"),
 				);
 		$branch_display_setting->setMultiOptions($branch_opt);
 		

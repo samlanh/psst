@@ -161,7 +161,8 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('Tel');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DEGREE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('GRADE');?>&nbsp;</td>
-									
+									<td scope="col">&nbsp;<?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_TYPE');?>&nbsp;</td>
 								  </tr>
 							  </thead>
 							 <?php 
@@ -171,10 +172,12 @@
 								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" ><?php echo $rs['stu_code']; ?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" > <?php echo $rs['stu_name']; ?></td>
-									<td data-label="<?php echo $tr->translate("SEX");?>" > <?php if($rs['sex']==1){ echo $tr->translate("MALE"); }else{ echo $tr->translate("FEMALE"); }; ?></td>
+									<td data-label="<?php echo $tr->translate("SEX");?>" > <?php if($rs['sex']==1){ echo $tr->translate("MALE_SHORT"); }else{ echo $tr->translate("FEMALE_SHORT"); }; ?></td>
 									<td data-label="<?php echo $tr->translate("Tel");?>" > <?php echo $rs['tel']; ?></td>
 									<td data-label="<?php echo $tr->translate("DEGREE");?>" ><?php echo $rs['degree']; ?></td>
 									<td data-label="<?php echo $tr->translate("GRADE");?>" ><?php echo $rs['grade']; ?></td>
+									<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR_ENROLL");?>" ><?php echo $rs['startYear']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT_TYPE");?>" ><?php echo $rs['studentType']; ?></td>
 							  </tr>
 							  <?php  }} ?>
 						</table>

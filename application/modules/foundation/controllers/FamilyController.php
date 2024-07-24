@@ -20,7 +20,7 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 						'status'=> -1,
 						);
 			}
-			//$db->updateFamilyIdInStudentOldData();
+			$db->updateFamilyIdInStudentOldData();
 			$rs_rows= $db->getAllFamily($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("familyCode","FATHER_NAME","PHONE","MOTHER_NAME","FAMILY_TYPE","laonNumber","NUMBER_HOME","CREATE_DATE","USER","STATUS");
@@ -103,6 +103,19 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 		$frm = $tsub->FrmFrmFamily($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
+	}
+	
+	function getFamilyListAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+    		$db = new Foundation_Model_DbTable_DbFamily();
+			$result = $db->getAllFamilyList($data);
+			if(!empty($data['selectOption'])){
+				array_unshift($result, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_FAMILY")));
+			}
+			print_r(Zend_Json::encode($result));
+			exit();
+		}
 	}
 	
 	

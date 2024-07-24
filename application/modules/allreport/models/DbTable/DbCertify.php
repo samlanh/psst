@@ -28,10 +28,23 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				(SELECT district_namekh FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_khmer,
     				(SELECT district_name FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_en,
 					
-    				(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fa_job,
-					(SELECT occu_enname FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS faJobEng,
-					(SELECT occu_name FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS mo_job,
-					(SELECT occu_enname FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS moJobEng,
+					fam.fatherNameKh AS father_khname 
+					,fam.fatherName AS father_enname  
+					,fam.fatherNation AS father_nation
+					,fam.fatherPhone AS father_phone
+					
+					,fam.motherNameKh AS mother_khname 
+					,fam.motherName AS mother_enname  
+					,fam.motherPhone AS mother_phone  
+					
+					,fam.guardianNameKh AS guardian_khname 
+					,fam.guardianName AS guardian_enname 
+					,fam.guardianPhone AS guardian_tel
+				
+    				,(SELECT occ.occu_name FROM rms_occupation AS occ 	WHERE occ.occupation_id=fam.fatherJob LIMIT 1) AS fa_job,
+					(SELECT occ.occu_enname FROM rms_occupation AS occ 	WHERE occ.occupation_id=fam.fatherJob LIMIT 1) AS faJobEng,
+					(SELECT occ.occu_name FROM rms_occupation AS occ 	WHERE occ.occupation_id=fam.motherJob LIMIT 1) AS mo_job,
+					(SELECT occ.occu_enname FROM rms_occupation AS occ 	WHERE occ.occupation_id=fam.motherJob LIMIT 1) AS moJobEng,
 					
     				(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degree,
     				(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS grade,
@@ -39,16 +52,12 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = t.academic_year LIMIT 1) AS academic_year,
     				t.generation
     			from 
-    				rms_student as s,
-    				rms_group as g,
-    				rms_group_detail_student as gds,
-    				rms_tuitionfee as t
-    			where 
-					gds.itemType=1 AND
-    				s.stu_id = gds.stu_id
-    				and g.id=gds.group_id
-    				and g.academic_year=t.id
-    				and s.stu_id=$id";
+    				rms_student AS s JOIN rms_group_detail_student AS gds ON gds.itemType=1 AND s.stu_id = gds.stu_id AND gds.is_maingrade=1
+    				LEFT JOIN rms_group AS g ON g.id = gds.group_id
+    				LEFT JOIN rms_tuitionfee AS t ON g.academic_year=t.id
+    				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+    			WHERE 
+    				1 AND s.stu_id=$id";
     	return $db->fetchRow($sql);
     }
 }

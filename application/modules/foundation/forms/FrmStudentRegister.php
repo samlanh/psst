@@ -239,61 +239,6 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'dojoType'=>$this->textarea,'class'=>'fullside',
 				'style'=>'min-height: 65px !important;',
 		));
-		
-		$fa_name_en = new Zend_Dojo_Form_Element_TextBox('fa_name_en');
-		$fa_name_en->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-				
-		$father_khname = new Zend_Dojo_Form_Element_TextBox('father_khname');
-		$father_khname->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-		
-		$fa_dob = new Zend_Dojo_Form_Element_DateTextBox('fa_dob');
-		$fa_dob->setAttribs(array(
-				'data-dojo-Type'=>"dijit.form.DateTextBox",
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'class'=>'fullside',
-				));
-// 		$fa_dob->setValue();
-		$fa_phone = new Zend_Dojo_Form_Element_ValidationTextBox('fa_phone');
-		$fa_phone->setAttribs(array('dojoType'=>$this->tvalidate,
-				'class'=>'fullside'));
-		
-		
-		$mom_name_en = new Zend_Dojo_Form_Element_TextBox('mom_name_en');
-		$mom_name_en->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-		
-		$mother_khname = new Zend_Dojo_Form_Element_TextBox('mother_khname');
-		$mother_khname->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-				
-		$mo_dob = new Zend_Dojo_Form_Element_DateTextBox('mo_dob');
-		$mo_dob->setAttribs(array(
-				'data-dojo-Type'=>"dijit.form.DateTextBox",
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'class'=>'fullside',
-		));
-		
-		$mon_phone = new Zend_Dojo_Form_Element_ValidationTextBox('mon_phone');
-		$mon_phone->setAttribs(array('dojoType'=>$this->tvalidate,
-				'class'=>'fullside'));
-		
-		$guardian_name_en = new Zend_Dojo_Form_Element_TextBox('guardian_name_en');
-		$guardian_name_en->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-		
-		$guardian_khname = new Zend_Dojo_Form_Element_TextBox('guardian_khname');
-		$guardian_khname->setAttribs(array('dojoType'=>$this->text,
-				'class'=>'fullside'));
-				
-		$guardian_dob = new Zend_Dojo_Form_Element_DateTextBox('guardian_dob');
-		$guardian_dob->setAttribs(array(
-				'data-dojo-Type'=>"dijit.form.DateTextBox",
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'class'=>'fullside',
-		));
-		
 		$from_school = new Zend_Dojo_Form_Element_TextBox('from_school');
 		$from_school->setAttribs(array('dojoType'=>$this->text,
 				'class'=>'fullside'));
@@ -376,7 +321,22 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
 				'class'=>'fullside'));
 		
-	
+		
+		$primary_phone = new Zend_Dojo_Form_Element_FilteringSelect("primary_phone");
+		$optPrimaryPhone = array(
+				1=>$tr->translate('STUDENT'),
+				2=>$tr->translate('FATHER'),
+				3=>$tr->translate('MOTHER'),
+				4=>$tr->translate('GUARDIAN'),
+		);
+		$primary_phone->setMultiOptions($optPrimaryPhone);
+		$primary_phone->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'required'=>'true',
+				'class'=>'fullside',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false'));
+				
 		$studentType = new Zend_Dojo_Form_Element_FilteringSelect("studentType");	
 		$studentType->setAttribs(array(
 				'dojoType'=>$this->filter,
@@ -432,31 +392,16 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$degree_stu->setValue($data['calture']);
 			$status->setValue($data['status']);
 			$remark->setValue($data['remark']);
-			$fa_name_en->setValue($data['father_enname']);
-			if (!empty($data['father_dob']) AND $data['father_dob']!='0000-00-00'){
-				$fa_dob->setValue(date("Y-m-d",strtotime($data['father_dob'])));
-			}
-			$fa_phone->setValue($data['father_phone']);
-			$mom_name_en->setValue($data['mother_enname']);
-			if (!empty($data['mother_dob']) AND $data['mother_dob']!='0000-00-00'){
-			$mo_dob->setValue(date("Y-m-d",strtotime($data['mother_dob'])));
-			}
-			$mon_phone->setValue($data['mother_phone']);
-			$guardian_name_en->setValue($data['guardian_enname']);
-			if (!empty($data['guardian_dob']) AND $data['guardian_dob']!='0000-00-00'){
-			$guardian_dob->setValue(date("Y-m-d",strtotime($data['guardian_dob'])));
-			}
-			$guardian_phone->setValue($data['guardian_tel']);
+			
 			
 			$from_school->setValue($data['from_school']);
 			$sponser->setValue($data['sponser']);
 			$sponser_phone->setValue($data['sponser_phone']);
 			
-			$father_khname->setValue($data['father_khname']);
-			$mother_khname->setValue($data['mother_khname']);
-			$guardian_khname->setValue($data['guardian_khname']);
+			
 			$data['studentType'] = empty($data['studentType']) ? 0 : $data['studentType'];
 			$studentType->setValue($data['studentType']);
+			$primary_phone->setValue($data['primary_phone']);
 			
 		}
 	
@@ -498,22 +443,12 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$room,
 						$status,
 						$remark,
-						$fa_name_en,
-						$fa_dob,
-						$fa_phone,
-						$mom_name_en,
-						$mo_dob,
-						$mon_phone,
-						$guardian_name_en,
-						$guardian_dob,
-						$guardian_phone,
+						
 						$from_school,
 						$sponser,
 						$sponser_phone,
 						
-						$father_khname,
-						$mother_khname,
-						$guardian_khname,
+						$primary_phone,
 						$studentType
 						
 						)

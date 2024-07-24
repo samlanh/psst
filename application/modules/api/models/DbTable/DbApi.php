@@ -122,35 +122,34 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						s.stu_id AS studentId,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) as studenLatinName,
 						CASE
-								WHEN primary_phone = 1 THEN s.tel
-								WHEN primary_phone = 2 THEN s.father_phone
-								WHEN primary_phone = 3 THEN s.mother_phone
-								ELSE s.guardian_tel
+								WHEN s.primary_phone = 1 THEN s.tel
+								WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+								WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+								ELSE COALESCE(fam.guardianPhone,'')
 						END as PrimaryContact,
 						COALESCE(DATE_FORMAT(s.dob, '%d-%m-%Y'),'') AS dobFormat,
 						
-						s.father_enname AS fatherLatinName,
-						s.father_khname AS fatherKhmerName,
-						COALESCE(DATE_FORMAT(s.father_dob, '%d-%m-%Y'),'') AS fatherDobFormat,
+						fam.fatherName AS fatherLatinName,
+						fam.fatherNameKh AS fatherKhmerName,
+						COALESCE(DATE_FORMAT(fam.fatherDob, '%d-%m-%Y'),'') AS fatherDobFormat,
 						
-						s.mother_enname AS motherLatinName,
-						s.mother_khname AS motherKhmerName,
+						fam.motherName AS motherLatinName,
+						fam.motherNameKh AS motherKhmerName,
 						
-						COALESCE(DATE_FORMAT(s.mother_dob, '%d-%m-%Y'),'') AS motherDobFormat,
+						COALESCE(DATE_FORMAT(fam.motherDob, '%d-%m-%Y'),'') AS motherDobFormat,
 						
-						s.guardian_enname AS guardianLatinName,
-						s.guardian_khname AS guardianKhmerName,
+						fam.guardianName AS guardianLatinName,
+						fam.guardianNameKh AS guardianKhmerName,
+						COALESCE(DATE_FORMAT(fam.guardianDob, '%d-%m-%Y'),'') AS guardianDobFormat,
 						
-						
-						COALESCE(DATE_FORMAT(s.guardian_dob, '%d-%m-%Y'),'') AS guardianDobFormat,
 						g.branch_id AS branchId,
 						gds.group_id,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
 						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
 						(SELECT $lbView FROM rms_view where type=21 and key_code=s.nationality LIMIT 1) AS nationality,
-						(SELECT $lbView FROM rms_view where type=21 and key_code=s.father_nation LIMIT 1) AS fatherNation,
-		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.mother_nation LIMIT 1) AS motherNation,
-		    			(SELECT $lbView FROM rms_view where type=21 and key_code=s.guardian_nation LIMIT 1) AS guardianNation,
+						(SELECT $lbView FROM rms_view where type=21 and key_code=fam.fatherNation LIMIT 1) AS fatherNation,
+		    			(SELECT $lbView FROM rms_view where type=21 and key_code=fam.motherNation LIMIT 1) AS motherNation,
+		    			(SELECT $lbView FROM rms_view where type=21 and key_code=fam.guardianNation LIMIT 1) AS guardianNation,
 						 
 						(SELECT $province FROM rms_province AS p WHERE p.province_id=s.province_id LIMIT 1) AS provinceTitle,
 						(SELECT $district FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS districtTitle,
@@ -158,9 +157,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						(SELECT $vill FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name,
 						 
 						 g.group_code AS groupCode,
-						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.father_job LIMIT 1) AS fatherOccupation,
-						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.mother_job LIMIT 1) AS motherOccupation,
-						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=s.guardian_job LIMIT 1) AS guardian_job,
+						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.fatherJob LIMIT 1) AS fatherOccupation,
+						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.motherJob LIMIT 1) AS motherOccupation,
+						(SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.guardianJob LIMIT 1) AS guardian_job,
 						(SELECT rms_items.$colunmname FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1)AS degreeTitle,
 						(SELECT rms_itemsdetail.$colunmname FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1)AS gradeTitle,
 						(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academicYearTitle
@@ -169,7 +168,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			FROM
 				rms_student AS s 
 				JOIN rms_group_detail_student AS gds ON s.stu_id = gds.stu_id
-				LEFT JOIN rms_group AS g ON g.id = gds.group_id
+				LEFT JOIN rms_group AS g ON g.id = gds.group_id 
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 			WHERE
 				gds.itemType=1 
 				AND s.stu_id=$stu_id ";

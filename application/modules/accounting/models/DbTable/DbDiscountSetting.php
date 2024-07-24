@@ -267,16 +267,23 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				s.stu_enname,
 				s.stu_khname,
 				s.last_name,
-				s.sex,
+				CASE
+				    WHEN s.sex =1  THEN 'M'
+				    WHEN s.sex =2  THEN 'F'
+				    ELSE ''
+				END AS sex,
 				sd.degree,
 				sd.grade,
 				sd.feeId AS fee_id,
 				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
+				(SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1) AS groupCode,
+				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
+				COALESCE((SELECT name_kh FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 			  FROM 
 			    rms_student AS s,
-			  	`rms_group_detail_student` AS sd
+			  	rms_group_detail_student AS sd
 		 	  WHERE 
 				sd.itemType=1 
 				AND s.stu_id = sd.stu_id
@@ -332,17 +339,24 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				s.stu_enname,
 				s.stu_khname,
 				s.last_name,
-				s.sex,
+				CASE
+				    WHEN s.sex =1  THEN 'M'
+				    WHEN s.sex =2  THEN 'F'
+				    ELSE ''
+				END AS sex,
 				sd.degree,
 				sd.grade,
 				sd.feeId AS fee_id,
 				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
+				(SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1) AS groupCode,
+				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
+				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 			  FROM 
 			  	rms_student AS s,
-			  	`rms_group_detail_student` AS sd,
-			  	`rms_discount_student` AS dc
+			  	rms_group_detail_student AS sd,
+			  	rms_discount_student AS dc
 		 	  WHERE 
 				sd.itemType=1 
 				AND s.stu_id = sd.stu_id
@@ -393,114 +407,111 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['limit'])){
 			$where.=" LIMIT ".$search['limit'];
 		}
-	//	$where.=" LIMIT 200 ";
-	//	echo $sql.$where;
 		return $db->fetchAll($sql.$where);
 	}
 	public function updateStudentDiscount($_data){
 		$db = $this->getAdapter();
 		$dbg = new Application_Model_DbTable_DbGlobal();
+	//	print_r($_data);exit();
 		try{
-			if(!empty($_data['public-methods'])){
+			if($_data['type']==2){  // chnage Discount Student
 				
-				if(!empty($_data['toDiscountId'])){
-					if($_data['type']==2){  // Change Discount
+				$oldDiscountSettengId = empty($_data['oldDiscountSettengId'])?0:$_data['oldDiscountSettengId'];
+				$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
 
-						$oldDiscountSettengId = empty($_data['oldDiscountSettengId'])?0:$_data['oldDiscountSettengId'];
-						$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
-					
-						$all_stu_id = $_data['public-methods'];
-						
-						foreach ($all_stu_id as $stu_id){
-							if(!empty($_data['oldDiscountSettengId'])){
+				if(!empty($_data['identity'])){
+					$ids=explode(',', $_data['identity']);
+					foreach ($ids as $k){
 
-								//Update Old Student in old Discount
+						if(!empty($_data['oldDiscountSettengId'])){
+
+							//Update Old Student in old Discount
+							$this->_name = 'rms_discount_student';
+							$data_gro = array(
+									'isCurrent'=> 0,
+							);
+							$where = ' studentId = '.$_data['stu_id_'.$k]."  AND isCurrent=1 AND discountGroupId = $oldDiscountSettengId ";
+							$this->update($data_gro, $where);
+
+							//Check Exist Student Discount
+							$param = array(
+								'discountGroupId'=> $toDiscountId,
+								'studentId'      => $_data['stu_id_'.$k],
+							);
+							$existDiscount=$this->IfExistDiscount($param);
+
+							if(empty($existDiscount)){  /// empty Student Discount
+								
+								if(!empty($_data['toDiscountId'])){
+									$arr = array(
+										'discountGroupId'=>$toDiscountId,
+										'studentId'      =>$_data['stu_id_'.$k],
+										'degreeId'       =>$_data['degree_'.$k],
+										'grade'          =>$_data['grade_'.$k],
+										'isCurrent'		 => 1,
+										'createDate'     => date("Y-m-d"),
+										'modifyDate'     => date("Y-m-d"),
+										'userId'         => $this->getUserId()
+									);
+									$this->_name ='rms_discount_student';
+									$this->insert($arr);
+								}
+							}else{  /// exist Student Discount
+
 								$this->_name = 'rms_discount_student';
 								$data_gro = array(
-										'isCurrent'=> 0,
+										'isCurrent'=> 1,
 								);
-								$where = ' studentId = '.$stu_id."  AND isCurrent=1 AND discountGroupId = $oldDiscountSettengId ";
+								$where = ' studentId = '.$_data['stu_id_'.$k]."  AND isCurrent=0 AND discountGroupId = $toDiscountId ";
 								$this->update($data_gro, $where);
-
-								//Check Exist Student Discount
-								$param = array(
-									'discountGroupId'=> $toDiscountId,
-									'studentId'      => $stu_id,
-								);
-								$existDiscount=$this->IfExistDiscount($param);
-
-								if(empty($existDiscount)){  /// empty Student Discount
-
-									$stu_info=$dbg->getStudentinfoGlobalById($stu_id);
-									if(!empty($_data['toDiscountId'])){
-										$arr = array(
-											'discountGroupId'=>$toDiscountId,
-											'studentId'      =>$stu_id,
-											'degreeId'       =>$stu_info['degree'],
-											'grade'          =>$stu_info['grade'],
-											'isCurrent'		 => 1,
-											'createDate'     => date("Y-m-d"),
-											'modifyDate'     => date("Y-m-d"),
-											'userId'         => $this->getUserId()
-										);
-										$this->_name ='rms_discount_student';
-										$this->insert($arr);
-									}
-								}else{  /// exist Student Discount
-
-									$this->_name = 'rms_discount_student';
-									$data_gro = array(
-											'isCurrent'=> 1,
-									);
-									$where = ' studentId = '.$stu_id."  AND isCurrent=0 AND discountGroupId = $toDiscountId ";
-									$this->update($data_gro, $where);
-								}	
-							}
+							}	
 						}
-					}elseif($_data['type']==1){  // ADD Student to discount
-						
-						$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
-						$all_stu_id = $_data['public-methods'];
-							foreach ($all_stu_id as $stu_id){
-								//Check Exist Student Discount
-								$param = array(
-									'discountGroupId'=> $toDiscountId,
-									'studentId'      => $stu_id,
+					}
+				}
+			}elseif($_data['type']==1){ /// Add Student to Discount
+
+				$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
+				if(!empty($_data['identity'])){
+					$ids=explode(',', $_data['identity']);
+					foreach ($ids as $k){
+
+					//Check Exist Student Discount
+						$param = array(
+							'discountGroupId'=> $toDiscountId,
+							'studentId'      => $_data['stu_id_'.$k],
+						);
+						$existDiscount=$this->IfExistDiscount($param);
+
+						if(empty($existDiscount)){  /// empty Student Discount
+
+							if(!empty($_data['toDiscountId'])){
+								$arr = array(
+									'discountGroupId'=>$toDiscountId,
+									'studentId'      =>$_data['stu_id_'.$k],
+									'degreeId'       =>$_data['degree_'.$k],
+									'grade'          =>$_data['grade_'.$k],
+									'isCurrent'		 => 1,
+									'createDate'     => date("Y-m-d"),
+									'modifyDate'     => date("Y-m-d"),
+									'userId'         => $this->getUserId()
 								);
-								$existDiscount=$this->IfExistDiscount($param);
-
-								if(empty($existDiscount)){  /// empty Student Discount
-
-									$stu_info=$dbg->getStudentinfoGlobalById($stu_id);
-									if(!empty($_data['toDiscountId'])){
-										$arr = array(
-											'discountGroupId'=>$toDiscountId,
-											'studentId'      =>$stu_id,
-											'degreeId'       =>$stu_info['degree'],
-											'grade'          =>$stu_info['grade'],
-											'isCurrent'		 => 1,
-											'createDate'     => date("Y-m-d"),
-											'modifyDate'     => date("Y-m-d"),
-											'userId'         => $this->getUserId()
-										);
-										$this->_name ='rms_discount_student';
-										$this->insert($arr);
-									}
-								}else{  /// exist Student Discount
-									$stu_info=$dbg->getStudentinfoGlobalById($stu_id);
-									$this->_name = 'rms_discount_student';
-									$data_gro = array(
-											'degreeId'       =>$stu_info['degree'],
-											'grade'          =>$stu_info['grade'],
-											'isCurrent'=> 1,
-									);
-									$where = ' studentId = '.$stu_id."  AND discountGroupId = $toDiscountId ";
-									$this->update($data_gro, $where);
-								}	
+								$this->_name ='rms_discount_student';
+								$this->insert($arr);
 							}
+						}else{  /// exist Student Discount
+							$this->_name = 'rms_discount_student';
+							$data_gro = array(
+								'degreeId'       =>$_data['degree_'.$k],
+								'grade'          =>$_data['grade_'.$k],
+								'isCurrent'=> 1,
+							);
+							$where = ' studentId = '.$_data['stu_id_'.$k]."  AND discountGroupId = $toDiscountId ";
+							$this->update($data_gro, $where);
+						}
 					}
 				}
 			}
+			
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
@@ -559,15 +570,59 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$string="";
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			if (!empty($row)){
+				// $string='
+				// 	<ul class="optListRow">
+				// 		<li class="opt-items"><span class="lbl-tt"><span class="text-value">'.$row['discountTitle'].'</span></li>
+				// 		<li class="opt-items"><span class="lbl-tt">'.$tr->translate("STUDY_YEAR").'</span>: <span class="text-value">'.$row['academicYear'].'</span></li>
+				// 		<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DISCOUNT_TYPE").'</span>: <span class="text-value">'.$row['discName'].'</span></li>
+				// 		<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DIS_MAX").'</span>: <span class="text-value">'.$row['DisValueType'].'</span></li>
+				// 		<li class="opt-items"><span class="lbl-tt"><span class="text-value">'.$row['discountPeriod'].'</span></li>
+				// 	</ul>
+				// ';
 				$string='
-					<ul class="optListRow">
-						<li class="opt-items"><span class="lbl-tt"><span class="text-value">'.$row['discountTitle'].'</span></li>
-						<li class="opt-items"><span class="lbl-tt">'.$tr->translate("STUDY_YEAR").'</span>: <span class="text-value">'.$row['academicYear'].'</span></li>
-						<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DISCOUNT_TYPE").'</span>: <span class="text-value">'.$row['discName'].'</span></li>
-						<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DIS_MAX").'</span>: <span class="text-value">'.$row['DisValueType'].'</span></li>
-						<li class="opt-items"><span class="lbl-tt"><span class="text-value">'.$row['discountPeriod'].'</span></li>
-					</ul>
+					
+					<div class="form-group">
+						<label class="control-label  col-md-5 col-sm-5 col-xs-12 bold " >
+							'.$tr->translate("TITLE").'
+						</label>
+						<div class="col-md-7 col-sm-7 col-xs-12 text-primary">
+							: '.$row['discountTitle'].'				
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label  col-md-5 col-sm-5 col-xs-12 bold" >
+							'.$tr->translate("STUDY_YEAR").'
+						</label>
+						<div class="col-md-7 col-sm-7 col-xs-12 text-primary bold">
+							: '.$row['academicYear'].'				
+						</div>
+					</div>	
+					<div class="form-group">
+						<label class="control-label  col-md-5 col-sm-5 col-xs-12 bold" >
+							'.$tr->translate("DISCOUNT_TYPE").'
+						</label>
+						<div class="col-md-7 col-sm-7 col-xs-12 text-primary bold">
+							: '.$row['discName'].'				
+						</div>
+					</div>	
+					<div class="form-group">
+						<label class="control-label  col-md-5 col-sm-5 col-xs-12 bold" >
+							'.$tr->translate("DIS_MAX").'
+						</label>
+						<div class="col-md-7 col-sm-7 col-xs-12 text-primary bold">
+							: '.$row['DisValueType'].'				
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label  col-md-5 col-sm-5 col-xs-12 bold" >
+							'.$tr->translate("DISCOUNT_PERIOD").'
+						</label>
+						<div class="col-md-7 col-sm-7 col-xs-12 text-primary bold">
+							: '.$row['discountPeriod'].'				
+						</div>
+					</div>			
 				';
+										
 			}
 			return $string;
 		}

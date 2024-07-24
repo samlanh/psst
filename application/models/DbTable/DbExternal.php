@@ -397,6 +397,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	{
 		$session_lang = new Zend_Session_Namespace('lang');
 		$lang_id = $session_lang->lang_id;
+		$viewColumn = 'name_en';
 		$gender_str = 'name_en';
 		$str_village = 'village_name';
 		$str_commune = 'commune_name';
@@ -404,6 +405,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$str_province = 'province_en_name';
 		$occuTitle = 'occu_enname';
 		if ($lang_id == 1) { //for kh
+			$viewColumn = 'name_kh';
 			$gender_str = 'name_kh';
 			$str_village = 'village_namekh';
 			$str_commune = 'commune_namekh';
@@ -412,7 +414,8 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$occuTitle = 'occu_name';
 		}
 		$db = $this->getAdapter();
-		$sql = "SELECT
+		$sql = "
+			SELECT
 					 g.gd_id
 					,gr.branch_id AS branchId
 					,(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=`gr`.branch_id LIMIT 1) AS branch_name
@@ -432,23 +435,33 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				    ,`s`.`tel` AS `tel`
 				    ,`s`.`sex` AS `gender`
 				    ,DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`
-				    ,s.father_enname AS father_name
-				    ,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality
-    				,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation
-					,(SELECT " . $occuTitle . " FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job
-					,s.mother_enname AS mother_name
-					,(SELECT " . $occuTitle . " FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job
-				    ,(SELECT
-				        `rms_view`.$gender_str
-				      FROM `rms_view`
-				      WHERE ((`rms_view`.`type` = 2)
-				             AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`
-				  ,g.`status`   AS `status`
-				  ,g.`is_current`   AS `is_current`
-				  ,g.`is_pass`   AS `is_pass`
-				  ,g.`is_maingrade`   AS `is_maingrade`
-				  ,s.home_num
-				  ,s.street_num
+					
+					,fam.fatherNameKh AS father_khname 
+					,fam.fatherName AS father_name  
+					,fam.fatherNation AS father_nation
+					,fam.fatherPhone AS father_phone
+					
+					,fam.motherNameKh AS mother_khname 
+					,fam.motherName AS mother_name  
+					,fam.motherPhone AS mother_phone  
+					
+					,fam.guardianNameKh AS guardian_khname 
+					,fam.guardianName AS guardian_enname 
+					,fam.guardianPhone AS guardian_tel
+					
+				    
+				    ,(SELECT v." . $viewColumn . " FROM rms_view AS v WHERE v.type=21 and v.key_code=`s`.`nationality` LIMIT 1) AS nationality
+    				,(SELECT v." . $viewColumn . " FROM rms_view AS v WHERE v.type=21 and v.key_code=`s`.`nation` LIMIT 1) AS nation
+					,(SELECT occ." . $occuTitle . " FROM `rms_occupation` AS occ WHERE occ.occupation_id = fam.fatherJob LIMIT 1) AS father_job
+					,(SELECT occ." . $occuTitle . " FROM `rms_occupation` AS occ WHERE occ.occupation_id = fam.motherJob LIMIT 1) AS mother_job
+				    
+					,(SELECT `rms_view`.$gender_str FROM `rms_view` WHERE ((`rms_view`.`type` = 2) AND (`rms_view`.`key_code` = `s`.`sex`)) LIMIT 1) AS `sex`
+					,g.`status`   AS `status`
+					,g.`is_current`   AS `is_current`
+					,g.`is_pass`   AS `is_pass`
+					,g.`is_maingrade`   AS `is_maingrade`
+					,s.home_num
+					,s.street_num
 				    ,(SELECT v.$str_village FROM `ln_village` AS v WHERE v.vill_id = s.village_name LIMIT 1) AS village_name
 			    	,(SELECT c.$str_commune FROM `ln_commune` AS c WHERE c.com_id = s.commune_name LIMIT 1) AS commune_name
 			    	,(SELECT d.$str_district FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name
@@ -457,16 +470,13 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT te.signature from rms_teacher AS te WHERE te.id = gr.teacher_id LIMIT 1 ) AS mainTeacherSigature
 				,(SELECT te.teacher_name_kh from rms_teacher AS te WHERE te.id = gr.teacher_id LIMIT 1 ) AS mainTeaccherNameKh
 				,(SELECT te.teacher_name_en from rms_teacher AS te WHERE te.id = gr.teacher_id LIMIT 1 ) AS mainTeaccherNameEng
-				
 			FROM 
-				`rms_group_detail_student` AS g,
-				 rms_student as s,
-				`rms_group` AS gr
-			WHERE 
-				g.itemType=1 
-				AND gr.id = g.group_id
-				AND g.stu_id = s.stu_id
-				AND `g`.`status` = 1 ";
+				rms_student as s JOIN `rms_group_detail_student` AS g ON g.itemType=1 AND g.stu_id = s.stu_id AND `g`.`status` = 1
+				LEFT JOIN `rms_group` AS gr ON gr.id = g.group_id
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+			WHERE 1
+				
+				 ";
 		$groupId = empty($search['group_id']) ? 0 : $search['group_id'];
 		if (!empty($groupId)) {
 			$sql .= ' AND g.group_id=' . $groupId;

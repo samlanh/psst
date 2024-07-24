@@ -6,23 +6,60 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$dbGb = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbGb->currentlang();
+		$viewShort = $dbGb->getViewLabelDisplay("shortcut");
+		$viewFull = $dbGb->getViewLabelDisplay();
+		
 		$occuTitle="occu_enname";
 		if ($currentLang==1){
 			$occuTitle="occu_name";
 		}
 		
-		$sql = "SELECT stu_id,stu_enname,stu_khname,
-		(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = sex) as gender
-		,stu_code,dob,remark,tel,(SELECT province_kh_name FROM `rms_province` WHERE `province_id`= rms_student.province_id) as pro,
-		father_phone,mother_phone,email,father_khname,father_enname,father_nation,
-		(SELECT $occuTitle FROM `rms_occupation` WHERE `occupation_id` = father_job LIMIT 1) AS far_job,
-		(SELECT $occuTitle FROM `rms_occupation` WHERE `occupation_id` = mother_job LIMIT 1) AS mom_job,
-		
-		mother_enname,mother_khname,mother_nation,guardian_khname,guardian_nation,guardian_document,guardian_enname,address,home_num,street_num,village_name,commune_name,district_name,
-		(SELECT $occuTitle FROM `rms_occupation` WHERE `occupation_id` = guardian_job)as guar_job,
-		guardian_tel,guardian_email,remark,
-		(SELECT name_kh FROM `rms_view` WHERE type=1 AND key_code = status) as status,nationality
-		FROM rms_student where status = 1";
+		$sql = "
+		SELECT 
+			s.stu_id
+			,s.stu_enname
+			,s.stu_khname
+			,(SELECT v.$viewShort FROM `rms_view` AS v WHERE v.type=2 AND v.key_code = s.sex LIMIT 1) as gender
+			,s.stu_code
+			,s.dob
+			,s.remark
+			,s.tel
+			,s.email
+			,(SELECT province_kh_name FROM `rms_province` WHERE `province_id`= s.province_id LIMIT 1) as pro
+			
+			,fam.fatherNameKh AS father_khname 
+			,fam.fatherName AS father_enname  
+			,fam.fatherNation AS father_nation
+			,fam.fatherPhone AS father_phone
+			
+			,fam.motherNameKh AS mother_khname 
+			,fam.motherName AS mother_enname  
+			,fam.motherNation AS mother_nation  
+			,fam.motherPhone AS mother_phone  
+			
+			,fam.guardianNameKh AS guardian_khname 
+			,fam.guardianName AS guardian_enname 
+			,fam.guardianNation AS guardian_nation 
+			,fam.guardianPhone AS guardian_tel
+				
+			,(SELECT occ.$occuTitle FROM `rms_occupation` AS occ WHERE occ.`occupation_id` = fam.fatherJob LIMIT 1) AS far_job
+			,(SELECT occ.$occuTitle FROM `rms_occupation` AS occ WHERE occ.`occupation_id` = fam.motherJob LIMIT 1) AS mom_job
+			,(SELECT occ.$occuTitle FROM `rms_occupation` AS occ WHERE occ.`occupation_id` = fam.guardianJob LIMIT 1) AS guar_job
+			
+			
+			,s.address
+			,s.home_num
+			,s.street_num
+			,s.village_name
+			,s.commune_name
+			,s.district_name
+			,s.remark
+			,(SELECT v.$viewFull FROM `rms_view` AS v WHERE v.type=1 AND v.key_code = s.status LIMIT 1) as status
+			,s.nationality
+		FROM 
+			rms_student AS s
+			LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+		where s.status = 1";
 		
 		$sql.='';
 		if(empty($search)){
@@ -32,13 +69,15 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		{
 			$s_where = array();
 			$s_search = trim($search['txtsearch']);
-			$s_where[] = " stu_enname LIKE '%{$s_search}%'";
-			$s_where[] = " stu_khname LIKE '%{$s_search}%'";
-			$s_where[] = " stu_code LIKE '%{$s_search}%'";
-			$s_where[] = " nationality LIKE '%{$s_search}%'";
-			// 			$s_where[] = " en_name LIKE '%{$s_search}%'";
-			// 			$s_where[] = " sex LIKE '%{$s_search}%'";
-			//			$s_where[] = " nationality LIKE '%{$s_search}%'";
+			
+			$s_where[] = " REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_khname,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.stu_enname,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.last_name,' ','')  	LIKE '%{$s_search}%'";
+			$s_where[] = " CONCAT(s.last_name,s.stu_enname) LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(s.tel,' ','')  			LIKE '%{$s_search}%'";
+			
+			
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		return $_db->fetchAll($sql);

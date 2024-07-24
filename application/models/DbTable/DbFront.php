@@ -18,13 +18,13 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 					$field = 'name_kh';
 					$colunmname='title';
 				}
-				$sql ="SELECT  s.*,
-							CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullNameEng,
+				$sql ="SELECT  s.*
+							,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS fullNameEng,
 							CASE
-								WHEN primary_phone = 1 THEN s.tel
-								WHEN primary_phone = 2 THEN s.father_phone
-								WHEN primary_phone = 3 THEN s.mother_phone
-								ELSE s.guardian_tel
+								WHEN s.primary_phone = 1 THEN s.tel
+								WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+								WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+								ELSE COALESCE(fam.guardianPhone,'')
 							END as tel,
 							ds.stop_type AS is_subspend,
 							ds.gd_id AS study_id,
@@ -40,13 +40,11 @@ class Application_Model_DbTable_DbFront extends Zend_Db_Table_Abstract
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
 						    ds.group_id,
 						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
-						FROM rms_student AS s,
-							rms_group_detail_student AS ds
-						  WHERE  
-						   ds.itemType=1
-						   AND ds.is_maingrade=1 
-						   AND ds.is_current=1 
-						   AND s.stu_id=ds.stu_id 
+						FROM 
+							rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND ds.is_maingrade=1  AND ds.is_current=1  AND s.stu_id=ds.stu_id 
+							LEFT JOIN rms_family AS fam ON fam.id = s.familyId 
+						WHERE  
+						   1 
 		                   AND s.status = 1 
 						AND s.customer_type = 1 ";
 		$sql.="  AND s.studentToken = ".$db->quote($qr);

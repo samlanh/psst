@@ -98,13 +98,27 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				      s.pob,
 				     `s`.`tel` AS `tel`,
 				     `s`.`sex` AS `gender`,
-				     DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
-				     s.father_enname AS father_name,
-				     (SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
+				     DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`
+					 
+					,fam.fatherNameKh AS father_khname 
+					,fam.fatherName AS father_name  
+					,fam.fatherNation AS father_nation
+					,fam.fatherPhone AS father_phone
+					
+					,fam.motherNameKh AS mother_khname 
+					,fam.motherName AS mother_name  
+					,fam.motherPhone AS mother_phone  
+					
+					,fam.guardianNameKh AS guardian_khname 
+					,fam.guardianName AS guardian_enname 
+					,fam.guardianPhone AS guardian_tel
+					
+				   
+				    ,(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nationality` LIMIT 1) AS nationality,
     				(SELECT name_kh FROM rms_view where type=21 and key_code=`s`.`nation` LIMIT 1) AS nation,
-					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.father_job LIMIT 1) AS father_job,
-					 s.mother_enname AS mother_name,
-					 (SELECT occu_name FROM `rms_occupation` WHERE occupation_id = s.mother_job LIMIT 1) AS mother_job,
+					
+					(SELECT occ.occu_name FROM `rms_occupation` AS occ  WHERE occ.occupation_id = fam.fatherJob LIMIT 1) AS father_job,
+					(SELECT occ.occu_name FROM `rms_occupation` AS occ  WHERE occ.occupation_id = fam.motherJob LIMIT 1) AS mother_job,
 				    (SELECT
 				        `rms_view`.$gender_str
 				      FROM `rms_view`
@@ -122,14 +136,12 @@ class Allreport_Model_DbTable_DbRptGroup extends Zend_Db_Table_Abstract
 				    	(SELECT $str_province FROM rms_province WHERE rms_province.province_id = s.province_id LIMIT 1) AS province,
 				    	(SELECT t.teacher_name_kh FROM rms_teacher AS t WHERE t.id = gr.teacher_id LIMIT 1) as teacher
 				FROM 
-					`rms_group_detail_student` AS g,
-					 rms_student as s,
-					`rms_group` AS gr
+					rms_student as s JOIN `rms_group_detail_student` AS g ON g.itemType=1 AND g.stu_id = s.stu_id AND g.is_maingrade=1 AND `g`.`status` = 1
+					LEFT JOIN rms_group AS gr ON gr.id = g.group_id 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 				WHERE 
-					g.itemType=1 
-					AND gr.id = g.group_id
-					AND g.stu_id = s.stu_id
-		   			AND `g`.`status` = 1 ";
+					1
+		   			 ";
 			
 			if(!empty($search['group'])){
 				$id= $search['group'] ;

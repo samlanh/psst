@@ -76,6 +76,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					ON (t.id=sp.academic_year)
     			WHERE 
     				sp.id=$id  ";
+
     			// 	rms_student_payment as sp JOIN rms_student_paymentdetail as spd ON sp.id = spd.payment_id
 				// 	JOIN rms_student as s ON sp.student_id=s.stu_id 
 				// 	LEFT JOIN rms_tuitionfee t
@@ -85,6 +86,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			// WHERE 
     			// 	1
     			// 	AND sp.id=$id  ";
+
     	$sql.=$_db->getAccessPermission('sp.branch_id');
     	$sql.=" LIMIT 1 ";
     		return $db->fetchRow($sql);

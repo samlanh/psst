@@ -56,6 +56,7 @@ public function init()
 		$row['test_online'] = $db_gs->geLabelByKeyName('test_online');
 		$row['show_groupin_payment'] = $db_gs->geLabelByKeyName('show_groupin_payment');
 		$row['receipt_paddingtop'] = $db_gs->geLabelByKeyName('receipt_paddingtop');
+		$row['receipt_start_setting'] = $db_gs->geLabelByKeyName('receipt_start_setting');
 		
 		$row['studentPrefixOpt'] = $db_gs->geLabelByKeyName('studentPrefixOpt');
 		$row['studentIPrefix'] = $db_gs->geLabelByKeyName('studentIPrefix');

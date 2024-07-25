@@ -209,7 +209,12 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			'dojoType'=>'dijit.form.NumberTextBox',
 			'class'=>'fullside',
 		));
-		
+
+		$ReceiptStartSetting = new Zend_Dojo_Form_Element_NumberTextBox('receipt_start_setting');
+		$ReceiptStartSetting->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+		));
 		
 		$StudentIdLength = new Zend_Dojo_Form_Element_NumberTextBox('studentIdLength');
 		$StudentIdLength->setAttribs(array(
@@ -300,6 +305,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$testOnline->setValue($data['test_online']['keyValue']);
 			$show_groupin_payment->setValue($data['show_groupin_payment']['keyValue']);
 			$paddingTopReceipt->setValue($data['receipt_paddingtop']['keyValue']);
+			$ReceiptStartSetting->setValue($data['receipt_start_setting']['keyValue']);
 			
 			$studentPrefixOpt->setValue($data['studentPrefixOpt']['keyValue']);
 			$studentIPrefix->setValue($data['studentIPrefix']['keyValue']);
@@ -345,6 +351,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$paymentDate
 				,$studydaySchedule
 				,$branch_display_setting
+				,$ReceiptStartSetting
 				));
 		
 		return $this;

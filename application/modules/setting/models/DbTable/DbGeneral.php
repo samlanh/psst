@@ -248,6 +248,16 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'receipt_paddingtop'";
 				$this->update($arr, $where);
 			}
+
+			$rows = $this->geLabelByKeyName('receipt_start_setting');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['receipt_start_setting'],'keyName'=>'receipt_start_setting','note'=>"Set Number of Receipt Start",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['receipt_start_setting']);
+				$where=" keyName= 'receipt_start_setting'";
+				$this->update($arr, $where);
+			}
 			
 			$rows = $this->geLabelByKeyName('studentPrefixOpt');
 			if (empty($rows)){

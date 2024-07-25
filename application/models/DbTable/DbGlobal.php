@@ -24,14 +24,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	{
 		$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
 		$lang = $this->currentlang();
-		if($branch_display_setting==2){
-			$string = "abbreviations";
-		}else{
+		if($branch_display_setting==1){
 			if($lang==1){// khmer
 				$string = "branch_namekh";
 			}else{ // English
 				$string = "branch_nameen";
 			}
+		}elseif($branch_display_setting==2){
+			$string = "abbreviations";
+		}elseif($branch_display_setting==3){
+			$string = "branch_code";
 		}	
 		return $string;
 	}

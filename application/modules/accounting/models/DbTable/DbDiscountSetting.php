@@ -114,23 +114,6 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				'userId' => $this->getUserId()
 			);
 			$id=$this->insert($_arr);
-
-			if(!empty($_data['identity'])){
-				$ids = explode(',', $_data['identity']);
-				if(!empty($ids))foreach ($ids as $i){
-					$arr = array(
-
-						'discountGroupId'=>$id,
-						'studentId'      =>$_data['student_id'.$i],
-						'createDate'     => date("Y-m-d"),
-						'modifyDate'     => date("Y-m-d"),
-						'userId'         => $this->getUserId()
-					);
-					$this->_name ='rms_discount_student';
-					$this->insert($arr);
-				}
-			}
-
 			$db->commit();
 		} catch (Exception $e) {
 			$db->rollBack();
@@ -191,24 +174,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		);
 		$where = $this->getAdapter()->quoteInto("id=?", $_data["id"]);
 		$this->update($_arr, $where);
-
-		$this->_name ='rms_discount_student';
-		$this->delete("discountGroupId=".$_data['id']);
-	   
-		 if(!empty($_data['identity'])){
-			 $ids = explode(',', $_data['identity']);
-			 if(!empty($ids))foreach ($ids as $i){
-				 $arr = array(
-					'discountGroupId'=>$_data['id'],
-					'studentId'      =>$_data['student_id'.$i],
-					'createDate'     => date("Y-m-d"),
-					'modifyDate'     => date("Y-m-d"),
-					'userId'         => $this->getUserId()
-				 );
-				 $this->_name ='rms_discount_student';
-				 $this->insert($arr);
-			 }
-		 }
+		
 	}
 
 	public function addDiscounttionset($_data)
@@ -570,17 +536,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$string="";
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			if (!empty($row)){
-				// $string='
-				// 	<ul class="optListRow">
-				// 		<li class="opt-items"><span class="lbl-tt"><span class="text-value">'.$row['discountTitle'].'</span></li>
-				// 		<li class="opt-items"><span class="lbl-tt">'.$tr->translate("STUDY_YEAR").'</span>: <span class="text-value">'.$row['academicYear'].'</span></li>
-				// 		<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DISCOUNT_TYPE").'</span>: <span class="text-value">'.$row['discName'].'</span></li>
-				// 		<li class="opt-items"><span class="lbl-tt">'.$tr->translate("DIS_MAX").'</span>: <span class="text-value">'.$row['DisValueType'].'</span></li>
-				// 		<li class="opt-items"><span class="lbl-tt"><span class="text-value">'.$row['discountPeriod'].'</span></li>
-				// 	</ul>
-				// ';
+			
 				$string='
-					
 					<div class="form-group">
 						<label class="control-label  col-md-5 col-sm-5 col-xs-12 bold " >
 							'.$tr->translate("TITLE").'
@@ -622,7 +579,6 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 						</div>
 					</div>			
 				';
-										
 			}
 			return $string;
 		}

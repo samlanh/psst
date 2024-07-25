@@ -542,32 +542,23 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 					<div class="card-body">
 						<div class="form-group"
 							style="background: #d8e0e2; padding: 15px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
-							<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="col-md-2 col-sm-2 col-xs-12">Filter </div>
+							<div class="col-md-2 col-sm-2 col-xs-12">
 								<div class="form-group">
-									<label
-										class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CATEGORY"); ?>vsss</label>
-									<div class="col-md-9 col-sm-9 col-xs-12">
-										<select style="height: 30px;" required="false" type="text" name="parentcategory"
-											id="parentcategory" class="fullside" dojoType="dijit.form.FilteringSelect"
-											autoComplete="false" queryExpr="*${0}*" onchange="getItemDetail(1,1,2);">
-											<option value="-1"></option>
-											<?php
-											
-											if (!empty($this->rsmaincategory)) {
-												foreach ($this->rsmaincategory as $rsmain) { ?>
-													<option value="<?php echo $rsmain['id'] ?>"><?php echo $rsmain['name'] ?></option>
-												<?php }
-											} ?>
-										</select>
-									</div>
+									<select style="height: 30px;" required="false" type="text" name="parentcategory"
+										placeHolder="Main Category"
+											id="parentcategory" class="custome-select-opt fullside" 
+											autoComplete="false" queryExpr="*${0}*" onchange="filterSubCategory();">
+										<?php
+											echo $this->rsmaincategory;
+										?>
+									</select>
 								</div>
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="col-md-2 col-sm-2 col-xs-12">
 								<div class="form-group">
-									<label
-										class="control-label  col-md-3 col-sm-3 col-xs-12"><?php echo $tr->translate("CATEGORY"); ?></label>
-									<div class="col-md-9 col-sm-9 col-xs-12">
 										<select style="height: 30px;" required="false" type="text" name="category"
+											placeHolder="Sup Category"
 											id="category" class="fullside" dojoType="dijit.form.FilteringSelect"
 											autoComplete="false" queryExpr="*${0}*" onchange="getItemDetail(1,1,2);">
 											<option value="-1"></option>
@@ -577,16 +568,11 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 												<?php }
 											} ?>
 										</select>
-									</div>
 								</div>
 							</div>
-							<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="col-md-3 col-sm-3 col-xs-12">
 								<div class="form-group">
-									<label
-										class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate("COURSE_SERVICE_PRODUCT"); ?>/<?php echo $tr->translate("PRODUCT"); ?></label>
-									<div class="col-md-7 col-sm-7 col-xs-12">
-										<input id="item" name="item" />
-									</div>
+									<input id="item" name="item" />
 								</div>
 							</div>
 							<div style="clear: both;"></div>
@@ -914,7 +900,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			var datajsonInfo = ($("#study_year").find(':selected').data('datajson'));
 			var stringPeriodList='<ul>';
 			academicTerm =$('#academic_term').val();
-			//$('#study_year option:selected').attr('data-academic-year-title')
 			for (i = 0; i < datajsonInfo.length; i++) {
 				if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
 					stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
@@ -929,9 +914,14 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			stringPeriodList+= '</ul>';
 			$("#lbl_period_year").html(stringPeriodList);
 		}
-		//.log(datajson);
-		
-		//const jsonData = JSON.stringify(dataObject);
+	}
+	function filterSubCategory(){
+		var datajson = $('#parentcategory').find(":selected").val();
+		if(typeof datajson !=="undefined" ){
+			var datajsonparent = ($("#parentcategory").find(':selected').data('jsondata'));
+			subcategorystore = getDataStorefromJSON('id', 'name', datajsonparent);
+			dijit.byId('category').set('store', subcategorystore);
+		}
 	}
 
 	var Itemstore = getDataStorefromJSON('id', 'name', []);
@@ -941,6 +931,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				{dropdownAutoWidth : true}
 			);
 			$("#academic_term").select2(
+				{dropdownAutoWidth : true}
+			);
+			$("#parentcategory").select2(
 				{dropdownAutoWidth : true}
 			);
 			

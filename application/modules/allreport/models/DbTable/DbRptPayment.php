@@ -69,13 +69,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.grade=sp.grade AND ds.degree=sp.degree ORDER BY ds.gd_id DESC LIMIT 1) LIMIT 1) AS group_name
     			FROM
-					(rms_student_payment AS sp
-					JOIN rms_student_paymentdetail AS spd  ON (spd.payment_id = sp.id))
-    				JOIN rms_student AS s  ON (sp.student_id=s.stu_id)
-					LEFT JOIN rms_tuitionfee t
-					ON (t.id=sp.academic_year)
-    			WHERE 
-    				sp.id=$id  ";
+
     				rms_student_payment as sp JOIN rms_student_paymentdetail as spd ON sp.id = spd.payment_id
 					JOIN rms_student as s ON sp.student_id=s.stu_id 
 					LEFT JOIN rms_tuitionfee t
@@ -855,6 +849,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				,tel
 				,(SELECT $degree FROM `rms_items` WHERE rms_items.id=ds.degreeId LIMIT 1 ) AS degree
 				,(SELECT $grade FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=ds.grade LIMIT 1) AS grade
+				,COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear
+				,COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 				
 			FROM  `rms_discount_student` AS ds 
 			INNER JOIN rms_student AS s ON ds.studentId = s.stu_id

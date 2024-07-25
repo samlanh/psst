@@ -94,7 +94,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
        $this->view->rsbranch = $_db->getAllBranch();
        $this->view->exchange_rate = $_db->getExchangeRate();
 
-       $this->view->rsmaincategory = $_db->getAllItems(null,null,null,0,'','',1);
+       $this->view->rsmaincategory = $_db->getAllItems(null,null,null,0,'','',1,1);
+		// print_r($_db->getAllItems(null, null, null, 0, '', '', 1, 1));
 	
        $this->view->rs_type = $_db->getAllItems();
 	

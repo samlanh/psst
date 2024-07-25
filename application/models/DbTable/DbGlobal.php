@@ -24,14 +24,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	{
 		$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
 		$lang = $this->currentlang();
-		if($branch_display_setting==2){
-			$string = "abbreviations";
-		}else{
+		if($branch_display_setting==1){
 			if($lang==1){// khmer
 				$string = "branch_namekh";
 			}else{ // English
 				$string = "branch_nameen";
 			}
+		}elseif($branch_display_setting==2){
+			$string = "abbreviations";
+		}elseif($branch_display_setting==3){
+			$string = "branch_code";
 		}	
 		return $string;
 	}
@@ -2512,7 +2514,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 
-	function getAllItems($type = null, $branchlists = null, $schooloption = null,$parent = 0, $spacing = '', $cate_tree_array = '',$isparent=null)
+	function getAllItems($type = null, $branchlists = null, $schooloption = null,$parent = 0, $spacing = '', $cate_tree_array = '',$isparent=null,$optionSelect=null)
 	{
 		$db = $this->getAdapter();
 		if (!is_array($cate_tree_array))
@@ -2585,6 +2587,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
 				}
 			}
+		}
+		if ($optionSelect != null) {
+			$options = '';
+			if (!empty($cate_tree_array))
+				foreach ($cate_tree_array as $value) {
+					$resultData = $this->getAllItems(null,null,null,$value['id'],'','',null,null);
+					$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
+				}
+			return $options;
 		}
 		
 		return $cate_tree_array;

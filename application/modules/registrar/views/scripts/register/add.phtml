@@ -1181,8 +1181,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			}
 		});
 	}
-	//var academicOption = '';
-	//var term_option = '<?php //echo $this->term_option; ?>';
 
 	function getExistingService() {//get existing server and default server
 		var col = 0;
@@ -1204,7 +1202,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		if (serviceId != '') {
 			isInititilize = 0;
 		} else {
-			//loadingBlock();
+			loadingBlock();
 		}
 		branch_id = dijit.byId('branch_id').get('value');
 		if (branch_id == '') {
@@ -1242,6 +1240,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 	let term_study_option = '';//period list..
 	let term_option = '';//year,semester..
+	academicOption = '';
+	discountOptionList='';
 	function prepareAddNewRow(urlRequest, contentData) {
 		//dijit.byId("item").reset();
 		term_option = '';//year,semester..
@@ -1254,8 +1254,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				HideloadingBlock();
 				
 				for (i = 0; i < data.length; i++) {
-					//term_option = '';//year,semester..
-					//term_study_option = '';//period list..
 					academicOption = data[i].academicYearList;
 					term_option = data[i].termTypeList;
 					term_study_option =data[i].studyPeriodList;
@@ -1266,6 +1264,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				}
 			},
 			error: function (err) {
+				console.log(err);
 				HideloadingBlock();
 			}
 		});
@@ -1369,18 +1368,13 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		{dropdownAutoWidth : true}
 	);
 
-	//alert(term_option);
-	//$('#term_'+col).empty().trigger("change");
-	//$('#term_'+col).append(term_option).trigger('change');
-	
-	
 		if (dataRow != null) {
 			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
 			if (dataRow.feeId > 0) {
 				$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
 			}
 			if (dataRow.is_onepayment == 1) {
-				dijit.byId('term_' + col).attr('value', 5);
+				$("#term_"+col).val(5).trigger('change');
 				dijit.byId('date_start_' + col).attr('value', '');
 				dijit.byId('validate_' + col).attr('value', '');
 			}
@@ -1391,7 +1385,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				dijit.byId('price_' + col).attr('value', balance);
 				dojo.style('paid_amount' + col, "color", "red");
 				dijit.byId('isoldBalance' + col).attr('value', 1);
-				//dijit.byId('term_study' + col).set('readOnly', true);
 				$("#term_study").select2({disabled:'readonly'});
 				dijit.byId('remark' + col).attr('value', 'Previous Balance');
 				dijit.byId('date_start_' + col).set('readOnly', true);
@@ -1424,13 +1417,18 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 	function getValidate(key) {
 		start_date = dijit.byId('date_start_' + key).get('value');
+		term = $('#term_' + key).val();//
+		service_type = $('#service_type_' + key).val();
+		if((term == 2 || term==3 || term==4) && service_type==1){
+			$('#academic_term').val(term).trigger('change');
+		}
+		if (term != 1) {
+			return;
+		}
+
 		if (start_date != null) {
 			amount = dijit.byId('qty_' + key).get('value');
-			term = $('#term_' + key).val();
-			if (term != 1) {
-				return;
-			}
-
+			
 			if (term == 1) {
 				var a = new Date(start_date);
 				mm = a.getMonth() + amount + 1;
@@ -1471,7 +1469,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			}
 		}
 	}
-
 	
 	var url_service_fee = "<?php echo $this->url(array('module' => 'accounting', 'controller' => 'servicecharge', 'action' => 'getservicefee')); ?>";
 	function getservicefee(key) {

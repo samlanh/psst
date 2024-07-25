@@ -2263,7 +2263,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$options = " <option value=''>" . $tr->translate("SELECT_TERM") . "</option> ";
 			if (!empty($rows)) {
 				foreach ($rows as $row) {
-					$options .= '<option data-start-date="'.$row['startDate'].'" data-end-date="'.$row['endDate'].'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+					$options .= '<option data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
 				}
 			}
 			return $options;
@@ -4351,38 +4351,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if ($data['itemType'] == 1 and !empty($data['academicYear'])) {//school fee
 			$sql .= " AND tf.type =1 AND tf.id = " . $data['academicYear'];
 		}
-
+		Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		$rows = $db->fetchAll($sql);
-		//return $rows;
+
 		$options = '';
 		if (!empty($rows)) {
-
-			foreach ($rows as $value) {///
-				$param = array(
-					'periodId' => $value['id'],
-					'feeId' => $value['feeId'],
-				);
-				$resultPeriods = $this->getAllStudyPeriod($param);
-				// $resultList = array();
-				// if (!empty($resultPeriods)) {
-				// 	foreach($resultPeriods as $resultPeriod){
-
-				// 	}
-				// }
-				//$dataJson = Zend_Json::encode($resultPeriods);
-				// data-period-list="'.$dataJson.'" 
+			foreach ($rows as $value) {
 				$options .= '<option value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 			}
-
-			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-			if ($data['itemType'] == 3) {
-				$options .= '<option value="5" >' . $tr->translate('ONE_PAYMENTONLY') . '</option>';
-			}
-			$options .= '<option value="6" >' . $tr->translate('OTHER') . '</option>';
-			return $options;
-		} {
-			return $rows;
 		}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		if ($data['itemType'] == 3) {
+			$options .= '<option value="5" >' . $tr->translate('ONE_PAYMENTONLY') . '</option>';
+		}
+		$options .= '<option value="6" >' . $tr->translate('OTHER') . '</option>';
+		return $options;
 	}
 
 	function getServiceForPaymentRecord($data)
@@ -4987,6 +4970,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	function getDiscountListbyStudent($data)
 	{
 
+		
 		if (!empty($data['resultList'])) {
 			$sql = "
 				SELECT
@@ -5047,7 +5031,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['studentId'])) {
 			$sql .= " AND disc.studentId=" . $data['studentId'];
 		}
-
 		if (!empty($data['degree'])) {
 			$sql .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
 		}
@@ -5059,9 +5042,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
 		$sql.=" OR ds.discountFor=1";
+		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 
 		if (!empty($data['fetchAll'])) {
-			
 			$result =  $this->getAdapter()->fetchAll($sql);
 			if (!empty($result) AND !empty($data['optionList'])) {
 				$options = '';

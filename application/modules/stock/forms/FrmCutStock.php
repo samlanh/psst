@@ -21,6 +21,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		$_dbcht = new Stock_Model_DbTable_DbCutStock();
 		$_dbgb = new Application_Model_DbTable_DbGlobal();
 		
+
 		$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
 		$optionBranch = $_dbgb->getAllBranch();
 		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
@@ -28,9 +29,18 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 		$_branch_id->setMultiOptions($_arr_opt_branch);
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
-				'required'=>'true',
-				'missingMessage'=>'Invalid Module!',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
 				'class'=>'fullside height-text',));
+		$_branch_id->setValue($request->getParam("branch_id"));
+		if (count($optionBranch)==1){
+			$_branch_id->setAttribs(array('readonly'=>'readonly'));
+			if(!empty($optionBranch))foreach($optionBranch AS $row){
+				$_branch_id->setValue($row['id']);
+			}
+		}
 		
 		$_serailno = new Zend_Dojo_Form_Element_TextBox('serailno');
 		$_serailno->setAttribs(array(

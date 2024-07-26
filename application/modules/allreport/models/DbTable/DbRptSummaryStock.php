@@ -286,7 +286,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		}
     		$sql="SELECT *,
 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = p.branch_id LIMIT 1) AS branch_name,
-			sd.receive_date,
+			p.create_date,
 			(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS student_code,
 			(SELECT $stuname FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS student_name,
 			(SELECT s.tel FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS tel,
@@ -325,6 +325,13 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     				$where.=' AND p.status=0';
     			}else if($search['status']==2){
     				$where.=' AND p.is_closed=1';
+    			}
+    		}
+			if(!empty($search['stock_status'])){
+    			if($search['stock_status']==1){
+    				$where.=' AND sd.qty_after =0';
+    			}else if($search['stock_status']==2){
+    				$where.=' AND sd.qty_after>0';
     			}
     		}
     		$where.=$dbp->getAccessPermission('p.branch_id');

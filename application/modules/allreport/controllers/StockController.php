@@ -720,6 +720,7 @@ class Allreport_StockController extends Zend_Controller_Action {
     							'start_date'=> date('Y-m-d'),
     							'end_date'=>date('Y-m-d'),
     							'status'=>'',
+								'stock_status'=>'',
     					);
     		}
 			$db =  new Allreport_Model_DbTable_DbRptSummaryStock();

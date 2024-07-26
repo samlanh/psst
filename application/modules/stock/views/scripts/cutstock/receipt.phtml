@@ -73,7 +73,7 @@ img.view{height: 70px !important;}
 								  	<td >បរិមាណសរុប<span class="small">Total Qty</span></td>
 								  	<td >បរិមាណទទួល<span class="small">Received Qty</span></td>
 								  	<td >បរិមាណនៅសល់<span class="small">Remain Qty</span></td>
-								  	<td >ថ្ងៃមកយក<span class="small">Remind Date</span></td>
+								  	<!-- <td >ថ្ងៃមកយក<span class="small">Remind Date</span></td> -->
 							  	</tr>
 							  	<?php $key=0; if (!empty($this->rowdetail)) foreach ($this->rowdetail as $key=> $row){?>
 							  	<tr class="rowlist">
@@ -83,7 +83,7 @@ img.view{height: 70px !important;}
 							  		<td align="center">&nbsp;<?php echo $row['due_amount']?>&nbsp;</td>
 							  		<td align="center">&nbsp;<?php echo $row['qty_receive']?>&nbsp;</td>
 							  		<td align="center"> &nbsp;<?php echo $row['remain']?>&nbsp;</td>
-							  		<td align="center">&nbsp;<?php if (!empty($row['remain']) OR $row['remain']>0){ echo date("d/M/Y",strtotime($row['remide_date']));}else{ echo '-';}?>&nbsp;</td>
+							  		<!-- <td align="center">&nbsp;<?php if (!empty($row['remain']) OR $row['remain']>0){ echo date("d/M/Y",strtotime($row['remide_date']));}else{ echo '-';}?>&nbsp;</td> -->
 							  	</tr>
 							  	<?php }?>
 								<?php for($record=$key+1;$record<=5;$record++){?>
@@ -94,15 +94,14 @@ img.view{height: 70px !important;}
 									<td></td>
 									<td></td>
 									<td></td>
-									<td></td>
 								</tr>
 								<?php } ?>
 							  	<tr class="rowlist">
-									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received</strong></td>
+									<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received</strong></td>
 									<td align="center">&nbsp;&nbsp;<strong><?php echo $this->row['total_received'];?></strong>&nbsp;</td>
 								</tr>
 								<tr class="rowlist">
-									<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប  Total Qty Remain</strong></td>
+									<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប  Total Qty Remain</strong></td>
 									<td align="center">&nbsp;&nbsp;<strong><?php echo $this->row['total_qty_due'];?></strong>&nbsp;</td>
 								</tr>
 							 </table>

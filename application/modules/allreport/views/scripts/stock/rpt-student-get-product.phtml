@@ -3,7 +3,7 @@
 	echo $this->headTitle($tr->translate('RPT_STUDENT_GOT_PRODUCT')); 
 	$frm = $this->form_search;
 	$classHideHeight=classHideHeight;
-	//print_r($this->rs);
+	///print_r($this->rs);
 ?>	
 <style>
 .hover:hover{ background:#ccc;}</style>
@@ -35,19 +35,26 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("end_date");?>
                    </div>
+                </div>
+				<div class="form-group">
                    <div class="col-md-2 col-sm-2 col-xs-12">
-                   		<div class="col-md-7 col-sm-7 col-xs-12">
-			        		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside" >
-								<option value=""><?php echo $tr->translate('STATUS')?></option>
-								<option value="1" <?php if ($this->search['status']==1){ echo 'selected=selected';}?>><?php echo $tr->translate('VOID')?></option>
-								<option value="2" <?php if ($this->search['status']==2){ echo 'selected=selected';}?>><?php echo $tr->translate('CLOSED')?></option>
-							</select>
-						</div>
-						<div class="col-md-5 col-sm-5 col-xs-12">
-							<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
-								showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
-						</div>
-		        	</div>
+				  		<select name="stock_status" id="stock_status" dojoType="dijit.form.FilteringSelect" class="fullside" >
+							<option value=""><?php echo $tr->translate('SELECT_TYPE')?></option>
+							<option value="1" <?php if ($this->search['stock_status']==1){ echo 'selected=selected';}?>><?php echo $tr->translate('RECEIVED_ALL')?></option>
+							<option value="2" <?php if ($this->search['stock_status']==2){ echo 'selected=selected';}?>><?php echo $tr->translate('IDEPTED')?></option>
+						</select>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+				   		<select name="status" id="status" dojoType="dijit.form.FilteringSelect" class="fullside" >
+							<option value=""><?php echo $tr->translate('STATUS')?></option>
+							<option value="1" <?php if ($this->search['status']==1){ echo 'selected=selected';}?>><?php echo $tr->translate('VOID')?></option>
+							<option value="2" <?php if ($this->search['status']==2){ echo 'selected=selected';}?>><?php echo $tr->translate('CLOSED')?></option>
+						</select>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
+						showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+                   </div>
                 </div>
 			</form>
 		</div>
@@ -169,6 +176,7 @@
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 								<td scope="col"  colspan="3">&nbsp;<?php echo $tr->translate("STUDENT_INFO");?>&nbsp;</td>
 								<td scope="col"  colspan="6">&nbsp;<?php echo $tr->translate("GETPRODUCT_INFO");?>&nbsp;</td>
+								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("STOCK_STATUS");?>&nbsp;</td>
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
 								<td scope="col"  rowspan="2">&nbsp;<?php echo $tr->translate("USER");?>&nbsp;</td>
 							</tr>
@@ -179,7 +187,7 @@
 
 								<!-- <td scope="col" >&nbsp;<?php echo $tr->translate("Ref Receipt No");?>&nbsp;</td> -->
 								<td scope="col" >&nbsp;<?php echo $tr->translate("Receipt Num");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("Received Date");?>&nbsp;</td>
+								<td scope="col" >&nbsp;<?php echo $tr->translate("PURCHASE_DATE");?>&nbsp;</td>
 
 								<td scope="col" >&nbsp;<?php echo $tr->translate("PRODUCT_NAME");?>&nbsp;</td>
 								<td scope="col" >&nbsp;<?php echo $tr->translate("QTY_ORDER");?>&nbsp;</td>
@@ -198,7 +206,7 @@
 
 							<!-- <td data-label="<?php echo $tr->translate("Ref Receipt No");?>" align="center"><a style="text-decoration: none; color: red;" href="<?php echo $this->baseUrl()."/stock/cutstock/receipt/id/".$row['cutstock_id'];?>">&nbsp;<?php echo $row['serailno'];?>&nbsp;</a></td> -->
 							<td data-label="<?php echo $tr->translate("Receipt Num");?>" align="center"><a style="text-decoration: none; color: red;" ></a>&nbsp;<?php echo $row['receipt_number'];?>&nbsp;</a></td>
-							<td data-label="<?php echo $tr->translate("Received Date");?>" align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['receive_date']))?>&nbsp;</td>
+							<td data-label="<?php echo $tr->translate("Received Date");?>" align="center">&nbsp;<?php echo date("d/M/Y",strtotime($row['create_date']))?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="center">&nbsp;<?php echo $row['product_name'];?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("QTY_ORDER");?>" align="center">&nbsp;<?php echo $row['qty'];?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("RECEIVE_QTY");?>" align="center">&nbsp;
@@ -207,7 +215,7 @@
 								 echo number_format($qtyReceived,2);
 							 ?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("QTY_AFTER");?>" align="center">&nbsp;<?php echo $row['qty_after'];?>&nbsp;</td>
-							
+							<td data-label="<?php echo $tr->translate("STATUS");?>"  align="center" <?php if($row['qty_after']>0 ){?> class="redBold"<?php } ?> >&nbsp;<?php if($row['qty_after']==0){ echo $tr->translate("RECEIVED_ALL");}else if($row['qty_after']>0){ echo $tr->translate("IDEPTED");}?></td>
 							<td data-label="<?php echo $tr->translate("STATUS");?>"  align="center"  <?php if($row['is_void']==1 ){?> class="redBold"<?php } ?> >&nbsp;<?php if($row['is_void']==1){ echo $tr->translate("VOID");}else if($row['is_closed']==1){ echo $tr->translate("CLOSED");}else{ echo "-";}?>&nbsp;</td>
 							<td data-label="<?php echo $tr->translate("USER");?>" align="center" >&nbsp;<?php if($row['is_closed']==1){ echo $row['user_close'];}else if($row['status']==1){ echo $row['user_enter'];}else{ echo "-";}?>&nbsp;</td>
 						</tr>

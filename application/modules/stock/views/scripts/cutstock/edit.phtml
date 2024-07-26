@@ -310,7 +310,7 @@ tr.head-td th {
 				tr.hearder_table td {
 				    padding: 5px;
 				}
-				table span.small{display: block;line-height: 20px;
+				table span.small{display: block;line-height: 20px;}
 		</style>
 		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:12px !important;white-space:nowrap;">
 			<tr>
@@ -455,7 +455,7 @@ tr.head-td th {
 			  temp+='<td >បរិមាណសរុប<span class="small">Total Qty</span></td>';
 			  temp+='<td >បរិមាណទទួល<span class="small">Received Qty</span></td>';
 			  temp+='<td >បរិមាណនៅសល់<span class="small">Remain Qty</span></td>';
-			  temp+='<td >ថ្ងៃមកយក<span class="small">Remind Date</span></td>';
+			// temp+='<td >ថ្ងៃមកយក<span class="small">Remind Date</span></td>';
 			  temp+='</tr>';
 			  var rowId = $('#identity').val();
 				var rowIDArray = rowId.split(',');
@@ -485,7 +485,7 @@ tr.head-td th {
 				  	temp+='<td align="center">&nbsp;'+$('#qty_balance'+rowIDArray[n]).val()+'&nbsp;</td>';
 				  	temp+='<td align="center">'+$('#qty_receive'+rowIDArray[n]).val()+'</td>';
 				  	temp+='<td align="center">&nbsp;'+remain+'&nbsp;</td>';
-				  	temp+='<td align="center">&nbsp;'+dateremide+'&nbsp;</td>';
+				//  	temp+='<td align="center">&nbsp;'+dateremide+'&nbsp;</td>';
 					temp+='</tr>';
 				}
 
@@ -497,16 +497,16 @@ tr.head-td th {
 						temp+='<td align="center">&nbsp;</td>';
 						temp+='<td align="center"></td>';
 						temp+='<td align="center">&nbsp;</td>';
-						temp+='<td align="center">&nbsp;</td>';
+					//	temp+='<td align="center">&nbsp;</td>';
 					temp+='</tr>';
 			}
 
 				temp+='<tr class="rowlist">';
-					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received	</strong></td>';
+					temp+='<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received	</strong></td>';
 					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_received').get('value')+'&nbsp;</td>';
 				temp+='</tr>';
 				temp+='<tr class="rowlist">';
-					temp+='<td colspan="6" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប Total Qty Remain</strong></td>';
+					temp+='<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប Total Qty Remain</strong></td>';
 					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_due').get('value')+'&nbsp;</td>';
 				temp+='</tr>';
 			temp+='</table>';

@@ -20,7 +20,7 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 						'status'=> -1,
 						);
 			}
-			$db->updateFamilyIdInStudentOldData();
+			//$db->updateFamilyIdInStudentOldData();
 			$rs_rows= $db->getAllFamily($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("familyCode","FATHER_NAME","PHONE","MOTHER_NAME","FAMILY_TYPE","laonNumber","NUMBER_HOME","CREATE_DATE","USER","STATUS");

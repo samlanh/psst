@@ -76,6 +76,7 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 	    $d_row = $db->getAllItems(3);
 	    array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 	    $this->view->cat_rows = $d_row;
+		$this->view->rsmaincategory = $db->getAllItems(3,null,null,0,'','',1,1);
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam('id');
@@ -94,6 +95,9 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		    $type=3; //Product
 		    $row =$db->getItemsDetailById($id,$type,1);
 		    $this->view->pro_detail=$db->getProductSetDetailById($id);
+			
+			$dbg = new Application_Model_DbTable_DbGlobal();
+			$this->view->rsmaincategory = $dbg->getAllItems(3,null,null,0,'','',1,1);
 		  
 		    $frm = new Global_Form_FrmItemsDetail();
 		    $frm->FrmAddItemsDetail($row,$type);
@@ -128,6 +132,9 @@ class Stock_ProductsetController extends Zend_Controller_Action {
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		$this->view->productlist=$d_row;
+
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$this->view->rsmaincategory = $dbg->getAllItems(3,null,null,0,'','',1,1);
 	}
 	function refreshproductAction(){
 		if($this->getRequest()->isPost()){

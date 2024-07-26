@@ -67,6 +67,8 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$model = new Application_Model_DbTable_DbGlobal();
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
+			
+			$this->view->rsmaincategory = $model->getAllItems(3,null,null,0,'','',1,1);
 	}
 	// public function editAction(){
 	// 	$id=$this->getRequest()->getParam('id');
@@ -128,6 +130,9 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 		$frm->FrmAddItemsDetail(null,$type);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_items = $frm;
+
+		$model = new Application_Model_DbTable_DbGlobal();
+		$this->view->rsmaincategory = $model->getAllItems(3,null,null,0,'','',1,1);
 	}
 
 	

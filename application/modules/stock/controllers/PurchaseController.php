@@ -65,6 +65,7 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		$model = new Application_Model_DbTable_DbGlobal();
 		$branch = $model->getAllBranch();
 		$this->view->branchopt = $branch;
+		$this->view->rsmaincategory = $model->getAllItems(3,null,null,0,'','',1,1);
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductsNormal();
@@ -118,6 +119,9 @@ class Stock_PurchaseController extends Zend_Controller_Action {
 		array_unshift($d_row, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
 		array_unshift($d_row, array ( 'id' => "",'name' =>$this->tr->translate("SELECT_PRODUCT")));
 		$this->view->products= $d_row;
+		
+		$model = new Application_Model_DbTable_DbGlobal();
+		$this->view->rsmaincategory = $model->getAllItems(3,null,null,0,'','',1,1);
 	}
     function getSupplierInfoAction(){
     	if($this->getRequest()->isPost()){

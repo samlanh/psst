@@ -237,7 +237,7 @@ a.btnstyle:hover{color:#eee;}
 										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_LIST");?></p>
 									</div> 
 									<div class="col-md-2 col-sm-2 col-xs-12 ">
-										<input  dojoType="dijit.form.Button" onclick="doPrintProfle('divPrint');" label="<?php echo $tr->translate("PREVIEW");?>" 
+										<input  dojoType="dijit.form.Button" onclick="doPrintRowCheck();" label="<?php echo $tr->translate("PREVIEW");?>" 
 										class="button-class button-warning " iconClass="glyphicon glyphicon-print"/>
 									</div>
 								</div>
@@ -288,8 +288,6 @@ a.btnstyle:hover{color:#eee;}
 												padding: 3px 1px;
 											}
 										</style>
-										<div id="head-title"  class="col-md-12 col-sm-12 col-xs-12">
-										</div>
 										<div id="data_table"  class="col-md-12 col-sm-12 col-xs-12">
 										</div>
 										<input type="hidden" name="all_student" id="all_student" dojoType="dijit.form.TextBox"  />
@@ -359,6 +357,7 @@ a.btnstyle:hover{color:#eee;}
 			</form>
 	</div>
 </div>
+
 <style>
 select{ width:100%;}
 fieldset{  background:#DFF7FD;}
@@ -522,8 +521,7 @@ function getStudentFromGroup(){
 
 			tem='<table border="1"   id="table" >'
 				+'<thead><tr align="center" class="header-row">'
-					+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
-					+'<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td>'
+					+'<td style="white-space:nowrap; border-right: 0px none;" colspan="1"><?php echo $tr->translate('ALL');?> <br><input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
 				    +'<td><?php echo $tr->translate('NUM');?></td>'
 					+'<td><?php echo $tr->translate('STUDENT_CODE');?></td>'
 					+'<td><?php echo $tr->translate('STUDENT_NAMEKHMER');?></td>'
@@ -540,7 +538,7 @@ function getStudentFromGroup(){
 				for(var i=0;i<respone.length;i++){
 					inx = i+1;
 					tem += '<tr style="border:1px solid #000;">';
-					tem += '<td align="center" colspan="2"><input style="height: 13px;" class="print-checkbox"  type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
+					tem += '<td align="center"><input style="height: 13px;" class="print-checkbox"  type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
 					tem += '<td align="center">'+inx+' ';
 					tem += '<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" />';
 					tem += '<input type="hidden"  name="degree_'+inx+'" id="degree_'+inx+'" value="'+respone[i].degree+'" />';
@@ -738,79 +736,116 @@ function getNewDiscountInfoById(){
 		} 
 	}
 
-	function doPrintProfle(keyid) {
-		window.frames["print_frame"].document.body.innerHTML=dojo.byId(keyid).innerHTML;
-	    window.frames["print_frame"].window.focus();
-	    window.frames["print_frame"].window.print();
-	    hideDialog();
-	}
+	// function doPrintProfle(keyid) {
+	// 	window.frames["print_frame"].document.body.innerHTML=dojo.byId(keyid).innerHTML;
+	//     window.frames["print_frame"].window.focus();
+	//     window.frames["print_frame"].window.print();
+	//     hideDialog();
+					
+	// }
 	
 function doPrintRowCheck() {
-  var table = document.getElementById('divPrint');
-  var checkboxes = table.getElementsByClassName('print-checkbox');
-  var checkedRows = [];
+	var table = document.getElementById('divPrint');
+    var checkboxes = table.getElementsByClassName('print-checkbox');
+    var checkedRows = [];
+    var rowNum = 1; // Initialize row number
 
-  // Loop through all checkboxes
-  for (var i = 0; i < checkboxes.length; i++) {
-    var checkbox = checkboxes[i];
-    var row = checkbox.closest('tr'); // Get the parent row
-    var cells = row.cells;
-    
-    // If checkbox is checked, add row HTML to checkedRows array
-    if (checkbox.checked) {
-      var rowHtml = '<tr>';
-      for (var j = 0; j < cells.length; j++) {
-        rowHtml += '<td>' + cells[j].textContent + '</td>';
-      }
-      rowHtml += '</tr>';
-      checkedRows.push(rowHtml);
+    // Loop through all checkboxes
+    for (var i = 0; i < checkboxes.length; i++) {
+        var checkbox = checkboxes[i];
+        var row = checkbox.closest('tr'); // Get the parent row
+        var cells = row.cells;
+        
+        // If checkbox is checked, add row HTML to checkedRows array
+        if (checkbox.checked) {
+            var rowHtml = '<tr>';
+            
+            // Adjust the number column to be reset
+            rowHtml += '<td class="center">' + rowNum + '</td>';
+            rowNum++; // Increment row number
+            
+            for (var j = 1; j < cells.length; j++) { // Start from 1 to skip the first hidden column
+                var hideclass = '';
+                if (j == 1) {
+                    hideclass = 'hidden';
+                }
+                rowHtml += '<td class="' + hideclass + '">' + cells[j].textContent + '</td>';
+            }
+            rowHtml += '</tr>';
+            checkedRows.push(rowHtml);
+        }
     }
-  }
 
-  // Open a new window and print checked rows
-  var printWindow = window.open();
-  printWindow.document.open();
-  printWindow.document.write(`
+////Print 
+
+  var w = 1000;
+  var h = 600;
+  var left = Number((screen.width/2)-(w/2));
+  var tops = Number((screen.height/2)-(h/2));
+
+  var winPrint = window.open('', '', 'toolbar=0,scrollbars=0,status=0,width='+w+', height='+h+', top='+tops+', left='+left);
+  //winPrint.document.write('<title>'+currentTitle+'</title>'+dojo.byId(keyid).innerHTML);
+  winPrint.document.write(`
     <html>
       <head>
         <title>Checked Rows</title>
         <style>
-          table {
-            border-collapse: collapse;
-            width: 100%;
-          }
-          table, th, td {
-            border: 1px solid black;
-            padding: 8px;
-          }
+			table#table {
+				border: 1px solid #000;
+				border-collapse: collapse;
+				font-size: 12px;
+				background-color: white;
+				width: 99.5%;
+				font-family: 'Times New Roman','Khmer OS Battambang';
+			}
+			table#table tr.header-row td {
+				background: #02014a;
+				font-size: 14px;
+				font-weight: bold;
+				color: #fff;
+				padding: 5px 1px;
+			}
+			table#table tr td {
+				padding: 3px 1px;
+			}
+			.header{
+				font-family: 'Times New Roman','Khmer Moul';
+			}
+			@media print {
+				.hidden{visibility: hidden; display: none;}
+			}
+			.center{
+				text-align:center;
+			}
         </style>
       </head>
       <body>
-        <h1>Checked Rows</h1>
-        <table>
+  		<h3 align="center" class="header"><?php echo $tr->translate("STUDENT_DISCOUNT_LIST");?></h3>
+	 	<table border="1" id="table">
         	<thead>
-		 		<tr align="center" class="header-row">'
-					<td style="white-space:nowrap; border-right: 0px none;" colspan="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="height: 13px;" type="checkBox" value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"/></td>'
-					<td align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td>'
+		 		<tr align="center" class="header-row">
+					<td class="hidden" align="left" style="white-space:nowrap;border-left: 0px none;" > <?php echo $tr->translate('ALL');?></td>
 				    <td><?php echo $tr->translate('NUM');?></td>
 					<td><?php echo $tr->translate('STUDENT_CODE');?></td>
 					<td><?php echo $tr->translate('STUDENT_NAMEKHMER');?></td>
 					<td><?php echo $tr->translate('NAME_EN');?></td>
-					<td ><?php echo $tr->translate('SEX');?></td>
-					<td ><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>
-					<td ><?php echo $tr->translate('STUDENT_TYPE');?></td>
-					<td ><?php echo $tr->translate('GROUP');?></td>
+					<td><?php echo $tr->translate('SEX');?></td>
+					<td><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>
+					<td><?php echo $tr->translate('STUDENT_TYPE');?></td>
+					<td><?php echo $tr->translate('GROUP');?></td>
 				</tr>	
 			</thead>
-          <tbody>
-            ${checkedRows.join('')}
-          </tbody>
+			<tbody >
+				${checkedRows.join('')}
+			</tbody>
         </table>
       </body>
     </html>
   `);
-  printWindow.print();
-  printWindow.document.close();
+  winPrint.document.close();
+  winPrint.focus();
+  winPrint.print();
+  winPrint.close();
  
 }
 

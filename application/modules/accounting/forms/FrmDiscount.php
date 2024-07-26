@@ -98,23 +98,26 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 		);
 		$discountType->setMultiOptions($opt);
 
-		$_arr_opt_branch = array("" => $this->tr->translate("PLEASE_SELECT_BRANCH"));
+		$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
 		$optionBranch = $db->getAllBranch();
-		if (!empty($optionBranch))
-			foreach ($optionBranch as $row)
-				$_arr_opt_branch[$row['id']] = $row['name'];
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
 		$_branch_id->setMultiOptions($_arr_opt_branch);
-		$_branch_id->setAttribs(
-			array(
-				'dojoType' => 'dijit.form.FilteringSelect',
-				'required' => 'true',
-				'class' => 'fullside height-text',
-				'autoComplete' => 'false',
-				'queryExpr' => '*${0}*',
-				'missingMessage' => 'Invalid Module!',
-			)
-		);
+		$_branch_id->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+				'class'=>'fullside height-text',));
+		$_branch_id->setValue($request->getParam("branch_id"));
+		if (count($optionBranch)==1){
+			$_branch_id->setAttribs(array('readonly'=>'readonly'));
+			if(!empty($optionBranch))foreach($optionBranch AS $row){
+				$_branch_id->setValue($row['id']);
+			}
+		}
+
 		$start_date = new Zend_Dojo_Form_Element_DateTextBox('start_date');
 		$start_date->setAttribs(
 			array(

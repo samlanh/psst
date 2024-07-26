@@ -363,7 +363,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 									<select class="custome-select-opt fullside" onchange="getdataJson();" placeHolder="<?php echo $tr->translate("ACADEMIC_TERM"); ?>" required="true" name="academic_term" id="academic_term" >
 										<?php if(!empty($this->academicTerm)) {
 												foreach($this->academicTerm as $key=> $resultTerm){?>
-													<option value="<?php echo $key;?>"><?php echo $resultTerm;?></option>;
+													<option value="<?php echo $key;?>"><?php echo $resultTerm;?></option>
 										<?php }}?>
 									</select>
 								</div>
@@ -549,6 +549,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 										placeHolder="Main Category"
 											id="parentcategory" class="custome-select-opt fullside" 
 											autoComplete="false" queryExpr="*${0}*" onchange="filterSubCategory();">
+											<option></option>
 										<?php
 											echo $this->rsmaincategory;
 										?>
@@ -867,24 +868,19 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	span.user-badge.bg-warning {
 		z-index: 1;
 	}
-
 	*,
 	:after,
 	:before {
 		box-sizing: border-box;
 	}
 </style>
-
-
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js" type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl(); ?>/js/pdbs_js.js" type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
-
 <link href="<?php echo $this->baseUrl()."/admin"?>/3.5.0/select2.css" rel="stylesheet">
 <script src="<?php echo $this->baseUrl()."/admin"?>/3.5.0/select2.min.js"></script>
 
 <script type="text/javascript">
-	//dojo.require('dijit/registry');
 	dojo.require('dijit.form.NumberTextBox');
 	dojo.require("dijit.form.ValidationTextBox");
 	dojo.require('dijit.form.TextBox');
@@ -893,6 +889,10 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dojo.NodeList-manipulate");
+
+	var Itemstore = getDataStorefromJSON('id', 'name');
+	var categoryStore = getDataStorefromJSON('id', 'name',<?php print_r(json_encode($this->rs_type));?>);
+	var group_store = getDataStorefromJSON('id', 'name');
 
 	function getdataJson(){
 		var datajson = $('#study_year').find(":selected").val();
@@ -917,26 +917,18 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	}
 	function filterSubCategory(){
 		var datajson = $('#parentcategory').find(":selected").val();
-		if(typeof datajson !=="undefined" ){
+		if(typeof datajson !=="undefined" &&  datajson!=''){
 			var datajsonparent = ($("#parentcategory").find(':selected').data('jsondata'));
 			subcategorystore = getDataStorefromJSON('id', 'name', datajsonparent);
 			dijit.byId('category').set('store', subcategorystore);
 		}
+		if(datajson==''){
+			dijit.byId('category').set('store', categoryStore);
+		}
 	}
 
-	var Itemstore = getDataStorefromJSON('id', 'name', []);
 	require(["dojo/ready"], function (ready) {
 		ready(function () {
-			$("#study_year").select2(
-				{dropdownAutoWidth : true}
-			);
-			$("#academic_term").select2(
-				{dropdownAutoWidth : true}
-			);
-			$("#parentcategory").select2(
-				{dropdownAutoWidth : true}
-			);
-			
 			getallstudentname();
 			getItemDetail(-1, 1, 2);
 			getAllAcademicBy();
@@ -984,6 +976,20 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		}, "group_id");
 
 	});
+$(document).ready(function() {
+	$("#study_year").select2(
+		{dropdownAutoWidth : true}
+	);
+	$("#academic_term").select2(
+		{dropdownAutoWidth : true}
+	);
+	$("#parentcategory").select2(
+		{
+			dropdownAutoWidth : true,
+			allowClear: "true"
+		}
+	);
+});
 
 	function getAllAcademicBy() {
 		branch_id = dijit.byId('branch_id').get('value');
@@ -1031,6 +1037,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			},
 			handleAs: "json",
 			load: function (data) {
+				itemstoreorg = data;
 				Itemstore = getDataStorefromJSON('id', 'name', data);
 				dijit.byId('item').set('store', Itemstore);
 			},
@@ -1181,8 +1188,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			}
 		});
 	}
-	//var academicOption = '';
-	//var term_option = '<?php //echo $this->term_option; ?>';
 
 	function getExistingService() {//get existing server and default server
 		var col = 0;
@@ -1203,8 +1208,15 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 		if (serviceId != '') {
 			isInititilize = 0;
+
+			let indexremove = itemstoreorg.findIndex(obj => obj.id == serviceId);
+			itemstoreorg.splice(indexremove, 1);
+			
+			newitemstoreorg  = getDataStorefromJSON('id','name', itemstoreorg);
+			dijit.byId('item').set('store',newitemstoreorg); 
+
 		} else {
-			//loadingBlock();
+			loadingBlock();
 		}
 		branch_id = dijit.byId('branch_id').get('value');
 		if (branch_id == '') {
@@ -1241,7 +1253,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	}
 
 	let term_study_option = '';//period list..
-	let term_option = '';//year,semester..
+	term_option = '';//year,semester..
+	academicOption = '';
+	discountOptionList='';
 	function prepareAddNewRow(urlRequest, contentData) {
 		//dijit.byId("item").reset();
 		term_option = '';//year,semester..
@@ -1252,20 +1266,19 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			handleAs: "json",
 			load: function (data) {
 				HideloadingBlock();
-				
-				for (i = 0; i < data.length; i++) {
-					//term_option = '';//year,semester..
-					//term_study_option = '';//period list..
-					academicOption = data[i].academicYearList;
-					term_option = data[i].termTypeList;
-					term_study_option =data[i].studyPeriodList;
-					discountOptionList = data[i].discountOptionList;
-					serviceId = data[i].itemDetailId;
-					dataLabel = data[i].itemDetaillabel;
-					addRow(serviceId, dataLabel, data[i]);
+				for (eRow = 0; eRow < data.length; eRow++) {
+					academicOption = data[eRow].academicYearList;
+					term_study_option =data[eRow].studyPeriodList;
+					discountOptionList = data[eRow].discountOptionList;
+					serviceId = data[eRow].itemDetailId;
+					dataLabel = data[eRow].itemDetaillabel;
+					term_option = data[eRow].termTypeList;
+					dataRow = data[eRow];
+					 addRow(serviceId, dataLabel, dataRow,term_option);
 				}
 			},
 			error: function (err) {
+				console.log(err);
 				HideloadingBlock();
 			}
 		});
@@ -1278,8 +1291,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	tmp = '';
 	temp = '';
 
-	function addRow(serviceId, dataLabel, dataRow = null) {
-		//col++;
+	function addRow(serviceId, dataLabel, dataRow = null,termOption) {
+		try{
 		strCol6 = '<div class="col-md-6 col-sm-6 col-xs-12">';
 		study_year = $('#study_year').val();
 
@@ -1315,7 +1328,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
 		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
-		template += '<div class="form-group"><select placeHolder="<?php echo $tr->translate('PAYMENT_TERM'); ?>" class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" required="false"  name="term_' + col + '" id="term_' + col + '" >'+term_option+'</select></div></td>';
+		template += '<div class="form-group"><select class="custome-select-opt fullside" required="false" onchange="getservicefee(' + col + ');getValidate(' + col + ')" id="term_' + col + '" name="term_' + col + '" >' + termOption + '</select></div>';
 		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" placeHolder="<?php echo $tr->translate('END_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="validate_' + col + '" id="validate_' + col + '" dojoType="dijit.form.DateTextBox" /></div></td>';
@@ -1355,6 +1368,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			parseContent: true,
 		});
 		
+	$("#term_"+col).select2();
+
 	$("#academic_year_"+col).select2(
 		{dropdownAutoWidth : true}
 	);
@@ -1365,22 +1380,14 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 	$("#term_study"+col).select2(
 		{dropdownAutoWidth : true}
 	);
-	$("#term_"+col).select2(
-		{dropdownAutoWidth : true}
-	);
 
-	//alert(term_option);
-	//$('#term_'+col).empty().trigger("change");
-	//$('#term_'+col).append(term_option).trigger('change');
-	
-	
 		if (dataRow != null) {
 			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
 			if (dataRow.feeId > 0) {
 				$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
 			}
 			if (dataRow.is_onepayment == 1) {
-				dijit.byId('term_' + col).attr('value', 5);
+				$("#term_"+col).val(5).trigger('change');
 				dijit.byId('date_start_' + col).attr('value', '');
 				dijit.byId('validate_' + col).attr('value', '');
 			}
@@ -1391,7 +1398,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 				dijit.byId('price_' + col).attr('value', balance);
 				dojo.style('paid_amount' + col, "color", "red");
 				dijit.byId('isoldBalance' + col).attr('value', 1);
-				//dijit.byId('term_study' + col).set('readOnly', true);
 				$("#term_study").select2({disabled:'readonly'});
 				dijit.byId('remark' + col).attr('value', 'Previous Balance');
 				dijit.byId('date_start_' + col).set('readOnly', true);
@@ -1409,6 +1415,9 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			getservicefee(col);
 			getValidate(col);
 		}
+		}catch(err){
+			console.log(err);
+		}
 	}
 
 	function deleteRecord(index) {
@@ -1424,13 +1433,18 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 	function getValidate(key) {
 		start_date = dijit.byId('date_start_' + key).get('value');
+		term = $('#term_' + key).val();//
+		service_type = $('#service_type_' + key).val();
+		if((term == 2 || term==3 || term==4) && service_type==1){
+			$('#academic_term').val(term).trigger('change');
+		}
+		if (term != 1) {
+			return;
+		}
+
 		if (start_date != null) {
 			amount = dijit.byId('qty_' + key).get('value');
-			term = $('#term_' + key).val();
-			if (term != 1) {
-				return;
-			}
-
+			
 			if (term == 1) {
 				var a = new Date(start_date);
 				mm = a.getMonth() + amount + 1;
@@ -1471,7 +1485,6 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			}
 		}
 	}
-
 	
 	var url_service_fee = "<?php echo $this->url(array('module' => 'accounting', 'controller' => 'servicecharge', 'action' => 'getservicefee')); ?>";
 	function getservicefee(key) {

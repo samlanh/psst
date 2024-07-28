@@ -182,6 +182,13 @@ fieldset{  background:none;}
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function(){  
 					pro_id   = dijit.byId('itemId').get('value');
+
+					let indexremove =itemstoreorg.findIndex(obj => obj.id == pro_id);
+					itemstoreorg.splice(indexremove, 1);
+					
+					newproductstore  = getDataStorefromJSON('id','name', itemstoreorg);
+					dijit.byId('itemId').set('store',newproductstore);
+
 					if(pro_id==''){
 						return false;
 					}else if(pro_id == -1){
@@ -296,7 +303,20 @@ fieldset{  background:none;}
 			'notLocation':branch_id,
 			'addNew':1
 		}
-		getAllItemIdByType(urlGet,contentData);
+		dojo.xhrPost({
+			url:urlGet,	
+			handleAs:"json",
+			content:contentData,
+			load: function(data) {
+
+				itemstoreorg = data;
+				productstore  = getDataStorefromJSON('id','name', data);		
+				dijit.byId('itemId').set('store',productstore);  
+			},
+			error: function(err){
+			}
+		});
+	//	getAllItemIdByType(urlGet,contentData);
 		
 	}
 	function filterSubCategory(){

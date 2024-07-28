@@ -217,6 +217,13 @@ fieldset{  background:none;}
 			placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
 			onChange: function() {  
 				product   = dijit.byId("itemId").get('value');
+
+				let indexremove =itemstoreorg.findIndex(obj => obj.id == product);
+				itemstoreorg.splice(indexremove, 1);
+				
+				newproductstore  = getDataStorefromJSON('id','name', itemstoreorg);
+				dijit.byId('itemId').set('store',newproductstore);
+
 				if(product==-1){
 					window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
 				}else{
@@ -254,7 +261,20 @@ fieldset{  background:none;}
 			'isProductset':0,
 			'proLocation':branch_id
 		}
-		getAllItemIdByType(urlGet,contentData);
+		dojo.xhrPost({
+			url:urlGet,	
+			handleAs:"json",
+			content:contentData,
+			load: function(data) {
+
+				itemstoreorg = data;
+				productstore  = getDataStorefromJSON('id','name', data);		
+				dijit.byId('itemId').set('store',productstore);  
+			},
+			error: function(err){
+			}
+		});
+		//getAllItemIdByType(urlGet,contentData);
 	}
 	
 var template = '';

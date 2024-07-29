@@ -360,7 +360,7 @@ function getQtyById(index){
 	pro_id = dijit.byId('itemId').get('value');
 	dijit.byId("itemId").attr('value','');
 	branch_id=dijit.byId("branch").get("value");
-	alert(pro_id);
+
 	if(pro_id==0 || pro_id=='' || branch_id==0 || branch_id==''){
 		dijit.byId('curr_qty'+index).attr("value",0);
 		return  false;

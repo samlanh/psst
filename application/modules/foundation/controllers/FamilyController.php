@@ -56,7 +56,7 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 				if($id==-1){
 					$sms = "RECORD_EXIST";
 				}
-				$inFrame = empty($_data['inFrame']) ? "false" : "true";
+				$inFrame = empty($_data['inFrame']) ? "" : "true";
 				if(!empty($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,'/foundation/family?inFrame='.$inFrame);
 				} 

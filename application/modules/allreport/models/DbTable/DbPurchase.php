@@ -60,8 +60,10 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getPurchaseCodeSuplier($search=null){
     	$db=$this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
     	$sql="SELECT s.sup_name,s.tel,
-				(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
+				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=sp.branch_id LIMIT 1) AS branch_name,
 				sp.*,
 				(SELECT CONCAT(first_name,' ',last_name) FROM rms_users as u where u.id = sp.user_id LIMIT 1) as user_name
 				FROM rms_purchase AS sp,rms_supplier AS s 
@@ -158,15 +160,15 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     function  getAllPurchase($search=null){
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
+		
+		$branch = $_db->getBranchDisplay();
     	$lang = $_db->currentlang();
     	if($lang==1){// khmer
     		$label = "name_kh";
-    		$branch = "branch_namekh";
     		$grade = "title";
     		$degree = "it.title";
     	}else{ // English
     		$label = "name_en";
-    		$branch = "branch_nameen";
     		$grade = "title_en";
     		$degree = "it.title_en";
     	}
@@ -230,11 +232,13 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     // Start Blog Action Purchase Payment
     function getAllPurchasePayment($search){
     	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
     	try{
     		$sql="
     		SELECT
     		pp.*,
-    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
     		pp.receipt_no,
     		(SELECT s.sup_name FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS supplier_name,
     		pp.balance,
@@ -285,11 +289,13 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     }
     function getAllPurchasePaymentForClose($search){
     	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
     	try{
     		$sql="
     		SELECT
     		pp.*,
-    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
     		pp.receipt_no,
     		(SELECT s.sup_name FROM `rms_supplier` AS s WHERE s.id = pp.supplier_id LIMIT 1 ) AS supplier_name,
     		pp.balance,

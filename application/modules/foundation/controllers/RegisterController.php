@@ -36,12 +36,24 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 			$rs_rows = $db_student->getAllStudent($search);
 			$list = new Application_Form_Frmtable();
 			
-				$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_EN","SEX","PHONE","ACADEMIC_YEAR","GROUP","USER","STATUS");
-				$link=array(
-						'module'=>'foundation','controller'=>'register','action'=>'edit',
-				);
-				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'stu_code'=>$link,
-						'stu_name'=>$link,'stu_khname'=>$link,'group_name'=>$link,'academic'=>$link));
+				$collumns = array("BRANCH","STUDENT_ID","SEX","PHONE","ACADEMIC_YEAR","GROUP","familyCode","USER","STATUS");
+				$link=array('module'=>'foundation','controller'=>'register','action'=>'edit',);
+				$arrayColumnLink = array(
+						'branch_name'=>$link
+						,'titleRecord'=>$link
+						,'stu_name'=>$link
+						,'stu_khname'=>$link
+						,'group_name'=>$link
+						,'academic'=>$link
+						);
+						
+				$actionLink = array(
+						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/register/edit" )
+						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/register/copy" )
+						,array("title" =>"view","recordConnect" =>"id" ,"link" => "/foundation/register/view" )
+						,array("title" =>"editFamily","recordConnect" =>"familyId" ,"link" => "/foundation/family/edit" )
+						);
+				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,$arrayColumnLink,$actionLink);
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

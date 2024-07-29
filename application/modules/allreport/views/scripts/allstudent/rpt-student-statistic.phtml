@@ -249,6 +249,8 @@ dojo.ready(function(){
 	 var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
     });
+	dijit.byId('academic_year').attr('value','<?php echo empty($this->search["academic_year"]) ? 0 : $this->search["academic_year"];?>'); 
+	
 });
 var oldBranch = "<?php echo $this->search['branch_id']?>";
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';

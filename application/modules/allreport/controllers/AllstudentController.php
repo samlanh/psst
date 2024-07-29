@@ -121,6 +121,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			$search=$this->getRequest()->getPost();
 		}
 		else{
+			
 			$search=array(
 				'adv_search' 		=>'',
 				'academic_year' 	=>'',
@@ -132,6 +133,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 				'start_date'	=> date('Y-m-d'),
 				'end_date'		=> date('Y-m-d'),
 			);
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+			$last = $dbgb->getLatestAcadmicYear();
+			if(!empty($last)){
+				$search["academic_year"] = empty($last["id"]) ? 0 : $last["id"];
+			}
 		}
 
 		$form=new Application_Form_FrmSearchGlobal();

@@ -27,7 +27,7 @@ class Application_Form_Frmtable
     
    
     
-    public function getCheckList($delete=0, $columns,$rows,$link=null,$editLink="", $class='items', $textalign= "left", $report=false, $id = "table")
+    public function getCheckList($delete=0, $columns,$rows,$link=null,$actionLink=array(), $class='items', $textalign= "left", $report=false, $id = "table")
     {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	/*
@@ -49,8 +49,8 @@ class Application_Form_Frmtable
     	foreach($columns as $column){
     		$col_str=$col_str.'<th class="tdheader"  style="text-align: center;">'.$tr->translate($column).'</th>';
     	}
-    	if($editLink != "") {
-    		$col_str .='<th class="tdheader tdedit">'.$tr->translate('EDIT_CAP').'</th>';
+    	if(!empty($actionLink)) {
+    		$col_str .='<th class="tdheader tdedit">'.$tr->translate('ACTION').'</th>';
     	}
     	$col_str.='</tr></thead>';
     	$row_str='<tbody>';
@@ -70,7 +70,9 @@ class Application_Form_Frmtable
     		//-------------------end check select-----------------
     		$row_str.='<tr class="'.$attb.'"> ';
     				$i=0;
-		  			foreach($row as $key=>$read) {
+    				$columnTitleIndex=0;
+					
+		  			foreach($row as $key => $read) {
 		  				$clisc='';
 		  				if($read==null) $read='&nbsp';
 		  				if($i==0) {
@@ -84,7 +86,7 @@ class Application_Form_Frmtable
 		  					}else if($delete==1){
 		  						$row_str .= '<td><input type="checkbox" name="del[]" id="del[]" value="'.$temp.'" /></td>';
 		  					}
-		  					$row_str.='<td class="items-no">'.$r.'</td>';
+		  					$row_str.='<td class="items-no text-center">'.$r.'</td>';
 		  				} else {
     						if($link!=null){
     							foreach($link as $column=>$url)
@@ -96,7 +98,11 @@ class Application_Form_Frmtable
     						}
     						$text='';
     						if($delete== 10) {
-    							$clisc='oncontextmenu="setrowdata('.$temp.');return false;" class="context-menu-one" ';
+								$classCenter="";
+								if($key=="statusRecord" || $key=="processingRecord"){
+									$classCenter="text-center";
+								}
+    							$clisc='oncontextmenu="setrowdata('.$temp.');return false;" class="context-menu-one '.$classCenter.'" ';
     						}
     						if($i!=1){
 	    						$text=$this->textAlign($read);
@@ -106,10 +112,54 @@ class Application_Form_Frmtable
 	    							$text  = " align=". $textalign;
 	    						}
     						}
-    						$row_str.='<td '.$clisc.' >'.$read.'</td>';
-			  				if($i == count($columns)) {
-	    						if($editLink != "") {
-									$row_str.='<td '.$clisc.' ><a class="edit" href="'.$editLink.'/id/'.$temp.'">'.'</a></td>';
+    						$columnSubTitle="subTitleRecord";
+    						$processingBg="processingBg";
+							if($key=="titleRecord"){
+								$row_str.='<td>';
+									$row_str.=$read;
+									$subTitle = empty($row[$columnSubTitle]) ? "" : $row[$columnSubTitle];
+									$row_str.='<small class="subtitle-row text-secondary">'.$subTitle.'</small>';
+								$row_str.='</td>';
+								$columnTitleIndex = $i;
+							}else if($key=="statusRecord"){
+								$read=$this->checkStatusRecord($read);
+								$row_str.='<td '.$clisc.' >'.$read.'</td>';
+							}else if($key=="processingRecord"){
+								$processingBg = empty($row[$processingBg]) ? "" : $row[$processingBg];
+								$arr = array(
+									"processTitle" =>$read
+									,"bgProcess" =>$processingBg
+								);
+								$read=$this->processingRecord($arr);
+								$row_str.='<td '.$clisc.' >'.$read.'</td>';
+							}else{
+								if($i > count($columns)) {
+									break;
+								}
+								if($key!=$columnSubTitle AND $key!=$processingBg ){
+									$row_str.='<td '.$clisc.' >'.$read.'</td>';
+								}
+							}
+			  				if($i > count($columns)) {
+	    						if(!empty($actionLink)) {
+									$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+									$row_str.='<td '.$clisc.' style=" position:relative; ">';
+										$row_str.='<ul class="nav navbar-right table-action-col " style=" float: none !important; ">
+												<li class="dropdown ">
+													<a href="href="javascript:void(0);"" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true"><i class="fa fa-ellipsis-v"></i></a>
+													<ul class="dropdown-menu" role="menu">';
+														foreach($actionLink as $rowAction){
+															$recordKey = empty($rowAction["recordConnect"]) ? 0 : $rowAction["recordConnect"];
+															$recordId = empty($row[$recordKey]) ? 0 : $row[$recordKey];
+															if(!empty($recordId)){
+																$row_str.='<li><a href="'.$baseUrl.$rowAction["link"].'/id/'.$recordId.'" >'.$tr->translate(strtoupper($rowAction["title"])).'</a></li>';	
+															}
+																										
+														}
+												$row_str.='</ul>
+												</li>
+											</ul>';
+									$row_str.='</td>';
 			    				}
 	    					}
     					}
@@ -196,6 +246,20 @@ class Application_Form_Frmtable
     	}catch(Zend_Exception $e){
     		return false;	
     	}    	
+    }
+	
+	public function checkStatusRecord($value){
+    	$string = '<span class="badge badge-center rounded-pill bg-danger"><i class="fa fa-times"></i></span>';  	
+    	if($value==1){
+			$string = '<span class="badge badge-center rounded-pill bg-success"><i class="fa fa-check"></i></span>';  	
+		}
+		return $string;
+    }
+	public function processingRecord($optionData=array()){
+		$bgLable = empty($optionData["bgProcess"]) ? "bg-label-success" : $optionData["bgProcess"];
+		$processTitle = empty($optionData["processTitle"]) ? "N/A" : $optionData["processTitle"];
+    	$string = '<span class="badge '.$bgLable.'" text-capitalized>'.$processTitle.'</span>';  
+		return $string;
     }
 }
 

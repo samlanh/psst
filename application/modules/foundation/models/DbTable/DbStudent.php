@@ -36,23 +36,22 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
+		$branch = $dbp->getBranchDisplay();
 		$colunmname='title_en';
 		$label="name_en";
-		$branch = "branch_nameen";
 		if ($currentLang==1){
 			$colunmname='title';
 			$label="name_kh";
-			$branch = "branch_namekh";
 		}
 		
 		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
-		$sql = "SELECT  s.stu_id,
+		$sql = "SELECT  
+				s.stu_id AS id,
 				(SELECT $branch FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.stu_code,
-				s.stu_khname,
-				CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stu_name,
+				s.stu_code AS titleRecord,
+				CONCAT(COALESCE(s.stu_khname,''),' / ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS subTitleRecord,
 				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
 				CASE
 					WHEN s.primary_phone = 1 THEN s.tel
@@ -61,11 +60,17 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					ELSE COALESCE(fam.guardianPhone,'')
 				END as tel,
 				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=COALESCE(ds.academic_year,0) LIMIT 1) AS academic,
-				(SELECT group_code FROM `rms_group` WHERE rms_group.id=COALESCE(ds.group_id,0) LIMIT 1) AS group_name,
-			
-				(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
+				(SELECT group_code FROM `rms_group` WHERE rms_group.id=COALESCE(ds.group_id,0) LIMIT 1) AS group_name
+				,COALESCE(fam.familyCode,'') AS familyCode
+				,(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
 				
-		$sql.=$dbp->caseStatusShowImage("s.status");
+		$sql.=" 
+			
+			, s.status AS statusRecord 
+			, s.familyId AS familyId 
+		
+		";
+		//$sql.=$dbp->caseStatusShowImage("s.status");
 		
 		$sql.=" FROM 
 					rms_student AS s
@@ -87,6 +92,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" CONCAT(s.last_name,' ',s.stu_enname)  	LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(s.tel,' ','') LIKE '%{$s_search}%'";
 			
+			$s_where[]=" REPLACE(COALESCE(fam.familyCode,''),' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(COALESCE(fam.fatherPhone,''),' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(COALESCE(fam.motherPhone,''),' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(COALESCE(fam.guardianPhone,''),' ','') LIKE '%{$s_search}%'";

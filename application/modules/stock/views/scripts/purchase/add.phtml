@@ -407,6 +407,7 @@ temp='';
 function addRow() {
 	label_proname = dijit.byId("itemId").attr('displayedValue');
 	itemId=dijit.byId("itemId").get("value");
+	dijit.byId("itemId").attr('value','');
 	if(itemId=='' || itemId==-1){
 		return false;
 	}

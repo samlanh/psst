@@ -348,6 +348,15 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 		$condictionArr = array("addonsItem"=>"addNEw");
 		$studentType->setMultiOptions($_db->getViewByType(40,1,$condictionArr));
 		
+		$goHomeType =  new Zend_Dojo_Form_Element_FilteringSelect('goHomeType');
+		$goHomeType->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$type_opt = array(
+				1=>$tr->translate("BY_THEMSELVES"),
+				2=>$tr->translate("BY_PARENTS"),
+				3=>$tr->translate("BY_SCHOOL_BUS"),
+				);
+		$goHomeType->setMultiOptions($type_opt);
+		
 		$id = new Zend_Form_Element_hidden('id');
 		$id->setAttribs(array('dojoType'=>"dijit.form.TextBox",
 				'class'=>'fullside'));
@@ -402,6 +411,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$data['studentType'] = empty($data['studentType']) ? 0 : $data['studentType'];
 			$studentType->setValue($data['studentType']);
 			$primary_phone->setValue($data['primary_phone']);
+			$goHomeType->setValue($data['goHomeType']);
 			
 		}
 	
@@ -449,7 +459,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$sponser_phone,
 						
 						$primary_phone,
-						$studentType
+						$studentType,
+						$goHomeType,
 						
 						)
 				);

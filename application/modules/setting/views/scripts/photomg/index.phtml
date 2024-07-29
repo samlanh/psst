@@ -116,7 +116,7 @@
 					  <div class="col-md-9">
 						<!-- <h3>Demo:</h3> -->
 						<div class="img-container">
-						  <img id="image" src="<?php echo $this->baseUrl()."/images/initialization.jpg" ?>" alt="Picture">
+						  <img id="image" src="<?php echo $this->baseUrl()."/images/no-profile.png" ?>" alt="Picture">
 						</div>
 					  </div>
 					  <div class="col-md-3">
@@ -163,67 +163,79 @@
 								</div>
 							</div>
 							<div class="docs-buttons">
-								<div class="btn-group">
-								  <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="<?php echo $tr->translate('Zoom In');?>">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Zoom In');?>">
-									  <span class="fa fa-search-plus"></span>
-									</span>
-								  </button>
-								  <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="<?php echo $tr->translate('Zoom Out');?>">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Zoom Out');?>">
-									  <span class="fa fa-search-minus"></span>
-									</span>
-								  </button>
+								<div class="row pb-10">
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="<?php echo $tr->translate('Zoom In');?>">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Zoom In');?>">
+											  <span class="fa fa-search-plus"></span>
+											</span>
+										  </button>
+										  <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="<?php echo $tr->translate('Zoom Out');?>">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Zoom Out');?>">
+											  <span class="fa fa-search-minus"></span>
+											</span>
+										  </button>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="<?php echo $tr->translate('Rotate Left');?>">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Rotate Left');?>">
+											  <span class="fa fa-rotate-left"></span>
+											</span>
+										  </button>
+										  <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="<?php echo $tr->translate('Rotate Right');?>">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Rotate Right');?>">
+											  <span class="fa fa-rotate-right"></span>
+											</span>
+										  </button>
+										</div>
+									</div>
 								</div>
-
-								<div class="btn-group">
-								  <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="<?php echo $tr->translate('Rotate Left');?>">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Rotate Left');?>">
-									  <span class="fa fa-rotate-left"></span>
-									</span>
-								  </button>
-								  <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="<?php echo $tr->translate('Rotate Right');?>">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Rotate Right');?>">
-									  <span class="fa fa-rotate-right"></span>
-									</span>
-								  </button>
+								<div class="row pb-10">
+									<div class="col-md-6 col-sm-6 col-xs-12 ">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="<?php echo $tr->translate('Flip Horizontal');?>">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Flip Horizontal');?>">
+											  <span class="fa fa-arrows-h"></span>
+											</span>
+										  </button>
+										  <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="<?php echo $tr->translate('Flip Vertical');?>">
+											<span class="docs-tooltip"  title="<?php echo $tr->translate('Flip Vertical');?>">
+											  <span class="fa fa-arrows-v"></span>
+											</span>
+										  </button>
+										</div>
+									</div>
+										
+									<div class="col-md-6 col-sm-6 col-xs-12 ">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-primary" data-method="reset" title="<?php echo $tr->translate('Reset');?>">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Reset');?>">
+											  <span class="fa fa-refresh"></span>
+											</span>
+										  </button>
+										  <label class="btn btn-success btn-upload" for="inputImage" title="Upload image file">
+											<input type="file" class="sr-only" id="inputImage" name="fileName" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
+											<span class="docs-tooltip" title="<?php echo $tr->translate('Choose Image');?>">
+											  <span class="fa fa-upload"></span> 
+											</span>
+										  </label>
+										</div>
+									</div>
 								</div>
-
-								<div class="btn-group">
-								  <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="<?php echo $tr->translate('Flip Horizontal');?>">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Flip Horizontal');?>">
-									  <span class="fa fa-arrows-h"></span>
-									</span>
-								  </button>
-								  <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="<?php echo $tr->translate('Flip Vertical');?>">
-									<span class="docs-tooltip"  title="<?php echo $tr->translate('Flip Vertical');?>">
-									  <span class="fa fa-arrows-v"></span>
-									</span>
-								  </button>
+								<div class="row ">
+									<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
+										<div class="btn-group btn-group-crop">
+										  <button type="button" class="btn btn-primary" data-method="getCroppedCanvas">
+											<span class="docs-tooltip"  >
+											  <span class="fa fa-floppy-o"></span> <?php echo $tr->translate("SAVE");?>
+											</span>
+										  </button>
+										</div>
+									</div>
 								</div>
-								
-
-								<div class="btn-group">
-								  <button type="button" class="btn btn-primary" data-method="reset" title="<?php echo $tr->translate('Reset');?>">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Reset');?>">
-									  <span class="fa fa-refresh"></span>
-									</span>
-								  </button>
-								  <label class="btn btn-success btn-upload" for="inputImage" title="Upload image file">
-									<input type="file" class="sr-only" id="inputImage" name="fileName" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
-									<span class="docs-tooltip" title="<?php echo $tr->translate('Upload Image');?>">
-									  <span class="fa fa-upload"></span> <?php echo $tr->translate('Upload Image');?>
-									</span>
-								  </label>
-								</div>
-								
-								<div class="btn-group btn-group-crop">
-						  <button type="button" class="btn btn-primary" data-method="getCroppedCanvas">
-							<span class="docs-tooltip"  >
-							  <?php echo $tr->translate("SAVE");?>
-							</span>
-						  </button>
-						</div>
 							</div>
 					  </div>
 					</div>

@@ -15,130 +15,28 @@ $db_student = new Home_Model_DbTable_DbStudent();
 $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 ?>
 <style>
-	.card-box-border {
-		background-color: #ffffff;
-		border: 1px solid rgba(98, 103, 115, 0.2);
-		padding: 10px;
-		margin-bottom: 20px;
-		color: #000;
-		box-shadow: 1px 1px 2px #ccc;
-	}
-
-	span.user-badge.bg-warning {
-		position: absolute;
-		top: 15px;
-		left: 0;
-		padding: 5px 15px;
-		border-radius: 20px;
-		color: #ffffff;
-		font-size: 11px;
-		text-transform: uppercase;
-		font-weight: bold;
-		z-index: 1 !important;
-	}
-
-	.bg-warning {
-		background: #009bcc !important;
-	}
-
-	.thumb-xl.member-thumb {
-		position: relative;
-	}
-
-	.thumb-xl.member-thumb {
-		height: 130px;
-		width: 120px;
-	}
-
-	.member-card p.text-muted.info-list {
-		text-align: left;
-		color: #0f2a5b;
-	}
-
-	.member-card img.img-thumbnail {
-		width: 100%;
-		height: 100%;
-	}
-
-	.member-card h4 {
-		margin: 0;
-		padding: 2px 0;
-	}
-
-	span.title-info {
-		min-width: 30%;
-		display: inline-block;
-		font-weight: 600;
-		color: #0f2a5b;
-	}
-
-	span.inf-value {
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		display: inline-block;
-		width: 63%;
-		overflow: hidden;
-		vertical-align: bottom;
-	}
-
-	.member-card .member-star {
-		position: absolute;
-		bottom: 10px;
-		right: 5px;
-		background-color: #ffffff;
-		height: 30px;
-		width: 30px;
-		border-radius: 50%;
-		line-height: 26px;
-		text-align: center;
-		font-size: 18px;
-		border: solid 2px;
-	}
-
-	.text-active {
-		color: #009688;
-	}
-
-	.text-deactive {
-		color: #ff1203;
-	}
-
-	.card-box.search-list {
+	.search-list {
 		min-height: 400px;
 	}
-
-	a.btn.btn-default.btn-detail {
-		background: #009688;
-		padding: 10px;
-		color: #fff;
-	}
-
-	a.btn.btn-default.btn-detail:hover {
-		opacity: 0.8;
-	}
-
-	.blue {
-		color: #08086b;
-	}
-
 	ul.nav.navbar-right.panel_toolbox.stusearch {
 		min-width: 0;
 	}
-
 	ul.nav.navbar-right.panel_toolbox.stusearch li.dropdown a.dropdown-toggle {
 		padding: 10px;
 	}
 </style>
 <div class="card pb-10 pt-10 pl-10 pr-10">
-	<div class="col-sm-12 border-botom m-0">
-		<div class="col-sm-8 pd-0">
-			<h4 class="m-b-0"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('FINDING_ALL_STUDENT_INFORMATION'); ?></h4>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION");?> <small><?php echo $tr->translate("STUDENT_INFO");?></small></h2>
+			<ul class="nav navbar-right panel_toolbox">
+			  <li>
+				<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+			  </li>
+			</ul>
+			<div class="clearfix"></div>
 		</div>
-		<div class="col-sm-4 text-right">
-		</div>
-	</div>
-	<div class="card-content collapse show">
-		<div class="card-box border-botom mb-10">
+		<div class="x_content" >
 			<form id='foundation_class' action="<?php echo $this->url(array('module' => 'home', 'controller' => 'searchstudentinfo', 'action' => 'index')); ?>" dojoType="dijit.form.Form" method="get" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
 					<div class="col-md-2 col-sm-2 col-xs-12">
@@ -172,6 +70,9 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 					?>
 					<!--                    </div> -->
 					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("goHomeType"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("start_date"); ?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
@@ -183,112 +84,188 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 					</div>
 				</div>
 			</form>
-			<div class="clearfix"></div>
 		</div>
-		<div class="card-box">
-			<?php echo $this->list; ?>
-		</div>
+	</div>
+	<div class="card-content collapse show">
+		
 		<div class="card-box search-list">
-			<?php if (!empty($this->row)) foreach ($this->row as $key => $rs) { ?>
-				<div class="col-md-3">
-					<div class="text-center card-box-border">
-						<div class="member-card">
-							<span class="user-badge bg-warning" <?php if ($rs['is_subspend'] == 1 or $rs['is_subspend'] == 2 or $rs['is_subspend'] == 3 or $rs['is_subspend'] == 5) {
-																	echo 'style="background: red !important;"';
-																}
-																if ($rs['is_subspend'] == 4) {
-																	echo 'style="background: gold !important;"';
-																} ?>><?php echo ($key + 1) . ".) ";
-																																																																									echo $rs['status_student']; ?></span>
-							<ul class="nav navbar-right panel_toolbox stusearch">
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-									<ul class="dropdown-menu" role="menu">
-										<?php $lastExam = $db_student->getLastExamByStudent($rs['stu_id']);
-										$lastEvaluation = $db_student->getLastStudentEnvaluation($rs['stu_id']);
-										?>
-										<?php if (!empty($rs['group_id'])) { ?>
-											<li>
-												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("STUDENT_LIST_REPORT");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/" . $rs['group_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('STUDENT_LIST_REPORT'); ?></a>
-											</li>
-											<?php if ($rs['is_subspend'] == 0) { ?>
-												<li>
-													<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("CERTIFY_KHMER");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/certify-khmer/id/" . $rs['stu_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('CERTIFY_KHMER'); ?></a>
-												</li>
-												<li>
-													<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("CERTIFY_ENGLIISH");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/certify-english/id/" . $rs['stu_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('CERTIFY_ENGLIISH'); ?></a>
-												</li>
+			<?php if (!empty($this->row)) foreach ($this->row as $key => $rs) { 
+			
+				$classStudentStatus = "bg-gradient-blue";
+				if ($rs['is_subspend'] == 1 or $rs['is_subspend'] == 2  or $rs['is_subspend'] == 5) {
+					$classStudentStatus = "bg-gradient-red";
+				}else if ($rs['is_subspend'] == 3) {
+					$classStudentStatus = "bg-gradient-orange";
+				}else if ($rs['is_subspend'] == 4) {
+					$classStudentStatus = "bg-gradient-green";
+				}
+			?>
+				<div class="col-md-4 col-sm-6 col-xs-6 mt-10">
+					<div class="card student-card text-center  border border-1 border-grey p-0">
+						<div class="card-body p-0">
+							<div class="row g-3">
+								<div class="col-md-4 col-sm-4 col-xs-12 <?php echo $classStudentStatus;?> mt-0 rounded card-info-left">
+									<?php
+										$photo = $this->baseUrl() . "/images/no-profile.png";
+										if ($rs['sexcode'] == 2) {
+											$photo = $this->baseUrl() . "/images/no-profile-female.png";
+										}
+										if (!empty($rs['photo'])) {
+											if (file_exists(PUBLIC_PATH . "/images/photo/" . $rs['photo'])) {
+												$photo = $this->baseUrl() . '/images/photo/' . $rs['photo'];
+											}
+										}
+									?>
+									<div class="user-avatar-section">
+									  <div class=" d-flex align-items-center flex-column card-profile">
+										<div class="flex-shrink-0 img-profile">
+											<img src="<?php echo $photo; ?>" alt="user image" class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img">
+											<?php if ($rs['sexcode'] == 1) { ?>
+												<i class="fa fa-male member-star text-active" title="verified user"></i>
+											<?php } else { ?>
+												<i class="fa fa-female member-star text-deactive" title="verified user"></i>
 											<?php } ?>
-											<?php $groupScore = $dbreportGr->getScoreSettingIdByGroup($rs['group_id']);
-											if (!empty($groupScore)) { ?>
-												<li>
-													<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("Assessment Term");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/" . $rs['group_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('Assessment Term'); ?></a>
+										</div>
+										<span class="addtional-info top-info"><?php echo $rs['status_student']; ?></span>
+										<span class="addtional-info bottom-info">
+											<?php echo $tr->translate('ACADEMIC_YEAR')." "; echo !empty($rs['academic_year']) ? $rs['academic_year'] : "N/A"; ?>
+											<br />
+											<small><?php echo !empty($rs['goHomeTypeTitle']) ? $rs['goHomeTypeTitle'] : "N/A"; ?></small>
+										</span>
+									
+									  </div>
+									</div>
+								</div>
+								
+								<div class="col-md-8 col-sm-8 col-xs-12 m-0 p-0 card-info-right">
+									<div class="card-addtional">
+										<div class="card-body <?php echo $classStudentStatus;?> py-2 px-1">
+											<ul class="nav navbar-right panel_toolbox stusearch">
+												<li class="dropdown">
+													<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true"><i class="fa fa-ellipsis-v"></i></a>
+													<ul class="dropdown-menu" role="menu">
+														<?php if (!empty($rs['group_id'])) { ?>
+														<li><a href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("STUDENT_LIST_REPORT");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/rpt-student-list/id/" . $rs['group_id'].'?inFrame=true'; ?>');"><?php echo $tr->translate('STUDENT_LIST_REPORT'); ?></a></li>
+														<li><a href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("CERTIFY_KHMER");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/certify-khmer/id/" . $rs['stu_id'].'?inFrame=true'; ?>');"><?php echo $tr->translate('CERTIFY_KHMER'); ?></a></li>
+														<li><a href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("CERTIFY_ENGLIISH");?>','<?php echo $this->baseUrl() . "/allreport/allstudent/certify-english/id/" . $rs['stu_id'].'?inFrame=true'; ?>');"><?php echo $tr->translate('CERTIFY_ENGLIISH'); ?></a></li>
+														<?php } ?>
+														
+														<?php 
+														$groupScore = $dbreportGr->getScoreSettingIdByGroup($rs['group_id']);
+															if (!empty($groupScore)) { 
+														?>
+														<li><a class="dropdown-item waves-effect p-0" href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("Assessment Term");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-assessmentterm/id/" . $rs['group_id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('Assessment Term'); ?></a></li>
+														<?php } ?>
+														
+														<?php if (!empty($lastExam)) { ?>
+														<li><a class="dropdown-item waves-effect p-0" href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("TRANSCRIPT");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-monthly-score-student?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastExam['group_id'] . "&exam_type=" . $lastExam['exam_type'] . "&for_semester=" . $lastExam['for_semester'] . "&for_month=" . $lastExam['for_month'].'&inFrame=true'; ?>');" ><?php echo $tr->translate('TRANSCRIPT'); ?></a></li>
+														<li><a class="dropdown-item waves-effect p-0" href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("SCORE_RESULT");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-score-result/id/" . $lastExam['id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('SCORE_RESULT'); ?></a></li>
+														<li><a class="dropdown-item waves-effect p-0" href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("SCORE_DETAIL");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-score-detail/id/" . $lastExam['id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('SCORE_DETAIL'); ?></a></li>
+														<?php } ?>
+														
+														<?php if (!empty($lastEvaluation)) { ?>
+														<li><a class="dropdown-item waves-effect p-0" href="javascript:void(0);" onClick="addTab('<?php echo $tr->translate("STUDENT_EVALUATION");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-student-evaluationletter?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastEvaluation['group_id'] . "&exam_type=" . $lastEvaluation['for_type'] . "&for_semester=" . $lastEvaluation['for_semester'] . "&for_month=" . $lastEvaluation['for_month'].'&inFrame=true'; ?>');" ><?php echo $tr->translate('STUDENT_EVALUATION'); ?></a></li>
+														<?php } ?>
+												
+													</ul>
 												</li>
-											<?php } ?>
-										<?php } ?>
-										<?php if (!empty($lastExam)) { ?>
-											<li>
-												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("TRANSCRIPT");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-monthly-score-student?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastExam['group_id'] . "&exam_type=" . $lastExam['exam_type'] . "&for_semester=" . $lastExam['for_semester'] . "&for_month=" . $lastExam['for_month'].'&inFrame=true'; ?>');" ><?php echo $tr->translate('TRANSCRIPT'); ?></a>
-											</li>
-											<li>
-												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("SCORE_RESULT");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-score-result/id/" . $lastExam['id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('SCORE_RESULT'); ?></a>
-											</li>
-											<li>
-												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("SCORE_DETAIL");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-score-detail/id/" . $lastExam['id'].'?inFrame=true'; ?>');" ><?php echo $tr->translate('SCORE_DETAIL'); ?></a>
-											</li>
-										<?php } ?>
-										<?php if (!empty($lastEvaluation)) { ?>
-											<li>
-												<a href="javascript:;" onClick="addTab('<?php echo $tr->translate("STUDENT_EVALUATION");?>','<?php echo $this->baseUrl() . "/allreport/score/rpt-student-evaluationletter?stu_id=" . $rs['stu_id'] . "&group_id=" . $lastEvaluation['group_id'] . "&exam_type=" . $lastEvaluation['for_type'] . "&for_semester=" . $lastEvaluation['for_semester'] . "&for_month=" . $lastEvaluation['for_month'].'&inFrame=true'; ?>');" ><?php echo $tr->translate('STUDENT_EVALUATION'); ?></a>
-											</li>
-										<?php } ?>
-
-									</ul>
-								</li>
-							</ul>
-							<div class="thumb-xl member-thumb m-b-10 center-block">
-								<?php
-								$photo = $this->baseUrl() . "/images/no-profile.png";
-								if ($rs['sexcode'] == 2) {
-									$photo = $this->baseUrl() . "/images/no-profile-female.png";
-								}
-								if (!empty($rs['photo'])) {
-									if (file_exists(PUBLIC_PATH . "/images/photo/" . $rs['photo'])) {
-										$photo = $this->baseUrl() . '/images/photo/' . $rs['photo'];
-									}
-								}
-								?>
-								<img src="<?php echo $photo; ?>" class=" img-thumbnail" alt="profile-image">
-								<?php if ($rs['sexcode'] == 1) { ?>
-									<i class="fa fa-male member-star text-active" title="verified user"></i>
-								<?php } else { ?>
-									<i class="fa fa-female member-star text-deactive" title="verified user"></i>
-								<?php } ?>
+											</ul>
+											
+											<h4 class="mb-0 mt-0 text-primary text-truncate"><?php echo $rs['stu_code']; ?></h4>
+											<p class="mb-0 text-primary text-truncate"><?php echo $rs['stu_khname']; ?></p>
+											<p class="mb-0 text-primary text-truncate"><?php echo $rs['last_name'] . " " . $rs['stu_enname']; ?></p>
+											
+											<div class="row w-100 align-items-center">
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0 text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('GROUP'); ?></small>
+											  </div>
+											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+												<small class="text-truncate"><?php echo !empty($rs['group_name']) ? $rs['group_name'] : "N/A"; ?></small>
+											  </div>
+											</div>
+											<div class="row w-100 align-items-center">
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0 text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('DEGREE'); ?></small>
+											  </div>
+											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+												<small class="text-truncate"><?php echo !empty($rs['degree']) ? $rs['degree'] : "N/A"; ?></small>
+											  </div>
+											</div>
+											
+											<div class="row w-100 align-items-center">
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('TEL'); ?></small>
+											  </div>
+											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+												<small class="text-truncate"><?php echo $rs['tel']; ?></small>
+											  </div>
+											</div>
+											<div class="row w-100 align-items-center">
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('Year Enrolled'); ?></small>
+											  </div>
+											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+												<small class="text-truncate"><?php echo !empty($rs['academicYearEnroll']) ? $rs['academicYearEnroll'] : "N/A"; ?></small>
+											  </div>
+											</div>
+											<div class="row w-100 align-items-center">
+											  <div class="col-sm-12 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-center">
+												<a class="btn btn-xs rounded-pill btn-primary waves-effect m-t-10 waves-effect waves-light" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>">
+													<i class="ti ti-eye ti-xs"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?>
+												</a>
+											  </div>
+											</div>
+										</div>
+									</div>
+									<div class="card-body py-2 px-1">
+										<h4 class="mb-0 mt-0 text-primary text-truncate"><?php echo $rs['stu_code']; ?></h4>
+										<p class="mb-0 text-primary text-truncate"><?php echo $rs['stu_khname']; ?></p>
+										<p class="mb-0 text-primary text-truncate"><?php echo $rs['last_name'] . " " . $rs['stu_enname']; ?></p>
+										
+										<div class="row w-100 align-items-center">
+										  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0 text-start">
+											<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('GROUP'); ?></small>
+										  </div>
+										  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+											<small class="text-truncate"><?php echo !empty($rs['group_name']) ? $rs['group_name'] : "N/A"; ?></small>
+										  </div>
+										</div>
+										<div class="row w-100 align-items-center">
+										  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0 text-start">
+											<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('DEGREE'); ?></small>
+										  </div>
+										  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+											<small class="text-truncate"><?php echo !empty($rs['degree']) ? $rs['degree'] : "N/A"; ?></small>
+										  </div>
+										</div>
+										<div class="row w-100 align-items-center">
+										  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+											<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('GRADE'); ?></small>
+										  </div>
+										  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+											<small class="text-truncate"><?php echo !empty($rs['grade']) ? $rs['grade'] : "N/A"; ?></small>
+										  </div>
+										</div>
+										<div class="row w-100 align-items-center">
+										  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+											<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('TEL'); ?></small>
+										  </div>
+										  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+											<small class="text-truncate"><?php echo $rs['tel']; ?></small>
+										  </div>
+										</div>
+										<div class="row w-100 align-items-center">
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('Year Enrolled'); ?></small>
+											  </div>
+											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+												<small class="text-truncate"><?php echo !empty($rs['academicYearEnroll']) ? $rs['academicYearEnroll'] : "N/A"; ?></small>
+											  </div>
+											</div>
+									</div>
+								</div>
 							</div>
-
-							<div class="">
-								<h4 class="blue m-b-5"><?php echo $rs['stu_code']; ?>&nbsp;</h4>
-								<h4 class="m-b-5"><?php echo $rs['stu_khname']; ?>&nbsp;</h4>
-								<h4 class="m-b-5"><?php echo $rs['last_name'] . " " . $rs['stu_enname']; ?>&nbsp;</h4>
-								<p class="text-muted"><span><?php echo $rs['academic_year']; ?>&nbsp;</span></p>
-							</div>
-							<p class="text-muted info-list font-13">
-								<span class="title-info"><?php echo $tr->translate('Year Enrolled'); ?></span> : <span class="inf-value"><?php echo $rs['academicYearEnroll']; ?></span><br />
-								<span class="title-info"><?php echo $tr->translate('GROUP'); ?></span> : <span class="inf-value"><?php echo !empty($rs['group_name']) ? $rs['group_name'] : "N/A"; ?></span><br />
-								<span class="title-info"><?php echo $tr->translate('DEGREE'); ?></span> : <span class="inf-value"><?php echo $rs['degree']; ?></span> <br />
-								<span class="title-info"><?php echo $tr->translate('GRADE'); ?></span> : <span class="inf-value"><?php echo $rs['grade']; ?></span><br />
-								<!-- <span class="title-info"><?php //echo $tr->translate('SESSION');
-																?></span> : <span class="inf-value" ><?php //echo $rs['session'];
-																																			?></span><br />
-                            <span class="title-info"><?php //echo $tr->translate('ROOM');
-														?></span> : <span class="inf-value" ><?php //echo $rs['room'];
-																																?></span><br />-->
-								<span class="title-info"><?php echo $tr->translate('TEL'); ?></span> : <span class="inf-value"><?php echo $rs['tel']; ?></span>
-								<span class="title-info"><?php echo $tr->translate('STUDENT_TYPE'); ?></span> : <span class="inf-value"><?php echo $rs['studentType']; ?></span>
-							</p>
 						</div>
-						<a class="btn btn-default btn-detail btn-sm m-t-10" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>"><i class="fa fa-eye" aria-hidden="true"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?></a>
-
 					</div>
 				</div>
 			<?php } ?>

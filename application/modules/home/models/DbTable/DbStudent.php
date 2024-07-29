@@ -10,6 +10,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	}
 	public function getAllStudentFronDesk($search)
 	{
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$curr = new Application_Model_DbTable_DbGlobal();
 		$lang = $curr->currentlang();
 		$_db = $this->getAdapter();
@@ -42,6 +43,12 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
 						    ds.group_id,
 						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
+							,CASE
+								WHEN s.goHomeType = 1 THEN '".$tr->translate("BY_THEMSELVES")."'
+								WHEN s.goHomeType = 2 THEN '".$tr->translate("BY_PARENTS")."'
+								WHEN s.goHomeType = 3 THEN '".$tr->translate("BY_SCHOOL_BUS")."'
+								ELSE 'N/A'
+							END as goHomeTypeTitle
 						FROM 
 							rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND s.stu_id=ds.stu_id AND ds.is_maingrade=1  AND ds.is_current=1 
 							LEFT JOIN rms_family AS fam ON fam.id = s.familyId
@@ -95,6 +102,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 		if (!empty($search['session'])) {
 			$where .= " AND ds.session=" . $search['session'];
+		}
+		if (!empty($search['goHomeType'])) {
+			$where .= " AND s.goHomeType=" . $search['goHomeType'];
 		}
 
 		if ($search['study_status'] >= 0) {

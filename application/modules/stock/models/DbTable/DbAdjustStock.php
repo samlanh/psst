@@ -50,9 +50,9 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	
+		$branch = $dbp->getBranchDisplay();
     	$sql="SELECT id, 
-	    	(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
+	    	(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
 			(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
 	    	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
     		pro_qty,costing,price,price_set,

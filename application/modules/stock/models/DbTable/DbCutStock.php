@@ -302,16 +302,17 @@ if(!empty($type)){
     }
     function getAllCutStock($search){
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
 		$cut_stock=$tr->translate('USAGE_STOCK');
 		$debt_stock=$tr->translate('DEBT_STOCK');
     	$db = $this->getAdapter();
     	try{
-    		$dbp = new Application_Model_DbTable_DbGlobal();
     		
     		$sql="
     		SELECT
     		pp.id,
-    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
     		pp.serailno,
     		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS student_name,
 			CASE 

@@ -63,6 +63,7 @@ class Stock_AdjuststockController extends Zend_Controller_Action {
 			$model = new Application_Model_DbTable_DbGlobal();
 			$branch = $model->getAllBranchName();
 			$this->view->branchopt = $branch;
+			$this->view->rsmaincategory = $model->getAllItems(3,null,null,0,'','',1,1);
 			
 			$db = new Global_Model_DbTable_DbItemsDetail();
 			$d_row= $db->getAllProductsNormal(2);//

@@ -12,13 +12,12 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     function getAllSupPurchase($search=null){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
     	$lang = $dbp->currentlang();
     	if($lang==1){// khmer
     		$label = "name_kh";
-    		$branch = "branch_namekh";
     	}else{ // English
     		$label = "name_en";
-    		$branch = "branch_nameen";
     	}
     	$sql="SELECT sp.id,
     		 (SELECT $branch FROM rms_branch WHERE br_id=sp.branch_id LIMIT 1) AS branch_name,

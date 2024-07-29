@@ -12,9 +12,9 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     function getAllAdjustStock($search=null){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	
+    	$branch = $dbp->getBranchDisplay();
     	$sql="SELECT id,
-    			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
+    			(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
     			adjust_no,request_name,note,request_date,
     		   (SELECT SUM(rd.qty_after) FROM rms_adjuststock_detail AS rd WHERE rd.adjuststock_id=rms_adjuststock.id LIMIT 1)AS total_qty,
 			   (SELECT first_name FROM rms_users WHERE id=rms_adjuststock.user_id LIMIT 1) AS user_name
@@ -50,9 +50,9 @@ class Stock_Model_DbTable_DbAdjustStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	
+		$branch = $dbp->getBranchDisplay();
     	$sql="SELECT id, 
-	    	(SELECT b.branch_namekh FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
+	    	(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = branch_id LIMIT 1) AS branch_name,
 			(SELECT t.code FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_code,
 	    	(SELECT t.title FROM `rms_itemsdetail` AS t  WHERE t.id = pro_id LIMIT 1) AS product_name,
     		pro_qty,costing,price,price_set,

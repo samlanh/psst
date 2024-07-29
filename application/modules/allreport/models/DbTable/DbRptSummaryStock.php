@@ -6,11 +6,13 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     protected $_name = 'rms_itemsdetail';
     function getAllRequestProduct($search=null){
     	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+    	$branch = $dbp->getBranchDisplay();
     	$sql="SELECT
 	    	re.*,
 	    	(select title from rms_request_for as rf where rf.id = request_for) as request_for,
 	    	(select title from rms_for_section as fs where fs.id = for_section) as for_section,
-	    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
+	    	(select $branch from rms_branch where br_id = branch_id) as branch_name,
 	    	(select CONCAT(last_name,' ',first_name) from rms_users as u where u.id = re.user_id) as user,
 	    	re.status
     	FROM
@@ -66,9 +68,11 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     
     function getAllRequestProductDetailById($id){
     	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+    	$branch = $dbp->getBranchDisplay();
     	$sql="SELECT
     	*,
-    	(select branch_namekh from rms_branch where br_id = branch_id) as branch_name,
+    	(select $branch from rms_branch where br_id = branch_id) as branch_name,
     	(SELECT d.title FROM `rms_itemsdetail` AS d WHERE d.items_type=3 AND d.id = pro_id LIMIT 1) AS pro_name
     	FROM
     	rms_request_orderdetail
@@ -83,16 +87,16 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     	try{
 	    	$db = $this->getAdapter();
 	    	$_db = new Application_Model_DbTable_DbGlobal();
+			
 	    	$level = $_db->getUserType();
 	    	$lang = $_db->currentlang();
+			$branch = $_db->getBranchDisplay();
 	    	if($lang==1){// khmer
 	    		$label = "name_kh";
-	    		$branch = "branch_namekh";
 	    		$grade = "d.title";
 	    		$degree = "it.title";
 	    	}else{ // English
 	    		$label = "name_en";
-	    		$branch = "branch_nameen";
 	    		$grade = "d.title_en";
 	    		$degree = "it.title_en";
 	    	}
@@ -192,7 +196,9 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$db = $this->getAdapter();
     		
     		$dbp = new Application_Model_DbTable_DbGlobal();
+			
     		$currentLang = $dbp->currentlang();
+			$branch = $dbp->getBranchDisplay();
     		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
     		if ($currentLang==1){
     			$stuname="s.stu_khname";
@@ -202,7 +208,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$to_date = $search['end_date'];
     		$sql ="
 			SELECT 
-			(SELECT CONCAT(b.branch_nameen) FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_name,
 			(SELECT b.photo FROM rms_branch AS b WHERE b.br_id=sp.branch_id LIMIT 1) AS branch_logo,
 			sp.student_id as stu_id,
 			$stuname AS student_name,
@@ -279,13 +285,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$dbp = new Application_Model_DbTable_DbGlobal();
+			$branch = $dbp->getBranchDisplay();
     		$currentLang = $dbp->currentlang();
     		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
     		if ($currentLang==1){
     			$stuname="s.stu_khname";
     		}
     		$sql="SELECT *,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = p.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = p.branch_id LIMIT 1) AS branch_name,
 			p.create_date,
 			(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS student_code,
 			(SELECT $stuname FROM `rms_student` AS s  WHERE s.stu_id = p.student_id LIMIT 1) AS student_name,
@@ -346,13 +353,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$dbp = new Application_Model_DbTable_DbGlobal();
+			$branch = $dbp->getBranchDisplay();
     		$currentLang = $dbp->currentlang();
     		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
     		if ($currentLang==1){
     			$stuname="s.stu_khname";
     		}
     		$sql="SELECT  *, c.id AS cutstock_id, c.received_date AS receivedDate,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.$branch  FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			(SELECT p.title FROM `rms_itemsdetail` AS p  WHERE p.id = sd.product_id LIMIT 1) AS product_name,
 			
 			(SELECT t.qty FROM `rms_saledetail` AS t  WHERE t.id = sd.student_paymentdetail_id LIMIT 1) AS buyQty,
@@ -413,6 +421,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
 	    	try{
 	    		$dbp = new Application_Model_DbTable_DbGlobal();
+				$branch = $dbp->getBranchDisplay();
 	    		$currentLang = $dbp->currentlang();
 	    		$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
 	    		if ($currentLang==1){
@@ -420,7 +429,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 	    		}
 	    		$sql="
 	    		SELECT
-	    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+	    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
 	    		s.stu_khname,
 	    		$stuname AS student_name,
 	    		s.stu_enname,
@@ -517,8 +526,10 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     
     function getProductSold($search){
     	$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
 		$sql="SELECT
-		    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
+		    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
 			    	(SELECT i.title FROM `rms_items` AS i WHERE i.id = i.items_id LIMIT 1) AS category,
 			    	i.title AS items_name,
 			    	i.code AS code,
@@ -588,13 +599,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     function getAllProductSold($search){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
     	$currentLang = $dbp->currentlang();
     	$stuname=" CONCAT(s.stu_enname,' ',s.last_name)";
     	if ($currentLang==1){
     		$stuname="s.stu_khname";
     	}
     	$sql="SELECT
-		    		(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
+		    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
 		    		s.stu_khname,
 		    		$stuname AS student_name,
 		    		s.stu_enname,

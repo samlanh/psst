@@ -106,13 +106,15 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 	
 	function getAllAdjustStockDetail($search=null){
 		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
 		$sql="SELECT 
 					ad.adjust_no,
 					ad.request_name,
 					ad.note,
 					ad.request_date,
 					ad.create_date,
-			        (SELECT b.branch_nameen FROM rms_branch AS b WHERE b.br_id=adj.branch_id LIMIT 1)AS branch_name,
+			        (SELECT b.$branch FROM rms_branch AS b WHERE b.br_id=adj.branch_id LIMIT 1)AS branch_name,
 			        (SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1) AS category,
 			       	i.title AS pro_name,
 			         adj.qty_befor,

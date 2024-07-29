@@ -11,16 +11,10 @@ class Test_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 	public function getAllTerm($search){
 		$db= $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
-    	$lang = $dbp->currentlang();
-    	if($lang==1){// khmer
-    		
-    		$branch = "branch_namekh";
-    	}else{ // English
-    		$branch = "branch_nameen";
-    	}
+		$branchLabel = $dbp->getBranchDisplay();
 		$sql="SELECT 
 					id,
-					(SELECT $branch FROM rms_branch WHERE br_id= branch_id LIMIT 1) AS branch_name,
+					(SELECT $branchLabel FROM rms_branch WHERE br_id= branch_id LIMIT 1) AS branch_name,
 					note AS title,
 					start_date,
 					end_date,

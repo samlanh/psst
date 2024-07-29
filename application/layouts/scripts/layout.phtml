@@ -228,7 +228,7 @@ if ($module != 'default') {
 							<a href="<?php echo $this->baseUrl() . "/home"; ?>" class="site_title"><span><img src="<?php echo $this->baseUrl() ?>/images/cam-app-logo.png" alt="CAM APP TECHNOLOGY"></span></a>
 						</div>
 						<div class="clearfix"></div>
-						<?php echo $this->render('menuleft.phtml') ?>
+						<?php if(empty($inFrame)) { echo $this->render('menuleft.phtml'); }?>
 					</div>
 				</div>
 				<!-- top navigation -->
@@ -272,8 +272,11 @@ if ($module != 'default') {
 										</li>
 									</ul>
 								</li>
-								<?php echo $this->render('notifcation.phtml'); ?>
-								<?php echo $this->render('calendar.phtml'); ?>
+								
+								<?php if(empty($inFrame)) {
+									echo $this->render('notifcation.phtml');
+									echo $this->render('calendar.phtml'); 
+								}?>
 							</ul>
 						</nav>
 					</div>

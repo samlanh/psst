@@ -6,9 +6,13 @@
     }
     function getAllCRM($search = ''){
     	$db = $this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branchLabel = $dbp->getBranchDisplay();
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$sql="SELECT c.id,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+    	$sql="SELECT 
+		c.id,
+			(SELECT b.$branchLabel FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			c.kh_name,c.last_name,c.first_name,
 			CASE    
 				WHEN  c.sex = 1 THEN '".$tr->translate("MALE")."'
@@ -71,7 +75,7 @@
     		$where.= " AND c.followup_status = ".$db->quote($search['followup_status']);
     	}
     	
-    	$dbp = new Application_Model_DbTable_DbGlobal();
+    	
 		$where.=$dbp->getAccessPermission('c.branch_id');
 		$where.=" ORDER BY c.id DESC";
 		$row = $db->fetchAll($sql.$where);

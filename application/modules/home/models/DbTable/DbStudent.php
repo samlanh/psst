@@ -11,8 +11,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 	public function getAllStudentFronDesk($search)
 	{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$curr = new Application_Model_DbTable_DbGlobal();
-		$lang = $curr->currentlang();
+		$dbGb = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbGb->currentlang();
+		
 		$_db = $this->getAdapter();
 		$from_date = (empty($search['start_date'])) ? '1' : "s.create_date >= '" . $search['start_date'] . " 00:00:00'";
 		$to_date = (empty($search['end_date'])) ? '1' : "s.create_date <= '" . $search['end_date'] . " 23:59:59'";
@@ -23,37 +24,43 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$field = 'name_kh';
 			$colunmname = 'title';
 		}
-		$sql = "SELECT  s.stu_id,
-							s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
-							CASE
-								WHEN s.primary_phone = 1 THEN s.tel
-								WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
-								WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
-								ELSE COALESCE(fam.guardianPhone,'')
-							END as tel,
-							ds.stop_type AS is_subspend,
-							s.sex as sexcode,
-							s.status,
-							photo,
-							(SELECT $field from rms_view where type=40 and key_code=s.studentType LIMIT 1) as studentType,
-							(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll,
-							(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
-							(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
-						    (SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
-						    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
-						    ds.group_id,
-						    (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
-							,CASE
-								WHEN s.goHomeType = 1 THEN '".$tr->translate("BY_THEMSELVES")."'
-								WHEN s.goHomeType = 2 THEN '".$tr->translate("BY_PARENTS")."'
-								WHEN s.goHomeType = 3 THEN '".$tr->translate("BY_SCHOOL_BUS")."'
-								ELSE 'N/A'
-							END as goHomeTypeTitle
-						FROM 
-							rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND s.stu_id=ds.stu_id AND ds.is_maingrade=1  AND ds.is_current=1 
-							LEFT JOIN rms_family AS fam ON fam.id = s.familyId
-						WHERE  
-						   1 AND s.status = 1 
+		$branchLabel = $dbGb->getBranchDisplay();
+		
+		$sql = "SELECT  
+					(SELECT b.$branchLabel FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branchName,
+					s.stu_id,
+					s.stu_code,s.stu_khname,s.stu_enname,s.last_name,
+					CASE
+						WHEN s.primary_phone = 1 THEN s.tel
+						WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
+						WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
+						ELSE COALESCE(fam.guardianPhone,'')
+					END as tel,
+					ds.stop_type AS is_subspend,
+					s.sex as sexcode,
+					s.status,
+					photo,
+					(SELECT $field from rms_view where type=40 and key_code=s.studentType LIMIT 1) as studentType,
+					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll,
+					(SELECT $field from rms_view where type=5 and key_code=ds.stop_type LIMIT 1) as status_student,
+					(SELECT group_code FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) AS group_name,
+					(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 AND ds.is_maingrade=1 LIMIT 1) AS degree,
+					(SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 AND ds.is_maingrade=1 LIMIT 1) AS grade,
+					ds.group_id,
+					ds.startDate,
+					ds.endDate,
+					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academic_year
+					,CASE
+							WHEN s.goHomeType = 1 THEN '".$tr->translate("BY_THEMSELVES")."'
+							WHEN s.goHomeType = 2 THEN '".$tr->translate("BY_PARENTS")."'
+							WHEN s.goHomeType = 3 THEN '".$tr->translate("BY_SCHOOL_BUS")."'
+							ELSE 'N/A'
+						END as goHomeTypeTitle
+				FROM 
+					rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND s.stu_id=ds.stu_id AND ds.is_maingrade=1  AND ds.is_current=1 
+					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+				WHERE  
+					   1 AND s.status = 1 
 						AND s.customer_type = 1 ";
 		$orderby = " ORDER BY s.stu_khname ASC ";
 		if (!empty($search['adv_search'])) {
@@ -114,9 +121,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$where .= ' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) =' . $search['study_status'];
 			}
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where .= $dbp->getAccessPermission('s.branch_id');
-		$where .= $dbp->getDegreePermission('ds.degree');
+		
+		$where .= $dbGb->getAccessPermission('s.branch_id');
+		$where .= $dbGb->getDegreePermission('ds.degree');
 		return $_db->fetchAll($sql . $where . $orderby);
 	}
 

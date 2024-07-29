@@ -5,8 +5,7 @@
 	$testCondiction = TEST_CONDICTION;
 	$test_online = SHOW_TEST_ONLINE;
 ?>
-<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
-<script src="<?php echo $this->baseUrl();?>/ckeditor/ckeditor.js"></script>
+
 <style>
 .image-box {
     text-align: center;
@@ -467,19 +466,35 @@ tr#head-title {
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GUARDIAN_NAME");?> <span class="required">*</span> :
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("parent_name");?>
-											</div>
+										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FAMILY");?>  :
+										   </label>
+										   <div class="col-md-7 col-sm-7 col-xs-12">
+												<select class="custome-select-opt fullside" onchange="getFamilyInfo()" placeHolder="<?php echo $tr->translate("SELECT_FAMILY"); ?>" required="false" name="familyId" id="familyId" ></select>
+										   </div>
 										</div>
-										<div class="form-group">
-											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TEL");?> <span class="required">*</span> :
-											</label>
-											<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("parent_tel");?>
-											</div>
+										<div class="table-responsive">
+											<table class="table">
+											  <tbody>
+												<tr>
+												  <th style="width:50%"><?php echo $tr->translate('FATHER_NAME');?></th>
+												  <td align="right"><span class="fatherNameKh">N/A</span></td>
+												</tr>
+												<tr>
+												  <th><?php echo $tr->translate('PHONE');?></th>
+												  <td align="right"><span class="fatherPhone">N/A</span></td>
+												</tr>
+												<tr>
+												  <th><?php echo $tr->translate('MOTHER_NAME');?></th>
+												  <td align="right"><span class="motherNameKh">N/A</span></td>
+												</tr>
+												<tr>
+												  <th><?php echo $tr->translate('PHONE');?></th>
+												  <td align="right"><span class="motherPhone">N/A</span></td>
+												</tr>
+											  </tbody>
+											</table>
 										</div>
+										
 										<div class="form-group">
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												&nbsp;
@@ -600,7 +615,12 @@ tr#head-title {
 			
 		  </div>
 	</div>
-</div>	
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+
+<link href="<?php echo $this->baseUrl()."/admin"?>/3.5.0/select2.css" rel="stylesheet">
+<script src="<?php echo $this->baseUrl()."/admin"?>/3.5.0/select2.min.js"></script>
+
 <script type="text/javascript">
 var district_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
 var commune_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -701,8 +721,53 @@ dojo.ready(function(){
 		<?php if ($testCondiction==2){?>
 		dijit.byId('branch_id').set('value',1);  
 		<?php }?>
+		
+		$("#familyId").select2(
+			{dropdownAutoWidth : true,allowClear: "true"}
+		);
+		getFamilyIdList();
 
 });
+
+
+function getFamilyIdList() {
+	
+	let urlGetFamilyList = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'family', 'action' => 'get-family-list')); ?>';
+	contentData = {
+		'option':1,
+		'recordType':2,//fatherName
+		'formType':'input',
+	}
+	dojo.xhrPost({
+		url: urlGetFamilyList,
+		content:contentData,
+		handleAs:"json",
+		load: function(data){
+			$('#familyId').empty().trigger("change");
+			$('#familyId').append(data).trigger('change');
+		},
+		error: function(err) {
+		}
+	});
+}
+function getFamilyInfo(){
+	var familyId = $('#familyId').find(":selected").val();
+	if(typeof familyId !=="undefined" ){
+		if( familyId >0){
+			var familyInfo = ($("#familyId").find(':selected').data('record-info'));
+			if(familyInfo !="undefined" ){
+				$(".fatherNameKh").html(familyInfo.fatherNameKh);
+				$(".fatherPhone").html(familyInfo.fatherPhone);
+				$(".motherNameKh").html(familyInfo.motherNameKh);
+				$(".motherPhone").html(familyInfo.motherPhone);
+				
+			}
+		}else if( familyId == -1){
+			addTab('<?php echo $tr->translate("ADD_FAMILY");?>','<?php echo $this->baseUrl() . "/foundation/family/add".'?inFrame=true'; ?>');
+		}
+	}
+} 
+
 var url_section = '<?php echo $this->url(array("module"=>"placement","controller"=>"setting","action"=>"allsettings"));?>';										
 function getAllTestSetting(){
 	dijit.byId('test_setting_id').reset();
@@ -744,6 +809,8 @@ function AllRefresh(){
 	if(commune_name!='' || commune_name!=-1){
 		filterVillage();
 	}
+	
+	getFamilyIdList();
 }
 
 url_getdistrict = '<?php echo $this->url(array('module'=>'global','controller'=>'district','action'=>'get-district'));?>';

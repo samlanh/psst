@@ -1444,6 +1444,8 @@ function getFamilyIdList() {
 	let urlGetFamilyList = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'family', 'action' => 'get-family-list')); ?>';
 	contentData = {
 		'option':1,
+		'recordType':2,//fatherName
+		'formType':'input',
 	}
 	dojo.xhrPost({
 		url: urlGetFamilyList,
@@ -1467,7 +1469,7 @@ function getFamilyInfo(){
 	var familyId = $('#familyId').find(":selected").val();
 	if(typeof familyId !=="undefined" ){
 		if( familyId >0){
-			var familyInfo = ($("#familyId").find(':selected').data('family-info'));
+			var familyInfo = ($("#familyId").find(':selected').data('record-info'));
 			if(familyInfo !="undefined" ){
 				
 				dijit.byId('home_note').set('value',familyInfo.houseNo); 
@@ -1492,6 +1494,8 @@ function getFamilyInfo(){
 				$(".motherPhone").html(familyInfo.motherPhone);
 				
 			}
+		}else if( familyId == -1){
+			addTab('<?php echo $tr->translate("ADD_FAMILY");?>','<?php echo $this->baseUrl() . "/foundation/family/add".'?inFrame=true'; ?>');
 		}
 	}
 } 
@@ -1685,6 +1689,8 @@ function AllRefresh(){
 	if(commun_note!='' || commun_note!=-1){
 		filterVillage();
 	}
+	
+	getFamilyIdList();
 	
 }
 

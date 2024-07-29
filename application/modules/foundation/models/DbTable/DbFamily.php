@@ -270,41 +270,6 @@ class Foundation_Model_DbTable_DbFamily extends Zend_Db_Table_Abstract
 		return $rs;
 	}
 	
-	function getAllFamilyList($data){
-		$sql=" 
-			SELECT 
-					f.`id` AS id
-					,CONCAT(f.`familyCode`,' ',COALESCE(f.`fatherNameKh`,'')) AS `name`
-					,f.`familyCode`
-					,f.`fatherName`
-					,f.`fatherNameKh`
-					,f.`fatherPhone`
-					,f.`motherName`
-					,f.`motherNameKh`
-					,f.`motherPhone`
-					,f.`houseNo`
-					,f.`street`
-					,f.`provinceId`
-					,f.`districtId`
-					,f.`communeId`
-					,f.`villageId` ";
-		$sql.=" FROM `rms_family` AS f 
-					WHERE f.`status` = 1 ";
-					
-		$db = $this->getAdapter();
-		$result = $db->fetchAll($sql);
-		if (!empty($data['option'])) {
-			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-			$options = '<option value="0">' . $tr->translate("PLEASE_SELECT") . '</option>';
-			if (!empty($result))
-				foreach ($result as $value) {
-					$options .= '<option  data-family-info="' . htmlspecialchars(Zend_Json::encode($value)) . '" data-family-code="' . $value['familyCode'] . '" value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
-				}
-			return $options;
-		}
-		return $result;
-	}
-	
 	
 	function getDistinctParentFatherKhNameStudent(){
 		$db = $this->getAdapter();

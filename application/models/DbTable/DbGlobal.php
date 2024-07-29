@@ -1038,7 +1038,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	{
 		$db = $this->getAdapter();
 		$branch_id = $this->getAccessPermission('br_id');
-		$sql = "select br_id as id, CONCAT(branch_nameen) as name from rms_branch WHERE branch_nameen!='' AND  status=1  $branch_id ";
+		$branchLabel = $this->getBranchDisplay();
+		$sql = "
+			SELECT 
+				br_id as id
+				, $branchLabel as name 
+			FROM rms_branch WHERE branch_nameen!='' 
+			AND  status=1  $branch_id 
+		";
 		return $db->fetchAll($sql);
 	}
 	public function getAccessPermission($branch_str = 'branch_id')

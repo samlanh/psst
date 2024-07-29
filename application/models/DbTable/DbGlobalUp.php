@@ -267,6 +267,11 @@ class Application_Model_DbTable_DbGlobalUp extends Zend_Db_Table_Abstract
 				,fam.`guardianPhoto`
 				,fam.`laonNumber`
 				,fam.`familyType`
+				,fam.`provinceId`
+				,fam.`districtId`
+				,fam.`communeId`
+				,fam.`villageId`
+				
 				,COALESCE((SELECT v.$labelShortCut FROM `rms_view` AS v WHERE v.type =41 AND v.key_code = fam.`familyType` LIMIT 1),'N/A') AS familyTypeTitle
 				,COALESCE(fam.`houseNo`,'N/A') AS houseNo
 				,COALESCE(fam.`street`,'N/A') AS street
@@ -290,10 +295,20 @@ class Application_Model_DbTable_DbGlobalUp extends Zend_Db_Table_Abstract
 		
 		$rows = $db->fetchAll($sql);
 		if (!empty($data['option'])) {
+			
+			$data['formType'] = empty($data['formType']) ? "" : $data['formType'];
 			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
 			$initializeImage = $baseUrl.'/images/no-profile.png';
 			$options = '<option value=""></option>';
+			
 			$options.= '<option value="0">' . $this->tr->translate("PLEASE_SELECT") . '</option>';
+			if($data['formType']=="input"){
+				$dbUser = new Application_Model_DbTable_DbUsers();
+				$checkPermission = $dbUser->getAccessUrl("foundation","family","add");
+				if(!empty($checkPermission)){
+					$options.= '<option value="-1">' . $this->tr->translate("ADD_NEW") . '</option>';
+				}
+			}
 			if (!empty($rows))
 				foreach ($rows as $value) {
 					$photoUrl = $initializeImage;

@@ -39,6 +39,10 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 	}
 	
 	function addAction(){
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
+		
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			if (empty($_data)){
@@ -52,10 +56,11 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 				if($id==-1){
 					$sms = "RECORD_EXIST";
 				}
+				$inFrame = empty($_data['inFrame']) ? "false" : "true";
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,'/foundation/family');
+					Application_Form_FrmMessage::Sucessfull($sms,'/foundation/family?inFrame='.$inFrame);
 				} 
-				Application_Form_FrmMessage::Sucessfull($sms,'/foundation/family/add');
+				Application_Form_FrmMessage::Sucessfull($sms,'/foundation/family/add?inFrame='.$inFrame);
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -108,7 +113,7 @@ class Foundation_FamilyController extends Zend_Controller_Action {
 	function getFamilyListAction(){
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
-    		$db = new Foundation_Model_DbTable_DbFamily();
+    		$db = new Application_Model_DbTable_DbGlobalUp();
 			$result = $db->getAllFamilyList($data);
 			if(!empty($data['selectOption'])){
 				array_unshift($result, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_FAMILY")));

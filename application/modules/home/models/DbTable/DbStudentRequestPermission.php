@@ -10,11 +10,12 @@
 	{
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branchLabel = $dbp->getBranchDisplay();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$sql = "
 			SELECT 
 				rp.id
-				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = rp.branchId LIMIT 1) AS branch_name
+				,(SELECT b.$branchLabel FROM `rms_branch` AS b  WHERE b.br_id = rp.branchId LIMIT 1) AS branch_name
 				,(SELECT s.stu_code FROM `rms_student` AS s  WHERE s.stu_id = rp.studentId LIMIT 1) AS studentCode
 				,(SELECT CONCAT(COALESCE(s.stu_khname,''),' ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s  WHERE s.stu_id = rp.studentId LIMIT 1) AS StudentName
 				,g.group_code AS GroupName

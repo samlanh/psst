@@ -83,8 +83,11 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'province_id'	=>$data['province_id'],
 						'tel'		=>$data['phone'],
 						'email'		=>$data['email'],
-						'guardian_khname'		=>$data['parent_name'],
-						'guardian_tel'		=>$data['parent_tel'],
+						
+						'familyId'		=>$data['familyId'],
+						//'guardian_khname'		=>$data['parent_name'],
+						//'guardian_tel'		=>$data['parent_tel'],
+						
 						'photo'				=>$photo,
 						'emergency_name'		=>$data['emergency_name'],
 						'relationship_to_student'=>$data['relationship_to_student'],
@@ -157,8 +160,10 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'province_id'	=>$data['province_id'],
 					'tel'		=>$data['phone'],
 					'email'		=>$data['email'],
-					'guardian_khname'		=>$data['parent_name'],
-					'guardian_tel'		=>$data['parent_tel'],
+					
+					'familyId'		=>$data['familyId'],
+					//'guardian_khname'		=>$data['parent_name'],
+					//'guardian_tel'		=>$data['parent_tel'],
 					'emergency_name'		=>$data['emergency_name'],
 					'relationship_to_student'=>$data['relationship_to_student'],
 					'emergency_tel'			=>$data['emergency_tel'],
@@ -260,21 +265,18 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$lang = $_db->currentlang();
+		$label = "name_en";
 		if($lang==1){// khmer
 			$label = "name_kh";
-			$branch = "branch_namekh";
-		}else{ // English
-			$label = "name_en";
-			$branch = "branch_nameen";
-		}		
+		}	
 
 		$testCondiction = TEST_CONDICTION;
-		
+		$branchLabel = $_db->getBranchDisplay();
 		$sql="
 			SELECT 
 				s.stu_id,";
 		if ($testCondiction!=2){
-			$sql.="(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,";
+			$sql.="(SELECT b.$branchLabel FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branch_name,";
 		}
 		$sql.="	s.serial,
 				s.stu_khname,
@@ -291,13 +293,15 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$sql.="s.from_school,";
 		}
 		$sql.="
-				s.guardian_khname,
-				s.guardian_tel,
+				fam.guardianNameKh,
+				fam.guardianPhone,
 				(select count(id) from rms_student_test_result where s.stu_id  = rms_student_test_result.stu_test_id and test_type=1) as result_test_fl,
 				(select count(id) from rms_student_test_result where s.stu_id  = rms_student_test_result.stu_test_id and test_type=2) as result_test_gn,
 				(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name,
 				'$print'
-			 FROM `rms_student` AS s
+			 FROM 
+				`rms_student` AS s 
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 			WHERE s.is_studenttest =1 ";
 		if (!empty($search['txtsearch'])){
 			$s_where = array();
@@ -309,8 +313,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 			$s_where[]=	 " REPLACE(CONCAT(s.last_name,s.stu_enname),' ','')  LIKE '%{$s_search}%'";
 			$s_where[]=	 " REPLACE(CONCAT(s.stu_enname,s.last_name),' ','')  LIKE '%{$s_search}%'";
 			$s_where[] = " REPLACE(s.tel,' ','')  LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.guardian_khname,' ','')  LIKE '%{$s_search}%'";
-			$s_where[] = " REPLACE(s.guardian_tel,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(fam.guardianNameKh,' ','')  LIKE '%{$s_search}%'";
+			$s_where[] = " REPLACE(fam.guardianPhone,' ','')  LIKE '%{$s_search}%'";
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}    
 		if(!empty($search['branch_search'])){

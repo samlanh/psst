@@ -2241,3 +2241,59 @@ span.addtional-info.bottom-info {
  {
 	color: #fff !important;
 }
+
+.rounded-circle {
+    border-radius: 50% !important
+}
+
+.rounded-pill {
+    border-radius: 50rem !important
+}
+
+
+.bg-primary {
+    background-color: #06467f !important
+}
+
+.bg-secondary {
+    background-color: #808390 !important
+}
+
+.bg-success {
+    background-color: #28c76f !important
+}
+
+.bg-info {
+    background-color: #00bad1 !important
+}
+
+.bg-warning {
+    background-color: #ff9f43 !important
+}
+
+.bg-danger {
+    background-color: #ff4c51 !important
+}
+
+.bg-dark {
+    background-color: #4b4b4b !important
+}
+.bg-white {
+    background-color: #fff !important
+}
+.badge.rounded-pill {
+    padding: 3px;
+    font-weight: normal;
+}
+
+small.subtitle-row {
+    display: block;
+	color: #4b4b4b;
+}
+.table-action-col ul.dropdown-menu {
+    padding: 10px 0px;
+}
+.table-action-col ul.dropdown-menu a {
+    padding: 5px 10px;
+}
+

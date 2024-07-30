@@ -298,18 +298,51 @@ tr.head-td th {
     </div>
 </div>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
-	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
+	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ; overflow: scroll;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
 	<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
-		<style>
-			.print tr td{
-				padding:0px 2px 0px 2px; 
-			}
-			tr.hearder_table td {
-				 padding: 5px;
-			}
-			table span.small{display: block;line-height: 20px;}
-		</style>
-		<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="height:4cm;font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:12px !important;white-space:nowrap;">
+			<style>
+				.style{
+					font-family: 'Times New Roman','Khmer OS Battambang' !important;
+					font-size:8px !important;
+					white-space:nowrap;
+				}
+				.conten_data{
+					width: 100%; padding: 0px;
+					margin-top: 2px !important;
+					border-collapse: collapse;
+					border: 1px solid #000;
+					font-size:9px;
+					font-family:'Times New Roman','Khmer OS Battambang' !important;
+					white-space:nowrap;
+				}
+				.print tr td{
+					padding:0px 2px 0px 2px; 
+				}
+				tr.hearder_table td {
+				    padding: 5px;
+					font-size:9px; 
+					text-align:center;
+					background:#f2f2f2;
+					font-weight:bold;
+					line-height:10px;
+				}
+				tr.rowlist td {
+				    padding: 1px;
+					font-size:9px; 
+				}
+				table span.small{
+					display: block;
+					line-height: 10px;
+					width: 100%;
+				}
+				@media print {
+					@page {
+						page: A4;
+						margin: 0.0cm 0.5cm;
+					}
+				}
+			</style>
+		<table width="100%"  class="style print" cellspacing="0"  cellpadding="0" >
 			<tr>
 				<td colspan="4"><label id="lbl_header"></label></td>
 			</tr>
@@ -329,14 +362,9 @@ tr.head-td th {
 				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span id="lb_date" style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
 			</tr>
 			<tr>
-				<td>Gender : &nbsp;&nbsp;<span id="lb_gender"></span></td>
-				<td></td>
-				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Print Date</span> : <span id="lb_print" style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date('d/m/Y, H:i ',strtotime(Zend_Date::now()));?></span></td>
-			</tr>
-			<tr>
 				<td>Tel : &nbsp;&nbsp;<span id="lb_tel"></span></td>
 				<td></td>
-				<td colspan="2" align="right"></td>
+				<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Print Date</span> : <span id="lb_print" style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date('d/m/Y, H:i ',strtotime(Zend_Date::now()));?></span></td>
 			</tr>
 			<tr>
 				<td  colspan="4">
@@ -353,7 +381,7 @@ tr.head-td th {
 			</tr>
 			<tr>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:100px;font-size:10px;"></div>
+					<div style="margin-top:100px;font-size:8px;"></div>
 					<?php 
 						   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 						   $last_name=$session_user->last_name;
@@ -362,7 +390,7 @@ tr.head-td th {
 						?>
 				</td>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:100px;font-size:10px;"></div>
+					<div style="margin-top:100px;font-size:8px;"></div>
 					<span id="studentpay"></span>
 				</td>
 			</tr>
@@ -464,8 +492,8 @@ function printSave(new_receipt){
 		dojo.byId("lb_date").innerHTML = dijit.byId("date_payment").attr('displayedValue');
 	template="";
 	temp='';
-    temp='<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">'
-		  temp+='<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;">';
+    temp='<table border="1" align="center" class="conten_data" >'
+		  temp+='<tr class="hearder_table">';
 			  temp+='<td >លរ<span class="small">No.</span></td>';
 			  temp+='<td >លេខយោង <span class="small">Receipt Ref</span></td>';
 			  temp+='<td >ពណ៍នា<span class="small">Item Name</span></td>';

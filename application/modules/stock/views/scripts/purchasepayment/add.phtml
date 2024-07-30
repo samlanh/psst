@@ -413,6 +413,7 @@ span.oldsup input[type=checkbox] {
 		}
 		calculateAmountCheck();
 		calBalance();
+		checkAmout();
 	}
 	function ResetPayment(){
 		var old_identity = $("#old_identity").val();
@@ -550,7 +551,7 @@ span.oldsup input[type=checkbox] {
 		}else{
 			dijit.byId('remain'+index).set('value',(subtotal-paid).toFixed(2));
 		}
-		calBalance();
+		//calBalance();
 		calculateAmountCheckByKeyup();
 	}
 	function calculateAmountCheckByKeyup(){

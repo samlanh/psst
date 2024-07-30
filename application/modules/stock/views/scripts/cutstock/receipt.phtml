@@ -11,32 +11,46 @@ img.view{height: 70px !important;}
  <div style="min-height:26cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">
 	<div id="divPrint" style="width: 100%;">
 			<style>
+				.style{
+					font-family: 'Times New Roman','Khmer OS Battambang' !important;
+					font-size:8px !important;
+					white-space:nowrap;
+				}
+				.conten_data{
+					width: 100%; padding: 0px;
+					margin-top: 2px !important;
+					border-collapse: collapse;
+					border: 1px solid #000;
+					font-size:8px;
+					font-family:'Khmer OS Battambang','Times New Roman' !important;
+					white-space:nowrap;
+				}
 				.print tr td{
 					padding:0px 2px 0px 2px; 
 				}
 				tr.hearder_table td {
 				    padding: 5px;
+					font-size:8px; 
+					text-align:center;
+					background:#f2f2f2;
+					font-weight:bold;
+					line-height:10px;
 				}
-				table span.small{display: block;line-height: 20px;
-				width: 100%;}
+				table span.small{
+					display: block;
+					line-height: 10px;
+					width: 100%;
+				}
 				@media print {
-				
-				@page {
-					page: A4;
-					margin: 0.5cm 0.5cm;
+					@page {
+						page: A4;
+						margin: 0.0cm 0.5cm;
+					}
 				}
-				
-			}
 			</style>
 			
 			<?php for($i=0; $i<2; $i++){ ?>		
-			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style="font-family: 'Times New Roman','Khmer OS Battambang' !important;font-size:12px !important;white-space:nowrap;">
-					<tr>
-						<td colspan="4">
-							<div class="lbl_header">
-							</div>
-						</td>
-					</tr>
+			<table width="100%" height="45%"  class="style print" cellspacing="0"  cellpadding="0">
 					<tr>
 						<td colspan="4" align="center">
 							<strong style="font-family:'Khmer OS Muol';">បង្កាន់ទទួលទំនិញ<span class="small">RECIEVED NOTED</span></strong>
@@ -53,20 +67,15 @@ img.view{height: 70px !important;}
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
 					</tr>
 					<t>
-						<td>Gender : <?php echo ($this->row['gender']); ?></td>
+						<td>Tel : <?php echo($this->row['tel']); ?></td>
 						<td></td>
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Print Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date('d/m/Y, H:i ',strtotime(Zend_Date::now()));?></span>
 						</td>
 					</tr>
-					<t>
-						<td>Tel : <?php echo($this->row['tel']); ?></td>
-						<td></td>
-						<td colspan="2" align="right"></td>
-					</tr>
 					<tr>
 						<td  colspan="4">
-							<table border="1" align="center" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:11px;font-family:Khmer OS Battambang !important; white-space:nowrap; ">
-							  	<tr class="hearder_table" style=" font-size:12px; text-align:center;background:#f2f2f2;font-weight:bold;line-height:15px;">
+							<table border="1" align="center" class="conten_data">
+							  	<tr class="hearder_table">
 								  	<td>លរ<span class="small">No.</span></td>
 								  	<td>លេខយោង <span class="small">Receipt Ref</span></td>
 								  	<td >ពណ៍នា<span class="small">Item Name</span></td>
@@ -109,28 +118,28 @@ img.view{height: 70px !important;}
 					</tr>
 					<tr>
 						<td colspan="2" width="50%" align="center">
-							<div style="font-size:10px;"></div>
+							<div style="font-size:8px;"></div>
 							<strong>អ្នកប្រគល់ Stock Controller </strong>
 						</td>
 						<td colspan="2" width="50%" align="center">
-							<div style="font-size:10px;"></div>
+							<div style="font-size:8px;"></div>
 							<strong>អ្នកទទួល Customer</strong>
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2" width="50%" align="center">
-							<div style="margin-top:100px;font-size:10px;"></div>
+							<div style="margin-top:50px;font-size:8px;"></div>
 							<?php echo $this->row['user_name'];?>
 						</td>
 						<td colspan="2" width="50%" align="center">
-							<div style="margin-top:100px;font-size:10px;"></div>
+							<div style="margin-top:50px;font-size:8px;"></div>
 							<?php echo $this->row['stu_enname']." ".$this->row['last_name'];?>
 						</td>
 					</tr>
 					
 				</table>	
 			<?php if($i==0){?>
-					<div style="height: 10px; margin-top: 20px;">
+					<div height="10%" style="margin-top: 5px;">
 						<div style="width: 100%;border-bottom:2px dashed #000; "></div>
 					</div>
 				<?php }?>

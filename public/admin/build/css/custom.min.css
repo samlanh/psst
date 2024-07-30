@@ -614,11 +614,19 @@ ul.nav.nav-tab li.nav-item {
 ==============================*/
 /*---------Pop loading---------------*/
 .hover:hover{background: #eee;}
-.overlay {display: none; position: fixed;  z-index: 9998; width: 100%;height: 100%;top: 0px;left: 0px;background: #fff;z-index: 1001;opacity: .95;}
-.overlay-load {width: 350px; margin: auto;top: 0px;bottom: 0px; position: fixed;  z-index: 9999; left: 0px;right: 0px;
+.overlay {/* display: none; */position: fixed;z-index: 9998;width: 100%;height: 100%;top: 0px;left: 0px;background: #fff;z-index: 1001;opacity: 1;}
+.overlay-load {
+          width: 350px;
+          margin: auto;
+          top: 0px;
+          bottom: 0px;
+          position: fixed;
+          z-index: 9999;
+          left: 0px;
+          right: 0px;
           text-align: center;
-           background: #fff url("loading-circle.gif") 50% 25%;
-           background-repeat: no-repeat;          
+          background: #fff0 url(loading-circle.gif) 50% 25%;
+          background-repeat: no-repeat;
 }
 .overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);}
 

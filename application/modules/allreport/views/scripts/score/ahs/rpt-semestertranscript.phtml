@@ -654,7 +654,8 @@ function getCountSubjectLang($subjectArray,$subjectLang){
 						</tr>
 						<tr class="khmerBoldFont " align="center">
 							<td colspan="2">ពិន្ទុសរុប<br />Total Score</td>
-							<td><strong><?php echo $scoreInfo['totalScoreAvg']; ?></strong></td>
+							<td><strong><?php if($forSemester==1){ echo $scoreInfo['totalScoreAvg']; } ?></strong></td>
+							<td><strong><?php if($forSemester==2){ echo $scoreInfo['totalScoreAvg']; } ?></strong></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -662,15 +663,21 @@ function getCountSubjectLang($subjectArray,$subjectLang){
 						</tr>
 						<tr class="khmerBoldFont " align="center">
 							<td colspan="2">មធ្យមភាគពិន្ទុ<br />Average Score</td>
-							<td><strong><?php echo  $scoreInfo['overallAssessmentSemester']; ?></strong></td>
+							<td><strong><?php if($forSemester==1){ echo $scoreInfo['overallAssessmentSemester']; } ?></strong></td>
+							<td><strong><?php if($forSemester==2){ echo $scoreInfo['overallAssessmentSemester']; } ?></strong></td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr class="khmerBoldFont " align="center">
 							<td colspan="2">និទ្ទេស និងចំណាត់ថ្នាក់<br />Letter Grade And Rank</td>
-							<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> <?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
-							<td></td>
+							<?php if($forSemester==1){ ?>
+								<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> <?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+								<td></td>
+							<?php }else if($forSemester==2){ ?>
+								<td></td>
+								<td class="" align="center">&nbsp;<strong class="colorRed"><?php echo $dbgb->getMentionScore($scoreInfo['overallAssessmentSemester'], $academicId, $scoreInfo['degreeId'], 1, null, $semesterScale); ?> <?php echo $scoreInfo['rankOverall'] . '/' . $scoreInfo['amountStudent']; ?></strong>&nbsp;</td>
+							<?php } ?>
 							<td></td>
 							<td></td>
 						</tr>

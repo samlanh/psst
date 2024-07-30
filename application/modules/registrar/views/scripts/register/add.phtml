@@ -998,14 +998,14 @@ $(document).ready(function() {
 			return false;
 		}
 		let url_getacademic = '<?php echo $this->url(array('module' => 'accounting', 'controller' => 'fee', 'action' => 'getfeeid')); ?>';
-			contentData = {
+			contentDataacademic = {
 			'branch_id': branch_id,
 			'option':1,
 			'isFinished': 0
 		}
 		dojo.xhrPost({
 			url: url_getacademic,
-			content:contentData,
+			content:contentDataacademic,
 			handleAs:"json",
 			load: function(data){
 				$('#study_year').empty().trigger("change");
@@ -1145,7 +1145,11 @@ $(document).ready(function() {
 					dojo.byId("table_paymenthistory").innerHTML = data.resultPaymentHistory;
 
 					studentData = data.studentData;
-					$('#study_year').val(studentData.feeId).trigger('change');
+					var studentFeeId = (studentData.feeId=="") ? 0 : studentData.feeId;
+					if(studentFeeId>0){
+						$('#study_year').val(studentData.feeId).trigger('change');
+					}
+					
 					dijit.byId("degree").set('value', studentData.degree);
 					dijit.byId("grade").set('value', studentData.grade);
 
@@ -1215,8 +1219,6 @@ $(document).ready(function() {
 			newitemstoreorg  = getDataStorefromJSON('id','name', itemstoreorg);
 			dijit.byId('item').set('store',newitemstoreorg); 
 
-		} else {
-			loadingBlock();
 		}
 		branch_id = dijit.byId('branch_id').get('value');
 		if (branch_id == '') {
@@ -1228,7 +1230,12 @@ $(document).ready(function() {
 			dijit.byId('old_stu').focus(); return false;
 		}
 		student_type = dijit.byId('student_type').get('value');
-		feeId = $('#study_year').val();
+		
+		var thisFeeId = 0;
+		var currentFee = $('#study_year').find(":selected").val();
+		if(typeof currentFee !=="undefined" ){
+			thisFeeId = currentFee;
+		}
 		
 		isAutopayment = '3';
 		if (student_type == 2) {//test
@@ -1237,9 +1244,10 @@ $(document).ready(function() {
 			isAutopayment = 1;
 		}
 		var urlget = "<?php echo $this->url(array('module' => 'registrar', 'controller' => 'register', 'action' => 'getitemforpaymentrecord')); ?>";
+	
 		contentData = {
 			'branch_id': branch_id,
-			'feeId': feeId,
+			'feeId': thisFeeId,
 			'studentId': studentId,
 			'grade': serviceId,
 			'studentType': student_type,

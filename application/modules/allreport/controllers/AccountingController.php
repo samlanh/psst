@@ -1098,10 +1098,17 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);// will remove
 		 
-		$branch_id=null;
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$periodList = array();
 		if(!empty($rs)){
-			$branch_id = $rs['branch_id'];
+			$data = array(
+				'feeId'=>$rs['academic_year'],
+				'periodId'=>$rs['payment_term']
+			);
+			$periodList = $dbg->getAllStudyPeriod($data);
 		}
+		$this->view->periodList = $periodList;
+		print_r($periodList);
 		
 		$frmreceipt = new Application_Form_FrmGlobal();
 		$this->view->officailreceipt = $frmreceipt->getFormatReceipt();

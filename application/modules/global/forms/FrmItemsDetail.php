@@ -309,7 +309,9 @@ class Global_Form_FrmItemsDetail extends Zend_Dojo_Form
 	    		$_product_type->setValue($data["product_type"]);
 	    		$_cost->setValue($data["cost"]);
 	    		$_price->setValue($data["price"]);
-    		}
+			} elseif ($data["items_type"] == 2) {
+				$auto_payment->setValue($data["is_autopayment"]);
+			}
 			$isCountStock->setValue($data["isCountStock"]);
     		$_total_score->setValue($data["total_score"]);
     		$_amount_subject->setValue($data["amount_subject"]);

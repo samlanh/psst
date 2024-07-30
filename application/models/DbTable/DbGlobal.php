@@ -4423,7 +4423,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'itemType' => $item['itemType'],
 				'startDate' => $item['startDate'],
 				'endDate' => $item['endDate'],
-				'feeId' => $item['feeId'],
+				'feeId' => empty($item['feeId'])?'':$item['feeId'],
 				'balance' => $item['balance'],
 				'academic_year' => $item['academic_year'],
 				'itemDetailId' => $item['itemDetailId'],
@@ -4626,11 +4626,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		if (isset($data['isAutopayment']) and $data['isInititilize'] == 1) {
 			if ($data['isAutopayment'] != '') {
-				$sql .= " AND i.is_autopayment=" . $data['isAutopayment'];
-				$sql .= " AND FIND_IN_SET((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),degreeOption) ";
+				if($data['studentType']==1){
+					$sql .= " AND FIND_IN_SET((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),degreeOption) ";
+				} else {
+					$sql .= " AND i.is_autopayment=" . $data['isAutopayment'];
+				}
 			}
 		}
 		$sql .= " ORDER BY i.items_type ASC ";
+		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		return $this->getAdapter()->fetchAll($sql);//fetch all but got only 1 row only .
 
 	}

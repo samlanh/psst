@@ -743,7 +743,11 @@ class Application_Form_FrmGlobal
 							list-style:none;
 							line-height:10px;
 						}
-						.displayinline{white-space:nowrap;}
+						.displayinline{white-space:nowrap;padding:1px;}
+						.aligncenter{text-align:center;}
+						.all-border{border:1px solid #000;}
+						.textright{text-align:right;}
+						.paddingright{padding-right:1px;}
 					</style>
 					<table broder='1' width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
 						<tr style='height:$paddingTop'>
@@ -810,14 +814,14 @@ class Application_Form_FrmGlobal
 					</tr>
 					<tr>
 						<td colspan='3'></td>
-						<td><div style='font-weight: bold;font-size:10px;'><strong>បានបង់/Paid Amount</strong>: $</div></td>
-						<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:10px;'>&nbsp;&nbsp; <strong><label id='lb_paid_amount'></label></strong></td>
+						<td><div style='font-weight: bold;font-size:11px !important;'><strong>សរុបត្រូវបង់/Total Payment</strong>: $</div></td>
+						<td align='right' style='font-weight: bold;font-family:Times New Roman;font-size:11px !important;border-bottom:1px solid #000;'>&nbsp;&nbsp;<strong><label id='lb_paid_amount'></label></strong></td>
 					</tr>
 					<tr>
 						<td valign='top' style='font-size:10px;'>
 							<div style='width:99%;float: left;'>
 								<div style='font-size:8px;min-height:60px;border:1px solid #000;' class='noted' >
-									<div class='displayinline'>ថ្ងៃត្រូវបង់ថ្លៃសិក្សា/Schedule Tuition Due</div>
+									<div class='displayinline aligncenter'>ថ្ងៃត្រូវបង់ថ្លៃសិក្សា/Schedule Tuition Due</div>
 									<div id='lbl_period_year' class='lbl_periodstudy' >
 									</div>
 								</div>

@@ -33,11 +33,11 @@ class Foundation_GroupController extends Zend_Controller_Action
 			$rs_rows = $db->getAllGroups($search);
 			$list = new Application_Form_Frmtable();
 
-			$collumns = array("BRANCH", "GROUP_CODE", "YEARS", "SEMESTER", "DEGREE", "GRADE", "SESSION", "ROOM_NAME", "TEACHER_ROOM", "TIME", "NOTE", "PROCESS_TYPE", "STATUS");
+			$collumns = array("BRANCH", "GROUP_CODE", "YEARS", "SEMESTER", "SESSION", "ROOM_NAME", "TEACHER_ROOM", "TIME", "NOTE", "PROCESS_TYPE", "STATUS");
 			$link = array(
 				'module' => 'foundation', 'controller' => 'group', 'action' => 'edit',
 			);
-			$this->view->list = $list->getCheckList(10, $collumns, $rs_rows, array('branch_name' => $link, 'group_code' => $link, 'tuitionfee_id' => $link, 'degree' => $link, 'grade' => $link));
+			$this->view->list = $list->getCheckList(10, $collumns, $rs_rows, array('branch_name' => $link, 'titleRecord' => $link, 'tuitionfee_id' => $link, 'degree' => $link, 'grade' => $link));
 		} catch (Exception $e) {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

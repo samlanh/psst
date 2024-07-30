@@ -27,7 +27,7 @@ class Application_Form_Frmtable
     
    
     
-    public function getCheckList($delete=0, $columns,$rows,$link=null,$actionLink=array(), $class='items', $textalign= "left", $report=false, $id = "table")
+    public function getCheckList($delete=0, $columns,$rows,$link=null,$additionalOption=array())
     {
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	/*
@@ -49,6 +49,8 @@ class Application_Form_Frmtable
     	foreach($columns as $column){
     		$col_str=$col_str.'<th class="tdheader"  style="text-align: center;">'.$tr->translate($column).'</th>';
     	}
+		
+		$actionLink= empty($additionalOption["actionLink"]) ? array() : $additionalOption["actionLink"];
     	if(!empty($actionLink)) {
     		$col_str .='<th class="tdheader tdedit">'.$tr->translate('ACTION').'</th>';
     	}
@@ -60,12 +62,14 @@ class Application_Form_Frmtable
     	/*------------------------Check param id----------------------------------*/
 
     	/*------------------------End check---------------------------------------*/
-    	$r=0;
+    	
+		$rowRecordInfo= empty($additionalOption["rowRecordInfo"]) ? array() : $additionalOption["rowRecordInfo"];
+		$r=0;
     	foreach($rows as $row){
     		if($r%2==0)$attb='normal';
     		else $attb='alternate';
     		$r++;
-	    		//-------------------check select-----------------
+			//-------------------check select-----------------
 
     		//-------------------end check select-----------------
     		$row_str.='<tr class="'.$attb.'"> ';
@@ -80,13 +84,17 @@ class Application_Form_Frmtable
 		  					if($delete== 10) {
 		  						$clisc='oncontextmenu="setrowdata('.$temp.');return false;" class="context-menu-one" ';
 		  					}
-		  					
 		  					if($delete==2){
 				    			$row_str .= '<td><input type="radio" onclick="setValue('.$temp.')" name="copy" id="copy" value="'.$temp.'" /></td>';
 		  					}else if($delete==1){
 		  						$row_str .= '<td><input type="checkbox" name="del[]" id="del[]" value="'.$temp.'" /></td>';
 		  					}
-		  					$row_str.='<td class="items-no text-center">'.$r.'</td>';
+							$stringAdditional='';
+							if(!empty($rowRecordInfo)){
+								$returnAdditionalVal = $this->checkAddtionalColumn($row,$rowRecordInfo);
+								$stringAdditional='data-additional-info="' . htmlspecialchars(Zend_Json::encode($returnAdditionalVal)) . '"';
+							}
+		  					$row_str.='<td id='.$temp.' class="items-no text-center" '.$stringAdditional.' >'.$r.'</td>';
 		  				} else {
     						if($link!=null){
     							foreach($link as $column=>$url)
@@ -107,10 +115,6 @@ class Application_Form_Frmtable
     						if($i!=1){
 	    						$text=$this->textAlign($read);
 	    						$read=$this->checkValue($read);
-
-	    						if($textalign != 'left'){
-	    							$text  = " align=". $textalign;
-	    						}
     						}
     						$columnSubTitle="subTitleRecord";
     						$processingBg="processingBg";
@@ -121,9 +125,6 @@ class Application_Form_Frmtable
 									$row_str.='<small class="subtitle-row text-secondary">'.$subTitle.'</small>';
 								$row_str.='</td>';
 								$columnTitleIndex = $i;
-							}else if($key=="statusRecord"){
-								$read=$this->checkStatusRecord($read);
-								$row_str.='<td '.$clisc.' >'.$read.'</td>';
 							}else if($key=="processingRecord"){
 								$processingBg = empty($row[$processingBg]) ? "" : $row[$processingBg];
 								$arr = array(
@@ -131,6 +132,9 @@ class Application_Form_Frmtable
 									,"bgProcess" =>$processingBg
 								);
 								$read=$this->processingRecord($arr);
+								$row_str.='<td '.$clisc.' >'.$read.'</td>';
+							}else if($key=="statusRecord"){
+								$read=$this->checkStatusRecord($read);
 								$row_str.='<td '.$clisc.' >'.$read.'</td>';
 							}else{
 								if($i > count($columns)) {
@@ -170,9 +174,7 @@ class Application_Form_Frmtable
     	$counter='<span class="row_num">'.$tr->translate('NUM-RECORD').count($rows).'</span>';
     	$row_str.='</tbody>';
     	$footer='</table></div></form>';
-    	if(!$report){
-    		$footer .= '<div class="footer_list">'.$stringPagination.$counter.'</div>';
-    	}
+    	
     	return $head.$col_str.$row_str.$footer;
     }
     
@@ -248,6 +250,12 @@ class Application_Form_Frmtable
     	}    	
     }
 	
+	public function checkAddtionalColumn($row,$rowRecordInfo){
+		if(!empty($rowRecordInfo)) foreach($rowRecordInfo as $key =>$rs){
+			$rowRecordInfo[$key] = empty($row[$key]) ? 0 : $row[$key];
+		}
+		return $rowRecordInfo;
+	}
 	public function checkStatusRecord($value){
     	$string = '<span class="badge badge-center rounded-pill bg-danger"><i class="fa fa-times"></i></span>';  	
     	if($value==1){
@@ -261,5 +269,7 @@ class Application_Form_Frmtable
     	$string = '<span class="badge '.$bgLable.'" text-capitalized>'.$processTitle.'</span>';  
 		return $string;
     }
+	
+	
 }
 

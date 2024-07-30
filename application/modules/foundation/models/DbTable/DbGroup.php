@@ -195,32 +195,44 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
+		$branch = $dbp->getBranchDisplay();
+		
 		$colunmname = 'title_en';
 		$label = "name_en";
-		$branch = "branch_nameen";
 		$titleCol = "title";
 		if ($currentLang == 1) {
 			$colunmname = 'title';
 			$label = "name_kh";
-			$branch = "branch_namekh";
 			$titleCol = "titleKh";
 		}
 
-		$sql = "SELECT `g`.`id`,
-			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
-			`g`.`group_code` AS `group_code`,
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS tuitionfee_id,	
-			 `g`.`semester` AS `semester`, 
-			i.$colunmname AS degree,
-			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
-			(select p.$titleCol from rms_parttime_list AS p where p.id = g.session limit 1 ) as session,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
-			time,
-			`g`.`note`,
-			(select $label from rms_view where type=9 and key_code=is_pass) as group_status ";
+		$sql = "SELECT 
+			`g`.`id`
+			,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
+			,`g`.`group_code` AS `titleRecord`
+			,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS tuitionfee_id	
+			,`g`.`semester` AS `semester`
+			 
+			,(SELECT p.$titleCol FROM rms_parttime_list AS p where p.id = g.session limit 1 ) as session
+			,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
+			,(SELECT teacher_name_kh FROM rms_teacher WHERE rms_teacher.id = g.teacher_id limit 1 ) as teaccher
+			,time
+			,`g`.`note`
+			,(SELECT $label FROM rms_view WHERE type=9 and key_code=g.is_pass LIMIT 1) as processingRecord
+			
+			";
 
-		$sql .= $dbp->caseStatusShowImage("g.status");
+		$sql .= ", g.status AS statusRecord ";
+		$sql .= "
+			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' ',COALESCE((SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1),'')) AS subTitleRecord
+			,CASE 
+				WHEN g.is_pass = 0 THEN 'bg-label-secondary' 
+				WHEN g.is_pass = 1 THEN 'bg-label-success' 
+				WHEN g.is_pass = 2 THEN 'bg-label-warning' 
+				WHEN g.is_pass = 3 THEN 'bg-label-success' 
+				WHEN g.is_pass = 3 THEN 'bg-label-success' 
+				ELSE 'bg-label-secondary' 
+			END as processingBg ";
 		$sql .= " FROM `rms_group` AS `g` 
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
 		";

@@ -48,26 +48,27 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 		$sql = "SELECT  
-				s.stu_id AS id,
-				(SELECT $branch FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name,
-				s.stu_code AS titleRecord,
-				CONCAT(COALESCE(s.stu_khname,''),' / ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS subTitleRecord,
-				(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex,
-				CASE
+				s.stu_id AS id
+				,(SELECT $branch FROM rms_branch WHERE br_id=s.branch_id LIMIT 1) AS branch_name
+				,s.stu_code AS titleRecord
+				
+				,(SELECT $label FROM `rms_view` WHERE type=2 AND key_code = s.sex LIMIT 1) AS sex
+				,CASE
 					WHEN s.primary_phone = 1 THEN s.tel
 					WHEN s.primary_phone = 2 THEN COALESCE(fam.fatherPhone,'')
 					WHEN s.primary_phone = 3 THEN COALESCE(fam.motherPhone,'')
 					ELSE COALESCE(fam.guardianPhone,'')
-				END as tel,
-				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=COALESCE(ds.academic_year,0) LIMIT 1) AS academic,
-				(SELECT group_code FROM `rms_group` WHERE rms_group.id=COALESCE(ds.group_id,0) LIMIT 1) AS group_name
+				END as tel
+				,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=COALESCE(ds.academic_year,0) LIMIT 1) AS academic
+				,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=COALESCE(ds.group_id,0) LIMIT 1) AS group_name
 				,COALESCE(fam.familyCode,'') AS familyCode
 				,(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
 				
 		$sql.=" 
-			
+			,CONCAT(COALESCE(s.stu_khname,''),' / ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS subTitleRecord
 			, s.status AS statusRecord 
 			, s.familyId AS familyId 
+			,ds.group_id AS groupId
 		
 		";
 		//$sql.=$dbp->caseStatusShowImage("s.status");

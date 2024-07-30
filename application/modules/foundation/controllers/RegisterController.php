@@ -46,14 +46,23 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 						,'group_name'=>$link
 						,'academic'=>$link
 						);
-						
+				
+					
 				$actionLink = array(
 						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/register/edit" )
 						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/register/copy" )
 						,array("title" =>"view","recordConnect" =>"id" ,"link" => "/foundation/register/view" )
 						,array("title" =>"editFamily","recordConnect" =>"familyId" ,"link" => "/foundation/family/edit" )
 						);
-				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,$arrayColumnLink,$actionLink);
+				$rowRecordInfo = array(
+					"groupId" => 0,
+					"familyId" => 0,
+				);
+				$additionalOption = array(
+					"actionLink" => $actionLink,
+					"rowRecordInfo" => $rowRecordInfo,
+				);
+				$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,$arrayColumnLink,$additionalOption);
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

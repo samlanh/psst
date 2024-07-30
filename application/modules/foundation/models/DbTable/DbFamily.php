@@ -301,6 +301,21 @@ class Foundation_Model_DbTable_DbFamily extends Zend_Db_Table_Abstract
 		return $rs;
 	}
 	
+	function getDistinctParentGuardianStudent(){
+		$db = $this->getAdapter();
+		$sql = "
+			SELECT 
+				DISTINCT s.`guardian_khname`
+				,s.*
+			FROM `rms_student` AS s 
+			WHERE s.`guardian_khname` IS NOT NULL AND s.`guardian_khname` !='' AND (s.`father_khname` = '' OR s.`father_khname` IS NULL) AND (s.`father_enname` = '' OR s.`father_enname` IS NULL)
+			AND COALESCE(s.`familyId`,0) = 0
+			GROUP BY s.`guardian_khname`
+		";
+		$rs = $db->fetchAll($sql);
+		return $rs;
+	}
+	
 	function checkFatherHasInFamilyId($fatherNameKh){
 		$db = $this->getAdapter();
 		$sql = "
@@ -434,6 +449,67 @@ class Foundation_Model_DbTable_DbFamily extends Zend_Db_Table_Abstract
 					);
 					$this->_name = "rms_student";
 					$where = " father_enname = '".$row["father_enname"]."' AND (`father_khname` = '' OR `father_khname` IS NULL)";
+					$this->update($_arr, $where);	
+				}
+			}
+		}
+		
+		$rsGuard = $this->getDistinctParentGuardianStudent();
+		if(!empty($rsGuard)){
+			foreach($rsGuard as $row){
+				$check = $this->checkFatherHasInFamilyId($row["guardian_khname"]);
+				if(!empty($check)){
+					$_arr= array(
+						'familyId'	=>$check['id'],
+					);
+					$this->_name = "rms_student";
+					$where = " guardian_khname = '".$row["guardian_khname"]."' AND (`father_khname` = '' OR `father_khname` IS NULL) AND (`father_enname` = '' OR `father_enname` IS NULL)";
+					$this->update($_arr, $where);	
+				}else{
+					
+					$_arr= array(
+						'familyType'	=>0,
+						'laonNumber'	=>"",
+						
+						'fatherName'	=>$row['guardian_khname'],
+						'fatherNameKh'	=>$row['guardian_khname'],
+						'fatherPhone'	=>$row['father_phone'],
+						'fatherDob'		=>empty($row['father_dob']) ? "" : $row['father_dob'],
+						'fatherNation'	=>$row['father_nation'],
+						'fatherJob'		=>$row['father_job'],
+						'fatherPhoto'	=>$row['father_photo'],
+						
+						'motherName'	=>$row['mother_enname'],
+						'motherNameKh'	=>$row['mother_khname'],
+						'motherPhone'	=>$row['mother_phone'],
+						'motherDob'		=>empty($row['mother_dob']) ? "" : $row['mother_dob'],
+						'motherNation'	=>$row['mother_nation'],
+						'motherJob'		=>$row['mother_job'],
+						'motherPhoto'	=>$row['mother_photo'],
+
+						'guardianName'	=>$row['guardian_enname'],
+						'guardianNameKh'=>$row['guardian_khname'],
+						'guardianPhone'	=>$row['guardian_tel'],
+						'guardianDob'	=>empty($row['guardian_dob']) ? "" : $row['guardian_dob'],
+						'guardianNation'	=>$row['guardian_nation'],
+						'guardianJob'	=>$row['guardian_job'],
+						'guardianPhoto'	=>$row['guardian_photo'],
+						
+						'street'		=>$row['street_num'],
+						'houseNo'		=>$row['home_num'],
+						'villageId'		=>$row['village_name'],
+						'communeId'		=>$row['commune_name'],
+						'districtId'	=>$row['district_name'],
+						'provinceId'	=>$row['province_id'],
+						'fromCompare'	=>1,
+					);
+					$familyId = $this->addNewFamily($_arr);
+					
+					$_arr= array(
+						'familyId'	=>$familyId,
+					);
+					$this->_name = "rms_student";
+					$where = " guardian_khname = '".$row["guardian_khname"]."' AND (`father_khname` = '' OR `father_khname` IS NULL) AND (`father_enname` = '' OR `father_enname` IS NULL)";
 					$this->update($_arr, $where);	
 				}
 			}

@@ -2267,7 +2267,7 @@ span.addtional-info.bottom-info {
 
 .bg-label-secondary {
     background-color: #ebebed !important;
-    color: #808390 !important
+    color: #656669 !important;
 }
 
 .bg-label-success {
@@ -2276,13 +2276,13 @@ span.addtional-info.bottom-info {
 }
 
 .bg-label-info {
-    background-color: #d6f4f8 !important;
-    color: #00bad1 !important
+    background-color: #a0e4ed !important;
+    color: #006672 !important;
 }
 
 .bg-label-warning {
-    background-color: #fff0e1 !important;
-    color: #ff9f43 !important
+    background-color: #fbe7d4 !important;
+    color: #e07b19 !important;
 }
 
 .bg-label-danger {

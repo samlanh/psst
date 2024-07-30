@@ -1,0 +1,495 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$pageTitle = $tr->translate("RPT_INCOME_REPORT");
+	echo $this->headTitle($pageTitle);
+	
+	$frm =  $this->form_search;
+	$classHideHeight=classHideHeight;
+	$dateFormat ="d/m/Y";
+	
+	$parentCol = $this->parentCol;
+	$countCol = count($parentCol);
+	$dbAcc = new Allreport_Model_DbTable_DbAccountReport();
+?>
+<style>
+	.hideprintdate {
+		display: none !important;
+	}
+	.hover:hover {
+		background: #ddd;
+	}
+</style>
+<div
+	style="min-height: 10cm; margin: 0 auto; padding: 0.2cm 0.2cm 0cm 0.2cm">
+	<div class="card-box">
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0">
+					<i class="fa fa-file-text"></i>&nbsp;&nbsp;&nbsp;<?php echo $pageTitle;?></h4>
+			</div>
+			<div class="col-sm-4 text-right"></div>
+		</div>
+	</div>
+	<form id='foundation_class' action="" dojoType="dijit.form.Form"
+		method="post" enctype="application/x-www-form-urlencoded">
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input dojoType="dijit.form.TextBox" class="fullside" id="adv_search" name="adv_search" value="<?php echo $this->search['adv_search']?>"
+					placeholder="<?php echo $tr->translate("SEARCH");?>" type="text">
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("branch_id");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("degree");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="grade_all" />
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<input id="userId" />
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("start_date");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("end_date");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("receipt_order");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<button class="button-class button-primary"
+					iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12"></div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-12 col-sm-12 col-xs-12"></div>
+		</div>
+	</form>
+	<div id="divPrint">
+		<style>
+			.style {
+				line-height: 20px;
+				font-size: 10px !important;
+			}
+			table.content-data {
+				border-collapse: collapse;
+				border: 1px solid #000;
+				font-size: 8px;
+			}
+			table.content-data tr td{
+				padding:2px;
+			}
+			#header {
+				display: table-header-group;
+				page-break-inside: avoid;
+				page-break-after: auto;
+				margin-top: 100px;
+			}
+			table.content-data tr.titlerow,table.content-data thead tr.style {
+				line-height: 20px;
+				font-size: 10px !important;
+				padding: 1px 0px;
+				white-space: nowrap;
+				height: 24px;
+				background: #c1d0f3;
+				font-weight: 600;
+			}
+			table.content-data tr.style {
+				white-space: nowrap;
+			}
+			.noted {
+				word-wrap: break-word;
+				word-break: break-all;
+				font-size: 8px;
+				line-height: 10px;
+				white-space: normal;
+				max-width: 100px;
+				display: block;
+			}
+			table tr td{
+				font-family: 'Times New Roman', 'Khmer OS Battambang';
+			}
+			.row_data{
+				white-space: normal; max-width: 200px; line-height: 12px;
+			}
+			
+			@media print {
+				.hide {
+					visibility: visible;
+					height: <?php echo $classHideHeight;?>;
+				}
+				@page {
+					page: A4;
+					margin: 0.6cm 0.5cm;
+				}
+				.bgRow {
+					background: #d6e2ff !important;
+					font-size: 11px;
+					}
+			}
+		</style>
+		<table style="width:100%;">
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr style="font-size: 12px;">
+				<td width="15%" align="center"></td>
+				<td align="center" width="70%">
+					<div
+						style="color: #000; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $pageTitle; ?></div>
+						<?php if(!empty($this->search["start_date"])){?>
+						<span style="color: #000; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:18px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></span><?php }?>
+				</td>
+				<td width="15%">
+					<label style="font-size:8px;" class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel" valign="top">
+					<?php 
+					 	
+					 	$i=1;
+						$record=1;
+					 	$summaryInfoArray = array();
+							
+							$oldLabelMethod="";
+							$colspanTotal=$countCol;
+							if($countCol>1){
+								$colspanTotal=$countCol-1;
+							}
+									
+							$paymentMethod="";
+							$bankId="";
+							
+							$totalTutionByMethod=0;
+							$totalPaidByMethod=0;
+							$totalCreditMemoByMethod=0;
+							
+							$gTutionTotal=0;
+							$gTotalPaid=0;
+							$gTotalCreditMemo=0;
+							if(!empty($this->rowStDailyPmt)){
+					 ?>
+					<table class="content-data" width="100%" border="1" align="center">
+						<thead>
+							<tr class="style" align="center">
+								<td scope="col"><?php echo $tr->translate("N_O");?></td>
+								<td scope="col"><?php echo $tr->translate("RECEIPT_NO");?></td>
+								<td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
+								<td scope="col"><?php echo $tr->translate("PAID_DATE");?></td>
+								<td scope="col"><?php echo $tr->translate("GRADE");?></td>
+								<td scope="col"><?php echo $tr->translate("TYPE");?></td>
+								<td scope="col"><?php echo $tr->translate("TOTAL_TUITION");?></td>
+								<td scope="col"><?php echo $tr->translate("DISCOUNT");?></td>
+								<?php if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){?>
+								<td scope="col"><?php echo $mainParent["title"];?></td>
+								<?php } ?>
+								<td scope="col"><?php echo $tr->translate("Credit Memo");?></td>
+								<td scope="col"><?php echo $tr->translate("PAID_AMOUNT");?></td>
+								<td scope="col"><?php echo $tr->translate("PAYMENT_METHOD");?></td>
+								<td scope="col"><?php echo $tr->translate("NOTE");?></td>
+								<td scope="col"><?php echo $tr->translate("TELLER");?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							
+								foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
+								
+								$i++; 
+								$record++;
+								$arr = array(
+									"parentCol"=>$parentCol
+									,"paymentId"=>$rs["paymentId"]
+								);
+								
+								$result = $dbAcc->getPaymentInfoParent($arr);
+								$payTerm="";
+								$tutionTotalFee=0;
+								$tutionTotalFeeLabel="";
+								$tutionFeeDisPer="";
+								$tutionFeeDisAmt="";
+								if(!empty($result[0]["paymentInfo"]["itemsName"])){
+									$payTerm = empty($result[0]["paymentInfo"]["payTerm"]) ? $tr->translate("OTHER") : $result[0]["paymentInfo"]["payTerm"];
+									$tutionTotalFee = empty($result[0]["paymentInfo"]["gSubTotalFee"]) ? 0 : $result[0]["paymentInfo"]["gSubTotalFee"];
+									$tutionTotalFeeLabel = $tutionTotalFee;
+									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"]) ? 0 : $result[0]["paymentInfo"]["totalDiscountPercent"]."%";
+									$tutionFeeDisAmt = empty($result[0]["paymentInfo"]["totalDiscountAmt"]) ? "" : "+".$result[0]["paymentInfo"]["totalDiscountAmt"];
+								}
+								
+							?>
+								
+								<?php 
+									if($paymentMethod !=$rs["payment_method"] || $bankId !=$rs["bank_id"]){
+										$rowLabel = $rs["bankName"];
+										if($rs["payment_method"]==1){
+											$rowLabel = $rs["paymentMethodTitle"];
+										}
+										
+									
+								?>
+								<?php if($kerIndex>0){ 
+								$arryTotal = array(
+									"methodTitle" =>$oldLabelMethod
+									,"totalRecord" =>$i-1
+									,"totalCrediMemoAmt" =>$totalCreditMemoByMethod
+									,"totalPaidAmt" =>$totalPaidByMethod
+								);
+								array_push($summaryInfoArray, $arryTotal);
+									
+								?>
+								<tr class="style">
+									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
+									<td></td>
+									<td align="right"><strong><?php echo number_format($totalTutionByMethod,2);?></strong></td>
+									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<td align="right"><strong><?php echo empty($totalCreditMemoByMethod) ? "" : "(-".number_format($totalCreditMemoByMethod,2).")"; ?></strong></td>
+									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<?php } 
+									$oldLabelMethod = $rowLabel;
+									//reset
+									$totalTutionByMethod=0;
+									$totalPaidByMethod=0;
+									$totalCreditMemoByMethod=0;
+									$i=1;
+								?>
+								<tr class="style">
+									<td colspan="<?php echo 13+$countCol;?>" align="left"><strong><?php echo $rowLabel;?></strong></td>
+								</tr>
+								<?php }?>
+								 <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,1);return false;" style="<?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?>" >
+									<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" class="bold" align="center"><?php echo $rs['receipt_number']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" ><?php echo $rs['studentNameKh']; ?></td>
+									<td data-label="<?php echo $tr->translate("PAID_DATE");?>" align="center"><?php echo date($dateFormat, strtotime($rs['create_date'])); ?></td>
+									<td data-label="<?php echo $tr->translate("GRADE");?>" align="center"><?php echo $rs['gradeTitle']; ?></td>
+									<td data-label="<?php echo $tr->translate("TYPE");?>" align="center"><?php echo $payTerm;?></td>
+									<td data-label="<?php echo $tr->translate("TOTAL_TUITION");?>" align="right"><?php echo $tutionTotalFeeLabel;?></td>
+									<td data-label="<?php echo $tr->translate("DISCOUNT");?>" align="center"><?php echo $tutionFeeDisPer.$tutionFeeDisAmt;?></td>
+									<?php 
+									
+									
+									if(!empty($result)) foreach($result AS $k =>$mainParent){ 
+										$currentAmtLabel="";
+										if(!empty($mainParent["paymentInfo"]["itemsName"])){
+											$currentAmtLabel = 0;
+											if(!empty($mainParent["paymentInfo"]["gTotalPament"])){
+												$gTotalPament = $mainParent["paymentInfo"]["gTotalPament"];
+												$currentAmtLabel = number_format($gTotalPament,2);
+											}
+										}
+									?>
+									<td data-label="<?php echo $mainParent["title"];?>" align="right"><?php echo $currentAmtLabel; ?></td>
+									<?php } ?>
+									
+									<?php 
+									$creditMemoLabel = "";
+									
+									if(!empty($rs['credit_memo'])){
+										if($rs['credit_memo']>0){
+										$creditMemoLabel = "(-".number_format($rs['credit_memo'],2).")";
+										}
+									}
+									?>
+									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right"><?php echo $creditMemoLabel; ?></td>
+									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right"><?php echo number_format($rs['paid_amount'],2); ?></td>
+									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $rs['paymentMethodTitle']; ?></td>
+									<td data-label="<?php echo $tr->translate("NOTE");?>"><span	class="noted"><?php echo $rs['note']; ?></span></td>
+									<td data-label="<?php echo $tr->translate("TELLER");?>" align="center"><?php echo $rs['byUserName'];?></td>
+								</tr>
+								
+								<?php 
+									$totalTutionByMethod = $totalTutionByMethod + $tutionTotalFee;
+									$totalPaidByMethod = $totalPaidByMethod + $rs['paid_amount'];
+									$totalCreditMemoByMethod = $totalCreditMemoByMethod + $rs['credit_memo'];
+									
+									
+									$gTutionTotal = $gTutionTotal + $tutionTotalFee;
+									$gTotalPaid = $gTotalPaid + $rs['paid_amount'];
+									$gTotalCreditMemo = $gTotalCreditMemo + $rs['credit_memo'];
+									
+									$paymentMethod=$rs["payment_method"];
+									$bankId=$rs["bank_id"];
+								?>
+							<?php }
+								$arryTotal = array(
+									"methodTitle" =>$oldLabelMethod
+									,"totalRecord" =>$i
+									,"totalCrediMemoAmt" =>$totalCreditMemoByMethod
+									,"totalPaidAmt" =>$totalPaidByMethod
+								);
+								array_push($summaryInfoArray, $arryTotal);
+							?>
+								<tr class="style">
+									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
+									<td></td>
+									<td align="right"><strong><?php echo number_format($totalTutionByMethod,2);?></strong></td>
+									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<td align="right"><strong><?php echo empty($totalCreditMemoByMethod) ? "" : "(-".number_format($totalCreditMemoByMethod,2).")"; ?></strong></td>
+									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr class="style">
+									<td colspan="7" align="right"><strong><?php echo $tr->translate("GRAND_TOTAL");?></strong></td>
+									<td></td>
+									<td align="right"><strong><?php echo number_format($gTutionTotal,2);?></strong></td>
+									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<td align="right"><strong><?php echo empty($gTotalCreditMemo) ? "" : "(-".number_format($gTotalCreditMemo,2).")"; ?></strong></td>
+									<td align="right"><strong><?php echo number_format($gTotalPaid,2);?></strong></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+						
+						</tbody>
+					</table>
+					<div style="display: flex;width: 100%;text-align: right;align-content: end;flex-wrap: wrap;flex-direction: column;margin-top: 10px;">
+						<table class="content-data" style="width: 25%; text-align: center; margin: 0 auto; font-weight: bold; border: 0;  font-size: 10px !important;">
+							<tr>
+								<td colspan="3" align="center"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
+							</tr>
+							<tr>
+								<td width="20%"align="right"><?php echo $tr->translate("GRAND_TOTAL");?></td>
+								<td width="45%" align="center"><?php echo sprintf('%02d', $record);?></td>
+								<td width="35%" align="right"><?php echo number_format($gTotalPaid,2);?></td>
+							</tr>
+							<?php if(!empty($summaryInfoArray)) foreach($summaryInfoArray as $sum){?>
+							<tr>
+								<td align="right"><?php echo $sum["methodTitle"];?></td>
+								<td align="center"><?php echo sprintf('%02d', $sum["totalRecord"]);?></td>
+								<td align="right"><?php echo number_format($sum["totalPaidAmt"],2);?></td>
+							</tr>
+							<?php } ?>
+						</table>
+					</div>
+					<?php echo $this->rsfooteracc;?>
+					<?php } ?>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js" type="text/javascript"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dijit.form.CheckBox"); 
+	
+	dojo.ready(function(){
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "grade_all",
+			name: "grade_all",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			onChange: function() {  
+			}
+		}, "grade_all");
+		
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false,                     
+			required: false,                        
+			id: "userId",
+			name: "userId",  
+			class: 'fullside',  
+			placeHolder:"<?php echo $tr->translate("SELECT_USER");?>",          
+			onChange: function() {  
+			}
+		}, "userId");
+
+		var branch_id = dijit.byId('branch_id');
+		branch_id.on('change', function(evt) {
+			 getAllUser();
+		});
+		
+		getallGrade();
+		getAllUser();
+	});
+	
+	function getAllUser(){
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		let url_user = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'get-user')); ?>';
+		contentData = {
+				'branchId':branch_id
+			}
+			selectedId = '';
+			if('<?php echo $this->search['branch_id']?>'==branch_id){
+				selectedId = '<?php echo $this->search['userId']?>';
+			}
+			getAllUserByBranch(url_user,contentData,selectedId);
+	}
+	
+	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+	function getallGrade(){
+		dept_id = dijit.byId('degree').get('value');
+		if(dept_id==''){return false;}
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('grade_all').set('store',grade_store);   
+				dijit.byId('grade_all').attr('value','<?php echo $this->search['grade_all']?>');  
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+
+	var row=0;
+	var typereceipt=1;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="receipt"){
+					if(typereceipt==1){//Student Payment
+						url='<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/";?>';
+					}else if(typereceipt==2){//Other Income
+						url='<?php echo $this->baseUrl()."/allreport/accounting/reprint-other-income/id/";?>';
+					}else if(typereceipt==3){//Other Expense
+						url='<?php echo $this->baseUrl()."/allreport/accounting/rpt-expensedetail/id/";?>';
+					}
+				}
+				gotoAction();
+			},
+			items:{
+				"receipt": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-money", accesskey: "c"},
+			}
+		});
+	});
+	function setrowdata(index,type){
+		row = index;
+		typereceipt = type;
+	}
+	var recordid ='';
+	function gotoAction(){
+		 window.open(url+row, '_blank');
+	}
+</script>

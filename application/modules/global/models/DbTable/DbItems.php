@@ -116,6 +116,7 @@
 		$_db= $this->getAdapter();
 		$show = SHOW_IN_DEGREE;
 		try{
+			$isparent = empty($_data['isParent'])?0:1;
 			$_data['parentId'] = empty($_data['parentId']) ? 0 : $_data['parentId'];
 			$_arr=array(
 					'parent'	  	=> $_data['parentId'],
@@ -127,7 +128,9 @@
 					'create_date' 	=> date("Y-m-d H:i:s"),
 					'modify_date' 	=> date("Y-m-d H:i:s"),
 					'status'		=> 1,
-					'user_id'	 	=> $this->getUserId()
+					'user_id'	 	=> $this->getUserId(),
+					'is_parent'	 	=> $isparent,
+					
 			);
 			if ($_data['type']==1){
 				$_arr['schoolOption'] = $_data['schoolOption'];
@@ -195,7 +198,7 @@
 		$_db= $this->getAdapter();
 		$show = SHOW_IN_DEGREE;
 		try{
-			
+			$isparent = empty($_data['isParent'])?0:1;
 			$_data['parentId'] = empty($_data['parentId']) ? 0 : $_data['parentId'];
 			$status = empty($_data['status'])?0:1;
 			$_arr=array(
@@ -207,7 +210,8 @@
 					'ordering'		=> $_data['ordering'],
 					'modify_date' 	=> date("Y-m-d H:i:s"),
 					'status'		=> $status,
-					'user_id'	  	=> $this->getUserId()
+					'user_id'	  	=> $this->getUserId(),
+					'is_parent'	 	=> $isparent,
 			);
 			if ($_data['type']==1){
 				$_arr['schoolOption'] = $_data['schoolOption'];

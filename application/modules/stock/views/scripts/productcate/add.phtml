@@ -56,6 +56,13 @@ ul.opt-school {
 													</div> 
 												</div>
 												<div class="form-group">
+													<label class="control-label custom-switch float-start "> 
+														<a href="javascript:void(0);"  class="switchButton status"><?php echo $tr->translate("Is Parent");?></a> 
+														<input type="checkbox"  id="isParent" name="isParent" class="custom-switch-input"  onChange="Checkchange();"> 
+														<span class="custom-switch-indicator custom-radius switch-status"></span> 
+													</label>
+												</div>
+												<div class="form-group">
 													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?></label>
 													<div class="col-md-7 col-sm-7 col-xs-12">
 														<?php echo $frm_degree->getElement("parentId");?>
@@ -87,7 +94,7 @@ ul.opt-school {
 														<?php echo $frm_degree->getElement("note");?>
 													</div>
 												</div>
-
+												
 										</div>
 									</div>
 							</div>
@@ -162,4 +169,13 @@ function CheckAllTotal(index){
 		}
 	}
 }
+function Checkchange(){
+	if (dojo.byId("isParent").checked){
+		dijit.byId('parentId').attr('value',''); 
+		dijit.byId('parentId').set('readOnly',true); 
+	}else{
+		 dijit.byId('parentId').set('readOnly',false); 
+	}
+}
+
 </script>

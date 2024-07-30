@@ -49,10 +49,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 				
 					
 				$actionLink = array(
-						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/group/edit" )
-						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/group/copy" )
-						,array("title" =>"view","recordConnect" =>"id" ,"link" => "/foundation/group/view" )
-						,array("title" =>"editFamily","recordConnect" =>"familyId" ,"link" => "/foundation/group/edit" )
+						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/register/edit" )
+						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/register/copy" )
+						,array("title" =>"view","recordConnect" =>"id" ,"link" => "/foundation/register/view" )
+						,array("title" =>"editFamily","recordConnect" =>"familyId" ,"link" => "/foundation/family/edit" )
 						);
 				$rowRecordInfo = array(
 					"groupId" => 0,

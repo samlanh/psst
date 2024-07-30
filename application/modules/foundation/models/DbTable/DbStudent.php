@@ -71,8 +71,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			,ds.group_id AS groupId
 		
 		";
-		//$sql.=$dbp->caseStatusShowImage("s.status");
-		
 		$sql.=" FROM 
 					rms_student AS s
 					LEFT JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.is_current=1 

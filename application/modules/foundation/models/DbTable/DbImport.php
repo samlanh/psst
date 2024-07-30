@@ -293,5 +293,69 @@ class Foundation_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 			return $itemId;
 		}
 	}
+	
+	
+	function checkFamilyInfo($data){
+		$db = $this->getAdapter();
+		$sql="
+			SELECT 
+				i.id FROM rms_family AS i
+			WHERE 1 ";
+		$sql.=" AND i.fatherNameKh= '".$data['fatherNameKh']."'";
+		$sql.=" AND i.fatherPhone = '".$data['fatherPhone']."'";
+		$sql.=" AND i.motherNameKh = '".$data['motherNameKh']."'";
+		$sql.=" AND i.motherPhone = '".$data['motherPhone']."'";
+		$sql.=" LIMIT 1 ";
+		$itemId= $db->fetchOne($sql);
+		return $itemId;
+	}
+	function importFamily($formData,$data)
+	{
+		
+		$count = count($data);
+		for ($i = 2; $i <= $count; $i++) {
+			$fatherPhone = empty($data[$i]['E']) ? "" : $data[$i]['E'];
+			$fatherPhone = empty($data[$i]['F']) ? $fatherPhone : $fatherPhone." / ".$data[$i]['F'];
+			
+			$motherPhone = empty($data[$i]['I']) ? "" : $data[$i]['I'];
+			$motherPhone = empty($data[$i]['J']) ? $motherPhone : $motherPhone." / ".$data[$i]['J'];
+		
+			
+			$param = array(
+				'familyType'	=>$data[$i]['P'],
+				'laonNumber'	=>$data[$i]['O'],
+				'familyCode'	=>$data[$i]['B'],
+				
+				'fatherName'	=>$data[$i]['C'],
+				'fatherNameKh'	=>$data[$i]['D'],
+				'fatherPhone'	=>$fatherPhone,
+				'fatherNation'	=>1,
+				'fatherJob'		=>0,
+				
+				'motherName'	=>$data[$i]['G'],
+				'motherNameKh'	=>$data[$i]['H'],
+				'motherPhone'	=>$motherPhone,
+				'motherNation'	=>1,
+				'motherJob'		=>0,
+				
+				'street'		=>$data[$i]['M'],
+				'houseNo'		=>$data[$i]['N'],
+				'villageId'		=>0,
+				'communeId'		=>0,
+				'districtId'	=>0,
+				'provinceId'	=>12,
+				'note'	=>$data[$i]['R'],
+				'createDate'	=>date("Y-m-d H:i:s"),
+				'modifyDate'	=>date("Y-m-d H:i:s"),
+				'userId'		=>1,
+
+			);
+			$familyId = $this->checkFamilyInfo($param);
+			if(empty($familyId)){
+				$this->_name = 'rms_family';
+				$this->insert($param);
+			}
+		}
+	}
 }   
 

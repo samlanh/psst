@@ -30,7 +30,7 @@ class Foundation_importController extends Zend_Controller_Action {
 				}
 				
 				$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-				$db->updateItemsByImport($data,$sheetData);
+				$db->importFamily($data,$sheetData);
 				Application_Form_FrmMessage::message("Import Successfully");
 				
 			}

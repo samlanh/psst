@@ -65,8 +65,8 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				,(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name ";
 				
 		$sql.=" 
-			,CONCAT(COALESCE(s.stu_khname,''),' / ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS subTitleRecord
 			, s.status AS statusRecord 
+			,CONCAT(COALESCE(s.stu_khname,''),' / ',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS subTitleRecord
 			, s.familyId AS familyId 
 			,ds.group_id AS groupId
 		

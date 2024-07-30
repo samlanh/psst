@@ -1444,7 +1444,7 @@ function getFamilyIdList() {
 	let urlGetFamilyList = '<?php echo $this->url(array('module' => 'foundation', 'controller' => 'family', 'action' => 'get-family-list')); ?>';
 	contentData = {
 		'option':1,
-		'recordType':2,//fatherName
+		'recordType':1,//general
 		'formType':'input',
 	}
 	dojo.xhrPost({

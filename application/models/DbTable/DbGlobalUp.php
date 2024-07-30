@@ -225,29 +225,48 @@ class Application_Model_DbTable_DbGlobalUp extends Zend_Db_Table_Abstract
 			$districtCol = 'district_namekh';
 		}
 		$recordType = empty($data["recordType"]) ? 2 : $data["recordType"];
+		
+		$concate=" 
+			CASE 
+				WHEN (fam.fatherNameKh IS NULL OR fam.fatherNameKh ='') AND (fam.motherNameKh IS NOT NULL OR fam.motherNameKh !='') 
+					THEN  CONCAT(fam.`familyCode`,' ',COALESCE(fam.motherNameKh,''))
+				WHEN (fam.motherNameKh IS NULL OR fam.motherNameKh ='') AND (fam.fatherNameKh IS NOT NULL OR fam.fatherNameKh !='' )
+					THEN  CONCAT(fam.`familyCode`,' ',COALESCE(fam.fatherNameKh,''))
+				ELSE CONCAT(fam.`familyCode`,' ',COALESCE(fam.fatherNameKh,''),' / ',COALESCE(fam.motherNameKh,''))
+			END 
+		";
 		$familyConcat = "fatherNameKh";
 		$familyConcatEn = "fatherName";
 		$familyPhone = "fatherPhone";
 		$photoColumn = "fatherPhoto";
-		$whereFamily=" AND fam.`fatherNameKh` !='' ";
-		if($recordType==3){
+		$whereFamily=" ";
+		if($recordType==2){
+			$familyConcat = "fatherNameKh";
+			$familyConcatEn = "fatherName";
+			$familyPhone = "fatherPhone";
+			$photoColumn = "fatherPhoto";
+			$whereFamily=" AND fam.`fatherNameKh` !='' ";
+			$concate=" CONCAT(fam.`familyCode`,' ',COALESCE(fam.fatherNameKh,''))";
+		}else if($recordType==3){
 			$familyConcat = "motherNameKh";
 			$familyConcatEn = "motherName";
 			$familyPhone = "motherPhone";
 			$photoColumn = "motherPhoto";
 			$whereFamily=" AND fam.`motherNameKh` !='' ";
+			$concate=" CONCAT(fam.`familyCode`,' ',COALESCE(fam.motherNameKh,''))";
 		}else if($recordType==4){
 			$familyConcat = "guardianNameKh";
 			$familyConcatEn = "guardianName";
 			$familyPhone = "guardianPhone";
 			$photoColumn = "guardianPhoto";
 			$whereFamily=" AND fam.`guardianNameKh` !='' ";
+			$concate=" CONCAT(fam.`familyCode`,' ',COALESCE(fam.guardianNameKh,''))";
 		}
 		
 		$sql = " 
 			SELECT 
 				fam.`id`
-				,CONCAT(fam.`familyCode`,COALESCE(fam.$familyConcat,'')) AS `name`
+				,$concate AS `name`
 				,fam.$familyConcat AS familyName
 				,fam.$familyConcatEn AS familyNameEn
 				,fam.$familyPhone AS familyPhone

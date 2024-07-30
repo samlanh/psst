@@ -228,9 +228,9 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			,CASE 
 				WHEN g.is_pass = 0 THEN 'bg-label-secondary' 
 				WHEN g.is_pass = 1 THEN 'bg-label-success' 
-				WHEN g.is_pass = 2 THEN 'bg-label-warning' 
-				WHEN g.is_pass = 3 THEN 'bg-label-success' 
-				WHEN g.is_pass = 3 THEN 'bg-label-success' 
+				WHEN g.is_pass = 2 THEN 'bg-label-primary' 
+				WHEN g.is_pass = 3 THEN 'bg-label-info' 
+				WHEN g.is_pass = 4 THEN 'bg-label-success' 
 				ELSE 'bg-label-secondary' 
 			END as processingBg ";
 		$sql .= " FROM `rms_group` AS `g` 

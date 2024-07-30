@@ -37,7 +37,21 @@ class Foundation_GroupController extends Zend_Controller_Action
 			$link = array(
 				'module' => 'foundation', 'controller' => 'group', 'action' => 'edit',
 			);
-			$this->view->list = $list->getCheckList(10, $collumns, $rs_rows, array('branch_name' => $link, 'titleRecord' => $link, 'tuitionfee_id' => $link, 'degree' => $link, 'grade' => $link));
+			
+			$actionLink = array(
+						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/register/edit" )
+						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/register/copy" )
+						,array("title" =>"STUDENT_LIST_REPORT","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-group" )
+						,array("title" =>"STUDENT_LIST","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-list" )
+						,array("title" =>"STUDENT_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-att-list" )
+						,array("title" =>"TOTAL_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-totalattendance" )
+						);
+				
+			$additionalOption = array(
+				"actionLink" => $actionLink,
+			);
+				
+			$this->view->list = $list->getCheckList(10, $collumns, $rs_rows, array('branch_name' => $link, 'titleRecord' => $link, 'tuitionfee_id' => $link, 'degree' => $link, 'grade' => $link),$additionalOption);
 		} catch (Exception $e) {
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

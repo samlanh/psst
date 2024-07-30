@@ -144,7 +144,7 @@ class Application_Form_Frmtable
 									$row_str.='<td '.$clisc.' >'.$read.'</td>';
 								}
 							}
-			  				if($i > count($columns)) {
+			  				if($i >= count($columns)) {
 	    						if(!empty($actionLink)) {
 									$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
 									$row_str.='<td '.$clisc.' style=" position:relative; ">';

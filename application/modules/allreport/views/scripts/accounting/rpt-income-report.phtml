@@ -155,7 +155,6 @@
 					<?php 
 					 	
 					 	$i=1;
-						$record=1;
 					 	$summaryInfoArray = array();
 							
 							$oldLabelMethod="";
@@ -203,7 +202,6 @@
 								foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
 								
 								$i++; 
-								$record++;
 								$arr = array(
 									"parentCol"=>$parentCol
 									,"paymentId"=>$rs["paymentId"]
@@ -267,7 +265,7 @@
 									<td colspan="<?php echo 13+$countCol;?>" align="left"><strong><?php echo $rowLabel;?></strong></td>
 								</tr>
 								<?php }?>
-								 <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['id'];?>,1);return false;" style="<?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?>" >
+								 <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['paymentId'];?>,1);return false;" style="<?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?>" >
 									<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
 									<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" class="bold" align="center"><?php echo $rs['receipt_number']; ?></td>
 									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" ><?php echo $rs['studentNameKh']; ?></td>
@@ -362,7 +360,7 @@
 							</tr>
 							<tr>
 								<td width="20%"align="right"><?php echo $tr->translate("GRAND_TOTAL");?></td>
-								<td width="45%" align="center"><?php echo sprintf('%02d', $record);?></td>
+								<td width="45%" align="center"><?php echo sprintf('%02d', count($this->rowStDailyPmt));?></td>
 								<td width="35%" align="right"><?php echo number_format($gTotalPaid,2);?></td>
 							</tr>
 							<?php if(!empty($summaryInfoArray)) foreach($summaryInfoArray as $sum){?>

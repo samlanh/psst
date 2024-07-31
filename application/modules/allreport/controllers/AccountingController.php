@@ -1377,8 +1377,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$parentCol =  $db->getMainParentOfItems();
 		$this->view->parentCol =  $parentCol;
 		
+		
 		$rowStDailyPmt =  $db->getStudentPaymentDaily($search);
 		$this->view->rowStDailyPmt =  $rowStDailyPmt;
+		
 		
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

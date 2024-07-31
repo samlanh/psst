@@ -120,11 +120,8 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			$labelFull = $dbGb->getViewLabelDisplay();
 			$labelShort = $dbGb->getViewLabelDisplay("shortcut");
 			
-			$currentLang = $dbGb->currentlang();
-			$columnItem = "title_en";
-			if($currentLang==1){// khmer
-				$columnItem = "title";
-			}
+			
+			$columnItem = "shortcut";
 			
 			$db=$this->getAdapter();
 			$fromDate =(empty($search['start_date']))? '1': " DATE_FORMAT(spmt.`create_date`, '%Y-%m-%d %H:%i:%s') >= '".$search['start_date']." 00:00:00'";
@@ -140,16 +137,24 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 						,fam.`street`
 						,fam.`houseNo`
 						,(SELECT v.$labelShort FROM `rms_view` AS v WHERE v.type =41 AND v.key_code = fam.`familyType` LIMIT 1) AS familyTypeTitle
-						,g.`group_code` AS groupCode
 						,(SELECT i.$columnItem FROM `rms_items` AS i WHERE i.type=1 AND i.id = spmt.degree LIMIT 1) AS degreeTitle
 						,(SELECT itd.$columnItem FROM `rms_itemsdetail` AS itd WHERE itd.`items_type`=1 AND itd.id = spmt.grade LIMIT 1) AS gradeTitle
 						,(SELECT u.first_name FROM rms_users AS u WHERE u.id = spmt.user_id LIMIT 1) AS byUserName
 						,spmt.id AS paymentId
-						,spmt.*
+						,spmt.receipt_number
+						,spmt.create_date
+						,spmt.credit_memo
+						,spmt.grand_total
+						,spmt.penalty
+						,spmt.paid_amount
+						,spmt.balance_due
+						,spmt.payment_method
+						,spmt.bank_id
+						,spmt.note
+						,spmt.is_void
 				  FROM
 						`rms_student_payment` AS spmt 
 						JOIN (`rms_student` AS s LEFT JOIN `rms_family` AS fam ON fam.`id` = s.`familyId`) ON s.`stu_id` = spmt.`student_id`
-						LEFT JOIN  `rms_group` AS g ON g.id =  spmt.`group_id` 
 				  WHERE 1
 						
 						$branch_id ";
@@ -167,7 +172,6 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 				$s_where[] = " REPLACE(fam.`laonNumber`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(fam.`street`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(fam.`houseNo`,' ','') LIKE '%{$s_search}%'";
-				$s_where[] = " REPLACE(g.`group_code`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(spmt.receipt_number,' ','') LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}

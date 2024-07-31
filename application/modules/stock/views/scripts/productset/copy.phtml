@@ -246,16 +246,19 @@ fieldset{  background:none;}
 		$("#parentcategory").select2(
 			{dropdownAutoWidth : true,allowClear: "true"}
 		);
+		getRefreshProduct();
 	});	
 	function getRefreshProduct(){
 		branch_id=dijit.byId("branch_search").get("value");
 	    if(branch_id=='' || branch_id==-1){
 		    alert("Please Selected Branch Name!");
 		    return false ;
-	    }										
+	    }
+		parentId = $('#parentcategory').val();										
 		category=dijit.byId("category").get("value");	
 		var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
 		contentData = {
+			'parentId':parentId,
 			'itemsType':3,
 			'itemId':category,
 			'isProductset':0,
@@ -461,5 +464,6 @@ function filterSubCategory(){
 		subcategorystore = getDataStorefromJSON('id', 'name', datajsonparent);
 		dijit.byId('category').set('store', subcategorystore);
 	}
+	getRefreshProduct();
 }
 </script>

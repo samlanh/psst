@@ -346,7 +346,22 @@ class Application_Form_FrmGlobal
 			$str .= "<tr><td>&nbsp;</td></tr>";
 		}
 		if ($footerType == 1) { //Account General
-			$str .= "	
+			$footerAccountType=1;//PSIS CHV
+			if($footerAccountType==1){
+				$str .= "	
+				<tr>
+					<td width='25%' align='center'>
+						
+					</td>
+					<td width='50%' align='center'>
+						<span>" . $tr->translate('chiefCashier') . "</span>
+					</td>
+					<td width='25%' align='center'>
+						<span>" . $tr->translate('cashier') . "</span>
+					</td>
+				</tr>";
+			}else{ // General
+				$str .= "	
 				<tr>
 					<td width='25%' align='center'>
 						<span>" . $tr->translate('APPROVED_BY') . "</span>
@@ -358,6 +373,7 @@ class Application_Form_FrmGlobal
 						<span>" . $tr->translate('PREPARED_BY') . "</span>
 					</td>
 				</tr>";
+			}
 		} else if ($footerType == 2) { //Foundation General
 			$str .= '
 					<tr>

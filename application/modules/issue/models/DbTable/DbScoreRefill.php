@@ -111,6 +111,7 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 				$overallAssessmentSemester = 0;
 				$monthlySemesterAvg_kh=0;
 				$monthlySemesterAvg_en=0;
+				$monthlySemesterAvg_ch=0;
 
 				$totalScoreKh = 0;
 				$totalScoreEng = 0;
@@ -199,15 +200,18 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 
 									$monthlySemesterAvgKh = ($avgkh + $monthlySemesterAvg_kh) / 2;
 									$monthlySemesterAvgEn = ($avgeEn + $monthlySemesterAvg_en) / 2;
+									$monthlySemesterAvgCh = ($avgeEn + $monthlySemesterAvg_ch) / 2;
 
 									$arr["monthlySemesterAvg"] = $monthlySemesterAvg;
 									$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
 
 									$arr["totalKhAvg"] = $monthlySemesterAvg_kh;
 									$arr["totalEnAvg"] = $monthlySemesterAvg_en;
+									$arr["totalChAvg"] = $monthlySemesterAvg_ch;
 								
 									$arr["OveralAvgKh"] = $monthlySemesterAvgKh;
 									$arr["OveralAvgEng"] = $monthlySemesterAvgEn;
+									$arr["OveralAvgCh"] = $monthlySemesterAvgCh;
 								
 							} else if ($_data['examTypeId'] == 1) {  //   Month
 
@@ -271,6 +275,7 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 
 						$monthlySemesterAvg_kh = empty($_data['totalKhAvg' . $i]) ? 0 : $_data['totalKhAvg' . $i];
 						$monthlySemesterAvg_en = empty($_data['totalEnAvg' . $i]) ? 0 : $_data['totalEnAvg' . $i];
+						$monthlySemesterAvg_ch = empty($_data['totalChAvg' . $i]) ? 0 : $_data['totalChAvg' . $i];
 					
 
 						$param = array(
@@ -411,17 +416,21 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 
 								$monthlySemesterAvgKh = ($avgkh + $monthlySemesterAvg_kh) / 2;
 								$monthlySemesterAvgEn = ($avgeEn + $monthlySemesterAvg_en) / 2;
+								$monthlySemesterAvgCh = ($avgeEn + $monthlySemesterAvg_ch) / 2;
+								
 					
 
 								$arr["monthlySemesterAvg"] = $monthlySemesterAvg;
 								$arr["overallAssessmentSemester"] = $overallAssessmentSemester;
 
-								$arr["totalKhAvg"] = $monthlySemesterAvg_en;
+								$arr["totalKhAvg"] = $monthlySemesterAvg_kh;
 								$arr["totalEnAvg"] = $monthlySemesterAvg_en;
+								$arr["totalChAvg"] = $monthlySemesterAvg_ch;
 							
 
 								$arr["OveralAvgKh"] = $monthlySemesterAvgKh;
 								$arr["OveralAvgEng"] = $monthlySemesterAvgEn;
+								$arr["OveralAvgCh"] = $monthlySemesterAvgCh;
 							
 
 						} else if ($_data['examTypeId'] == 1) {  //   Month
@@ -502,16 +511,33 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 		$currentLang = $dbp->currentlang();
 		$title = 's.title_score_en';
 		$label = 'name_en';
+		$month = "month_en";
 		if ($currentLang == 1) {
 			$title = 's.title_score';
 			$label = 'name_kh';
+			$month = "month_kh";
 		}
-
+        $sub_title="CASE
+				WHEN s.exam_type = 2 THEN s.for_semester
+				ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1)
+				END 
+				as forMonth";
 		$sql = "SELECT 
 				s.`id` AS id,
-				CONCAT($title,'(',(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1),')' )  AS name
+				CONCAT(
+					$title, ' ( ',
+						(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1),
+						CASE
+							WHEN s.exam_type = 3 THEN ''
+							WHEN s.exam_type = 2 THEN s.for_semester
+							ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1)
+						END 
+					,')'
+					
+				) AS name
+				
 			FROM rms_score AS s 
-			WHERE 1 ";
+			WHERE s.status= 1  ";
 
 			if (!empty($data['branch_id'])) {
 				$sql .= " AND `s`.`branch_id` =" . $data['branch_id'];
@@ -579,6 +605,7 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 
 		$sqlstr =	" , 0 AS totalKhAvg
 					  , 0 AS totalEnAvg
+					  , 0 AS totalChAvg
 					  , 0 AS monthlySemesterAvg
 
 		            ";
@@ -598,6 +625,14 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 						AND s.for_semester=".$data['semesterId']."
 						AND s.exam_type=1 
 						AND s.group_id=".$data['groupId']." LIMIT 1 ),2), 0) AS totalEnAvg
+
+						,COALESCE( FORMAT((SELECT SUM(sm.totalChAvg)/COUNT(sm.totalChAvg)/g.`semesterPercentage` FROM `rms_score_monthly` AS sm 
+						INNER JOIN `rms_score` AS s  ON s.`id` =sm.`score_id` 
+						LEFT JOIN `rms_group` AS g ON s.group_id = g.id
+						WHERE sm.`student_id` = st.`stu_id` 
+						AND s.for_semester=".$data['semesterId']."
+						AND s.exam_type=1 
+						AND s.group_id=".$data['groupId']." LIMIT 1 ),2), 0) AS totalChAvg
 
 						,COALESCE( FORMAT((SELECT SUM(sm.total_avg)/COUNT(sm.total_avg)/g.`semesterPercentage` FROM `rms_score_monthly` AS sm 
 						INNER JOIN `rms_score` AS s  ON s.`id` =sm.`score_id` 
@@ -625,6 +660,7 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 				$results['sex'] = $studentRow['sex'];
 				$results['totalKhAvg'] = $studentRow['totalKhAvg'];
 				$results['totalEnAvg'] = $studentRow['totalEnAvg'];
+				$results['totalChAvg'] = $studentRow['totalChAvg'];
 				$results['monthlySemesterAvg'] = $studentRow['monthlySemesterAvg'];
               
 				$gradingScore = array();

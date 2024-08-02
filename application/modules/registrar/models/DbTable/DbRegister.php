@@ -169,6 +169,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     							'qty_receive'=>$row['set_qty'] * $data['qty_'.$i],
     							'remain'=>0,
     							'remide_date'=>'',
+    							'paymentId'=>$data['paymentId'],
     					);
     					$this->_name ='rms_cutstock_detail';
     					$this->insert($arrs);
@@ -227,6 +228,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     					'qty_receive'=>$data['qty_'.$i],
     					'remain'=>0,
     					'remide_date'=>'',
+						'paymentId'=>$data['paymentId'],
     			);
     			$this->_name ='rms_cutstock_detail';
     			$this->insert($arrs);
@@ -398,13 +400,13 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'feeId'			=>$data['academic_year_'.$i],
 								'service_type'	=>$rs_item['items_type'],
 								'itemdetail_id'	=>$data['item_id'.$i],
-								'payment_term'	=>$data['term_'.$i],
+								'payment_term'	=>empty($data['term_'.$i]) ? 0 : $data['term_'.$i],// underfined when submit product
 								'fee'			=>$data['price_'.$i],
 								'qty'			=>$data['qty_'.$i],
 								'qty_balance'	=>$data['qty_'.$i],
 								'subtotal'		=>$data['subtotal_'.$i],
 								'extra_fee'		=>$data['extra_fee'.$i],
-								'discount_type'	=>$data['discount_type'.$i],
+								'discount_type'	=>empty($data['discount_type'.$i]) ? 0 : $data['discount_type'.$i],// underfined when submit product
 								'discount_percent'=>$data['discount_'.$i],
 								'discount_amount'=>$data['discount_amount'.$i],
 								'totalpayment'	=>$data['total_amount'.$i],

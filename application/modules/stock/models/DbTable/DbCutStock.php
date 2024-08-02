@@ -79,6 +79,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS stu_code,
 					(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) AS tel,
 					(SELECT name_kh FROM `rms_view` WHERE type=2 AND key_code = (SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = sp.student_id LIMIT 1) LIMIT 1) AS gender,
+					(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS productCode,
 					(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
 					(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
 				FROM 
@@ -130,9 +131,10 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+					<input type="text" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
     			</td>
-    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel" >'.$row['receipt_number'].'</label>
-    			<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+    			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="productcodelabel'.$no.'" title="'.$row['productCode'].'" class="productcodelabel" >'.$row['productCode'].'</label>
+    			<input type="hidden" dojoType="dijit.form.TextBox" name="productCode'.$no.'" id="productCode'.$no.'" value="'.$row['productCode'].'" >
     			&nbsp;</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
     				<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
@@ -260,7 +262,7 @@ if(!empty($type)){
     			
     			$arrs = array(
     					'cutstock_id'=>$cut_id,
-//     					'paymentId'=>$_data['payment_id'.$i],
+     					'paymentId'=>$_data['payment_id'.$i],
     					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
     					'product_id'=>$_data['itemdetail_id'.$i],
     					'due_amount'=>$_data['qty_balance'.$i],
@@ -312,8 +314,9 @@ if(!empty($type)){
     		$sql="
     		SELECT
     		pp.id,
-    		(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
-    		pp.serailno,
+			(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = pp.branch_id LIMIT 1) AS branch_name,
+			pp.serailno,
+			(SELECT GROUP_CONCAT(p.receipt_number) FROM rms_student_payment AS p WHERE p.id IN(SELECT ct.paymentId FROM `rms_cutstock_detail` AS ct WHERE ct.cutstock_id = pp.id ) ) AS refReceiptNum,
     		(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = pp.student_id LIMIT 1 ) AS student_name,
 			CASE 
 				WHEN pp.cut_stock_type=1 THEN   '$cut_stock'
@@ -369,7 +372,8 @@ if(!empty($type)){
 			s.stu_code AS stu_code,
 			s.tel,
 			(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) as gender,
-			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name
+			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name,
+			(SELECT GROUP_CONCAT(p.receipt_number) FROM rms_student_payment AS p WHERE p.id IN(SELECT ct.paymentId FROM `rms_cutstock_detail` AS ct WHERE ct.cutstock_id = pp.id ) ) AS refReceiptNum
     	FROM 
 			rms_cutstock AS pp,
 			rms_student s  
@@ -383,9 +387,10 @@ if(!empty($type)){
     function getCutStockDetailBYId($cutstockid){
     	$db=$this->getAdapter();
     	$sql="SELECT ct.*,
-(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
-(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE sp.id = (SELECT spd.payment_id FROM `rms_saledetail` AS spd WHERE spd.id = ct.student_paymentdetail_id LIMIT 1) LIMIT 1) AS receipt_number
-    	 FROM `rms_cutstock_detail` AS ct
+				(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS code,
+				(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
+				(SELECT sp.receipt_number FROM `rms_student_payment` AS sp WHERE sp.id = (SELECT spd.payment_id FROM `rms_saledetail` AS spd WHERE spd.id = ct.student_paymentdetail_id LIMIT 1) LIMIT 1) AS receipt_number
+    		 FROM `rms_cutstock_detail` AS ct
 				WHERE ct.cutstock_id=$cutstockid";
     	return $db->fetchAll($sql);
     }
@@ -426,6 +431,7 @@ if(!empty($type)){
 					(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS stu_code,
 					(SELECT s.tel FROM `rms_student` AS s WHERE s.stu_id = (SELECT sp.student_id FROM `rms_student_payment` AS sp WHERE spd.payment_id = sp.id LIMIT 1) LIMIT 1) AS tel,
 					'' as gender,
+					(SELECT ie.code FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS productCode,
 					(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_name,
 					(SELECT ie.items_type FROM `rms_itemsdetail` AS ie WHERE ie.id = spd.pro_id LIMIT 1) AS items_type
 	    	
@@ -491,8 +497,8 @@ if(!empty($type)){
 				    		
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
-				    	&nbsp;<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel"">'.$row['receipt_number'].'</label>&nbsp;
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+				    	&nbsp;<label id="productcodelabel'.$no.'" title="'.$row['productCode'].'" class="productcodelabel"">'.$row['productCode'].'</label>&nbsp;
+				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productCode'.$no.'" id="productCode'.$no.'" value="'.$row['productCode'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
 				    		<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';
@@ -532,8 +538,8 @@ if(!empty($type)){
 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
-				    	<label id="invoicelabel'.$no.'" title="'.$row['receipt_number'].'" class="invoicelabel">'.$row['receipt_number'].'</label>&nbsp;
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+				    	<label id="productcodelabel'.$no.'" title="'.$row['productCode'].'" class="productcodelabel">'.$row['productCode'].'</label>&nbsp;
+				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productCode'.$no.'" id="productCode'.$no.'" value="'.$row['productCode'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
 				    	<select queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" name="itemdetail_id'.$no.'" id="itemdetail_id'.$no.'" >';

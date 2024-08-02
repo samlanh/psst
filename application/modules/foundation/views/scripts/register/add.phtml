@@ -1097,77 +1097,6 @@ dojo.ready(function(){
 			academic_year = dijit.byId('academic_year').get('value');
 		}
 	}, "academic_year");
-	
-	
-
-	new dijit.form.FilteringSelect({
-		store: job_store,
-		queryExpr: "*${0}*",
-		autoComplete:false,                     
-		required: false,
-	    id: "fa_job",
-	    name: "fa_job",  
-	    queryExpr: "*${0}*",
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
-	    onChange: function() {          
-	   	fa_job = dijit.byId('fa_job').get('value');
-	    if(fa_job==-1){
-	     dijit.byId("save").attr("disabled",false);
-	   	 dijit.byId("popup_dept2").show();
-		   	dijit.byId('value_j').attr('value',1);
-	     }
-	    else {
-	    }  
-	   } 
-	}, "fa_job");
-	dijit.byId('fa_job').attr('value',0);
-	
-	new dijit.form.FilteringSelect({
-		store: job_store,
-		queryExpr: "*${0}*",
-		autoComplete:false,                     
-		required: false,              
-	    id: "mo_job",
-	    name: "mo_job",  
-	    tabindex: "17",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
-	    onChange: function() {          
-	   	mo_job = dijit.byId('mo_job').get('value');
-	    if(mo_job==-1){
-	     dijit.byId("save").attr("disabled",false);
-	   	 dijit.byId("popup_dept2").show();
-		   	dijit.byId('value_j').attr('value',2);
-	     }
-	    else {
-	    }  
-	   } 
-	}, "mo_job");
-	dijit.byId('mo_job').attr('value',0);
-
-	new dijit.form.FilteringSelect({
-		store: job_store,
-		queryExpr: "*${0}*",
-		autoComplete:false,                     
-		required: false,                     
-	    id: "gu_job",
-	    name: "gu_job",  
-	    tabindex: "17",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_JOB");?>", 
-	    onChange: function() {          
-	   	mo_job = dijit.byId('gu_job').get('value');
-	    if(mo_job==-1){
-	     dijit.byId("save").attr("disabled",false);
-	   	 dijit.byId("popup_dept2").show();
-		   	dijit.byId('value_j').attr('value',3);
-	     }
-	    else {
-	    }  
-	   } 
-	}, "gu_job");
-	dijit.byId('gu_job').attr('value',0);
 
 	new dijit.form.FilteringSelect({
 		store: nation_store,
@@ -1212,70 +1141,6 @@ dojo.ready(function(){
 	}, "studen_national");
 	dijit.byId('studen_national').attr('value',1);
 
-	new dijit.form.FilteringSelect({
-		store: nation_store,
-		queryExpr: "*${0}*",
-		autoComplete:false,                     
-		required: false,	
-	    id: "fa_national",
-	    name: "fa_national",  
-	    queryExpr: "*${0}*",
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
-	    onChange: function() {          
-	    fa_nation = dijit.byId('fa_national').get('value');
-	    if(fa_nation==-1){
-	     dijit.byId("save_nation").attr("disabled",false);
-	   	 dijit.byId("popup_nation").show();
-		   	dijit.byId('value_j').attr('value',3);
-	     }  
-	   } 
-	}, "fa_national");
-	dijit.byId('fa_national').attr('value',1);
-
-	new dijit.form.FilteringSelect({
-		store: nation_store,
-		queryExpr: "*${0}*",
-		autoComplete:false,                     
-		required: false,	
-	    id: "mom_nation",
-	    name: "mom_nation",  
-	    queryExpr: "*${0}*",
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
-	    onChange: function() {          
-	    mom_nation = dijit.byId('mom_nation').get('value');
-	    if(mom_nation==-1){
-	     dijit.byId("save_nation").attr("disabled",false);
-	   	 dijit.byId("popup_nation").show();
-		   	dijit.byId('value_j').attr('value',4);
-	     }
-	   
-	   } 
-	}, "mom_nation");
-	dijit.byId('mom_nation').attr('value',1);
-
-	new dijit.form.FilteringSelect({
-		store: nation_store,
-		queryExpr: "*${0}*",
-		autoComplete:false,                     
-		required: false,	
-	    id: "guardian_national",
-	    name: "guardian_national",  
-	    queryExpr: "*${0}*",
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_NATION");?>", 
-	    onChange: function(){          
-	   	gurdian_nation = dijit.byId('guardian_national').get('value');
-	    if(gurdian_nation==-1){
-	     dijit.byId("save_nation").attr("disabled",false);
-	   	 dijit.byId("popup_nation").show();
-		   	dijit.byId('value_j').attr('value',5);
-	     }
-	   
-	   } 
-	}, "guardian_national");
-	dijit.byId('guardian_national').attr('value',1);
 	
 	new dijit.form.FilteringSelect({
 		store: language_store,
@@ -1392,7 +1257,6 @@ dojo.ready(function(){
 		dijit.byId('student_province').attr('value',12);
 		
 		dijit.byId('nation').attr("value",1);
-		dijit.byId('fa_national').attr("value",1);
 
 		var branch_id = dijit.byId('branch_id');
 		 branch_id.on('change', function(evt) {
@@ -1432,7 +1296,6 @@ dojo.ready(function(){
 			 getStudentNo();
 			 getRefreshItems();	 
 			 getAllNation();
-			 getAllJob();
 			 initilizeDoc();
 		}, 200);
 		    
@@ -1500,28 +1363,6 @@ function getFamilyInfo(){
 	}
 } 
 
-function getAllJob(){ 
-	var url_getjob = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"getalljob"));?>';										
-	dojo.xhrPost({
-		url: url_getjob,
-		content:{
-			'addNew':1
-			},
-		handleAs:"json",
-		load: function(data) {
-			var job_store  = getDataStorefromJSON('id','name', data);
-			dijit.byId('fa_job').set('store',job_store);  
-			dijit.byId('mo_job').set('store',job_store);  
-			dijit.byId('gu_job').set('store',job_store);  
-			
-			
-		},
-		error: function(err) {
-			console.log(err);
-		}
-	});
-}
-
 function getAllNation(){ 
 	var url_getnation = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"getallnation"));?>';										
 	dojo.xhrPost({
@@ -1535,9 +1376,6 @@ function getAllNation(){
 			var nation_store  = getDataStorefromJSON('id','name', data);
 			dijit.byId('nation').set('store',nation_store);  
 			dijit.byId('studen_national').set('store',nation_store);  
-			dijit.byId('fa_national').set('store',nation_store); 
-			dijit.byId('mom_nation').set('store',nation_store); 
-			dijit.byId('guardian_national').set('store',nation_store); 
 		},
 		error: function(err) {
 			console.log(err);
@@ -1890,26 +1728,6 @@ function addNationBy(){
 					}else{
 						dijit.byId('studen_national').attr('value', data.id);
 					}
-						
-				}else if(type==3){
-					if(data.addNew == 1){
-						addDataToSelectbox(dijit.byId('fa_national'), nation_store, Itemmake, data.id);	
-					}else{
-						dijit.byId('fa_national').attr('value', data.id);
-					}
-					
-				}else if(type==4){
-					if(data.addNew == 1){
-						addDataToSelectbox(dijit.byId('mom_nation'), nation_store, Itemmake, data.id);	
-					}else{
-						dijit.byId('mom_nation').attr('value', data.id);
-					}
-				}else if(type==5){
-					if(data.addNew == 1){
-						addDataToSelectbox(dijit.byId('guardian_national'), nation_store, Itemmake, data.id);	
-					}else{
-						dijit.byId('guardian_national').attr('value', data.id);
-					}
 				}
 				getAllNation();	
 				dijit.byId('frm_nation_kh').reset();
@@ -1997,37 +1815,6 @@ function hideDialogPopup(popupContentId) {
 	dijit.byId(popupContentId).hide();
 }
 
-var url_add_job = '<?php echo $this->url(array("module"=>"foundation","controller"=>"register","action"=>"add-job")); ?>';
-function addJob(){
-	if(dijit.byId('frm_add_tran1').validate()){
-		loadingBlock();
-		type=dijit.byId('value_j').get('value');
-		dojo.xhrPost({
-			url:url_add_job,
-			form: dojo.byId("frm_add_tran1"),
-			handleAs:"json",
-			load: function(data) {
-				var Itemmake = { 
-							id: data.id,
-							name: dijit.byId('occu_name').get('value')
-					   };
-				if(type==1){	   
-					addDataToSelectbox(dijit.byId('fa_job'), job_store, Itemmake, data.id);
-				}else if(type==2){
-					addDataToSelectbox(dijit.byId('mo_job'), job_store, Itemmake, data.id);
-				}else if(type==3){
-					addDataToSelectbox(dijit.byId('gu_job'), job_store, Itemmake, data.id);
-				}
-				getAllJob();
-				dijit.byId('frm_add_tran1').reset();
-				dijit.byId("popup_dept2").hide();
-				HideloadingBlock();
-			},
-			error: function(err) {
-			}
-		});
-	}
-}
 
 function setup() {
 	dijit.byId("showcamera").show();	

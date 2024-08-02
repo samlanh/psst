@@ -2629,6 +2629,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['itemId'])) {//
 			$sql .= " AND i.items_id=" . $data['itemId'];
 		}
+		if (!empty($data['parentId'])) {//want to get product in this location
+			$sql .= " AND  i.items_id IN (SELECT id FROM `rms_items` WHERE id is NOT NULL AND parent=" . $data['parentId'] . ")";
+		}
 		if (isset($data['isOnepayment'])) {
 			$sql .= " AND i.is_onepayment=" . $data['isOnepayment'];
 		}

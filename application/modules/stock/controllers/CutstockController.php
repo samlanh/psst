@@ -26,7 +26,7 @@ class Stock_CutstockController extends Zend_Controller_Action {
 			$db =  new Stock_Model_DbTable_DbCutStock();
 			$rows = $db->getAllCutStock($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","RECEIPT_NO","STUDENT","TYPE","NOTE","DATE","STATUS");
+			$collumns = array("BRANCH","RECEIPT_NO","REF_RECEIPT_NUM","STUDENT","TYPE","NOTE","DATE","STATUS");
 			$link=array(
 					'module'=>'stock','controller'=>'cutstock','action'=>'edit',
 			);
@@ -44,6 +44,8 @@ class Stock_CutstockController extends Zend_Controller_Action {
 	public function addAction(){
 		if($this->getRequest()->isPost()){
 		$_data = $this->getRequest()->getPost();
+		print_r($_data);
+	//	exit();
 			try{
 				$db = new Stock_Model_DbTable_DbCutStock();
 				$row = $db->addCutStock($_data);

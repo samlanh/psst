@@ -59,17 +59,17 @@ img.view{height: 70px !important;}
 					<tr>
 						<td>Student ID : <?php echo $this->row['stu_code'];?></td>
 						<td></td>
-						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['serailno'];?><?php if($this->row['status']==0){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></span></td>
+						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Serial No.</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['serailno'];?><?php if($this->row['status']==0){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></span></td>
 					</tr>
 					<tr>
 						<td>Student Name : <?php echo $this->row['stu_khname'].'/'.$this->row['stu_enname']." ".$this->row['last_name'];?></td>
 						<td></td>
-						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
+						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['refReceiptNum'];?></span></td>
 					</tr>
 					<t>
 						<td>Tel : <?php echo($this->row['tel']); ?></td>
 						<td></td>
-						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Print Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date('d/m/Y, H:i ',strtotime(Zend_Date::now()));?></span>
+						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
 						</td>
 					</tr>
 					<tr>
@@ -77,8 +77,8 @@ img.view{height: 70px !important;}
 							<table border="1" align="center" class="conten_data">
 							  	<tr class="hearder_table">
 								  	<td>លរ<span class="small">No.</span></td>
-								  	<td>លេខយោង <span class="small">Receipt Ref</span></td>
-								  	<td >ពណ៍នា<span class="small">Item Name</span></td>
+								  	<td>លេខកូដទំនិញ <span class="small">Product Code</span></td>
+								  	<td >ឈ្មោះទំនិញ<span class="small">Item Name</span></td>
 								  	<td >បរិមាណសរុប<span class="small">Total Qty</span></td>
 								  	<td >បរិមាណទទួល<span class="small">Received Qty</span></td>
 								  	<td >បរិមាណនៅសល់<span class="small">Remain Qty</span></td>
@@ -86,8 +86,9 @@ img.view{height: 70px !important;}
 							  	</tr>
 							  	<?php $key=0; if (!empty($this->rowdetail)) foreach ($this->rowdetail as $key=> $row){?>
 							  	<tr class="rowlist">
+
 							  		<td align="center">&nbsp;<?php echo $key+1?>&nbsp;</td>
-							  		<td align="center">&nbsp;<?php echo $row['receipt_number']?>&nbsp;</td>
+							  		<td align="center">&nbsp;<?php echo $row['code']?>&nbsp;</td>
 							  		<td>&nbsp;<?php echo $row['items_name']?>&nbsp;</td>
 							  		<td align="center">&nbsp;<?php echo $row['due_amount']?>&nbsp;</td>
 							  		<td align="center">&nbsp;<?php echo $row['qty_receive']?>&nbsp;</td>

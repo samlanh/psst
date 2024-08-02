@@ -418,9 +418,10 @@ function getProByBranch(){
 		    return false ;
 	    }
 		category=dijit.byId("category").get("value");
-
+		parentId = $('#parentcategory').val();
 		var urlGet = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-allitemid')); ?>';
 		contentData = {
+			'parentId':parentId,
 			'itemsType':3,
 			'itemId':category,
 			'isProductset':0,
@@ -455,5 +456,6 @@ function filterSubCategory(){
 		subcategorystore = getDataStorefromJSON('id', 'name', datajsonparent);
 		dijit.byId('category').set('store', subcategorystore);
 	}
+	getProByBranch();
 }
 </script>

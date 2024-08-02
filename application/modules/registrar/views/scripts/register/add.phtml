@@ -1257,6 +1257,7 @@ $(document).ready(function() {
 			'isInititilize': isInititilize,
 			'isFinished':0
 		}
+		
 		prepareAddNewRow(urlget, contentData);
 	}
 
@@ -1265,6 +1266,8 @@ $(document).ready(function() {
 	academicOption = '';
 	discountOptionList='';
 	function prepareAddNewRow(urlRequest, contentData) {
+		
+		
 		//dijit.byId("item").reset();
 		term_option = '';//year,semester..
 		term_study_option = '';//period list..
@@ -1274,6 +1277,7 @@ $(document).ready(function() {
 			handleAs: "json",
 			load: function (data) {
 				HideloadingBlock();
+				
 				for (eRow = 0; eRow < data.length; eRow++) {
 					academicOption = data[eRow].academicYearList;
 					term_study_option =data[eRow].studyPeriodList;

@@ -205,7 +205,8 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 			$label = "name_kh";
 			$titleCol = "titleKh";
 		}
-
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$stringCountStudent = " COALESCE((SELECT COUNT(gds.gd_id) FROM `rms_group_detail_student` AS gds WHERE gds.group_id = g.id AND gds.itemType =1 AND gds.stop_type NOT IN (1,2) LIMIT 1),0) ";
 		$sql = "SELECT 
 			`g`.`id`
 			,(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
@@ -224,7 +225,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 
 		$sql .= ", g.status AS statusRecord ";
 		$sql .= "
-			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' ',COALESCE((SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1),'')) AS subTitleRecord
+			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' ',COALESCE((SELECT COALESCE(id.shortcut,id.$colunmname)  FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1),''),' ".$tr->translate('TOTAL_STUDENT')." ',$stringCountStudent ) AS subTitleRecord
 			,CASE 
 				WHEN g.is_pass = 0 THEN 'bg-label-secondary' 
 				WHEN g.is_pass = 1 THEN 'bg-label-success' 

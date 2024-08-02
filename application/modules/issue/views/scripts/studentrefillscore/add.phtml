@@ -45,6 +45,9 @@
 		color: #f00;
 		font-weight: bold;
 	}
+	tr.odd {
+		background: #daeef5;
+	}
 </style>
 
 <div class="card">
@@ -218,7 +221,7 @@
 										<div class="col-md-12 col-sm-12 col-xs-12">
 											<div class="form-group">
 												<input type="hidden" name="identity" id="identity" value="">
-													<table  class="collape responsiveTable" >
+													<table  border="1" style="font-size:12px;border:1px solid #ccc;text-align: center; table-layout: fixed;" id="table" width="100%" >
 														<thead id="tableHeadInfo">
 														</thead>
 														<tbody id="table_row">
@@ -534,8 +537,12 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 			handleAs:"json",
 			load: function(data) { 
 				if(data!=""){
+					rowClasss = "odd"
+					if ((keyrow % 2) == 0) {
+						rowClasss = "regurlar";
+					}
 					keyrow = keyrow+1;
-				
+					
 					var strStudent="";
 						strStudent += '<td width="10px" align="center"><img onclick="deleteRecord(' + keyrow + ')" src="<?php echo $this->baseUrl(); ?>/images/Delete_16.png"></td>';
 						strStudent += '<td width="10px" align="center">&nbsp;' + keyrow + '</td>';
@@ -557,9 +564,10 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 						if (examType == 2) {
 							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.totalKhAvg+'" id="totalKhAvg' + keyrow + '"  name="totalKhAvg' + keyrow + '" ></td>';
 							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.totalEnAvg+'" id="totalEnAvg' + keyrow + '"  name="totalEnAvg' + keyrow + '" ></td>';
+							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.totalChAvg+'" id="totalChAvg' + keyrow + '"  name="totalChAvg' + keyrow + '" ></td>';
 							strStudent += '<td width="40px"><input class="fullside" dojoType="dijit.form.NumberTextBox" type="text" value="'+data.monthlySemesterAvg+'" id="monthlySemesterAvg' + keyrow + '"  name="monthlySemesterAvg' + keyrow + '" ></td>';
 						}
-					tmp='<tr class="rowData" id="row'+keyrow+'">';
+					tmp='<tr class="hover normal ' + rowClasss + '" id="row'+keyrow+'">';
 					tmp+="</tr>";
 	
 					dojo.query("#table_row").append(tmp);
@@ -610,29 +618,30 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 				subjectList = data;
 
 				var strHeadRow="";
-				strHeadRow = '<tr class="head-td" align="left"><th rowspan="3" class="tdheader"><?php echo $tr->translate('DEL'); ?></th>' +
-						'<th rowspan="2" class="tdheader" ><?php echo $tr->translate('NUM'); ?></th>' +
-						'<th rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID'); ?></th>' +
-						'<th rowspan="2" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME'); ?></th>' +
-						'<th rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></th>';
+				strHeadRow = '<tr  style="border:1px solid #000; border-bottom:1px solid #fff; "><td rowspan="3" class="tdheader"><?php echo $tr->translate('DEL'); ?></td>' +
+						'<td rowspan="2" class="tdheader" ><?php echo $tr->translate('NUM'); ?></td>' +
+						'<td rowspan="2" class="tdheader header" style="width:80px;"><?php echo $tr->translate('STUDENT_ID'); ?></td>' +
+						'<td rowspan="2" class="tdheader header" style="width:120px;"><?php echo $tr->translate('STUDENT_NAME'); ?></td>' +
+						'<td rowspan="2" class="tdheader header"><?php echo $tr->translate('SEX'); ?></td>';
 					no = 0;
 					for (j = 0; j < subjectList.length; j++) {
 						no++;
 						amtsubject = subjectList[j].amount_subjectdivide;
 						stringsname = subjectList[j].shortcuttitle;
 						subLangId = subjectList[j].subjectLang;
-						strHeadRow += '<th class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname + '</span> <input id="subject_lang' + subjectList[j].subject_id + '"  name="subject_lang' + subjectList[j].subject_id + '" value="' + subLangId + '" type="hidden" >&nbsp;</th>';
+						strHeadRow += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname + '</span> <input id="subject_lang' + subjectList[j].subject_id + '"  name="subject_lang' + subjectList[j].subject_id + '" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
 					}
-					strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('AMOUNT_SUBJECT'); ?></span></th>';
+					strHeadRow += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('AMOUNT_SUBJECT'); ?></span></td>';
 
 					if (examType == 2) {
-						strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG_KH'); ?></span></th>';
-						strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG_EN'); ?></span></th>';
-						strHeadRow += '<th rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG'); ?></span></th>';
+						strHeadRow += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG_KH'); ?></span></td>';
+						strHeadRow += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG_EN'); ?></span></td>';
+						strHeadRow += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG_CH'); ?></span></td>';
+						strHeadRow += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('MONTHLY_SEMESTER_AVG'); ?></span></td>';
 					}
 					strHeadRow += '</tr>';
 
-					strHeadRow += '<tr class="head-td" align="center" > <th colspan="' + subjectList.length + '" class="tdheader header"><?php echo $tr->translate('SUBJECT'); ?></th>';
+					strHeadRow += '<tr  align="center" > <td colspan="' + subjectList.length + '" class="tdheader header"><?php echo $tr->translate('SUBJECT'); ?></td>';
 					strHeadRow += '</tr>';
 					no = 0;
 					for (j = 0; j < subjectList.length; j++) {
@@ -693,5 +702,28 @@ url_getstudent = '<?php echo $this->url(array('module'=>'issue','controller'=>'s
 			}
 		}
 		updateTimeOut();
+	}
+	function CheckSubjectExam(subject_id) {
+		var rowId = $('#identity').val();
+		var amountsub = $(".checkbox:checked").length;
+		if ($('#subject' + subject_id).is(':checked')) {
+			if (rowId != '') {
+				var rowIDArray = rowId.split(',');
+				for (var b = 0; b < rowIDArray.length; b++) {
+					dijit.byId('score_' + rowIDArray[b] + '_' + subject_id).set('disabled', false);
+					dijit.byId('score_' + rowIDArray[b] + '_' + subject_id).attr('value', 0);
+					dijit.byId('score_' + rowIDArray[b] + '_' + subject_id).set('required', true);
+				}
+			}
+		} else {
+			if (rowId != '') {
+				var rowIDArray = rowId.split(',');
+				for (var b = 0; b < rowIDArray.length; b++) {
+					dijit.byId('score_' + rowIDArray[b] + '_' + subject_id).set('disabled', true);
+					dijit.byId('score_' + rowIDArray[b] + '_' + subject_id).attr('value', 0);
+					dijit.byId('score_' + rowIDArray[b] + '_' + subject_id).set('required', false);
+				}
+			}
+		}
 	}
 </script> 

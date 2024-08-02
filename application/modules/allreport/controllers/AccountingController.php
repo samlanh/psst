@@ -1346,4 +1346,59 @@ class Allreport_AccountingController extends Zend_Controller_Action {
      		}
      	}
     }
+	
+	function rptIncomeReportAction(){
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}
+			else{
+				$search = array(
+						'adv_search' =>'',
+						'branch_id'     =>0,
+						'degree'     =>'',
+						'grade_all'  =>'',
+						'session'    =>'',
+						'receipt_order'=>'0',
+						'all_payment'=>'all',
+						'student_payment'=>'',
+						'income'    =>'',
+						'stu_code'  =>'',
+						'stu_name'  =>'',
+						'expense'   =>'',
+						'change_product'=>'',
+						'customer_payment'=>'',
+						'clear_balance'=>'',
+						'userId'	=>'',
+						'start_date'=> date('Y-m-d'),
+						'end_date'  => date('Y-m-d'),
+				);
+			}
+	
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		
+		$db = new Allreport_Model_DbTable_DbAccountReport();
+		$parentCol =  $db->getMainParentOfItems();
+		$this->view->parentCol =  $parentCol;
+		
+		
+		$rowStDailyPmt =  $db->getStudentPaymentDaily($search);
+		$this->view->rowStDailyPmt =  $rowStDailyPmt;
+		
+		
+		
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	}
 }

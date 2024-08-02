@@ -2629,6 +2629,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['itemId'])) {//
 			$sql .= " AND i.items_id=" . $data['itemId'];
 		}
+		if (!empty($data['parentId'])) {//want to get product in this location
+			$sql .= " AND  i.items_id IN (SELECT id FROM `rms_items` WHERE id is NOT NULL AND parent=" . $data['parentId'] . ")";
+		}
 		if (isset($data['isOnepayment'])) {
 			$sql .= " AND i.is_onepayment=" . $data['isOnepayment'];
 		}
@@ -4627,7 +4630,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (isset($data['isAutopayment']) and $data['isInititilize'] == 1) {
 			if ($data['isAutopayment'] != '') {
 				if($data['studentType']==1){
-					$sql .= " AND FIND_IN_SET((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),degreeOption) ";
+					$sql .= " AND FIND_IN_SET(COALESCE((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),0),degreeOption) ";
 				} else {
 					$sql .= " AND i.is_autopayment=" . $data['isAutopayment'];
 				}

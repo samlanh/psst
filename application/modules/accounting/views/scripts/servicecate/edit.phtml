@@ -68,6 +68,13 @@ ul.opt-school {
 																&nbsp; 
 														</div>
 														<div class="form-group">
+															<label class="control-label custom-switch float-start "> 
+																<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("Is Parent");?></a> 
+																<input type="checkbox" id="isParent" name="isParent" class="custom-switch-input" <?php if(!empty($this->row["is_parent"])){ echo "checked";} ?> onChange="Checkchange();" > 
+																<span class="custom-switch-indicator custom-radius switch-status"></span> 
+															</label>
+														</div>
+														<div class="form-group">
 															<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("PARENT");?></label>
 															<div class="col-md-7 col-sm-7 col-xs-12">
 																<?php echo $frm_degree->getElement("parentId");?>
@@ -156,29 +163,41 @@ ul.opt-school {
 	dojo.require("dijit.form.CheckBox");
 	dojo.require("dijit.form.Textarea")
 
-function CheckAllTotal(index){
-	if(index==0){
-			if($('#check_all').is(":checked")){
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = true;  
-				});
-			}else{
-				$('.checkbox').each(function() { //loop through each checkbox
-		            this.checked = false;  
-				});
-			}
-	}else{
-		var a = $("input:checked").val();
-		 var identity = [];
-	     $(':checkbox:checked').each(function(i){
-	    	 identity[i] = $(this).val();
-	     });
-	     var allidentity = $("#identityCheck").val();
-		if(identity == allidentity ){
-			$('#check_all').prop('checked', true); // checks it
+	dojo.ready(function(){
+		Checkchange();
+	});
+
+	function CheckAllTotal(index){
+		if(index==0){
+				if($('#check_all').is(":checked")){
+					$('.checkbox').each(function() { //loop through each checkbox
+						this.checked = true;  
+					});
+				}else{
+					$('.checkbox').each(function() { //loop through each checkbox
+						this.checked = false;  
+					});
+				}
 		}else{
-			$('#check_all').prop('checked', false); // Unchecks it
+			var a = $("input:checked").val();
+			var identity = [];
+			$(':checkbox:checked').each(function(i){
+				identity[i] = $(this).val();
+			});
+			var allidentity = $("#identityCheck").val();
+			if(identity == allidentity ){
+				$('#check_all').prop('checked', true); // checks it
+			}else{
+				$('#check_all').prop('checked', false); // Unchecks it
+			}
 		}
 	}
-}
+	function Checkchange(){
+		if (dojo.byId("isParent").checked){
+			dijit.byId('parentId').attr('value',''); 
+			dijit.byId('parentId').set('readOnly',true); 
+		}else{
+			dijit.byId('parentId').set('readOnly',false); 
+		}
+	}
 </script>

@@ -628,130 +628,31 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			";
 		return $db->fetchAll($sql);
 	}
+	
 	function getSumStatusAttendence($stu_id, $group)
 	{
 		$db = $this->getAdapter();
+		$sql = "
+			SELECT 
+				v.`group_id`
+				,v.`maxAttendenceStatus` AS attendence_status
+				,COUNT(IF(v.`maxAttendenceStatus` = '1' AND v.`forSemester`=1, v.`maxAttendenceStatus`, NULL)) AS totalComeSemester1
+				,COUNT(IF(v.`maxAttendenceStatus` = '2' AND v.`forSemester`=1, v.`maxAttendenceStatus`, NULL)) AS totalASemester1
+				,COUNT(IF(v.`maxAttendenceStatus` = '3' AND v.`forSemester`=1, v.`maxAttendenceStatus`, NULL)) AS totalPSemester1
+				,COUNT(IF(v.`maxAttendenceStatus` = '4' AND v.`forSemester`=1, v.`maxAttendenceStatus`, NULL)) AS totalLSemester1
+				,COUNT(IF(v.`maxAttendenceStatus` = '5' AND v.`forSemester`=1, v.`maxAttendenceStatus`, NULL)) AS totalELSemester1
 
-		$sql = "SELECT
-			sat.`group_id`,
-			satd.`attendence_status`
-			
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=1) AS totalComeSemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=2) AS totalASemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=3) AS totalPSemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=4) AS totalLSemester1
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=1
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=5) AS totalELSemester1
-				
-		
-			
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=1) AS totalComeSemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=2) AS totalASemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=3) AS totalPSemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=4) AS totalLSemester2
-			,(SELECT 
-				COUNT(*) AS attendence_status
-			FROM 
-				`rms_student_attendence` AS sat2 
-			WHERE					
-				sat2.type=1
-				AND sat2.for_semester=2
-				AND sat2.`status`=1
-				AND sat2.group_id =$group
-				AND (SELECT satd2.attendence_status FROM `rms_student_attendence_detail` AS satd2 WHERE sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$stu_id ORDER BY satd2.attendence_status DESC LIMIT 1)=5) AS totalELSemester2
-			
-			
-			,sat.`date_attendence`
-			,satd.description
-		FROM
-			`rms_student_attendence` AS sat,
-			`rms_student_attendence_detail` AS satd
-		WHERE
-			sat.`id`= satd.`attendence_id`
-			AND sat.type=1
-			AND satd.`stu_id`=$stu_id
-			AND sat.`group_id`=$group GROUP BY satd.`stu_id` ";
+				,COUNT(IF(v.`maxAttendenceStatus` = '1' AND v.`forSemester`=2, v.`maxAttendenceStatus`, NULL)) AS totalComeSemester2
+				,COUNT(IF(v.`maxAttendenceStatus` = '2' AND v.`forSemester`=2, v.`maxAttendenceStatus`, NULL)) AS totalASemester2
+				,COUNT(IF(v.`maxAttendenceStatus` = '3' AND v.`forSemester`=2, v.`maxAttendenceStatus`, NULL)) AS totalPSemester2
+				,COUNT(IF(v.`maxAttendenceStatus` = '4' AND v.`forSemester`=2, v.`maxAttendenceStatus`, NULL)) AS totalLSemester2
+				,COUNT(IF(v.`maxAttendenceStatus` = '5' AND v.`forSemester`=2, v.`maxAttendenceStatus`, NULL)) AS totalELSemester2
 
+			FROM `v_studentattendancestatusperdate` AS v
+			WHERE 
+				v.`studentId` = $stu_id 
+				AND v.`group_id`= $group 
+		";
 		return $db->fetchRow($sql);
 
 		/*
@@ -768,6 +669,7 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			COUNT(IF(satd.attendence_status = '5' AND sat.for_semester=2, satd.attendence_status, NULL)) AS totalELSemester2,
 		*/
 	}
+	
 
 	function addReadNews($id)
 	{

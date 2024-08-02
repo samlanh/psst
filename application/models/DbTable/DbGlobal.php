@@ -2232,6 +2232,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name, 
 			academic_year AS academicYear,
 			periodId,
+			degreeId,
 			DATE_FORMAT(start_date, '%Y-%m-%d') startDate,
 			DATE_FORMAT(end_date, '%Y-%m-%d') endDate
   		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
@@ -2263,6 +2264,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql .= " ORDER BY academic_year DESC ";
 		$rows = $db->fetchAll($sql);
+		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		if (empty($data['option'])) {
 			return $rows;
 		} else {
@@ -2534,8 +2536,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 
 		$this->_name = "rms_items";
-		$sql = "SELECT m.id, m.$colunmname AS name FROM $this->_name AS m WHERE m.status=1 ";
-		$sql .= " AND m.parent=$parent";
+		$sql = "SELECT m.id, m.$colunmname AS name,m.is_parent FROM $this->_name AS m WHERE m.status=1 ";
+		$type = empty($type) ? 0 : $type;
+		if($type!=1){ // not tuition
+			$sql .= " AND m.parent=$parent";
+		}else{
+			$sql .= " AND COALESCE(m.is_parent,0) = 0 ";
+		}
+		
 		if (!empty($type)) {
 			$sql .= " AND m.type=$type";
 		}
@@ -2584,28 +2592,40 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= ' ORDER BY m.schoolOption ASC,m.type ASC,m.ordering DESC, m.title ASC';
 		
 		$query = $db->fetchAll($sql);
-		
-		$rowCount = count($query);
-		$id = '';
-		if ($rowCount > 0) {
-			foreach ($query as $row) {
-				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
-				if(!$isparent!=null){
-					$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+		if($type!=1){
+			$rowCount = count($query);
+			$id = '';
+			if ($rowCount > 0) {
+				foreach ($query as $row) {
+					$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+					if(!$isparent!=null){
+						$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+					}
 				}
 			}
+			if ($optionSelect != null) {
+				$options = '';
+				if (!empty($cate_tree_array))
+					foreach ($cate_tree_array as $value) {
+						$resultData = $this->getAllItems(null,null,null,$value['id'],'','',null,null);
+						$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
+					}
+				return $options;
+			}
+			return $cate_tree_array;
+		}else{
+			if ($optionSelect != null) {
+				$options = '';
+				if (!empty($query))
+					foreach ($query as $value) {
+						if(empty($value["is_parent"])){
+							$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
+						}
+					}
+				return $options;
+			}
+			return $query;
 		}
-		if ($optionSelect != null) {
-			$options = '';
-			if (!empty($cate_tree_array))
-				foreach ($cate_tree_array as $value) {
-					$resultData = $this->getAllItems(null,null,null,$value['id'],'','',null,null);
-					$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
-				}
-			return $options;
-		}
-		
-		return $cate_tree_array;
 		
 	}
 	function getAllItemDetail($data = null)
@@ -3101,6 +3121,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 								<span class="title-info">' . $tr->translate("FATHER_NAME") . '</span> : <span id="lbl_father" class="inf-value">'.$rs['father_enname'] . '</span>
 								<span id="lbl_fathertel" class="inf-value" style="display:none;">' . $rs['father_phone'] . '</span>
 								<span id="lbl_mothertel" class="inf-value" style="display:none;">' . $rs['mother_phone'] . '</span>
+								<span id="lbl_degreeId" class="inf-value" style="display:none;">' . $rs['degree'] . '</span>
 								<span class="title-info">'. $tr->translate("MOTHER_NAME") . '</span> : <span id="lbl_mother" class="inf-value">'. $rs['mother_enname'] . '</span>
 								<span class="title-info">'. $tr->translate("PARENT_PHONE") . '</span> : <span id="lbl_parentphone" class="inf-value">' . $rs['guardian_tel'] . '</span>
 								<span class="title-info">'. $tr->translate("STATUS") . '</span> : <span id="lbl_culturelevel" class="inf-value red bold" >' . $rs['status_student'] . '</span>

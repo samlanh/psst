@@ -215,9 +215,10 @@
 								$tutionFeeDisAmt="";
 								if(!empty($result[0]["paymentInfo"]["itemsName"])){
 									$payTerm = empty($result[0]["paymentInfo"]["payTerm"]) ? $tr->translate("OTHER") : $result[0]["paymentInfo"]["payTerm"];
-									$tutionTotalFee = empty($result[0]["paymentInfo"]["gSubTotalFee"]) ? 0 : $result[0]["paymentInfo"]["gSubTotalFee"];
-									$tutionTotalFeeLabel = $tutionTotalFee;
-									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"]) ? 0 : $result[0]["paymentInfo"]["totalDiscountPercent"]."%";
+									$tutionTotalFee = empty($result[0]["paymentInfo"]["gTotalPament"]) ? 0 : $result[0]["paymentInfo"]["gTotalPament"];
+									$tutionTotalFeeLabel = empty($result[0]["paymentInfo"]["gSubTotalFee"]) ? 0 : $result[0]["paymentInfo"]["gSubTotalFee"];
+									$tutionTotalFeeLabel = $tutionTotalFeeLabel;
+									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"]) ? 0 : str_replace(".00","",number_format($result[0]["paymentInfo"]["totalDiscountPercent"],2))."%";
 									$tutionFeeDisAmt = empty($result[0]["paymentInfo"]["totalDiscountAmt"]) ? "" : "+".$result[0]["paymentInfo"]["totalDiscountAmt"];
 								}
 								

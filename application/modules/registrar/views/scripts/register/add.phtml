@@ -900,15 +900,18 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			var datajsonInfo = ($("#study_year").find(':selected').data('datajson'));
 			var stringPeriodList='<ul>';
 			academicTerm =$('#academic_term').val();
+			currentDegreeId = dojo.byId("lbl_degreeId").innerHTML;
 			for (i = 0; i < datajsonInfo.length; i++) {
-				if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
-					stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
-				}
-				if(datajsonInfo[i].periodId==3 && academicTerm==3){//semester
-					stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
-				}
-				if(datajsonInfo[i].periodId==4 && academicTerm==4){//year
-					stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
+				if(datajsonInfo[i].degreeId.search(currentDegreeId>-1)){
+					if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
+						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
+					}
+					if(datajsonInfo[i].periodId==3 && academicTerm==3){//semester
+						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
+					}
+					if(datajsonInfo[i].periodId==4 && academicTerm==4){//year
+						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
+					}
 				}
 			}
 			stringPeriodList+= '</ul>';

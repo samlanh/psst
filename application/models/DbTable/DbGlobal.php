@@ -2534,8 +2534,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 
 		$this->_name = "rms_items";
-		$sql = "SELECT m.id, m.$colunmname AS name FROM $this->_name AS m WHERE m.status=1 ";
-		$sql .= " AND m.parent=$parent";
+		$sql = "SELECT m.id, m.$colunmname AS name,m.is_parent FROM $this->_name AS m WHERE m.status=1 ";
+		$type = empty($type) ? 0 : $type;
+		if($type!=1){ // not tuition
+			$sql .= " AND m.parent=$parent";
+		}else{
+			$sql .= " AND COALESCE(m.is_parent,0) = 0 ";
+		}
+		
 		if (!empty($type)) {
 			$sql .= " AND m.type=$type";
 		}
@@ -2584,28 +2590,40 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql .= ' ORDER BY m.schoolOption ASC,m.type ASC,m.ordering DESC, m.title ASC';
 		
 		$query = $db->fetchAll($sql);
-		
-		$rowCount = count($query);
-		$id = '';
-		if ($rowCount > 0) {
-			foreach ($query as $row) {
-				$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
-				if(!$isparent!=null){
-					$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+		if($type!=1){
+			$rowCount = count($query);
+			$id = '';
+			if ($rowCount > 0) {
+				foreach ($query as $row) {
+					$cate_tree_array[] = array("id" => $row['id'], "name" => $spacing . $row['name']);
+					if(!$isparent!=null){
+						$cate_tree_array = $this->getAllItems($type, $branchlists, $schooloption,$row['id'], $spacing . ' - ', $cate_tree_array);
+					}
 				}
 			}
+			if ($optionSelect != null) {
+				$options = '';
+				if (!empty($cate_tree_array))
+					foreach ($cate_tree_array as $value) {
+						$resultData = $this->getAllItems(null,null,null,$value['id'],'','',null,null);
+						$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
+					}
+				return $options;
+			}
+			return $cate_tree_array;
+		}else{
+			if ($optionSelect != null) {
+				$options = '';
+				if (!empty($query))
+					foreach ($query as $value) {
+						if(empty($value["is_parent"])){
+							$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
+						}
+					}
+				return $options;
+			}
+			return $query;
 		}
-		if ($optionSelect != null) {
-			$options = '';
-			if (!empty($cate_tree_array))
-				foreach ($cate_tree_array as $value) {
-					$resultData = $this->getAllItems(null,null,null,$value['id'],'','',null,null);
-					$options .= '<option data-jsondata="'.htmlspecialchars(json_encode($resultData)).'" value="' . $value['id'] . '" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
-				}
-			return $options;
-		}
-		
-		return $cate_tree_array;
 		
 	}
 	function getAllItemDetail($data = null)

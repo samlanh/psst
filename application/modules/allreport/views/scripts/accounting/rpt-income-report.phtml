@@ -307,6 +307,7 @@
 								</tr>
 								
 								<?php 
+									if ($rs['is_void']!=1){
 									$totalTutionByMethod = $totalTutionByMethod + $tutionTotalFee;
 									$totalPaidByMethod = $totalPaidByMethod + $rs['paid_amount'];
 									$totalCreditMemoByMethod = $totalCreditMemoByMethod + $rs['credit_memo'];
@@ -315,6 +316,7 @@
 									$gTutionTotal = $gTutionTotal + $tutionTotalFee;
 									$gTotalPaid = $gTotalPaid + $rs['paid_amount'];
 									$gTotalCreditMemo = $gTotalCreditMemo + $rs['credit_memo'];
+									}
 									
 									$paymentMethod=$rs["payment_method"];
 									$bankId=$rs["bank_id"];

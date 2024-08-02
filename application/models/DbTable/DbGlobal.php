@@ -4624,8 +4624,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['Id'])) {
 			$sql .= " AND i.id=" . $data['Id'];
 		}
+		if(!empty($data['itemsId'])){
+			$sql.=" AND i.items_id=".$data['itemsId'];
+		}
+		if(!empty($data['itemsType'])){
+			$sql.=" AND i.items_type=".$data['itemsType'];
+		}
+		if(!empty($data['productType'])){
+			$sql.=" AND i.product_type=".$data['productType'];
+		}
+		if(isset($data['isProductseat'])){
+			$sql.=" AND i.is_productseat=".$data['isProductseat'];
+		}
 		if (isset($data['isOnepayment'])) {
 			$sql .= " AND i.is_onepayment=" . $data['isOnepayment'];
+		}
+		if(isset($data['isAutopayment'])){
+			$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
 		}
 		if (isset($data['isAutopayment']) and $data['isInititilize'] == 1) {
 			if ($data['isAutopayment'] != '') {

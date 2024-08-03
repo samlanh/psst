@@ -247,7 +247,9 @@
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
 									<td></td>
 									<td align="right"><strong><?php echo number_format($totalTutionByMethod,2);?></strong></td>
+									<?php if($colspanTotal>1){?>
 									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<?php } ?>
 									<td align="right"><strong><?php echo empty($totalCreditMemoByMethod) ? "" : "(-".number_format($totalCreditMemoByMethod,2).")"; ?></strong></td>
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
@@ -335,7 +337,9 @@
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
 									<td></td>
 									<td align="right"><strong><?php echo number_format($totalTutionByMethod,2);?></strong></td>
+									<?php if($colspanTotal>1){?>
 									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<?php } ?>
 									<td align="right"><strong><?php echo empty($totalCreditMemoByMethod) ? "" : "(-".number_format($totalCreditMemoByMethod,2).")"; ?></strong></td>
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
@@ -346,7 +350,9 @@
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("GRAND_TOTAL");?></strong></td>
 									<td></td>
 									<td align="right"><strong><?php echo number_format($gTutionTotal,2);?></strong></td>
+									<?php if($colspanTotal>1){?>
 									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<?php } ?>
 									<td align="right"><strong><?php echo empty($gTotalCreditMemo) ? "" : "(-".number_format($gTotalCreditMemo,2).")"; ?></strong></td>
 									<td align="right"><strong><?php echo number_format($gTotalPaid,2);?></strong></td>
 									<td></td>

@@ -900,9 +900,10 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			var datajsonInfo = ($("#study_year").find(':selected').data('datajson'));
 			var stringPeriodList='<ul>';
 			academicTerm =$('#academic_term').val();
-			currentDegreeId = dojo.byId("lbl_degreeId").innerHTML;
+			currentDegree =$('#degree').val();
 			for (i = 0; i < datajsonInfo.length; i++) {
-				if(datajsonInfo[i].degreeId.search(currentDegreeId>-1)){
+				var degreeOfTerm = datajsonInfo[i].degreeId;
+				if(degreeOfTerm.indexOf(currentDegree)>-1){
 					if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
 						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
 					}

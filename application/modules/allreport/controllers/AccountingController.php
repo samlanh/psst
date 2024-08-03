@@ -1109,7 +1109,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$periodList = $dbg->getAllStudyPeriod($data);
 		}
 		$this->view->periodList = $periodList;
-		print_r($periodList);
 		
 		$frmreceipt = new Application_Form_FrmGlobal();
 		$this->view->officailreceipt = $frmreceipt->getFormatReceipt();

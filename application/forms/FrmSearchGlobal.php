@@ -692,7 +692,18 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			);
 		$limit->setMultiOptions($limitopt);
 		$limit->setValue($request->getParam("limit"));
-				
+		
+		
+		$termOption=  new Zend_Dojo_Form_Element_FilteringSelect('termOption');
+		$termOption->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$rowsOpt = $_dbgb->getAllPaymentTerm($id=null,$hidemonth=1);
+		$optTerm = array(0=>$this->tr->translate("PLEASE_SELECT"));
+		if(!empty($rowsOpt)) foreach($rowsOpt as $key => $opt){
+			$optTerm[$key] =$opt;
+		}
+		$termOption->setMultiOptions($optTerm);
+		$termOption->setValue($request->getParam("termOption"));
+		
 		$this->addElements(array(
 				$_type,
 				$adv_search,
@@ -738,7 +749,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$studentType,
 				$academicYearEnroll,
 				$updateOption,
-				$limit
+				$limit,
+				$termOption
 				)
 			);
 		return $this;

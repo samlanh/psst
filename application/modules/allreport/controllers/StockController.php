@@ -799,7 +799,10 @@ class Allreport_StockController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
-			$rows = $db->getProductbyBranch($data['cate_id'],1);
+			$data = array(
+				'categoryId'=>$data['cate_id']
+			);
+			$rows = $db->getProductbyBranch($data,1);
 			array_unshift($rows, array ( 'id' => 0,'name' => $this->tr->translate('SELECT_PRODUCT')));
 			print_r(Zend_Json::encode($rows));
 			exit();

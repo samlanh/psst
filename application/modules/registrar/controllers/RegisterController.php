@@ -199,9 +199,21 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data['dept_id'] = empty($data['dept_id'])?null:$data['dept_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
     		$groupDetailId = empty($data['groupDetailId'])?null:$data['groupDetailId'];
-    		
-    		$rs = $db->getAllGradeStudyByDegree($data['dept_id'],$student_id,$is_stutested,$groupDetailId);
-    		$rsproduct = $db->getProductbyBranch($data['dept_id']);
+
+			$param = array(
+				'studentId'=>$student_id,
+				'isTestedStudent'=>$is_stutested,
+				'groupDetailId'=>$groupDetailId,
+				'parentcagetoryId'=>$data['parentcagetoryId']
+			);
+
+    		$rs = $db->getAllGradeStudyByDegree($param);//$data['dept_id'],$student_id,$is_stutested,$groupDetailId
+			$data = array(
+				'categoryId'=>$data['dept_id'],
+				'parentcagetoryId'=>$data['parentcagetoryId'],
+			);
+    		$rsproduct = $db->getProductbyBranch($data);
+
     		if(!empty($rsproduct) OR !empty($rs)){
     			$rs = array_merge($rs,$rsproduct);
     		}

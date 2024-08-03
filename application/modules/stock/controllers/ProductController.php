@@ -212,7 +212,10 @@ class Stock_ProductController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		$data=$this->getRequest()->getPost();
     		$db = new Application_Model_DbTable_DbGlobal();
-    		$group = $db->getAllGradeStudyByDegree($data['category']);
+			$data = array(
+			'categoryId'=>$data['category']
+			);
+    		$group = $db->getAllGradeStudyByDegree($data);
     		array_unshift($group, array ( 'id' =>'','name' =>$this->tr->translate("SELECT_PRODUCT")));
     		print_r(Zend_Json::encode($group));
     		exit();

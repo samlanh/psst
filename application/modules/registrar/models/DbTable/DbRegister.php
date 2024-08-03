@@ -161,6 +161,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     				$sale_detailid = $this->insert($arr_sale);
     					
     				if ($condictionSale!=1){
+						$totalQty = $totalQty + ($row['set_qty'] * $data['qty_' . $i]);
     					$arrs = array(
     							'cutstock_id'=>$data['cutStockId'],
     							'student_paymentdetail_id'=>$sale_detailid,
@@ -220,6 +221,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     		$sale_detailid= $this->insert($arr_sale);
     			
     		if ($condictionSale!=1){
+				$totalQty = $totalQty + $data['qty_'.$i];
     			$arrs = array(
     					'cutstock_id'=>$data['cutStockId'],
     					'student_paymentdetail_id'=>$sale_detailid,
@@ -236,6 +238,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     			$dbpu->updateStock($data['item_id'.$i],$data['branch_id'],-$data['qty_'.$i]);
     		}
     	}
+		return $totalQty;
     }
 	function addRegister($data){
 		$db = $this->getAdapter();
@@ -477,13 +480,15 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 						$data['cutStockId'] = $cut_id;
 						$data['costing'] = $rs_item['cost'];
 						$data['conditionCutStock'] = $condictionSale;
-						$this->cutStockDetail($data,$i);
+
+						$totalQty = $this->cutStockDetail($data,$i);
 					}
 				}
 				if ($condictionSale!=1){
 					$dbstock = new Stock_Model_DbTable_DbCutStock();
 					$itemsCode = $dbstock->getCutStockode($data['branch_id']);
 					$_arr=array(
+						'balance'=>$totalQty,
 						'total_received'=>$totalQty,
 					);
 					$this->_name ='rms_cutstock';

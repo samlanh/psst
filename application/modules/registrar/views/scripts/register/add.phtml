@@ -445,15 +445,17 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 								</div>
 								<div class="col-md-9 col-sm-9 col-xs-12">
 									<div class="form-group">
-											<div class="member-card card-display-reg">
-												<p class="text-muted info-list font-13">
-													<span class="title-info"><?php echo $tr->translate("STUDENT_CODE"); ?></span><span id="lbl_stucode" class="inf-value"></span>
-													<span class="title-info"><?php echo $tr->translate("STUDENT_NAMEKHMER"); ?></span><span id="lbl_namekh" class="inf-value"></span>
-													<span class="title-info"><?php echo $tr->translate("NAME_ENGLISH"); ?></span><span id="lbl_nameen" class="inf-value"></span>
-													<span class="title-info"><?php echo $tr->translate("DOB"); ?></span><span id="lbl_dob" class="inf-value"></span>
-													<span class="title-info"><?php echo $tr->translate('PHONE'); ?></span><span id="lbl_phone" class="inf-value">
-												</p>
-											</div>
+										<div class="member-card card-display-reg">
+											<p class="text-muted info-list font-13">
+												<span class="title-info"><?php echo $tr->translate("STUDENT_CODE"); ?></span><span id="lbl_stucode" class="inf-value"></span>
+												<span class="title-info"><?php echo $tr->translate("STUDENT_NAMEKHMER"); ?></span><span id="lbl_namekh" class="inf-value"></span>
+												<span class="title-info"><?php echo $tr->translate("NAME_ENGLISH"); ?></span><span id="lbl_nameen" class="inf-value"></span>
+												<span class="title-info"><?php echo $tr->translate("DOB"); ?></span><span id="lbl_dob" class="inf-value"></span>
+												<span class="title-info"><?php echo $tr->translate('PHONE'); ?></span><span id="lbl_phone" class="inf-value"></span>
+												<span class="title-info"><?php echo $tr->translate('Year Enrolled'); ?></span><span id="lbl_enroll_year" class="inf-value"></span>
+												<span class="title-info"><?php echo $tr->translate('STUDENT_TYPE'); ?></span><span id="lbl_student_type" class="inf-value"></span>
+											</p>
+										</div>
 									</div>
 								</div>
 								<div class="clear"></div>
@@ -482,6 +484,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 													<span id="lbl_mother" class="inf-value"></span>
 													<span class="title-info"><?php echo $tr->translate('PARENT_PHONE'); ?></span>
 													<span id="lbl_parentphone" class="inf-value"></span>
+													
 													<span class="title-info"><?php echo $tr->translate('STATUS'); ?></span>
 													<span id="lbl_status" class="inf-value"></span>
 												</p>
@@ -929,6 +932,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		if(datajson==''){
 			dijit.byId('category').set('store', categoryStore);
 		}
+		getItemDetail();
 	}
 
 	require(["dojo/ready"], function (ready) {
@@ -1025,6 +1029,7 @@ $(document).ready(function() {
 		student_id = dijit.byId("old_stu").get("value");
 
 		student_type = dijit.byId("student_type").get("value");
+		parentCategoryId = $('#parentcategory').val();
 		is_stutested = 0;
 		if (student_type == 2) {
 			is_stutested = 1;
@@ -1034,6 +1039,7 @@ $(document).ready(function() {
 		dojo.xhrPost({
 			url: urlItemId,
 			content: {
+				'parentcagetoryId':parentCategoryId,
 				'dept_id': ItemTypeId,
 				'student_id': student_id,
 				'is_stutested': is_stutested,

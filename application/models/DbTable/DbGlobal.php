@@ -2724,7 +2724,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 
 
-	function getAllGradeStudyByDegree($category_id = null, $student_id = null, $is_stutested = null, $groupDetailId = null)
+	function getAllGradeStudyByDegree($data,$category_id = null, $student_id = null, $is_stutested = null, $groupDetailId = null)
 	{
 		$db = $this->getAdapter();
 		$currentLang = $this->currentlang();
@@ -2737,18 +2737,27 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   		$colunmname AS name
   	FROM `rms_itemsdetail` AS i
   	WHERE i.status = 1 and product_type=1 ";
-		if ($category_id != null and $category_id > 0 and $category_id != '') {
-			$sql .= " AND i.items_id=" . $category_id;
+		// if ($category_id != null and $category_id > 0 and $category_id != '') {
+		// 	$sql .= " AND i.items_id=" . $category_id;
+		// }
+		if (!empty($data['categoryId'])) {
+			$sql .= " AND i.items_id=" .$data['categoryId'];
 		}
-		if ($student_id != null and !empty($student_id)) {
-			if (empty($is_stutested)) {//for normal student
-				if (empty($groupDetailId)) {
-					$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE itemType=1 AND status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $student_id )) ";
+		if (!empty($data['parentcagetoryId'])) {
+			$sql .= " AND  i.items_id IN (SELECT id FROM `rms_items` WHERE id is NOT NULL AND parent=".$data['parentcagetoryId']. ")";
+		}
+		if (!empty($data['studentId'])) {
+			$studentId = $data['studentId'];
+			// if ($student_id != null and !empty($student_id)) {
+			if (!empty($data['isTestedStudent'])) {//for normal student
+				if (!empty($data['groupDetailId'])) {
+					$groupDetailId = $data['groupDetailId'];
+					$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE itemType=1 AND status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $studentId )) ";
 				} else {
-					$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE itemType=1 AND status=1 AND stop_type=0 AND gd_id=$groupDetailId  AND stu_id= $student_id )) ";
+					$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE itemType=1 AND status=1 AND stop_type=0 AND gd_id=$groupDetailId  AND stu_id= $studentId )) ";
 				}
 			} else {//will check expired of result test later //for tested student
-				$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $student_id GROUP By grade_result ))";
+				$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade_result FROM `rms_student_test_result` WHERE stu_test_id = $studentId GROUP By grade_result ))";
 			}
 		}
 		$user = $this->getUserInfo();
@@ -2783,9 +2792,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			}
 		}
 		$sql .= " GROUP BY i.id ORDER BY i.items_type ASC, i.ordering ASC , i.items_id DESC ";
+		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		return $db->fetchAll($sql);
 	}
-	function getProductbyBranch($category_id = null, $product_type = null)
+	function getProductbyBranch($data)
 	{
 		$db = $this->getAdapter();
 		$sql = "SELECT t.id,title AS name 
@@ -2796,24 +2806,30 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
   					 AND ( t.is_productseat=1 OR (t.id=pl.pro_id)) ";
 		$sql .= $this->getAccessPermission("pl.branch_id");
 
-		if ($category_id != null and $category_id > 0) {
+		if ($data['categoryId'] != null and $data['categoryId'] > 0) {
 			//$sql .= ' AND t.items_id=' . $category_id;
 			
 			$arrCon = array(
-				"categoryId" => $category_id,
+				"categoryId" => $data['categoryId'],
 				"itemsType" => 3,
 			);
 			$condiction = $this->getChildItems($arrCon);
 			if (!empty($condiction)){
 				$sql.=" AND t.items_id IN ($condiction)";
 			}else{
-				$sql.=" AND t.items_id=".$category_id;
+				$sql.=" AND t.items_id=".$data['categoryId'];
 			}
 		}
 		if (empty($product_type)) {
 			$sql .= " AND t.product_type=1 ";
 		}
+
+		if (!empty($data['parentcagetoryId'])) {//want to get product in this location
+			$sql .= " AND  t.items_id IN (SELECT id FROM `rms_items` WHERE id is NOT NULL AND parent=" . $data['parentcagetoryId'] . ")";
+		}
 		$sql .= " GROUP BY t.id ";
+
+		
 		return $db->fetchAll($sql);
 	}
 	public function getAllGradeStudyOption($type = 1)
@@ -3108,7 +3124,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 											<span class="title-info">' . $tr->translate("STUDENT_NAMEKHMER") . '</span>: <span id="lbl_namekh" class="inf-value" ><a target="_blank" href="' . $link . '">' . $rs["stu_khname"] . '</a></span>
 											<span class="title-info">' . $tr->translate("NAME_ENGLISH") . '</span>: <span id="lbl_nameen" class="inf-value" ><a target="_blank" href="' . $link . '">' . $rs["last_name"] . " " . $rs["stu_enname"] . '</a></span>
 											<span class="title-info">' . $tr->translate("PHONE") . '</span>: <span id="lbl_phone" class="inf-value">' . $rs['tel'] . '</span>
-											<span class="title-info">' . $tr->translate("Year Enrolled") . '</span>: <span id="lbl_phone" class="inf-value groupinfo">' . $rs['academicYearEnroll'] . '</span>
+											<span class="title-info">' . $tr->translate("Year Enrolled") . '</span>: <span id="lbl_enroll_year" class="inf-value groupinfo">' . $rs['academicYearEnroll'] . '</span>
 											<span class="title-info">' . $tr->translate("STUDENT_TYPE") . '</span>: <span id="lbl_student_type" class="inf-value" >' . $rs['studentType'] . '</span>
 										</p>
 										<span class="title-info hidden">' . $tr->translate("DOB") . '</span><span id="lbl_dob" class="inf-value hidden" >: ' . $rs['dob'] . '</span>

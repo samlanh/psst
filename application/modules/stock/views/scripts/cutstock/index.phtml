@@ -121,13 +121,12 @@
 				}else if(key=="receipt"){
 					url='<?php echo $urlreceipt;?>';
 				}
-				
 				gotoAction();
 				//window.console && console.log(m) || alert(m); 
 			},
 			items: {
-				"void": {name: "<?php echo $tr->translate("VOID");?>", icon: "edit", accesskey: "e"},
 				"receipt": {name: "<?php echo $tr->translate("បង្កាន់ទទួលទំនិញ");?>", icon: "fa-print"},
+				"void": {name: "<?php echo $tr->translate("VOID");?>", icon: "edit", accesskey: "e"},
 			}
 		});
 	});

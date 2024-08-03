@@ -131,7 +131,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 	    			<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
-					<input type="text" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
+					<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;<label id="productcodelabel'.$no.'" title="'.$row['productCode'].'" class="productcodelabel" >'.$row['productCode'].'</label>
     			<input type="hidden" dojoType="dijit.form.TextBox" name="productCode'.$no.'" id="productCode'.$no.'" value="'.$row['productCode'].'" >
@@ -398,8 +398,8 @@ if(!empty($type)){
     	$db = $this->getAdapter();
     	$sql="SELECT ct.*,
     	(SELECT ie.title FROM `rms_itemsdetail` AS ie WHERE ie.id = ct.product_id LIMIT 1) AS items_name,
-(SELECT p.qty FROM `rms_saledetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty,
-(SELECT p.qty_after FROM `rms_saledetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty_after
+		(SELECT p.qty FROM `rms_saledetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty,
+		(SELECT p.qty_after FROM `rms_saledetail` AS p WHERE p.id = ct.student_paymentdetail_id LIMIT 1) AS qty_after
     	 FROM `rms_cutstock_detail` AS ct
     	WHERE ct.cutstock_id=$cutstockid AND ct.student_paymentdetail_id=$stu_paymetdetail_id ";
     	return $db->fetchRow($sql);
@@ -494,7 +494,7 @@ if(!empty($type)){
 				    	<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$rowpaymentdetail['items_name'].'" >
-				    		
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">
 				    	&nbsp;<label id="productcodelabel'.$no.'" title="'.$row['productCode'].'" class="productcodelabel"">'.$row['productCode'].'</label>&nbsp;
@@ -535,7 +535,8 @@ if(!empty($type)){
 				    		<label id="billingdatelabel'.$no.'">'.date("d-M-Y",strtotime($row['payment_date'])).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="payment_id'.$no.'" id="payment_id'.$no.'" value="'.$row['payment_id'].'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="paymentdetail_id'.$no.'" id="paymentdetail_id'.$no.'" value="'.$row['id'].'" >
-				    	<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+				    		<input type="hidden" dojoType="dijit.form.TextBox" name="productname'.$no.'" id="productname'.$no.'" value="'.$row['items_name'].'" >
+							<input type="hidden" dojoType="dijit.form.TextBox" name="receipt_number'.$no.'" id="receipt_number'.$no.'" value="'.$row['receipt_number'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 100px;">&nbsp;
 				    	<label id="productcodelabel'.$no.'" title="'.$row['productCode'].'" class="productcodelabel">'.$row['productCode'].'</label>&nbsp;

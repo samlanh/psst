@@ -41,10 +41,10 @@ class Foundation_GroupController extends Zend_Controller_Action
 			$actionLink = array(
 						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/group/edit" )
 						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/group/copy" )
-						,array("title" =>"STUDENT_LIST_REPORT","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-group" )
+						,array("title" =>"STUDENT_LIST_REPORT","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-group","linkType"=>"inframe" )
 						,array("title" =>"STUDENT_LIST","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-list" )
-						,array("title" =>"STUDENT_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-att-list" )
-						,array("title" =>"TOTAL_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-totalattendance" )
+						,array("title" =>"STUDENT_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-att-list","linkType"=>"inframe" )
+						,array("title" =>"TOTAL_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-totalattendance","linkType"=>"inframe" )
 						);
 				
 			$additionalOption = array(
@@ -63,6 +63,10 @@ class Foundation_GroupController extends Zend_Controller_Action
 	}
 	function addAction()
 	{
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
+		
 		$dbgb = new Application_Model_DbTable_DbGlobal();
 		if ($this->getRequest()->isPost()) {
 			$checkses = $dbgb->checkSessionExpire();
@@ -71,6 +75,7 @@ class Foundation_GroupController extends Zend_Controller_Action
 				exit();
 			}
 			$data = $this->getRequest()->getPost();
+			
 			try {
 				$sms = "INSERT_SUCCESS";
 				$db = new Foundation_Model_DbTable_DbGroup();
@@ -78,12 +83,12 @@ class Foundation_GroupController extends Zend_Controller_Action
 				if ($group_id == -1) {
 					$sms = "RECORD_EXIST";
 				}
+				$inFrame = empty($data['inFrame']) ? "" : "true";
 				if (!empty($data['save_close'])) {
-					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL . "/index");
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL . "/index?inFrame=".$inFrame);
 				} else {
-					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL . "/add");
+					Application_Form_FrmMessage::Sucessfull($sms, self::REDIRECT_URL . "/add?inFrame=".$inFrame);
 				}
-				Application_Form_FrmMessage::message($sms);
 			} catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");

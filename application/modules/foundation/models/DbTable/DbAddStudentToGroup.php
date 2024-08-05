@@ -12,38 +12,57 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 	public function getGroupDetail($search){
 		$db = $this->getAdapter();
 		$_db  = new Application_Model_DbTable_DbGlobal();
+		
+		$branch = $_db->getBranchDisplay();
 		$lang = $_db->currentlang();
 		
 		$label = "name_en";
-		$branch = "branch_nameen";
-		$grade = "rms_itemsdetail.title_en";
-		$degree = "rms_items.title_en";
+		$grade = "title_en";
+		$degree = "title_en";
 		$titleCol = "title";
 		if($lang==1){// khmer
 			$label = "name_kh";
-			$branch = "branch_namekh";
-			$grade = "rms_itemsdetail.title";
-			$degree = "rms_items.title";
+			$grade = "title";
+			$degree = "title";
 			$titleCol = "titleKh";
 		}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$stringCountStudent = " COALESCE((SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1),0) ";
+		
 		$sql = " SELECT
 					`g`.`id`
 					,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
-					,`g`.`group_code` AS `group_code`
+					,`g`.`group_code` AS `titleRecord`
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) as academic
-					,(SELECT $degree FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) as degree
-					,(SELECT $grade FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade
 					,(SELECT p.$titleCol FROM `rms_parttime_list` AS p WHERE p.id = g.session LIMIT 1) AS `session`
 					,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
 					,`g`.`semester` AS `semester`
 					,`g`.`note`
-					,(SELECT $label from rms_view where rms_view.type=9 and key_code=g.is_pass) as status
-					,(SELECT COUNT(gds.`stu_id`) FROM `rms_group_detail_student` as gds WHERE gds.itemType=1 AND gds.`group_id`=`g`.`id` GROUP BY gds.group_id LIMIT 1) AS Num_Student
-				FROM
-					rms_group g
-				where
-					g.status=1
-					and g.is_pass != 1  ";
+					,(SELECT v.$label FROM rms_view AS v WHERE v.type=9 and v.key_code=g.is_pass LIMIT 1) as processingRecord
+					
+					
+				";
+					
+		$sql .= "
+			,CONCAT(COALESCE(i.shortcut,i.$degree),' ',COALESCE((SELECT COALESCE(id.shortcut,id.$grade)  FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1),''),' ".$tr->translate('AMOUNT_STUDENT')." ',$stringCountStudent ) AS subTitleRecord
+			,CASE 
+				WHEN g.is_pass = 0 THEN 'bg-label-secondary' 
+				WHEN g.is_pass = 1 THEN 'bg-label-success' 
+				WHEN g.is_pass = 2 THEN 'bg-label-primary' 
+				WHEN g.is_pass = 3 THEN 'bg-label-info' 
+				WHEN g.is_pass = 4 THEN 'bg-label-success' 
+				ELSE 'bg-label-secondary' 
+			END as processingBg ";
+			
+		$sql .= " 
+			FROM
+				rms_group AS g 
+				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
+			WHERE
+				g.status=1
+				and g.is_pass != 1  
+		";
+			
 	
 		$order = " ORDER BY `g`.`id` DESC " ;
 	
@@ -64,8 +83,8 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 	
-		if(!empty($search['study_year'])){
-			$where.=' AND g.academic_year='.$search['study_year'];
+		if(!empty($search['academic_year'])){
+			$where.=' AND g.academic_year='.$search['academic_year'];
 		}
 		if(!empty($search['group'])){
 			$where.=' AND g.id='.$search['group'];
@@ -98,7 +117,7 @@ class Foundation_Model_DbTable_DbAddStudentToGroup extends Zend_Db_Table_Abstrac
 					$group_info = $dbGroup->getGroupById($_data['group']);
 					
 					$ids = explode(',', $_data['identity']);
-					if(!empty($ids))foreach ($ids as $stu_id){
+				if(!empty($ids))foreach ($ids as $stu_id){
 					
 					$_arrcheck = array(
 						'gd_id'	=>$stu_id,

@@ -120,6 +120,10 @@
 		});
 		 getAllGroup();
 		 getPartTimeListByDregree();
+		 
+		<?php if (!empty($this->search['academic_year'])){?>
+		dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year']?>');  
+		<?php }?> 
 	});
 	var oldBranch = "<?php echo $this->search['branch_id']?>";
 	url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';

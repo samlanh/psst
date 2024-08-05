@@ -225,7 +225,7 @@ class Foundation_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 
 		$sql .= ", g.status AS statusRecord ";
 		$sql .= "
-			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' ',COALESCE((SELECT COALESCE(id.shortcut,id.$colunmname)  FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1),''),' ".$tr->translate('TOTAL_STUDENT')." ',$stringCountStudent ) AS subTitleRecord
+			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' ',COALESCE((SELECT COALESCE(id.shortcut,id.$colunmname)  FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1),''),' ".$tr->translate('AMOUNT_STUDENT')." ',$stringCountStudent ) AS subTitleRecord
 			,CASE 
 				WHEN g.is_pass = 0 THEN 'bg-label-secondary' 
 				WHEN g.is_pass = 1 THEN 'bg-label-success' 

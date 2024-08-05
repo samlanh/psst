@@ -83,6 +83,7 @@
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> <span class="required">*</span> :</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<?php echo $frm->getElement("branch_id");?>
+									<input type="hidden" name="inFrame" id="inFrame" value="<?php echo $this->inFrame;?>"  dojoType="dijit.form.TextBox" class='fullside'/>
 								</div>
 							 </div>
 							<div class="form-group">
@@ -1059,8 +1060,9 @@ function submitDataClose(){
 		    url: url_submit,	
 			form: dojo.byId("frm_add_tran"),		    
 			load: function(data) {
+				inFrame = dijit.byId("inFrame").get("value");
 				alert('<?php echo $tr->translate('INSERT_SUCCESS');?> !');
-				window.location.href ="<?php echo $this->baseUrl();?>/foundation/group";
+				window.location.href ="<?php echo $this->baseUrl();?>/foundation/group?inFrame="+inFrame;
 			},
 			error: function(e) {
 			}

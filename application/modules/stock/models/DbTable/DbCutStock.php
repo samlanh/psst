@@ -520,7 +520,7 @@ if(!empty($type)){
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="detailid'.$no.'" id="detailid'.$no.'" value="'.$rowpaymentdetail['id'].'" >
 				    	</td>
 				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateqty('.$no.',1);" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$rowpaymentdetail['qty_receive'].'" style="text-align: center;" ></td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['qty_after'].'" style="text-align: center;" ></td>
+				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['remain'].'" style="text-align: center;" ></td>
 				    	<td >
 				    		<input class="fullside" readonly="readonly" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="'.date("Y-m-d",strtotime($rowpaymentdetail['remide_date'])).'" >
 				    	</td>

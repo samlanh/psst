@@ -56,7 +56,7 @@ class Foundation_StudentreturnController extends Zend_Controller_Action {
 					$_add = new Foundation_Model_DbTable_DbStudentReturn();
 	 				$_add->addStudentDropReturn($_data);
 	 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/studentreturn");
-	 					exit();
+	 					
 				}catch(Exception $e){
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 					Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -92,11 +92,9 @@ class Foundation_StudentreturnController extends Zend_Controller_Action {
 			$row = $db->getStudentDropReturnById($id);
 			if (empty($row)){
 				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentreturn/index");
-				exit();
 			}
 			if ($row['status']==0){
 				Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_DEACTIVE_RECORD","/foundation/studentreturn/index");
-				exit();
 			}
 			$this->view->row =$row;
 			$tsub= new Foundation_Form_FrmStudentReturn();

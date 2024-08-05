@@ -19,6 +19,8 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 						'academic_year' => '',
 						'grade'	=>'',
 						'session' => '',
+						'start_date'=> date('Y-m-d'),
+						'end_date'=>date('Y-m-d'),
 				);
 			}
 			$db_student= new Foundation_Model_DbTable_DbGroupStudentChangeGroup();
@@ -28,7 +30,7 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
 			$link=array(
 					'module'=>'foundation','controller'=>'groupstudentchangegroup','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('group_code'=>$link,'academic'=>$link,'grade'=>$link,'changeType'=>$link,'to_group_code'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows);
 			$this->view->adv_search = $search;
 			
 		}catch (Exception $e){

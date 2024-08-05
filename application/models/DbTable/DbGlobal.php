@@ -4967,6 +4967,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				AND deg.`type`=1
 			
 		";
+		$sql .= " AND COALESCE(deg.is_parent,0) = 0 ";
 		$user = $this->getUserProfile();
 		$level = $user['user_type'];
 		if (!empty($_data['schooloptoncheck'])) {

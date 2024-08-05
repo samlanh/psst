@@ -148,27 +148,27 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     	$string.='</select>
     			</td>
     			<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-    				<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+    				<label id="origtotallabel'.$no.'">'.number_format($row['qty'],0).'</label>
     				<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
     			</td> ';
 if(!empty($type)){
 	if($type==1){
 		$string.='<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-						<label id="duelabel'.$no.'">'.number_format($row['qty_after'],2).'</label>
+						<label id="duelabel'.$no.'">'.number_format($row['qty_after'],0).'</label>
 						<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_after'].'" >
 					</td>
-					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateqty('.$no.', '.$type.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
 					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
 					<td >
-						<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+						<input class="fullside" readonly="readonly" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
 					</td> ';
 	}elseif($type==2){
 		$string.='
-					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamountdue('.$no.');" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty'].'" style="text-align: center;" ></td>
-					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0.00" style="text-align: center;" ></td>
-					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="0" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateqty('.$no.', '.$type.');" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty'].'" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0" style="text-align: center;" ></td>
+					<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty'].'" style="text-align: center;" ></td>
 					<td >
-						<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+						<input class="fullside" readonly="readonly" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
 					</td> ';
 	}
 	}
@@ -226,7 +226,7 @@ if(!empty($type)){
     				'student_id'   => $_data['studentId'],
     				'balance'      => $_data['balance'],
     				'total_received'=> $_data['total_received'],
-    				'total_qty_due' => $_data['total_due'],
+    				'total_qty_due' => $_data['total_remain'],
     				'received_date' => $_data['date_payment'],
     				'create_date'   => date("Y-m-d H:i:s"),
     				'modify_date'	=> date("Y-m-d H:i:s"),
@@ -480,10 +480,10 @@ if(!empty($type)){
 			    	}else{$identityedit=$identityedit.",".$no;
 			    	}
 			    	$duevalu=$rowpaymentdetail['due_amount'];
-			    	$paymenttailbybilling = $this->getSumCutStockDetailByStuPayDetId($rowpaymentdetail['student_paymentdetail_id'], $rowpaymentdetail['id']);// get other pay amount on this Purchase on other payment number
-			    	if (!empty($paymenttailbybilling)){
-			    		$duevalu = $rowpaymentdetail['qty']-$paymenttailbybilling['tolalpayamount'];
-			    	}
+			    	// $paymenttailbybilling = $this->getSumCutStockDetailByStuPayDetId($rowpaymentdetail['student_paymentdetail_id'], $rowpaymentdetail['id']);// get other pay amount on this Purchase on other payment number
+			    	// if (!empty($paymenttailbybilling)){
+			    	// 	$duevalu = $rowpaymentdetail['qty']-$paymenttailbybilling['tolalpayamount'];
+			    	// }
 			    	
 			    	$string.='
 			    	<tr id="row'.$no.'" style="background: #fff; border: solid 1px #bac;">
@@ -511,18 +511,18 @@ if(!empty($type)){
 						    	}
 				   $string.='</select></td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-				    		<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['qty'],2).'</label>
+				    		<label id="origtotallabel'.$no.'">'.number_format($rowpaymentdetail['qty'],0).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$rowpaymentdetail['qty'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-				    		<label id="duelabel'.$no.'">'.number_format($duevalu,2).'</label>
+				    		<label id="duelabel'.$no.'">'.number_format($duevalu,0).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$duevalu.'" >
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="detailid'.$no.'" id="detailid'.$no.'" value="'.$rowpaymentdetail['id'].'" >
 				    	</td>
-				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$rowpaymentdetail['qty_receive'].'" style="text-align: center;" ></td>
+				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateqty('.$no.',1);" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="'.$rowpaymentdetail['qty_receive'].'" style="text-align: center;" ></td>
 				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$rowpaymentdetail['qty_after'].'" style="text-align: center;" ></td>
 				    	<td >
-				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="'.date("Y-m-d",strtotime($rowpaymentdetail['remide_date'])).'" >
+				    		<input class="fullside" readonly="readonly" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="'.date("Y-m-d",strtotime($rowpaymentdetail['remide_date'])).'" >
 				    	</td>
 			    	</tr>';
 			    	
@@ -554,17 +554,17 @@ if(!empty($type)){
 				   $string.='</select>	
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc; min-width: 70px;">&nbsp;
-				    		<label id="origtotallabel'.$no.'">'.number_format($row['qty'],2).'</label>
+				    		<label id="origtotallabel'.$no.'">'.number_format($row['qty'],0).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty'.$no.'" id="qty'.$no.'" value="'.$row['qty'].'" >
 				    	</td>
 				    	<td style="vertical-align: middle; text-align: left; border-left:solid 1px #ccc;  min-width: 70px; ">&nbsp;
-				    		<label id="duelabel'.$no.'">'.number_format($row['qty_after'],2).'</label>
+				    		<label id="duelabel'.$no.'">'.number_format($row['qty_after'],0).'</label>
 				    		<input type="hidden" dojoType="dijit.form.TextBox" name="qty_balance'.$no.'" id="qty_balance'.$no.'" value="'.$row['qty_after'].'" >
 				    	</td>
 				    	<td style="width: 70px;"><input type="text" class="fullside" dojoType="dijit.form.NumberTextBox" required="required" onKeyup="calculateamount('.$no.');" name="qty_receive'.$no.'" id="qty_receive'.$no.'" value="0" style="text-align: center;" ></td>
 				    	<td style="width: 70px;"><input type="text" class="fullside" readonly="readonly" dojoType="dijit.form.NumberTextBox" required="required" name="remain'.$no.'" id="remain'.$no.'" value="'.$row['qty_after'].'" style="text-align: center;" ></td>
 				    	<td >
-				    		<input class="fullside" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
+				    		<input class="fullside" readonly="readonly" type="text" dojoType="dijit.form.DateTextBox" name="remide_date'.$no.'" id="remide_date'.$no.'" value="now" >
 				    	</td>
 			    	</tr>';
 			    }
@@ -601,7 +601,7 @@ if(!empty($type)){
     				'student_id'   => $_data['student_id'],
     				'balance'      => $_data['balance'],
     				'total_received'=> $_data['total_received'],
-    				'total_qty_due' => $_data['total_due'],
+    				'total_qty_due' => $_data['total_remain'],
     				'received_date' => $_data['date_payment'],
 //     				'create_date'   => date("Y-m-d H:i:s"),
     				'modify_date'	=> date("Y-m-d H:i:s"),

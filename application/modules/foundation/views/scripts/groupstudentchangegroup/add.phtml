@@ -29,41 +29,46 @@
 							dijit.byId('branch_id').focus();
 							return false;
 						}
-
-						academicYear=dijit.byId('study_year').get('value');
-               			 if(academicYear==0 || academicYear==''){
-                        		alert('<?php echo $tr->translate("SELECT_STUDY_YEAR");?>');
-								dijit.byId('study_year').focus();
-								return false;	
-                		}
-
+						
 						FromgroupId=dijit.byId('from_group').get('value');
 						groupId=dijit.byId('groupId').get('value');
 						changeType = dijit.byId('change_type').get('value');
-
-						if(changeType==1){//change group
-							if((FromgroupId==0 || FromgroupId=='' || groupId==0 || groupId=='') || FromgroupId==groupId){
-                        		alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
-								dijit.byId('groupId').focus();
-								return false;	
-                			}
-						}else if(changeType==2){//upgrade grade
-							gradeId=dijit.byId('gradeId').get('value');
-							if(gradeId==0 || gradeId==''){
-                        		alert('<?php echo $tr->translate("SELECT_GRADE");?>');
-								dijit.byId('academic_year').focus();
-								return false;	
-                			}
-						}else{
-							degree=dijit.byId('degree').get('value');
-							degreeId=dijit.byId('degreeId').get('value');
-               			 	if((degree==0 || degree=='') && (degreeId==0 || degreeId=='')){
-                        		alert('<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>');
-								dijit.byId('degreeId').focus();
-								return false;	
-                			}	
+						
+						if(changeType!=4){
+							academicYear=dijit.byId('study_year').get('value');
+							 if(academicYear==0 || academicYear==''){
+									alert('<?php echo $tr->translate("SELECT_STUDY_YEAR");?>');
+									dijit.byId('study_year').focus();
+									return false;	
+							}
+						
+							if(changeType==1){//change group
+								if((FromgroupId==0 || FromgroupId=='' || groupId==0 || groupId=='') || FromgroupId==groupId){
+									alert('<?php echo $tr->translate("PLEASE_SELECT_GROUP");?>');
+									dijit.byId('groupId').focus();
+									return false;	
+								}
+							}else if(changeType==2){//upgrade grade
+								gradeId=dijit.byId('gradeId').get('value');
+								if(gradeId==0 || gradeId==''){
+									alert('<?php echo $tr->translate("SELECT_GRADE");?>');
+									dijit.byId('academic_year').focus();
+									return false;	
+								}
+							}else if(changeType==4){ //Graduate
+							}else{
+								degree=dijit.byId('degree').get('value');
+								degreeId=dijit.byId('degreeId').get('value');
+								if((degree==0 || degree=='') && (degreeId==0 || degreeId=='')){
+									alert('<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>');
+									dijit.byId('degreeId').focus();
+									return false;	
+								}	
+							}
 						}
-						//loadingBlock();	
+
+						
+						loadingBlock();	
 					}else {
 						return false;
 					}
@@ -107,6 +112,17 @@
 															<?php echo $frm->getElement("branch_id");?>
 														</div>
 													</div>
+													<div class="form-group">
+														<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<select id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
+																<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
+																<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
+																<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
+																<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
+															</select>
+														</div>
+													 </div>
 												</div>
 											</div>
 											<div class="col-md-8 col-sm-8 col-xs-12"> 
@@ -140,17 +156,7 @@
 														<?php echo $frm->getElement("from_degree");?>
 												   </div>
 												</div>
-												<div class="form-group">
-													<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT");?></label>
-													<div class="col-md-7 col-sm-7 col-xs-12">
-														<select id="sortStundent" name="sortStundent" class="fullside"  dojoType="dijit.form.FilteringSelect" >
-															<option value="0"><?php echo $tr->translate("DEFAULT");?></option>
-															<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC");?></option>
-															<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC");?></option>
-															<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC");?></option>
-														</select>
-													</div>
-												 </div>
+												
 												<div class="form-group">
 													<label class="control-label  col-md-5 col-sm-5 col-xs-12" >
 													<?php echo $tr->translate("STUDENT_INFO");?>
@@ -312,28 +318,28 @@
 								</div>
 							</div>
 						</div>
-		                <div class="form-group otherCondiction">
+		                <div class="newStudyInfo form-group otherCondiction">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span> :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		 <input id="study_year" />
 		                   </div>
 		                </div>
-						<div class="form-group conditionGroup">
+						<div class="newStudyInfo form-group conditionGroup">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?>
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		 <input id="degreeId" />
 		                   </div>
 		                </div>
-		                <div class="form-group conditionGroup">
+		                <div class="newStudyInfo form-group conditionGroup">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GRADE");?><span class="required">(*)</span>
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
 		                   		 <input id="gradeId" />
 		                   </div>
 		                </div>
-			            <div class="form-group otherCondiction">
+			            <div class="newStudyInfo form-group otherCondiction">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TO_GROUP");?> <span class="required">(*)</span>
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -542,9 +548,28 @@ dojo.ready(function(){
 
 function conditionGroup(){
 	let changeType = dijit.byId('change_type').get('value');
-	$(".conditionGroup").css("display", "block");
+	$(".newStudyInfo").css("display", "block");
+	$(".newStudyInfo.conditionGroup").css("display", "block");
+	
+	dijit.byId('study_year').set('required',true); 
+	dijit.byId('groupId').set('required',true);
+	dijit.byId('degreeId').set('required',true); 
+	dijit.byId('gradeId').set('required',true); 
+		
 	if(changeType==1){
-		$(".conditionGroup").css("display", "none");
+		$(".newStudyInfo.conditionGroup").css("display", "none");
+		dijit.byId('study_year').set('required',true); 
+		dijit.byId('groupId').set('required',true);
+		dijit.byId('degreeId').set('required',false); 
+		dijit.byId('gradeId').set('required',false); 
+	}else if(changeType==4){
+		$(".newStudyInfo").css("display", "none");
+		dijit.byId('study_year').set('required',false); 
+		dijit.byId('groupId').set('required',false); 
+		
+		dijit.byId('degreeId').set('required',false); 
+		dijit.byId('gradeId').set('required',false); 
+		
 	}
 }
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';

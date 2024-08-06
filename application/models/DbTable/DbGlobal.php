@@ -1495,8 +1495,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql = "
 			SELECT 
-				s.*,
-	   			DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
+			
+				fam.fatherNameKh AS father_khname 
+				,fam.fatherName AS father_enname  
+				,fam.fatherNation AS father_nation
+				,fam.fatherPhone AS father_phone
+				
+				,fam.motherNameKh AS mother_khname 
+				,fam.motherName AS mother_enname  
+				,fam.motherNation AS mother_nation  
+				,fam.motherPhone AS mother_phone  
+				
+				,fam.guardianNameKh AS guardian_khname 
+				,fam.guardianName AS guardian_enname 
+				,fam.guardianNation AS guardian_nation 
+				,fam.guardianPhone AS guardian_tel
+				,s.*
+				,DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
 	   			sgd.grade,
 	   			sgd.degree,
 	   			sgd.is_newstudent AS is_stu_new,
@@ -1515,20 +1530,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   		sgd.feeId AS fee_id,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=sgd.group_id AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) AS group_name
 				
-				,fam.fatherNameKh AS father_khname 
-				,fam.fatherName AS father_enname  
-				,fam.fatherNation AS father_nation
-				,fam.fatherPhone AS father_phone
 				
-				,fam.motherNameKh AS mother_khname 
-				,fam.motherName AS mother_enname  
-				,fam.motherNation AS mother_nation  
-				,fam.motherPhone AS mother_phone  
-				
-				,fam.guardianNameKh AS guardian_khname 
-				,fam.guardianName AS guardian_enname 
-				,fam.guardianNation AS guardian_nation 
-				,fam.guardianPhone AS guardian_tel
 			
 	   		FROM 
 	   			rms_student AS s LEFT JOIN rms_group_detail_student AS sgd ON s.stu_id=sgd.stu_id
@@ -1552,8 +1554,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		$sql = "
 		SELECT 
-			s.*,
-			'N/A' as group_name,
+			
+			fam.fatherNameKh AS father_khname 
+			,fam.fatherName AS father_enname  
+			,fam.fatherNation AS father_nation
+			,fam.fatherPhone AS father_phone
+			
+			,fam.motherNameKh AS mother_khname 
+			,fam.motherName AS mother_enname  
+			,fam.motherNation AS mother_nation  
+			,fam.motherPhone AS mother_phone  
+			
+			,fam.guardianNameKh AS guardian_khname 
+			,fam.guardianName AS guardian_enname 
+			,fam.guardianNation AS guardian_nation 
+			,fam.guardianPhone AS guardian_tel
+			,s.*
+			,'N/A' as group_name,
 			(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 			(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,
 			(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS credit_memo_id,  	
@@ -1568,20 +1585,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			'1' AS is_newstudent,
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll
 		
-			,fam.fatherNameKh AS father_khname 
-			,fam.fatherName AS father_enname  
-			,fam.fatherNation AS father_nation
-			,fam.fatherPhone AS father_phone
 			
-			,fam.motherNameKh AS mother_khname 
-			,fam.motherName AS mother_enname  
-			,fam.motherNation AS mother_nation  
-			,fam.motherPhone AS mother_phone  
-			
-			,fam.guardianNameKh AS guardian_khname 
-			,fam.guardianName AS guardian_enname 
-			,fam.guardianNation AS guardian_nation 
-			,fam.guardianPhone AS guardian_tel
 		   		
 	   	FROM 
 			rms_student as s JOIN rms_student_test_result As t ON t.stu_test_id=s.stu_id 

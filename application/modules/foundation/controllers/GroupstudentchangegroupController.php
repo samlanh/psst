@@ -50,8 +50,9 @@ class Foundation_GroupstudentchangegroupController extends Zend_Controller_Actio
  				$_add->addGroupStudentChangeGroup($data);
   				if(!empty($data['save_close'])){
   					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/groupstudentchangegroup");
-  				}
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
+  				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/groupstudentchangegroup/add");
+				}
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

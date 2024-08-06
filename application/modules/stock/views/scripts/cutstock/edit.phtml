@@ -165,21 +165,14 @@ tr.head-td th {
 											</div>
 
 											<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_DUE");?> 
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_ORG");?> 
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
 														<?php echo $frm->getElement("balance");?>
 														
 												</div>
 											</div>
-											<div class="form-group" style="display: none;">
-												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("AMOUNT");?> 
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<?php echo $frm->getElement("amount");?>
-														<?php echo $frm->getElement("all_balance");?>
-												</div>
-											</div>
+											
 											<div class="form-group">
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TOTAL_RECEIVED");?> 
 												</label>
@@ -192,7 +185,7 @@ tr.head-td th {
 												<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("REMAIN");?> 
 												</label>
 												<div class="col-md-7 col-sm-7 col-xs-12">
-													<?php echo $frm->getElement("total_due");?>
+													<?php echo $frm->getElement("total_remain");?>
 												</div>
 											</div>
 										</div>
@@ -547,7 +540,7 @@ tr.head-td th {
 				temp+='</tr>';
 				temp+='<tr class="rowlist">';
 					temp+='<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប Total Qty Remain</strong></td>';
-					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_due').get('value')+'&nbsp;</td>';
+					temp+='<td align="center">&nbsp;&nbsp;'+dijit.byId('total_remain').get('value')+'&nbsp;</td>';
 				temp+='</tr>';
 			temp+='</table>';
 		dojo.byId('t_amountmoneytype').innerHTML = temp;
@@ -641,13 +634,11 @@ tr.head-td th {
 				dojo.html.set(dojo.byId("table_row"),data.stringrow , {
 				     parseContent: true,
 					});
-				dijit.byId('all_balance').set('value',data.all_balance);
-
 				dojo.byId("lb_name").innerHTML =  data.stuName;
 				dojo.byId("lb_id").innerHTML =  data.stucode;
 				dojo.byId("studentpay").innerHTML =  data.stuName;
 				dojo.byId("lb_tel").innerHTML =  data.tel;
-				calBalance();
+				
 				HideloadingBlock();
 			},
 			error: function(err) {
@@ -658,21 +649,31 @@ tr.head-td th {
 	}
 	
 	function CheckAllTotal(index){
+		
 		var total = 0;
 		var descriptionr="";
 		var old_identity = $("#old_identity").val();
+
+		cut_stock_type = dijit.byId('cut_stock_type').get('value');
+
 		if(index==0){
 				if($('#check_all').is(":checked")){
 					$('.checkbox').each(function() { //loop through each checkbox
 			            this.checked = true;  
 					});
 					$("#identity").val(old_identity);
+
+					check=1
+					ResetQty(index,check,cut_stock_type);
+					
 				}else{
 					$('.checkbox').each(function() { //loop through each checkbox
 			            this.checked = false;  
 					});
-					ResetPayment();
 					$("#identity").val('');
+
+					check=2
+					ResetQty(index,check,cut_stock_type);
 				}
 		}else{
 			 $('#check_all').attr('checked', false); // Unchecks it
@@ -681,179 +682,150 @@ tr.head-td th {
 		     $(':checkbox:checked').each(function(i){
 		    	 identity[i] = $(this).val();
 		     });
-		    
 		     $("#identity").val(identity);
 		     var newIdentity = $("#identity").val();
-
 				if(old_identity == newIdentity ){
 					$('#check_all').attr('checked', true); // checks it
 				}
 			if($('#mfdid_'+index).is(":checked")){
+				check=1
+				ResetQty(index,check,cut_stock_type);
 			}else{
-				dijit.byId('qty_receive'+index).set('value',0);
-				//calculateAmountCheckByKeyup();
-				//ResetPayment();
+				check=2
+				ResetQty(index,check,cut_stock_type);
 			}
 		}
 		calculateAmountCheck();
-		calBalance();
-	}
-	
-	function ResetPayment(){
-		var old_identity = $("#old_identity").val();
-		var rowIDArray = old_identity.split(',');
-		for(var n = 0; n < rowIDArray.length; n++) {
-			dijit.byId('qty_receive'+rowIDArray[n]).set('value',0);
-			amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
-			discount = 0;
-			amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
-			amountrowafterdis = amountrow - amountrowdis; //amount after discount
-			amountrow = parseFloat(dijit.byId('remain'+rowIDArray[n]).set('value',amountrowafterdis.toFixed(2)));
-		}
-	}
-	function calBalance() {
-		var balance=0;
-		var rowId = $('#old_identity').val();
-		if(rowId==""){
-			return false;
-		}
-		var rowIDArray = rowId.split(',');
-		for(var n = 0; n < rowIDArray.length; n++) {
-			if($('#mfdid_'+rowIDArray[n]).is(":checked")){
-				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
-				discount = 0;
-				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
 		
-				amountrowafterdis = amountrow - amountrowdis; //amount after discount
-		
-				balance = balance + parseFloat(amountrowafterdis);
-			}
-		}
-		dijit.byId('balance').attr('value',balance.toFixed(2));
+	}
+	function ResetQty(index,check,type){
+		if(index==0){     /// Reset qty check all
+			var old_identity = $("#old_identity").val();
+			var rowIDArray = old_identity.split(',');
+			for(var n = 0; n < rowIDArray.length; n++) {
+				if(type==1){   /// cut stock 
+					if(check==1){
+						dijit.byId('remain'+rowIDArray[n]).set('value',0);
+						dijit.byId('qty_receive'+rowIDArray[n]).set('readOnly',false);
 
-	}
-	function checkAmout(){
-		amount_paid = parseFloat(dijit.byId('amount').get('value'));
-		balance = parseFloat(dijit.byId('balance').get('value'));
-		if(amount_paid>=balance){
-			dijit.byId('amount').set('value',balance.toFixed(2))
+						qty_balance = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+						dijit.byId('qty_receive'+rowIDArray[n]).set('value',qty_balance);
+
+					}else{
+						dijit.byId('qty_receive'+rowIDArray[n]).set('value',0);
+						dijit.byId('qty_receive'+rowIDArray[n]).set('readOnly',true);
+
+						qty_balance = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+						dijit.byId('remain'+rowIDArray[n]).set('value',qty_balance);
+					}
+				}else{  // dept stock
+					
+					if(check==1){
+						dijit.byId('qty_receive'+rowIDArray[n]).set('value',0);
+						dijit.byId('qty_balance'+rowIDArray[n]).set('readOnly',false);
+
+						qty = parseFloat(dijit.byId('qty'+rowIDArray[n]).get('value'));
+						dijit.byId('qty_balance'+rowIDArray[n]).set('value',qty);
+						dijit.byId('remain'+rowIDArray[n]).set('value',qty);
+
+					}else{
+						dijit.byId('qty_balance'+rowIDArray[n]).set('value',0);
+						dijit.byId('qty_balance'+rowIDArray[n]).set('readOnly',true);
+
+						qty = parseFloat(dijit.byId('qty'+rowIDArray[n]).get('value'));
+						dijit.byId('qty_receive'+rowIDArray[n]).set('value',qty);
+						dijit.byId('remain'+rowIDArray[n]).set('value',0);
+					}
+				}
+			}
+		}else{   // reset qty check one by one
+
+			if(type==1){   // cut
+				if(check==1){
+				dijit.byId('remain'+index).set('value',0);
+				dijit.byId('qty_receive'+index).set('readOnly',false);
+
+				qty_balance = parseFloat(dijit.byId('qty_balance'+index).get('value'));
+				dijit.byId('qty_receive'+index).set('value',qty_balance);
+
+				}else{
+					dijit.byId('qty_receive'+index).set('value',0);
+					dijit.byId('qty_receive'+index).set('readOnly',true);
+
+					qty_balance = parseFloat(dijit.byId('qty_balance'+index).get('value'));
+					dijit.byId('remain'+index).set('value',qty_balance);
+				}
+
+			}else{   // remain
+				if(check==1){
+					dijit.byId('qty_receive'+index).set('value',0);
+					dijit.byId('qty_balance'+index).set('readOnly',false);
+
+					qty = parseFloat(dijit.byId('qty'+index).get('value'));
+					dijit.byId('qty_balance'+index).set('value',qty);
+					dijit.byId('remain'+index).set('value',qty);
+
+				}else{
+					dijit.byId('qty_balance'+index).set('value',0);
+					dijit.byId('qty_balance'+index).set('readOnly',true);
+
+					qty = parseFloat(dijit.byId('qty'+index).get('value'));
+					dijit.byId('qty_receive'+index).set('value',qty);
+					dijit.byId('remain'+index).set('value',0);
+				}
+			}
+			
 		}
 		calculateAmountCheck();
 	}
 	function calculateAmountCheck(){
-		ResetPayment();
-		amount_paid = parseFloat(dijit.byId('amount').get('value'));
+		
 		var rowId = $('#identity').val();
 		if(rowId==""){
+			dijit.byId('balance').attr('value',0);
+			dijit.byId('total_received').attr('value',0);
+			dijit.byId('total_remain').attr('value',0);
 			return false;
 		}
-		var credit=0;
-		var payment=0;
-		var amount = 0;
-		var due = 0;
-		var discount = 0;
-		var totaldis=0;
-		var amountrow = 0;
+		var totalbalance=0;
+		var totalreceive=0;
+		var totalremain=0;
 		var rowIDArray = rowId.split(',');
-		var amountrowdis = 0;
-		if(amount_paid>0){
-			var paid=0;
-			for(var n = 0; n < rowIDArray.length; n++) {
-				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
-				discount =0;
-				amountrowdis = parseFloat((amountrow*parseFloat(discount))/100).toFixed(2);
-				amountrowafterdis = amountrow - amountrowdis; //amount after discount
-				amount_paid = amount_paid - parseFloat(amountrowafterdis);
-				totaldis+=  totaldis+parseFloat(amountrowdis);
-				if(amount_paid>=0){
-					payment+= amountrowafterdis;
-					dijit.byId('qty_receive'+rowIDArray[n]).set('value',amountrowafterdis.toFixed(2));
-					dijit.byId('remain'+rowIDArray[n]).set('value',0);
-					
-					due+= 0;
-				}else{
-					remain = Math.abs(amount_paid);
-					paid = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value')) - parseFloat(remain);
-					dijit.byId('qty_receive'+rowIDArray[n]).set('value',paid.toFixed(2));
-					dijit.byId('remain'+rowIDArray[n]).set('value',remain.toFixed(2));
-					payment+= paid;
-					due+= remain;
-					break;
-				}
-			}
-		}
-		calculateLastTotal();
-	}
-	function calculateLastTotal(){
-		var rowId = $('#identity').val();
-		if(rowId==""){
-			return false;
-		}
-		var credit=0;
-		var payment=0;
-		var amount = 0;
-		var due = 0;
-		var discount = 0;
-		var totaldis=0;
-		var amountrow = 0;
-		var rowIDArray = rowId.split(',');
-		var amountrowdis = 0;
-		for(var n = 0; n < rowIDArray.length; n++) {
-			payment+= parseFloat(dijit.byId('qty_receive'+rowIDArray[n]).get('value'));
-			due+= parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
 
-			amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
-			discount = 0;
-			amountrowafterdis = ((amountrow*parseFloat(discount))/100).toFixed(2);
-			totaldis= totaldis+parseFloat(amountrowafterdis);
-		}
-		//dijit.byId('total_discount').attr('value',totaldis);
-		dijit.byId('total_received').attr('value',payment.toFixed(2));
-		dijit.byId('total_due').attr('value',due.toFixed(2));
-	}
-	function calculateamount(index){
-		var due = dijit.byId('qty_balance'+index).get('value');
-		var discount = 0;
-		var payment = dijit.byId('qty_receive'+index).get('value');
-		var paid =0;
-		var subtotal=0;
-		
-		paid = parseFloat(payment);
-		subtotal= parseFloat(due) - ((parseFloat(due)*parseFloat(discount))/100).toFixed(2);
-		if(paid > subtotal){
-			dijit.byId('qty_receive'+index).set('value',subtotal.toFixed(2));
-			dijit.byId('remain'+index).set('value',0);
-		}else{
-			dijit.byId('remain'+index).set('value',(subtotal-paid).toFixed(2));
-		}
-		calBalance();
-		calculateAmountCheckByKeyup();
-	}
-	function calculateAmountCheckByKeyup(){
-		var rowId = $('#identity').val();
-		if(rowId==""){
-			return false;
-		}
-		var payment=0;
-		var amount = 0;
-		var due = 0;
-		var discount = 0;
-		var totaldis=0;
-		var amountrow = 0;
-		var rowIDArray = rowId.split(',');
 			for(var n = 0; n < rowIDArray.length; n++) {
-				payment+= parseFloat(dijit.byId('qty_receive'+rowIDArray[n]).get('value'));
-				due+= parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
-		
-				amountrow = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
-				discount = 0;
-				amountrowafterdis = ((amountrow*parseFloat(discount))/100).toFixed(2);
-				totaldis= totaldis+parseFloat(amountrowafterdis);
+			
+				qty_balance = parseFloat(dijit.byId('qty_balance'+rowIDArray[n]).get('value'));
+				qty_receive = parseFloat(dijit.byId('qty_receive'+rowIDArray[n]).get('value'));
+				remain = parseFloat(dijit.byId('remain'+rowIDArray[n]).get('value'));
+
+				totalbalance=totalbalance+qty_balance;
+				totalreceive=totalreceive+qty_receive;
+				totalremain=totalremain+remain;
+			
 			}
-		amount = parseFloat(payment).toFixed(2);
-		dijit.byId('total_received').attr('value',payment.toFixed(2));
-		dijit.byId('total_due').attr('value',due.toFixed(2));
-		dijit.byId('amount').attr('value',parseFloat(amount).toFixed(2));
+		dijit.byId('balance').attr('value',totalbalance.toFixed(0));
+		dijit.byId('total_received').attr('value',totalreceive.toFixed(0));
+		dijit.byId('total_remain').attr('value',totalremain.toFixed(0));
+	}
+	
+	function calculateqty(index,type){
+		var org_qty = dijit.byId('qty'+index).get('value');
+		var qty_receive = dijit.byId('qty_receive'+index).get('value');
+		var qty_balance = dijit.byId('qty_balance'+index).get('value');
+		if(type==1){
+			var qtyremain=qty_balance-qty_receive;
+			if(qty_receive>qty_balance){
+				dijit.byId('qty_receive'+index).attr('value',qty_balance);
+				dijit.byId('remain'+index).attr('value',0);
+			}else{
+				dijit.byId('remain'+index).attr('value',qtyremain.toFixed(0));
+			}
+		}else{
+			var qty_receive=org_qty-qty_balance;
+			dijit.byId('qty_receive'+index).attr('value',qty_receive.toFixed(0));
+			dijit.byId('remain'+index).attr('value',qty_balance.toFixed(0));
+		}
+		calculateAmountCheck();
 	}
 </script>
 

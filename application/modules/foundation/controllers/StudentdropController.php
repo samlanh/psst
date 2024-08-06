@@ -28,7 +28,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$db_student= new Foundation_Model_DbTable_DbStudentDrop();
 			$rs_rows = $db_student->getAllStudentDrop($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","TYPE","STOP_DATE","REASON","USER","STATUS");
+			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","TYPE","STOP_DATE","REASON","returnStudy","USER","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 			);
@@ -92,12 +92,10 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$this->view->row = $row;
 			if (empty($row)){
 				Application_Form_FrmMessage::Sucessfull("NO_RECORD","/foundation/studentdrop/index");
-				exit();
 			}
-			// if ($row['isReturn']==1){
-			// 	Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_STUDENT_ALREADY_RETUN_SCHOOL","/foundation/studentdrop/index");
-			// 	exit();
-			// }
+			 if ($row['isReturn']==1){
+			 	Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_STUDENT_ALREADY_RETUN_SCHOOL","/foundation/studentdrop/index");
+			 }
 			
 			
 		}catch(Exception $e){

@@ -3,12 +3,7 @@
 	echo $this->headTitle($tr->translate('ADD_GROUP_STUDENT_CHANGE_GROUP')); 
 	$frm =  $this->frm;
 ?>
-<style>
-.bgintro {
-    background: #b1badf !important;
-}
-.bgintro label{font-size: 11px !important;}
-</style>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -209,7 +204,30 @@
 						<div class="col-md-6 col-sm-6 col-xs-12">
 			                <div class="form-group">
 			                   <div class="col-md-12 col-sm-12 col-xs-12">
-			                   		<div id="lblfromgroup" ></div>
+									<div class="card-blogform bgInfo">
+										<div class="card-body introduction">
+											<div class="form-group">
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-info-circle" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="mb-0 tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_INFO");?></p>
+													</div> 
+												</div>
+											</div>
+											<div class="row g-3" id="lbltogroup" name="detail_to_group">
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<p class="text-primary me-2 mb-0"><?php echo $tr->translate("ACADEMIC_YEAR")?>: <strong class="value fromAcademic">N/A</strong></p>
+													<p class="text-primary me-2 mb-0"><?php echo $tr->translate("DEGREE")?>: <strong class="value fromDegree">N/A</strong></p>
+												</div>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<p class="text-primary me-2 mb-0"><?php echo $tr->translate("SESSION")?>: <strong class="value fromGrade">N/A</strong></p>
+													<p class="text-primary me-2 mb-0"><?php echo $tr->translate("ROOM")?>: <strong class="value fromSession">N/A</strong></p>
+												</div>
+											</div>
+									   </div>
+									</div>
 			                   </div>
 			                </div>
 			                <div class="form-group">
@@ -235,7 +253,7 @@
 						</div>
 		            </div>
 		            <div class="col-md-4 col-sm-4 col-xs-12 search-blog " style="padding-right:40px;">
-		                 <div class="card-blogform">
+						<div class="card-blogform">
 							<div class="card-body"> 
 								<div class="row">
 									<div class="d-flex"> 
@@ -263,20 +281,37 @@
 								</div>
 							</div>
 						</div> 
-										
-		                <div class="form-group">
-							<div class="d-flex"> 
-								<div class="settings-main-icon ">
-									<i class="fa fa fa-sitemap" aria-hidden="true"></i>
-								</div> 
-								<div class="col-md-8 col-sm-8 col-xs-12"> 
-									<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("NEW_STUDY_INFORMATION");?></p>
+						<div class="form-group">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-blogform bgInfo">
+									<div class="card-body introduction">
+										<div class="form-group">
+											<div class="d-flex"> 
+												<div class="settings-main-icon ">
+													<i class="fa fa-sitemap" aria-hidden="true"></i>
+												</div> 
+												<div class="col-md-8 col-sm-8 col-xs-12"> 
+													<p class="mb-0 tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("NEW_STUDY_INFORMATION");?></p>
+												</div>
+												<div class="col-md-4 col-sm-4 col-xs-12">
+													<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
+												</div> 
+											</div>
+										</div>
+										<div class="row g-3" name="detail_to_group">
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<p class="text-primary me-2 mb-0"><?php echo $tr->translate("ACADEMIC_YEAR")?>: <strong class="value toAcademic">N/A</strong></p>
+												<p class="text-primary me-2 mb-0"><?php echo $tr->translate("DEGREE")?>: <strong class="value toDegree">N/A</strong></p>
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<p class="text-primary me-2 mb-0"><?php echo $tr->translate("SESSION")?>: <strong class="value toGrade">N/A</strong></p>
+												<p class="text-primary me-2 mb-0"><?php echo $tr->translate("ROOM")?>: <strong class="value toSession">N/A</strong></p>
+											</div>
+										</div>
+								   </div>
 								</div>
-								<div class="col-md-4 col-sm-4 col-xs-12">
-									<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="getRefreshGroup();"/>
-								</div> 
 							</div>
-		                </div>
+						</div>
 		                <div class="form-group otherCondiction">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR");?> <span class="required">*</span> :
 		                   </label>
@@ -284,7 +319,7 @@
 		                   		 <input id="study_year" />
 		                   </div>
 		                </div>
-		                 <div class="form-group conditionGroup">
+						<div class="form-group conditionGroup">
 		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEGREE");?>
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -305,12 +340,7 @@
 		                   		<input id="groupId" />
 		                   </div>
 		                </div>
-		                <div class="form-group">
-		                   <div class="col-md-12 col-sm-12 col-xs-12">
-		                   		<div id="lbltogroup" name="detail_to_group" ></div>
-		                   </div>
-		                </div>
-		                 <div class="form-group">
+						<div class="form-group">
 		                   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NOTE");?>  :
 		                   </label>
 		                   <div class="col-md-7 col-sm-7 col-xs-12">
@@ -330,7 +360,6 @@
 					                  </div>
 		                   		</div>
 		                   </div>
-		                   
 		                </div>
 			        </div>
 			    </div>
@@ -339,30 +368,14 @@
    </div>
 </div>
 <style>
-ul.listFor {
-    list-style: none;
-    margin: 0;
-    padding: 10px;
-    border: solid 1px #02014a;
-    width: 100%;
-    display: block;
-    background: #feffca;
-    border-radius: 5px;
+.bgintro {
+    background: #b1badf !important;
 }
-li.row-value {
-    display: inline-block;
-    width: 50%;
+.bgintro label{font-size: 11px !important;}
+.bgInfo {
+    background: #feffca !important;
+	 border: solid 1px #02014a;
 }
-li.row-value span.title {
-    min-width: 22%;
-    display: inline-block;
-    font-weight: 600;
-    color: #0063a5;
-}
-li.row-value span.value {
-    color: #02014a;
-}
-
 table#table {
     border: 1px solid #000;
     border-collapse: collapse;
@@ -387,6 +400,7 @@ table#table tr td {
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore");  
 dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.Textarea");
 
 var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 var degree_store = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
@@ -474,6 +488,7 @@ dojo.ready(function(){
 	    	getRefreshItems();
 	    }
 	}, "from_group");
+	
 	new dijit.form.FilteringSelect({
 		store: group_store,
 	    queryExpr: "*${0}*",
@@ -487,7 +502,9 @@ dojo.ready(function(){
 	    onChange: function() {  
 	    	group_id = dijit.byId('groupId').get('value');
 	    	toStudentGroup(2);
-	    	popupAddGroup();
+			if(group_id==-1){
+				addTab('<?php echo $tr->translate("ADD_STUDY_GROUP");?>','<?php echo $this->baseUrl() . "/foundation/group/add".'?inFrame=true'; ?>');
+			}
 	    }
 	}, "groupId");
 
@@ -627,7 +644,7 @@ function getStudentFromGroup(){
 						+'<div class="custom-control custom-checkbox ">'
 							+'<input type="checkbox" class="checkbox custom-control-input" checked="checked"  value="0" checked="checked" name="checkall" onclick="check('+respone.length+');setValue('+respone.length+');" id="checkall"  >'
 							+'<label class="custom-control-label" for="checkall">'
-								+'<small><?php echo $tr->translate('ALL');?></small>'
+								+'<small></small>'
 							+'</label>'
 						+'</div>'
 					+'</td>'
@@ -683,13 +700,20 @@ function toStudentGroup(type){
 		dijit.byId('identity').attr('value','');
 		togroup = dijit.byId('from_group').get('value');
 		if(togroup==0){
-			dojo.byId('lblfromgroup').innerHTML='';
+			$(".fromAcademic").html("N/A");
+			$(".fromDegree").html("N/A");
+			$(".fromGrade").html("N/A");
+			$(".fromSession").html("N/A");
+			$(".fromGroup").html("N/A");
 			return false;
 		}
 	}else{
 		togroup = dijit.byId('groupId').get('value');
 		if(togroup==0 ){
-			dojo.byId('lbltogroup').innerHTML='';
+			$(".toAcademic").html("N/A");
+			$(".toDegree").html("N/A");
+			$(".toGrade").html("N/A");
+			$(".toSession").html("N/A");
 			return false;
 		}
 	}
@@ -702,24 +726,17 @@ function toStudentGroup(type){
 		handleAs:"json",
 		load: function(data){
 			if(type==1){
-				string='';
-				string+='<ul class="listFor">';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("ACADEMIC_YEAR")?></span> <span class="value">:'+data.year+'</span></li>';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("DEGREE")?></span> <span class="value">:'+data.degree+'</span></li>';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("GRADE")?></span> <span class="value">:'+data.grade+'</span></li>';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("SESSION")?></span> <span class="value">:'+data.session+'</span></li>';
-				string+='</ul>';
-				dojo.byId('lblfromgroup').innerHTML=string;
+				$(".fromAcademic").html(data.year);
+				$(".fromDegree").html(data.degree);
+				$(".fromGrade").html(data.grade);
+				$(".fromSession").html(data.session);
+				$(".fromGroup").html(data.group_code);
 				getAllFromGroupByBranch(1);
 			}else{
-				string='';
-				string+='<ul class="listFor">';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("ACADEMIC_YEAR")?></span> <span class="value">:'+data.year+'</span></li>';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("DEGREE")?></span> <span class="value">:'+data.degree+'</span></li>';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("GRADE")?></span> <span class="value">:'+data.grade+'</span></li>';
-					string+='<li class="row-value"><span class="title"><?php echo $tr->translate("SESSION")?></span> <span class="value">:'+data.session+'</span></li>';
-				string+='</ul>';
-				dojo.byId('lbltogroup').innerHTML=string;
+				$(".toAcademic").html(data.year);
+				$(".toDegree").html(data.degree);
+				$(".toGrade").html(data.grade);
+				$(".toSession").html(data.session);
 			}
 		},
 		error: function(err) {
@@ -759,12 +776,6 @@ function check(i){
 		for(var j=1;j<=i;j++){
 			$("#checkbox"+j).removeAttr("checked");
 		}
-	}
-}
-function popupAddGroup(){
-	id = dijit.byId('groupId').get('value');
-	if(id==-1){
-		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/foundation/group/add";?>','_blank');
 	}
 }
 

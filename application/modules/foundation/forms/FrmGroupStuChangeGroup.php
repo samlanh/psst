@@ -3,12 +3,14 @@
 class Foundation_Form_FrmGroupStuChangeGroup extends Zend_Dojo_Form
 {
 	protected  $tr;
+	protected $textarea;
 	protected $filter;
 
 	public function init()
 	{
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$this->filter = 'dijit.form.FilteringSelect';
+		$this->textarea = 'dijit.form.Textarea';
 	}
 	function FrmAddGroupChangeGroup($data = null)
 	{

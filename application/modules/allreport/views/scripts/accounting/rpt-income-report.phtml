@@ -74,16 +74,15 @@
 	<div id="divPrint">
 		<style>
 			.style {
-				line-height: 20px;
-				font-size: 10px !important;
+				line-height: 16px;
 			}
+			.styleheader{line-height: 20px;}
 			table.content-data {
 				border-collapse: collapse;
 				border: 1px solid #000;
-				font-size: 8px;
 			}
 			table.content-data tr td{
-				padding:2px;
+				padding:1px;
 			}
 			#header {
 				display: table-header-group;
@@ -91,9 +90,7 @@
 				page-break-after: auto;
 				margin-top: 100px;
 			}
-			table.content-data tr.titlerow,table.content-data thead tr.style {
-				line-height: 20px;
-				font-size: 10px !important;
+			table.content-data thead tr.styleheader {
 				padding: 1px 0px;
 				white-space: nowrap;
 				height: 24px;
@@ -106,18 +103,18 @@
 			.noted {
 				word-wrap: break-word;
 				word-break: break-all;
-				font-size: 8px;
 				line-height: 10px;
 				white-space: normal;
-				max-width: 100px;
+				width: 100px;
 				display: block;
 			}
 			table tr td{
 				font-family: 'Times New Roman', 'Khmer OS Battambang';
 			}
 			.row_data{
-				white-space: normal; max-width: 200px; line-height: 12px;
+				white-space: normal; max-width: 200px;
 			}
+			.content-data,.hideprintdate{font-size: 9px ;}
 			
 			@media print {
 				.hide {
@@ -130,7 +127,6 @@
 				}
 				.bgRow {
 					background: #d6e2ff !important;
-					font-size: 11px;
 					}
 			}
 		</style>
@@ -138,25 +134,24 @@
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
-			<tr style="font-size: 12px;">
+			<tr>
 				<td width="15%" align="center"></td>
 				<td align="center" width="70%">
 					<div
-						style="color: #000; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $pageTitle; ?></div>
+						style="color: #000;font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $pageTitle; ?>
+					</div>
 						<?php if(!empty($this->search["start_date"])){?>
-						<span style="color: #000; font-size: 12px; font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:18px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></span><?php }?>
+						<span style="color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></span><?php }?>
 				</td>
 				<td width="15%">
-					<label style="font-size:8px;" class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
+					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="3" id="exportExcel" valign="top">
 					<?php 
-					 	
 					 	$i=1;
 					 	$summaryInfoArray = array();
-							
 							$oldLabelMethod="";
 							$colspanTotal=$countCol;
 							if($countCol>1){
@@ -177,7 +172,7 @@
 					 ?>
 					<table class="content-data" width="100%" border="1" align="center">
 						<thead>
-							<tr class="style" align="center">
+							<tr class="styleheader" align="center">
 								<td scope="col"><?php echo $tr->translate("N_O");?></td>
 								<td scope="col"><?php echo $tr->translate("RECEIPT_NO");?></td>
 								<td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
@@ -189,7 +184,6 @@
 								<?php if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){?>
 								<td scope="col"><?php echo $mainParent["title"];?></td>
 								<?php } ?>
-								<td scope="col"><?php echo $tr->translate("Credit Memo");?></td>
 								<td scope="col"><?php echo $tr->translate("PAID_AMOUNT");?></td>
 								<td scope="col"><?php echo $tr->translate("PAYMENT_METHOD");?></td>
 								<td scope="col"><?php echo $tr->translate("NOTE");?></td>
@@ -198,15 +192,12 @@
 						</thead>
 						<tbody>
 							<?php 
-							
 								foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
-								
 								$i++; 
 								$arr = array(
 									"parentCol"=>$parentCol
 									,"paymentId"=>$rs["paymentId"]
 								);
-								
 								$result = $dbAcc->getPaymentInfoParent($arr);
 								$payTerm="";
 								$tutionTotalFee=0;
@@ -217,21 +208,16 @@
 									$payTerm = empty($result[0]["paymentInfo"]["payTerm"]) ? $tr->translate("OTHER") : $result[0]["paymentInfo"]["payTerm"];
 									$tutionTotalFee = empty($result[0]["paymentInfo"]["gTotalPament"]) ? 0 : $result[0]["paymentInfo"]["gTotalPament"];
 									$tutionTotalFeeLabel = empty($result[0]["paymentInfo"]["gSubTotalFee"]) ? 0 : $result[0]["paymentInfo"]["gSubTotalFee"];
-									$tutionTotalFeeLabel = $tutionTotalFeeLabel;
-									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"]) ? 0 : str_replace(".00","",number_format($result[0]["paymentInfo"]["totalDiscountPercent"],2))."%";
-									$tutionFeeDisAmt = empty($result[0]["paymentInfo"]["totalDiscountAmt"]) ? "" : "+".$result[0]["paymentInfo"]["totalDiscountAmt"];
+									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"] ANd$result[0]["paymentInfo"]["totalDiscountPercent"]!="0.00") ? '' : str_replace(".00","",number_format($result[0]["paymentInfo"]["totalDiscountPercent"],2))."%";
+									$tutionFeeDisAmt = empty($result[0]["paymentInfo"]["totalDiscountAmt"] AND $result[0]["paymentInfo"]["totalDiscountAmt"]!="0.00" ) ? '' : "+".$result[0]["paymentInfo"]["totalDiscountAmt"];
 								}
-								
 							?>
-								
 								<?php 
 									if($paymentMethod !=$rs["payment_method"] || $bankId !=$rs["bank_id"]){
 										$rowLabel = $rs["bankName"];
 										if($rs["payment_method"]==1){
 											$rowLabel = $rs["paymentMethodTitle"];
 										}
-										
-									
 								?>
 								<?php if($kerIndex>0){ 
 								$arryTotal = array(
@@ -241,7 +227,6 @@
 									,"totalPaidAmt" =>$totalPaidByMethod
 								);
 								array_push($summaryInfoArray, $arryTotal);
-									
 								?>
 								<tr class="style">
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
@@ -250,7 +235,6 @@
 									<?php if($colspanTotal>1){?>
 									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
 									<?php } ?>
-									<td align="right"><strong><?php echo empty($totalCreditMemoByMethod) ? "" : "(-".number_format($totalCreditMemoByMethod,2).")"; ?></strong></td>
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
 									<td></td>
@@ -265,7 +249,7 @@
 									$i=1;
 								?>
 								<tr class="style">
-									<td colspan="<?php echo 13+$countCol;?>" align="left"><strong><?php echo $rowLabel;?></strong></td>
+									<td colspan="<?php echo 12+$countCol;?>" align="left"><strong><?php echo $rowLabel;?></strong></td>
 								</tr>
 								<?php }?>
 								 <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['paymentId'];?>,1);return false;" style="<?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?>" >
@@ -278,7 +262,6 @@
 									<td data-label="<?php echo $tr->translate("TOTAL_TUITION");?>" align="right"><?php echo $tutionTotalFeeLabel;?></td>
 									<td data-label="<?php echo $tr->translate("DISCOUNT");?>" align="center"><?php echo $tutionFeeDisPer.$tutionFeeDisAmt;?></td>
 									<?php 
-									
 									
 									if(!empty($result)) foreach($result AS $k =>$mainParent){ 
 										$currentAmtLabel="";
@@ -302,7 +285,7 @@
 										}
 									}
 									?>
-									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right"><?php echo $creditMemoLabel; ?></td>
+									
 									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right"><?php echo number_format($rs['paid_amount'],2); ?></td>
 									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $rs['paymentMethodTitle']; ?></td>
 									<td data-label="<?php echo $tr->translate("NOTE");?>"><span	class="noted"><?php echo $rs['note']; ?></span></td>
@@ -314,7 +297,6 @@
 									$totalTutionByMethod = $totalTutionByMethod + $tutionTotalFee;
 									$totalPaidByMethod = $totalPaidByMethod + $rs['paid_amount'];
 									$totalCreditMemoByMethod = $totalCreditMemoByMethod + $rs['credit_memo'];
-									
 									
 									$gTutionTotal = $gTutionTotal + $tutionTotalFee;
 									$gTotalPaid = $gTotalPaid + $rs['paid_amount'];
@@ -340,7 +322,6 @@
 									<?php if($colspanTotal>1){?>
 									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
 									<?php } ?>
-									<td align="right"><strong><?php echo empty($totalCreditMemoByMethod) ? "" : "(-".number_format($totalCreditMemoByMethod,2).")"; ?></strong></td>
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
 									<td></td>
@@ -353,7 +334,6 @@
 									<?php if($colspanTotal>1){?>
 									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
 									<?php } ?>
-									<td align="right"><strong><?php echo empty($gTotalCreditMemo) ? "" : "(-".number_format($gTotalCreditMemo,2).")"; ?></strong></td>
 									<td align="right"><strong><?php echo number_format($gTotalPaid,2);?></strong></td>
 									<td></td>
 									<td></td>
@@ -363,7 +343,7 @@
 						</tbody>
 					</table>
 					<div style="display: flex;width: 100%;text-align: right;align-content: end;flex-wrap: wrap;flex-direction: column;margin-top: 10px;">
-						<table class="content-data" style="width: 25%; text-align: center; margin: 0 auto; font-weight: bold; border: 0;  font-size: 10px !important;">
+						<table class="content-data" style="width: 25%; text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
 							<tr>
 								<td colspan="3" align="center"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
 							</tr>

@@ -76,6 +76,11 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					 JOIN rms_group as g ON g.id=gscg.from_group
 					 LEFT JOIN rms_group AS toG ON toG.id=gscg.to_group
 				WHERE 1 ";
+				
+		$from_date =(empty($search['start_date']))? '1': "gscg.moving_date >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': "gscg.moving_date <= '".$search['end_date']." 23:59:59'";
+		$sql.= " AND ".$from_date." AND ".$to_date;
+		
 		$order_by=" order by id DESC";
 		$where=" ";
 		if(!empty($search['adv_search'])){

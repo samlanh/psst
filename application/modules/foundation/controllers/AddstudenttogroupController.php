@@ -15,23 +15,37 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 			$search = array(
 					'adv_search' => '',
 					'branch_id' => '',
-					'study_year' => '',
+					'academic_year' => '',
 					'group' => '',
 					'degree' => '',
 					'grade' => '',
 					'session' => '',
 					'room' => '',
 					);
+			$dbgb = new Application_Model_DbTable_DbGlobal();
+			$last = $dbgb->getLatestAcadmicYear();
+			if(!empty($last)){
+				$search["academic_year"] = empty($last["id"]) ? 0 : $last["id"];
+			}
 		}
-		
 		$rs= $db->getGroupDetail($search);
 		$list = new Application_Form_Frmtable();
 		$this->view->search = $search;
-		$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","DEGREE","GRADE","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS","AMOUNT_STUDENT");
+		$collumns = array("BRANCH","GROUP_ID","ACADEMIC_YEAR","SESSION","ROOM_NAME","SEMESTER","NOTE","STATUS");
 		$link=array(
 				'module'=>'foundation','controller'=>'addstudenttogroup','action'=>'edit',
 		);
-		$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
+		
+		$actionLink = array(
+						array("title" =>"STUDENT_LIST_REPORT","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-group","linkType"=>"inframe" )
+						,array("title" =>"STUDENT_LIST","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-list","linkType"=>"inframe" )
+						);
+				
+			$additionalOption = array(
+				"actionLink" => $actionLink,
+			);
+			
+		$this->view->list=$list->getCheckList(10, $collumns, $rs,array(),$additionalOption);
 		
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
@@ -70,7 +84,7 @@ class Foundation_AddstudenttogroupController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
-				if(empty($_data['public-methods'])){
+				if(empty($_data['identity'])){
 					Application_Form_FrmMessage::Sucessfull("PLEASE SELECT STUDENTS FIRST",'/foundation/addstudenttogroup/add');
 					exit();
 				}

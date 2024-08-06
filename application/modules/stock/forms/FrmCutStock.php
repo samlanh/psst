@@ -94,12 +94,12 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
 		
-		$_total_due = new Zend_Dojo_Form_Element_NumberTextBox('total_due');
-		$_total_due->setAttribs(array(
+		$_total_remain = new Zend_Dojo_Form_Element_NumberTextBox('total_remain');
+		$_total_remain->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>' fullside height-text',
 				'readonly'=>'readonly',
-				'placeholder'=>$this->tr->translate("TOTAL_DUE"),
+				'placeholder'=>$this->tr->translate("total_remain"),
 				'missingMessage'=>$this->tr->translate("Forget Enter Balance")
 		));
 		
@@ -232,7 +232,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 			$_balance->setValue($data["balance"]);
 			$total_received->setValue($data["total_received"]);
 			$_amount->setValue($data["total_received"]);
-			$_total_due->setValue($data["total_qty_due"]);
+			$_total_remain->setValue($data["total_qty_due"]);
 			if (!empty($data["received_date"])){
 				$_date_payment->setValue(date("Y-m-d",strtotime($data["received_date"])));
 			}
@@ -253,7 +253,7 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 				$_balance,
 				$total_received,
 				$_total_discount,
-				$_total_due,
+				$_total_remain,
 				$_date_payment,
 				$_status,
 				$id,

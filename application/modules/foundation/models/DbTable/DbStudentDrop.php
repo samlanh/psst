@@ -26,7 +26,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 	
 	public function getAllStudentDrop($search){//
 		$_db = $this->getAdapter();
-		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
 		$colunmname='title_en';
@@ -54,6 +54,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				,(SELECT $label FROM `rms_view` WHERE TYPE=5 AND key_code = s.type LIMIT 1) AS type
 				,date_stop
 				,reason
+				,CASE WHEN s.isReturn = 1 
+					THEN '".$tr->translate('returnStudy')."'
+					ELSE ''
+				END AS returnStudy
 				,(SELECT first_name FROM `rms_users` WHERE id=s.user_id LIMIT 1) AS user_name
 			";
 		$sql.=$dbp->caseStatusShowImage("s.status");

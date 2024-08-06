@@ -224,9 +224,9 @@ if(!empty($type)){
 					'cut_stock_type'  => $_data['cut_stock_type'],
     				'serailno'	   => $itemsCode,
     				'student_id'   => $_data['studentId'],
-    				'balance'      => $_data['balance'],
-    				'total_received'=> $_data['total_received'],
-    				'total_qty_due' => $_data['total_remain'],
+    				// 'balance'      => $_data['balance'],
+    				// 'total_received'=> $_data['total_received'],
+    				// 'total_qty_due' => $_data['total_remain'],
     				'received_date' => $_data['date_payment'],
     				'create_date'   => date("Y-m-d H:i:s"),
     				'modify_date'	=> date("Y-m-d H:i:s"),
@@ -371,6 +371,9 @@ if(!empty($type)){
 			s.last_name AS last_name,
 			s.stu_code AS stu_code,
 			s.tel,
+			(SELECT SUM(cd.due_amount) FROM `rms_cutstock_detail` AS cd WHERE cd.cutstock_id=pp.id LIMIT 1) AS totalAmountDue,
+			(SELECT SUM(cd.qty_receive) FROM `rms_cutstock_detail` AS cd WHERE cd.cutstock_id=pp.id LIMIT 1) AS totalQtyReceive,
+			(SELECT SUM(cd.remain) FROM `rms_cutstock_detail` AS cd WHERE cd.cutstock_id=pp.id LIMIT 1) AS totalQtyRemain,
 			(SELECT name_kh FROM rms_view WHERE rms_view.type=2 and rms_view.key_code=s.sex LIMIT 1) as gender,
 			(SELECT CONCAT(last_name,' ',first_name) FROM rms_users WHERE id=pp.user_id LIMIT 1) As user_name,
 			(SELECT GROUP_CONCAT(p.receipt_number) FROM rms_student_payment AS p WHERE p.id IN(SELECT ct.paymentId FROM `rms_cutstock_detail` AS ct WHERE ct.cutstock_id = pp.id ) ) AS refReceiptNum
@@ -599,11 +602,12 @@ if(!empty($type)){
     				'branch_id'	   => $_data['branch_id'],
     				'serailno'	   => $_data['serailno'],
     				'student_id'   => $_data['student_id'],
-    				'balance'      => $_data['balance'],
-    				'total_received'=> $_data['total_received'],
-    				'total_qty_due' => $_data['total_remain'],
+
+    				// 'balance'      => $_data['balance'],
+    				// 'total_received'=> $_data['total_received'],
+    				// 'total_qty_due' => $_data['total_remain'],
+					
     				'received_date' => $_data['date_payment'],
-//     				'create_date'   => date("Y-m-d H:i:s"),
     				'modify_date'	=> date("Y-m-d H:i:s"),
     				'status'        => 1,
     				'user_id'       => $this->getUserId(),
@@ -685,6 +689,7 @@ if(!empty($type)){
     			if (!empty($_data['detailid'.$i])){
     				$arrs = array(
     						'cutstock_id'=>$cut_id,
+							'paymentId'=>$_data['payment_id'.$i],
     						'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
     						'product_id'=>$_data['itemdetail_id'.$i],
     						'due_amount'=>$_data['qty_balance'.$i],
@@ -698,6 +703,7 @@ if(!empty($type)){
     			}else{
 	    			$arrs = array(
 	    					'cutstock_id'=>$cut_id,
+							'paymentId'=>$_data['payment_id'.$i],
 	    					'student_paymentdetail_id'=>$_data['paymentdetail_id'.$i],
 	    					'product_id'=>$_data['itemdetail_id'.$i],
 	    					'due_amount'=>$_data['qty_balance'.$i],

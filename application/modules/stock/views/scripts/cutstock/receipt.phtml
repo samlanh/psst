@@ -43,13 +43,16 @@ img.view{height: 70px !important;}
 				}
 				@media print {
 					@page {
-						page: A4;
+						page: A5 landscape;
 						margin: 0.0cm 0.5cm;
 					}
 				}
 			</style>
 			
-			<?php for($i=0; $i<2; $i++){ ?>		
+			<?php
+				$receive_note_setting=1;
+
+			for($i=0; $i<$receive_note_setting; $i++){ ?>		
 			<table width="100%" height="45%"  class="style print" cellspacing="0"  cellpadding="0">
 					<tr>
 						<td colspan="4" align="center">
@@ -139,11 +142,12 @@ img.view{height: 70px !important;}
 					</tr>
 					
 				</table>	
-			<?php if($i==0){?>
-					<div height="10%" style="margin-top: 5px;">
-						<div style="width: 100%;border-bottom:2px dashed #000; "></div>
-					</div>
-				<?php }?>
+				<?php if($i==0 AND $receive_note_setting==2 ){?>
+						<div height="10%" style="margin-top: 5px;">
+							<div style="width: 100%;border-bottom:2px dashed #000; "></div>
+						</div>
+				<?php } ?>
+
 			<?php } ?>
 	</div>
 </div>

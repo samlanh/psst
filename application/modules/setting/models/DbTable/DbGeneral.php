@@ -50,6 +50,17 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 			$arr = array('keyValue'=>$data['show_header_receipt'],);
 			$where=" keyName= 'show_header_receipt'";
 			$this->update($arr, $where);
+
+
+			$rows = $this->geLabelByKeyName('receive_note_print');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['receive_note_print'],'keyName'=>'receive_note_print','note'=>"កំណត់ទម្រង់ Receipt ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['receive_note_print'],);
+				$where=" keyName= 'receive_note_print'";
+				$this->update($arr, $where);
+			}
 			
 			$rows = $this->geLabelByKeyName('payment_day_alert');
 			if (empty($rows)){

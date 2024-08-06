@@ -408,12 +408,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				}
 				if(!empty($_data['from_group'])){ // Current Class
 				
-					$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$_data['from_group'];
+					$sql=" SELECT gd_id FROM rms_group_detail_student WHERE group_id =".$_data['from_group'];
 					$sql.=" AND stop_type=0";
 					$sql.=" ORDER BY is_pass ASC LIMIT 1 ";
 					$resultGroup = $this->getAdapter()->fetchOne($sql);
 					// check student empty class to completed class
-					if(!empty($resultGroup)){
+					if(empty($resultGroup)){
 						$this->_name = 'rms_group';
 						$group=array(
 								'is_use'	=>1,

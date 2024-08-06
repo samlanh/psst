@@ -388,6 +388,43 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				}
 				
 				$this->updateOldGrouptoFinish($_data['from_group'],3);
+			}elseif($_data['change_type']==4){//បញ្ចប់ការសិក្សា
+				$newStuId = '';
+				foreach ($ids as $k){
+					if(!empty($_data['stu_id_'.$k])){
+						$rsexist =$dbg->ifStudentinGroupReady($_data['stu_id_'.$k],$_data['from_group']);
+						if(!empty($rsexist)){//old infor
+							$stu=array(
+									'is_pass'		=> 1,
+									'stop_type'		=> 4,//បញ្ចប់ការសិក្សា
+									'is_current'	=> 1,//still show in front desk
+									'note'	=>'បញ្ចប់ការសិក្សា'
+							);
+							$where=" stu_id=".$_data['stu_id_'.$k]." AND group_id=".$_data['from_group']." AND itemType=1";
+							$this->_name='rms_group_detail_student';
+							$this->update($stu, $where);
+						}
+					}
+				}
+				if(!empty($_data['from_group'])){ // Current Class
+				
+					$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$_data['from_group'];
+					$sql.=" AND stop_type=0";
+					$sql.=" ORDER BY is_pass ASC LIMIT 1 ";
+					$resultGroup = $this->getAdapter()->fetchOne($sql);
+					// check student empty class to completed class
+					if(!empty($resultGroup)){
+						$this->_name = 'rms_group';
+						$group=array(
+								'is_use'	=>1,
+								'is_pass'	=>4,
+						);
+						$where=" id=".$_data['from_group'];
+						$this->update($group, $where);
+					}
+		
+					
+				}
 			}
 			$_db->commit();
 			
@@ -495,7 +532,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 				}
 			}
 		}
-		
 	}
 	function updateOldGrouptoFinish($groupId,$stopType=null){
 		$sql=" SELECT is_pass FROM rms_group_detail_student WHERE group_id =".$groupId;

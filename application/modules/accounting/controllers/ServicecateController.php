@@ -24,7 +24,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
        $rs_rows = $db_dept->getAllItemsOption($search,$type);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("SELECT_SERVICE_TYPE","SERVICE_TYPE_EN","PARENT","BY_USER","STATUS");
+    	$collumns = array("TYP","SELECT_SERVICE_TYPE","SERVICE_TYPE_EN","PARENT","ORDERING","BY_USER","STATUS");
     	$link=array(
     			'module'=>'accounting','controller'=>'servicecate','action'=>'edit',
     	);

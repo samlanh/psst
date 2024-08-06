@@ -229,10 +229,10 @@ Class Stock_Form_FrmCutStock extends Zend_Dojo_Form {
 			$_branch_id->setValue($data["branch_id"]);
 			$_cut_stock_type->setValue($data["cut_stock_type"]);
 			$_serailno->setValue($data["serailno"]);
-			$_balance->setValue($data["balance"]);
-			$total_received->setValue($data["total_received"]);
-			$_amount->setValue($data["total_received"]);
-			$_total_remain->setValue($data["total_qty_due"]);
+			$_balance->setValue($data["totalAmountDue"]);
+			$total_received->setValue($data["totalQtyReceive"]);
+			$_amount->setValue($data["totalQtyReceive"]);
+			$_total_remain->setValue($data["totalQtyRemain"]);
 			if (!empty($data["received_date"])){
 				$_date_payment->setValue(date("Y-m-d",strtotime($data["received_date"])));
 			}

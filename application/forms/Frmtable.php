@@ -154,9 +154,21 @@ class Application_Form_Frmtable
 													<ul class="dropdown-menu" role="menu">';
 														foreach($actionLink as $rowAction){
 															$recordKey = empty($rowAction["recordConnect"]) ? 0 : $rowAction["recordConnect"];
+															$linkType = empty($rowAction["linkType"]) ? "general" : $rowAction["linkType"];
+															
 															$recordId = empty($row[$recordKey]) ? 0 : $row[$recordKey];
+															
+															$titleAction = $tr->translate(strtoupper($rowAction["title"]));
+															
+															$href = $baseUrl.$rowAction["link"].'/id/'.$recordId;
+															$typefunction = "";
+															if($linkType=="inframe"){
+																$urlLink = $href."?inFrame=true";
+																$typefunction ='onClick="addTab('."'".$titleAction."'".','."'".$urlLink."'".')"';
+																$href ="javascript:void(0);";
+															}
 															if(!empty($recordId)){
-																$row_str.='<li><a href="'.$baseUrl.$rowAction["link"].'/id/'.$recordId.'" >'.$tr->translate(strtoupper($rowAction["title"])).'</a></li>';	
+																$row_str.='<li><a href="'.$href.'" '.$typefunction.' >'.$titleAction.'</a></li>';	
 															}
 																										
 														}

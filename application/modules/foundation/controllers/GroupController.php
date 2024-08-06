@@ -42,7 +42,7 @@ class Foundation_GroupController extends Zend_Controller_Action
 						array("title" =>"edit","recordConnect" =>"id" ,"link" => "/foundation/group/edit" )
 						,array("title" =>"copy","recordConnect" =>"id" ,"link" => "/foundation/group/copy" )
 						,array("title" =>"STUDENT_LIST_REPORT","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-group","linkType"=>"inframe" )
-						,array("title" =>"STUDENT_LIST","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-list" )
+						,array("title" =>"STUDENT_LIST","recordConnect" =>"id" ,"link" => "/allreport/allstudent/rpt-student-list","linkType"=>"inframe" )
 						,array("title" =>"STUDENT_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-att-list","linkType"=>"inframe" )
 						,array("title" =>"TOTAL_ATTENDANT_LIST","recordConnect" =>"id" ,"link" => "/allreport/studentattendance/rpt-totalattendance","linkType"=>"inframe" )
 						);

@@ -31,7 +31,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 
 	.thumb-xl.member-thumb {
 		height: 130px;
-		width: 120px;
+		width: 92px;
 	}
 
 	.member-card p.text-muted.info-list {
@@ -72,7 +72,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		display: inline-block;
-		width: 63%;
+		width: 60%;
 		overflow: hidden;
 		vertical-align: bottom;
 	}
@@ -1744,17 +1744,19 @@ $(document).ready(function() {
 
 				temp = '<table class="tableDetail" width="100%" id="table">'
 				temp += '<tr class="hearder_table">';
-				temp += '<td style="border:1px solid #000;">លរ  <small>No. </small></td>';
-				temp += '<td style="border:1px solid #000;width:200px;"><strong style="color:#000;">ពណ៍នា <small>Description<small></strong></td>';
-				temp += '<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Pay as</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:10px;">លរ  <small>No. </small></td>';
+				temp += '<td style="border:1px solid #000;"><strong style="color:#000;">បរិយាយ <small>Description<small></strong></td>';
+				
+				//temp += '<td style="border:1px solid #000;"><strong style="color:#000;">បង់ជា<small>Pay as</small></strong></td>';
+				//temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សុពលភាព<small>Valid Date</small></strong></td>';
+				//temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid($)</small></strong></td>';
+				//temp += '<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
+				
 				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">បរិមាណ<small>Quantity</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:90px;"><strong style="color:#000;">តម្លៃរាយ<small>Unit Price</small></strong></td>';
 				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បញ្ចុះតម្លៃ<small>Discount</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Fee</small></strong></td>';
-				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">ប្រាក់ត្រូវប​ង់<small>Total Payment</small></strong></td>';
-				//temp+='<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">បានបង់<small>Paid($)</small></strong></td>';
-				//temp += '<td style="border:1px solid #000;width:150px;"><strong style="color:#000;">សម្គាល់<small>Note</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">សេវាផ្សេងៗ<small>Other Services</small></strong></td>';
+				temp += '<td style="border:1px solid #000;width:70px;"><strong style="color:#000;">ប្រាក់ត្រូវប​ង់<small>Payment</small></strong></td>';
 				temp += '</tr>';
 
 				i = 1;
@@ -1762,9 +1764,9 @@ $(document).ready(function() {
 
 					var items_type = dijit.byId("service_type_" + rowIDArray[n]).get("value");
 					var isoldBalance = dijit.byId("isoldBalance" + rowIDArray[n]).get("value");
-					var term_label = "-";
+					var term_label = "";
 					if (items_type != 3 && isoldBalance == 0) {
-						term_label =  $('#term_'+rowIDArray[n]).select2('data').text;
+						term_label =  '-'+$('#term_'+rowIDArray[n]).select2('data').text;
 					}
 					temp += '<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">' + i + '</td>';
 
@@ -1772,8 +1774,8 @@ $(document).ready(function() {
 					if (dijit.byId("service_type_" + rowIDArray[n]).get("value") == 1) {
 						item_label = 'School Fee ' + item_label;
 					}
-					temp += '<td align="left" style="border:1px solid #000;line-height:10px" class="notedDescription"><label class="notedDescription">&nbsp;' + item_label + '<label></td>';
-					temp += '<td align="center" style="border:1px solid #000;white-space:nowrap;">' + term_label + '</td>';
+					temp += '<td align="left" style="border:1px solid #000;line-height:10px" class="notedDescription"><label class="notedDescription">&nbsp;' + item_label + term_label+'<label></td>';
+					//temp += '<td align="center" style="border:1px solid #000;white-space:nowrap;">' + term_label + '</td>';
 					onepaymentType = $("#term_" + rowIDArray[n]).val();
 					
 					if (onepaymentType == 5) {//one payment only
@@ -1787,9 +1789,9 @@ $(document).ready(function() {
 						start_date='';
 						epx_date='';
 					}
-					temp += '<td align="center" style="border:1px solid #000;"><span class="spanBlog">' + start_date + '</span><span class="spanBlog">' + epx_date + '</span></td>';
+					//temp += '<td align="center" style="border:1px solid #000;"><span class="spanBlog">' + start_date + '</span><span class="spanBlog">' + epx_date + '</span></td>';
 					temp += '<td style="border:1px solid #000;">' + dijit.byId("qty_" + rowIDArray[n]).get('value') + '</td>';
-					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId('price_' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
+					temp += '<td style="border:1px solid #000;text-align:right;">' + dojo.number.format(dijit.byId('price_' + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
 
 					discountLable = '';
 					if (dijit.byId("total_discount" + rowIDArray[n]).get('value') > 0) {
@@ -1808,7 +1810,7 @@ $(document).ready(function() {
 					temp += '<td style="border:1px solid #000;"><span class="spanBlog">' + discountLable + '</span></td>';
 					otherFee = !isNaN(dijit.byId('extra_fee' + rowIDArray[n]).get('value'))?dojo.number.format(dijit.byId('extra_fee' + rowIDArray[n]).get('value'), { places: 2 }):'';
 					temp += '<td align="center" style="border:1px solid #000;">' +otherFee+ '</td>';
-					temp += '<td style="border:1px solid #000;">' + dojo.number.format(dijit.byId("total_amount" + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
+					temp += '<td style="border:1px solid #000;text-align:right;">' + dojo.number.format(dijit.byId("total_amount" + rowIDArray[n]).get('value'), { places: 2 }) + '</td>';
 					//temp+='<td style="border:1px solid #000;">'+dojo.number.format(dijit.byId("paid_amount"+rowIDArray[n]).get('value'),{places:2})+'</td>';	
 					//temp += '<td style="border:1px solid #000;max-width:150px;white-space:normal;line-height:10px;font-size:9px;">' + dijit.byId("remark" + rowIDArray[n]).get('value') + '</td>';
 					temp += '</tr>';

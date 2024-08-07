@@ -267,7 +267,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'customer_type' =>4,
 							'is_studenttest' =>1,
 							'serial' => $newSerial,
-							'create_date'=>date("Y-m-d H:i:s"),
+							'create_date'=>$paid_date,
 							'create_date_stu_test'=>date("Y-m-d H:i:s"),
 						);
 						$this->_name='rms_student';
@@ -368,7 +368,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 							'balance'      => 0,
 							'total_qty_due' => 0,
 							'received_date' => $paid_date,
-							'create_date'   => date("Y-m-d H:i:s"),
+							'create_date'   => $paid_date,//date("Y-m-d H:i:s"),
 							'modify_date'	=> date("Y-m-d H:i:s"),
 							'status'        => 1,
 							'note'			=>'Cut From Payment',
@@ -467,7 +467,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'status'		=> 1,
 								'isNewStudent'	=> 1,
 								'remark'		=> $data['remark'.$i],
-								'create_date'	=> date("Y-m-d H:i:s"),
+								'create_date'	=> $paid_date,//date("Y-m-d H:i:s"),
 								'user_id'		=> $this->getUserId(),
 								'entryFrom'	=>4,
 							);

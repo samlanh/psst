@@ -353,10 +353,10 @@ class Application_Form_FrmGlobal
 					<td width='25%' align='center'>
 						
 					</td>
-					<td width='50%' align='center'>
+					<td width='50%' align='center' style='font-family:$font_family'>
 						<span>" . $tr->translate('chiefCashier') . "</span>
 					</td>
-					<td width='25%' align='center'>
+					<td width='25%' align='center' style='font-family:$font_family'>
 						<span>" . $tr->translate('cashier') . "</span>
 					</td>
 				</tr>";

@@ -1370,6 +1370,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'customer_payment'=>'',
 						'clear_balance'=>'',
 						'userId'	=>'',
+						'receiptStatus'	=>1,
 						'start_date'=> date('Y-m-d'),
 						'end_date'  => date('Y-m-d'),
 				);

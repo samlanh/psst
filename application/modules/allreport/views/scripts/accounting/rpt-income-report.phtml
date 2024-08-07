@@ -46,6 +46,9 @@
 			<div class="col-md-2 col-sm-2 col-xs-12">
 				<input id="grade_all" />
 			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("receiptStatus");?>
+       		</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-2 col-sm-2 col-xs-12">
@@ -115,6 +118,16 @@
 				white-space: normal; max-width: 200px;
 			}
 			.content-data,.hideprintdate{font-size: 9px ;}
+			tr.style.total-row {
+				background: #edf2ff;
+			}
+
+			tr.style.gtotal-row {
+				background: #c1d0f3;
+			}
+			.redColor{
+				color : #e00000 !important;
+			}
 			
 			@media print {
 				.hide {
@@ -137,11 +150,11 @@
 			<tr>
 				<td width="15%" align="center"></td>
 				<td align="center" width="70%">
-					<div
-						style="color: #000;font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $pageTitle; ?>
+					<div style="color: #000;font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $pageTitle; ?>
 					</div>
+					<div class="branchName"></div>
 						<?php if(!empty($this->search["start_date"])){?>
-						<span style="color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></span><?php }?>
+						<div style="margin-bottom:5px; color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></div><?php }?>
 				</td>
 				<td width="15%">
 					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
@@ -161,7 +174,6 @@
 							$paymentMethod="";
 							$bankId="";
 							
-							$totalTutionByMethod=0;
 							$totalPaidByMethod=0;
 							$totalCreditMemoByMethod=0;
 							
@@ -192,7 +204,7 @@
 						</thead>
 						<tbody>
 							<?php 
-								foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
+							foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
 								$i++; 
 								$arr = array(
 									"parentCol"=>$parentCol
@@ -200,18 +212,53 @@
 								);
 								$result = $dbAcc->getPaymentInfoParent($arr);
 								$payTerm="";
-								$tutionTotalFee=0;
 								$tutionTotalFeeLabel="";
 								$tutionFeeDisPer="";
-								$tutionFeeDisAmt="";
+								$tutionFeeDisAmt="";								
 								if(!empty($result[0]["paymentInfo"]["itemsName"])){
 									$payTerm = empty($result[0]["paymentInfo"]["payTerm"]) ? $tr->translate("OTHER") : $result[0]["paymentInfo"]["payTerm"];
-									$tutionTotalFee = empty($result[0]["paymentInfo"]["gTotalPament"]) ? 0 : $result[0]["paymentInfo"]["gTotalPament"];
 									$tutionTotalFeeLabel = empty($result[0]["paymentInfo"]["gSubTotalFee"]) ? 0 : $result[0]["paymentInfo"]["gSubTotalFee"];
 									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"] ANd$result[0]["paymentInfo"]["totalDiscountPercent"]!="0.00") ? '' : str_replace(".00","",number_format($result[0]["paymentInfo"]["totalDiscountPercent"],2))."%";
 									$tutionFeeDisAmt = empty($result[0]["paymentInfo"]["totalDiscountAmt"] AND $result[0]["paymentInfo"]["totalDiscountAmt"]!="0.00" ) ? '' : "+".$result[0]["paymentInfo"]["totalDiscountAmt"];
 								}
 							?>
+							
+								<?php 
+									$strTotalByMethod="";
+									$columnTypeStr="";
+									if(!empty($result)) foreach($result AS $k =>$mainParent){ 
+										$columnClass="";
+										$currentAmtLabel="";
+										$gTotalPayment = 0;
+										$parentCol[$k]["totalByMethod"] = empty($parentCol[$k]["totalByMethod"]) ? 0 : $parentCol[$k]["totalByMethod"];
+										if(!empty($mainParent["paymentInfo"]["itemsName"])){
+											$currentAmtLabel = 0;
+											if(!empty($mainParent["paymentInfo"]["gTotalPayment"])){
+												$gTotalPayment = $mainParent["paymentInfo"]["gTotalPayment"];
+												
+												$currentAmtLabel = number_format($gTotalPayment,2);
+												if($gTotalPayment<0){
+													$columnClass="redColor";
+													$currentAmtLabel = "(".$currentAmtLabel.")";
+												}
+												
+												$parentCol[$k]["gTotal"] = empty($parentCol[$k]["gTotal"]) ? 0 : $parentCol[$k]["gTotal"];
+												$parentCol[$k]["gTotal"] = $parentCol[$k]["gTotal"] + $gTotalPayment;
+												
+											}
+										}
+										$currTotalMethod = empty($parentCol[$k]["totalByMethod"]) ? "" : number_format($parentCol[$k]["totalByMethod"],2);
+										$strTotalByMethod.= '<td align="right"><strong>'.$currTotalMethod.'</strong></td>';
+										if($paymentMethod !=$rs["payment_method"] || $bankId !=$rs["bank_id"]){
+											$parentCol[$k]["totalByMethod"] = 0;
+										}
+										$parentCol[$k]["totalByMethod"] = $parentCol[$k]["totalByMethod"] + $gTotalPayment;
+										
+												
+										$columnTypeStr.= '<td class="'.$columnClass.'" data-label="'.$mainParent["title"].'" align="right">'.$currentAmtLabel.'</td>';
+									}
+								?>
+									
 								<?php 
 									if($paymentMethod !=$rs["payment_method"] || $bankId !=$rs["bank_id"]){
 										$rowLabel = $rs["bankName"];
@@ -228,13 +275,11 @@
 								);
 								array_push($summaryInfoArray, $arryTotal);
 								?>
-								<tr class="style">
+								<tr class="style total-row">
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
 									<td></td>
-									<td align="right"><strong><?php echo number_format($totalTutionByMethod,2);?></strong></td>
-									<?php if($colspanTotal>1){?>
-									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
-									<?php } ?>
+									<?php echo $strTotalByMethod;?>
+									
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
 									<td></td>
@@ -243,7 +288,7 @@
 								<?php } 
 									$oldLabelMethod = $rowLabel;
 									//reset
-									$totalTutionByMethod=0;
+									
 									$totalPaidByMethod=0;
 									$totalCreditMemoByMethod=0;
 									$i=1;
@@ -261,46 +306,36 @@
 									<td data-label="<?php echo $tr->translate("TYPE");?>" align="center"><?php echo $payTerm;?></td>
 									<td data-label="<?php echo $tr->translate("TOTAL_TUITION");?>" align="right"><?php echo $tutionTotalFeeLabel;?></td>
 									<td data-label="<?php echo $tr->translate("DISCOUNT");?>" align="center"><?php echo $tutionFeeDisPer.$tutionFeeDisAmt;?></td>
-									<?php 
 									
-									if(!empty($result)) foreach($result AS $k =>$mainParent){ 
-										$currentAmtLabel="";
-										if(!empty($mainParent["paymentInfo"]["itemsName"])){
-											$currentAmtLabel = 0;
-											if(!empty($mainParent["paymentInfo"]["gTotalPament"])){
-												$gTotalPament = $mainParent["paymentInfo"]["gTotalPament"];
-												$currentAmtLabel = number_format($gTotalPament,2);
+									<?php echo $columnTypeStr; ?>
+									<?php 
+										$creditMemoLabel = "";
+										
+										if(!empty($rs['credit_memo'])){
+											if($rs['credit_memo']>0){
+												$creditMemoLabel = "(-".number_format($rs['credit_memo'],2).")";
 											}
 										}
-									?>
-									<td data-label="<?php echo $mainParent["title"];?>" align="right"><?php echo $currentAmtLabel; ?></td>
-									<?php } ?>
-									
-									<?php 
-									$creditMemoLabel = "";
-									
-									if(!empty($rs['credit_memo'])){
-										if($rs['credit_memo']>0){
-										$creditMemoLabel = "(-".number_format($rs['credit_memo'],2).")";
-										}
-									}
+										$paidAmount = $rs['paid_amount'];
+										$paidAmountLabel = number_format($paidAmount,2);
+										$paidClass="";
+										if($gTotalPayment<0){
+											$paidClass="redColor";
+											$paidAmountLabel = "(".$paidAmountLabel.")";
+										}		
 									?>
 									
-									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right"><?php echo number_format($rs['paid_amount'],2); ?></td>
-									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $rs['paymentMethodTitle']; ?></td>
+									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right" class="<?php echo $paidClass;?>"><?php echo $paidAmountLabel; ?></td>
+									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $rowLabel; ?></td>
 									<td data-label="<?php echo $tr->translate("NOTE");?>"><span	class="noted"><?php echo $rs['note']; ?></span></td>
 									<td data-label="<?php echo $tr->translate("TELLER");?>" align="center"><?php echo $rs['byUserName'];?></td>
 								</tr>
 								
 								<?php 
 									if ($rs['is_void']!=1){
-									$totalTutionByMethod = $totalTutionByMethod + $tutionTotalFee;
-									$totalPaidByMethod = $totalPaidByMethod + $rs['paid_amount'];
-									$totalCreditMemoByMethod = $totalCreditMemoByMethod + $rs['credit_memo'];
 									
-									$gTutionTotal = $gTutionTotal + $tutionTotalFee;
-									$gTotalPaid = $gTotalPaid + $rs['paid_amount'];
-									$gTotalCreditMemo = $gTotalCreditMemo + $rs['credit_memo'];
+										$totalPaidByMethod = $totalPaidByMethod + $paidAmount;
+										$gTotalPaid = $gTotalPaid + $paidAmount;
 									}
 									
 									$paymentMethod=$rs["payment_method"];
@@ -310,30 +345,31 @@
 								$arryTotal = array(
 									"methodTitle" =>$oldLabelMethod
 									,"totalRecord" =>$i
-									,"totalCrediMemoAmt" =>$totalCreditMemoByMethod
 									,"totalPaidAmt" =>$totalPaidByMethod
 								);
 								array_push($summaryInfoArray, $arryTotal);
 							?>
-								<tr class="style">
+								<tr class="style total-row">
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
 									<td></td>
-									<td align="right"><strong><?php echo number_format($totalTutionByMethod,2);?></strong></td>
-									<?php if($colspanTotal>1){?>
-									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
+									<?php 
+									$strGTotal="";
+									if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){ 
+									$currTotalMethod = empty($mainParent["totalByMethod"]) ? "" : number_format($mainParent["totalByMethod"],2);
+									$gTotal = empty($mainParent["gTotal"]) ? "" : number_format($mainParent["gTotal"],2);
+									$strGTotal.= '<td align="right"><strong>'.$gTotal.'</strong></td>';
+									?>
+									<td align="right"><strong><?php echo $currTotalMethod;?></strong></td>
 									<?php } ?>
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
 									<td></td>
 									<td></td>
 								</tr>
-								<tr class="style">
+								<tr class="style gtotal-row">
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("GRAND_TOTAL");?></strong></td>
 									<td></td>
-									<td align="right"><strong><?php echo number_format($gTutionTotal,2);?></strong></td>
-									<?php if($colspanTotal>1){?>
-									<td colspan="<?php echo $colspanTotal;?>" align="right"></td>
-									<?php } ?>
+									<?php echo $strGTotal;?>
 									<td align="right"><strong><?php echo number_format($gTotalPaid,2);?></strong></td>
 									<td></td>
 									<td></td>
@@ -406,14 +442,20 @@
 		
 		getallGrade();
 		getAllUser();
+		
+		<?php if(!empty($this->search['receiptStatus'])){ ?>
+		dijit.byId('receiptStatus').attr('value','<?php echo $this->search['receiptStatus']?>');
+		<?php } ?>
 	});
 	
 	function getAllUser(){
 		branch_id = dijit.byId('branch_id').get('value');
 		if(branch_id=='' || branch_id==-1){
+			$(".branchName").text("");
 			dijit.byId('branch_id').focus();
 			return false;
 		}
+		$(".branchName").text(dijit.byId("branch_id").attr('displayedValue'));
 		let url_user = '<?php echo $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'get-user')); ?>';
 		contentData = {
 				'branchId':branch_id

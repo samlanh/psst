@@ -43,6 +43,8 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			i.`id`
 			,i.$columnItem AS title
 			,'' AS listSubId
+			,'0' AS totalByMethod
+			,'0' AS gTotal
 		FROM `rms_items` AS i 
 		WHERE i.`is_parent` =1
 			ORDER BY i.`type` ASC,i.`ordering` ASC,i.$columnItem ASC
@@ -58,13 +60,24 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 	
 	function getCurrentPayemntDetailByParent($data){
 		$db=$this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		
+		$titleCol = "title_en";
+		$labelView = "name_en";
+		if ($currentLang == 1) {
+			$titleCol = "title";
+			$labelView = "name_kh";
+		}
+		
 		$paymentId = empty($data["paymentId"]) ? 0 : $data["paymentId"];
 		$subList = empty($data["listSubId"]) ? 0 : $data["listSubId"];
 		$sql="
 			SELECT 
 			spmtd.`service_type`
 			,spmtd.`itemdetail_id`
-			,itd.title AS itemsName
+			,itd.$titleCol AS itemsName
 			,COALESCE(itd.`items_id`,0) AS categoryId
 			,SUM(spmtd.`fee`) AS totalFee
 			,SUM(spmtd.`subtotal`) AS gSubTotalFee
@@ -73,8 +86,8 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			,SUM(spmtd.`total_discount`) AS gTotalDiscount
 			,SUM(spmtd.`extra_fee`) AS totalExtraFee
 			,spmtd.`extra_fee`
-			,SUM(spmtd.`totalpayment`) AS gTotalPament
-			,(SELECT v.name_kh FROM rms_view  AS v WHERE v.type=6 AND v.key_code=spmtd.payment_term LIMIT 1) AS payTerm
+			,SUM(spmtd.`totalpayment`) AS gTotalPayment
+			,(SELECT v.$labelView FROM rms_view  AS v WHERE v.type=6 AND v.key_code=spmtd.payment_term LIMIT 1) AS payTerm
 
 			FROM `rms_student_paymentdetail` AS spmtd 
 		LEFT JOIN `rms_itemsdetail` AS itd ON itd.id = spmtd.`itemdetail_id`
@@ -89,8 +102,8 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 		$parentCol = empty($data["parentCol"]) ? 0 : $data["parentCol"];
 		$paymentId = empty($data["paymentId"]) ? 0 : $data["paymentId"];
 		
-		
 		if(!empty($parentCol)) foreach($parentCol as $key => $rs){
+			$gTotalPayment =0;
 			if(!empty($rs["listSubId"])){
 				$array = array(
 					"paymentId" =>$paymentId
@@ -98,15 +111,15 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 				);
 				$result = $this->getCurrentPayemntDetailByParent($array);
 				if(!empty($result)){
+					$gTotalPayment = empty($result["gTotalPayment"]) ? 0 : $result["gTotalPayment"];
 					$parentCol[$key]["paymentInfo"] = $result;
+					
 				}else{
 					$parentCol[$key]["paymentInfo"] = array();
 				}
 			}else{
 				$parentCol[$key]["paymentInfo"] = array();
 			}
-			
-			
 		}
 		return $parentCol;
 		
@@ -114,14 +127,17 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 	function getStudentPaymentDaily($search=null){
 		try{
 			$dbGb = new Application_Model_DbTable_DbGlobal();
+			$currentLang = $dbGb->currentlang();
 			$branch_id = $dbGb->getAccessPermission('spmt.branch_id');
 			$branch = $dbGb->getBranchDisplay();
 			
 			$labelFull = $dbGb->getViewLabelDisplay();
 			$labelShort = $dbGb->getViewLabelDisplay("shortcut");
 			
-			
-			$columnItem = "shortcut";
+			$columnItem = 'title_en';
+			if ($currentLang == 1) {
+				$columnItem = 'title';
+			}
 			
 			$db=$this->getAdapter();
 			$fromDate =(empty($search['start_date']))? '1': " DATE_FORMAT(spmt.`create_date`, '%Y-%m-%d %H:%i:%s') >= '".$search['start_date']." 00:00:00'";
@@ -137,8 +153,8 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 						,fam.`street`
 						,fam.`houseNo`
 						,(SELECT v.$labelShort FROM `rms_view` AS v WHERE v.type =41 AND v.key_code = fam.`familyType` LIMIT 1) AS familyTypeTitle
-						,(SELECT i.$columnItem FROM `rms_items` AS i WHERE i.type=1 AND i.id = spmt.degree LIMIT 1) AS degreeTitle
-						,(SELECT itd.$columnItem FROM `rms_itemsdetail` AS itd WHERE itd.`items_type`=1 AND itd.id = spmt.grade LIMIT 1) AS gradeTitle
+						,(SELECT COALESCE(i.shortcut,i.$columnItem) FROM `rms_items` AS i WHERE i.type=1 AND i.id = spmt.degree LIMIT 1) AS degreeTitle
+						,(SELECT COALESCE(itd.shortcut,itd.$columnItem) FROM `rms_itemsdetail` AS itd WHERE itd.`items_type`=1 AND itd.id = spmt.grade LIMIT 1) AS gradeTitle
 						,(SELECT u.first_name FROM rms_users AS u WHERE u.id = spmt.user_id LIMIT 1) AS byUserName
 						,spmt.id AS paymentId
 						,spmt.receipt_number
@@ -189,6 +205,13 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			}
 			if(!empty($search['stu_name'])){
 				$sql.= " AND spmt.student_id = ".$search['stu_name'];
+			}
+			if(!empty($search['receiptStatus'])){
+				if($search['receiptStatus']==1){
+					$sql.= " AND spmt.is_void = 0 ";
+				}else if($search['receiptStatus']==2){
+					$sql.= " AND spmt.is_void = 1 ";
+				}
 			}
 	
 			$order=" ORDER BY spmt.`payment_method` DESC,spmt.`bank_id` ASC,spmt.id DESC ";

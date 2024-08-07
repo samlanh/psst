@@ -604,6 +604,16 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$goHomeType->setMultiOptions($type_opt);
 		$goHomeType->setValue($request->getParam("goHomeType"));
 		
+		$receiptStatus =  new Zend_Dojo_Form_Element_FilteringSelect('receiptStatus');
+		$receiptStatus->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$type_opt = array(
+				0=>$this->tr->translate("ALL"),
+				1=>$this->tr->translate("NORMARL"),
+				2=>$this->tr->translate("VOID")
+				);
+		$receiptStatus->setMultiOptions($type_opt);
+		$receiptStatus->setValue($request->getParam("receiptStatus"));
+		
 		$this->addElements(array(
 				$receipt_order,
 			    $option_type,
@@ -622,6 +632,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				$_session_type
 				,$_is_current
 				,$goHomeType
+				,$receiptStatus
 				));
 		return $this;
 	} 

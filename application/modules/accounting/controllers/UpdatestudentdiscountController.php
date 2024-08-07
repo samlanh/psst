@@ -135,7 +135,7 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$db = new Accounting_Model_DbTable_DbDiscountSetting();
-
+          
 			if($data['updateOption']==1){  //Add Student To Discount
 				$student =$db->getSearchStudent($data);
 			}elseif($data['updateOption']==2){ //Change Discount Student

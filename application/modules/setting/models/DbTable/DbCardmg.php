@@ -263,7 +263,7 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
   		 return $db->fetchAll($sql.$where.$order);
    }
       
- function getCardmgById($id){
+	function getCardmgById($id){
  		
 	 	$dbp = new Application_Model_DbTable_DbGlobal();
 	 	$sql_string = $dbp->caseStatusShowImage("status");
@@ -275,6 +275,32 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
     	
    		return $db->fetchRow($sql.$where);
     }
+	
+	/*
+	function getStudentInfo($studentCode,$fileNameAndPart,$fileName){
+		$_db= $this->getAdapter();
+		$sql="SELECT 
+				s.`stu_code`
+				FROM `rms_student` AS s 
+				WHERE s.`stu_code` = '$studentCode'
+		";
+		$rs = $_db->fetchOne($sql);
+		if(empty($rs)){
+			$file=$fileNameAndPart;
+			if(file_exists($file)){
+				unlink($file);
+			}
+		}else{
+			$_arrother = array(				
+				'photo'	=>$fileName	
+			);
+			$this->_name ="rms_student";
+			$whereother=" stu_code='$studentCode'";
+			$this->update($_arrother, $whereother);
+		}
+	}
+	*/
+	
     
 }  
 	  

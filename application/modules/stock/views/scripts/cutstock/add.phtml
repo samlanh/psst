@@ -285,11 +285,11 @@ tr.head-td th {
 </div>
 <div class="dijitHidden" style="padding: 0px; margin: 0px;">
 	<div id="terms" data-dojo-type="dijit.Dialog" style="width:23.5cm;height: 16cm ; overflow: scroll;" align="center" data-dojo-props="title:'<?php echo $tr->translate("បោះពុម្ពទទួលទំនិញ");?>'"  >
-	<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; margin-bottom:30px; ">
+	<div id="PrintReceipt" style="width: 22cm !important; padding: 0px; ">
 			<style>
 				.style{
 					font-family: 'Times New Roman','Khmer OS Battambang' !important;
-					font-size:8px !important;
+					font-size:9px !important;
 					white-space:nowrap;
 				}
 				.conten_data{
@@ -318,17 +318,17 @@ tr.head-td th {
 				}
 				table span.small{
 					display: block;
-					line-height: 10px;
+					line-height: 12px;
 					width: 100%;
 				}
 				@media print {
 					@page {
-						page: A4;
+						page: A5 landscape;
 						margin: 0.0cm 0.5cm;
 					}
 				}
 			</style>
-		<table width="100%"  class="style print" cellspacing="0"  cellpadding="0" >
+		<table width="100%" class="style print" cellspacing="0"  cellpadding="0" >
 			<tr>
 				<td colspan="4"><label id="lbl_header"></label></td>
 			</tr>
@@ -368,7 +368,7 @@ tr.head-td th {
 			</tr>
 			<tr>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:100px;font-size:8px;"></div>
+					<div style="margin-top:100px; font-size:8px;"></div>
 					<?php 
 						   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
 						   $last_name=$session_user->last_name;
@@ -377,12 +377,11 @@ tr.head-td th {
 						?>
 				</td>
 				<td colspan="2" width="50%" align="center">
-					<div style="margin-top:100px;font-size:8px;"></div>
+					<div style="margin-top:100px; font-size:8px;"></div>
 					<span id="studentpay"></span>
 				</td>
 			</tr>
 		</table>
-		<div style="padding-top: 30px;" id='printblog2'></div>
 	</div>
 	<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
 			<button dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-erase"
@@ -669,13 +668,13 @@ function getallstudentname(){
 
 	function printSubmit(){
 		getReceiptNo();
-		dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
+		//dojo.byId("printblog2").innerHTML = dojo.byId('PrintReceipt').innerHTML;
 		window.frames["print_frame"].document.body.innerHTML = dojo.byId('PrintReceipt').innerHTML;
 	    window.frames["print_frame"].window.focus();
 	    window.frames["print_frame"].window.print();
 	    loadingBlock();
 	    HideloadingBlock();
-	    dijit.byId('office_receipt').submit();
+	   dijit.byId('office_receipt').submit();
 	}
 
 	function CheckAllTotal(index){

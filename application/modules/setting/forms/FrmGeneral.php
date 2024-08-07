@@ -275,6 +275,12 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				);
 		$branch_display_setting->setMultiOptions($branch_opt);
 		
+		$receive_note_print = new Zend_Dojo_Form_Element_NumberTextBox('receive_note_print');
+		$receive_note_print->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'placeholder'=>$this->tr->translate("RECEIPT_PRINT")
+		));
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -315,6 +321,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$studydaySchedule->setValue($data['studyday_schedule']['keyValue']);
 
 			$branch_display_setting->setValue($data['branch_display_setting']['keyValue']);
+			
+			$receive_note_print->setValue($data['receive_note_print']['keyValue']);
 
 		}
 		$this->addElements(array(
@@ -352,6 +360,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$studydaySchedule
 				,$branch_display_setting
 				,$ReceiptStartSetting
+				,$receive_note_print
 				));
 		
 		return $this;

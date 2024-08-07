@@ -117,7 +117,7 @@ class Stock_Model_DbTable_DbCutStock extends Zend_Db_Table_Abstract
     			}else{
 					$identity=$identity.",".$no;
     			}
-    			$stuName=$row['stu_enname']." ".$row['last_name'];
+    			$stuName=$row['last_name']." ".$row['stu_enname'];
     			$stuCode=$row['stu_code'];
     			$gender=$row['gender'];
     			$tel=$row['tel'];
@@ -472,7 +472,7 @@ if(!empty($type)){
 		    		$identity=$no;
 			    }else{$identity=$identity.",".$no;
 			    }
-			    $stuName=$row['stu_enname']." ".$row['last_name'];
+			    $stuName=$row['last_name']." ".$row['stu_enname'];
 			    $stuCode=$row['stu_code'];
 			    $gender=$row['gender'];
 			    $tel=$row['tel'];

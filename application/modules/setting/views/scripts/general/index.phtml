@@ -106,6 +106,11 @@ input[type=file] {
 						<i class="fa fa-graduation-cap ml-2"></i> <?php echo $tr->translate("STUDENT_SETTING");?>
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panelSetting5" role="tab">
+						<i class="fa fa-cubes ml-2"></i> <?php echo $tr->translate("STOCK_SETTING");?>
+						</a>
+					</li>
 				</ul>
 			</div>
 			<div class="col-md-9 col-sm-9 col-xs-12">
@@ -355,49 +360,7 @@ input[type=file] {
 										</div> 
 									</div> 
 								</div>
-								<div class="card-blogform">
-									<div class="card-body"> 
-										<div class="row"> 
-											<div class="col-md-12 col-sm-12 col-xs-12"> 
-												<div class="d-flex"> 
-													<div class="settings-main-icon ">
-														<i class="fa fa-cubes" aria-hidden="true"></i>
-													</div> 
-													<div class="col-md-10 col-sm-10 col-xs-12"> 
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Stock Option");?></p>
-													</div> 
-												</div> 
-												<div class="form-group">
-													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Sale Stock Setting')?></label>
-													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('sale_stock');?></div>
-												</div>
-												<div class="form-group">
-													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Transfer Stock')?></label>
-													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('trasfer_st_cut');?></div>
-												</div>
-												<div class="form-group">
-													 <label class="control-label col-md-12 col-sm-12 col-xs-12">
-														<?php echo $tr->translate('SCHOOL_OPTION')?>
-														<small><?php echo $tr->translate('STUDY_SERVICE_PROVIDE_TO_CLIENT')?></small>
-													</label>
-												</div>
-												<?php if (!empty($this->allSchoolOption)) foreach ($this->allSchoolOption as $rs){?>
-												<div class="form-group">
-													<label class="custom-switch  "> 
-														<input type="checkbox" <?php if ($rs['status']==1){?> checked="checked" <?php }?> id="school_<?php echo $rs['id']?>" name="school_<?php echo $rs['id']?>"  class="custom-switch-input" > 
-														<span class="custom-switch-indicator custom-radius"></span> 
-														<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $rs['title'];?></a> 
-													</label>
-												</div>
-												<?php }?>
-												
-											</div> 
-										</div> 
-									</div> 
-								</div>
 
-								
-								
 							</div> 
 						</div> 
 					</div>
@@ -585,7 +548,59 @@ input[type=file] {
 							</div> 
 						</div> 
 					</div>
-					<!--End Panel 4-->					
+					<!--End Panel 4-->	
+					<!--Panel 5-->	
+					<div class="tab-pane fade in " id="panelSetting5" role="tabpanel">
+						<div class="card-box">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-blogform">
+									<div class="card-body"> 
+										<div class="row"> 
+											<div class="col-md-12 col-sm-12 col-xs-12"> 
+												<div class="d-flex"> 
+													<div class="settings-main-icon ">
+														<i class="fa fa-cubes" aria-hidden="true"></i>
+													</div> 
+													<div class="col-md-10 col-sm-10 col-xs-12"> 
+														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("Stock Option");?></p>
+													</div> 
+												</div> 
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('RECEIVED_STOCK_SETTING')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('receive_note_print');?></div>
+												</div>
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Sale Stock Setting')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('sale_stock');?></div>
+												</div>
+												<div class="form-group">
+													<label class="control-label col-md-4 col-sm-4 col-xs-12"><?php echo $tr->translate('Transfer Stock')?></label>
+													<div class="col-md-8 col-sm-8 col-xs-12"><?php echo $frm->getElement('trasfer_st_cut');?></div>
+												</div>
+												<div class="form-group">
+													 <label class="control-label col-md-12 col-sm-12 col-xs-12">
+														<?php echo $tr->translate('SCHOOL_OPTION')?>
+														<small><?php echo $tr->translate('STUDY_SERVICE_PROVIDE_TO_CLIENT')?></small>
+													</label>
+												</div>
+												<?php if (!empty($this->allSchoolOption)) foreach ($this->allSchoolOption as $rs){?>
+												<div class="form-group">
+													<label class="custom-switch  "> 
+														<input type="checkbox" <?php if ($rs['status']==1){?> checked="checked" <?php }?> id="school_<?php echo $rs['id']?>" name="school_<?php echo $rs['id']?>"  class="custom-switch-input" > 
+														<span class="custom-switch-indicator custom-radius"></span> 
+														<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $rs['title'];?></a> 
+													</label>
+												</div>
+												<?php }?>
+												
+											</div> 
+										</div> 
+									</div> 
+								</div>
+							</div> 
+						</div> 
+					</div>
+					<!--End Panel 5 -->					
 				</div>
 			</div>
 		</div>

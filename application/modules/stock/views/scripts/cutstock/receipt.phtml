@@ -21,12 +21,16 @@ img.view{height: 70px !important;}
 					margin-top: 2px !important;
 					border-collapse: collapse;
 					border: 1px solid #000;
-					font-size:9px;
+					font-size:8px;
 					font-family:'Khmer OS Battambang','Times New Roman' !important;
 					white-space:nowrap;
 				}
 				.print tr td{
 					padding:0px 2px 0px 2px; 
+				}
+				tr.rowlist td {
+				    padding: 0px;
+					font-size:8px; 
 				}
 				tr.hearder_table td {
 				    padding: 5px;
@@ -60,18 +64,15 @@ img.view{height: 70px !important;}
 						</td>
 					</tr>
 					<tr>
-						<td>Student ID : <?php echo $this->row['stu_code'];?></td>
-						<td></td>
+						<td colspan="2" align="left"><span style="text-align:left; min-width: 100px; display: inline-block;">Student ID </span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['stu_code'];?></span></td>
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Serial No.</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['serailno'];?><?php if($this->row['status']==0){echo "<span style='color:red;'>&nbsp;&nbsp;(Void)</span>";};?></span></td>
 					</tr>
 					<tr>
-						<td>Student Name : <?php echo $this->row['stu_khname'].'/'.$this->row['stu_enname']." ".$this->row['last_name'];?></td>
-						<td></td>
+						<td colspan="2" align="left"><span style="text-align:left; min-width: 100px; display: inline-block;">Student Name</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['stu_khname'].'/'.$this->row['last_name']." ".$this->row['stu_enname'];?></span></td>
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Ref Receipt No.</span> : <span style="text-align:left; min-width: 100px; display: inline-block;font-weight:bold;"><?php echo $this->row['refReceiptNum'];?></span></td>
 					</tr>
-					<t>
-						<td>Tel : <?php echo($this->row['tel']); ?></td>
-						<td></td>
+					<tr>
+						<td colspan="2" align="left"><span style="text-align:left; min-width: 100px; display: inline-block;">Tel</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo $this->row['tel'];?></span></td>
 						<td colspan="2" align="right"><span style="text-align:left; min-width: 100px; display: inline-block;">Received Date</span> : <span style="text-align:left; min-width: 100px; display: inline-block;"><?php echo date("d/M/Y",strtotime($this->row['received_date']));?></span></td>
 						</td>
 					</tr>
@@ -110,12 +111,12 @@ img.view{height: 70px !important;}
 								</tr>
 								<?php } ?>
 							  	<tr class="rowlist">
-									<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>បរិមាណទទួល Total Qty Received</strong></td>
-									<td align="center">&nbsp;&nbsp;<strong><?php echo $this->row['totalQtyReceive'];?></strong>&nbsp;</td>
+									<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">បរិមាណទទួល Total Qty Received </td>
+									<td align="center"><strong><?php echo $this->row['totalQtyReceive'];?></strong></td>
 								</tr>
 								<tr class="rowlist">
-									<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;"><strong>ជំពាក់សរុប  Total Qty Remain</strong></td>
-									<td align="center">&nbsp;&nbsp;<strong><?php echo $this->row['totalQtyRemain'];?></strong>&nbsp;</td>
+									<td colspan="5" align="right" style=" border-bottom: #fff 1px solid; border-left: 1px solid #fff;">ជំពាក់សរុប  Total Qty Remain </td>
+									<td align="center"><strong><?php echo $this->row['totalQtyRemain'];?></strong></td>
 								</tr>
 							 </table>
 						</td>

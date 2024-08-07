@@ -4680,9 +4680,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (isset($data['isOnepayment'])) {
 			$sql .= " AND i.is_onepayment=" . $data['isOnepayment'];
 		}
-		if(isset($data['isAutopayment'])){
-			$sql.=" AND i.is_autopayment=".$data['isAutopayment'];
-		}
+		
 		if (isset($data['isAutopayment']) and $data['isInititilize'] == 1) {
 			if ($data['isAutopayment'] != '') {
 				if($data['studentType']==1){
@@ -4693,7 +4691,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			}
 		}
 		$sql .= " ORDER BY i.items_type ASC ";
-		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
+		Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		return $this->getAdapter()->fetchAll($sql);//fetch all but got only 1 row only .
 
 	}

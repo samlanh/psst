@@ -69,6 +69,8 @@ public function init()
 		$row['footerScoreDocument'] = $db_gs->geLabelByKeyName('footerScoreDocument');
 
 		$row['branch_display_setting'] = $db_gs->geLabelByKeyName('branch_display_setting');
+
+		$row['receive_note_print'] = $db_gs->geLabelByKeyName('receive_note_print');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

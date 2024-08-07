@@ -9,6 +9,8 @@
 	$dbname = $data['dbname'];
 	$part=PUBLIC_PATH. '/sytembackup/';
 	$url = $this->baseUrl().'/sytembackup/';
+	$urlPhoto = $this->baseUrl().'/images/photo/';
+	$partPhoto=PUBLIC_PATH. '/images/photo/';
 ?>
 <style>
 table.history-record {
@@ -114,6 +116,15 @@ table.history-record a.btn.btn-danger.btn-xs {
 					    </div> 
                    </div>
                 </div>
+				
+				<div class="form-group">
+                   <div class="col-md-12 col-sm-12 col-xs-12">
+                   		<div class="backup_list">
+                   			
+					    </div> 
+                   </div>
+                </div>
+				
             </div>
             </form>
          </div>   
@@ -121,6 +132,35 @@ table.history-record a.btn.btn-danger.btn-xs {
     </div>
  </div>
 <?php 
+/*
+$dbCard = new Setting_Model_DbTable_DbCardmg();
+$photos = getPhoto($partPhoto);
+if(count($photos)>0){ 
+	foreach ($photos as $k => $v) {
+		$dbCard->getStudentInfo(trim(str_replace(".png","",$v)),$partPhoto.'/'.$v,$v);
+	 }
+}
+function getPhoto($dir="./images/photo/"){
+	if (is_dir($dir)){
+		$dh  = opendir($dir);
+		$files=array();
+		$i=0;
+		
+		$ignored = array('.', '..', '.svn', '.htaccess');
+		
+		$files = array();
+		foreach (scandir($dir) as $file) {
+			if (in_array($file, $ignored)) continue;
+			$files[$file] = filemtime($dir . '/' . $file);
+		}
+		
+		arsort($files);
+		$files = array_keys($files);
+		return $files;
+	}
+}
+*/
+
 function getDownloads($dir="./sytembackup"){
 	if (is_dir($dir)){
 		$dh  = opendir($dir);

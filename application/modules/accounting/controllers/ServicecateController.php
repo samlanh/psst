@@ -24,7 +24,7 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
        $rs_rows = $db_dept->getAllItemsOption($search,$type);
         
     	$list = new Application_Form_Frmtable();
-    	$collumns = array("SELECT_SERVICE_TYPE","SERVICE_TYPE_EN","PARENT","BY_USER","STATUS");
+    	$collumns = array("TYPE","SELECT_SERVICE_TYPE","SERVICE_TYPE_EN","PARENT","ORDERING","BY_USER","STATUS");
     	$link=array(
     			'module'=>'accounting','controller'=>'servicecate','action'=>'edit',
     	);
@@ -40,7 +40,6 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     		try {
     			$sms="INSERT_SUCCESS";
     			$_data = $this->getRequest()->getPost();
-    			$_data['ordering']=1;
     			$db = new Global_Model_DbTable_DbItems();
     			$degree_id= $db->AddDegree($_data);
     			if($degree_id==-1){
@@ -73,7 +72,6 @@ class Accounting_ServicecateController extends Zend_Controller_Action {
     	if($this->getRequest()->isPost()){
     		try {
     			$_data = $this->getRequest()->getPost();
-    			$_data['ordering']=1;
     			$db->UpdateDegree($_data);
     			Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS",'/accounting/servicecate');
     			exit();

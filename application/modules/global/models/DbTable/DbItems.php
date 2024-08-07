@@ -50,10 +50,17 @@
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	function getAllItemsOption($search = '',$type=null){
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$db = $this->getAdapter();
+		$parenttitle=$tr->translate('IS_PARENT');
+		
 		$sql = "
 		SELECT 
 			d.id
+			,CASE 
+					WHEN d.is_parent=1 THEN   '$parenttitle'
+					WHEN d.is_parent!=1 THEN  ''
+				END AS parenttitle
 			,d.title
 			,d.title_en
 			
@@ -61,9 +68,11 @@
 		if(!empty($type)){
 			if($type==3 || $type==2){
 				$sql.= " ,(SELECT ip.title FROM rms_items AS ip WHERE ip.id = d.parent AND d.type =ip.type LIMIT 1) AS category ";
+				$sql.=" ,d.ordering ";
 			}
 			
 		}
+		
 		$sql.=" ,(SELECT CONCAT(first_name) FROM rms_users WHERE d.user_id=id LIMIT 1 ) AS user_name ";
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql.=$dbp->caseStatusShowImage("d.status");
@@ -88,7 +97,7 @@
 		}
 		$where.= $dbp->getSchoolOptionAccess('d.schoolOption');
 		
-		$orderby = " ORDER BY d.type ASC, d.id DESC ";
+		$orderby = " ORDER BY  d.type ASC, d.id DESC ";
 		return $db->fetchAll($sql.$where.$orderby);
 	}
 	public function getDegreeById($degreeId,$type=null){

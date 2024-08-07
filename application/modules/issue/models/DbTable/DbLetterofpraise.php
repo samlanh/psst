@@ -11,9 +11,10 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
     function getAllIssueCertification($search){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql = "SELECT c.id,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
+			(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
 			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
 			c.academic_year,
 			c.grade,

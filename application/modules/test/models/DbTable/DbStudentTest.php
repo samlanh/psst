@@ -84,7 +84,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'tel'		=>$data['phone'],
 						'email'		=>$data['email'],
 						
-						'familyId'		=>$data['familyId'],
+						'familyId'		=>empty($data['familyId']) ? 0 : $data['familyId'],
 						//'guardian_khname'		=>$data['parent_name'],
 						//'guardian_tel'		=>$data['parent_tel'],
 						
@@ -161,7 +161,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'tel'		=>$data['phone'],
 					'email'		=>$data['email'],
 					
-					'familyId'		=>$data['familyId'],
+					'familyId'		=>empty($data['familyId']) ? 0 : $data['familyId'],
 					//'guardian_khname'		=>$data['parent_name'],
 					//'guardian_tel'		=>$data['parent_tel'],
 					'emergency_name'		=>$data['emergency_name'],

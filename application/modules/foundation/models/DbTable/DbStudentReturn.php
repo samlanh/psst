@@ -12,6 +12,9 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
+		
+		$branch = $dbp->getBranchDisplay();
+		
 		$colunmname='title_en';
 		$label="name_en";
 		if ($currentLang==1){
@@ -20,7 +23,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 		}
 		
 		$sql = "SELECT  sdr.id,
-				(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sdr.branchId LIMIT 1) AS branch_name,			
+				(SELECT rms_branch.$branch FROM `rms_branch` WHERE rms_branch.br_id = sdr.branchId LIMIT 1) AS branch_name,			
 				(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id=sdr.stuId LIMIT 1) AS stu_code,
 				(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id=sdr.stuId LIMIT 1) AS student_kh,
 				(SELECT CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=sdr.stuId LIMIT 1) AS student_name,

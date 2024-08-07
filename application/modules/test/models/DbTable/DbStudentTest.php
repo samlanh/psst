@@ -84,7 +84,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 						'tel'		=>$data['phone'],
 						'email'		=>$data['email'],
 						
-						'familyId'		=>$data['familyId'],
+						'familyId'		=>empty($data['familyId']) ? 0 : $data['familyId'],
 						//'guardian_khname'		=>$data['parent_name'],
 						//'guardian_tel'		=>$data['parent_tel'],
 						
@@ -161,7 +161,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 					'tel'		=>$data['phone'],
 					'email'		=>$data['email'],
 					
-					'familyId'		=>$data['familyId'],
+					'familyId'		=>empty($data['familyId']) ? 0 : $data['familyId'],
 					//'guardian_khname'		=>$data['parent_name'],
 					//'guardian_tel'		=>$data['parent_tel'],
 					'emergency_name'		=>$data['emergency_name'],
@@ -235,9 +235,28 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	}
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT * FROM rms_student WHERE stu_id=$id AND is_studenttest=1 "; //AND customer_type =4
+		$sql=" SELECT 
+				fam.fatherNameKh AS father_khname 
+				,fam.fatherName AS father_enname  
+				,fam.fatherNation AS father_nation
+				,fam.fatherPhone AS father_phone
+				
+				,fam.motherNameKh AS mother_khname 
+				,fam.motherName AS mother_enname  
+				,fam.motherNation AS mother_nation  
+				,fam.motherPhone AS mother_phone  
+				
+				,fam.guardianNameKh AS guardian_khname 
+				,fam.guardianName AS guardian_enname 
+				,fam.guardianNation AS guardian_nation 
+				,fam.guardianPhone AS guardian_tel
+				,s.* 
+				FROM rms_student AS s
+				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+				WHERE s.stu_id=$id AND s.is_studenttest=1 
+			"; //AND customer_type =4
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$sql.=$dbp->getAccessPermission('branch_id');
+		$sql.=$dbp->getAccessPermission('s.branch_id');
 		$sql.=" LIMIT 1";
 		return $db->fetchRow($sql);
 	}

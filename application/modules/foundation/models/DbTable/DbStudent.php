@@ -298,7 +298,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						,'studentToken'=>$stuToken
 
 						,'studentType'	=>$_data['studentType']
-						,'familyId'	=>$_data['familyId']
+						,'familyId'	=>empty($_data['familyId']) ? 0 : $_data['familyId']
 						,'goHomeType'	=>$_data['goHomeType']
 
 						);
@@ -465,7 +465,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					,'certificate_bacc'	=>$_data['certificate_baccexam']
 					
 					,'studentType'	=>$_data['studentType']
-					,'familyId'	=>$_data['familyId']
+					,'familyId'	=>empty($_data['familyId']) ? 0 : $_data['familyId']
 					,'goHomeType'	=>$_data['goHomeType']
 				);
 			if (EDUCATION_LEVEL==1){

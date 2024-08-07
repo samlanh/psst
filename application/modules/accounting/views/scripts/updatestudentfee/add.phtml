@@ -21,157 +21,180 @@ a.btnstyle:hover{color:#eee;}
     			</div>
     		</div>
     	</div>
-    	
-	    	<div class="card-box">
-	        	<div class="col-md-12 col-sm-12 col-xs-12 search-blog">
-	        		<form id="studentgroup" dojoType="dijit.form.Form" action="" method="post" enctype="application/x-www-form-urlencoded">
-						<script type="dojo/method" event="onSubmit">			
-							if(this.validate()) {
-								branch_id = dijit.byId('branch_id').get('value');
-								if(branch_id==''){
-									alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
-									dijit.byId('branch_id').focus();
-									return false;
-								}
-								
-								return true;
-	   						}else {
-								return false;
-	   						}
-						</script>
-						<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-search" aria-hidden="true"></i> <?php echo $tr->translate("SEARCH_GROUP");?> 
-		                   </label>
-		                </div>
-		                <div class="form-group">
-		                	<div class="col-md-6 col-sm-6 col-xs-12">
-				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-				                <div class="col-md-7 col-sm-7 col-xs-12">
-				                	<?php echo $frm->getElement("branch_id");?>
-				                </div>
-				              </div>
-			             </div>
-			             <div class="form-group">
-		                	<div class="col-md-6 col-sm-6 col-xs-12">
-				                <label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
-				                <div class="col-md-7 col-sm-7 col-xs-12">
-				                	<?php echo $frm->getElement("degree");?>
-				                </div>
-				              </div>
-			             </div>
-						<div class="form-group">
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_FEEID");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<input id="fromFeeid" />
-				                   </div>
-				                 </div>
-			                </div>
-		                </div>
-		                <div class="form-group">
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEARCH_STUDENT_NAME").', '.$tr->translate("STUDENT_CODE");?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("adv_search");?>
-				                   </div>
-				                 </div>
-			                </div>
-		                </div>
-						<div class="form-group">
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<div class="form-group">
-				                   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LIMIT")?>  :
-				                   </label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		<?php echo $frm->getElement("limit");?>
-				                   </div>
-				                 </div>
-			                </div>
-		                </div>
-		                <div class="form-group">
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<div class="form-group">
-				                    <label class="control-label  col-md-5 col-sm-5 col-xs-12" ></label>
-				                   <div class="col-md-7 col-sm-7 col-xs-12">
-				                   		 <input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
-											class="button-class button-primary" iconClass="glyphicon glyphicon-search"/>
-				                   </div>
-				                 </div>
-			                </div>
-		                </div>
-					</form>
-	            </div>
-	            <div class="clearfix"></div>
-	        </div>
-	        <div class="card-box" style="margin-top: 10px;">
-		       	<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentfee','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-					<script type="dojo/method" event="onSubmit">			
-					if(this.validate()) {
-						academic_year_fee = dijit.byId('academic_year_fee').get('value');
-						if(academic_year_fee=='' || academic_year_fee==-1){
-							alert('<?php echo $tr->translate("PLEASE_SELECT_STUDENT_FEE");?>');
-							dijit.byId('academic_year_fee').focus();
-							return false;
-						}
-						loadingBlock();	
-						return true;
-	   				}else {
+
+    	<form id="studentgroup" dojoType="dijit.form.Form" action="" method="post" enctype="application/x-www-form-urlencoded">
+			<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					branch_id = dijit.byId('branch_id').get('value');
+					if(branch_id==''){
+						alert('<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>');
+						dijit.byId('branch_id').focus();
 						return false;
-	   				}
-				</script>
-					<div class="col-md-8 col-sm-8 col-xs-12">
-		            	<div class="form-group">
-			         		<div class="col-md-12 col-sm-12 col-xs-12 text-center">
-								<a class="btnstyle" id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
-								<a class="btnstyle" id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
-								<div style="height: 10px;"></div>
-							</div>
-							 <div class="clearfix"></div>
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<select multiple id="public-methods" name="public-methods[]">
-									<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
-										<option value="<?php echo $row['stu_id'];?>">
-											<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
-										</option>
-									<?php }?>
-								</select>
-							</div>
-							 <div class="clearfix"></div>
-			         	</div>
-		            </div>
-		        	<div class="col-md-4 col-sm-4 col-xs-12">
-						<div class="form-group">
-		                   <label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_FEE_INFORMATION");?> 
-		                   </label>
-		                </div>
-		                <div class="form-group">
-		                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NEW_FEEID");?> :
-		                   </label>
-		                   <div class="col-md-7 col-sm-7 col-xs-12">
-	                   		 <input id="academic_year_fee" />
-	                   		 <input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
-							 <input type="hidden" name="OldFee" id="OldFee" dojoType="dijit.form.TextBox" /> 
-		                   </div>
-		                </div>
-		                
-		                <div class="form-group">
-		                   <div class="col-md-12 col-sm-12 col-xs-12">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
-									class="button-class button-primary" iconClass="	glyphicon glyphicon-floppy-saved"/>
+					}
+					
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+
+			<div class="card-box">
+				<div class="col-md-8 col-sm-8 col-xs-12 ">
+					<div class="x_panel">
+						<div class="x_title">
+							<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("FILTERING");?> <small><?php echo $tr->translate("STUDENT_INFO");?></small></h2>
+							<ul class="nav navbar-right panel_toolbox">
+								<li>
+								<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+								</li>
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content" >
+							<div class="card-blogform">
+								<div class="card-body"> 
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-12 ">
+											<div class="card-blogform">
+												<div class="card-body"> 
+													<div class="row"> 
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="d-flex"> 
+																<div class="settings-main-icon ">
+																	<i class="glyphicon glyphicon-education"></i>
+																</div> 
+																<div class="col-md-10 col-sm-10 col-xs-12"> 
+																	<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
+																</div> 
+															</div>
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH");?> </label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<?php echo $frm->getElement("branch_id");?>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<?php echo $frm->getElement("degree");?>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_FEEID");?>  :
+																</label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<input id="fromFeeid" />
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEARCH_STUDENT_NAME").', '.$tr->translate("STUDENT_CODE");?>  :
+																</label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<?php echo $frm->getElement("adv_search");?>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("LIMIT")?>  :
+																</label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<?php echo $frm->getElement("limit");?>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ></label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<input type="submit" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SEARCH")?>" id="search"
+																	class="button-class button-primary" iconClass="glyphicon glyphicon-search"/>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+
+										<div class="col-md-6 col-sm-6 col-xs-12 ">
+
+										</div>
+									</div>
 								</div>
-		                   </div>
-		                </div>
-		            </div>
-		            
-		            <div class="clearfix"></div>
-	             </form>
-       	 </div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</form>
+
+			<div class="col-md-4 col-sm-4 col-xs-12">
+				<div class="form-group">
+					<label class="control-label col-md-12 col-sm-12 col-xs-12 title-blog bold" ><i class="fa fa-hand-o-right" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_FEE_INFORMATION");?> 
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NEW_FEEID");?> :
+					</label>
+					<div class="col-md-7 col-sm-7 col-xs-12">
+						<input id="academic_year_fee" />
+						<input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
+						<input type="hidden" name="OldFee" id="OldFee" dojoType="dijit.form.TextBox" /> 
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ></label>
+						<div class="col-md-7 col-sm-7 col-xs-12">
+							<input type="submit" id="save_new" dojoType="dijit.form.Button"  label="<?php echo $tr->translate("SAVE_NEW");?>" 
+							class="button-class button-primary" iconClass="	glyphicon glyphicon-floppy-saved"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+
+		<div class="card-box" style="margin-top: 10px;">
+			<form id='submitgroup' dojoType="dijit.form.Form" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'updatestudentfee','action'=>'submit')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<script type="dojo/method" event="onSubmit">			
+				if(this.validate()) {
+					academic_year_fee = dijit.byId('academic_year_fee').get('value');
+					if(academic_year_fee=='' || academic_year_fee==-1){
+						alert('<?php echo $tr->translate("PLEASE_SELECT_STUDENT_FEE");?>');
+						dijit.byId('academic_year_fee').focus();
+						return false;
+					}
+					loadingBlock();	
+					return true;
+				}else {
+					return false;
+				}
+			</script>
+				<div class="col-md-8 col-sm-8 col-xs-12">
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+							<a class="btnstyle" id="select-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("SELECT_ALL");?></span></a> <span style="font-size: 16px;"> | </span>
+							<a class="btnstyle" id="deselect-all" href="#"><span style="font-size: 15px;"><?php echo $tr->translate("DESELECT_ALL");?></span></a> <span style="font-size: 16px;"> </span>
+							<div style="height: 10px;"></div>
+						</div>
+							<div class="clearfix"></div>
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<select multiple id="public-methods" name="public-methods[]">
+								<?php $no=0; if(!empty($this->rs)) foreach($this->rs as $row){ $no++;?>
+									<option value="<?php echo $row['stu_id'];?>">
+										<?php echo $no, ". " , $row['stu_code'],"-",$row['last_name'].' '.$row['stu_enname'],"-",$row['stu_khname']." (".$row['grade_title'].")"; ?>
+									</option>
+								<?php }?>
+							</select>
+						</div>
+							<div class="clearfix"></div>
+					</div>
+				</div>
+				
+				
+				<div class="clearfix"></div>
+			</form>
+		</div>
 	</div>
 </div>
 <style>

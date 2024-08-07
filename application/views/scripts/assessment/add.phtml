@@ -117,6 +117,7 @@ table#table tbody tr:hover {
 																	<select id="examType" name="examType" class="fullside" onchange="checkExamType(); "  dojoType="dijit.form.FilteringSelect"  readOnly>
 																		<option value="1" <?php if(1==$this->scoreInfo['exam_type']){echo "selected='selected'";}?> >ប្រចាំខែ/Monthly</option>
 																		<option value="2" <?php if(2==$this->scoreInfo['exam_type']){echo "selected='selected'";}?> >ប្រចាំឆមាស/Semester</option>
+																		<option value="3" <?php if(3==$this->scoreInfo['exam_type']){echo "selected='selected'";}?> >ប្រចាំឆ្នាំ/Annual</option>
 																	</select>
 																	<input type="hidden" name="branchId" id="branchId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['branch_id']?>" />
 																	<input type="hidden" name="groupId" id="groupId" class="fullside" required="1" dojoType="dijit.form.ValidationTextBox" value="<?php echo $this->row['id']?>"/>
@@ -124,12 +125,14 @@ table#table tbody tr:hover {
 																</div>
 																<div class="col-md-4 col-sm-4 col-xs-12">
 																	<select dojoType="dijit.form.FilteringSelect" onchange="duplicationRecord();" required="true" class="fullside" id="forSemester" name="forSemester" queryExpr="*${0}*" autoComplete="false" readOnly>								
+																		<option value="0"  >ជ្រើសរើសឆមាស/Choose Semester</option>
 																		<option value="1" <?php if(1==$this->scoreInfo['for_semester']){echo "selected='selected'";}?> >ឆមាសទី១/Semester I</option>
 																		<option value="2" <?php if(2==$this->scoreInfo['for_semester']){echo "selected='selected'";}?> >ឆមាសទី២/Semester II</option>
 																	</select>
 																</div>
 																<div class="col-md-4 col-sm-4 col-xs-12">
 																	<select dojoType="dijit.form.FilteringSelect" required="true" onchange="duplicationRecord();" class="fullside" id="forMonth" name="forMonth" queryExpr="*${0}*" autoComplete="false" readOnly>								
+																		<option value="0"  >ជ្រើសរើសខែ/Choose Month</option>
 																		<?php if(!empty($this->month)){foreach ($this->month as $month){?>
 																			<option value="<?php echo $month['id']?>" <?php if($month['id']==$this->scoreInfo['for_month']){echo "selected='selected'";}?>><?php echo $month['month_kh']."/".$month['month_en']?></option>
 																		<?php }}?>

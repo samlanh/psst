@@ -35,6 +35,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=s.branch_id LIMIT 1) as branchName,	
 		(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as examTypeTitle,
 		CASE
+			WHEN s.exam_type  = 3 THEN 'Annual'
 			WHEN s.exam_type  = 2 THEN s.for_semester
 			ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month LIMIT 1) 
 		END AS forMonthTitle,

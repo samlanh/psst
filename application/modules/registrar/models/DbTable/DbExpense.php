@@ -106,12 +106,10 @@ class Registrar_Model_DbTable_DbExpense extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$lang = $dbp->currentlang();
+		$branch = $dbp->getBranchDisplay();
+		$label = "name_en";
 		if($lang==1){// khmer
 			$label = "name_kh";
-			$branch = "branch_namekh";
-		}else{ // English
-			$label = "name_en";
-			$branch = "branch_nameen";
 		}
 		$sql=" SELECT 
 					id,

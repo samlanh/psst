@@ -41,11 +41,17 @@ Class Registrar_Form_Frmincome extends Zend_Dojo_Form {
 		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$rows = $db->getAllBranchName();
-		$options=array(''=>'---Select Branch---');
+		$options=array(''=>$this->tr->translate("SELECT_BRANCH"));
 		if(!empty($rows))foreach($rows AS $row){
 			$options[$row['br_id']]=$row['branch_namekh'];
 		}
 		$_branch_id->setMultiOptions($options);
+		if (count($rows)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($rows))foreach($rows AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
 		
 		$_stutas = new Zend_Dojo_Form_Element_FilteringSelect('Stutas');
 		$_stutas ->setAttribs(array(

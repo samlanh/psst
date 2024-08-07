@@ -98,6 +98,12 @@ Class Registrar_Form_FrmSearchexpense extends Zend_Dojo_Form {
 		$_branch_id->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside height-text',));
+		if (count($optionBranch)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($optionBranch))foreach($optionBranch AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
 		
 		
 		$this->addElements(array($_title,$_branch_id,$_cate,$_bydate,$payment_method,$_transfer,$_releasedate

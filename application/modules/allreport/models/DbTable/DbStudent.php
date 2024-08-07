@@ -229,16 +229,16 @@ class Allreport_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$lang = $dbp->currentlang();
+		
+		$branch= $dbp->getBranchDisplay();
+		$label = "name_en";
+		$grade = "rms_itemsdetail.title_en";
+		$degree = "rms_items.title_en";
+			
 		if($lang==1){// khmer
 			$label = "name_kh";
 			$grade = "rms_itemsdetail.title";
 			$degree = "rms_items.title";
-			$branch = "b.branch_namekh";
-		}else{ // English
-			$label = "name_en";
-			$grade = "rms_itemsdetail.title_en";
-			$degree = "rms_items.title_en";
-			$branch = "b.branch_nameen";
 		}
 		$sql="
 			SELECT 

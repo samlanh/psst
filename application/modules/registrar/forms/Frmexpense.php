@@ -59,6 +59,12 @@ Class Registrar_Form_Frmexpense extends Zend_Dojo_Form {
 		$rows = $db->getAllBranch();
 		if(!empty($rows))foreach($rows AS $row){$options_rr[$row['id']]=$row['name'];}
 		$_branch_id->setMultiOptions($options_rr);
+		if (count($rows)==1){
+    		$_branch_id->setAttribs(array('readonly'=>'readonly'));
+    		if(!empty($rows))foreach($rows AS $row){
+    			$_branch_id->setValue($row['id']);
+    		}
+    	}
 		
 		$_stutas = new Zend_Dojo_Form_Element_FilteringSelect('Stutas');
 		$_stutas ->setAttribs(array(

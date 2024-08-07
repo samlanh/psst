@@ -11,71 +11,66 @@ class Allreport_Model_DbTable_DbRptOtherIncome extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
-    	if($lang==1){// khmer
+		$branch = $_db->getBranchDisplay();
+    	$label = "name_en";
+		if($lang==1){ // khmer
     		$label = "name_kh";
-    		$branch = "branch_namekh";
-    	}else{ // English
-    		$label = "name_en";
-    		$branch = "branch_nameen";
-    		
     	}
     	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	$sql = "SELECT 
-    				*,
-    				CASE
-						WHEN optionType = 1 THEN '".$tr->translate("OTHER_INCOME")."'
+    				inc.*
+					,CASE
+						WHEN inc.optionType = 1 THEN '".$tr->translate("OTHER_INCOME")."'
 						ELSE '".$tr->translate("OTHER_INCOME")."'
-					END as incomeType,
-					(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) 
-					FROM rms_student AS s
-					WHERE s.stu_id=student_id LIMIT 1) AS studentName,
-					(SELECT bank_name FROM `rms_bank` b WHERE b.id=bank_id LIMIT 1) AS bank_name,
-    				 payment_method AS payment_methodid,
-    				(SELECT $branch from rms_branch where br_id = branch_id LIMIT 1) as branch_name,
-    				(SELECT category_name FROM rms_cate_income_expense WHERE rms_cate_income_expense.id = cate_income LIMIT 1) AS cate_income, 
-	    			(select category_name from rms_cate_income_expense where rms_cate_income_expense.id = cate_income LIMIT 1) as income_category,
-	    			(SELECT $label FROM `rms_view` WHERE rms_view.type=8 and rms_view.key_code = payment_method LIMIT 1) AS payment_method,
-	    			(SELECT CONCAT(first_name) from rms_users as u where u.id = user_id LIMIT 1)  as byUser,
-	    			(SELECT first_name FROM rms_users WHERE rms_users.id = voidBy LIMIT 1) AS voidBy
-    			 FROM 
-    				ln_income  
+					END AS incomeType
+					,CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentName
+					,(SELECT b.bank_name FROM `rms_bank` b WHERE b.id=inc.bank_id LIMIT 1) AS bank_name
+    				,payment_method AS payment_methodid
+    				,(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = inc.branch_id LIMIT 1) AS branch_name
+    				,(SELECT cate.category_name FROM rms_cate_income_expense AS cate WHERE cate.id = inc.cate_income LIMIT 1) AS cate_income
+	    			,(select cate.category_name FROM rms_cate_income_expense AS cate where cate.id = inc.cate_income LIMIT 1) as income_category
+	    			,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=8 and v.key_code = inc.payment_method LIMIT 1) AS payment_method
+	    			,(SELECT CONCAT(u.first_name) FROM rms_users AS u WHERE u.id = inc.user_id LIMIT 1)  AS byUser
+	    			,(SELECT u.first_name FROM rms_users AS u WHERE u.id = inc.voidBy LIMIT 1) AS voidBy
+    			FROM 
+    				ln_income  AS inc 
+					LEFT JOIN rms_student AS s ON s.stu_id= inc.student_id
     			WHERE 
     				1 ";
     	
     	$where= ' ';
     	
-    	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
+    	$from_date =(empty($search['start_date']))? '1': " inc.date >= '".$search['start_date']." 00:00:00'";
+    	$to_date = (empty($search['end_date']))? '1': " inc.date <= '".$search['end_date']." 23:59:59'";
     	$where .= "  AND ".$from_date." AND ".$to_date;
     	if(!empty($search['cate_income'])){
-    		$where.=" AND cate_income = ".$search['cate_income'] ;
+    		$where.=" AND inc.cate_income = ".$search['cate_income'] ;
     	}
     	if(!empty($search['branch_id'])){
-    		$where.= " AND ln_income.branch_id = ".$search['branch_id'];
+    		$where.= " AND inc.branch_id = ".$search['branch_id'];
     	}
     	if(!empty($search['branch_id'])){
-    		$where.=" AND branch_id = ".$search['branch_id'] ;
+    		$where.=" AND inc.branch_id = ".$search['branch_id'] ;
     	}
     	if(!empty($search['user']) AND $search['user']>0){
-    		$where.=" AND user_id = ".$search['user'] ;
+    		$where.=" AND inc.user_id = ".$search['user'] ;
     	}
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['txtsearch']));
     		$s_search = str_replace(' ', '', addslashes(trim($search['txtsearch'])));
-    		$s_where[] = " REPLACE(title,' ','') LIKE '%{$s_search}%'";
-    		$s_where[] = " REPLACE(invoice,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(inc.title,' ','') LIKE '%{$s_search}%'";
+    		$s_where[] = " REPLACE(inc.invoice,' ','') LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$where.= $_db->getAccessPermission();
     	
     		if($search['receipt_order']==1){
-    			$order=" ORDER BY id DESC ";
+    			$order=" ORDER BY inc.id DESC ";
     		}else{
-    			$order=" ORDER BY id ASC ";
+    			$order=" ORDER BY inc.id ASC ";
     		}
-    	
     	return $db->fetchAll($sql.$where.$order);
     }
     function getAllOtherIncomebyCate($search){

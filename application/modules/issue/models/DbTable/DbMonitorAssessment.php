@@ -29,6 +29,7 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 				,s.`for_semester` AS forSemester
 				,s.`exam_type` AS examType
 				,CASE
+					WHEN s.exam_type = 3 THEN CONCAT('Annual')
 					WHEN s.exam_type = 2 THEN CONCAT('Semester ',s.`for_semester` )
 					ELSE (SELECT mth.month_kh FROM `rms_month` AS mth WHERE mth.id=s.for_month  LIMIT 1) 
 				END  AS scoreType

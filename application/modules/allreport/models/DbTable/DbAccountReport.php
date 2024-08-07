@@ -47,7 +47,7 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			,'0' AS gTotal
 		FROM `rms_items` AS i 
 		WHERE i.`is_parent` =1
-			ORDER BY i.`type` ASC,i.`ordering` ASC,i.$columnItem ASC
+			ORDER BY i.`ordering` ASC,i.$columnItem ASC
 		";
 		$rs = $db->fetchAll($sql);
 		if(!empty($rs)) foreach($rs as $key => $cate){

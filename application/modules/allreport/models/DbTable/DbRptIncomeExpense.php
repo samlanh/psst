@@ -10,16 +10,32 @@ class Allreport_Model_DbTable_DbRptIncomeExpense extends Zend_Db_Table_Abstract
     
 	public function getAllexspan($search){//report expense
 	   $db=$this->getAdapter();
-	   $sql="SELECT e.* ,
-				(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id =e.branch_id LIMIT 1) AS branch_name,
-				u.user_name ,u.first_name,e.receiver,e.cheque_no,e.external_invoice,
-				(select name_en from rms_view where rms_view.type=8 and key_code=payment_type LIMIT 1) as payment_type,
-				(SELECT v.name_kh FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1) AS pay
-			FROM ln_expense AS e ,
-				rms_branch AS b ,
-				rms_users AS u 
-			WHERE b.br_id=e.branch_id 
-	   			AND e.user_id=u.id ";
+	   
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$branch = $dbp->getBranchDisplay();
+		
+    	$label = "name_en";
+		if($currentLang==1){ 
+    		$label = "name_kh";
+    	}
+		
+	   $sql="SELECT 
+				e.*
+				 ,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id =e.branch_id LIMIT 1) AS branch_name
+				 ,u.user_name 
+				 ,u.first_name
+				 ,e.receiver
+				 ,e.cheque_no
+				 ,e.external_invoice
+				 ,(select v.$label FROM rms_view AS v WHERE v.type=8 and v.key_code= e.payment_type LIMIT 1) as payment_type
+				 ,(SELECT v.$label FROM rms_view AS v WHERE v.type=8 AND v.key_code= e.payment_type LIMIT 1) AS pay
+			FROM 
+				ln_expense AS e JOIN rms_branch AS b ON b.br_id=e.branch_id 
+				LEFT JOIN rms_users AS u  ON e.user_id=u.id
+			WHERE 
+	   			1  
+		";
 	   
 	   $where="";
 	   $from_date =(empty($search['start_date']))? '1': " e.date  >= '".$search['start_date']." 00:00:00'";

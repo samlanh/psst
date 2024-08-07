@@ -119,13 +119,12 @@ class registrar_Model_DbTable_DbIncome extends Zend_Db_Table_Abstract
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$lang = $dbp->currentlang();
+		$label = "name_en";
 		if($lang==1){// khmer
 			$label = "name_kh";
-			$branch = "branch_namekh";
-		}else{ // English
-			$label = "name_en";
-			$branch = "branch_nameen";
 		}
+		$branch = $dbp->getBranchDisplay();
+		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$Option1 = $tr->translate('OTHER_INCOME');
 		$Option2 = $tr->translate('CREDIT_MEMO');

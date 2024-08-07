@@ -62,10 +62,10 @@
 											<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>:
 											</label>
 											<div class="col-md-7 col-sm-7 col-xs-12">
-													<select name="branch_id" id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getReceiptNumber('');filterClient();">
+													<select name="branch_id" <?php if(count($this->branch_name)==1){ echo "readOnly";} ?> id="branch_id" class="fullside" dojoType="dijit.form.FilteringSelect" onchange="getReceiptNumber('');filterClient();">
 														<option value=""><?php echo $tr->translate("PLEASE_SELECT_BRANCH");?></option>
-														<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $branch){?>
-															<option value="<?php echo $branch['id']?>"><?php echo $branch['name']?></option>
+														<?php if(!empty($this->branch_name)){foreach ($this->branch_name as $key => $branch){?>
+															<option value="<?php echo $branch['id']?>" <?php if($key==0){ echo "selected";} ?> ><?php echo $branch['name']?></option>
 														<?php }}?>
 													</select>
 											</div>

@@ -51,7 +51,7 @@
 	<div id="divPrint">
 		<style type="text/css">
 			.style{
-				line-height: 20px;font-size: 12px !important;
+				line-height: 20px;font-size: 10px !important;
 				font-family: 'Times New Roman','Khmer OS Battambang';
 			}
 			.style1:hover{ background: #ccc; }
@@ -76,10 +76,14 @@
 			table.content-data{
 				border-collapse:collapse;
 				border:1px solid #000; 
-				font-size:12px;
+				font-size:8px;
 			}
 			table.content-data thead tr.style {
-			line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+				line-height: 25px;
+				font-size:10px !important; 
+				padding:1px 0px; 
+				white-space: nowrap;
+				height: 22px; 
 				background: #c1d0f3;
 				font-weight:600;
 			}
@@ -97,19 +101,18 @@
 				word-break: break-all;
 			}
 			@media print{
-						@page{
-							margin:0.3cm 0.7cm 0cm 0.7cm;
-							page-break-before: avoid;
-							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-							-ms-transform: scale(0.5);   /* IE 9 */
-							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-							transform: scale(0.5);
-							page: A4;
-						}
+				@page{
+					margin:0.3cm 0.7cm 0cm 0.7cm;
+					page-break-before: avoid;
+					-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
+					-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
+					-ms-transform: scale(0.5);   /* IE 9 */
+					-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
+					transform: scale(0.5);
+					page: A4;
 				}
-
-			</style>
+			}
+		</style>
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
 			<table width="100%">
 				<tr>

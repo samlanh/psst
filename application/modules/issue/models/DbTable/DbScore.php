@@ -898,23 +898,30 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 					}
 				}
 			} else {  // Void Score
-
-				$this->_name = 'rms_grading';
-				$where = 'groupId=' . $_data['group'] . '  AND examType =' . $_data['exam_type'];
-				if ($_data['exam_type'] == 1) {
-					$where .= ' AND formonth=' . $_data['for_month'];
-				} else {
-					$where .= ' AND forSemester=' . $_data['for_semester'];
+				if ($_data['exam_type'] == 2 || $_data['exam_type'] == 1) {
+					$this->_name = 'rms_grading';
+					$where = 'groupId=' . $_data['group'] . '  AND examType =' . $_data['exam_type'];
+					if ($_data['exam_type'] == 1) {
+						$where .= ' AND formonth=' . $_data['for_month'];
+					} else {
+						$where .= ' AND forSemester=' . $_data['for_semester'];
+					}
+					$arr = array(
+						'isLock' => 0,
+						'lockBy' => $this->getUserId()
+					);
+					$this->update($arr, $where);
 				}
-				$arr = array(
-					'isLock' => 0,
-					'lockBy' => $this->getUserId()
-				);
-				$this->update($arr, $where);
 
 				$this->_name = 'rms_score';
 				if ($_data['exam_type'] == 2) {
 					$where = 'group_id=' . $_data['group'] . '  AND for_semester=' . $_data['for_semester'] . ' AND exam_type = 1 ';
+					$arr = array(
+						'isCombineSemester' => 0,
+					);
+					$this->update($arr, $where);
+				}else if($_data['exam_type'] == 3){
+					$where = 'group_id=' . $_data['group'] . '  AND exam_type = 2 ';
 					$arr = array(
 						'isCombineSemester' => 0,
 					);

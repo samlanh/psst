@@ -2753,8 +2753,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['studentId'])) {
 			$studentId = $data['studentId'];
 			// if ($student_id != null and !empty($student_id)) {
-			if (!empty($data['isTestedStudent'])) {//for normal student
-				if (!empty($data['groupDetailId'])) {
+			if (empty($data['isTestedStudent'])) {//for normal student
+				if (empty($data['groupDetailId'])) {
 					$groupDetailId = $data['groupDetailId'];
 					$sql .= " AND (i.items_type =2 OR i.id IN (SELECT grade FROM `rms_group_detail_student` WHERE itemType=1 AND status=1 AND is_maingrade=1 AND stop_type=0 AND stu_id= $studentId )) ";
 				} else {

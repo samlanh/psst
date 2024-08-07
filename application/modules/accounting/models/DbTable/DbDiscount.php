@@ -10,7 +10,7 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 	public function addNewDiscount($_data){
 		$db = $this->getAdapter();
 		try{
-			$sql="SELECT disco_id FROM rms_discount WHERE status =".$_data['status'];
+			$sql="SELECT disco_id FROM rms_discount WHERE status = 1 ";
 			$sql.=" AND dis_name='".$_data['dis_name']."'";
 			$rs = $db->fetchOne($sql);
 			if(!empty($rs)){
@@ -18,8 +18,9 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 			}			
 		$_arr=array(
 				'dis_name'	  => $_data['dis_name'],
+				'dis_enname'  => $_data['dis_enname'],
 				'create_date' => Zend_Date::now(),
-				'status'  	  => $_data['status'],
+				'status'  	  => 1,
 				'user_id'	  => $this->getUserId()
 		);
 		$this->insert($_arr);
@@ -31,10 +32,10 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 	
 	public function addNewOccupationPopup($_data){
 		$_arr=array(
-				'dis_name' => $_data['dis_name'],
-				'create_date' => Zend_Date::now(),
-				'status'   => $_data['status_j'],
-				'user_id'	  => $this->getUserId()
+				'dis_name' 		=> $_data['dis_name'],
+				'create_date' 	=> Zend_Date::now(),
+				'status'   		=> $_data['status_j'],
+				'user_id'	  	=> $this->getUserId()
 		);
 		return  $this->insert($_arr);
 	}
@@ -49,10 +50,11 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 	}
 	public function updateDiscount($_data){
 		$_arr=array(
-				'dis_name' => $_data['dis_name'],
-				'create_date' => Zend_Date::now(),
-				'status'   => $_data['status'],
-				'user_id'	  => $this->getUserId()
+				'dis_name' 		=> $_data['dis_name'],
+				'dis_enname' 	=> $_data['dis_enname'],
+				'create_date' 	=> Zend_Date::now(),
+				'status'   		=> $_data['status'],
+				'user_id'	  	=> $this->getUserId()
 		);
 		$where=$this->getAdapter()->quoteInto("disco_id=?", $_data["id"]);
 		$this->update($_arr, $where);
@@ -63,6 +65,7 @@ class Accounting_Model_DbTable_DbDiscount extends Zend_Db_Table_Abstract
 		$sql = " SELECT 
 					disco_id AS id,
 					dis_name,
+					dis_enname,
 					create_date,
 				   (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id )AS user_name
 			";

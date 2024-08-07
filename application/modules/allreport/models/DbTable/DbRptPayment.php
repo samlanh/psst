@@ -61,7 +61,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			   sp.number,
 				    (SELECT CONCAT_WS('-',ac.fromYear,ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = t.academic_year LIMIT 1) as academic_year,
 				    (SELECT title_kh FROM `rms_studytype` AS ac WHERE ac.id = t.term_study LIMIT 1) AS term_study,
-					(SELECT payment_term FROM rms_student_paymentdetail AS spd WHERE sp.id = spd.payment_id AND spd.service_type=1 LIMIT 1) AS payment_term,
+					(SELECT payment_term from `rms_student_paymentdetail` as spd WHERE sp.id = spd.payment_id AND spd.service_type=1 and payment_term between 2 and 4 limit 1) AS payment_term,
 					(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=sp.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 					(SELECT $degree FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1)AS degree,
 					(SELECT $label from rms_view where rms_view.type = 4 AND key_code=sp.session LIMIT 1) as session,

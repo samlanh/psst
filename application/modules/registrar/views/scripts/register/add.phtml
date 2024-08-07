@@ -361,6 +361,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 								</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<select class="custome-select-opt fullside" onchange="getdataJson();" placeHolder="<?php echo $tr->translate("ACADEMIC_TERM"); ?>" required="true" name="academic_term" id="academic_term" >
+										<option></option>
 										<?php if(!empty($this->academicTerm)) {
 												foreach($this->academicTerm as $key=> $resultTerm){?>
 													<option value="<?php echo $key;?>"><?php echo $resultTerm;?></option>
@@ -989,7 +990,10 @@ $(document).ready(function() {
 		{dropdownAutoWidth : true}
 	);
 	$("#academic_term").select2(
-		{dropdownAutoWidth : true}
+		{
+			dropdownAutoWidth : true,
+			allowClear: "true"
+		}
 	);
 	$("#parentcategory").select2(
 		{
@@ -1369,10 +1373,10 @@ $(document).ready(function() {
 		template += '<input type="hidden" value="' + serviceId + '" dojoType="dijit.form.TextBox" name="item_id' + col + '" id="item_id' + col + '"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_' + col + '" id="service_type_' + col + '"/></td>';
 
 		classOddRow = 'listBox evenRow';
-		if (numberRange % 2 == 0) {
+		if(numberRange % 2 == 0){
 			classOddRow = 'listBox oddRow';
 		}
-		if (dataRow != null) {
+		if(dataRow != null){
 			balance = dataRow.balance;
 			if (balance > 0 && balance != null) {
 				classOddRow = classOddRow + ' balance'
@@ -1403,43 +1407,40 @@ $(document).ready(function() {
 		{dropdownAutoWidth : true}
 	);
 
-		if (dataRow != null) {
-			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
-			if (dataRow.feeId > 0) {
-				$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
-			}
-			if (dataRow.is_onepayment == 1) {
-				$("#term_"+col).val(5).trigger('change');
-				dijit.byId('date_start_' + col).attr('value', '');
-				dijit.byId('validate_' + col).attr('value', '');
-			}
-			
-			if (balance!=0 && balance!=null) {
-				dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
-				dijit.byId('validate_' + col).attr('value', dataRow.endDate);
-				dijit.byId('price_' + col).attr('value', balance);
-				dojo.style('paid_amount' + col, "color", "red");
-				dijit.byId('isoldBalance' + col).attr('value', 1);
-				$("#term_study").select2({disabled:'readonly'});
-				dijit.byId('remark' + col).attr('value', 'Previous Balance');
-				dijit.byId('date_start_' + col).set('readOnly', true);
-				dijit.byId('validate_' + col).set('readOnly', true);
-				netTotal();
-			} else {
-				if (dataRow.endDate = !'') {
-					dijit.byId('date_start_' + col).attr('value', dataRow.endDate);
+			if (dataRow != null) {
+				dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
+				if (dataRow.feeId > 0) {
+					$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
 				}
+				if (dataRow.is_onepayment == 1) {
+					$("#term_"+col).val(5).trigger('change');
+					dijit.byId('date_start_' + col).attr('value', '');
+					dijit.byId('validate_' + col).attr('value', '');
+				}
+				
+				if (balance!=0 && balance!=null) {
+					dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
+					dijit.byId('validate_' + col).attr('value', dataRow.endDate);
+					dijit.byId('price_' + col).attr('value', balance);
+					dojo.style('paid_amount' + col, "color", "red");
+					dijit.byId('isoldBalance' + col).attr('value', 1);
+					$("#term_study").select2({disabled:'readonly'});
+					dijit.byId('remark' + col).attr('value', 'Previous Balance');
+					dijit.byId('date_start_' + col).set('readOnly', true);
+					dijit.byId('validate_' + col).set('readOnly', true);
+					netTotal();
+				} else {
+					if (dataRow.endDate = !'') {
+						dijit.byId('date_start_' + col).attr('value', dataRow.endDate);
+					}
+					getservicefee(col);
+				}
+				getDiscountforStudent(col);
+			} else {
 				getservicefee(col);
+				getValidate(col);
 			}
-			getDiscountforStudent(col);
-
-		} else {
-			getservicefee(col);
-			getValidate(col);
-		}
-		}catch(err){
-			console.log(err);
-		}
+		}catch(err){}
 	}
 
 	function deleteRecord(index) {
@@ -1459,6 +1460,8 @@ $(document).ready(function() {
 		service_type = $('#service_type_' + key).val();
 		if((term == 2 || term==3 || term==4) && service_type==1){
 			$('#academic_term').val(term).trigger('change');
+		}else{
+			//$('#academic_term').val('').trigger('change');
 		}
 		if (term != 1) {
 			return;

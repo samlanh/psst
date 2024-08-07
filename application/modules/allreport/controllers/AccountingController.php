@@ -1100,7 +1100,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		 
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$periodList = array();
-		if(!empty($rs)){
+		if(!empty($rs['payment_term'])){
 			$data = array(
 				'feeId'=>$rs['academic_year'],
 				'periodId'=>$rs['payment_term'],

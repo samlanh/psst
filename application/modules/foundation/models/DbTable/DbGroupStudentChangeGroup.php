@@ -35,22 +35,20 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 		$_db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
-		
+		$branch = $dbp->getBranchDisplay();
 		$colunmname='title_en';
 		$label = 'name_en';
-		$branch = "branch_nameen";
 		$month = "month_en";
 		$titleCol = "title";
 		if ($currentLang==1){
 			$colunmname='title';
 			$label = 'name_kh';
-			$branch = "branch_namekh";
 			$month = "month_kh";
 			$titleCol = "titleKh";
 		}
 		$sql = "SELECT 
 					gscg.id
-					,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
+					,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name
 					,g.group_code as group_code
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic
 					,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=g.grade ) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1) as grade

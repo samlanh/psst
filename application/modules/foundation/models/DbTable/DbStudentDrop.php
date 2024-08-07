@@ -37,10 +37,10 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 			$label="name_kh";
 			$titleCol = "titleKh";
 		}
-		
+		$branch = $dbp->getBranchDisplay();
 		$sql = "SELECT  
 				s.id
-				,(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name	
+				,(SELECT rms_branch.$branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name	
 				,(SELECT stu_code FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS stu_id
 				,(SELECT stu_khname FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_kh
 				,(SELECT CONCAT(last_name,' ',stu_enname) FROM `rms_student` WHERE `stu_id`=s.stu_id LIMIT 1) AS student_name

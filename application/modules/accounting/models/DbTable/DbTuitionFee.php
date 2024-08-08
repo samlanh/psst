@@ -10,21 +10,29 @@ class Accounting_Model_DbTable_DbTuitionFee extends Zend_Db_Table_Abstract
     }
     function getAllTuitionFee($search=null){  
     	$db=$this->getAdapter();
-    	$sql = "SELECT t.id,
-    				  (select CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
-					  CONCAT(t.from_academic,' - ',t.to_academic) AS academic, t.generation,
-					  t.create_date,  
-					  (select name_en from rms_view where type=12 and key_code=t.is_finished) as is_finished,
-					   (SELECT name_en FROM rms_view WHERE key_code=t.status AND TYPE=1) AS `status`,
-					  (select CONCAT(first_name) from rms_users where rms_users.id = t.user_id) as user
-					  FROM `rms_tuitionfee` AS t
-					 WHERE 1	";
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$branch = $dbp->getBranchDisplay();
+		
+    	$sql = "SELECT 
+					t.id
+					,(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id =t.branch_id LIMIT 1) AS branch
+					,CONCAT(t.from_academic,' - ',t.to_academic) AS academic
+					,t.generation
+					,t.create_date
+					,(SELECT v.name_en FROM rms_view AS v WHERE v.type=12 AND v.key_code=t.is_finished LIMIT 1) AS is_finished
+					,(SELECT v.name_en FROM rms_view AS v WHERE v.type=1 AND v.key_code=t.status  LIMIT 1) AS `status`
+				   ,(SELECT CONCAT(u.first_name) FROM rms_users AS u WHERE u.id = t.user_id LIMIT 1) AS user
+				FROM `rms_tuitionfee` AS t
+				 WHERE 1	
+				";
     	$where =" ";
     	
 	    if(!empty($search['txtsearch'])){
 	    	$s_where = array();
 	    	$s_search = addslashes(trim($search['txtsearch']));
-		 	$s_where[] = " CONCAT(from_academic,'-',to_academic) LIKE '%{$s_search}%'";
+		 	$s_where[] = " CONCAT(t.from_academic,'-',t.to_academic) LIKE '%{$s_search}%'";
 	    	$s_where[] = " t.generation LIKE '%{$s_search}%'";
 	    	$where .=' AND ( '.implode(' OR ',$s_where).')';
 	    }

@@ -7,18 +7,24 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     }
 	public function getinvoice($search){
 		$db= $this->getAdapter();
-		$sql="SELECT v.id ,
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=v.branch_id LIMIT 1) AS branch,
-					s.stu_code ,
-					s.stu_khname,
-					CONCAT(s.last_name,' ',s.stu_enname) as en_name,
-					(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2 LIMIT 1) AS sex,
-					DATE_FORMAT(v.invoice_date,'%d-%M-%Y') AS invoice_date,
-					v.invoice_num ,
-					v.input_date ,
-					v.remark ,
-					v.totale_amount ,
-					(SELECT first_name FROM rms_users WHERE rms_users.id = v.user_id LIMIT 1) AS first_name
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentlang = $dbp->currentlang();
+		
+		$branch= $dbp->getBranchDisplay();
+		
+		$sql="SELECT v.id 
+					,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=v.branch_id LIMIT 1) AS branch
+					,s.stu_code
+					,s.stu_khname
+					,CONCAT(s.last_name,' ',s.stu_enname) as en_name
+					,(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2 LIMIT 1) AS sex
+					,DATE_FORMAT(v.invoice_date,'%d-%M-%Y') AS invoice_date
+					,v.invoice_num
+					,v.input_date
+					,v.remark
+					,v.totale_amount 
+					,(SELECT u.first_name FROM rms_users AS u WHERE u.id = v.user_id LIMIT 1) AS first_name
 				FROM 
 					rms_invoice_account  AS v ,
 					rms_student AS s 

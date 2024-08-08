@@ -19,42 +19,46 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$term=$tr->translate('TERM');
 		$semster=$tr->translate('SEMESTER');
 		$year=$tr->translate('YEAR');
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentlang = $dbp->currentlang();
+		$branch= $dbp->getBranchDisplay();
 
 		$sql="SELECT 
-			id,
-			(SELECT CONCAT(branch_nameen) FROM rms_branch WHERE br_id=branch_id LIMIT 1) AS branch_name,
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = academic_year LIMIT 1) AS academic_year,
-			title,
-			CASE
-			WHEN periodId = 1 THEN '$month'
-			WHEN periodId = 2 THEN '$term'
-			WHEN periodId = 3 THEN '$semster'
-			WHEN periodId = 4 THEN '$year'
-			END as Period,
-			(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,degreeId) LIMIT 1) AS degreeList,
-			start_date, end_date,
-			(SELECT first_name FROM `rms_users` WHERE id=user_id LIMIT 1) AS user_name 
+				std.id
+				,(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id=std.branch_id LIMIT 1) AS branch_name
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = std.academic_year LIMIT 1) AS academic_year
+				,std.title
+				,CASE
+					WHEN std.periodId = 1 THEN '$month'
+					WHEN std.periodId = 2 THEN '$term'
+					WHEN std.periodId = 3 THEN '$semster'
+					WHEN std.periodId = 4 THEN '$year'
+				END as Period
+				,(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,std.degreeId) LIMIT 1) AS degreeList
+				,std.start_date
+				,std.end_date
+				,(SELECT first_name FROM `rms_users` WHERE id=std.user_id LIMIT 1) AS user_name 
 	
-			FROM 
-			rms_startdate_enddate WHERE 1 AND forDepartment=1 ";
+			FROM  rms_startdate_enddate AS std
+			WHERE 1 AND std.forDepartment=1 ";
 			 $where = "";
     	
     	if(!empty($search['branch_id'])){
-    		$where.=" AND branch_id= ".$search['branch_id'];
+    		$where.=" AND std.branch_id= ".$search['branch_id'];
     	}
     	if(!empty($search['academic_year'])){
-    		$where.=" AND academic_year= ".$search['academic_year'];
+    		$where.=" AND std.academic_year= ".$search['academic_year'];
     	}
 		if(!empty($search['degree'])){
 			$degreeId = $search['degree'];
-			$where.= " AND  FIND_IN_SET($degreeId,degreeId) ";
+			$where.= " AND  FIND_IN_SET($degreeId,std.degreeId) ";
     	}
 		if(!empty($search['termOption'])){
-    		$where.=" AND periodId= ".$search['termOption'];
+    		$where.=" AND std.periodId= ".$search['termOption'];
     	}
-    	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('branch_id');
-		$order="  ORDER BY id DESC";
+    	$where.=$dbp->getAccessPermission('std.branch_id');
+		$order="  ORDER BY std.id DESC";
 		return $db->fetchAll($sql.$where.$order);
 	}
 	public function addTermStudy($data){

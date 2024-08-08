@@ -11,11 +11,13 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 	}
 	function getAllTuitionFee($search=null){
 		$db=$this->getAdapter();
-		$dbp = new Application_Model_DbTable_DbGlobal();
 		
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$session_lang=new Zend_Session_Namespace('lang');
-		$lang = $session_lang->lang_id;
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbp->currentlang();
+		
+		$branch= $dbp->getBranchDisplay();
 		$field = 'name_en';
 		$str = 'title_eng';
 		if ($lang==1){
@@ -24,7 +26,7 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		}
 		 
 		$sql = "SELECT t.id,
-					(SELECT CONCAT(branch_nameen) from rms_branch WHERE br_id =t.branch_id LIMIT 1) AS branch,
+					(SELECT CONCAT($branch) from rms_branch WHERE br_id =t.branch_id LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) as academic,
 					(SELECT $str FROM rms_studytype WHERE rms_studytype.id =t.term_study  LIMIT 1) AS study_type,
 					CASE is_multi_study
@@ -175,7 +177,7 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		}
 		
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-		$where.=" ORDER BY sd.degree,sd.grade ASC, s.stu_id DESC ";
+		$where.=" ORDER BY sd.degree,sd.grade,sd.group_id ASC, s.stu_id DESC ";
 		
 		if(!empty($search['limit'])){
 			$where.=" LIMIT ".$search['limit'];

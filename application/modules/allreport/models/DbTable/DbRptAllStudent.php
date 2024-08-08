@@ -37,7 +37,20 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			$stu_name = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
     	}
     	$sql ="SELECT 
-    				s.*
+		
+					fam.fatherNameKh AS father_khname 
+					,fam.fatherName AS father_enname  
+					,fam.fatherNation AS father_nation
+					,fam.fatherPhone AS father_phone
+					
+					,fam.motherNameKh AS mother_khname 
+					,fam.motherName AS mother_enname  
+					,fam.motherPhone AS mother_phone  
+					
+					,fam.guardianNameKh AS guardian_khname 
+					,fam.guardianName AS guardian_enname 
+					,fam.guardianPhone AS guardian_tel
+    				,s.*
     				
 					,s.branch_id
 					,(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name
@@ -80,18 +93,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					,(SELECT pro.province_kh_name FROM rms_province AS pro WHERE pro.province_id = s.province_id LIMIT 1) AS provinceNameKh
 					,(SELECT pro.province_en_name FROM rms_province AS pro WHERE pro.province_id = s.province_id LIMIT 1) AS provinceNameEn
 				   
-					,fam.fatherNameKh AS father_khname 
-					,fam.fatherName AS father_enname  
-					,fam.fatherNation AS father_nation
-					,fam.fatherPhone AS father_phone
 					
-					,fam.motherNameKh AS mother_khname 
-					,fam.motherName AS mother_enname  
-					,fam.motherPhone AS mother_phone  
-					
-					,fam.guardianNameKh AS guardian_khname 
-					,fam.guardianName AS guardian_enname 
-					,fam.guardianPhone AS guardian_tel
 				
 					,(SELECT occ.occu_name FROM rms_occupation AS occ WHERE occ.occupation_id=fam.fatherJob LIMIT 1) fath_job
 					,(SELECT occ.occu_name FROM rms_occupation AS occ WHERE occ.occupation_id=fam.fatherJob LIMIT 1) fatherJobTitle
@@ -749,11 +751,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		
     	$sql ='
 			SELECT 
-				s.*
-				,CONCAT(s.stu_khname," - ",s.stu_enname," ",s.last_name) AS name
-				,(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name
 			
-				,CONCAT(fam.fatherName," - ",fam.fatherNameKh)AS father_name
+				CONCAT(fam.fatherName," - ",fam.fatherNameKh)AS father_name
 				,fam.fatherNameKh AS father_khname 
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
@@ -769,6 +768,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianPhone AS guardian_tel
 				
+				,s.*
+				,CONCAT(s.stu_khname," - ",s.stu_enname," ",s.last_name) AS name
+				,(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name
+			
 				,(SELECT occ.occu_enname 	FROM rms_occupation AS occ WHERE occ.occupation_id=fam.fatherJob LIMIT 1) AS father_job
 				,(SELECT occ.'.$occuTitle.' FROM rms_occupation AS occ WHERE occ.occupation_id=fam.fatherJob LIMIT 1) AS fatherJobTitle
 				,(SELECT occ.occu_enname 	FROM rms_occupation AS occ WHERE occ.occupation_id=fam.motherJob LIMIT 1) AS mother_job

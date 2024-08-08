@@ -6,7 +6,19 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     function getStudentCertify($id){
     	$db = $this->getAdapter();
     	$sql ="SELECT
-    				s.*,
+					fam.fatherNameKh AS father_khname 
+					,fam.fatherName AS father_enname  
+					,fam.fatherNation AS father_nation
+					,fam.fatherPhone AS father_phone
+					
+					,fam.motherNameKh AS mother_khname 
+					,fam.motherName AS mother_enname  
+					,fam.motherPhone AS mother_phone  
+					
+					,fam.guardianNameKh AS guardian_khname 
+					,fam.guardianName AS guardian_enname 
+					,fam.guardianPhone AS guardian_tel
+    				,s.*,
     				 DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob`,
     				 DATE_FORMAT(`s`.`dob`,'%d-%m-%Y') AS `dob_en`,
     				(SELECT CONCAT(b.branch_nameen) FROM rms_branch as b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name,
@@ -26,20 +38,8 @@ class Allreport_Model_DbTable_DbCertify extends Zend_Db_Table_Abstract{
     				(SELECT commune_namekh FROM ln_commune AS p WHERE p.com_id=s.commune_name LIMIT 1) AS commune_name,
     				(SELECT commune_name FROM ln_commune AS p WHERE p.com_id=s.commune_name LIMIT 1) AS commune_nameeg,
     				(SELECT district_namekh FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_khmer,
-    				(SELECT district_name FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_en,
+    				(SELECT district_name FROM ln_district AS p WHERE p.dis_id=s.district_name LIMIT 1) AS district_en
 					
-					fam.fatherNameKh AS father_khname 
-					,fam.fatherName AS father_enname  
-					,fam.fatherNation AS father_nation
-					,fam.fatherPhone AS father_phone
-					
-					,fam.motherNameKh AS mother_khname 
-					,fam.motherName AS mother_enname  
-					,fam.motherPhone AS mother_phone  
-					
-					,fam.guardianNameKh AS guardian_khname 
-					,fam.guardianName AS guardian_enname 
-					,fam.guardianPhone AS guardian_tel
 				
     				,(SELECT occ.occu_name FROM rms_occupation AS occ 	WHERE occ.occupation_id=fam.fatherJob LIMIT 1) AS fa_job,
 					(SELECT occ.occu_enname FROM rms_occupation AS occ 	WHERE occ.occupation_id=fam.fatherJob LIMIT 1) AS faJobEng,

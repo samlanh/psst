@@ -131,27 +131,26 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
    public function getStudentSuspendService($search){
 	   	$db = $this->getAdapter();
 	   	$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
+		
 	   	$lang = $dbp->currentlang();
+		$label = "name_en";
 	   	if($lang==1){// khmer
 	   		$label = "name_kh";
-	   		$branch = "branch_namekh";
-	   	}else{ // English
-	   		$label = "name_en";
-	   		$branch = "branch_nameen";
 	   	}
 	   	$sql="SELECT 
-	   				ss.id,
-	   				(SELECT $branch from rms_branch where br_id = ss.branch_id LIMIT 1) as branch,
-			  	 	s.stu_code AS code,
-			   		s.stu_khname as kh_name,
-			   		CONCAT(s.last_name,' ',s.stu_enname) AS en_name,
-			   		ss.create_date,
-			   		(SELECT CONCAT(first_name) from rms_users where rms_users.id = ss.user_id) as user,
-			   		(select $label from rms_view as v where v.type=1 and v.key_code = ss.status) as status
+	   				ss.id
+	   				,(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = ss.branch_id LIMIT 1) AS branch
+			  	 	,s.stu_code AS code
+			   		,s.stu_khname AS kh_name
+			   		,CONCAT(s.last_name,' ',s.stu_enname) AS en_name
+			   		,ss.create_date
+			   		,(SELECT u.first_name FROM rms_users AS u WHERE u.id = ss.user_id LIMIT 1) as user
+			   		,(SELECT v.$label FROM rms_view AS v WHERE v.type=1 and v.key_code = ss.status LIMIT 1) as status
 	   			FROM 
-	   				rms_suspendservice as ss,
-	   				rms_student as s
-	   			where 
+	   				rms_suspendservice AS ss,
+	   				rms_student AS s
+	   			WHERE 
 	   				s.stu_id = ss.student_id
 	   		";
 	   	

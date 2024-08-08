@@ -17,20 +17,25 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     }
     function getAllServiceFee($search){
 	    try{
-	    	$session_lang=new Zend_Session_Namespace('lang');
-	    	$lang = $session_lang->lang_id;
-	    	$field = 'name_en';
-	    	if ($lang==1){
+	    	
+		    $dbp = new Application_Model_DbTable_DbGlobal();
+			$currentLang = $dbp->currentlang();
+			
+			$branch = $dbp->getBranchDisplay();
+			$field = 'name_en';
+	    	if ($currentLang==1){
 	    		$field = 'name_kh';
 	    	}
-		    $dbp = new Application_Model_DbTable_DbGlobal();
+			
 		    $db=$this->getAdapter();
-	    	$sql = "SELECT t.id,
-		    	(SELECT CONCAT(branch_nameen) from rms_branch where br_id =t.branch_id LIMIT 1) as branch,
-		    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=t.academic_year LIMIT 1) AS academic,
-		    	t.create_date,
-		    	(SELECT $field from rms_view where type=12 and key_code=t.is_finished LIMIT 1) as is_finished,
-		    	(SELECT CONCAT(first_name) from rms_users where rms_users.id = t.user_id LIMIT 1) as user ";
+	    	$sql = "
+				SELECT 
+					t.id
+					,(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id =t.branch_id LIMIT 1) as branch
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM rms_academicyear AS ac WHERE ac.id=t.academic_year LIMIT 1) AS academic
+					,t.create_date
+					,(SELECT v.$field FROM rms_view AS v WHERE v.type=12 and v.key_code=t.is_finished LIMIT 1) as is_finished
+					,(SELECT u.first_name FROM rms_users AS u WHERE u.id = t.user_id LIMIT 1) as user ";
 	    	
 	    	$sql.=$dbp->caseStatusShowImage("t.status");
 	    	$sql.=" FROM `rms_tuitionfee` AS t WHERE t.type=2 ";
@@ -177,8 +182,10 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     function getAllBranch(){
     	$db = $this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
+		$branch = $_db->getBranchDisplay();
+		
     	$branch_id = $_db->getAccessPermission('br_id');
-    	$sql="SELECT br_id as id, CONCAT(branch_nameen) as name from rms_branch where status=1  $branch_id  ";
+    	$sql="SELECT br_id as id, CONCAT($branch) as name from rms_branch where status=1  $branch_id  ";
     	return $db->fetchAll($sql);
     }
     function getAllYear(){

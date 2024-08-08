@@ -122,7 +122,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
     	$where .= " AND ".$from_date." AND ".$to_date;    	
-    	$order=" ORDER BY s.stu_id,gds.degree,gds.grade,gds.academic_year DESC";
 		
 		$adv_search = empty($search['adv_search'])?"":$search['adv_search'];
 		$search['title'] = empty($search['title'])?$adv_search:$search['title'];
@@ -607,12 +606,16 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	if(($search['branch_id'])>0){
     		$where.=' AND s.branch_id='.$search['branch_id'];
     	}
+		
     	if($search['study_type']!=''){
-    		if($search['study_type']==0){
+    		$where.=' AND gds.stop_type='.$search['study_type'];
+    		/*
+			if($search['study_type']==0){
     			$where.=' AND gds.stop_type='.$search['study_type'];
     		}else{
     			$where.=' AND gds.stop_type!=0';
     		}
+			*/
     	}
     	return $db->fetchAll($sql.$where.$order);
     }

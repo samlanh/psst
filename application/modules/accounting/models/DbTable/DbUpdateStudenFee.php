@@ -75,22 +75,24 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 	public function addStudentFee($_data){
 		$db = $this->getAdapter();
 		try{
-			if(!empty($_data['public-methods'])){
-				
-				if(!empty($_data['academic_year_fee'])){
-					$_dbFee = new Accounting_Model_DbTable_DbFee();
-					$feeId = empty($_data['academic_year_fee'])?0:$_data['academic_year_fee'];
-					$row = $_dbFee->getFeeById($feeId);
-					$all_stu_id = $_data['public-methods'];
-					
-					foreach ($all_stu_id as $stu_id){
+			if(!empty($_data['academic_year_fee'])){
+		
+				$feeId = empty($_data['academic_year_fee'])?0:$_data['academic_year_fee'];
+
+				if(!empty($_data['identity'])){
+					$ids=explode(',', $_data['identity']);
+					foreach ($ids as $k){
 						if(!empty($_data['OldFee'])){
 							$this->_name = 'rms_group_detail_student';
 							$data_gro = array(
 									'is_current'=> 1,
 									'feeId'=> $feeId,
 							);
-							$where = 'itemType=1 AND stu_id = '.$stu_id."  AND is_current=1 AND (feeId =".$_data['OldFee']." OR oldFeeId =".$_data['OldFee'].")";
+							$where = 'itemType=1 AND stu_id = '.$_data['stu_id_'.$k]."  AND is_current=1 
+								AND CASE 
+								WHEN COALESCE(feeId,0) > 0 THEN feeId
+								ELSE oldFeeId END = ".$_data['OldFee'];
+						
 							$this->update($data_gro, $where);
 						}
 					}
@@ -111,13 +113,20 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				s.stu_enname,
 				s.stu_khname,
 				s.last_name,
-				s.sex,
+				CASE
+				    WHEN s.sex =1  THEN 'M'
+				    WHEN s.sex =2  THEN 'F'
+				    ELSE ''
+				END AS sex,
 				sd.degree,
 				sd.grade,
 				sd.feeId AS fee_id,
 				sd.academic_year,
 				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
+				COALESCE((SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1),'') AS groupCode,
+				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
+				COALESCE((SELECT name_kh FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 			  FROM 
 			  	rms_student AS s,
 			  	`rms_group_detail_student` AS sd
@@ -130,15 +139,27 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				AND s.stu_id=sd.stu_id
 				AND sd.is_current=1 ";
 		if(!empty($search['fromFeeid'])){
-			$sql.=" AND (sd.feeId =".$search['fromFeeid'];
-			$sql.=" OR sd.oldFeeId =".$search['fromFeeid'].")";
+			$sql.=" AND CASE 
+					WHEN COALESCE(sd.feeId,0) > 0 THEN sd.feeId
+					ELSE sd.oldFeeId END = ".$search['fromFeeid'];
+		}
+		if(!empty($search['branch_id'])){
+			$sql.=" AND s.branch_id =".$search['branch_id'];
+		}
+		if(!empty($search['academic_year'])){
+			$sql.=" AND sd.academic_year =".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
 			$sql.=" AND sd.degree =".$search['degree'];
 		}
-		
-		if(!empty($search['branch_id'])){
-			$sql.=" AND s.branch_id =".$search['branch_id'];
+		if(!empty($search['grade'])){
+			$sql.=" AND sd.grade =".$search['grade'];
+		}
+		if(!empty($search['academicYearEnroll'])){
+			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
+		}
+		if(!empty($search['studentType'])){
+			$sql.=" AND s.studentType =".$search['studentType'];
 		}
 		$where="";
 		if(!empty($search['adv_search'])){
@@ -154,7 +175,7 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 		}
 		
 		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-		$where.=" ORDER BY s.stu_id DESC ";
+		$where.=" ORDER BY sd.degree,sd.grade ASC, s.stu_id DESC ";
 		
 		if(!empty($search['limit'])){
 			$where.=" LIMIT ".$search['limit'];

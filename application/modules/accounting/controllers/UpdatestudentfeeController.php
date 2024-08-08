@@ -1,5 +1,6 @@
 <?php
 class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
+	const REDIRECT_URL = '/accounting/updatestudentfee';
     public function init()
     {    	
     	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
@@ -50,50 +51,35 @@ class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
     	$this->view->form_search=$form;
     }
     
-	function addAction(){
+	public function addAction(){
 		$db = new Accounting_Model_DbTable_DbUpdateStudenFee();
-		try{
-			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = $_data;
-				$rs =$db->getSearchStudentbyFeeId($search);
-				$this->view->rs = $rs;
-			}else{
-				$search = array(
-					'adv_search' => '',
-					'branch_id' => '',
-					'degree' => '',
-					'grade' => '',
-					'fromFeeid'=> '',
-					'limit'=> ''
-				);
+		if($this->getRequest()->isPost()){
+			try{
+				$_data = $this->getRequest()->getPost();
+				$db->addStudentFee($_data);
+				if(isset($_data['save_close'])){
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+				}
+				
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("INSERT_FAIL");
+				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
-			$this->view->search=$search;
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$form=new Application_Form_FrmSearchGlobal();
 		$forms=$form->FrmSearch();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
-	public function submitAction(){
+	function getAllStudentAction(){
 		if($this->getRequest()->isPost()){
-			try{
-				$_data = $this->getRequest()->getPost();
-				$db = new Accounting_Model_DbTable_DbUpdateStudenFee();
-				$db->addStudentFee($_data);
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-				if(isset($_data['save_close'])){
-					$this->_redirect('/accounting/updatestudentfee');
-				}else{
-					$this->_redirect('/accounting/updatestudentfee/add');
-				}
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("INSERT_FAIL");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			}
+			$data=$this->getRequest()->getPost();
+			$db = new Accounting_Model_DbTable_DbUpdateStudenFee();
+			$student =$db->getSearchStudentbyFeeId($data);
+			print_r(Zend_Json::encode($student));
+			exit();
 		}
 	}
 }

@@ -2,6 +2,7 @@
 	$request = Zend_Controller_Front::getInstance ()->getRequest ();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate("UPDATE_STUDENT_DISCOUNT"));
+	$urlDetail = $this->baseUrl()."/allreport/accounting/rpt-discountdetail/id/";
 ?>	
 <?php $frm =  $this->form_search;?>
 
@@ -116,4 +117,31 @@ function getAllstudentBranch(){
 	selectedId='<?php echo $this->adv_search['studentId'];?>';
 	getAllStudentByBranch(urlGet,contentData,selectedId);
 }
+
+var row=0;
+	var url="";
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one', 
+			callback: function(key, options) {
+				var m = "clicked: " + key;
+				if(key=="reprint"){
+					url='<?php echo $urlDetail;?>';
+					newPageTitle="<?php echo $tr->translate("RPT_DISCOUNT_SETTING_DETAIL");?>";
+				}
+				addTab(newPageTitle,url+row+'?inFrame=true');
+				//gotoAction();
+			},
+			items: {
+				"reprint": {name: "<?php echo $tr->translate("RPT_DISCOUNT_SETTING_DETAIL");?>", icon: "fa-list", accesskey: "e"},
+			}
+		});
+	});
+	function setrowdata(index){
+		row = index;
+	}
+	var recordid ='';
+	function gotoAction(){
+		window.location.href =url+row;
+	}
 </script>

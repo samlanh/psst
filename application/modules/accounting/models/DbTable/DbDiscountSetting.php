@@ -590,6 +590,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch= $dbp-> getBranchDisplay();
 		$currentLang = $dbp->currentlang();
 		$colunmname = 'name_en';
 		$strDegree = 'title_en';
@@ -604,7 +606,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
 
 		$sql = "SELECT ds.id, 
-					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
+					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
 					discountTitle,
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,

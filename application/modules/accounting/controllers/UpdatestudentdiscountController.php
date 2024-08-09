@@ -31,7 +31,7 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 			$collumns = array("BRANCH", "ACADEMIC_YEAR", "TITLE",  "DISCOUNT_TYPE", "DIS_MAX","AMOUNT_STU_USED","AMOUNT_STOP_USED", "DISCOUNT_PERIOD", "BY_USER", "CREATE_DATE", "STATUS");
 		
 			$this->view->list = $list->getCheckList(
-				0,
+				10,
 				$collumns,
 				$rs_rows,
 				array()

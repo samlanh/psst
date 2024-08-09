@@ -153,14 +153,14 @@
 											$degreename=$rowdegree["title"];
 										}
 									?>
-								    <strong​​ style="font-family: Arial Black;color:#f00; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT_PROFILE").$branc_name;?></strong><br />
-									<strong​​ style="font-family: Arial Black;color:#0400ff; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php echo $degreename;?></strong><br />
-									<strong​​ style="font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
+								    <strong  style="font-family: Arial Black;color:#f00; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("ALL_STUDENT_REPORT_PROFILE").$branc_name;?></strong><br />
+									<strong  style="font-family: Arial Black;color:#0400ff; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php echo $degreename;?></strong><br />
+									<strong  style="font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 								</td>
 								<td width="15%" align="center"></td>
 							</tr>
 						</table>
-						<table cellpadding="4"​ style="font-size:11px; display: table; font-family:'Khmer OS Battambang';width:100%;color: #4839bd; border: 1px solid #4839bd;border-collapse: collapse;white-space: nowrap; text-align: center;table-layout : fixed;" border="1" >
+						<table cellpadding="4" style="font-size:11px; display: table; font-family:'Khmer OS Battambang';width:100%;color: #4839bd; border: 1px solid #4839bd;border-collapse: collapse;white-space: nowrap; text-align: center;table-layout : fixed;" border="1" >
 							<thead>
 								<tr style=" background: #f9d4ae; font-family:'Khmer OS Muol Light';" >
 									<td style="white-space: normal; width: 40px;"><?php echo $tr->translate("NUM");?></td>
@@ -200,9 +200,9 @@
 								<td style="white-space: normal;">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
 								<td class="verites-col">&nbsp;<span class="verites"><?php echo ($row['dob']=='00-00-0000')?'':$row['dob'];?></span></td>
 								<td style="white-space: normal;">&nbsp;<?php echo $row['pob'];?>&nbsp;</td>
-								<td class="verites-col"><span class="verites"><?php echo $row['father_enname'];?></span></td>
+								<td class="verites-col"><span class="verites"><?php echo $row['father_khname'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['fatherJobTitle'];?></span></td>
-								<td class="verites-col"><span class="verites"><?php echo $row['mother_enname'];?></span></td>
+								<td class="verites-col"><span class="verites"><?php echo $row['mother_khname'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['motherJobTitle'];?></span></td>
 								<td style="white-space: normal;">&nbsp;
 								<?php if (!empty($row['home_num'])){ echo "ផ្ទះលេខ ".$row['home_num']." ";}?>

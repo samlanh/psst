@@ -162,6 +162,19 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			'class'=>'fullside',
 			'required'=>true,
 		));
+		
+		$photo_left = new Zend_Dojo_Form_Element_NumberTextBox('photo_left');
+		$photo_left->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
+		$photo_top = new Zend_Dojo_Form_Element_NumberTextBox('photo_top');
+		$photo_top->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true,
+		));
 
 		$group_left = new Zend_Dojo_Form_Element_NumberTextBox('group_left');
 		$group_left->setAttribs(array(
@@ -212,6 +225,8 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			$name_top->setValue($data['stunametop']);
 			$studentcode_left->setValue($data['studentcodeleft']);
 			$studentcode_top->setValue($data['studentcodetop']);
+			$photo_left->setValue($data['photo_left']);
+			$photo_top->setValue($data['photo_top']);
 			$group_left->setValue($data['groupleft']);
 			$group_top->setValue($data['grouptop']);
 			$code_left->setValue($data['qrcodeleft']);
@@ -238,6 +253,9 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				$name_top,
 				$studentcode_left,
 				$studentcode_top,
+				$photo_left,
+				$photo_top,
+				
 				$group_left,
 				$group_top,
 				$code_left,

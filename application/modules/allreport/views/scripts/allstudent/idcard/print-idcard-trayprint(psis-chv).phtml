@@ -1,0 +1,205 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$_dbgb = new Application_Model_DbTable_DbGlobal();
+	echo $this->headTitle($tr->translate('SINGLE_IDPRINT'));
+	$type=$this->rs[0]['card_type'];//CARD_TYPE;  // tyep=1 for ELT , type=2 for good will , type=3 for New World
+?>	
+
+<div style="width:21cm !important;height:12.7cm;padding: 0px;margin:0px;">
+		<div id="divPrint1" >
+			<div class='bgcard'>
+			<?php if($type==1){// psis format ?>
+				<style>
+					.bgcard{
+						background-repeat: no-repeat;
+						width: 100%;
+						height: 100%;
+						position: relative;	
+						margin: 0;
+						padding: 0;
+					}	
+					
+					@page {
+						margin: 0;
+					 }
+					.card-content-student-print{
+						background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
+						background-size: 100%;background-repeat: no-repeat;
+						transform: rotateZ(-90deg);	
+						page-break-inside:always; page-break-after:always; 	
+						margin-left: 70px;
+					}
+				<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
+					$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+					$color = "000000";
+					$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
+					$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption'],$dep);
+					
+					$maginTopName = 0;
+					$maginTopClass = 0;
+					$maginTopId = 0;
+					
+					$maginTopPhoto = 0;
+					$maginLeftPhoto = 0;
+				
+					if(!empty($bg['background'])){
+						
+						if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
+							$image = $this->baseUrl().'/images/card/'.$bg['background'];
+						}
+						
+						if (!empty($bg['colorcode'])){
+							$color = str_replace("#", "", $bg['colorcode']);
+						}
+						
+						$maginTopName = empty($bg['stunametop']) ? 0 : $bg['stunametop'];
+						$maginTopClass = empty($bg['grouptop']) ? 0 : $bg['grouptop'];
+						$maginTopId = empty($bg['studentcodetop']) ? 0 : $bg['studentcodetop'];
+						
+						$maginTopPhoto = empty($bg['photo_top']) ? 0 : $bg['photo_top'];
+						$maginLeftPhoto = empty($bg['photo_left']) ? 0 : $bg['photo_left'];
+					}
+				?>
+					
+					.card-content-student-print<?php echo $dep;?>{
+						background-image: url('<?php echo $image;?>');
+						background-size: 100%;background-repeat: no-repeat;
+											
+					}
+					
+					.name-card-block ul.list-data li.sdudent-id.color-{
+						color:#<?php echo $color;?>;
+					}
+				<?php }?>
+					.profile-card-block {
+						position: relative;
+					}
+					.profile-card-block .photo {
+						text-align: center;
+						width: 100%;
+						position: absolute;
+						top: <?php echo $maginTopPhoto;?>px;
+						left: <?php echo $maginLeftPhoto;?>px;
+					}
+					.photo img {
+						width: 135px;
+						height: 135px;
+						border-radius: 50%;
+					}
+					.name-card-block {
+						position: relative;
+					}
+			
+					span.stuNameValue,
+					span.groupCodeValue,
+					span.studentIdValue	
+					{
+						position: absolute;
+						display: block;
+						width: 100%;
+						font-weight: 600;
+						font-size: 14px;
+						text-align: center;
+					}
+					span.stuNameValue {
+						top: <?php echo $maginTopName;?>px;
+						
+						
+					}
+					span.groupCodeValue {
+						top: <?php echo $maginTopClass;?>px;
+						
+					}
+					span.studentIdValue {
+						top: <?php echo $maginTopId;?>px;
+					}
+					@media print{@page {size: portrait;}}
+					
+				</style>
+			<?php 
+				
+				$i=0; 
+				if(!empty($this->rs)){foreach ($this->rs AS $key => $row){ $i++;
+				$imageProfile = "";
+				$imageProfile = $this->baseUrl().'/images/no-profile.png';
+				if(!empty($row['photo'])){
+					if (file_exists(PUBLIC_PATH."/images/photo/".$row['photo'])){
+						$imageProfile = $this->baseUrl().'/images/photo/'.$row['photo'];
+					}
+				}
+				$prefix="";
+				$validDate="";
+				$stu_name = $row['last_name']." ".$row['en_name'];
+				$dep = empty($row['degree_id'])?0:$row['degree_id'];
+				$bg = $_dbgb->getCardBackground($row['branch_id'],1,$row['schoolOption'],$dep);
+				$issueDate="";
+				if (!empty($bg)){
+					if ($bg['display_by']==2){
+						$stu_name = $row['stu_khname'];
+					}
+					$prefix = $bg['card_prefix'];
+					$validDate = $bg['valid'];
+					$issueDate = $bg['issue'];
+				}
+				
+				$classPartBlock="blogCard1";
+				if( $i%2==0){
+					$classPartBlock="blogCard2";
+				}
+				
+				?>
+					<div class="card-content-student-print card-content-student-print<?php echo $dep;?> " style=" display:block;line-height: 16.285px; width: 226px;height: 350px; color: #3f3f95;font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db;">
+						<div class="profile-card-block">
+							<div class="photo">
+								<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
+							</div>
+						</div>
+						<div class="name-card-block">
+							<span class="stuNameValue"><?php echo $stu_name;?></span>
+							<span class="groupCodeValue">Class: <?php echo str_replace("Grade","",$row['group_name']);?></span>
+							<span class="studentIdValue">ID:<?php echo $row['stu_code'];?></span>
+						</div>
+					</div>				
+				<?php }} ?>
+			<?php }?>
+		</div>
+	</div>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-4" style="text-align: center;">
+	<div class="row"> 
+		<button dojoType="dijit.form.Button" id="printall" class="button-class button-primary" iconClass="glyphicon glyphicon-print"
+		type="button" onclick="print();"><?php echo $tr->translate("PRINT");?></button>
+	</div>
+</div>
+<script type="text/javascript">
+	dojo.ready(function(){
+		print();
+	});
+	function print(){
+		loadingBlock();
+	  	 var contents = document.getElementById("divPrint1").innerHTML;
+	 	  var frame1 = document.createElement('iframe');
+	    frame1.name = "frame1";
+	    frame1.style.position = "absolute";
+	    frame1.style.top = "-1000000px";
+	    document.body.appendChild(frame1);
+	    var frameDoc = (frame1.contentWindow) ? frame1.contentWindow : (frame1.contentDocument.document) ? frame1.contentDocument.document : frame1.contentDocument; frameDoc.document.open();
+	    frameDoc.document.write('<html><head><title>Employee ID</title>');
+	    frameDoc.document.write('</head><body>');
+	    frameDoc.document.write(contents);
+	    frameDoc.document.write('</body></html>');
+	    frameDoc.document.close();
+	    setTimeout(function () {
+	        window.frames["frame1"].focus();
+	        window.frames["frame1"].print();
+	        document.body.removeChild(frame1);
+	        HideloadingBlock();
+			<?php 
+				defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
+			?>
+	    }, 10000);
+	   return false;
+	}
+</script>

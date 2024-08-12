@@ -234,7 +234,15 @@ table.tb-footer tr.style-head {
 									}
 								?>&nbsp;</td>
 								<td align="center">&nbsp;<?php echo $row['nation'];?>&nbsp;</td>
-								<td align="center">&nbsp;<?php echo ($row['dob']=='00-00-0000')?'':$row['dob'];?>&nbsp;</td>
+								<td align="center">
+									<?php
+										$format = 'd-M-Y';
+										$dateString = $row["dob"];
+										$date = new DateTime($dateString);
+										$dob = $date->format($format);
+										echo ($row['dob']=='00-00-0000')?'':$dob;
+								 	?>
+								 </td>
 								<td style="padding: 1px 2px; font-size:90%; line-height:14px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;"  >
 									<?php echo $row['pob'];?>
 								</td>

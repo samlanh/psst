@@ -319,7 +319,7 @@
 										$paidAmount = $rs['paid_amount'];
 										$paidAmountLabel = number_format($paidAmount,2);
 										$paidClass="";
-										if($gTotalPayment<0){
+										if($paidAmount<0){
 											$paidClass="redColor";
 											$paidAmountLabel = "(".$paidAmountLabel.")";
 										}		

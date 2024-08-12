@@ -179,7 +179,15 @@
 									}
 								?>&nbsp;
 								</td>
-								<td align="center">&nbsp;<?php echo ($row['dob']=='00-00-0000')?'':$row['dob'];?>&nbsp;</td>
+								<td align="center">
+									<?php
+										$format = 'd-M-Y';
+										$dateString = $row["dob"];
+										$date = new DateTime($dateString);
+										$dob = $date->format($format);
+										echo ($row['dob']=='00-00-0000')?'':$dob;
+								 	?>
+								</td>
 								<td align="center"><!-- 
 									<img style="cursor:pointer" onclick="deleteRecord(<?php //echo $i;?>)" src="<?php //echo $this->baseUrl();?>/images/Delete_16.png"></td>
 									 -->

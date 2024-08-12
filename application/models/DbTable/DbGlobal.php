@@ -5047,8 +5047,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	}
 	function getDiscountListbyStudent($data)
 	{
-
-		
 		if (!empty($data['resultList'])) {
 			$sql = "
 				SELECT
@@ -5119,7 +5117,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
-		$sql.=" OR ds.discountFor=1";
+		$sql.=" OR (ds.discountFor=3)";
 		//Application_Model_DbTable_DbUserLog::writeMessageError(print_r($data));
 
 		if (!empty($data['fetchAll'])) {

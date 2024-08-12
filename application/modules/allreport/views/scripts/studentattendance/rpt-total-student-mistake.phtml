@@ -147,10 +147,9 @@ table.tb-footer tr.style-head {
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
-			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
 				<td colspan="3" id="exportExcel">
-					<table class="content-data" cellpadding="5"​  border="1" >							
+					<table class="content-data" cellpadding="5" border="1" >							
 						<?php $i=0; $old_groupid=0;
 						$_db = new Home_Model_DbTable_DbStudent();
 						 if (!empty($this->student)) foreach ($this->student as $key => $rs){

@@ -153,7 +153,6 @@ table.tb-footer tr.style-head {
 			<tr>
 				<td colspan="3"><?php echo $this->rsheader;?></td>
 			</tr>
-			<tr class="line"><td colspan="3"></td></tr>
 			<tr>
 				<td>&nbsp;</td>
 			</tr>
@@ -161,8 +160,8 @@ table.tb-footer tr.style-head {
 				<td width="10%" align="right">
 				</td>
 				<td width="60%" align="center">
-					<span​​ style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_TEACHER_DOCUMENT_ALERT");?></span><br/>
-					<span​​ style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
+					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("REPORT_TEACHER_DOCUMENT_ALERT");?></span><br/>
+					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo $tr->translate("BY_DAY")." ".date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 				</td>
 				<td width="5%" align="right">
 				</td>

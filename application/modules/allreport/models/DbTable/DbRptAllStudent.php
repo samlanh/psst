@@ -451,7 +451,8 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
     	}
     	
     	$sql ="SELECT
-			    	*
+					
+			    	s.*
 			    	,s.branch_id
 			    	,(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name
 			    	,(SELECT card_type FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS card_type
@@ -498,7 +499,19 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		    		,(SELECT occ.occu_name FROM rms_occupation AS occ WHERE occ.occupation_id=fam.fatherJob LIMIT 1) fath_job
 					,(SELECT occ.occu_name FROM rms_occupation AS occ WHERE occ.occupation_id=fam.motherJob LIMIT 1) moth_job
 					,(SELECT occ.occu_name FROM rms_occupation AS occ WHERE occ.occupation_id=fam.guardianJob LIMIT 1) guard_job
-    			FROM
+					,fam.fatherNameKh AS father_khname 
+					,fam.fatherName AS father_enname  
+					,fam.fatherNation AS father_nation
+					,fam.fatherPhone AS father_phone
+					
+					,fam.motherNameKh AS mother_khname 
+					,fam.motherName AS mother_enname  
+					,fam.motherPhone AS mother_phone  
+					
+					,fam.guardianNameKh AS guardian_khname 
+					,fam.guardianName AS guardian_enname 
+					,fam.guardianPhone AS guardian_tel
+				FROM
     				rms_student as s JOIN rms_group_detail_student AS gds ON gds.itemType=1  AND s.stu_id = gds.stu_id  AND gds.is_current =1 AND gds.is_maingrade =1 
 					LEFT JOIN rms_family AS fam ON fam.id = s.familyId 
     			WHERE

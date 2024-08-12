@@ -19,10 +19,21 @@
 				.card-content-student-print{
 					background-image: url('<?php echo $this->baseUrl()."/images/card/student_card_bg.jpg";?>');
 					background-size: 100%;background-repeat: no-repeat;
-					page-break-after:always					
+					page-break-after:always;
+
+					display:inline-block; 
+					margin-top:10px; 
+					margin-right:10px; 
+					line-height: 16.285px;  
+					width: 226px;
+					height: 350px; 
+					color: #3f3f95; 
+					font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';
+					border:1px solid #e2c7c7db;					
 				}
 			<?php if(!empty($this->groupByBranchAndSchool)) foreach($this->groupByBranchAndSchool as $bck){
 				$image = $this->baseUrl().'/images/card/default_card_bg.jpg';
+				$imageBack = $this->baseUrl().'/images/card/default_card_bg.jpg';
 				$color = "000000";
 				$dep = empty($bck['degree_id'])?0:$bck['degree_id'];
 				$bg = $_dbgb->getCardBackground($bck['branch_id'],1,$bck['schoolOption'],$dep);
@@ -38,6 +49,11 @@
 					if (file_exists(PUBLIC_PATH."/images/card/".$bg['background'])){
 						$image = $this->baseUrl().'/images/card/'.$bg['background'];
 					}
+					if(!empty($bg['front_background'])){
+						if (file_exists(PUBLIC_PATH."/images/card/".$bg['front_background'])){
+							$imageBack = $this->baseUrl().'/images/card/'.$bg['front_background'];
+						}
+					}
 					
 					if (!empty($bg['colorcode'])){
 						$color = str_replace("#", "", $bg['colorcode']);
@@ -52,6 +68,13 @@
 					
 				}
 			?>
+				
+				
+				.back-card-content-student-print<?php echo $dep;?>{
+					background-image: url('<?php echo $imageBack;?>');
+					 background-size: 100%;background-repeat: no-repeat;
+					 page-break-after:always;					
+				}
 				
 				.card-content-student-print<?php echo $dep;?>{
 					background-image: url('<?php echo $image;?>');
@@ -106,6 +129,35 @@
 				span.studentIdValue {
 					top: <?php echo $maginTopId;?>px;
 				}
+				
+				span.fatherNameKh,
+				span.fatherPhone,
+				span.motherNameKh,
+				span.motherPhone	
+				{
+					position: absolute;
+					display: block;
+					width: 90%;
+					font-weight: 600;
+					font-size: 10px;
+					text-align: left;
+					left: 60px;
+				}
+				span.fatherNameKh {
+					top: 113px;
+				}
+
+				span.fatherPhone {
+					top: 130px;
+				}
+
+				span.motherNameKh {
+					top: 159px;
+				}
+
+				span.motherPhone {
+					top: 175px;
+				}
 				@media print{@page {size: landscape}}
 			</style>
 		<?php 
@@ -134,7 +186,7 @@
 					$issueDate = $bg['issue'];
 				}
 			?>
-				<div class="card-content-student-print card-content-student-print<?php echo $dep;?>" style=" display:inline-block; margin-right:10px; line-height: 16.285px;  width: 226px;height: 350px; color: #3f3f95; font-family: 'Times New Roman', 'sans-serif','Khmer OS Battambang';border:1px solid #e2c7c7db; ">
+				<div class="card-content-student-print card-content-student-print<?php echo $dep;?>" style="  ">
 					<div class="profile-card-block">
 						<div class="photo">
 							<img <?php if(!empty($imageProfile)){echo 'src="'.$imageProfile.'"';}?> >
@@ -145,7 +197,16 @@
 						<span class="groupCodeValue">Class: <?php echo str_replace("Grade","",$row['group_name']);?></span>
 						<span class="studentIdValue">ID:<?php echo $row['stu_code'];?></span>
 					</div>			
-				</div>			
+				</div>
+				<div class="card-content-student-print back-card-content-student-print<?php echo $dep;?>" style="  ">
+					
+					<div class="name-card-block">
+						<span class="fatherNameKh"><?php echo empty($row['father_khname']) ? "N/A" : $row['father_khname'];?></span>
+						<span class="fatherPhone"><?php echo empty($row['father_phone']) ? "N/A" : $_dbgb->getNumberInkhmer($row['father_phone']);?></span>
+						<span class="motherNameKh"><?php echo empty($row['mother_khname']) ? "N/A" : $row['mother_khname'];?></span>
+						<span class="motherPhone"><?php echo empty($row['mother_phone']) ? "N/A" : $_dbgb->getNumberInkhmer($row['mother_phone']);?></span>
+					</div>			
+				</div>				
 			<?php }}?>
 		</div>
 		<table width="100%">
@@ -161,7 +222,9 @@
 </div>
 <script type="text/javascript">
 	dojo.ready(function(){
-		loadingBlock();
+		setTimeout(function () {
+			loadingBlock();
+		}, 700);
 		print();
 	});
 	function print(){
@@ -179,7 +242,7 @@
 	    frameDoc.document.write('</body></html>');
 	    frameDoc.document.close();
 	    setTimeout(function () {
-			HideloadingBlock();
+			
 	        window.frames["frame1"].focus();
 	        window.frames["frame1"].print();
 	        document.body.removeChild(frame1);
@@ -189,6 +252,7 @@
 				$url_copy =$this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'rpt-studentcard'),null,true);
 			?>
 			//window.location.href = '<?php echo $url_copy;?>';
+			HideloadingBlock();
 	    }, 10000);
 	   return false;
 	}

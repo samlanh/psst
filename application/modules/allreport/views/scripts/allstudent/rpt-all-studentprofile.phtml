@@ -198,7 +198,15 @@
 								</td>	
 								<td style="white-space: normal; color: red;">&nbsp;<?php if ($row['sex']==1){ echo "ប";}else{ echo "ស";}?>&nbsp;</td>	
 								<td style="white-space: normal;">&nbsp;<?php echo $row['grade'];?>&nbsp;</td>
-								<td class="verites-col">&nbsp;<span class="verites"><?php echo ($row['dob']=='00-00-0000')?'':$row['dob'];?></span></td>
+								<td class="verites-col">&nbsp;<span class="verites">
+									<?php
+										$format = 'd-M-Y';
+										$dateString = $row["dob"];
+										$date = new DateTime($dateString);
+										$dob = $date->format($format);
+										echo ($row['dob']=='00-00-0000')?'':$dob;
+								 	?>
+								</span></td>
 								<td style="white-space: normal;">&nbsp;<?php echo $row['pob'];?>&nbsp;</td>
 								<td class="verites-col"><span class="verites"><?php echo $row['father_khname'];?></span></td>
 								<td class="verites-col"><span class="verites"><?php echo $row['fatherJobTitle'];?></span></td>

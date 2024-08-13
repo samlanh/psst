@@ -199,7 +199,6 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		else{
 			$search = array(
 					'txtsearch' => "",
-					'study_type'=>0
 			);
 		}
 		$this->view->search = $search;

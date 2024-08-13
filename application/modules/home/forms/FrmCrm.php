@@ -77,6 +77,7 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     			2=>$this->tr->translate("ENGLISH_KNOWLEDGE"),
     			//3=>$this->tr->translate("UNIVERSITY"),
     			4=>$this->tr->translate("CHINESE_KNOWLEDGE"),
+				6=>$this->tr->translate("SCHOLARSHIP"),
     			5=>$this->tr->translate("OTHER"));
     	$_ask_for = new Zend_Dojo_Form_Element_FilteringSelect("ask_for");
     	$_ask_for->setMultiOptions($_arr);
@@ -244,7 +245,13 @@ class Home_Form_FrmCrm extends Zend_Dojo_Form
     		}
     	}
     	
-    	$_arr = array(""=>$this->tr->translate("ASK_FOR"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),2=>$this->tr->translate("ENGLISH_KNOWLEDGE"),3=>$this->tr->translate("UNIVERSITY"),4=>$this->tr->translate("CHINESE_KNOWLEDGE"),5=>$this->tr->translate("OTHER"));
+    	$_arr = array(""=>$this->tr->translate("ASK_FOR"),1=>$this->tr->translate("KHMER_KNOWLEDGE"),
+		2=>$this->tr->translate("ENGLISH_KNOWLEDGE"),
+		3=>$this->tr->translate("UNIVERSITY"),
+		4=>$this->tr->translate("CHINESE_KNOWLEDGE"),
+		5=>$this->tr->translate("OTHER"),
+		6=>$this->tr->translate("SCHOLARSHIP")
+	);
     	$_ask_for_search = new Zend_Dojo_Form_Element_FilteringSelect("ask_for_search");
     	$_ask_for_search->setMultiOptions($_arr);
     	$_ask_for_search->setAttribs(array(

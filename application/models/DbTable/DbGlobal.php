@@ -4691,7 +4691,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			}
 		}
 		$sql .= " ORDER BY i.items_type ASC ";
-		Application_Model_DbTable_DbUserLog::writeMessageError($sql);
+		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		return $this->getAdapter()->fetchAll($sql);//fetch all but got only 1 row only .
 
 	}
@@ -5093,7 +5093,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				FROM `rms_dis_setting` AS ds
 					LEFT JOIN rms_discount_student disc
 					ON ds.`id`=disc.`discountGroupId`
-				WHERE disc.isCurrent=1 ";
+				WHERE ds.isCurrent=1 ";
 		}
 		
 		//$secondCondition = "  ds.discountFor=2 ";
@@ -5113,12 +5113,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['grade'])) {
 			$sql .= " AND FIND_IN_SET((SELECT d.items_id FROM `rms_itemsdetail` d WHERE d.id=".$data['grade']." LIMIT 1),ds.degree)";
 		}
-
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
-		$sql.=" OR (ds.discountFor=3)";
-		//Application_Model_DbTable_DbUserLog::writeMessageError(print_r($data));
+		$from_date =" ds.startDate >= '".date("Y-m-d")."'";
+		$to_date =" ds.endDate <= '".date("Y-m-d")."'";
+	    $WherediscountPromotion = " AND ".$from_date." AND ".$to_date;
+
+		$sql.=" OR (ds.discountFor=3 AND discountPeriod=2 $WherediscountPromotion)";
+		
 
 		if (!empty($data['fetchAll'])) {
 			$result =  $this->getAdapter()->fetchAll($sql);

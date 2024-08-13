@@ -308,11 +308,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
 					discountTitle,
-					(CASE 
-						WHEN ds.discountFor=2 THEN $sqlDiscountFor
-						WHEN ds.discountFor=1 THEN $strStudent
-					END) AS discountForText,
-					(SELECT $colunmname FROM `rms_view` WHERE TYPE=38 AND key_code=ds.discountFor LIMIT 1) AS discountForOption,
+					$sqlDiscountFor AS discountForText,
+					(SELECT $colunmname FROM `rms_view` WHERE TYPE=38 AND key_code=ds.discountForType LIMIT 1) AS discountForOption,
 					(SELECT GROUP_CONCAT($strDegree) FROM `rms_items` WHERE FIND_IN_SET(id,degree)) as degreeList,
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
 					CONCAT(ds.discountValue, 

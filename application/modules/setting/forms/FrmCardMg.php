@@ -142,12 +142,15 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$name_left->setValue(0);
+		
 		$name_top=new Zend_Dojo_Form_Element_NumberTextBox('name_top');
 		$name_top->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$name_top->setValue(0);
 
 		$studentcode_left = new Zend_Dojo_Form_Element_NumberTextBox('studentcode_left');
 		$studentcode_left->setAttribs(array(
@@ -155,6 +158,7 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			'class'=>'fullside',
 			'required'=>true,
 		));
+		$studentcode_left->setValue(0);
 
 		$studentcode_top = new Zend_Dojo_Form_Element_NumberTextBox('studentcode_top');
 		$studentcode_top->setAttribs(array(
@@ -162,6 +166,7 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			'class'=>'fullside',
 			'required'=>true,
 		));
+		$studentcode_top->setValue(0);
 		
 		$photo_left = new Zend_Dojo_Form_Element_NumberTextBox('photo_left');
 		$photo_left->setAttribs(array(
@@ -169,12 +174,15 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$photo_left->setValue(0);
+		
 		$photo_top = new Zend_Dojo_Form_Element_NumberTextBox('photo_top');
 		$photo_top->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$photo_top->setValue(0);
 
 		$group_left = new Zend_Dojo_Form_Element_NumberTextBox('group_left');
 		$group_left->setAttribs(array(
@@ -182,6 +190,7 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$group_left->setValue(0);
 
 		$group_top = new Zend_Dojo_Form_Element_NumberTextBox('group_top');
 		$group_top->setAttribs(array(
@@ -189,6 +198,7 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$group_top->setValue(0);
 
 		$code_left = new Zend_Dojo_Form_Element_NumberTextBox('code_left');
 		$code_left->setAttribs(array(
@@ -196,12 +206,15 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$code_left->setValue(0);
+		
 		$code_top = new Zend_Dojo_Form_Element_NumberTextBox('code_top');
 		$code_top->setAttribs(array(
 			'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true,
 		));
+		$code_top->setValue(0);
 
 		
 		$_id = new Zend_Form_Element_Hidden('id');
@@ -219,7 +232,6 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			$card_type->setValue($data['card_type']);
 			$valid->setValue($data['valid']);
 			$issue->setValue($data['issue']);
-			$name_left->setValue($data['issue']);
 
 			$name_left->setValue($data['stunameleft']);
 			$name_top->setValue($data['stunametop']);

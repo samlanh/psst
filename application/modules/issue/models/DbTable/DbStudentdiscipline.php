@@ -13,28 +13,42 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$currentLang = $dbp->currentlang();
-    	$colunmname='title_en';
+    	
+    	$branch = $dbp->getBranchDisplay();
+		
+		$colunmname='title_en';
+    	$label="name_en";
+		$titleCol = "title";
     	if ($currentLang==1){
     		$colunmname='title';
+    		$label="name_kh";
+			$titleCol = "titleKh";
     	}
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$roomQue = " (SELECT `r`.`room_name` FROM `rms_room` `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1) ";
+		$sessionQue = " (SELECT p.$titleCol FROM rms_parttime_list AS p where p.id = g.session limit 1 )  ";
+		$academicQue = " (SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1)  ";
+		$attQue = " (SELECT COUNT(DISTINCT(sdsd.stu_id)) FROM rms_student_attendence_detail AS sdsd WHERE sdsd.attendence_id = sa.id LIMIT 1)  ";
+		$allStuQue = " (SELECT COUNT(gds.`gd_id`) FROM `rms_group_detail_student` AS gds WHERE gds.`group_id`=g.id AND gds.`is_maingrade`=1 AND gds.`itemType`=1 LIMIT 1)  ";
     	
-    	$sql="SELECT sa.`id`,
-		    	(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sa.branch_id LIMIT 1) AS branch_name,
-		    	g.group_code  AS group_name,
-		    	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academy,
-		    	(SELECT rms_items.$colunmname FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-		    	(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE `rms_itemsdetail`.`id`=`g`.`grade` AND `rms_itemsdetail`.`items_type`=1 LIMIT 1 ) AS grade,
-		    	sa.for_semester AS semester,
-		    	(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS room,
-		    	(SELECT`rms_view`.`name_kh`	FROM `rms_view`	WHERE (`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`) LIMIT 1) AS session,
-		    	sa.`date_attendence` ";
-    	$sql.=$dbp->caseStatusShowImage("sa.status");
-    	$sql.=" FROM 
-    				`rms_student_attendence` AS sa,
-    				rms_group as g ";
+		
+    	$sql="SELECT sa.`id`
+		    	,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = sa.branch_id LIMIT 1) AS branch_name
+		    	,CONCAT(COALESCE(g.group_code,''),' ',COALESCE($academicQue,'')) AS titleRecord
+		    	,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE `rms_itemsdetail`.`id`=`g`.`grade` AND `rms_itemsdetail`.`items_type`=1 LIMIT 1 ) AS grade
+		    	,sa.for_semester AS semester
+		    	,sa.`date_attendence` 
+				,CONCAT(COALESCE($attQue,0),' / ',COALESCE($allStuQue,0)) AS amtStuAtt
+				,(SELECT first_name FROM rms_users WHERE sa.user_id=rms_users.id LIMIT 1 ) AS user_name 
+				";
+		$sql.=",sa.`status` AS statusRecord 
+			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' ".$tr->translate('ROOM').":',COALESCE($roomQue,''),' ',COALESCE($sessionQue,'')) AS subTitleRecord
+			
+		";
+    	$sql.=" FROM  `rms_student_attendence` AS sa JOIN rms_group as g ON g.id=sa.group_id 
+					LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree` ";
     	
-    	$where =' WHERE g.id=sa.group_id 
-    					AND sa.`type` = 2 ';
+    	$where =' WHERE sa.`type` = 2 ';
     	$from_date =(empty($search['start_date']))? '1': " sa.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sa.date_attendence <= '".$search['end_date']." 23:59:59'";
     	$where.= " AND ".$from_date." AND ".$to_date;
@@ -255,7 +269,8 @@ class Issue_Model_DbTable_DbStudentdiscipline extends Zend_Db_Table_Abstract
 		$db=$this->getAdapter();
 		$sql="
 			SELECT 
-				sd.* 
+				sd.*
+				,g.is_pass
 			FROM 
 				`rms_student_attendence` sd 
 				JOIN rms_group AS g ON g.id = sd.group_id

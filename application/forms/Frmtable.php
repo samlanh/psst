@@ -135,7 +135,7 @@ class Application_Form_Frmtable
 								$row_str.='<td '.$clisc.' >'.$read.'</td>';
 							}else if($key=="statusRecord"){
 								$read=$this->checkStatusRecord($read);
-								$row_str.='<td '.$clisc.' >'.$read.'</td>';
+								$row_str.='<td class="text-center" '.$clisc.' >'.$read.'</td>';
 							}else{
 								if($i > count($columns)) {
 									break;

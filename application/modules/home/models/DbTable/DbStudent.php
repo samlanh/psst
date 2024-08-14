@@ -56,6 +56,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 							WHEN s.goHomeType = 3 THEN '".$tr->translate("BY_SCHOOL_BUS")."'
 							ELSE 'N/A'
 						END as goHomeTypeTitle
+					,(SELECT generation FROM rms_tuitionfee WHERE rms_tuitionfee.id=ds.feeId LIMIT 1) AS feeTitle
+					,(SELECT d.discountTitle FROM `rms_dis_setting` AS d 
+						INNER JOIN `rms_discount_student` AS dd ON d.id = dd.discountGroupId WHERE dd.isCurrent=1 AND dd.studentId=ds.stu_id LIMIT 1) AS discountTitle
+
 				FROM 
 					rms_student AS s JOIN rms_group_detail_student AS ds ON ds.itemType=1 AND s.stu_id=ds.stu_id AND ds.is_maingrade=1  AND ds.is_current=1 
 					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
@@ -113,15 +117,10 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		if (!empty($search['goHomeType'])) {
 			$where .= " AND s.goHomeType=" . $search['goHomeType'];
 		}
-
-		if ($search['study_status'] >= 0) {
-			if (($search['study_status'] == 3) || $search['study_status'] == 4) {
-				$where .= " AND ds.stop_type=" . $search['study_status'];
-			} else {
-				$where .= ' AND (SELECT rms_group.is_pass FROM `rms_group` WHERE rms_group.id=ds.group_id AND ds.is_maingrade=1 LIMIT 1) =' . $search['study_status'];
-			}
+		if ($search['student_status']>-1) {
+			$where .= " AND ds.stop_type=" . $search['student_status'];
 		}
-		
+
 		$where .= $dbGb->getAccessPermission('s.branch_id');
 		$where .= $dbGb->getDegreePermission('ds.degree');
 		return $_db->fetchAll($sql . $where . $orderby);

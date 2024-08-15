@@ -268,7 +268,7 @@ class Accounting_Model_DbTable_DbRequestProduct extends Zend_Db_Table_Abstract
     	$db=$this->getAdapter();
     	$sql="SELECT 
     				pl.pro_qty,
-    				p.cost
+    				pl.costing AS cost
     			FROM 
     				rms_itemsdetail AS p,
     				rms_product_location AS pl

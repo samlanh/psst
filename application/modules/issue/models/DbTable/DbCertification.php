@@ -11,23 +11,26 @@ class Issue_Model_DbTable_DbCertification extends Zend_Db_Table_Abstract
     function getAllIssueCertification($search){
     	$db = $this->getAdapter();
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	
+    	$branch = $dbp->getBranchDisplay();
+		
     	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
     	$khmer = $tr->translate("KHMER");
     	$eng = $tr->translate("ENGLISH");
     	
-    	$sql = "SELECT c.id,
-			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
-			c.dept_kh,
-			c.from_date,
-			c.to_date,
-			c.issue_date
-			, CASE
-		   	WHEN  c.type = 1 THEN '$khmer'
-		   	WHEN  c.type = 2 THEN '$eng'
-		   	END AS type,
-			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user 
+    	$sql = "
+		SELECT 
+			c.id
+			,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name
+			,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code
+			,c.dept_kh
+			,c.from_date
+			,c.to_date
+			,c.issue_date
+			,CASE
+				WHEN  c.type = 1 THEN '$khmer'
+				WHEN  c.type = 2 THEN '$eng'
+		   	END AS type
+			,(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id) AS user 
     	";
     	
     	$sql.=$dbp->caseStatusShowImage("c.status");

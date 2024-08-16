@@ -1,0 +1,363 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('RPT_DUPLICATED_STUDY_INFO'));
+$base_url = Application_Form_FrmMessage::getUrl("/");
+$frm = $this->form_search;
+
+?>
+<div class="reportblog">
+	<div class="card-box">
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0"><i class="fa fa-file-text "
+						aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_DUPLICATED_STUDY_INFO'); ?></h4>
+			</div>
+			<div class="col-sm-4 text-right">
+			</div>
+		</div>
+	</div>
+	<div class="x_panel tile">
+                <div class="x_title">
+                  <h2><?php echo $tr->translate('Quick Search');?></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: block;">
+			<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("adv_search"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("branch_id"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("degree"); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search"
+							dojoType="dijit.form.Button" showLabel="true"
+							type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
+					</div>
+				</div>
+				<div class="form-group">
+					
+					<div class="col-md-2 col-sm-2 col-xs-12">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<style>
+		.hover:hover {
+			background: #ccc;
+		}
+
+		table.content-data tr.style-head,
+		table.tb-footer tr.style-head {
+			font-weight: bold !important;
+		}
+
+		.hidden {
+			display: table-cell !important;
+		}
+	</style>
+	<div id="divPrint">
+		<style type="text/css">
+			
+			table {
+				border-collapse: collapse;
+				margin: 0 auto;
+				border-color: #4839bd;
+				font-family: 'Times New Roman', 'Khmer OS Battambang';
+			}
+			table th,
+			table td {
+				padding: 0 1px;
+				color: #4839bd;
+			}
+			.padding {
+				padding: 0 1px !important;
+			}
+			tr {
+				page-break-inside: avoid;
+				page-break-after: auto
+			}
+			#header {
+				display: table-header-group;
+				page-break-inside: avoid;
+				page-break-after: auto;
+			}
+			.hover:hover {
+				background: #ccc;
+			}
+			.hidden {
+				display: none;
+			}
+			tr.line td {
+				border-bottom: 2px solid #000;
+				padding-top: 5px;
+			}
+			table.content-data {
+				border-collapse: collapse;
+				width: 100%;
+				border: 1px solid #4839bd;
+				font-family: 'Times New Roman', 'Khmer OS Battambang';
+				font-size: 12px;
+				white-space: nowrap;
+				margin: 0 auto;
+				color: #4839bd;
+			}
+			table.content-data thead tr.style-head {
+				line-height: 25px;
+				padding: 1px 0px;
+				white-space: nowrap;
+				height: 22px;
+				background: #ccd9ff;
+				text-align: center;
+			}
+			@media print {
+				@page {
+					page: A4;
+					size: portrait;
+					;
+					margin: 0.8cm;
+				}
+			}
+		</style>
+		<table style="background:#fff; margin: 0 auto; width: 100%;" cellpadding="0">
+			<tr>
+				<td ><?php echo $this->rsheader; ?></td>
+			</tr>
+			<tr>
+				<td width="100%" align="center">
+					<span style="font-weight:200;color:#4839bd; font-size: 12px;font-family:Times New Roman,'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_DUPLICATED_STUDY_INFO"); ?></span>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" id="exportExcel">
+					<table class="content-data" cellpadding="3" border="1">
+						<thead>
+							<tr class="style-head">
+								<td scope="col"><?php echo $tr->translate("NUM"); ?></td>
+								<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
+								<td scope="col"><?php echo $tr->translate("STU_CODE"); ?></td>
+								<td scope="col"><?php echo $tr->translate("STUDENT_NAME"); ?></td>
+								<td scope="col"><?php echo $tr->translate("AMT_DUPLICATE"); ?></td>
+								<td scope="col"><?php echo $tr->translate("STUDY_GROUP"); ?></td>
+								<td scope="col"><?php echo $tr->translate("ACTION"); ?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							$i = 0;
+							if(!empty($this->studentRs)) foreach($this->studentRs As $row){
+								$i++;
+							?>
+								<tr class='hover padding'>
+									<td align="center" data-label="<?php echo $tr->translate("NUM"); ?>"><?php echo $i; ?></td>
+									<td data-label="<?php echo $tr->translate("BRANCH"); ?>"><?php echo $row["branchName"]; ?></td>
+									<td data-label="<?php echo $tr->translate("STU_CODE"); ?>" class="studentCode<?php echo $i; ?>">
+										<?php echo $row["studentCode"]; ?>
+										<input type="hidden" name="studentId<?php echo $i; ?>" id="studentId<?php echo $i; ?>" value="<?php echo $row["studentId"]; ?>" dojoType="dijit.form.TextBox" />
+									</td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME"); ?>" class="studentName<?php echo $i; ?>"><?php echo $row["studentNameKh"]; ?></td>
+									<td data-label="<?php echo $tr->translate("AMT_DUPLICATE"); ?>" align="center"><?php echo $row["cnt"]; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDY_GROUP"); ?>"><?php echo $row["groupCode"]; ?></td>
+									<td data-label="<?php echo $tr->translate("ACTION"); ?>" align="center">
+										<a class="btn btn-xs btn-round rounded-pill btn-primary " onClick="getDuplicateStudentInfo(<?php echo $i; ?>);" href="javascript:void(0);">
+											<small><i class="fa fa-eye"></i> <?php echo $tr->translate("ADJUST"); ?></small>
+										</a>
+									</td>
+								</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" style="width:700px;" id="popupStudentInfo" >
+		<form style="background-color: buttonface;" id='frmAdjustment' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+			<div class="card-blogform">
+				<div class="card-body">
+				  <div class="form-group">
+						<div class="d-flex"> 
+							<div class="settings-main-icon ">
+								<i class="material-icons-outlined">
+								school
+								</i>
+							</div> 
+							<div class="col-md-10 col-sm-10 col-xs-12"> 
+								<h4 class="modal-title text-primary studentCode"></h4>
+							</div> 
+						</div>
+					</div>
+					<div class="form-group" >
+						<table class="content-data" border="1" cellspacing="5" width="100%">
+							<thead  id="head-title" >
+								<tr class="style-head" align="center">
+									<td width="4%" ><?php echo $tr->translate("DEL");?></td>
+									<td width="4%" ><?php echo $tr->translate("NO");?></td>
+									<td ><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+									<td ><?php echo $tr->translate("GROUP_CODE");?></td>
+									<td ><?php echo $tr->translate("DEGREE");?></td>
+									<td ><?php echo $tr->translate("GRADE");?></td>
+									<td width="20%"><?php echo $tr->translate("OPTION");?></td>
+									
+								</tr>
+							</thead>
+							<tbody id="tableDuplicateInfo" >
+							</tbody>
+						</table>
+					</div>
+					
+					
+					<div class="clearfix"></div>
+					<div class="card-box">
+						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<input type="hidden" name="studentId" id="studentId" value="" dojoType="dijit.form.TextBox" />
+							<input type="hidden" name="identity" id="identity" value="" dojoType="dijit.form.TextBox" />
+							<input type="hidden" name="removeIdentity" id="removeIdentity" value="" dojoType="dijit.form.TextBox" />
+							<input type="button" class="button-class button-danger" iconClass="glyphicon glyphicon-off" value="ចាកចេញ" label="<?php echo $tr->translate('CLOSE');?>" id="hideStudentType" name="hideStudentType" dojoType="dijit.form.Button" onclick="hideDialogPopup('popupStudentInfo');"/>
+							<input type="button" class="button-class button-primary" iconClass="glyphicon glyphicon-floppy-disk" value="save" label="<?php echo $tr->translate('SAVE');?>" id="saveStudentType" name="saveStudentType" dojoType="dijit.form.Button" onclick="adjustmentStudentInfo();"/>
+						</div>
+					</div>
+			
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
+<script src="<?php echo $baseurl;?>/js/help.js"></script>
+<script type="text/javascript">
+	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dojo.data.ItemFileWriteStore");
+
+	var stringOption='';
+	stringOption+='<option value="1"><?php echo $tr->translate("IS_CURRENT_CLASS");?></option>';
+	stringOption+='<option value="0"><?php echo $tr->translate("COMPLETED_CLASS");?></option>';
+	
+	var col = 0;
+	tmp = '';
+	temp='';
+	function getDuplicateStudentInfo(index){
+		var urlGetDuplicate = '<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'get-stu-duplicate'));?>';
+		var studentId = dijit.byId('studentId'+index).get('value');
+		dijit.byId('studentId').set('value',studentId); 
+		dojo.query("#tableDuplicateInfo").append("");
+		$("#identity").val("");
+		$("#removeIdentity").val("");
+		dojo.xhrPost({
+			url: urlGetDuplicate,
+			content:{
+				'studentId':studentId,
+				},
+			handleAs:"json",
+			load: function(data){
+				$(".studentCode").html($(".studentCode"+index).html()+'/ '+$(".studentName"+index).html());
+				template='';
+				var no = 0;
+				if(data!=""){
+					var identity ="";
+					for(var i=0;i<data.length;i++) {
+						col++;no++;
+						template+='<tr class="rowData hover" id="row'+col+'">';
+							template+='<td data-label="<?php echo $tr->translate("DEL");?>" align="center" class="removCol'+col+'"><span title="<?php echo $tr->translate("REMOVE_RECORD");?>" class="removeRow" onclick="deleteRecord('+col+')" ><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></span></td>';
+							template+='<td data-label="<?php echo $tr->translate("N_O");?>" align="center">'+no+'</td>';
+							template+='<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" align="center">'+data[i].academicYear;
+							template+='<input type="hidden" name="detailId'+col+'" id="detailId'+col+'" value="'+data[i].gd_id+'" dojoType="dijit.form.TextBox" />';
+							template+='</td>';
+							template+='<td data-label="<?php echo $tr->translate("GROUP_CODE");?>" align="center">'+data[i].groupCode+'</td>';
+							template+='<td data-label="<?php echo $tr->translate("DEGREE");?>" align="center">'+data[i].degreeTitle+'</td>';
+							template+='<td data-label="<?php echo $tr->translate("GRADE");?>" align="center">'+data[i].gradeTitle+'</td>';
+							template+='<td data-label="<?php echo $tr->translate("OPTION");?>" align="center">';
+								template+='<select placeholder="<?php echo $tr->translate('SELECT_TEACHER');?>" queryExpr="*${0}*" autoComplete="false" dojoType="dijit.form.FilteringSelect" class="fullside" id="isCurrent'+col+'" name="isCurrent'+col+'" >';
+								template+=stringOption; 
+								template+='</select>';
+							template+='</td>';
+						template+="</tr>";
+						if(identity!=""){
+							identity = identity+','+col;
+						}else{
+							identity = col;
+						}
+						
+					}
+					$("#identity").val(identity);
+					
+					dojo.query("#tableDuplicateInfo").append(template);
+					dojo.html.set(dojo.byId("tableDuplicateInfo"),template , {
+						 parseContent: true,
+					});
+					
+				}
+				dijit.byId("popupStudentInfo").show();
+			},
+			error: function(err) {
+			}
+		});
+		
+	}
+	function hideDialogPopup(popupContentId) {		
+		dijit.byId(popupContentId).hide();
+	}
+	
+	function deleteRecord(index) {
+		
+		var removeIdentity = $('#removeIdentity').val();
+		if(removeIdentity!=""){
+			removeIdentity = removeIdentity+','+dijit.byId('detailId'+index).get('value');
+		}else{
+			removeIdentity = dijit.byId('detailId'+index).get('value');
+		}
+		$('#removeIdentity').val(removeIdentity);
+		
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).remove();
+		
+		
+		
+		var newIde = $('#identity').val();
+		var newArr = newIde.split(',');
+		if(newArr.length==1){
+			$(".removCol"+newIde).html("");
+		}
+	}
+	
+	
+	function adjustmentStudentInfo(){
+		var urlSumbitAdjustment = '<?php echo $this->url(array("module"=>"allreport","controller"=>"allstudent","action"=>"submit-adjustment")); ?>';
+		if(dijit.byId('frmAdjustment').validate()){
+			loadingBlock();
+			dojo.xhrPost({
+				url: urlSumbitAdjustment,
+				form: dojo.byId("frmAdjustment"),
+				handleAs:"json",
+				load: function(data) {
+					if(data==1){
+						alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?>!');
+						window.location.href = "<?php echo $this->baseUrl(); ?>/allreport/allstudent/rpt-duplicate-study";
+					}else{
+						HideloadingBlock();
+					}
+				},
+				error: function(err) {
+				}
+			});
+		}
+	}
+</script>

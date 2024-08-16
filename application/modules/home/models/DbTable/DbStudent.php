@@ -730,29 +730,29 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$teacher = "teacher_name_en";
 		}
 		$sql = "SELECT
-					g.group_code,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_id,
-					(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-					(SELECT $view FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-					(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher,
-					(SELECT $view FROM `rms_view` WHERE TYPE=12 AND key_code = gds.is_pass LIMIT 1) as is_pass_label,
-					gds.is_pass,
-					gds.stop_type
+					g.group_code
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_id
+					,(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree
+					,(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
+					,(SELECT $view FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id
+					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
+					,(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher
+					,(SELECT $view FROM `rms_view` WHERE TYPE=12 AND key_code = gds.is_pass LIMIT 1) as is_pass_label
+					,(SELECT $view from rms_view where type=5 and key_code=gds.stop_type LIMIT 1) as status_student
+					,gds.is_pass
+					,gds.stop_type
+					,(SELECT $view FROM rms_view WHERE type=9 and key_code=g.is_pass LIMIT 1) as groupStatus
 				FROM
-					rms_group_detail_student AS gds,
-					rms_group AS g,
-					rms_student as s
+					rms_group_detail_student AS gds JOIN rms_student as s ON gds.stu_id = s.stu_id
+					LEFT JOIN rms_group AS g ON gds.group_id = g.id
+					
 				WHERE 
 					gds.itemType=1 
-					AND gds.group_id = g.id
-					AND gds.stu_id = s.stu_id
-					and gds.stu_id = $stu_id
-					and gds.status=1
+					AND gds.stu_id = $stu_id
+					AND gds.status=1
 				order by 
-					gds.is_pass ASC,
-					gds.create_date ASC
+					gds.gd_id DESC,
+					gds.create_date DESC
 						
 			";
 		return $db->fetchAll($sql);

@@ -1749,5 +1749,122 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
    		return $db->fetchRow($sql);
    	}
 	
+	
+	function getAllDuplicatedStudyInfo($data){
+   		$db = $this->getAdapter();
+   		 
+   		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$currentLang = $dbp->currentlang();
+   		$colunmname='name_en';
+   		if ($currentLang==1){
+   			$colunmname='name_kh';
+   		}
+		$branch = $dbp->getBranchDisplay();
+   		$sql="SELECT 
+				gsd.`stu_id` AS studentId
+				,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = s.branch_id LIMIT 1) AS branchName
+		   		,s.`stu_code` AS studentCode
+				,s.stu_khname AS studentNameKh
+				,CONCAT(s.last_name,' ',s.stu_enname) AS studentNameEng
+				,gsd.`gd_id`
+				,GROUP_CONCAT(IF(gsd.`is_current`=1 AND gsd.itemType=1, gsd.`gd_id`, NULL)) AS groupDetilId
+				,GROUP_CONCAT(IF(gsd.`is_current`=1 AND gsd.itemType=1, gsd.`gd_id`, NULL)) AS groupDetilId
+				,(SELECT GROUP_CONCAT(g.group_code) FROM `rms_group` AS g WHERE FIND_IN_SET(g.id,GROUP_CONCAT(IF(gsd.`is_current`=1 AND gsd.itemType=1, gsd.`group_id`, NULL)) ) LIMIT 1 ) AS groupCode
+				,(SELECT GROUP_CONCAT(g.`academic_year`) FROM `rms_group` AS g WHERE FIND_IN_SET(g.id,GROUP_CONCAT(IF(gsd.`is_current`=1 AND gsd.itemType=1, gsd.`group_id`, NULL)) ) LIMIT 1 ) AS academicYear
+				,COUNT(IF(gsd.`is_current`=1, gsd.stu_id, NULL)) AS cnt
+				FROM `rms_group_detail_student` AS gsd 
+					JOIN `rms_student` AS s ON s.`stu_id` = gsd.`stu_id` AND s.`customer_type` = 1
+   			WHERE
+				1 AND gsd.itemType=1
+   		";
+		
+   		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$sql.=$dbp->getAccessPermission("s.branch_id");
+		if(!empty($data["degree"])){
+			//$sql.=" AND FIND_IN_SET(".$data["degree"].",GROUP_CONCAT(IF(gsd.`is_current`=1 AND gsd.itemType=1, gsd.`degree`, NULL)) ) ";
+		}
+		if(!empty($data["branch_id"])){
+			$sql.=" AND s.branch_id = ".$data["branch_id"];
+		}
+		$sql.="
+			GROUP BY gsd.`stu_id`, gsd.itemType HAVING cnt > 1 
+			ORDER BY gsd.`stu_id` ASC
+		";
+   		return $db->fetchAll($sql);
+   	}
+	
+	function getStuDuplicateStudyList($data){
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
+   		$currentLang = $dbp->currentlang();
+   		$colunmName='title_en';
+   		if ($currentLang==1){
+   			$colunmName='title';
+   		}
+		
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$sql="SELECT 
+				gsd.`stu_id` AS studentId
+				,s.`stu_code` AS studentCode
+				,s.stu_khname AS studentNameKh
+				,CONCAT(s.last_name,' ',s.stu_enname) AS studentNameEng
+				,gsd.`gd_id`
+				,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = gsd.`group_id` LIMIT 1 ) AS groupCode
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsd.academic_year LIMIT 1) AS academicYear
+				,COALESCE(i.shortcut,i.$colunmName) AS degreeTitle
+				,COALESCE((SELECT COALESCE(id.shortcut,id.$colunmName)  FROM `rms_itemsdetail` AS id WHERE id.id = gsd.`grade` LIMIT 1),'') AS gradeTitle
+			FROM `rms_group_detail_student` AS gsd 
+				JOIN `rms_student` AS s ON s.`stu_id` = gsd.`stu_id` AND s.`customer_type` = 1 
+				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = gsd.`degree`
+   			WHERE
+				1 AND gsd.itemType=1 
+				AND gsd.`is_current`=1
+				AND gsd.stu_id = $studentId
+   		";
+		$sql.="
+			ORDER BY gsd.`gd_id` DESC
+		";
+		$db = $this->getAdapter();
+		return $db->fetchAll($sql);
+   	}
+	
+	function adjustmentStudentInfo($data){
+		try {
+			$check = $this->getStuDuplicateStudyList($data);
+			if(count($check)>1){
+				if (!empty($data['identity'])) {
+					$ids = explode(',', $data['identity']);
+					foreach ($ids as $i) {
+						$arr = array(
+							'is_current'	=> $data['isCurrent' . $i],
+						);
+						$this->_name = 'rms_group_detail_student';
+						$where = ' gd_id = ' . $data['detailId'.$i]." AND stu_id = ".$data['studentId'];
+						$this->update($arr, $where);
+					}
+				}
+				if (!empty($data['removeIdentity'])) {
+					if(!empty($data['studentId'])){
+						
+						$this->_name = 'rms_group_detail_student';
+						$whereDelete = "gd_id IN (". $data['removeIdentity'].") AND stu_id = ".$data['studentId'];
+						$this->delete($whereDelete);
+							
+						$removeIds = explode(',', $data['removeIdentity']);
+						foreach ($removeIds as $k) {
+							
+						}
+					}
+					
+				}
+				return 1;
+			}else{
+				return 2;
+			}
+		} catch (Exception $e) {
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
+	
 		
 }

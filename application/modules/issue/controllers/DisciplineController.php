@@ -29,11 +29,11 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 			$this->view->search=$search;
 			$rs_rows = $db->getAllDiscipline($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array( "BRANCH","GROUP","ACADEMIC_YEAR","DEGREE","GRADE","SEMESTER","ROOM","SESSION","MISTAKE_DATE","STATUS");
+			$collumns = array("BRANCH","GROUP","GRADE","SEMESTER","ATTENDANCE_DATE","amtStuAtt","USER","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'discipline','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'group_name'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('branch_name'=>$link,'titleRecord'=>$link,'academy'=>$link,'degree'=>$link,'grade'=>$link,'semester'=>$link));
 	
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
@@ -92,14 +92,18 @@ class Issue_DisciplineController extends Zend_Controller_Action {
 		$result = $_model->getAttendencetByIDDiscipline($id);
 		if (empty($result)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/issue/discipline");
-			exit();
 		}
 		$this->view->row=$result;
+		if ($result['is_pass'] > 0) {
+			Application_Form_FrmMessage::Sucessfull("UNABLE_TO_EDIT_COMPETED_CLASS", "/issue/discipline");
+		}
 		$condiction = array(
 			"attendanceId" => $id
 		);
-		$this->view->allstudentBygroup= $_model->getStudentDisplineDetail($condiction);
-	//	$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
+		if (!empty($result)){
+			$this->view->allstudentBygroup= $_model->getStudentDisplineDetail($condiction);
+			//	$this->view->allstudentBygroup = $_model->getStudentByGroup($result['group_id']);
+		}
 		
 		$db_global=new Application_Model_DbTable_DbGlobal();
 		

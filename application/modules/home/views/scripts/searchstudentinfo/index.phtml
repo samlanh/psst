@@ -63,12 +63,8 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 				<div class="clearfix"></div>
 				<div class="form-group">
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement("study_status"); ?>
+						<?php echo $frm->getElement("student_status"); ?>
 					</div>
-					<!--                    <div class="col-md-2 col-sm-2 col-xs-12"> -->
-					<?php //echo $frm->getElement("session");
-					?>
-					<!--                    </div> -->
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement("goHomeType"); ?>
 					</div>
@@ -126,11 +122,19 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 												<i class="fa fa-female member-star text-deactive" title="verified user"></i>
 											<?php } ?>
 										</div>
-										<span class="addtional-info top-info"><?php echo $rs['status_student']; ?></span>
-										<span class="addtional-info bottom-info">
+										<span class="addtional-info top-info">
+											<?php echo $rs['status_student']; ?>
+											<br>
 											<?php echo $tr->translate('ACADEMIC_YEAR')." "; echo !empty($rs['academic_year']) ? $rs['academic_year'] : "N/A"; ?>
-											<br />
+										</span>
+										<span class="addtional-info bottom-info">
 											<small><?php echo !empty($rs['goHomeTypeTitle']) ? $rs['goHomeTypeTitle'] : "N/A"; ?></small>
+											<br>
+											<a class="btn btn-xs btn-round rounded-pill btn-primary waves-effect m-t-10 waves-effect waves-light" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>">
+												<small>
+												<i class="ti ti-eye ti-xs"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?>
+												</small>
+											</a>
 										</span>
 									
 									  </div>
@@ -184,20 +188,27 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 											  </div>
 											</div>
 											<div class="row w-100 align-items-center">
-											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0 text-start">
-												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('DEGREE'); ?></small>
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('TUITION_FEE'); ?></small>
 											  </div>
 											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
-												<small class="text-truncate"><?php echo !empty($rs['degree']) ? $rs['degree'] : "N/A"; ?></small>
+												<small class="text-truncate"><?php echo !empty($rs['feeTitle']) ? $rs['feeTitle'].'('.$rs['academic_year'].')' : "N/A"; ?></small>
 											  </div>
 											</div>
-											
 											<div class="row w-100 align-items-center">
 											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
-												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('TEL'); ?></small>
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('DISCOUNT'); ?></small>
 											  </div>
 											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
-												<small class="text-truncate"><?php echo $rs['tel']; ?></small>
+												<small class="text-truncate"><?php echo !empty($rs['discountTitle']) ? $rs['discountTitle'] : "N/A"; ?></small>
+											  </div>
+											</div>
+											<div class="row w-100 align-items-center">
+											  <div class="col-sm-4 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-start">
+												<small class="mb-0 fw-normal text-truncate"><?php echo $tr->translate('STUDENT_TYPE'); ?></small>
+											  </div>
+											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
+												<small class="text-truncate"><?php echo !empty($rs['studentType']) ? $rs['studentType'] : "N/A"; ?></small>
 											  </div>
 											</div>
 											<div class="row w-100 align-items-center">
@@ -206,13 +217,6 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 											  </div>
 											  <div class="col-sm-8 d-flex justify-content-sm-end mt-0 ">
 												<small class="text-truncate"><?php echo !empty($rs['academicYearEnroll']) ? $rs['academicYearEnroll'] : "N/A"; ?></small>
-											  </div>
-											</div>
-											<div class="row w-100 align-items-center">
-											  <div class="col-sm-12 mb-1 mb-sm-0 mb-lg-1 mb-xxl-0 mt-0  text-center">
-												<a class="btn btn-xs btn-round rounded-pill btn-primary waves-effect m-t-10 waves-effect waves-light" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>">
-													<i class="ti ti-eye ti-xs"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?>
-												</a>
 											  </div>
 											</div>
 										</div>

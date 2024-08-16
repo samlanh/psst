@@ -119,7 +119,7 @@ class Application_Form_Frmtable
     						$columnSubTitle="subTitleRecord";
     						$processingBg="processingBg";
 							if($key=="titleRecord"){
-								$row_str.='<td>';
+								$row_str.='<td '.$clisc.'>';
 									$row_str.=$read;
 									$subTitle = empty($row[$columnSubTitle]) ? "" : $row[$columnSubTitle];
 									$row_str.='<small class="subtitle-row text-secondary">'.$subTitle.'</small>';
@@ -135,7 +135,7 @@ class Application_Form_Frmtable
 								$row_str.='<td '.$clisc.' >'.$read.'</td>';
 							}else if($key=="statusRecord"){
 								$read=$this->checkStatusRecord($read);
-								$row_str.='<td '.$clisc.' >'.$read.'</td>';
+								$row_str.='<td class="text-center" '.$clisc.' >'.$read.'</td>';
 							}else{
 								if($i > count($columns)) {
 									break;

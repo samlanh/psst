@@ -167,16 +167,17 @@ class Issue_Model_DbTable_DbScoreEng extends Zend_Db_Table_Abstract
     	if ($currentLang==1){
     		$colunmname='title';
     	}
-    
-    	$sql="SELECT seng.id_multiscore AS id,
-				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=seng.branch_id LIMIT 1) AS branch_name,
-				seng.title,
-				seng.for_date,
-				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
-				g.group_code,
-				(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-    			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
-				 ";
+		$branch = $dbp->getBranchDisplay();
+    	$sql="SELECT 
+				seng.id_multiscore AS id
+				,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=seng.branch_id LIMIT 1) AS branch_name
+				,seng.title
+				,seng.for_date
+				,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id
+				,g.group_code
+				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree
+    			,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
+			 ";
     	$sql.=$dbp->caseStatusShowImage("seng.status");
     	$sql.=" FROM `rms_score_eng` AS seng,
 						rms_group AS g

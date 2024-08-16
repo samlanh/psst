@@ -23,7 +23,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 						'time'=> '',
 						'group'=>'',
 						'degree'=> '',
-						'study_status'=>-1,
+						'student_status'=>-1,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}

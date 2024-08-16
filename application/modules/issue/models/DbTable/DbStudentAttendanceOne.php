@@ -18,28 +18,30 @@ class Issue_Model_DbTable_DbStudentAttendanceOne extends Zend_Db_Table_Abstract
     		$colunmname='title';
     		$label="name_kh";
     	}
-    	$sql="SELECT 
-			sad.`id`,
-			(SELECT branch_nameen FROM `rms_branch` WHERE rms_branch.br_id = sad.branchId LIMIT 1) AS branch_name,
-			(SELECT stu_code FROM rms_student AS s WHERE s.stu_id = sad.stu_id LIMIT 1) AS stu_code,
-			(SELECT stu_khname FROM rms_student AS s WHERE s.stu_id = sad.stu_id LIMIT 1) AS stu_name,
-			g.group_code AS group_name,
-			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
-			(SELECT rms_items.$colunmname FROM `rms_items` WHERE `rms_items`.`id`=`g`.`degree` AND `rms_items`.`type`=1 LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE `rms_itemsdetail`.`id`=`g`.`grade` AND `rms_itemsdetail`.`items_type`=1 LIMIT 1) AS grade,
-			CASE    
+		$branch = $dbp->getBranchDisplay();
+    	$sql="
+		SELECT 
+			sad.`id`
+			,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id = sad.branchId LIMIT 1) AS branch_name
+			,(SELECT stu_code FROM rms_student AS s WHERE s.stu_id = sad.stu_id LIMIT 1) AS stu_code
+			,(SELECT stu_khname FROM rms_student AS s WHERE s.stu_id = sad.stu_id LIMIT 1) AS stu_name
+			,g.group_code AS group_name
+			,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id
+			,(SELECT rms_items.$colunmname FROM `rms_items` WHERE `rms_items`.`id`=`g`.`degree` AND `rms_items`.`type`=1 LIMIT 1) AS degree
+			,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE `rms_itemsdetail`.`id`=`g`.`grade` AND `rms_itemsdetail`.`items_type`=1 LIMIT 1) AS grade
+			,CASE    
 				WHEN  sad.forSemester = 1 THEN '".$tr->translate("Semester 1")."'
 				WHEN  sad.forSemester = 2 THEN '".$tr->translate("Semester 2")."'
-			END AS forSemester ,
-			CASE    
+			END AS forSemester 
+			,CASE    
 				WHEN  sad.forSession = 1 THEN '".$tr->translate("MORNING")."'
 				WHEN  sad.forSession = 2 THEN '".$tr->translate("AFTERNOON")."'
 				WHEN  sad.forSession = 3 THEN '".$tr->translate("FULL_DAY")."'
-			END AS forSession ,
-			sad.`attendanceDate`,
-			CASE    
-			WHEN  sad.isCompleted = 0 THEN '".$tr->translate("PENDING")."'
-			WHEN  sad.isCompleted = 1 THEN '".$tr->translate("COMPLETED")."'
+			END AS forSession 
+			,sad.`attendanceDate`
+			,CASE    
+				WHEN  sad.isCompleted = 0 THEN '".$tr->translate("PENDING")."'
+				WHEN  sad.isCompleted = 1 THEN '".$tr->translate("COMPLETED")."'
 			END AS isCompleted 
 			";
 	$sql.=$dbp->caseStatusShowImage("sad.`status`");

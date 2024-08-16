@@ -1159,7 +1159,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		} else { // English
 			$label = "name_en";
 		}
-		$sql = "SELECT key_code AS id,$label AS name,key_code,$label AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 ";
+		$sql = "SELECT key_code AS id,$label AS name,key_code,$label AS view_name FROM rms_view WHERE `type`=$type AND `status`=1 order by key_code ASC ";
 		$rows = $db->fetchAll($sql);
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$options = array(-1 => $tr->translate("PAYMENT_METHOD"));

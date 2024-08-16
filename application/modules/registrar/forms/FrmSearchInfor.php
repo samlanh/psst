@@ -387,6 +387,18 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
 		$study_status->setMultiOptions($study_option);
 		$study_status->setValue($request->getParam("study_status"));
+
+		$student_status = new Zend_Dojo_Form_Element_FilteringSelect('student_status');
+		$student_status->setAttribs(array('dojoType'=>$this->filter,
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>false
+		));
+		$stud_option = $db->getViewById(5,1);
+		$stud_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
+		$student_status->setMultiOptions($stud_option);
+		$student_status->setValue($request->getParam("student_status"));
 		
 		$opt=array(-1=>"Select Payment By",1=>"Tution Fee",2=>"Service",3=>"Product");
 		$payment_by->setMultiOptions($opt);
@@ -633,6 +645,7 @@ class Registrar_Form_FrmSearchInfor extends Zend_Dojo_Form {
 				,$_is_current
 				,$goHomeType
 				,$receiptStatus
+				,$student_status
 				));
 		return $this;
 	} 

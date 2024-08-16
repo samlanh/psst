@@ -207,7 +207,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	$sql="SELECT 
     				p.id,
-    				p.cost,
+    				pl.costing,
     				SUM(pl.pro_qty) pro_qty
     			from
     				rms_itemsdetail as p,
@@ -215,7 +215,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     			where 
     				p.id = pl.pro_id
     				and p.status = 1
-    				and p.id = $pro_id ";
+    				and p.id = $pro_id AND pl.branch_id= $branch ";
     	$result = $db->fetchRow($sql);
     	
     	if(!empty($result)){
@@ -223,13 +223,13 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$total_qty_sum = $result['pro_qty'] + $qty;
     		
     		$last_cost = ($total_amount_in_stock + $total_amount_purchase)/$total_qty_sum;
-			
-    		$array = array(
-    				"cost"=>$last_cost,
-    				);
-    		
-    		$this->_name = "rms_itemsdetail";
-    		$where = " id = ".$result['id'];
+
+			$array = array(
+				"costing"=>$last_cost,
+				);
+		
+			$this->_name = "rms_product_location";
+			$where = " pro_id = ".$result['id'];
 			$this->update($array, $where);
     	}
     }

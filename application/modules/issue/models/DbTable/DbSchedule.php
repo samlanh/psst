@@ -11,16 +11,16 @@ class Issue_Model_DbTable_DbSchedule extends Zend_Db_Table_Abstract
     	$db = $this->getAdapter();
     	try{
     		$dbp = new Application_Model_DbTable_DbGlobal();
-    		
+    		$branch = $dbp->getBranchDisplay();
     		$sql="
     		SELECT 
 				gsch.id
-				,(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gsch.branch_id LIMIT 1) AS branch_name
+				,(SELECT b.$branch FROM `rms_branch` AS b WHERE  b.br_id=gsch.branch_id LIMIT 1) AS branch_name
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsch.academic_year LIMIT 1) AS years
 				,g.group_code AS group_code
 				,(SELECT st.title FROM `rms_schedulesetting` AS st WHERE st.id = gsch.schedule_setting LIMIT 1) AS sch_setting
 				,DATE_FORMAT(gsch.create_date,'%d-%m-%Y') AS create_date
-				,(SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id) AS user_name
+				,(SELECT first_name FROM rms_users WHERE rms_users.id = gsch.user_id LIMIT 1) AS user_name
 			
     		";
     		$sql.=$dbp->caseStatusShowImage("gsch.status");

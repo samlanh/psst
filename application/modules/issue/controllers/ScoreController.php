@@ -34,14 +34,14 @@ class Issue_ScoreController extends Zend_Controller_Action
 			$rs_rows = $db->getAllScore($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH", "EXAM_TITLE", "EXAM_TYPE", "FOR_SEMESTER", "FOR_MONTH", "STUDENT_GROUP", "STUDY_YEAR", "DEGREE", "GRADE", "SESSION", "ROOM_NAME", "USER", "STATUS");
+			$collumns = array("BRANCH", "EXAM_TITLE", "STUDY_YEAR", "STUDENT_GROUP", "GRADE", "SESSION", "ROOM_NAME", "USER", "STATUS");
 			//"SCORE_LEVEL",
 			$link = array(
 				'module' => 'issue', 'controller' => 'score', 'action' => 'edit',
 			);
 			$this->view->list = $list->getCheckList(10, $collumns, $rs_rows, array(
-				'branch_name' => $link, 'exam_type' => $link, 'title_score' => $link,
-				'for_semester' => $link, 'for_month' => $link, 'academic_id' => $link, 'degree' => $link, 'group_id' => $link
+				'branch_name' => $link, 'exam_type' => $link, 'titleRecord' => $link,
+				'for_semester' => $link, 'for_month' => $link, 'academic_id' => $link, 'grade' => $link, 'group_id' => $link
 			));
 		} catch (Exception $e) {
 			Application_Form_FrmMessage::message("Application Error");

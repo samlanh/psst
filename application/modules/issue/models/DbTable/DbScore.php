@@ -982,37 +982,44 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		$currentLang = $dbp->currentlang();
 		$colunmname = 'title_en';
 		$label = 'name_en';
-		$branch = "branch_nameen";
 		$month = "month_en";
 		if ($currentLang == 1) {
 			$colunmname = 'title';
 			$label = 'name_kh';
-			$branch = "branch_namekh";
 			$month = "month_kh";
 		}
-		$sql = "SELECT s.id,
-			(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
-			s.title_score,
-			CONCAT(COALESCE(`title_score`,''),' ',COALESCE(`title_score_en`,'')) AS title_score,
-			(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
-			s.for_semester,
-			CASE
-				WHEN s.exam_type = 2 THEN ''
-			ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
-			END 
-			as for_month,
+		$branch = $dbp->getBranchDisplay();
+		$examTypeQue = " (SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =s.exam_type LIMIT 1) ";
+		$monthQue = " (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) ";
+		$gradeQue = " (SELECT COALESCE(idd.shortcut,idd.$colunmname) FROM `rms_itemsdetail` AS idd WHERE idd.`id`=`g`.`grade` AND idd.items_type=1 LIMIT 1) ";
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "SELECT 
+			s.id
+			,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) As branch_name
 			
-			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
-			(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id,
-			(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree,
-			(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
-			(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id,
-			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, 
-			(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name
+			,CONCAT(COALESCE(`title_score`,''),' ',COALESCE(`title_score_en`,'')) AS titleRecord
+			,(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=g.academic_year LIMIT 1) AS academic_id
+			,(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id
+			,CONCAT(COALESCE(i.shortcut,i.$colunmname),' - ',$gradeQue) AS grade
+			,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id
+			,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
+			,(SELECT first_name FROM rms_users WHERE s.user_id=rms_users.id LIMIT 1 ) AS user_name
 		";
 		//s.max_score,
-		$sql .= $dbp->caseStatusShowImage("s.status");
-		$sql .= " FROM rms_score AS s,rms_group AS g WHERE s.group_id=g.id "; //AND s.status=1
+		$sql .= ",s.status AS statusRecord 
+				,CASE
+					WHEN s.exam_type = 3 THEN $examTypeQue
+					WHEN s.exam_type = 2 THEN CONCAT($examTypeQue,' ',s.for_semester)
+					ELSE CONCAT($monthQue,' ".$tr->translate('SEMESTER')." ',s.for_semester)
+				END  AS subTitleRecord
+		
+		";
+		$sql .= " 
+				FROM rms_score AS s JOIN rms_group AS g ON s.group_id = g.id
+					LEFT JOIN `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
+				WHERE 1 "; 
+			//AND s.status=1
 
 		$where = '';
 		$from_date = (empty($search['start_date'])) ? '1' : " s.date_input >= '" . $search['start_date'] . " 00:00:00'";

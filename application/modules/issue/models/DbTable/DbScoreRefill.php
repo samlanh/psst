@@ -16,31 +16,29 @@ class Issue_Model_DbTable_DbScoreRefill extends Zend_Db_Table_Abstract
 		$currentLang = $dbp->currentlang();
 		$colunmname = 'title_en';
 		$label = 'name_en';
-		$branch = "branch_nameen";
 		$month = "month_en";
-
 		$studentName = "CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,''))";
-
 		if ($currentLang == 1) {
 			$studentName ='st.stu_khname';
 			$colunmname = 'title';
 			$label = 'name_kh';
-			$branch = "branch_namekh";
 			$month = "month_kh";
 		}
-		$sql = "SELECT s.id,
-			(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) As branch_name,
-			(SELECT st.stu_code FROM `rms_student` AS st WHERE st.stu_id=ms.student_id LIMIT 1) AS stu_code, 
-			(SELECT $studentName FROM `rms_student` AS st WHERE st.stu_id=ms.student_id LIMIT 1) AS studentName, 
-			(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id,
-			CONCAT(s.title_score,' ',s.title_score_en) AS title_score,
-			(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type,
-			s.for_semester,
-			CASE
-				WHEN s.exam_type = 2 THEN ''
-			ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
-			END 
-			as for_month
+		$branch = $dbp->getBranchDisplay();
+		$sql = "
+			SELECT 
+				s.id
+				,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name
+				,(SELECT st.stu_code FROM `rms_student` AS st WHERE st.stu_id=ms.student_id LIMIT 1) AS stu_code
+				,(SELECT $studentName FROM `rms_student` AS st WHERE st.stu_id=ms.student_id LIMIT 1) AS studentName
+				,(SELECT group_code FROM rms_group WHERE id=s.group_id limit 1 ) AS  group_id
+				,CONCAT(s.title_score,' ',s.title_score_en) AS title_score
+				,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =s.exam_type LIMIT 1) as exam_type
+				,s.for_semester
+				,CASE
+					WHEN s.exam_type = 2 THEN ''
+					ELSE (SELECT $month FROM `rms_month` WHERE id=s.for_month  LIMIT 1) 
+				END  AS for_month
 		";
 		$sql .= $dbp->caseStatusShowImage("s.status");
 		$sql .= " FROM rms_score_monthly AS ms

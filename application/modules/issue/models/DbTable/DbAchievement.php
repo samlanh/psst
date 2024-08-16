@@ -10,12 +10,15 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
     }
     function getAllAchievement($search){
     	$db = $this->getAdapter();
+		
     	$dbp = new Application_Model_DbTable_DbGlobal();
+		$branch = $dbp->getBranchDisplay();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		
     	$sql = "
 			SELECT 
 				ac.id
-				,(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = ac.branchId LIMIT 1) AS branch_name
+				,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = ac.branchId LIMIT 1) AS branch_name
 				,CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS `group_code`
 				,CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentName
 				,(SELECT first_name FROM rms_users WHERE rms_users.id = ac.userId LIMIT 1) AS userName

@@ -313,8 +313,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				sd.grade,
 				sd.feeId AS fee_id,
 				sd.academic_year,
-				(SELECT `title` FROM `rms_items` WHERE `id`=sd.degree AND TYPE=1 LIMIT 1) AS degree_title,
-				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
+				(SELECT `title` FROM `rms_items` WHERE `id`=dc.degreeId AND TYPE=1 LIMIT 1) AS degree_title,
+				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=dc.grade AND items_type=1 LIMIT 1) AS grade_title,
 				COALESCE((SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1),'') AS groupCode,
 				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
 				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
@@ -327,7 +327,6 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				AND s.stu_id = sd.stu_id
 				AND s.`status`=1 
 				AND s.customer_type = 1 
-				AND sd.stop_type=0
 				AND s.stu_id=sd.stu_id
 				AND sd.is_current=1
 				AND dc.isCurrent=1 
@@ -340,13 +339,13 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}
 		if(!empty($search['academic_year'])){
-			$sql.=" AND sd.academic_year =".$search['academic_year'];
+			$sql.=" AND dc.academic_year =".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
-			$sql.=" AND sd.degree =".$search['degree'];
+			$sql.=" AND dc.degreeId =".$search['degree'];
 		}
 		if(!empty($search['grade'])){
-			$sql.=" AND sd.grade =".$search['grade'];
+			$sql.=" AND dc.grade =".$search['grade'];
 		}
 		if(!empty($search['academicYearEnroll'])){
 			$sql.=" AND s.academicYearEnroll =".$search['academicYearEnroll'];
@@ -354,6 +353,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['studentType'])){
 			$sql.=" AND s.studentType =".$search['studentType'];
 		}
+		//AND sd.stop_type=0
 		$where="";
 		if(!empty($search['adv_search'])){
 			$s_where = array();
@@ -366,8 +366,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		
-		$where.=" GROUP BY s.stu_id,sd.degree,sd.grade";
-		$where.=" ORDER BY sd.degree,sd.grade,s.stu_id DESC ";
+		$where.=" ORDER BY dc.degreeId,dc.grade,s.stu_id DESC ";
 
 		if(!empty($search['limit'])){
 			$where.=" LIMIT ".$search['limit'];

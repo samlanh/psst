@@ -13,17 +13,19 @@ class Issue_Model_DbTable_DbLetterofpraise extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
 		$branch = $dbp->getBranchDisplay();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$sql = "SELECT c.id,
-			(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name,
-			(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code,
-			c.academic_year,
-			c.grade,
-			c.issue_date,
-			CASE
-				WHEN  c.for_type = 1 THEN '". $tr->translate("KHMER")."'
-				WHEN  c.for_type = 2 THEN '". $tr->translate("ENGLISH")."'
-			END AS for_type,
-			(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
+    	$sql = "
+			SELECT 
+				c.id
+				,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = c.branch_id LIMIT 1) AS branch_name
+				,(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = c.group_id LIMIT 1) AS group_code
+				,c.academic_year
+				,c.grade
+				,c.issue_date
+				,CASE
+					WHEN  c.for_type = 1 THEN '". $tr->translate("KHMER")."'
+					WHEN  c.for_type = 2 THEN '". $tr->translate("ENGLISH")."'
+				END AS for_type
+				,(SELECT first_name FROM rms_users WHERE rms_users.id = c.user_id LIMIT 1) AS user
     	";
     	$sql.=$dbp->caseStatusShowImage("c.status");
     	$sql.=" FROM `rms_issue_letterpraise` AS c WHERE 1 ";

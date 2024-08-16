@@ -814,7 +814,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) StuAmountUsed,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AmountStopUsed,		
-					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
+					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),' ',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
 					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
 					ds.createDate
 		 FROM rms_dis_setting AS ds WHERE id=" . $db->quote($id);
@@ -824,7 +824,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$row = $db->fetchRow($sql);
 		return $row;
 	}
-	function getStudentDiscountById($id){
+	function getStudentDiscountById($id,$search){
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 
@@ -847,12 +847,31 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 				,(SELECT $degree FROM `rms_items` WHERE rms_items.id=ds.degreeId LIMIT 1 ) AS degree
 				,(SELECT $grade FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=ds.grade LIMIT 1) AS grade
 				,COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear
-				,COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
-				
-			FROM  `rms_discount_student` AS ds 
-			INNER JOIN rms_student AS s ON ds.studentId = s.stu_id
-		";
-		$sql.=" WHERE ds.isCurrent=1 AND  ds.discountGroupId = $id  ";
+				,COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType 
+				,ds.isCurrent ";
+
+		$sql .=" FROM  `rms_discount_student` AS ds 
+					INNER JOIN rms_student AS s ON ds.studentId = s.stu_id
+				";
+		$sql.=" WHERE  ds.discountGroupId = $id  ";
+
+		if(!empty($search['academicYearEnroll'])){
+			$sql .= " AND s.academicYearEnroll = ".$search['academicYearEnroll'];
+		}
+		if(!empty($search['studentType'])){
+			$sql .= " AND s.studentType = ".$search['studentType'];
+		}
+		if(!empty($search['degree'])){
+			$sql .= " AND ds.degreeId = ".$search['degree'];
+		}
+		if(!empty($search['grade'])){
+			$sql .= " AND ds.grade = ".$search['grade'];
+		}
+		if($search['status_search'] > -1 ){
+			$sql .= " AND ds.isCurrent = ".$search['status_search'];
+		}
+		
+		$sql.=" ORDER By ds.degreeId,ds.grade ASC , ds.isCurrent DESC";
 		return $db->fetchAll($sql);
 	}
     

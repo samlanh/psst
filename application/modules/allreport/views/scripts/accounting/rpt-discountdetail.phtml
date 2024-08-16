@@ -18,6 +18,50 @@
     		<div class="col-sm-4 text-right"></div>
     	</div>
     </div>
+	<div class="x_panel">
+		<div class="x_title">
+			<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("FILTERING");?> <small><?php echo $tr->translate("STUDENT");?></small></h2>
+			<ul class="nav navbar-right panel_toolbox">
+				<li>
+				<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+				</li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+		<div class="x_content" style="display: none;" >
+			<form action="" dojoType="dijit.form.Form" method="post">
+				<script type="dojo/method" event="onSubmit">
+					if (this.validate()) {
+						loadingBlock();
+						return true;
+					} else {
+						return false;
+					}
+				</script>
+				<div class="form-group">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('degree'); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<input id="grade" />
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('academicYearEnroll'); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('studentType'); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('status_search'); ?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<button class="button-class button-primary" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
 	<div id="divPrint">
 		<style type="text/css">
 			.style{
@@ -65,6 +109,15 @@
 				white-space: normal;
 				width:200px;
 				word-break: break-all;
+			}
+			.bg-grey{
+				background: #ccc;
+				height: 22px; 
+				font-weight:600;
+				text-align: center;
+			}
+			.redBold{
+				color: red;
 			}
 			@media print{
 						@page{
@@ -133,9 +186,10 @@
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['discName']; ?></strong></div></td>
 								<td width="27%">&nbsp;</td>
 								<td width="10%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DISCOUNT_OPTION");?>
+									<?php echo $tr->translate("DISCOUNT_PERIOD");?>
 								</td>
-								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountForOption']; ?></strong></div></td>
+								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountPeriod']; ?></strong></div></td>
+								
 							</tr>
 							<tr>
 								<td width="13%" style="white-space: nowrap;">
@@ -144,9 +198,9 @@
 								<td width="25%" ><div  class="value"> : &nbsp;<strong><?php echo $this->rr['DisValueType']; ?></strong></div></td>
 								<td width="27%">&nbsp;</td>
 								<td width="10%" style="white-space: nowrap;">
-									<?php echo $tr->translate("DISCOUNT_PERIOD");?>
+									
 								</td>
-								<td width="25%" ><div  class="value"> : &nbsp; <strong><?php echo $this->rr['discountPeriod']; ?></strong></div></td>
+								<td width="25%" ><div  class="value"> </div></td>
 							</tr>
 
 						</table>
@@ -162,21 +216,36 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('GRADE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
 								  </tr>
 							  </thead>
 							 <?php 
+								 $oldGrade='';
 							 	if(!empty($this->row)){foreach($this->row as $key=>$rs){
-							 ?>
+
+									if($oldGrade!=$rs['grade']){ 
+							 ?> 
+								
+								<tr class="style hover bg-grey" >
+									<td colspan="10"><?php echo $tr->translate("GRADE");?> : <?php echo $rs['grade']; ?></td>
+								</tr>
+							
+							<?php } 
+
+								$oldGrade = $rs['grade'];
+							?>
+
 							  <tr class=" hover style"  align="left" >
 								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" ><?php echo $rs['stu_code']; ?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" > <?php echo $rs['stu_name']; ?></td>
-									<td data-label="<?php echo $tr->translate("SEX");?>" > <?php if($rs['sex']==1){ echo $tr->translate("MALE_SHORT"); }else{ echo $tr->translate("FEMALE_SHORT"); }; ?></td>
+									<td data-label="<?php echo $tr->translate("SEX");?>" align="center"> <?php if($rs['sex']==1){ echo $tr->translate("MALE_SHORT"); }else{ echo $tr->translate("FEMALE_SHORT"); }; ?></td>
 									<td data-label="<?php echo $tr->translate("Tel");?>" > <?php echo $rs['tel']; ?></td>
 									<td data-label="<?php echo $tr->translate("DEGREE");?>" ><?php echo $rs['degree']; ?></td>
 									<td data-label="<?php echo $tr->translate("GRADE");?>" ><?php echo $rs['grade']; ?></td>
 									<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR_ENROLL");?>" ><?php echo $rs['startYear']; ?></td>
 									<td data-label="<?php echo $tr->translate("STUDENT_TYPE");?>" ><?php echo $rs['studentType']; ?></td>
+									<td data-label="<?php echo $tr->translate("STATUS");?>" align="center" class=" <?php if($rs['isCurrent']==0){ echo "redBold"; } ?> " ><?php if($rs['isCurrent']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DACTIVE"); }; ?></td>
 							  </tr>
 							  <?php  }} ?>
 						</table>
@@ -196,62 +265,52 @@
 dojo.require("dojo.data.ItemFileWriteStore"); 
 var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
 dojo.ready(function(){
+	
 	new dijit.form.FilteringSelect({
-		required: false,  
-		autoComplete: false,
-		queryExpr: "*${0}*",                      
-	    id: "studentId",
-	    name: "studentId",  
-	    tabindex: "1",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>", 
-	    
-	}, "studentId");
-
-	new dijit.form.FilteringSelect({
-		store: disname_store,
-		required: false,   
-		autoComplete: false,
-		queryExpr: "*${0}*",  
-		id: "discountId",
-		name: "discountId", 
-		value:"<?php echo $this->adv_search['discountId'];?>",          
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		queryExpr: "*${0}*",
+		autoComplete:false,                     
+		required: false,                     
+		id: "grade",
+		name: "grade",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 		onChange: function() {  
-		}
-	}, "discountId");
 
-	branchId = dijit.byId('branch_id');
-	branchId.on('change',function(evt){
-		branchId = dijit.byId('branch_id').get('value');
-		if(branchId==''){
-			dijit.byId("branch_id").focus();
-			return false;
 		}
-		getAllstudentBranch();
-		
-	});
+	}, "grade");
 
-	getAllstudentBranch();
+	oldGrade='<?php echo $this->search['grade'];?>';
+
+	getallGrade();
 });
 
-function getAllstudentBranch(){
-	dijit.byId("studentId").reset();
-	branchId = dijit.byId('branch_id').get('value');
-	if(branchId==''){
-		 dijit.byId('branch_id').focus();
-		 return false;
-	}
-	
-	var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
-	
-	contentData = {
-			'branchId':branchId,
-			'customerType':1
+var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+var urlGetGrade = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+function getallGrade(){
+	dijit.byId('grade').attr('value','');   
+	dept_id = dijit.byId('degree').get('value');
+		if(dept_id==''){
+			return false;
+		}
+		dojo.xhrPost({
+			url:urlGetGrade,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
+				},
+			handleAs:"json",
+			load: function(data) {
+				grade_store  = getDataStorefromJSON('id','name', data);
+			    dijit.byId('grade').set('store',grade_store);  
+				if(oldGrade>0){
+					dijit.byId('grade').attr('value',oldGrade);
+				} 
+			},
+			error: function(err) {
 			}
-	selectedId='<?php echo $this->adv_search['studentId'];?>';
-	getAllStudentByBranch(urlGet,contentData,selectedId);
+		});
 }
 
 var row=0;

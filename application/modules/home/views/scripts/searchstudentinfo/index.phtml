@@ -87,13 +87,17 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 		<div class="card-box search-list">
 			<?php if (!empty($this->row)) foreach ($this->row as $key => $rs) { 
 			
+				$btnClass = "btn-primary";
 				$classStudentStatus = "bg-gradient-blue";
 				if ($rs['is_subspend'] == 1 or $rs['is_subspend'] == 2  or $rs['is_subspend'] == 5) {
 					$classStudentStatus = "bg-gradient-red";
+					$btnClass = "btn-danger";
 				}else if ($rs['is_subspend'] == 3) {
 					$classStudentStatus = "bg-gradient-orange";
+					$btnClass = "btn-warning";
 				}else if ($rs['is_subspend'] == 4) {
 					$classStudentStatus = "bg-gradient-green";
+					$btnClass = "btn-success";
 				}
 			?>
 				<div class="col-md-4 col-sm-6 col-xs-6 mt-10">
@@ -130,9 +134,9 @@ $dbreportGr = new Allreport_Model_DbTable_DbRptGroup();
 										<span class="addtional-info bottom-info">
 											<small><?php echo !empty($rs['goHomeTypeTitle']) ? $rs['goHomeTypeTitle'] : "N/A"; ?></small>
 											<br>
-											<a class="btn btn-xs btn-round rounded-pill btn-primary waves-effect m-t-10 waves-effect waves-light" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>">
+											<a class="btn btn-xs btn-round rounded-pill <?php echo $btnClass;?> waves-effect m-t-10 waves-effect waves-light" href="<?php echo $this->baseUrl() . "/home/searchstudentinfo/student-detail/id/" . $rs['stu_id']; ?>">
 												<small>
-												<i class="ti ti-eye ti-xs"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?>
+												<i class="fa fa-eye"></i> <?php echo $tr->translate('VIEW_DETAIL'); ?>
 												</small>
 											</a>
 										</span>

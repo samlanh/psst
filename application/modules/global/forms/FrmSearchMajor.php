@@ -364,6 +364,22 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 			'placeholder'=>$this->tr->translate("SEARCH_DISCOUNT_TITLE")
 			));
 		$_title->setValue($request->getParam("title"));
+
+		$_degree = new Zend_Dojo_Form_Element_FilteringSelect('degree');
+		$_degree->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("DEGREE"),
+				'class'=>'fullside',
+				'autoComplete'=>"false",
+				'queryExpr'=>'*${0}*',
+				'required'=>'false',
+				'onchange'=>'getallGrade();'
+		));
+		$_degree->setValue($request->getParam('degree'));
+		$opt_deg = array(''=>$this->tr->translate("DEGREE"));
+		$opt_degree = $db->getAllItems(1);//degree
+		if(!empty($opt_degree))foreach ($opt_degree As $rows)$opt_deg[$rows['id']]=$rows['name'];
+		$_degree->setMultiOptions($opt_deg);
+		
 		
 		$_arr_opt_branch = array(""=>$this->tr->translate("PLEASE_SELECT_BRANCH"));
 		$optionBranch = $db->getAllBranch();
@@ -392,6 +408,31 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
 
+		$academicYearEnroll = new Zend_Dojo_Form_Element_FilteringSelect('academicYearEnroll');
+		$academicYearEnroll->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$this->tr->translate("SELECT_ENROLL_YEAR"),
+				'class'=>'fullside',
+				'required'=>'false',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		$academicYearEnroll->setValue($request->getParam("academicYearEnroll"));
+		$rows =  $db->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_ENROLL_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$academicYearEnroll->setMultiOptions($opt);
+
+		$studentType = new Zend_Dojo_Form_Element_FilteringSelect("studentType");	
+		$studentType->setAttribs(array(
+				'dojoType'=>$this->filter,
+				'required'=>'false',
+				'class'=>'fullside',
+				'autoComplete'=>'false',
+				'queryExpr'=>'*${0}*',
+		));
+		$studentType->setMultiOptions($db->getViewByType(40,1));
+
 		$frm = new Accounting_Form_FrmDiscount();
 		$newfrm = $frm->FrmDiscountsetting();
 		
@@ -399,7 +440,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$discountPeriod = $newfrm->getElement('discountPeriod');
 		$academic_year = $newfrm->getElement('academic_year');
 
-		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year));
+		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year,$academicYearEnroll,$studentType,$_degree));
 		
 	
 		return $this;

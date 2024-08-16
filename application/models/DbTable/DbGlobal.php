@@ -3999,7 +3999,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if ($option != null) {
 			$request = Zend_Controller_Front::getInstance()->getRequest();
 			if ($request->getActionName() == 'index' or $request->getModuleName() == 'allreport') {
-				$options = array(-1 => $this->tr->translate("SELECT_TYPE"));
+				$options = array(-1 => $this->tr->translate("SELECT_ACADEMIC_YEAR"));
 			}
 			if (!empty($result))
 				foreach ($result as $row) {

@@ -290,19 +290,40 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 	function rptDiscountdetailAction(){
 		$id=$this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptPayment();
+
+		if ($this->getRequest()->isPost()) {
+			$search = $this->getRequest()->getPost();
+		
+		} else {
+			$search = array(
+				'status_search' => -1,
+				'degree' => '',
+				'grade' => '',
+				'academicYearEnroll' => '',
+				'studentType' => '',
+			
+			);
+		}
+		$this->view->search = $search;
+
 		$rs = $db->getDiscountsetById($id);
 		if(empty($rs)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/accounting/rpt-discountsetting");
 		}
-	
 		$this->view->rr = $rs;
-		$row=$db->getStudentDiscountById($id);
-		$this->view->row = $row;
 
+		$row=$db->getStudentDiscountById($id,$search);
+		$this->view->row = $row;
+		
 		$branch_id = empty($rs['branch_id'])?null:$rs['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
+
+		$frm = new Global_Form_FrmSearchMajor();
+		$frms =$frm->FrmsearchDiscount();
+		Application_Model_Decorator::removeAllDecorator($frms);
+		$this->view->form_search = $frms;
 	
 	}
 	function submitlistAction(){

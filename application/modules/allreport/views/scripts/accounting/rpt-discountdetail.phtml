@@ -213,7 +213,6 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('SEX');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('Tel');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('DEGREE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('GRADE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_TYPE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
@@ -242,7 +241,6 @@
 									<td data-label="<?php echo $tr->translate("SEX");?>" align="center"> <?php if($rs['sex']==1){ echo $tr->translate("MALE_SHORT"); }else{ echo $tr->translate("FEMALE_SHORT"); }; ?></td>
 									<td data-label="<?php echo $tr->translate("Tel");?>" > <?php echo $rs['tel']; ?></td>
 									<td data-label="<?php echo $tr->translate("DEGREE");?>" ><?php echo $rs['degree']; ?></td>
-									<td data-label="<?php echo $tr->translate("GRADE");?>" ><?php echo $rs['grade']; ?></td>
 									<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR_ENROLL");?>" ><?php echo $rs['startYear']; ?></td>
 									<td data-label="<?php echo $tr->translate("STUDENT_TYPE");?>" ><?php echo $rs['studentType']; ?></td>
 									<td data-label="<?php echo $tr->translate("STATUS");?>" align="center" class=" <?php if($rs['isCurrent']==0){ echo "redBold"; } ?> " ><?php if($rs['isCurrent']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DACTIVE"); }; ?></td>

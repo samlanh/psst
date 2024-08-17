@@ -309,26 +309,17 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				    WHEN s.sex =2  THEN 'F'
 				    ELSE ''
 				END AS sex,
-				sd.degree,
-				sd.grade,
-				sd.feeId AS fee_id,
-				sd.academic_year,
+				dc.degreeId as degree,
+				dc.grade,
 				(SELECT `title` FROM `rms_items` WHERE `id`=dc.degreeId AND TYPE=1 LIMIT 1) AS degree_title,
 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=dc.grade AND items_type=1 LIMIT 1) AS grade_title,
-				COALESCE((SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1),'') AS groupCode,
 				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
 				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
 			  FROM 
 			  	rms_student AS s,
-			  	rms_group_detail_student AS sd,
 			  	rms_discount_student AS dc
-		 	  WHERE 
-				sd.itemType=1 
-				AND s.stu_id = sd.stu_id
-				AND s.`status`=1 
+		 	  WHERE s.`status`=1 
 				AND s.customer_type = 1 
-				AND s.stu_id=sd.stu_id
-				AND sd.is_current=1
 				AND dc.isCurrent=1 
 				AND s.`stu_id` = dc.studentId ";
 
@@ -398,40 +389,44 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 							$this->update($data_gro, $where);
 
 							//Check Exist Student Discount
-							$param = array(
-								'discountGroupId'=> $toDiscountId,
-								'studentId'      => $_data['stu_id_'.$k],
-							);
-							$existDiscount=$this->IfExistDiscount($param);
+							if($_data['discountStatus']==1){  
 
-							if(empty($existDiscount)){  /// empty Student Discount
-								
-								if(!empty($_data['toDiscountId'])){
-									$arr = array(
-										'discountGroupId'=>$toDiscountId,
-										'studentId'      =>$_data['stu_id_'.$k],
-										'degreeId'       =>$_data['degree_'.$k],
-										'grade'          =>$_data['grade_'.$k],
-										'isCurrent'		 => 1,
-										'createDate'     => date("Y-m-d"),
-										'modifyDate'     => date("Y-m-d"),
-										'userId'         => $this->getUserId()
-									);
-									$this->_name ='rms_discount_student';
-									$this->insert($arr);
-								}
-							}else{  /// exist Student Discount
-
-								$this->_name = 'rms_discount_student';
-								$data_gro = array(
-										'isCurrent'=> 1,
+								$param = array(
+									'discountGroupId'=> $toDiscountId,
+									'studentId'      => $_data['stu_id_'.$k],
 								);
-								$where = ' studentId = '.$_data['stu_id_'.$k]."  AND isCurrent=0 AND discountGroupId = $toDiscountId ";
-								$this->update($data_gro, $where);
-							}	
+								$existDiscount=$this->IfExistDiscount($param);
+
+								if(empty($existDiscount)){  /// empty Student Discount
+									
+									if(!empty($_data['toDiscountId'])){
+										$arr = array(
+											'discountGroupId'=>$toDiscountId,
+											'studentId'      =>$_data['stu_id_'.$k],
+											'degreeId'       =>$_data['degree_'.$k],
+											'grade'          =>$_data['grade_'.$k],
+											'isCurrent'		 => 1,
+											'createDate'     => date("Y-m-d"),
+											'modifyDate'     => date("Y-m-d"),
+											'userId'         => $this->getUserId()
+										);
+										$this->_name ='rms_discount_student';
+										$this->insert($arr);
+									}
+								}else{  /// exist Student Discount
+
+									$this->_name = 'rms_discount_student';
+									$data_gro = array(
+											'isCurrent'=> 1,
+									);
+									$where = ' studentId = '.$_data['stu_id_'.$k]."  AND isCurrent=0 AND discountGroupId = $toDiscountId ";
+									$this->update($data_gro, $where);
+								}	
+							}
 						}
 					}
 				}
+
 			}elseif($_data['type']==1){ /// Add Student to Discount
 
 				$toDiscountId = empty($_data['toDiscountId'])?0:$_data['toDiscountId'];
@@ -604,8 +599,10 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$sql = "SELECT ds.id, 
 					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
-					discountTitle,
-					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
+					discountTitle
+					,$sqlDiscountFor AS discountForText
+					,(SELECT v.$colunmname FROM `rms_view` AS v WHERE v.type=38 AND v.key_code=ds.discountForType LIMIT 1) AS discountForOption
+					,(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,	
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) IsUsed,

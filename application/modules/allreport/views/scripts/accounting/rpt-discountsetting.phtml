@@ -264,8 +264,10 @@ var row=0;
 				var m = "clicked: " + key;
 				if(key=="detail"){
 					url='<?php echo $this->baseUrl()."/allreport/accounting/rpt-discountdetail/id/";?>';
+					newPageTitle="<?php echo $tr->translate("RPT_DISCOUNT_SETTING_DETAIL");?>";
 				}
-				gotoAction();
+				addTab(newPageTitle,url+row+'?inFrame=true');
+				//gotoAction();
 			},
 			items:{
 				"detail": {name: "<?php echo $tr->translate("RPT_DISCOUNT_SETTING_DETAIL");?>", icon: "fa-list", accesskey: "c"},

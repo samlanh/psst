@@ -679,6 +679,14 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$updateOption->setMultiOptions($updateopt);
 		$updateOption->setValue($request->getParam("updateOption"));
 
+		$discountStatus=  new Zend_Dojo_Form_Element_FilteringSelect('discountStatus');
+		$discountStatus->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$discountstatusopt = array(
+				1=>$this->tr->translate("USING"),
+				0=>$this->tr->translate("STOP_USED"));
+		$discountStatus->setMultiOptions($discountstatusopt);
+		$discountStatus->setValue($request->getParam("discountStatus"));
+
 		$limit=  new Zend_Dojo_Form_Element_FilteringSelect('limit');
 		$limit->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$limitopt = array(
@@ -750,7 +758,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$academicYearEnroll,
 				$updateOption,
 				$limit,
-				$termOption
+				$termOption,
+				$discountStatus
 				)
 			);
 		return $this;

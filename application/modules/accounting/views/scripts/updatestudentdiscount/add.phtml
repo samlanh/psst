@@ -41,13 +41,15 @@ a.btnstyle:hover{color:#eee;}
 							}
 						}		
 					
-						toDiscountId = dijit.byId('toDiscountId').get('value');
-						if(toDiscountId=='' || toDiscountId==-1){
-							alert('<?php echo $tr->translate("SELECT_DISCOUNT");?>');
-							dijit.byId('toDiscountId').focus();
-							return false;
+						discountStatus = dijit.byId('discountStatus').get('value');
+						if(discountStatus==1){
+							toDiscountId = dijit.byId('toDiscountId').get('value');
+							if(toDiscountId=='' || toDiscountId==-1){
+								alert('<?php echo $tr->translate("SELECT_DISCOUNT");?>');
+								dijit.byId('toDiscountId').focus();
+								return false;
+							}
 						}
-
 						loadingBlock();	
 						return true;
 	   				}else {
@@ -157,7 +159,7 @@ a.btnstyle:hover{color:#eee;}
 																		<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
 																	</div> 
 																</div>	
-																<div class="form-group">
+																<div class="form-group academic_display">
 																	<div class="col-md-12 col-sm-12 col-xs-12">
 																		<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?> </label>
 																		<div class="col-md-7 col-sm-7 col-xs-12">
@@ -312,7 +314,17 @@ a.btnstyle:hover{color:#eee;}
 												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("NEW_DISCOUNT_INFORMATION");?></p>
 											</div> 
 										</div>
-										<div class="form-group">
+
+										<div class="form-group adiscountStatus_display">
+											<div class="col-md-12 col-sm-12 col-xs-12">
+												<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DISCOUNT_STATUS");?> </label>
+												<div class="col-md-7 col-sm-7 col-xs-12">
+													<?php echo $frm->getElement("discountStatus");?>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group new_discount_display">
 											<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NEW_DISCOUNT");?> :
 											</label>
 											<div class="col-md-7 col-sm-7 col-xs-12">
@@ -458,6 +470,11 @@ dojo.ready(function(){
 		 OptionChange();
   	});
 
+	var discountStatus = dijit.byId('discountStatus');
+	discountStatus.on('change', function(evt) {
+		changeDisocuntStatus();
+  	});
+
 	 oldDiscountSettengId='<?php echo $this->search['discountSettengId'];?>';
 	 oldGrade='<?php echo $this->search['grade'];?>';
 	 getAllDiscountSetting();
@@ -529,7 +546,7 @@ function getStudentFromGroup(){
 					+'<td ><?php echo $tr->translate('SEX');?></td>'
 					+'<td ><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>'
 					+'<td ><?php echo $tr->translate('STUDENT_TYPE');?></td>'
-					+'<td ><?php echo $tr->translate('GROUP');?></td>'
+					+'<td ><?php echo $tr->translate('GRADE');?></td>'
 					+'</tr>'
 				+'</thead>';
 			if(respone!=""){
@@ -550,7 +567,7 @@ function getStudentFromGroup(){
 					tem += '<td align="center">&nbsp;'+respone[i].sex+'</td>';
 					tem += '<td align="center">'+respone[i].startYear+'</td>';
 					tem += '<td align="center">'+respone[i].studentType+'</td>';
-					tem += '<td align="center">'+respone[i].groupCode+'</td>';
+					tem += '<td align="center">'+respone[i].grade_title+'</td>';
 					tem += '</tr>';
 					if($("#identity").val()!="") {
 						var identity = $("#identity").val();
@@ -730,19 +747,34 @@ function getNewDiscountInfoById(){
 		updateOption = dijit.byId("updateOption").get("value");
 		dijit.byId('type').attr('value',updateOption);
 
+		$(".academic_display").css("display", "flow-root");
 		$(".curent_discount_display").css("display", "flow-root");
+		$(".adiscountStatus_display").css("display", "flow-root");
+
+		
 		if (updateOption == 1) {
 			$(".curent_discount_display").css("display", "none");
-		} 
+			$(".adiscountStatus_display").css("display", "none");
+		}
+		if(updateOption == 2){
+			$(".academic_display").css("display", "none");
+		}
+		
 	}
 
-	// function doPrintProfle(keyid) {
-	// 	window.frames["print_frame"].document.body.innerHTML=dojo.byId(keyid).innerHTML;
-	//     window.frames["print_frame"].window.focus();
-	//     window.frames["print_frame"].window.print();
-	//     hideDialog();
-					
-	// }
+	function changeDisocuntStatus() {
+		discountStatus = dijit.byId("discountStatus").get("value");
+		
+		$(".new_discount_display").css("display", "flow-root");
+
+		if (discountStatus == 0) {
+			$(".new_discount_display").css("display", "none");
+		}
+		
+		
+	}
+
+	
 	
 function doPrintRowCheck() {
 	var table = document.getElementById('divPrint');
@@ -832,7 +864,7 @@ function doPrintRowCheck() {
 					<td><?php echo $tr->translate('SEX');?></td>
 					<td><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>
 					<td><?php echo $tr->translate('STUDENT_TYPE');?></td>
-					<td><?php echo $tr->translate('GROUP');?></td>
+					<td><?php echo $tr->translate('GRADE');?></td>
 				</tr>	
 			</thead>
 			<tbody >

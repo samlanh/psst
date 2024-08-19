@@ -1639,6 +1639,9 @@ $(document).ready(function() {
 		credit_memo = dijit.byId('credit_memo').get('value');
 		credit_memo = isNaN(credit_memo) ? 0 : credit_memo;
 		netPaidAmount = PaidAmount - credit_memo;
+		if(netPaidAmount<0){
+			netPaidAmount=0;
+		}
 
 		dijit.byId('paid_amount').attr('value', netPaidAmount.toFixed(2));
 		balance = totalPayment - netPaidAmount;

@@ -635,7 +635,6 @@ function getallGrade(){
 			url:urlGetGrade,
 			content:{
 				'dept_id':dept_id,
-				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {
@@ -746,6 +745,7 @@ function getNewDiscountInfoById(){
 	function OptionChange() {
 		updateOption = dijit.byId("updateOption").get("value");
 		dijit.byId('type').attr('value',updateOption);
+		dijit.byId('discountStatus').attr('value',1);
 
 		$(".academic_display").css("display", "flow-root");
 		$(".curent_discount_display").css("display", "flow-root");

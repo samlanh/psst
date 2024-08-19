@@ -408,6 +408,20 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$_status->setMultiOptions($_status_opt);
 		$_status->setValue($request->getParam("status_search"));
 
+		$discount_status=  new Zend_Dojo_Form_Element_FilteringSelect('discount_status');
+		$discount_status->setAttribs(array(
+			'dojoType'=>$this->filter,
+			"class"=>"fullside",
+			'required'=>'false',
+			'placeholder'=>$this->tr->translate("DISCOUNT_STATUS"),
+		));
+		$discount_status_opt = array(
+				''=>$this->tr->translate("DISCOUNT_STATUS"),
+				1=>$this->tr->translate("USING"),
+				0=>$this->tr->translate("STOP_USED"));
+		$discount_status->setMultiOptions($discount_status_opt);
+		$discount_status->setValue($request->getParam("status_search"));
+
 		$academicYearEnroll = new Zend_Dojo_Form_Element_FilteringSelect('academicYearEnroll');
 		$academicYearEnroll->setAttribs(array('dojoType'=>$this->filter,
 				'placeholder'=>$this->tr->translate("SELECT_ENROLL_YEAR"),
@@ -440,7 +454,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$discountPeriod = $newfrm->getElement('discountPeriod');
 		$academic_year = $newfrm->getElement('academic_year');
 
-		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year,$academicYearEnroll,$studentType,$_degree));
+		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year,$academicYearEnroll,$studentType,$_degree,$discount_status));
 		
 	
 		return $this;

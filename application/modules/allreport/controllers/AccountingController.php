@@ -296,7 +296,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		
 		} else {
 			$search = array(
-				'status_search' => -1,
+				'discount_status' => '',
 				'degree' => '',
 				'grade' => '',
 				'academicYearEnroll' => '',

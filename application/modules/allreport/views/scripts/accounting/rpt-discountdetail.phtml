@@ -52,7 +52,7 @@
 						<?php echo $frm->getElement('studentType'); ?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement('status_search'); ?>
+						<?php echo $frm->getElement('discount_status'); ?>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<button class="button-class button-primary" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
@@ -210,9 +210,9 @@
 								    <td scope="col">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
 								    <td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_CODE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('NAME_ENGLISH');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('SEX');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('Tel');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('DEGREE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_TYPE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('STATUS');?>&nbsp;</td>
@@ -238,12 +238,12 @@
 								    <td data-label="<?php echo $tr->translate("N_O");?>"  style="text-align: center;"><?php echo $key+1;?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_CODE");?>" ><?php echo $rs['stu_code']; ?></td>
 								    <td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" > <?php echo $rs['stu_name']; ?></td>
+									<td data-label="<?php echo $tr->translate("NAME_ENGLISH");?>" > <?php echo $rs['stu_name_en']; ?></td>
 									<td data-label="<?php echo $tr->translate("SEX");?>" align="center"> <?php if($rs['sex']==1){ echo $tr->translate("MALE_SHORT"); }else{ echo $tr->translate("FEMALE_SHORT"); }; ?></td>
 									<td data-label="<?php echo $tr->translate("Tel");?>" > <?php echo $rs['tel']; ?></td>
-									<td data-label="<?php echo $tr->translate("DEGREE");?>" ><?php echo $rs['degree']; ?></td>
 									<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR_ENROLL");?>" ><?php echo $rs['startYear']; ?></td>
 									<td data-label="<?php echo $tr->translate("STUDENT_TYPE");?>" ><?php echo $rs['studentType']; ?></td>
-									<td data-label="<?php echo $tr->translate("STATUS");?>" align="center" class=" <?php if($rs['isCurrent']==0){ echo "redBold"; } ?> " ><?php if($rs['isCurrent']==1){ echo $tr->translate("ACTIVE"); }else{ echo $tr->translate("DACTIVE"); }; ?></td>
+									<td data-label="<?php echo $tr->translate("STATUS");?>" align="center" class=" <?php if($rs['isCurrent']==0){ echo "redBold"; } ?> " ><?php if($rs['isCurrent']==1){ echo $tr->translate("USING"); }else{ echo $tr->translate("STOP_USED"); }; ?></td>
 							  </tr>
 							  <?php  }} ?>
 						</table>
@@ -251,7 +251,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" width="100%">
-						<?php echo $this->rsfooteracc;?>
+						<?php //echo $this->rsfooteracc;?>
 					</td>
 				</tr>
 			</table>
@@ -296,7 +296,6 @@ function getallGrade(){
 			url:urlGetGrade,
 			content:{
 				'dept_id':dept_id,
-				'noaddnew':1
 				},
 			handleAs:"json",
 			load: function(data) {

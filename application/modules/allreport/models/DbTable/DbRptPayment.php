@@ -314,6 +314,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,
+					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id LIMIT 1 ) AS StuAmount,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) StuAmountUsed,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AmountStopUsed,		
 					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
@@ -812,8 +813,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,
-					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) StuAmountUsed,
-					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AmountStopUsed,		
+					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id LIMIT 1 ) AS StuAmount,
+					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) AS  StuAmountUsed,
+					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AS AmountStopUsed,		
 					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),' ',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
 					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
 					ds.createDate
@@ -841,7 +843,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    s.stu_id,
 				s.stu_code AS stu_code
 			
-				,CONCAT(s.stu_khname,'- ',s.last_name,' ' ,s.stu_enname) AS stu_name
+				,s.stu_khname AS stu_name
+				,CONCAT(s.last_name,' ' ,s.stu_enname) AS stu_name_en
 				,s.sex AS sex
 				,tel
 				,(SELECT $degree FROM `rms_items` WHERE rms_items.id=ds.degreeId LIMIT 1 ) AS degree
@@ -867,8 +870,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		if(!empty($search['grade'])){
 			$sql .= " AND ds.grade = ".$search['grade'];
 		}
-		if($search['status_search'] > -1 ){
-			$sql .= " AND ds.isCurrent = ".$search['status_search'];
+		if(!empty($search['discount_status'])){
+			$sql .= " AND ds.isCurrent = ".$search['discount_status'];
 		}
 		
 		$sql.=" ORDER By ds.degreeId,ds.grade ASC , ds.isCurrent DESC";

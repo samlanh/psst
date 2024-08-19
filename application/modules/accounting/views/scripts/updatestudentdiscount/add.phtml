@@ -289,6 +289,12 @@ a.btnstyle:hover{color:#eee;}
 											table#table tr td {
 												padding: 3px 1px;
 											}
+											.red{
+												color:red;
+											}
+											.yellow{
+												color:#e9a43f;
+											}
 										</style>
 										<div id="data_table"  class="col-md-12 col-sm-12 col-xs-12">
 										</div>
@@ -547,14 +553,22 @@ function getStudentFromGroup(){
 					+'<td ><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>'
 					+'<td ><?php echo $tr->translate('STUDENT_TYPE');?></td>'
 					+'<td ><?php echo $tr->translate('GRADE');?></td>'
+					+'<td ><?php echo $tr->translate('STUDENT_STATUS');?></td>'
 					+'</tr>'
 				+'</thead>';
 			if(respone!=""){
 				num=0;
+				
 				all_student = respone.length;
 				for(var i=0;i<respone.length;i++){
 					inx = i+1;
-					tem += '<tr style="border:1px solid #000;">';
+					color= '';
+					if(respone[i].stop_type==1){
+						color= 'red';
+					}else if(respone[i].stop_type==3 ){
+						color= 'yellow';
+					}
+					tem += '<tr class="hover" style="border:1px solid #000;">';
 					tem += '<td align="center"><input style="height: 13px;" class="print-checkbox"  type="checkBox" checked="checked" value="'+inx+'" onclick="setValue('+respone.length+');" name="checkbox'+inx+'" id="checkbox'+inx+'"/></td>';
 					tem += '<td align="center">'+inx+' ';
 					tem += '<input type="hidden"  name="stu_id_'+inx+'" id="stu_id_'+inx+'" value="'+respone[i].stu_id+'" />';
@@ -568,6 +582,7 @@ function getStudentFromGroup(){
 					tem += '<td align="center">'+respone[i].startYear+'</td>';
 					tem += '<td align="center">'+respone[i].studentType+'</td>';
 					tem += '<td align="center">'+respone[i].grade_title+'</td>';
+					tem += '<td align="center" class="'+color+'" >'+respone[i].status_student+'</td>';
 					tem += '</tr>';
 					if($("#identity").val()!="") {
 						var identity = $("#identity").val();
@@ -865,6 +880,8 @@ function doPrintRowCheck() {
 					<td><?php echo $tr->translate('ACADEMIC_YEAR_ENROLL');?></td>
 					<td><?php echo $tr->translate('STUDENT_TYPE');?></td>
 					<td><?php echo $tr->translate('GRADE');?></td>
+					<td><?php echo $tr->translate('STUDENT_STATUS');?></td>
+					
 				</tr>	
 			</thead>
 			<tbody >

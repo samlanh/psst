@@ -28,7 +28,7 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 			$rs_rows = $db->getAllStudentDiscount($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH", "ACADEMIC_YEAR", "TITLE", "DISCOUNT_FOR_TYPE", "DISCOUNT_OPTION",  "DISCOUNT_TYPE", "DIS_MAX","STUDENT_TOTAL","USING","STOP_USED", "DISCOUNT_PERIOD", "BY_USER", "CREATE_DATE", "STATUS");
+			$collumns = array("BRANCH", "ACADEMIC_YEAR", "TITLE", "DISCOUNT_FOR_TYPE", "DISCOUNT_TYPE", "DIS_MAX","STUDENT_TOTAL","USING","STOP_USED", "DISCOUNT_OPTION","DISCOUNT_PERIOD", "BY_USER", "CREATE_DATE", "STATUS");
 		
 			$this->view->list = $list->getCheckList(
 				10,

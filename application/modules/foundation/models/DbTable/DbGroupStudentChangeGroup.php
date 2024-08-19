@@ -420,8 +420,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 						$where=" id=".$_data['from_group'];
 						$this->update($group, $where);
 					}
-		
-					
 				}
 			}
 			$_db->commit();
@@ -628,6 +626,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					test_id,
 					test_setting_id,
 					test_type,
+					academicYearEnroll,
+					goHomeType,
+					oldStudentId,
 					user_id				
 				)
 					SELECT
@@ -702,6 +703,9 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					test_id,
 					test_setting_id,
 					test_type,
+					academicYearEnroll,
+					goHomeType,
+					$stu_id,
 					$userId
 		FROM rms_student WHERE stu_id=$stu_id LIMIT 1";
 		 $db->query($sql);

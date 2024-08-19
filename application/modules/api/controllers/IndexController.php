@@ -58,7 +58,7 @@ class Api_IndexController extends Zend_Controller_Action
     		}else if ($GetData['url']=="singlecontact"){
     			$_dbAction->SinglecontactAction($GetData);
     		}else if ($GetData['url']=="course"){
-    				$_dbAction->coursePostAction($GetData);
+    			$_dbAction->coursePostAction($GetData);
     		}else if ($GetData['url']=="calendar"){
     			$_dbAction->calendarAction($GetData);
     		}else if ($GetData['url']=="getholiday"){

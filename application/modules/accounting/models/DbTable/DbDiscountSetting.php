@@ -246,7 +246,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=sd.grade AND items_type=1 LIMIT 1) AS grade_title,
 				COALESCE((SELECT `group_code` FROM `rms_group` WHERE `id`=sd.group_id  LIMIT 1),'') AS groupCode,
 				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
-				COALESCE((SELECT name_kh FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
+				COALESCE((SELECT name_kh FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType,
+				(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=sd.stop_type LIMIT 1) AS status_student,
+				sd.stop_type
 			  FROM 
 			    rms_student AS s,
 			  	rms_group_detail_student AS sd
@@ -310,19 +312,24 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				    WHEN s.sex =2  THEN 'F'
 				    ELSE ''
 				END AS sex,
-				dc.degreeId as degree,
-				dc.grade,
+
+				( SELECT sd.degree FROM rms_group_detail_student AS sd WHERE sd.stu_id = dc.studentId AND sd.itemType=1  AND sd.is_current=1 AND sd.stop_type=0 AND is_pass =0 limit 1 ) AS degree,
+				( SELECT sd.grade FROM rms_group_detail_student AS sd WHERE  sd.stu_id = dc.studentId AND sd.itemType=1  AND sd.is_current=1 AND sd.stop_type=0 AND is_pass =0 limit 1 ) AS grade,
+
 				(SELECT `title` FROM `rms_items` WHERE `id`=dc.degreeId AND TYPE=1 LIMIT 1) AS degree_title,
 				(SELECT CONCAT(`title`) FROM `rms_itemsdetail` WHERE `id`=dc.grade AND items_type=1 LIMIT 1) AS grade_title,
 				COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear,
-				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType
+				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType,
+				(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=dd.stop_type LIMIT 1) AS status_student,
+				dd.stop_type
 			  FROM 
-			  	rms_student AS s,
-			  	rms_discount_student AS dc
+			  	rms_student AS s INNER JOIN 
+			  	rms_discount_student AS dc ON s.`stu_id` = dc.studentId
+				INNER JOIN rms_group_detail_student AS dd ON ( dd.stu_id = dc.studentId AND dd.itemType=1 AND dd.degree= dc.degreeId AND dd.grade= dc.grade ) 
 		 	  WHERE s.`status`=1 
 				AND s.customer_type = 1 
 				AND dc.isCurrent=1 
-				AND s.`stu_id` = dc.studentId ";
+			";
 
 		if(!empty($search['discountSettengId'])){
 			$sql.=" AND dc.discountGroupId =".$search['discountSettengId'];
@@ -345,6 +352,10 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['studentType'])){
 			$sql.=" AND s.studentType =".$search['studentType'];
 		}
+		if($search['student_status']>-1){
+			$sql.=" AND dd.stop_type =".$search['student_status'];
+		}
+		
 		//AND sd.stop_type=0
 		$where="";
 		if(!empty($search['adv_search'])){
@@ -357,8 +368,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$s_where[]=" CONCAT(s.last_name,s.stu_enname) LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		
-		$where.=" ORDER BY dc.degreeId,dc.grade,s.stu_id DESC ";
+		$where.=" GROUP BY dc.studentId ";
+		$where.=" ORDER BY dc.degreeId,dc.grade ASC ";
 
 		if(!empty($search['limit'])){
 			$where.=" LIMIT ".$search['limit'];
@@ -602,13 +613,13 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
 					discountTitle
 					,$sqlDiscountFor AS discountForText
-					,(SELECT v.$colunmname FROM `rms_view` AS v WHERE v.type=38 AND v.key_code=ds.discountForType LIMIT 1) AS discountForOption
 					,(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,	
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id LIMIT 1 ) studentAmount,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) IsUsed,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) IsStopUsed,
+					(SELECT v.$colunmname FROM `rms_view` AS v WHERE v.type=38 AND v.key_code=ds.discountForType LIMIT 1) AS discountForOption,
 					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
 					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
 					ds.createDate";

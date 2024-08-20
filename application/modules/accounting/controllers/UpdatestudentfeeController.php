@@ -28,10 +28,8 @@ class Accounting_UpdatestudentfeeController extends Zend_Controller_Action {
     		$db = new Accounting_Model_DbTable_DbUpdateStudenFee();
     		$rs_rows= $db->getAllTuitionFee($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE_STUDY","IS_MULTY_STUDY","TYPE","AMOUNT_STUDENT","School Option","CREATED_DATE","PROCESS_TYPE","BY_USER","STATUS");
-    		$link=array(
-    			'module'=>'accounting','controller'=>'updatestudentfee','action'=>'edit',
-    		);
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TYPE_STUDY","IS_MULTY_STUDY","TYPE","AMOUNT_STUDENT","LEARNING","STOP_STUDY","OLD_FEE","School Option","CREATED_DATE","PROCESS_TYPE","BY_USER","STATUS");
+    		
     		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array());
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("APPLICATION_ERROR");

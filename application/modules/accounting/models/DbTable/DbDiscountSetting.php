@@ -403,9 +403,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 							$where = ' studentId = '.$_data['stu_id_'.$k]."  AND isCurrent=1 AND discountGroupId = $oldDiscountSettengId ";
 							$this->update($data_gro, $where);
 
-							//Check Exist Student Discount
 							if($_data['discountStatus']==1){  
-
+								
+								//Check Exist Student Discount
 								$param = array(
 									'discountGroupId'=> $toDiscountId,
 									'studentId'      => $_data['stu_id_'.$k],
@@ -432,7 +432,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 
 									$this->_name = 'rms_discount_student';
 									$data_gro = array(
-											'isCurrent'=> 1,
+											'isCurrent'	 => 1,
+											'degreeId'   =>$_data['degree_'.$k],
+											'grade'      =>$_data['grade_'.$k],
 									);
 									$where = ' studentId = '.$_data['stu_id_'.$k]."  AND isCurrent=0 AND discountGroupId = $toDiscountId ";
 									$this->update($data_gro, $where);

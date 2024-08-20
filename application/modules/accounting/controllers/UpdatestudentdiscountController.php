@@ -76,8 +76,6 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 					'discountSettengId'  => '',
 					'updateOption'  	 => '',
 					'limit'  			 => '',
-					
-					
 				);
 			}
 			$this->view->search=$search;

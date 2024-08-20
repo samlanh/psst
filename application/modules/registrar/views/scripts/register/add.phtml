@@ -1644,12 +1644,11 @@ $(document).ready(function() {
 		}
 
 		dijit.byId('paid_amount').attr('value', netPaidAmount.toFixed(2));
-		balance = totalPayment - netPaidAmount;
-		balanceDue = balance - credit_memo;
-		if (balanceDue < 0) {
-			balanceDue = 0;
+		balance = totalPayment - netPaidAmount - credit_memo;
+		if (balance < 0) {
+			balance = 0;
 		}
-		dijit.byId('balance_due').attr('value', balanceDue.toFixed(2));
+		dijit.byId('balance_due').attr('value', balance.toFixed(2));
 		readMoneyInKhmer(netPaidAmount.toFixed(2));
 	}
 

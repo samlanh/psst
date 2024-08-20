@@ -352,10 +352,13 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if(!empty($search['studentType'])){
 			$sql.=" AND s.studentType =".$search['studentType'];
 		}
-		if($search['student_status']>-1){
-			$sql.=" AND dd.stop_type =".$search['student_status'];
+		if(!empty($search['student_status'])){
+			if($search['student_status']==1){
+				$sql.=" AND dd.stop_type = 0 ";
+			}elseif($search['student_status']==2){
+				$sql.=" AND dd.stop_type > 0 ";
+			}
 		}
-		
 		//AND sd.stop_type=0
 		$where="";
 		if(!empty($search['adv_search'])){

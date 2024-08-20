@@ -292,7 +292,7 @@ a.btnstyle:hover{color:#eee;}
 											}
 											table#table tr.header-row td {
 												background: #02014a;
-												font-size: 14px;
+												font-size: 12px;
 												font-weight: bold;
 												color: #fff;
 												padding: 5px 1px;
@@ -491,6 +491,11 @@ dojo.ready(function(){
 	discountStatus.on('change', function(evt) {
 		changeDisocuntStatus();
   	});
+
+	var student_status = dijit.byId('student_status');
+	student_status.on('change', function(evt) {
+		changeStudentStatus();
+	});
 
 	 oldDiscountSettengId='<?php echo $this->search['discountSettengId'];?>';
 	 oldGrade='<?php echo $this->search['grade'];?>';
@@ -798,8 +803,13 @@ function getNewDiscountInfoById(){
 		if (discountStatus == 0) {
 			$(".new_discount_display").css("display", "none");
 		}
-		
-		
+	}
+	function changeStudentStatus() {
+		student_status = dijit.byId("student_status").get("value");
+		dijit.byId("discountStatus").attr("value",1)
+		if(student_status==2){
+			dijit.byId("discountStatus").attr("value",0)
+		}
 	}
 
 	
@@ -860,7 +870,7 @@ function doPrintRowCheck() {
 			}
 			table#table tr.header-row td {
 				background: #02014a;
-				font-size: 14px;
+				font-size: 12px;
 				font-weight: bold;
 				color: #fff;
 				padding: 5px 1px;
@@ -876,6 +886,12 @@ function doPrintRowCheck() {
 			}
 			.center{
 				text-align:center;
+			}
+			.red{
+				color:red;
+			}
+			.yellow{
+				color:#e9a43f;
 			}
         </style>
       </head>

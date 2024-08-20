@@ -225,19 +225,6 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$study_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
 		$study_status->setMultiOptions($study_option);
 		$study_status->setValue($request->getParam("study_status"));
-
-		$student_status = new Zend_Dojo_Form_Element_FilteringSelect('student_status');
-		$student_status->setAttribs(array('dojoType'=>$this->filter,
-				'class'=>'fullside',
-				'autoComplete'=>"false",
-				'queryExpr'=>'*${0}*',
-				'required'=>false
-		));
-		$stud_option = $_dbgb->getViewById(5,1);
-		$stud_option[-1]=$this->tr->translate("PLEASE_SELECT_STATUS");
-		$student_status->setMultiOptions($stud_option);
-		$student_status->setValue($request->getParam("student_status"));
-		
 		
 		
 		$changegroup_id = new Zend_Dojo_Form_Element_FilteringSelect('changegroup_id');
@@ -713,6 +700,14 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 			);
 		$limit->setMultiOptions($limitopt);
 		$limit->setValue($request->getParam("limit"));
+
+		$student_status=  new Zend_Dojo_Form_Element_FilteringSelect('student_status');
+		$student_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$statusopt = array(
+				1=>$this->tr->translate("LEARNING"),
+				2=>$this->tr->translate("STOP_STUDY"));
+		$student_status->setMultiOptions($statusopt);
+		$student_status->setValue($request->getParam("student_status"));
 		
 		
 		$termOption=  new Zend_Dojo_Form_Element_FilteringSelect('termOption');

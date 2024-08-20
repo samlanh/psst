@@ -877,5 +877,103 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$sql.=" ORDER By ds.degreeId,ds.grade ASC , ds.isCurrent DESC";
 		return $db->fetchAll($sql);
 	}
+
+	public function getFeeById($id)
+	{
+		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentLang = $dbp->currentlang();
+		$branch= $dbp->getBranchDisplay();
+
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    
+    	$field = 'name_en';
+    	$str = 'title_eng';
+    	if ($currentLang==1){
+    		$field = 'name_kh';
+    		$str = 'title_kh';
+    	}
+    	$sql = "SELECT 
+					t.id
+					,(SELECT b.$branch from rms_branch AS b WHERE b.br_id =t.branch_id LIMIT 1) AS branch
+					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM rms_academicyear AS ac WHERE ac.id=t.academic_year LIMIT 1) AS academic
+					,(SELECT $str FROM rms_studytype WHERE rms_studytype.id =t.term_study  LIMIT 1) AS study_type
+					,CASE is_multi_study
+						WHEN 1 THEN '".$tr->translate("MULTY_PROGRAM")."'
+						WHEN 0 THEN '".$tr->translate("ONE_PROGRAM_ONLY")."'
+					END is_multistudy
+					,t.generation
+					,(SELECT sch.title FROM `rms_schooloption` AS sch WHERE sch.id=t.school_option LIMIT 1) AS school_option
+					,t.create_date
+					,(SELECT v.$field FROM rms_view AS v WHERE v.type=12 and v.key_code=t.is_finished LIMIT 1) AS is_finished
+			";
+    	
+    	$sql.=$dbp->caseStatusShowImage("t.status");
+    	$sql.=" FROM `rms_tuitionfee` AS t
+    		WHERE t.type=1 AND t.id	= ". $db->quote($id);
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql .= $dbp->getAccessPermission('t.branch_id');
+		$sql .= " LIMIT 1 ";
+		$row = $db->fetchRow($sql);
+		return $row;
+	}
+	function getStudentFeeDetailById($id,$search){
+		$db = $this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+
+		$currentLang = $dbp->currentlang();
+		
+		$grade = 'title_en';
+		$degree = 'title_en';
+		if ($currentLang == 1) {
+			$grade = 'title';
+			$degree = 'title';
+		}
+		$sql = "SELECT 
+					s.stu_id,
+					s.stu_code AS stu_code
+
+					,s.stu_khname AS stu_name
+					,CONCAT(s.last_name,' ' ,s.stu_enname) AS stu_name_en
+					,s.sex AS sex
+					,tel
+					,COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=s.academicYearEnroll LIMIT 1),'') AS startYear
+					,COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType 
+					,COALESCE((SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1),'') AS academic_year
+					,(SELECT $degree FROM `rms_items` WHERE rms_items.id=ds.degree LIMIT 1 ) AS degree
+					,(SELECT $grade  FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=ds.grade LIMIT 1) AS grade
+					,(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=ds.stop_type LIMIT 1) AS status_student
+					,ds.stop_type
+					,ds.is_pass ";
+
+		$sql .=" FROM  `rms_group_detail_student` AS ds 
+					INNER JOIN rms_student AS s ON ds.stu_id = s.stu_id
+				";
+		$sql.=" WHERE ds.itemType=1 AND ds.is_current=1  AND ds.feeId  = $id  ";
+
+		if(!empty($search['academicYearEnroll'])){
+			$sql .= " AND s.academicYearEnroll = ".$search['academicYearEnroll'];
+		}
+		if(!empty($search['studentType'])){
+			$sql .= " AND s.studentType = ".$search['studentType'];
+		}
+		if(!empty($search['degree'])){
+			$sql .= " AND ds.degree = ".$search['degree'];
+		}
+		if(!empty($search['grade'])){
+			$sql .= " AND ds.grade = ".$search['grade'];
+		}
+		if(!empty($search['student_status'])){
+			if($search['student_status'] == 1){
+				$sql .= " AND ds.stop_type = 0 ";
+			}elseif($search['student_status'] == 2){
+				$sql .= " AND ds.stop_type > 0 ";
+			}
+		}
+		
+		$sql.=" ORDER By ds.degree,ds.grade ASC ";
+		return $db->fetchAll($sql);
+	}
     
 }   

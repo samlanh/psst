@@ -5093,7 +5093,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				FROM `rms_dis_setting` AS ds
 					LEFT JOIN rms_discount_student disc
 					ON ds.`id`=disc.`discountGroupId`
-				WHERE ds.isCurrent=1 ";
+				WHERE ds.isCurrent=1 AND disc.isCurrent=1";
 		}
 		
 		//$secondCondition = "  ds.discountFor=2 ";
@@ -5121,7 +5121,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	    $WherediscountPromotion = " AND ".$from_date." AND ".$to_date;
 
 		$sql.=" OR (ds.discountFor=3 AND discountPeriod=2 $WherediscountPromotion)";
-		
+		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 
 		if (!empty($data['fetchAll'])) {
 			$result =  $this->getAdapter()->fetchAll($sql);

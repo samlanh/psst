@@ -447,6 +447,15 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		));
 		$studentType->setMultiOptions($db->getViewByType(40,1));
 
+		$student_status=  new Zend_Dojo_Form_Element_FilteringSelect('student_status');
+		$student_status->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$statusopt = array(
+				''=>$this->tr->translate("STUDENT_STATUS"),
+				1=>$this->tr->translate("LEARNING"),
+				2=>$this->tr->translate("STOP_STUDY"));
+		$student_status->setMultiOptions($statusopt);
+		$student_status->setValue($request->getParam("student_status"));
+
 		$frm = new Accounting_Form_FrmDiscount();
 		$newfrm = $frm->FrmDiscountsetting();
 		
@@ -454,7 +463,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 		$discountPeriod = $newfrm->getElement('discountPeriod');
 		$academic_year = $newfrm->getElement('academic_year');
 
-		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year,$academicYearEnroll,$studentType,$_degree,$discount_status));
+		$this->addElements(array($_title,$_status,$_branch_id,$discountFor,$discountPeriod,$academic_year,$academicYearEnroll,$studentType,$_degree,$discount_status,$student_status));
 		
 	
 		return $this;

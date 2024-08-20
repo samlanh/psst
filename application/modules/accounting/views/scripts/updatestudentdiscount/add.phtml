@@ -779,6 +779,7 @@ function getNewDiscountInfoById(){
 		updateOption = dijit.byId("updateOption").get("value");
 		dijit.byId('type').attr('value',updateOption);
 		dijit.byId('discountStatus').attr('value',1);
+	
 
 		$(".academic_display").css("display", "flow-root");
 		$(".curent_discount_display").css("display", "flow-root");
@@ -788,6 +789,8 @@ function getNewDiscountInfoById(){
 		if (updateOption == 1) {
 			$(".curent_discount_display").css("display", "none");
 			$(".adiscountStatus_display").css("display", "none");
+
+			dijit.byId('student_status').attr('value',1);
 		}
 		if(updateOption == 2){
 			$(".academic_display").css("display", "none");

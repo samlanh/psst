@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate('UPDATE_STUDENT_FEE')); 
 	$frm =  $this->form_search;
 	$frm_fee = $this->frm_fee;
+	$urlDetail = $this->baseUrl()."/allreport/accounting/rpt-studentfee-detail/id/";
 ?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
 	<div class="card-content collapse show">
@@ -97,6 +98,32 @@ function getAllAcademicByBranch(){
 	getAllYear(url_getacademic,contentData,selectedId);
 	
 	
+}
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="reprint"){
+				url='<?php echo $urlDetail;?>';
+				newPageTitle="<?php echo $tr->translate("RPT_STUDENT_FEE_DETAIL");?>";
+			}
+			addTab(newPageTitle,url+row+'?inFrame=true');
+		//	gotoAction();
+		},
+		items: {
+			"reprint": {name: "<?php echo $tr->translate("RPT_STUDENT_FEE_DETAIL");?>", icon: "fa-list", accesskey: "e"},
+		}
+	});
+});
+function setrowdata(index){
+	row = index;
+}
+var recordid ='';
+function gotoAction(){
+	window.location.href =url+row;
 }
 
 </script>

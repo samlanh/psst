@@ -322,13 +322,20 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType,
 				(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=dd.stop_type LIMIT 1) AS status_student,
 				dd.stop_type
-			  FROM 
+			   FROM 
 			  	rms_student AS s INNER JOIN 
 			  	rms_discount_student AS dc ON s.`stu_id` = dc.studentId
-				INNER JOIN rms_group_detail_student AS dd ON ( dd.stu_id = dc.studentId AND dd.itemType=1 AND dd.degree= dc.degreeId AND dd.grade= dc.grade ) 
+				INNER JOIN rms_group_detail_student AS dd ON dd.stu_id = dc.studentId 
+				INNER JOIN `rms_dis_setting` AS d ON d.id = dc.discountGroupId
 		 	  WHERE s.`status`=1 
+			  	 AND dd.itemType=1
+				 AND dd.degree= dc.degreeId 
+				 AND dd.grade= dc.grade 
+				 AND d.academicYear = dd.academic_year
+				
 				AND s.customer_type = 1 
 				AND dc.isCurrent=1 
+				
 			";
 
 		if(!empty($search['discountSettengId'])){

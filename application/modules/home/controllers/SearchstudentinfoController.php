@@ -135,6 +135,7 @@ class Home_SearchstudentinfoController extends Zend_Controller_Action {
 			$branch_id = empty($student['branch_id'])?1:$student['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooter = $frm->getFooterAccount(2);
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

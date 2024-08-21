@@ -883,4 +883,64 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 	}
+	public function rptDuplicateStudyAction(){
+		
+		if($this->getRequest()->isPost()){
+			$search=$this->getRequest()->getPost();
+			$search['issetGroup']=0;
+		}
+		else{
+			$search = array(
+					'adv_search' 	=> "",
+					'group' 		=> "",
+					'branch_id' 	=> "",
+					'academic_year'	=> "",
+					'grade' 		=> "",
+					'school_option' => "",
+					'teacher' 		=> "",
+					'room'=>0,
+					'degree'=>0,
+					'study_status'=>-1,
+					'issetGroup'=>0,
+			);
+			$dbGb = new Application_Model_DbTable_DbGlobal();
+			$last = $dbGb->getLatestAcadmicYear();
+			if(!empty($last)){
+				$search["academic_year"] = empty($last["id"]) ? 0 : $last["id"];
+			}
+		}
+		
+		$group= new Allreport_Model_DbTable_DbRptAllStudent();
+		$this->view->studentRs = $group->getAllDuplicatedStudyInfo($search);
+		
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
+		$this->view->search = $search;
+	
+		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+		$frm = new Application_Form_FrmGlobal();
+		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+		$this->view->rsfooter = $frm->getFooterAccount(2);
+		
+	}
+	function getStuDuplicateAction(){
+		if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    		$row = $db->getStuDuplicateStudyList($data);
+    		print_r(Zend_Json::encode($row));
+    		exit();
+    	}
+	}
+	function submitAdjustmentAction(){
+		if($this->getRequest()->isPost()){
+    		$data=$this->getRequest()->getPost();
+    		$db = new Allreport_Model_DbTable_DbRptAllStudent();
+    		$row = $db->adjustmentStudentInfo($data);
+    		print_r(Zend_Json::encode($row));
+    		exit();
+    	}
+	}
 }

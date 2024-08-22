@@ -5685,15 +5685,19 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					ac.*
 					,b.$branch AS branchName
 					,g.group_code AS  groupCode
+					,g.degree AS  degreeId
 					,(SELECT CONCAT(acad.fromYear,'-',acad.toYear) FROM rms_academicyear AS acad WHERE acad.id=g.academic_year LIMIT 1) AS academicYear
 					,(SELECT rms_items.$colunmName FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
 					,(SELECT rms_itemsdetail.$colunmName FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 					,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
 					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
-			
+					,s.stu_code AS stuCode
+					,s.stu_khname AS stuNameKH
+					,CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS stuNameEng
+					,s.photo
 					
 				FROM 
-					`rms_student_achievement` AS ac
+					`rms_student_achievement` AS ac JOIN rms_student AS s ON s.stu_id = ac.studentId 
 					LEFT JOIN `rms_group` AS g ON g.id = ac.groupId
 					LEFT JOIN `rms_branch` AS b ON b.br_id = ac.branchId
 				WHERE ac.status = 1

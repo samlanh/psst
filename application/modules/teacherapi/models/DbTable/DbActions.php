@@ -34,6 +34,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($_data);
+
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){
@@ -131,6 +135,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -162,6 +170,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -193,6 +205,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -254,6 +270,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -533,6 +553,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -564,6 +588,10 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();
@@ -595,6 +623,9 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
 			header('Content-Type: application/json');
 			print_r(Zend_Json::encode($arrResult));
 			exit();

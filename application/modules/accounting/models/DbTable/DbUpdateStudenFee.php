@@ -35,6 +35,8 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 					END is_multistudy,
 					t.generation,
 					(SELECT count(ds.stu_id) FROM rms_group_detail_student AS ds WHERE ds.feeId = t.id AND ds.itemType=1 AND ds.is_current=1  LIMIT 1 ) AS amountStudent,
+					(SELECT COUNT(ds.stu_id) FROM rms_group_detail_student AS ds WHERE ds.feeId = t.id AND ds.itemType=1 AND ds.is_current=1 AND ds.stop_type=0  LIMIT 1 ) AS amountUsed,
+					(SELECT COUNT(ds.stu_id) FROM rms_group_detail_student AS ds WHERE ds.feeId = t.id AND ds.itemType=1 AND ds.is_current=1 AND ds.stop_type>0  LIMIT 1 ) AS amountStop,
 					(SELECT title FROM `rms_schooloption` WHERE rms_schooloption.id=t.school_option LIMIT 1) as school_option,
 					t.create_date,
 					(SELECT $field from rms_view where type=12 and key_code=t.is_finished) as is_finished,

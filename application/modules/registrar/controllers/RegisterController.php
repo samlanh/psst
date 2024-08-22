@@ -15,6 +15,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     	defined('ENABLE_DATE_PAYMENT') || define('ENABLE_DATE_PAYMENT', Setting_Model_DbTable_DbGeneral::geValueByKeyName('payment_date'));
     }
     public function indexAction(){
+		
     	try{
     		$db = new Registrar_Model_DbTable_DbRegister();
     		if($this->getRequest()->isPost()){

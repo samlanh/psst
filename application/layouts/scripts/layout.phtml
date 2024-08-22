@@ -285,7 +285,7 @@ if ($module != 'default') {
 				<!-- page content -->
 				<div class="right_col <?php echo $padLeftContent;?>" role="main" >
 					<div class="right-conten" style="min-height: 570px;">
-						<div id="tt" class="easyui-tabs  <?php echo $classContentInframe;?>" style="width:100%; ">
+						<div id="tt" class="easyui-tabs  <?php echo $classContentInframe;?>" style="width:100%;">
 							<div id="firstTabs" title="Home" >
 								<div style="clear:both;"></div>
 								<?php if ($module != 'allreport' and ($module != 'home' or $controller == "crm" or $controller == "studentpermission") and $module != 'default') { ?>
@@ -380,11 +380,11 @@ if ($module != 'default') {
 				  minHeight: 300, 
 				});
 				
-				var currentTitle = $(document).attr('title');
-				$('#firstTabs').attr('title', currentTitle);
-				var currentTab = $('#tt').tabs();
-				$(".tabs-header ul.tabs" ).addClass( "hiddenBlog" );
-	
+				
+				initialTab();
+				$( "#menu_toggle" ).on( "click", function() {
+					resizeTab();
+				});
 			});
 
 			var urlReload = '<?php echo $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'reloadr')); ?> ';
@@ -575,6 +575,13 @@ if ($module != 'default') {
 
 			<?php } ?>
 			
+			function initialTab(){
+				var currentTitle = $(document).attr('title');
+				$('#firstTabs').attr('title', currentTitle);
+				var currentTab = $('#tt').tabs();
+				$(".tabs-header ul.tabs" ).addClass( "hiddenBlog" );
+				
+			}
 			function addTab(title, url){
 				if ($('#tt').tabs('exists', title)){
 					$('#tt').tabs('select', title);
@@ -619,6 +626,12 @@ if ($module != 'default') {
 				}
 				
 				
+			}
+			function resizeTab(){
+				$('#tt').css('width', '100%');
+				$('#tt .tabs-panels').css('width', '100%');
+				$('#tt .tabs-panels .panel').css('width', '100%');
+				$('#tt .tabs-panels .panel #firstTabs').css('width', '100%');
 			}
 
 		</script>

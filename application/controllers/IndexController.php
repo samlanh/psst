@@ -33,7 +33,12 @@ class IndexController extends Zend_Controller_Action
 		{
 			$dbgb = new Application_Model_DbTable_DbGlobal();
 			$sys = $dbgb->getPh();//don't know what is for using
-			
+			// if (!$sys) {
+			// 	$session_user = new Zend_Session_Namespace(SYSTEM_SES);
+			// 	$session_user->unsetAll();
+			// 	Application_Form_FrmMessage::redirectUrl("/");
+			// 	exit();
+			// }
 			
 			$formdata=$this->getRequest()->getPost();
 			if($form->isValid($formdata))

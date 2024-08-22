@@ -3708,13 +3708,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		//Search the "Physical" | Find the position of Physical text
 		$pmac = strpos($mycom, $findme);
 		// Get Physical Address
-		$mac = substr($mycom, ($pmac + 36), 17);
+		$mac = md5(substr($mycom, ($pmac + 36), 17));
 		if ($type == 1) {
 			return $mac;
 		} else {
 
 			//Display Mac Address
-			if ($mac != PHISYCAL_CONFIG) {
+			if ($mac != SECRET_KEY) {
 				return false;
 			}
 			return true;

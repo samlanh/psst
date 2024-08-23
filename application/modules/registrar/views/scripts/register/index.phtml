@@ -300,6 +300,10 @@
 				if(key=="issue"){
 					url='<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/";?>';
 					addTab("<?php echo $tr->translate("RECEIPT");?>",url+row+'?inFrame=true');
+				}else if(key=="receive_note"){
+					url='<?php echo $this->baseUrl()."/stock/cutstock/receipt/paymentId/";?>';
+					gotoAction();
+					//addTab("<?php echo $tr->translate("RECEIPT");?>",url+row+'?inFrame=true');
 				}else if(key=="void"){
 					dijit.byId('id').set('value',row);
 					dijit.byId('updateForm').show();
@@ -307,6 +311,7 @@
 			},
 			items: {
 				"issue": {name: "<?php echo $tr->translate("RECEIPT");?>", icon: "fa-print", accesskey: "e"},
+				"receive_note": {name: "<?php echo $tr->translate("បង្កាន់ទទួលទំនិញ");?>", icon: "fa-print", accesskey: "e"},
 				<?php 
 						$dbacc = new Application_Model_DbTable_DbUsers();
 				 		$rs = $dbacc->getAccessUrl('registrar','register','edit');

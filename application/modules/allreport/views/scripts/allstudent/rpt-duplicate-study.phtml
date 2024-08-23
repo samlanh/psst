@@ -17,15 +17,16 @@ $frm = $this->form_search;
 		</div>
 	</div>
 	<div class="x_panel tile">
-                <div class="x_title">
-                  <h2><?php echo $tr->translate('Quick Search');?></h2>
-                  <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                    </li>
-                  </ul>
-                  <div class="clearfix"></div>
-                </div>
-                <div class="x_content" style="display: block;">
+		<div class="x_title">
+			<h2><?php echo $tr->translate('Quick Search');?></h2>
+			<ul class="nav navbar-right panel_toolbox">
+				<li>
+					<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+				</li>
+			</ul>
+		  <div class="clearfix"></div>
+		</div>
+		<div class="x_content" style="display: block;">
 			<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 				<div class="form-group">
 					<div class="col-md-2 col-sm-2 col-xs-12">
@@ -41,11 +42,6 @@ $frm = $this->form_search;
 						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search"
 							dojoType="dijit.form.Button" showLabel="true"
 							type="submit"><?php echo $tr->translate("SEARCH"); ?></button>
-					</div>
-				</div>
-				<div class="form-group">
-					
-					<div class="col-md-2 col-sm-2 col-xs-12">
 					</div>
 				</div>
 			</form>
@@ -157,7 +153,7 @@ $frm = $this->form_search;
 							if(!empty($this->studentRs)) foreach($this->studentRs As $row){
 								$i++;
 							?>
-								<tr class='hover padding'>
+								<tr id="rowRecord<?php echo $i; ?>" class='hover padding'>
 									<td align="center" data-label="<?php echo $tr->translate("NUM"); ?>"><?php echo $i; ?></td>
 									<td data-label="<?php echo $tr->translate("BRANCH"); ?>"><?php echo $row["branchName"]; ?></td>
 									<td data-label="<?php echo $tr->translate("STU_CODE"); ?>" class="studentCode<?php echo $i; ?>">
@@ -221,6 +217,7 @@ $frm = $this->form_search;
 					<div class="clearfix"></div>
 					<div class="card-box">
 						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<input type="hidden" name="rowId" id="rowId" value="0" dojoType="dijit.form.TextBox" />
 							<input type="hidden" name="studentId" id="studentId" value="" dojoType="dijit.form.TextBox" />
 							<input type="hidden" name="identity" id="identity" value="" dojoType="dijit.form.TextBox" />
 							<input type="hidden" name="removeIdentity" id="removeIdentity" value="" dojoType="dijit.form.TextBox" />
@@ -250,8 +247,10 @@ $frm = $this->form_search;
 	function getDuplicateStudentInfo(index){
 		var urlGetDuplicate = '<?php echo $this->url(array('module'=>'allreport','controller'=>'allstudent','action'=>'get-stu-duplicate'));?>';
 		var studentId = dijit.byId('studentId'+index).get('value');
+		dijit.byId('rowId').set('value',index); 
 		dijit.byId('studentId').set('value',studentId); 
 		dojo.query("#tableDuplicateInfo").append("");
+		$("#identity").val("");
 		$("#identity").val("");
 		$("#removeIdentity").val("");
 		dojo.xhrPost({
@@ -350,10 +349,14 @@ $frm = $this->form_search;
 				load: function(data) {
 					if(data==1){
 						alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?>!');
-						window.location.href = "<?php echo $this->baseUrl(); ?>/allreport/allstudent/rpt-duplicate-study";
+						var rowId = dijit.byId('rowId').get('value');
+						dojo.query("#rowRecord"+rowId).remove();
+						dijit.byId("popupStudentInfo").hide();
+						//window.location.href = "<?php echo $this->baseUrl(); ?>/allreport/allstudent/rpt-duplicate-study";
 					}else{
-						HideloadingBlock();
+						alert('<?php echo $tr->translate('INSERT_FAIL'); ?>!');
 					}
+					HideloadingBlock();
 				},
 				error: function(err) {
 				}

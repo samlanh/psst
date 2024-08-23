@@ -920,11 +920,19 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			
 			$db->commit();
-    		return true;
+			$result = array(
+					'status' =>true,
+					'value' =>$gradinTmpId,
+			);
+			return $result;
     	}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();
-    		return false;
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+    		return $result;
     	}
     }
 	function submitEditCriteriaScore($_data){

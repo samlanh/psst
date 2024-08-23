@@ -41,7 +41,7 @@ public function indexAction(){
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	   	$this->view->frm_new = $frm;
 	}
-   function addAction(){
+	function addAction(){
 	   	if($this->getRequest()->isPost()){
 	   		try{
 	   			$_data = $this->getRequest()->getPost();

@@ -397,6 +397,16 @@ if(!empty($type)){
 				WHERE ct.cutstock_id=$cutstockid";
     	return $db->fetchAll($sql);
     }
+	function getCutStockByPaymentId($paymentId){
+    	$db=$this->getAdapter();
+    	$sql="SELECT ct.*
+				
+    		 FROM `rms_cutstock_detail` AS ct
+				WHERE ct.paymentId=$paymentId";
+		$sql.=" ORDER BY ct.paymentId ASC";
+		$sql.=" LIMIT 1";
+    	return $db->fetchRow($sql);
+    }
     function getCutstockDetailByCutstockIdAndStuDetailId($cutstockid,$stu_paymetdetail_id){
     	$db = $this->getAdapter();
     	$sql="SELECT ct.*,

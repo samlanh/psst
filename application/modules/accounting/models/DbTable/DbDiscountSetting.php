@@ -322,13 +322,19 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				COALESCE((SELECT shortcut FROM `rms_view` WHERE key_code= s.studentType AND TYPE=40  LIMIT 1),'') AS studentType,
 				(SELECT name_kh FROM rms_view WHERE TYPE=5 AND key_code=dd.stop_type LIMIT 1) AS status_student,
 				dd.stop_type
-			  FROM 
+			   FROM 
 			  	rms_student AS s INNER JOIN 
 			  	rms_discount_student AS dc ON s.`stu_id` = dc.studentId
-				INNER JOIN rms_group_detail_student AS dd ON ( dd.stu_id = dc.studentId AND dd.itemType=1 AND dd.degree= dc.degreeId AND dd.grade= dc.grade ) 
+				INNER JOIN rms_group_detail_student AS dd ON dd.stu_id = dc.studentId 
+				
 		 	  WHERE s.`status`=1 
+			  	 AND dd.itemType=1
+				 AND dd.degree= dc.degreeId 
+				 AND dd.grade= dc.grade 
+				
 				AND s.customer_type = 1 
 				AND dc.isCurrent=1 
+				
 			";
 
 		if(!empty($search['discountSettengId'])){
@@ -338,7 +344,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}
 		if(!empty($search['academic_year'])){
-			$sql.=" AND dc.academic_year =".$search['academic_year'];
+			$sql.=" AND dd.academic_year =".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
 			$sql.=" AND dc.degreeId =".$search['degree'];
@@ -521,7 +527,8 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$sqlPeriod = "(SELECT $colunmname FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
 		$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
 
-		$sql = "SELECT ds.id, 
+		$sql = "SELECT  ds.id, 
+					ds.academicYear as academicYearId,
 					(SELECT branch_nameen FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
 					discountTitle,

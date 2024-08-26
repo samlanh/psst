@@ -1798,8 +1798,10 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
    		$currentLang = $dbp->currentlang();
    		$colunmName='title_en';
+   		$field='name_en';
    		if ($currentLang==1){
    			$colunmName='title';
+			$field = 'name_kh';
    		}
 		
 		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
@@ -1813,6 +1815,7 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = gsd.academic_year LIMIT 1) AS academicYear
 				,COALESCE(i.shortcut,i.$colunmName) AS degreeTitle
 				,COALESCE((SELECT COALESCE(id.shortcut,id.$colunmName)  FROM `rms_itemsdetail` AS id WHERE id.id = gsd.`grade` LIMIT 1),'') AS gradeTitle
+				,(SELECT v.$field FROM rms_view AS v WHERE v.type=5 AND v.key_code=gsd.stop_type LIMIT 1) as statusStudent
 			FROM `rms_group_detail_student` AS gsd 
 				JOIN `rms_student` AS s ON s.`stu_id` = gsd.`stu_id` AND s.`customer_type` = 1 
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = gsd.`degree`

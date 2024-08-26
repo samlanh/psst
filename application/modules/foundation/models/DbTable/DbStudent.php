@@ -298,8 +298,10 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						,'studentToken'=>$stuToken
 
 						,'studentType'	=>$_data['studentType']
-						,'familyId'	=>empty($_data['familyId']) ? 0 : $_data['familyId']
+						,'familyId'		=>empty($_data['familyId']) ? 0 : $_data['familyId']
 						,'goHomeType'	=>$_data['goHomeType']
+						,'academicYearEnroll'	=>$_data['academicYearEnroll']
+						
 
 						);
 				if (EDUCATION_LEVEL==1){
@@ -467,6 +469,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 					,'studentType'	=>$_data['studentType']
 					,'familyId'	=>empty($_data['familyId']) ? 0 : $_data['familyId']
 					,'goHomeType'	=>$_data['goHomeType']
+					,'academicYearEnroll'	=>$_data['academicYearEnroll']
 				);
 			if (EDUCATION_LEVEL==1){
 				$_arr['calture'] = $_data['calture'];

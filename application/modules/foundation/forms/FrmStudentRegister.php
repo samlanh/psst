@@ -29,7 +29,8 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 	{
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$_db = new Application_Model_DbTable_DbGlobal();
-		
+		$request=Zend_Controller_Front::getInstance()->getRequest();
+
 		$name_kh = new Zend_Dojo_Form_Element_ValidationTextBox('name_kh');
 		$name_kh->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true'
 		));
@@ -356,6 +357,22 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 				3=>$tr->translate("BY_SCHOOL_BUS"),
 				);
 		$goHomeType->setMultiOptions($type_opt);
+
+		$academicYearEnroll = new Zend_Dojo_Form_Element_FilteringSelect('academicYearEnroll');
+		$academicYearEnroll->setAttribs(array('dojoType'=>$this->filter,
+				'placeholder'=>$tr->translate("SELECT_ENROLL_YEAR"),
+				'class'=>'fullside',
+				'required'=>'false',
+				'queryExpr'=>'*${0}*',
+				'autoComplete'=>'false',
+		));
+		
+		$academicYearEnroll->setValue($request->getParam("academicYearEnroll"));
+		$rows =  $_dbgb->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$tr->translate("SELECT_ENROLL_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$academicYearEnroll->setMultiOptions($opt);
 		
 		$id = new Zend_Form_Element_hidden('id');
 		$id->setAttribs(array('dojoType'=>"dijit.form.TextBox",
@@ -412,6 +429,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 			$studentType->setValue($data['studentType']);
 			$primary_phone->setValue($data['primary_phone']);
 			$goHomeType->setValue($data['goHomeType']);
+			$academicYearEnroll->setValue($data['academicYearEnroll']);
 			
 		}
 	
@@ -461,7 +479,7 @@ Class Foundation_Form_FrmStudentRegister extends Zend_Dojo_Form {
 						$primary_phone,
 						$studentType,
 						$goHomeType,
-						
+						$academicYearEnroll 
 						)
 				);
 		

@@ -905,9 +905,13 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			var stringPeriodList='<ul>';
 			academicTerm =$('#academic_term').val();
 			currentDegree =$('#degree').val();
+			if(currentDegree==''){
+				return ;
+			}
 			for (i = 0; i < datajsonInfo.length; i++) {
 				var degreeOfTerm = datajsonInfo[i].degreeId;
-				if(degreeOfTerm.indexOf(currentDegree)>-1){
+				if(degreeOfTerm!=""){
+					if(degreeOfTerm.indexOf(currentDegree)>-1){
 					if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
 						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
 					}
@@ -918,6 +922,8 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
 					}
 				}
+				}
+				
 			}
 			stringPeriodList+= '</ul>';
 			$("#lbl_period_year").html(stringPeriodList);

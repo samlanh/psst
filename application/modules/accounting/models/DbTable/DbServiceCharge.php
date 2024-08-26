@@ -236,6 +236,16 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     					}
     				}else if($item_type==2){//service
     					$sql.=" AND tf.type = 2 ";
+						if(!empty($data['year'])){
+							
+							$_dbFee = new Accounting_Model_DbTable_DbFee();
+							$feeInfo = $_dbFee->getFeeById($data['year']);
+							if(!empty($feeInfo["academic_year"])){
+								$sql.=" AND tf.academic_year =".$feeInfo["academic_year"];
+							}
+    						
+    					}
+						
     				}
     				if(!empty($data['branch_id'])){
     					$sql.=" AND branch_id = ".$data['branch_id'];

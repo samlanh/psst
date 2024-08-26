@@ -161,16 +161,30 @@ class Stock_CutstockController extends Zend_Controller_Action {
 	}
 	function receiptAction(){
 		$db = new Stock_Model_DbTable_DbCutStock();
+
 		$id=$this->getRequest()->getParam('id');
-		if (!empty($id)){
+		$paymentId=$this->getRequest()->getParam('paymentId');
+
+		if(!empty($paymentId)){
+			$rowcutstock = $db->getCutStockByPaymentId($paymentId);
+			if(empty($rowcutstock)){
+				Application_Form_FrmMessage::message("No Cutstock Receipt ! please check again.");
+				$this->_redirect("/registrar/register");
+			}
+			$cutstockid = $rowcutstock['cutstock_id'];
+		}elseif(!empty($id)){
+			$cutstockid = $id;
+		}
+
+		if(!empty($cutstockid)){
 			try{
-				$row = $db->getCutStockBYId($id);
+				$row = $db->getCutStockBYId($cutstockid);
 				if (empty($row)){
 					Application_Form_FrmMessage::Sucessfull("No Record",self::REDIRECT_URL."/index");
 					exit();
 				}
 				$this->view->row = $row;
-				$this->view->rowdetail = $db->getCutStockDetailBYId($id);
+				$this->view->rowdetail = $db->getCutStockDetailBYId($cutstockid);
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("err");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

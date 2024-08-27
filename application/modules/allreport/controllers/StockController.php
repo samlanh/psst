@@ -478,7 +478,7 @@ class Allreport_StockController extends Zend_Controller_Action {
 			}
 			$this->view->search = $search;
 			$db=new Allreport_Model_DbTable_DbRptSummaryStock();
-			$ds=$this->view->rows=$db->getAllProduct($search);
+			$ds=$this->view->rows=$db->getSummaryStockReport($search);
 	
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();

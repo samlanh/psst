@@ -71,30 +71,38 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     	{
     		$this->updatePreviousClosingEntry($data['branch_id'], $data['date']);
     		
-    		$dbs = new Application_Model_DbTable_DbGlobalStock();
+			$date= new DateTime($data['date']);
+			$date->modify('+1 day');
+			$next_payment = $date->format("Y-m-d");
+			
+
     		$arr = array(
     				'branchId'=>$data['branch_id'],
     				'adjustId'=>$data['adjust_date'],
-    				'closingDate'=>$data['date'],
+					'closingDate' => $next_payment,
+					'fromDate' => $next_payment,//increase 1 day
     				'note'=>$data['note'],
     				'userId'=>$this->getUserId(),
     				'createDate'=>date('Y-m-d'),
     			);
     		$closeId = $this->insert($arr);
     		
-    		
-    		$arr = array(
+    		if(!empty($data['adjust_date'])){
+
+				$arr = array(
     				'is_closed'=>1
     			);
-    		$this->_name='rms_adjuststock';
-    		$where='id='.$data['adjust_date'];
-    		$this->update($arr, $where);
+				$this->_name='rms_adjuststock';
+				$where='id='.$data['adjust_date'];
+				$this->update($arr, $where);
+			}
+    	
     		
     		$param = array(
     			'branch_id'=>$data['branch_id'],
     			//'isCountStock'=>1
     		);
-    		
+    		$dbs = new Application_Model_DbTable_DbGlobalStock();
     		$results = $dbs->getProductLocationbyBranch($param);
     		
     		if(!empty($results)){
@@ -117,6 +125,7 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     		Application_Form_FrmMessage::Sucessfull("INSERT_FAIL", "/stock/stockclosing/add",2);
     	}
     }
+	
 
 	/*
     function upateAdjustStock($data){

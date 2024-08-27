@@ -5,7 +5,7 @@
 	$frm =  $this->form_search;
 	$db=new Allreport_Model_DbTable_DbRptSummaryStock();
 	$classHideHeight=classHideHeight;
-	
+	//echo $this->rows[0]['fromDate'];
 ?>
 <style>
 .hover:hover{ background:#ccc;}
@@ -32,24 +32,27 @@ table.tb-footer tr.style-head {
         	<div class="col-md-3 col-sm-3 col-xs-12">
         		<?php echo $frm->getElement('branch_id');?>
         	</div>
+			<div class="col-md-3 col-sm-3 col-xs-12">
+           		<input id="closeStockId" />
+            </div>
+			<div class="col-md-3 col-sm-3 col-xs-12">
+           		<?php echo $frm->getElement("product_type");?>
+            </div>
+        </div>
+         <div class="form-group">
+         	<!-- <div class="col-md-3 col-sm-3 col-xs-12">
+        		<?php //echo $frm->getElement('start_date');?>
+        	</div>
         	<div class="col-md-3 col-sm-3 col-xs-12">
+        		<?php //echo $frm->getElement('end_date');?>
+        	</div> -->
+			<div class="col-md-3 col-sm-3 col-xs-12">
            		<?php echo $frm->getElement("category_id");?>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
            		<input id="product" />
             </div>
-        </div>
-         <div class="form-group">
-         	<div class="col-md-3 col-sm-3 col-xs-12">
-        		<?php echo $frm->getElement('start_date');?>
-        	</div>
-        	<div class="col-md-3 col-sm-3 col-xs-12">
-        		<?php echo $frm->getElement('end_date');?>
-        	</div>
 			<div class="col-md-3 col-sm-3 col-xs-12">
-           		<?php echo $frm->getElement("product_type");?>
-            </div>
-			<div class="col-md-2 col-sm-3 col-xs-12">
            		<?php echo $frm->getElement("sort_by");?>
             </div>
         	<div class="col-md-1 col-sm-3 col-xs-12">
@@ -158,7 +161,7 @@ table.tb-footer tr.style-head {
 				</td>
 				<td align="center" width="70%">
 					<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_SUMMARY_STOCK');?></span> 
-					<div style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?>&nbsp; <?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> <?php echo $tr->translate('TO')?> <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></div>
+					<div style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->rows[0]['fromDate'])){?><?php echo date("d-M-Y",strtotime($this->rows[0]['fromDate']))?> <?php echo $tr->translate('TO')?> <?php if(!empty($this->rows[0]['toDate'])){ echo date("d-M-Y",strtotime($this->rows[0]['toDate'])); }else{ echo date("d-M-Y"); } }?></div>
 				</td>
 				<td width="15%" align="center">
 				</td>
@@ -174,11 +177,15 @@ table.tb-footer tr.style-head {
 								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 								<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BEGINNING_STOCK");?>&nbsp;</td>
+								<td scope="col" rowspan="2">
+									<?php echo $tr->translate("BEGINNING_STOCK");?>
+									<br>
+									<?php echo date("d-M-Y",strtotime($this->rows[0]['closingDate']))?>
+								</td>
 								<td scope="col" colspan="2">&nbsp;<?php echo $tr->translate("STOCK_IN");?>&nbsp;</td>
 								<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("STOCK_OUT");?>&nbsp;</td>
 								<td scope="col" rowspan="2"><?php echo $tr->translate("ADJUST_STOCK");?></td>
-								<td scope="col" rowspan="2"><?php echo $tr->translate("CURR_QTY");?></td>
+								<td scope="col" rowspan="2"><?php echo $tr->translate("CURRENT_STOCK_QTY");?></td>
 							</tr>
 							<tr class="style"  align="center">
 								<td scope="col"><?php echo $tr->translate("CATEGORY");?></td>
@@ -237,6 +244,7 @@ table.tb-footer tr.style-head {
 	require(["dojo/ready"], function(ready){
 		ready(function(){
 			getProductByCate();
+			getAllClosingStock();
 		});
 		new dijit.form.FilteringSelect({
 			store: item_store,
@@ -247,6 +255,15 @@ table.tb-footer tr.style-head {
 			required:false,        
 			class: 'fullside', 
 		}, "product");
+		new dijit.form.FilteringSelect({
+			store: closingdate_store,
+			autoComplete: false,
+			queryExpr: "*${0}*",                     
+			id: "closeStockId",
+			name: "closeStockId",   
+			required:false,        
+			class: 'fullside', 
+		}, "closeStockId");
 	});
 	
 	var item_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
@@ -269,5 +286,26 @@ table.tb-footer tr.style-head {
 				}
 			});
 		//}
+	}
+
+	var closingdate_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
+	var url_closingdate = '<?php echo $this->url(array('module'=>'stock','controller'=>'stockclosing','action'=>'get-allclosingdate')); ?>';
+	function getAllClosingStock(){
+		branch_id = dijit.byId("branch_id").get("value");
+		dojo.xhrPost({
+			url:url_closingdate,
+			content:{
+				'branch_id':branch_id,
+				},
+			handleAs:"json",
+			load: function(data) {
+				closingdate_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('closeStockId').set('store',closingdate_store);  	
+				dijit.byId('closeStockId').attr('value',"<?php echo $this->search['closeStockId']?>");
+			},
+			error: function(err) {
+			}
+		});
+		
 	}
 </script>

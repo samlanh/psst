@@ -77,5 +77,15 @@ class Stock_StockclosingController extends Zend_Controller_Action {
 		}
 	}
     
-   
+	function getAllclosingdateAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Stock_Model_DbTable_DbClosingStock();
+			$results=$db->getAllClosingDate($data);
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+			array_unshift($results, array ('id' => 0,'name' =>$tr->translate("SELECT_REPORT_DATE")));
+			print_r(Zend_Json::encode($results));
+			exit();
+		}
+	}
 }

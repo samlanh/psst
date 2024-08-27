@@ -169,17 +169,26 @@ class Accounting_Form_FrmSearchProduct extends Zend_Dojo_Form
 		if(!empty($row))foreach ($row As $rs)$opt_ls[$rs['id']]=$rs['name'];
 		$location->setMultiOptions($opt_ls);
 		
-		$branch_id= new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
+
+		$_arr_opt_branch = array(""=>$this->tr->translate("SELECT_BRANCH"));
+		$optionBranch = $_dbg->getAllBranch();
+		if(!empty($optionBranch))foreach($optionBranch AS $row) $_arr_opt_branch[$row['id']]=$row['name'];
+		$branch_id = new Zend_Dojo_Form_Element_FilteringSelect("branch_id");
+		$branch_id->setMultiOptions($_arr_opt_branch);
 		$branch_id->setAttribs(array(
-				'dojoType'=>$this->filter,
-				'class'=>'fullside',
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'false',
+				'placeholder'=>$this->tr->translate("SELECT_BRANCH"),
 				'autoComplete'=>'false',
 				'queryExpr'=>'*${0}*',
-				'required'=>'false',
-				'placeholder'=>$this->tr->translate("SELECT_BRANCH")
-		));
-		$branch_id->setMultiOptions($opt_ls);
+				'class'=>'fullside height-text',));
 		$branch_id->setValue($request->getParam("branch_id"));
+		if (count($optionBranch)==1){
+			$branch_id->setAttribs(array('readonly'=>'readonly'));
+			if(!empty($optionBranch))foreach($optionBranch AS $row){
+				$branch_id->setValue($row['id']);
+			}
+		}
 		
 		$cate= new Zend_Dojo_Form_Element_FilteringSelect('category_id');
 		$cate->setAttribs(array(

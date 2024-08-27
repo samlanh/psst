@@ -125,7 +125,26 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     		Application_Form_FrmMessage::Sucessfull("INSERT_FAIL", "/stock/stockclosing/add",2);
     	}
     }
-	
+	function getAllClosingDate($search)
+	{
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+
+		$sql = "SELECT
+		cl.id,
+		CONCAT( COALESCE(DATE_FORMAT(cl.closingDate,'%d-%m-%Y'), ''), ' /', COALESCE( DATE_FORMAT(cl.toDate,'%d-%m-%Y'), DATE_FORMAT(NOW(),'%d-%m-%Y'))) AS name
+		FROM `rms_closing` cl WHERE 1 ";
+
+		$where = '';
+		if (!empty($search['branch_id'])) {
+			$where .= " AND cl.branchId = " . $search['branch_id'];
+		}
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$where .= $dbg->getAccessPermission('cl.branchId');
+
+		$order = ' ORDER BY cl.id DESC  ';
+		$db = $this->getAdapter();
+		return $db->fetchAll($sql . $where . $order);
+	}
 
 	/*
     function upateAdjustStock($data){
@@ -239,25 +258,6 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     	return $db->fetchAll($sql);
     }
     
-    function getAllClosingDate($search){
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	
-    	$sql="SELECT
-		    	cl.id,
-		    	CONCAT(DATE_FORMAT(cl.closingDate,'%d-%m-%Y'),'/',DATE_FORMAT(cl.toDate,'%d-%m-%Y')) AS name
-    		FROM `st_closing` cl WHERE 1 ";
-    	
-    	$where='';
-    	if($search['branch_id']>-1){
-    		$where.= " AND cl.projectId = ".$search['branch_id'];
-    	}
-    	 
-    	$dbg = new Application_Model_DbTable_DbGlobal();
-    	$where.= $dbg->getAccessPermission('cl.projectId');
-    	 
-    	$order=' ORDER BY cl.id DESC  ';
-    	$db = $this->getAdapter();
-    	return $db->fetchAll($sql.$where.$order);
-    }
+   
 	*/
 }

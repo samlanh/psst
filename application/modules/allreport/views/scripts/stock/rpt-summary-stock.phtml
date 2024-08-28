@@ -134,6 +134,10 @@ table.tb-footer tr.style-head {
 					}
 					table.content-data tr td{
 						padding: 2px;
+					}
+					.bg-grey{
+						background: #d2d2d2;
+						font-weight: 600;
 					}	
 					@media print{
 						@page{
@@ -161,7 +165,7 @@ table.tb-footer tr.style-head {
 				</td>
 				<td align="center" width="70%">
 					<span <?php echo TITLE_REPORT;?>><?php echo $tr->translate('RPT_SUMMARY_STOCK');?></span> 
-					<div style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->rows[0]['fromDate'])){?><?php echo date("d-M-Y",strtotime($this->rows[0]['fromDate']))?> <?php echo $tr->translate('TO')?> <?php if(!empty($this->rows[0]['toDate'])){ echo date("d-M-Y",strtotime($this->rows[0]['toDate'])); }else{ echo date("d-M-Y"); } }?></div>
+					<!-- <div style="color:#000; font-size: 13px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->rows[0]['fromDate'])){?><?php echo date("d-M-Y",strtotime($this->rows[0]['fromDate']))?> <?php echo $tr->translate('TO')?> <?php if(!empty($this->rows[0]['toDate'])){ echo date("d-M-Y",strtotime($this->rows[0]['toDate'])); }else{ echo date("d-M-Y"); } }?></div> -->
 				</td>
 				<td width="15%" align="center">
 				</td>
@@ -177,11 +181,7 @@ table.tb-footer tr.style-head {
 								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 								<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 								<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-								<td scope="col" rowspan="2">
-									<?php echo $tr->translate("BEGINNING_STOCK");?>
-									<br>
-									<?php echo date("d-M-Y",strtotime($this->rows[0]['closingDate']))?>
-								</td>
+								<td scope="col" rowspan="2"><?php echo $tr->translate("BEGINNING_STOCK");?>	</td>
 								<td scope="col" colspan="2">&nbsp;<?php echo $tr->translate("STOCK_IN");?>&nbsp;</td>
 								<td scope="col" colspan="3">&nbsp;<?php echo $tr->translate("STOCK_OUT");?>&nbsp;</td>
 								<td scope="col" rowspan="2"><?php echo $tr->translate("ADJUST_STOCK");?></td>
@@ -200,11 +200,22 @@ table.tb-footer tr.style-head {
 						</thead>
 						
 						<?php 
+						$oldclosingId='';
 						$gender=array(1=>"Male",2=>"Female");
 						$i=0;
 						if(!empty($this->rows)) foreach($this->rows As $key=> $rs_row){	
 							$i++;
+
+							if($oldclosingId!=$rs_row['closingId']){ 
 						?>
+							<tr class="style hover bg-grey" align="center" >
+								<td colspan="13"><?php echo $tr->translate("OPENING_AND_CLOSING_STOCK_DATE");?> : <?php echo $rs_row['closingDate'];  if(!empty($rs_row['toDate'])){ echo ' '.$tr->translate("TO").' '.$rs_row['toDate']; }?></td>
+							</tr>
+							
+							<?php } 
+
+								$oldclosingId = $rs_row['closingId'];
+							?>
 							<tr class="style hover" align="center">
 								<td data-label="<?php echo $tr->translate("NUM");?>">&nbsp;<?php echo $i; ?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("BRANCH");?>" align="left">&nbsp;<?php echo $rs_row['branchName']; ?>&nbsp;</td>

@@ -74,7 +74,6 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 			$date= new DateTime($data['date']);
 			$date->modify('+1 day');
 			$next_payment = $date->format("Y-m-d");
-			
 
     		$arr = array(
     				'branchId'=>$data['branch_id'],
@@ -100,7 +99,6 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     		
     		$param = array(
     			'branch_id'=>$data['branch_id'],
-    			//'isCountStock'=>1
     		);
     		$dbs = new Application_Model_DbTable_DbGlobalStock();
     		$results = $dbs->getProductLocationbyBranch($param);
@@ -131,7 +129,7 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 
 		$sql = "SELECT
 		cl.id,
-		CONCAT( COALESCE(DATE_FORMAT(cl.closingDate,'%d-%m-%Y'), ''), ' /', COALESCE( DATE_FORMAT(cl.toDate,'%d-%m-%Y'), DATE_FORMAT(NOW(),'%d-%m-%Y'))) AS name
+		CONCAT( COALESCE(DATE_FORMAT(cl.closingDate,'%d-%m-%Y'), ''), ' /', COALESCE( DATE_FORMAT(cl.toDate,'%d-%m-%Y'), '')) AS name
 		FROM `rms_closing` cl WHERE 1 ";
 
 		$where = '';

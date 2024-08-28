@@ -206,6 +206,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 		}
 
 		$sql = "SELECT 
+				cl.id as closingId ,
 				cl.branchId,
 				p.code as proCode,
 				$proName as productName,
@@ -250,12 +251,13 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbg->getAccessPermission('cl.branchId');
-		$order = ' GROUP BY cl.id DESC, cd.proId ORDER BY p.items_id,p.id ASC  ';
+		$order = ' GROUP BY cl.id DESC, cd.proId ORDER BY cl.id DESC, p.items_id,p.id ASC  ';
 		
 		$results = $this->getAdapter()->fetchAll($sql . $where . $order);
 		$records = array();
 		if (!empty($results)) {
 			foreach ($results as $key => $result) {
+				$records[$key]['closingId'] = $result['closingId'];
 				$records[$key]['branchName'] = $result['branchName'];
 				$records[$key]['closingDate'] = $result['closingDate'];
 				$records[$key]['fromDate'] = $result['fromDate'];

@@ -40,7 +40,7 @@ class Issue_Model_DbTable_DbImport extends Zend_Db_Table_Abstract
 				$degree= 4;
 			}
 			if(!empty($groupName)){
-				$sql2=" SELECT id FROM `rms_group` WHERE group_code = '$groupName' AND academic_year= ".$data['academic_year']." ";
+				$sql2=" SELECT id FROM `rms_group` WHERE group_code like '%$groupName%' AND academic_year= ".$data['academic_year']." ";
 				$groupId =  $db->fetchOne($sql2);
 				if(empty($groupId)){
 

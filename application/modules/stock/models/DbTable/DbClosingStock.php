@@ -14,6 +14,7 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     	$sql="SELECT 
 					cl.id,
 					(SELECT branch_namekh FROM `rms_branch` WHERE br_id=cl.branchId LIMIT 1) AS projectName,
+					cl.openingDate,
 					cl.closingDate,
 					cl.note,
 					(SELECT create_date FROM `rms_adjuststock` WHERE rms_adjuststock.id= cl.adjustId LIMIT 1) AS adjustDate,
@@ -21,8 +22,8 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 				FROM `rms_closing` AS cl WHERE 1";
 
 		$where="";
-		$from_date =(empty($search['start_date']))? '1': " cl.closingDate >= '".$search['start_date']." 00:00:00'";
-		$to_date = (empty($search['end_date']))? '1': " cl.closingDate <= '".$search['end_date']." 23:59:59'";
+		$from_date =(empty($search['start_date']))? '1': " cl.createDate >= '".$search['start_date']." 00:00:00'";
+		$to_date = (empty($search['end_date']))? '1': " cl.createDate <= '".$search['end_date']." 23:59:59'";
 		$where = " AND ".$from_date." AND ".$to_date;
 
 		if(!empty($search['title'])){
@@ -50,17 +51,45 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 	
 
     function updatePreviousClosingEntry($branchId,$endDate){
-    	$sql="SELECT id FROM $this->_name WHERE branchId=".$branchId." ORDER BY closingDate DESC LIMIT 1";
+    	$sql="SELECT id FROM $this->_name WHERE branchId=".$branchId." ORDER BY openingDate DESC LIMIT 1";
     	$db = $this->getAdapter();
     	$closedId = $db->fetchOne($sql);
-    	
+    	 
     	if(!empty($closedId)){
+
+			// Close old Stock
     		$arr = array(
-    				'toDate'=>$endDate
-    			);
+				'isClosed'=>1,
+				'toDate'=>$endDate,
+				'closingDate'=>$endDate
+			);
     		$where='id='.$closedId;
     		$this->update($arr, $where);
+
+			//Update Closing Qty 
+			$param = array(
+    			'branch_id'=>$branchId,
+    		);
+
+    		$dbs = new Application_Model_DbTable_DbGlobalStock();
+    		$results = $dbs->getProductLocationbyBranch($param);
+		
+    		if(!empty($results)){
+    			foreach($results as $rs){
+    				$arr = array(
+
+    					'qtyClosing'=>$rs['currentQty'],
+
+    				);
+    				$this->_name='rms_closing_detail';
+					$where="proId=".$rs['id']." AND closingId =".$closedId;
+    				$this->update($arr, $where);
+					//echo $where; print_r($arr); exit();
+    			}
+    		}
     	}
+
+		
     }
    
 	
@@ -78,12 +107,13 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     		$arr = array(
     				'branchId'=>$data['branch_id'],
     				'adjustId'=>$data['adjust_date'],
-					'closingDate' => $next_payment,
+					'openingDate' => $next_payment,
 					'fromDate' => $next_payment,//increase 1 day
     				'note'=>$data['note'],
     				'userId'=>$this->getUserId(),
     				'createDate'=>date('Y-m-d'),
     			);
+			$this->_name='rms_closing';
     		$closeId = $this->insert($arr);
     		
     		if(!empty($data['adjust_date'])){
@@ -129,7 +159,7 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 
 		$sql = "SELECT
 		cl.id,
-		CONCAT( COALESCE(DATE_FORMAT(cl.closingDate,'%d-%m-%Y'), ''), ' /', COALESCE( DATE_FORMAT(cl.toDate,'%d-%m-%Y'), '')) AS name
+		CONCAT( COALESCE(DATE_FORMAT(cl.openingDate,'%d-%M-%Y'), ''), ' /', COALESCE( DATE_FORMAT(cl.closingDate,'%d-%M-%Y'), '')) AS name
 		FROM `rms_closing` cl WHERE 1 ";
 
 		$where = '';
@@ -143,7 +173,19 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		return $db->fetchAll($sql . $where . $order);
 	}
-
+	function getLatestClosingStock()
+	{
+		$db = $this->getAdapter();
+		$sql = "
+			SELECT 
+				c.* 
+				FROM `rms_closing` AS  c
+			WHERE c.`isClosed` = 0
+			ORDER BY c.`openingDate` DESC 
+			LIMIT 1
+		";
+		return $db->fetchRow($sql);
+	}
 	/*
     function upateAdjustStock($data){
     	$db = $this->getAdapter();

@@ -209,7 +209,23 @@ table.tb-footer tr.style-head {
 							if($oldclosingId!=$rs_row['closingId']){ 
 						?>
 							<tr class="style hover bg-grey" align="center" >
-								<td colspan="13"><?php echo $tr->translate("OPENING_AND_CLOSING_STOCK_DATE");?> : <?php echo $rs_row['closingDate'];  if(!empty($rs_row['toDate'])){ echo ' '.$tr->translate("TO").' '.$rs_row['toDate']; }?></td>
+								<td colspan="13"><?php echo $tr->translate("OPENING_AND_CLOSING_STOCK_DATE");?> : 
+									<?php
+										$format = 'd-M-Y';
+										$dateString = $rs_row['openingDate'];
+										$date = new DateTime($dateString);
+										$openingDate = $date->format($format); 
+										echo $openingDate;  
+										
+										if(!empty($rs_row['closingDate'])){ 
+
+											$closingDateString = $rs_row['closingDate'];
+											$closedate = new DateTime($closingDateString);
+											$closingDate = $closedate->format($format); 
+											echo ' '.$tr->translate("TO").' '.$closingDate; 
+										}
+									?>
+								</td>
 							</tr>
 							
 							<?php } 
@@ -229,7 +245,19 @@ table.tb-footer tr.style-head {
 								<td data-label="<?php echo $tr->translate("REQUEST_QTY");?>">&nbsp;<?php if($rs_row['qtyUsage']>0){echo number_format($rs_row['qtyUsage']);}else{ echo "-";} ?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("TRANSFER_OUT");?>">&nbsp;<?php if(!empty($rs_row['qtyTransferOut'])){echo number_format(-1*$rs_row['qtyTransferOut']);}else{ echo "-";} ?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("ADJUST_STOCK");?>">&nbsp;<?php if(!empty($rs_row['qtyAdjust'])){echo number_format(-1*$rs_row['qtyAdjust']);}else{ echo "-";} ?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("CURR_QTY");?>">&nbsp;<?php if($rs_row['currentQty']>0){echo number_format($rs_row['currentQty']);}else{ echo "-";} ?>&nbsp;</td>
+								<td data-label="<?php echo $tr->translate("CURR_QTY");?>" class=" <?php if($rs_row['isClosed']==1){ echo "redBold"; } ?> ">
+									<?php 
+										if($rs_row['isClosed']==1){
+											echo number_format($rs_row['qtyClosing']);
+										}else{
+											if($rs_row['currentQty']>0){
+												echo number_format($rs_row['currentQty']);
+											}else{ 
+												echo "-";
+											} 
+										}
+									?>
+								</td>
 								
 							</tr>
 						<?php
@@ -254,6 +282,12 @@ table.tb-footer tr.style-head {
 	
 	require(["dojo/ready"], function(ready){
 		ready(function(){
+
+			var branch_id = dijit.byId('branch_id');
+			branch_id.on('change', function (evt) {
+				getAllClosingStock();
+			});
+
 			getProductByCate();
 			getAllClosingStock();
 		});
@@ -275,6 +309,8 @@ table.tb-footer tr.style-head {
 			required:false,        
 			class: 'fullside', 
 		}, "closeStockId");
+		
+	
 	});
 	
 	var item_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );

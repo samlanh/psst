@@ -212,13 +212,16 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				$proName as productName,
 				(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = cl.branchId LIMIT 1) AS branchName,
 				(SELECT $category FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS categoryName,
+				cl.openingDate,
 				cl.closingDate,
 				cl.fromDate,
 				cl.toDate,
 				cl.adjustId,
 				cd.proId,
 				cd.qtyBegining,
-				(SELECT pro_qty FROM `rms_product_location` AS pl WHERE pl.pro_id = cd.proId LIMIT 1) AS currentQty
+				cd.qtyClosing,
+				(SELECT pro_qty FROM `rms_product_location` AS pl WHERE pl.pro_id = cd.proId LIMIT 1) AS currentQty,
+				cl.isClosed
 							
 				FROM `rms_closing` AS cl 
 				INNER JOIN `rms_closing_detail` AS cd ON cl.id = cd.closingId 
@@ -232,13 +235,13 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			$s_where[] = " p.code LIKE '%{$s_search}%'";
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		
-		if (!empty($search['branch_id'])) {
-			$where .= " AND cl.branchId = " . $search['branch_id'];
-		}
 		if (!empty($search['closeStockId'])) {
 			$where .= " AND cl.id = " . $search['closeStockId'];
 		}
+		if (!empty($search['branch_id'])) {
+			$where .= " AND cl.branchId = " . $search['branch_id'];
+		}
+		
 		if(!empty($search['category_id'])){
 			$where .=' AND p.items_id = '.$search['category_id'];
 		}
@@ -252,13 +255,14 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbg->getAccessPermission('cl.branchId');
 		$order = ' GROUP BY cl.id DESC, cd.proId ORDER BY cl.id DESC, p.items_id,p.id ASC  ';
-		
+	//	echo $sql . $where . $order;
 		$results = $this->getAdapter()->fetchAll($sql . $where . $order);
 		$records = array();
 		if (!empty($results)) {
 			foreach ($results as $key => $result) {
 				$records[$key]['closingId'] = $result['closingId'];
 				$records[$key]['branchName'] = $result['branchName'];
+				$records[$key]['openingDate'] = $result['openingDate'];
 				$records[$key]['closingDate'] = $result['closingDate'];
 				$records[$key]['fromDate'] = $result['fromDate'];
 				$records[$key]['toDate'] = $result['toDate'];
@@ -268,6 +272,8 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				$records[$key]['categoryName'] = $result['categoryName'];
 
 				$records[$key]['qtyBegining'] = $result['qtyBegining'];
+				$records[$key]['qtyClosing'] = $result['qtyClosing'];
+				$records[$key]['isClosed'] = $result['isClosed'];
 				$records[$key]['currentQty'] = $result['currentQty'];
 
 				$records[$key]['purchaseQty'] = 0;
@@ -282,7 +288,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				$param = array(
 					'branchId' => $result['branchId'],
 					'proId' => $result['proId'],
-					'start_date' => $result['closingDate'],
+					'start_date' => $result['openingDate'],
 					'end_date' => empty($result['toDate']) ? date('Y-m-d') : $result['toDate'], //less 1 day
 				);
 
@@ -315,18 +321,6 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				if (!empty($qtyAdjust)) {
 					$records[$key]['qtyAdjust'] = $qtyAdjust;
 				}
-
-				// $param['toProjectId'] = $result['projectId'];
-				// $param['column'] = 'qtyAppAfter';
-
-				// //comlumn
-				// unset($param['projectId']);
-
-
-				// $qtyTransferPending = $this->getTransferClosingEntry($param);
-				// if (!empty($qtyTransferPending)) {
-				// 	$records[$key]['qtyTransferInpending'] = $qtyTransferPending;
-				// }
 			}
 		}
 		///echo $sql . $where . $order; exit();

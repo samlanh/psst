@@ -30,7 +30,7 @@ class Stock_StockclosingController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","CLOSING_DATE","NOTE","ADJUST_DATE","BY_USER");
+			$collumns = array("BRANCH_NAME","OPENING_DATE","CLOSING_DATE","NOTE","ADJUST_DATE","BY_USER");
 			$link=array('module'=>'stock','controller'=>'stockclosing','action'=>'index');
 			$this->view->list=$list->getCheckList(10, $collumns,$rs_rows,array('projectName'=>$link,'adjustDate'=>$link,
 			'user_name'=>$link,'status'=>$link));

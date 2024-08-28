@@ -477,6 +477,11 @@ class Allreport_StockController extends Zend_Controller_Action {
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
 				);
+				$dbGb = new Stock_Model_DbTable_DbClosingStock();
+				$last = $dbGb->getLatestClosingStock();
+				if(!empty($last)){
+					$search["closeStockId"] = empty($last["id"]) ? '' : $last["id"];
+				}
 			}
 			$this->view->search = $search;
 			$db=new Allreport_Model_DbTable_DbRptSummaryStock();

@@ -381,21 +381,16 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	}
 		$sql="
 			SELECT 
-				frTime.title AS fromHourTitle
-				,toTime.title AS toHourTitle
-				,CONCAT(COALESCE(frTime.title,''),'-',COALESCE(toTime.title,'')) timeTitle
-				,schDetail.*
+				CONCAT_WS(' - ',(SELECT  t.title FROM `rms_timeseting` AS t WHERE t.value= schDetail.from_hour LIMIT 1),( SELECT  t.title FROM `rms_timeseting` AS t WHERE t.value= schDetail.to_hour LIMIT 1)) AS timeTitle
+				,schDetail.day_id
 			FROM rms_group_reschedule AS schDetail
-				JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id
-				LEFT JOIN `rms_timeseting` AS frTime ON frTime.value=schDetail.from_hour
-				LEFT JOIN `rms_timeseting` AS toTime ON toTime.value=schDetail.to_hour
+			JOIN rms_group_schedule AS sch ON sch.id =schDetail.main_schedule_id	
 			WHERE 
 				schDetail.techer_id =$teacherId 
 				AND sch.group_id =$groupId
 				AND schDetail.subject_id = $subjectId
 		";
 		$order=" ORDER BY schDetail.day_id ASC ";
-	//	echo $sql.$order;
 		return $db->fetchAll($sql.$order);
 	}
 

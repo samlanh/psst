@@ -329,7 +329,10 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$sql.=$dbp->getAccessPermission("g.branch_id");
     
-    	if(!empty($search['branch_id'])){
+    	if(!empty($search['academic_year'])){
+    		$sql.=' AND g.academic_year='.$search['academic_year'];
+    	}
+		if(!empty($search['branch_id'])){
     		$sql.=' AND g.branch_id='.$search['branch_id'];
     	}
 		if(!empty($search['degree'])){

@@ -512,24 +512,15 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	}
 	public function rptReschedulebygroupAction()
 	{
+		$group = new Allreport_Model_DbTable_DbRptStudentDrop();
 		if ($this->getRequest()->isPost()) {
 			$search = $this->getRequest()->getPost();
+			$rs_rows = $group->getAllReschedulebygroup($search);
+
 		} else {
-			$search = array(
-				'adv_search' => '',
-				'academic_year' => '',
-				'branch_id' => '',
-				'group' => '',
-				'room' => '',
-				'degree' => '',
-				'grade' => '',
-				'session' => '',
-				'start_date' => date("Y-m-d"),
-				'end_date' => date("Y-m-d")
-			);
+			$rs_rows =array();
 		}
-		$group = new Allreport_Model_DbTable_DbRptStudentDrop();
-		$rs_rows = $group->getAllReschedulebygroup($search);
+		
 		$this->view->rs = $rs_rows;
 		$this->view->search = $search;
 

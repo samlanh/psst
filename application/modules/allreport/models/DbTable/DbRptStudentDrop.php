@@ -349,44 +349,48 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			    	AND gr.subject_id =$subject_id
     			ORDER BY 
     				subject_name,gr.subject_id DESC ";
-    	
     	$row = $db->fetchAll($sql);
-    	$hour=0;
-    	$min=0;
-    	if (!empty($row)){
-	    	foreach ($row as $rs){
-	    		$fromHour = explode(".", $rs['from_hour']);
-	    		$to_hour = explode(".", $rs['to_hour']);
-	    		
-	    		$HourFro = $fromHour[0]; 
-	    		$HourTo = $to_hour[0];	
-	    		
-	    		$MinFro = end($fromHour);
-	    		$MinTo = end($to_hour);
-	    		
-	    		$hour = $hour + ($HourTo - $HourFro);
-	    		$min = $min+($MinTo - $MinFro);
-		
-	    		if(($MinTo - $MinFro)<0 && $min<60){
-	    			$hour = $hour -1;
-	    			$min = 60 + $min;
-	    			if($min>=60){
-	    				$min = $min%60;
-	    				$hour = $hour+1;
-	    			}
-	    		}else if($min>=60){
-	    			$min = $min%60;
-	    			$hour = $hour+1;
-	    		}else if(($MinTo - $MinFro)<0){
-	    			$hour = $hour -1;
-	    			$min = 60 + $min;
-	    		}
-	    	}
-    	}
-		if($min>0){
-			$hour=$hour+1;
-			$min =0;
+		if(!empty($row)){
+			$hour=count($row);  // section count
+		}else{
+			$hour=0;
 		}
+    	$min=0;
+    	// if (!empty($row)){
+	    // 	foreach ($row as $rs){
+	    // 		$fromHour = explode(".", $rs['from_hour']);
+	    // 		$to_hour = explode(".", $rs['to_hour']);
+	    		
+	    // 		$HourFro = $fromHour[0]; 
+	    // 		$HourTo = $to_hour[0];	
+	    		
+	    // 		$MinFro = end($fromHour);
+	    // 		$MinTo = end($to_hour);
+	    		
+	    // 		$hour = $hour + ($HourTo - $HourFro);
+	    // 		$min = $min+($MinTo - $MinFro);
+		
+	    // 		if(($MinTo - $MinFro)<0 && $min<60){
+	    // 			$hour = $hour -1;
+	    // 			$min = 60 + $min;
+	    // 			if($min>=60){
+	    // 				$min = $min%60;
+	    // 				$hour = $hour+1;
+	    // 			}
+	    // 		}else if($min>=60){
+	    // 			$min = $min%60;
+	    // 			$hour = $hour+1;
+	    // 		}else if(($MinTo - $MinFro)<0){
+	    // 			$hour = $hour -1;
+	    // 			$min = 60 + $min;
+	    // 		}
+	    // 	}
+    	// }
+		// if($min>0){
+		// 	$hour=$hour+1;
+		// 	$min =0;
+		// }
+
     	$lblHour="Hr";
     	if ($hour>1){
     		$lblHour="Hrs";

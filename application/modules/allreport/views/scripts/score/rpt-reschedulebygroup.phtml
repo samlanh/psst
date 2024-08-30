@@ -19,6 +19,26 @@
     	</div>
     </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<script type="dojo/method" event="onSubmit">   
+			if(this.validate()){
+				branch_id = dijit.byId('branch_id').get('value');
+				if(branch_id==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+					dijit.byId("branch_id").focus();
+					return false;
+				}
+				academic_year = dijit.byId('academic_year').get('value');
+				if(academic_year==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
+					dijit.byId("academic_year").focus();
+					return false;
+				}
+				loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+		</script>
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("adv_search");?>

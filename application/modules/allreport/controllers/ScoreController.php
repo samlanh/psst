@@ -518,6 +518,15 @@ class Allreport_ScoreController extends Zend_Controller_Action
 			$rs_rows = $group->getAllReschedulebygroup($search);
 
 		} else {
+			$search = array(
+				'adv_search' => '',
+				'branch_id' => '',
+				'academic_year' => '',
+				'group' => '',
+				'degree' => '',
+				'grade' => '',
+				'room' => '',
+			);
 			$rs_rows =array();
 		}
 		

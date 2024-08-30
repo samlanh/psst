@@ -221,7 +221,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 			}
 
 			.headerKhmer {
-				font-size: 16px;
+				font-size: 14px;
 				line-height: 12px;
 				font-weight: initial;
 				font-family: 'Times New Roman','Khmer OS Muol Light', serif;
@@ -313,27 +313,63 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 			}
 
 			.principalStamp {
-				position: relative;
+				position:relative;
+				width: 300px;
+				height: 140px;
+				margin:0 auto;
+				margin-top:5px;
 			}
-
+			.principalStamp .stamp {
+				width:140px;
+				height:140px;
+				position:absolute;
+				transform: translate(-81%);
+				left:50%;
+			}
 			.principalStamp .signature {
-				left: 50%;
-				top: 0%;
+				left: 40px;
+				bottom: 32px;
 				height: 100px;
-				width: 150px;
+				width:150px;
 				position: absolute;
 			}
+			.principalStamp .principalName{
+				left: 120px;
+				top: 113px;
+				height: 100px;
+				width: 100px;
+				position: absolute;
+			}
+			.seenApproved{
+				position: relative;
+				margin-top: 5px;
+			}
+			.seenApproved .interimPrincipal{
+				position: absolute;
+				left: 50%;
+				top: 20px;
+				transform: translate(-50%);
+				z-index: 1;
+			}
+			
 			.bold{
 				font-weight: bold;
 			}
 		</style>
 		
-		<?php if (!empty($this->rs))
+		<?php
+		if (!empty($this->rs))
 			foreach ($this->rs as $key => $rs) {
 
+				
+				$dbSetting = new Setting_Model_DbTable_Dbduty();
+				$degreeList= explode(",",$rs['degreeList']);
+				$dregreeId = empty($degreeList[0]) ? 2 : $degreeList[0];
+				$principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
 
 				$branch_id = empty($rs['branch_id']) ? 1 : $rs['branch_id'];
 				$branchInfo = $dbgb->getBranchInfo($branch_id);
+
 				$NameTitle = 'លោក/លោកស្រី';
 
 				if ($lang_id == 1) {
@@ -740,7 +776,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 					</tr>
 					<tr class="footer">
 						<td colspan="3" valign="top">
-							<table width="100%" >
+							<table width="100%">
 								<tr class="head">
 									<td align="left" rowspan="2">
 										<span class="khmerLabel valueLabel " style="margin-top: 10px;"><?php echo $tr->translate("CC"); ?></span>
@@ -783,12 +819,26 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 													<?php echo date("Y");?> 
 												</label>
 											<?php } ?>
-										<h2 class="headerLabel <?php echo $bold; ?>"><?php echo $branchInfo['principal']; ?></h2>
+										
 									</td>
 								</tr>
 								<tr class="head">
 									<td  align="center">
-										<div class="principalStamp">
+										<div class="seenApproved headerKhmer">បានឃើញ និងឯកភាព
+											<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
+										</div>
+										<div class="principalStamp" id="principalStamp" >
+											<div class="stamp" >
+												<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['stamp']; ?>"  />
+												<div class="signature">
+													<img src="<?php echo $this->baseUrl() . '/images/logo/' . $principalInfo['signature']; ?>" />
+												</div>
+												<div class="principalName">
+													<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php if(!empty($principalInfo['duty_namekh'])){ echo $principalInfo['duty_namekh']; } ?></span>
+												</div>
+											</div>
+										</div>
+										<!-- <div class="principalStamp">
 											<div class="stamp" style="margin-bottom: 20px;">
 												<?php if(!empty($stamp)){ ?>
 												<img src="<?php echo $stamp; ?>" style="height:120px;position:relative;" />
@@ -802,7 +852,7 @@ list($fromYear, $toYear) = explode("-", $yearValue);
 										</div>
 										<h2 style="left:82px; bottom:50px; width:150px;position:relative; color:#f00; " class="headerLabel red <?php echo $bold; ?>">
 											<?php echo $branchInfo['deputy_principal']; ?>
-										</h2>
+										</h2> -->
 									</td>
 								</tr>
 							</table>

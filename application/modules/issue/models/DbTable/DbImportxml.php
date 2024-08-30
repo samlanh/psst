@@ -59,7 +59,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			$strId =$row["@attributes"]['id'];
 			$gender =$row["@attributes"]['gender'];
 			$shortcut = $row['@attributes']['short'];
-			$teacher = $this->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
+			$this->getTeacherId($teacherTitle,$gender,$strId,$shortcut);
 		}
 
 
@@ -106,16 +106,20 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			$teacherId = $dbxml->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
 			$groupId = $dbxml->getGroupIdbyStrId($row["@attributes"]['classids']);
 			
-			
 			$lessionId = $row["@attributes"]['id'];
-			
 			$data = array(
-							'subject_id'=>$subjectId,
-							'techer_id' =>$teacherId,
-							'note'=>'abc',
-					);
-			$dbxml->updateExistingSchedule($lessionId,$data,$groupId);
+				'subject_id'=>$subjectId,
+				'techer_id' =>$teacherId,
+				'note'=>'abc',
+				);
+		$this->updateExistingSchedule($lessionId,$data,$groupId);
 		}
+	}
+	function getDataFromCard($lessionId)
+	{
+		$db = $this->getAdapter();
+		$sql = "select lessionstrId,`periodstrId`,daystrId,`fromhr`,tohr from `rms_cards` where lessionstrId='" . $lessionId . "'";
+		return $db->fetchAll($sql);
 	}
 	function uploadXMLFile($data){
 		
@@ -157,28 +161,31 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		/**
 		 * check subject
 		 */
+		
+		$step = $data['step'];
+		$branchId = 1;
+		$academicYear = 8;
 		if(!empty($array)){
-			$step = 7;
+			//$step = 7;
 
 			if ($step == 2) {
 				$tableData = $array["subjects"]["subject"];
 				$subjectColumn = $array["subjects"]["@attributes"]["columns"];
-				$columnList = explode(',', $subjectColumn);
-				if (!empty($tableData))
+				if (!empty($tableData)) {
 					foreach ($tableData as $row) {//use
 						$subjectTitle = null;//$row["@attributes"]['name'];
 						$strId = $row["@attributes"]['id'];
 						$shortcut = $row["@attributes"]['short'];
-						$Subject = $this->getSubjectId($subjectTitle, $strId, $shortcut);
+						$this->getSubjectId($subjectTitle, $strId, $shortcut);
 					}
 					return 3;
+				}
 			}elseif($step==3){
 				/**
 			 * check teacher
 			 */
 				$tableData = $array["teachers"]["teacher"];
 				$periodsColumn = $array["teachers"]["@attributes"]["columns"];
-				$columnList = explode(',', $periodsColumn);
 				if(!empty($tableData)) foreach($tableData as $row){//use
 
 					$teacherTitle =$row["@attributes"]['name'];
@@ -190,9 +197,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				return 4;
 			} elseif ($step == 4) {
 				$tableData = $array["classes"]["class"];
-				$periodsColumn = $array["classes"]["@attributes"]["columns"];
-				$columnList = explode(',', $periodsColumn);
-
+				
 				if(!empty($tableData)) foreach($tableData as $row){//use
 					$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
 					$strId =$row["@attributes"]['id'];
@@ -213,6 +218,10 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				$groupCode = str_replace('Grade ','',$row["@attributes"]['name']);
 				$strId =$row["@attributes"]['id'];
 				$groupId = $this->getGroupId($groupCode,$strId);
+				$param = array(
+					'groupId'=>$groupId,
+				);
+				$this->addSchedule($param);
 			}
 
 			/**
@@ -237,26 +246,49 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				$periodsColumn = $array["classes"]["@attributes"]["columns"];
 				$columnList = explode(',', $periodsColumn);
 
-				if(!empty($tableData)) foreach($tableData as $row){
-					$subjectId= $this->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
-					$teacherId = $this->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
-					$groupId = $this->getGroupIdbyStrId($row["@attributes"]['classids']);
-					
-					$lessionId = $row["@attributes"]['id'];
-					
-					$data = array(
-							'subject_id'=>$subjectId,
-							'techer_id' =>$teacherId,
-							'note'=>'abc',
-							);
-					$this->updateExistingSchedule($lessionId,$data,$groupId);
-				}
+				if (!empty($tableData))
+					foreach ($tableData as $row) {
+						$subjectId = $this->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
+						$teacherId = $this->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
+						$groupId = $this->getGroupIdbyStrId($row["@attributes"]['classids']);
+
+						$lessionId = $row["@attributes"]['id'];
+
+						$resultCards = $this->getDataFromCard($lessionId);
+
+						if (!empty($resultCards)) {
+							$this->_name = 'rms_group_reschedule';
+							foreach ($resultCards as $card) {
+								$arr = array(
+									'branch_id' => $branchId,
+									'group_id' => $groupId,
+									'year_id' => $academicYear,
+									'day_id' => $card['daystrId'],
+									'from_hour' => $card['fromhr'],
+									'to_hour' => $card['tohr'],
+									'subject_id' => $subjectId,
+									'techer_id' => $teacherId,
+									'create_date' => date('Y-m-d'),
+								);
+								$this->insert($arr);
+							}
+						}
+					}
 				return 8;
 			}
 		}else{
 			return 0;
 		}
-
+	}
+	function addSchedule($data)
+	{
+		$this->_name = "rms_group_schedule";
+		$arr = array(
+			'academic_year'=>8,
+			'group_id'=>$data['groupId'],
+			'create_date'=>date("Y-m-d")
+		);
+		return $this->insert($arr);
 	}
 	public function getUserId(){
     	$session_user=new Zend_Session_Namespace(SYSTEM_SES);
@@ -332,9 +364,10 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 
 				$_arr=array(
 						'branch_id' 		 => 1,
+						'strId'	 			 => $strId,
 						'teacher_name_en'	 => $title,
 						'teacher_name_kh'	 => $title,
-						'teacher_code'		 => $code,
+						'teacher_code'		 => $shortcut,
 						'sex'				 => $sex,
 						'nation' 			 => 1,
 						'create_date' 		 => date("Y-m-d"),
@@ -356,27 +389,18 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 	
 	public function getGroupId($title,$strId){
 		$db = $this->getAdapter();
-	
-	
-		$sql=" SELECT id FROM `rms_group` WHERE group_code like '%".$title."%' AND academic_year=7";
+		$sql=" SELECT id FROM `rms_group` WHERE school_option=1 AND group_code like '%".$title."%' AND academic_year=8";
 		$groupId =  $db->fetchOne($sql);
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		if(empty($groupId)){
-			echo $title;
-			exit();
-			// 	$_arr=array(
-			// 		'branch_id' 		 => $data['branch_id'],
-			// 		'teacher_name_en'	 => $eng_name,
-			// 		'teacher_name_kh'	 => $kh_name,
-			// 		'teacher_code'		 => $code,
-			// 		'tel'				 => $tel,
-			// 		'sex'				 => $sex,
-			// 		'nation' 			 => 1,
-			// 		'create_date' 		 => date("Y-m-d"),
-			// 		'user_id'	  		 => $this->getUserId(),
-			// );
-			// $this->_name = "rms_teacher";
-			// $teacherId =  $this->insert($_arr);
+				$_arr=array(
+					'group_code' 		 => $title,
+					'strId' 		 	=> $strId,
+					'create_date' 		 => date("Y-m-d"),
+					'user_id'	  		 => $this->getUserId(),
+			);
+			$this->_name = "rms_group";
+			return $this->insert($_arr);
 		}else{
 			$this->_name='rms_group';
 			$array = array(
@@ -384,7 +408,6 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			);
 			$where = "id =".$groupId;
 			$this->update($array,$where);
-	
 		}
 	
 		return $groupId;
@@ -401,7 +424,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 	}
 	function getGroupIdbyStrId($strId){
 		$db = $this->getAdapter();
-		$sql=" SELECT id FROM `rms_group` WHERE strId = '".$strId."'" ;
+		$sql=" SELECT id FROM `rms_group` WHERE academic_year =8 AND strId = '".$strId."'" ;
 		return $db->fetchOne($sql);
 	}
 	function getPeriodData($index){
@@ -459,9 +482,8 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		$results = $this->getCardList($lessionId);
 		foreach($results as $rs){
 			$this->_name="rms_group_reschedule";
-			$where = "year_id=7 AND group_id=".$groupId." AND day_id=".$rs['daystrId']." AND from_hour=".$rs['fromhr']." AND to_hour=".$rs['tohr'];
+			$where = "year_id=8 AND group_id=".$groupId." AND day_id=".$rs['daystrId']." AND from_hour=".$rs['fromhr']." AND to_hour=".$rs['tohr'];
 			 $this->update($data, $where);
-// 			exit();
 		}
 	}
 	

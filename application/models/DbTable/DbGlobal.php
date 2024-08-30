@@ -2239,7 +2239,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			degreeId,
 			DATE_FORMAT(start_date, '%Y-%m-%d') startDate,
 			DATE_FORMAT(end_date, '%Y-%m-%d') endDate
-  		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 ";
+  		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 AND degreeId!='' ";
 		if (!empty($data['branch_id'])) {
 			$sql .= " AND branch_id = " . $data['branch_id'];
 		}

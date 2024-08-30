@@ -53,43 +53,6 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 	}
     
 	function addAction(){
-		$db = new Accounting_Model_DbTable_DbDiscountSetting();
-		try{
-			if($this->getRequest()->isPost()){
-				$_data=$this->getRequest()->getPost();
-				$search = $_data;
-				if($search['updateOption']==1){     //Add Student To Discount
-					$rs =$db->getSearchStudent($search);
-				}elseif($search['updateOption']==2){ //Change Discount Student
-					$rs =$db->getSearchStudentbyDiscount($search);
-				}
-				$this->view->rs = $rs;
-			}else{
-				$search = array(
-					'adv_search'  		 => '',
-					'branch_id'			 => '',
-					'academic_year' 	 => '',
-					'degree' 			 => '',
-					'grade' 			 => '',
-					'academicYearEnroll' => '',
-					'studentType' 		 => '',
-					'discountSettengId'  => '',
-					'updateOption'  	 => '',
-					'limit'  			 => '',
-				);
-			}
-			$this->view->search=$search;
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$form=new Application_Form_FrmSearchGlobal();
-		$forms=$form->FrmSearch();
-		Application_Model_Decorator::removeAllDecorator($forms);
-		$this->view->form_search=$form;
-	}
-	public function submitAction(){
-		
 		if($this->getRequest()->isPost()){
 			try{
 				$_data = $this->getRequest()->getPost();
@@ -106,7 +69,30 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		$form=new Application_Form_FrmSearchGlobal();
+		$forms=$form->FrmSearch();
+		Application_Model_Decorator::removeAllDecorator($forms);
+		$this->view->form_search=$form;
 	}
+	// public function submitAction(){
+		
+	// 	if($this->getRequest()->isPost()){
+	// 		try{
+	// 			$_data = $this->getRequest()->getPost();
+	// 			$db = new Accounting_Model_DbTable_DbDiscountSetting();
+	// 			$db->updateStudentDiscount($_data);
+	// 			if(isset($_data['save_close'])){
+	// 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+	// 			}else{
+	// 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+	// 			}
+				
+	// 		}catch(Exception $e){
+	// 			Application_Form_FrmMessage::message("INSERT_FAIL");
+	// 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+	// 		}
+	// 	}
+	// }
 	function getdiscountAction(){//year for study only
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
@@ -136,7 +122,7 @@ class Accounting_UpdatestudentdiscountController extends Zend_Controller_Action 
           
 			if($data['updateOption']==1){  //Add Student To Discount
 				$student =$db->getSearchStudent($data);
-			}elseif($data['updateOption']==2){ //Change Discount Student
+			}else{ //Change Discount Student
 				$student =$db->getSearchStudentbyDiscount($data);
 			}
 			print_r(Zend_Json::encode($student));

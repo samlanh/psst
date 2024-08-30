@@ -523,6 +523,7 @@
 						                	<?php echo $frm->getElement("id");?>
 						                </div>
 						             </div>
+
 						             <div class="form-group">
 					                   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("STUDENT_TYPE");?> <span class="required">*</span> :
 					                   </label>
@@ -537,6 +538,13 @@
 					                   		<?php echo $frm->getElement("student_id");?>
 					                   </div>
 					                </div>
+									<div class="form-group">
+										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACADEMIC_YEAR_ENROLL");?>  :
+										</label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("academicYearEnroll");?>
+										</div>
+									</div>
 									<div class="form-group">
 										<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TYPE");?>  :
 										</label>

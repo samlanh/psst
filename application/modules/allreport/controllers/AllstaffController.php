@@ -129,6 +129,7 @@ public function init()
 			$row = $db->getTeacherScheduleGroupAndStudent($search);
 		}else{
 			$search = array(
+						'academic_year' => '',
 						'branch_id' => '',
 						'degree' => '',
 						'group' => '',

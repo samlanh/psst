@@ -175,7 +175,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     			//Application_Form_FrmMessage::Sucessfull("UPDATE_SUCCESS", self::REDIRECT_URL . '/register');
      		} catch (Exception $e) {
      			Application_Form_FrmMessage::message("UPDATE_FAIL");
-     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+     			Applicatiaon_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
      		}
      	}
     }

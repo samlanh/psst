@@ -191,6 +191,286 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
     }
+	function getSummaryStockReport($search){
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		$branch = $_db->getBranchDisplay();
+		if($lang==1){// khmer
+			
+			$proName = "p.title";
+			$category = "it.title";
+		}else{ // English
+			
+			$proName = "p.title_en";
+			$category = "it.title_en";
+		}
+
+		$sql = "SELECT 
+				cl.id as closingId ,
+				cl.branchId,
+				p.code as proCode,
+				$proName as productName,
+				(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = cl.branchId LIMIT 1) AS branchName,
+				(SELECT $category FROM `rms_items` AS it WHERE it.id = p.items_id LIMIT 1) AS categoryName,
+				cl.openingDate,
+				cl.closingDate,
+				cl.fromDate,
+				cl.toDate,
+				cl.adjustId,
+				cd.proId,
+				cd.qtyBegining,
+				cd.qtyClosing,
+				(SELECT pro_qty FROM `rms_product_location` AS pl WHERE pl.pro_id = cd.proId LIMIT 1) AS currentQty,
+				cl.isClosed
+							
+				FROM `rms_closing` AS cl 
+				INNER JOIN `rms_closing_detail` AS cd ON cl.id = cd.closingId 
+				LEFT JOIN `rms_itemsdetail` AS p ON p.id = cd.proId ";
+		$where = ' WHERE 1 ';
+		
+		if(!empty($search['title'])){
+			$s_where = array();
+			$s_search = addslashes(trim($search['title']));
+			$s_where[] = " p.title LIKE '%{$s_search}%'";
+			$s_where[] = " p.code LIKE '%{$s_search}%'";
+			$where .=' AND ( '.implode(' OR ',$s_where).')';
+		}
+		if (!empty($search['closeStockId'])) {
+			$where .= " AND cl.id = " . $search['closeStockId'];
+		}
+		if (!empty($search['branch_id'])) {
+			$where .= " AND cl.branchId = " . $search['branch_id'];
+		}
+		
+		if(!empty($search['category_id'])){
+			$where .=' AND p.items_id = '.$search['category_id'];
+		}
+		if(!empty($search['product'])){
+			$where .= " AND cd.proId = " . $search['productId'];
+		}
+		if(!empty($search['product_type'])){
+			$where .=' AND p.product_type = '.$search['product_type'];
+		}
+
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		$where .= $dbg->getAccessPermission('cl.branchId');
+		$order = ' GROUP BY cl.id DESC, cd.proId ORDER BY cl.id DESC, p.items_id,p.id ASC  ';
+	//	echo $sql . $where . $order;
+		$results = $this->getAdapter()->fetchAll($sql . $where . $order);
+		$records = array();
+		if (!empty($results)) {
+			foreach ($results as $key => $result) {
+				$records[$key]['closingId'] = $result['closingId'];
+				$records[$key]['branchName'] = $result['branchName'];
+				$records[$key]['openingDate'] = $result['openingDate'];
+				$records[$key]['closingDate'] = $result['closingDate'];
+				$records[$key]['fromDate'] = $result['fromDate'];
+				$records[$key]['toDate'] = $result['toDate'];
+				$records[$key]['productName'] = $result['productName'];
+				$records[$key]['proCode'] = $result['proCode'];
+
+				$records[$key]['categoryName'] = $result['categoryName'];
+
+				$records[$key]['qtyBegining'] = $result['qtyBegining'];
+				$records[$key]['qtyClosing'] = $result['qtyClosing'];
+				$records[$key]['isClosed'] = $result['isClosed'];
+				$records[$key]['currentQty'] = $result['currentQty'];
+
+				$records[$key]['purchaseQty'] = 0;
+				$records[$key]['qtyTransferIn'] = 0;
+
+				$records[$key]['saleqty'] = 0;
+				$records[$key]['qtyUsage'] = 0;
+				$records[$key]['qtyTransferOut'] = 0;
+
+				$records[$key]['qtyAdjust'] = 0;
+
+				$param = array(
+					'branchId' => $result['branchId'],
+					'proId' => $result['proId'],
+					'start_date' => $result['openingDate'],
+					'end_date' => empty($result['toDate']) ? date('Y-m-d') : $result['toDate'], //less 1 day
+				);
+
+				$purchaseQty = $this->getPurchasebyClosingEntry($param);
+				if (!empty($purchaseQty)) {
+					$records[$key]['purchaseQty'] = $purchaseQty;
+				}
+
+				$qtyTransferIn = $this->getReceiveTransferClosingEntry($param);
+				if (!empty($qtyTransferIn)) {
+					$records[$key]['qtyTransferIn'] = $qtyTransferIn;
+				}
+
+				$qtyTransferOut = $this->getTransferClosingEntry($param);
+				if (!empty($qtyTransferOut)) {
+					$records[$key]['qtyTransferOut'] = $qtyTransferOut;
+				}
+
+				$saleqty = $this->getSaleQtyClosingEntry($param);
+				if (!empty($saleqty)) {
+					$records[$key]['saleqty'] = $saleqty;
+				}
+			
+				$qtyUsage = $this->getUsageQtyClosingEntry($param);
+				if (!empty($qtyUsage)) {
+					$records[$key]['qtyUsage'] = $qtyUsage;
+				}
+
+				$qtyAdjust = $this->getAdjustQtyClosingEntry($param);
+				if (!empty($qtyAdjust)) {
+					$records[$key]['qtyAdjust'] = $qtyAdjust;
+				}
+			}
+		}
+		///echo $sql . $where . $order; exit();
+		return $records;
+	}
+	function getPurchasebyClosingEntry($data)
+	{
+		$sql = "SELECT  
+					SUM(pd.qty) 
+				FROM 
+					rms_purchase_detail AS pd,
+					rms_purchase AS pu 
+				WHERE 
+					pu.id = pd.supproduct_id 
+					AND pu.status = 1 ";
+
+		if (!empty($data['start_date'])) {
+			$from_date = (empty($data['start_date'])) ? '1' : " pu.date >= '" . $data['start_date'] . " 00:00:00'";
+			$to_date = (empty($data['end_date'])) ? '1' : " pu.date <='" . $data['end_date'] . " 23:59:59'";
+			$sql .= " AND " . $from_date . " AND " . $to_date;
+		}
+		if (!empty($data['branchId'])) {
+			$sql .= " AND pu.branch_id =" . $data['branchId'];
+		}
+		if (!empty($data['proId'])) {
+			$sql .= " AND pd.pro_id  =" . $data['proId'];
+		}
+		$sql .= " GROUP BY pd.pro_id ";
+		return $this->getAdapter()->fetchOne($sql);
+	}
+	function getSaleQtyClosingEntry($data)
+	{ //usage and sale
+		$sql = " SELECT 
+			SUM(ctd.qty_receive)
+		 FROM `rms_cutstock` AS ct,
+		 		`rms_cutstock_detail` AS ctd 
+				WHERE ct.id = ctd.cutstock_id 
+				AND ct.status=1 ";
+		if (!empty($data['start_date'])) {
+			$from_date = (empty($data['start_date'])) ? '1' : " ct.received_date  >= '" . $data['start_date'] . " 00:00:00'";
+			$to_date = (empty($data['end_date'])) ? '1' : " ct.received_date  <= '" . $data['end_date'] . " 00:00:00'";
+			$sql .= " AND " . $from_date . " AND " . $to_date;
+		}
+
+		if (!empty($data['branchId'])) {
+			$sql .= " AND ct.branch_id =" . $data['branchId'];
+		}
+		if (!empty($data['proId'])) {
+			$sql .= " AND ctd.product_id=" . $data['proId'];
+		}
+		$sql .= " GROUP BY ctd.product_id ";
+
+		return $this->getAdapter()->fetchOne($sql);
+	}
+	function getUsageQtyClosingEntry($data)
+	{ //usage and sale
+		$sql = " SELECT 
+					SUM(qty_receive) 
+				FROM
+					rms_request_order AS req,
+					rms_request_orderdetail AS req_d 
+				WHERE 
+					req.id = req_d.request_id 
+					AND req.status=1 ";
+		if (!empty($data['start_date'])) {
+			$from_date = (empty($data['start_date'])) ? '1' : " req.request_date  >= '" . $data['start_date'] . " 00:00:00'";
+			$to_date = (empty($data['end_date'])) ? '1' : " req.request_date  <= '" . $data['end_date'] . " 00:00:00'";
+			$sql .= " AND " . $from_date . " AND " . $to_date;
+		}
+
+		if (!empty($data['branchId'])) {
+			$sql .= " AND req_d.branch_id =" . $data['branchId'];
+		}
+		if (!empty($data['proId'])) {
+			$sql .= " AND req_d.pro_id=" . $data['proId'];
+		}
+		$sql .= " GROUP BY req_d.pro_id ";
+		return $this->getAdapter()->fetchOne($sql);
+	}
+
+	function getAdjustQtyClosingEntry($data)
+	{ //usage and sale
+		$sql = " SELECT 
+				SUM(difference) 
+				FROM rms_adjuststock AS adj,
+					rms_adjuststock_detail AS adj_d 
+					WHERE adj.id = adj_d.adjuststock_id 
+					AND adj.status=1 ";
+		if (!empty($data['start_date'])) {
+			$from_date = (empty($data['start_date'])) ? '1' : " adj.request_date  >= '" . $data['start_date'] . " 00:00:00'";
+			$to_date = (empty($data['end_date'])) ? '1' : " adj.request_date  <= '" . $data['end_date'] . " 00:00:00'";
+			$sql .= " AND " . $from_date . " AND " . $to_date;
+		}
+		if (!empty($data['branchId'])) {
+			$sql .= " AND adj_d.branch_id =" . $data['branchId'];
+		}
+		if (!empty($data['proId'])) {
+			$sql .= " AND adj_d.pro_id =" . $data['proId'];
+		}
+		$sql .= " GROUP BY adj_d.pro_id ";
+		return $this->getAdapter()->fetchOne($sql);
+	}
+	
+	function getTransferClosingEntry($data)
+	{ //transfer and receive for closing
+		$sql = " SELECT
+    		SUM(td.qty) AS qty
+    	FROM `rms_transferstock` AS t,
+			 rms_transferdetail AS td
+    	WHERE t.id=td.transferid AND t.is_received=1 ";
+
+		if (!empty($data['start_date'])) {
+			$from_date = (empty($data['start_date'])) ? '1' : " t.transfer_date >= '" . $data['start_date'] . " 00:00:00'";
+			$to_date = (empty($data['end_date'])) ? '1' : " t.transfer_date <= '" . $data['end_date'] . " 00:00:00'";
+			$sql .= " AND " . $from_date . " AND " . $to_date;
+		}
+
+		if (!empty($data['branchId'])) {
+			$sql .= " AND t.from_location=" . $data['branchId'];
+		}
+		if (!empty($data['proId'])) {
+			$sql .= " AND td.pro_id=" . $data['proId'];
+		}
+		$sql .= " GROUP BY td.pro_id ";
+		return $this->getAdapter()->fetchOne($sql);
+	}
+	function getReceiveTransferClosingEntry($data)
+	{ //transfer and receive for closing
+		$sql = " SELECT
+    		SUM(td.qty) AS qty
+    	FROM `rms_transferstock` AS t,
+			 rms_transferdetail AS td
+    	WHERE t.id=td.transferid AND t.is_received=1 ";
+
+		if (!empty($data['start_date'])) {
+			$from_date = (empty($data['start_date'])) ? '1' : " t.transfer_date >= '" . $data['start_date'] . " 00:00:00'";
+			$to_date = (empty($data['end_date'])) ? '1' : " t.transfer_date <= '" . $data['end_date'] . " 00:00:00'";
+			$sql .= " AND " . $from_date . " AND " . $to_date;
+		}
+
+		if (!empty($data['branchId'])) {
+			$sql .= " AND t.to_location=" . $data['branchId'];
+		}
+		if (!empty($data['proId'])) {
+			$sql .= " AND td.pro_id=" . $data['proId'];
+		}
+		$sql .= " GROUP BY td.pro_id ";
+		return $this->getAdapter()->fetchOne($sql);
+	}
+
     public function getAllStudentProduct($search,$new=null){
     	try{
     		$db = $this->getAdapter();

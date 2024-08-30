@@ -1287,8 +1287,6 @@ $(document).ready(function() {
 	discountOptionList='';
 	function prepareAddNewRow(urlRequest, contentData) {
 		
-		
-		//dijit.byId("item").reset();
 		term_option = '';//year,semester..
 		term_study_option = '';//period list..
 		dojo.xhrPost({
@@ -1310,7 +1308,6 @@ $(document).ready(function() {
 				}
 			},
 			error: function (err) {
-				console.log(err);
 				HideloadingBlock();
 			}
 		});
@@ -1349,17 +1346,10 @@ $(document).ready(function() {
 		template += '<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
 		checked = 'checked';
 		disabled = '';
-		if (dataRow != null) {
-
-			if ((student_type == '3' || student_type == '2') && dataRow.is_onepayment == '1') {//isOnepayment
-				checked = '';
-				disabled = 'disabled';
-			}
-		}
 		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' />';
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
-		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ');getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
+		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ',7);getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
 		template += '<div class="form-group"><select class="custome-select-opt fullside" required="false" onchange="getservicefee(' + col + ');getValidate(' + col + ')" id="term_' + col + '" name="term_' + col + '" >' + termOption + '</select></div>';
 		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';
@@ -1413,42 +1403,40 @@ $(document).ready(function() {
 		{dropdownAutoWidth : true}
 	);
 
-			if (dataRow != null) {
-				dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
-				if (dataRow.feeId > 0) {
-					$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
-				}
-				if (dataRow.is_onepayment == 1) {
-					$("#term_"+col).val(5).trigger('change');
-					dijit.byId('date_start_' + col).attr('value', '');
-					dijit.byId('validate_' + col).attr('value', '');
-				}
-				
-				if (balance!=0 && balance!=null) {
-					dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
-					dijit.byId('validate_' + col).attr('value', dataRow.endDate);
-					dijit.byId('price_' + col).attr('value', balance);
-					dojo.style('paid_amount' + col, "color", "red");
-					dijit.byId('isoldBalance' + col).attr('value', 1);
-					$("#term_study").select2({disabled:'readonly'});
-					dijit.byId('remark' + col).attr('value', 'Previous Balance');
-					dijit.byId('date_start_' + col).set('readOnly', true);
-					dijit.byId('validate_' + col).set('readOnly', true);
-					netTotal();
-				} else {
-					if (dataRow.endDate = !'') {
-						dijit.byId('date_start_' + col).attr('value', dataRow.endDate);
-					}
-					getservicefee(col);
-				}
-				getDiscountforStudent(col);
-			} else {
-				getservicefee(col);
-				getValidate(col);
+			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
+			
+			if (dataRow.feeId > 0) {
+				$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
 			}
-		}catch(err){}
-	}
+			
+			if (balance!=0 && balance!=null) {// have old balance
+				
+				dijit.byId('price_' + col).attr('value', balance);
+				dojo.style('paid_amount' + col, "color", "red");
+				dijit.byId('isoldBalance' + col).attr('value', 1);
+				$("#term_study").select2({disabled:'readonly'});
+				dijit.byId('remark' + col).attr('value', 'Previous Balance');
 
+				dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
+				dijit.byId('date_start_' + col).set('readOnly', true);
+
+				dijit.byId('validate_' + col).attr('value', dataRow.endDate);
+				dijit.byId('validate_' + col).set('readOnly', true);
+				netTotal();
+			} else {
+			
+				/*if (dataRow.endDate = !'') {
+					dijit.byId('date_start_' + col).attr('value', dataRow.endDate);
+				}*/
+				getservicefee(col);
+			}
+			getDiscountforStudent(col);
+			
+		}catch(err){
+
+		}
+	}
+	
 	function deleteRecord(index) {
 		var identity = $('#identity').val();
 		var arrays = identity.split(',');
@@ -1466,8 +1454,6 @@ $(document).ready(function() {
 		service_type = $('#service_type_' + key).val();
 		if((term == 2 || term==3 || term==4) && service_type==1){
 			$('#academic_term').val(term).trigger('change');
-		}else{
-			//$('#academic_term').val('').trigger('change');
 		}
 		if (term != 1) {
 			return;
@@ -1522,7 +1508,6 @@ $(document).ready(function() {
 		if (dijit.byId('isoldBalance' + key).get('value') == 1) {
 			return;
 		}
-
 		stu_type = dijit.byId('student_type').get('value');
 		studentid = dijit.byId('old_stu').get('value');
 		branch_id = dijit.byId('branch_id').get('value');
@@ -1531,13 +1516,12 @@ $(document).ready(function() {
 		item_id = dijit.byId('item_id' + key).get('value');
 		serviceType = dijit.byId('service_type_' + key).get('value');
 
-		term = $('#term_' + key).val();
+		termRecord = $('#term_' + key).val();
 		
-		
-		if (term == '') {
+		if (termRecord == '') {
 			return false;
 		}
-		if (term == 6) {
+		if (termRecord == 6) {//other term
 			dijit.byId("price_" + key).set('readOnly', false);
 			dijit.byId("price_" + key).attr("value", 0);
 			calculateTotal(key);
@@ -1550,7 +1534,7 @@ $(document).ready(function() {
 		dojo.xhrPost({
 			url: url_service_fee,
 			content: {
-				'term': term,
+				'term': termRecord,
 				'service': item_id,
 				'serviceType': serviceType,
 				'year': study_year,
@@ -1566,12 +1550,13 @@ $(document).ready(function() {
 				dijit.byId("service_type_" + key).attr("value", resultFee.items_type);
 
 				calculateTotal(key);
+
 				if (resultFee.validate != null) {
 					dijit.byId("date_start_" + key).attr("value", resultFee.validate);
 				} else {
 					dijit.byId('date_start_' + key).attr('value', '<?php echo date('Y-m-d'); ?>');
 				}
-
+				
 				if (resultFee.onepayment == 1) {
 					$("#autoNextPay" + key).prop("checked", false);
 					$("#autoNextPay" + key).prop("disabled", true);

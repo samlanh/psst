@@ -243,9 +243,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
 							if(!empty($feeInfo["academic_year"])){
 								$sql.=" AND tf.academic_year =".$feeInfo["academic_year"];
 							}
-    						
     					}
-						
     				}
     				if(!empty($data['branch_id'])){
     					$sql.=" AND branch_id = ".$data['branch_id'];
@@ -271,7 +269,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     								`rms_itemsdetail`
     								WHERE
     									id=$item_id LIMIT 1 ";
-    				}else{
+    			}else{
     					$sql="SELECT
 		    						price,
 		    						(SELECT is_onepayment FROM `rms_itemsdetail` WHERE rms_itemsdetail.id=$item_id LIMIT 1) as onepayment,

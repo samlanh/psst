@@ -675,7 +675,9 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$updateopt = array(
 				''=>$this->tr->translate("SELECT_TYPE"),
 				1=>$this->tr->translate("ADD_TO_DISCOUNT"),
-				2=>$this->tr->translate("CHANGE_DISCOUNT"));
+				2=>$this->tr->translate("UPGRADE_DISCOUNT"),
+				3=>$this->tr->translate("CHANGE_DISCOUNT"),
+			);
 		$updateOption->setMultiOptions($updateopt);
 		$updateOption->setValue($request->getParam("updateOption"));
 

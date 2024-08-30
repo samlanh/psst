@@ -1894,17 +1894,20 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{
-				$_data['device_type'] = empty($_data['device_type']) ? 1 : $_data['device_type'];
-				$check = $this->checkTokenDevice($_data['token']);
-    			$this->_name='mobile_mobile_token';
-				if(empty($check)){
-					$array = array(
-						'token'	=>$_data['token'],
-						'device_type'=> $_data['device_type'],
-						'date'	=>date('Y-m-d H:i:s'),
-					);
-					return $this->insert($array);
+				if(!empty($_data['token'])){
+					$_data['device_type'] = empty($_data['device_type']) ? 1 : $_data['device_type'];
+					$check = $this->checkTokenDevice($_data['token']);
+					$this->_name='mobile_mobile_token';
+					if(empty($check)){
+						$array = array(
+							'token'	=>$_data['token'],
+							'device_type'=> $_data['device_type'],
+							'date'	=>date('Y-m-d H:i:s'),
+						);
+						return $this->insert($array);
+					}
 				}
+				
     			
     		}catch(Exception $e){
     			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -2933,6 +2936,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						$where.=" AND s.for_month=".$search['month'];
 					}	
 				}
+			}
+			if(!empty($search['scoreId'])){
+				$where.=" AND s.`id`=".$search['scoreId'];
 			}
 			
 			$ordering=" ORDER BY s.date_input DESC,s.id DESC";
@@ -4173,6 +4179,29 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$where ="stu_id=".$studentId." AND token='$mobileToken' ";
 					$this->_name="mobile_mobile_token";
 					$this->delete($where);
+				}else{
+					$currentStudentCheck = 0;
+					if($currentStudentId>0){
+						$sql="SELECT id FROM mobile_mobile_token WHERE token='".$mobileToken."' ORDER BY id ASC LIMIT 1";
+						$currentStudentCheck = $db->fetchOne($sql);
+					}
+					if($currentStudentId>0){
+						$where =" token='$mobileToken' AND id > $currentStudentCheck";
+						$this->_name="mobile_mobile_token";
+						$this->delete($where);
+						
+						$_arr =array(
+							'stu_id' 	=> 0,
+							'token' 	=> $mobileToken,		
+							'device_type' => $deviceType,
+							'tokenType' => "0",
+						);
+						$this->_name = "mobile_mobile_token";
+						$where=" id = $currentStudentCheck ";
+						$this->update($_arr,$where);
+						
+					}
+					
 				}
 			}
 			

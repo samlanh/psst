@@ -28,13 +28,6 @@ fieldset{  background:none;}
 						dijit.byId('branch_id').focus();
 						return false;
 					}
-					adjust_date = dijit.byId('adjust_date').get('value');
-					if(adjust_date=='' || adjust_date<=0){
-						alert('<?php echo $tr->translate('PLEASE_SELECT');?>');
-						dijit.byId('adjust_date').focus();
-						return false;
-					}
-					
 					
 					loadingBlock();
 					return true;
@@ -136,7 +129,7 @@ fieldset{  background:none;}
 		new dijit.form.FilteringSelect({
 			autoComplete: false,
 			queryExpr: "*${0}*",
-			required: true,		           
+			required: false,		           
 			placeHolder:'<?php echo $tr->translate('SELECT_ADJUST');?>',
 			name: "adjust_date",
 			id: "adjust_date",

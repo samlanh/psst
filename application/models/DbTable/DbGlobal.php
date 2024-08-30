@@ -1520,8 +1520,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   		(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,	
 				(SELECT name_kh FROM `rms_view` WHERE type=40 AND key_code=s.studentType LIMIT 1) as studentType,	
 				(SELECT p.`title`  FROM `rms_parttime_list` AS p WHERE p.`id` = sgd.`session` LIMIT 1) as parttime_label,		   		
-		   		(SELECT SUM(total_amountafter) FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS total_amountafter,
-		   		(SELECT id FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS credit_memo_id,
+		   		(SELECT SUM(cr.total_amountafter) FROM rms_creditmemo cr WHERE cr.status=1 AND cr.student_id = $stu_id and cr.total_amountafter>0 GROUP BY cr.student_id LIMIT 1 ) AS total_amountafter,
+		   		(SELECT id FROM rms_creditmemo WHERE status AND student_id = $stu_id AND total_amountafter>0 GROUP BY student_id LIMIT 1 ) AS credit_memo_id,
 		   		(SELECT $field from rms_view where type=5 and key_code=sgd.stop_type AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) as status_student,
 		   		sgd.academic_year,
 		   		sgd.is_newstudent,
@@ -4367,7 +4367,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 
 		$order = " ORDER BY gs.`itemType` ASC ";
-
+		Application_Model_DbTable_DbUserLog::writeMessageError($sql . $order);
 		return $db->fetchAll($sql . $order);
 	}
 	public function getAllTermbyItemdetail($data)
@@ -4437,13 +4437,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$resultItems = array();
 			if ($data['isInititilize'] == 1) {
 				$resultItems = $this->getItemForPayment($data);//result now year
+			}else{
+				if(!empty($data['grade'])) {
+					$data['Id'] = $data['grade'];
+					unset($data['isAutopayment']);
+				}
+				$resultItems = $this->getItemAllDetail($data);
 			}
-			if(!empty($data['grade'])) {
-				$data['Id'] = $data['grade'];
-				unset($data['isAutopayment']);
-			}
-			$resultItem2 = $this->getItemAllDetail($data);
-			$resultItems = array_merge($resultItems, $resultItem2);
+			
+			// $resultItems = array_merge($resultItems, $resultItem2);
 		} elseif ($data['studentType'] == 2) {  	//tested
 			$resultItems = array();
 			if ($data['isInititilize'] == 1) {
@@ -4461,9 +4463,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			}
 			$resultItems = $this->getItemAllDetail($data);
 		}
+	
 		foreach ($resultItems as $key => $item) {
-
-			$items[$key] = array(
+			$newArray = array(
 				'itemType' => $item['itemType'],
 				'startDate' => $item['startDate'],
 				'endDate' => $item['endDate'],
@@ -4484,7 +4486,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'academicYear' => empty($item['feeId'])?$data['feeId']:$item['feeId'],
 			);
 
-			$items[$key]['termTypeList'] = $this->getAllTermbyItemdetail($param);//month,semester,year...
+			$newArray['termTypeList'] = $this->getAllTermbyItemdetail($param);//month,semester,year...
 
 			$param = array(
 				'branch_id' => $data['branch_id'],
@@ -4492,7 +4494,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'option' => 1,
 			);
 			$academicYearList = $this->getAllYearByBranch($param);
-			$items[$key]['academicYearList'] = $academicYearList;
+			$newArray['academicYearList'] = $academicYearList;
 
 			$param = array(
 				'branch_id' => $data['branch_id'],
@@ -4501,7 +4503,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			);
 
 			$termStudy = $this->getAllStudyPeriod($param);//វគ្គចូលរៀន
-			$items[$key]['studyPeriodList'] = $termStudy;
+			$newArray['studyPeriodList'] = $termStudy;
 
 			$param = array(
 				'studentId'=>$data['studentId'],
@@ -4509,7 +4511,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'optionList'=>1,
 				'fetchAll'=>1
 			);
-			$items[$key]['discountOptionList'] =$this->getDiscountListbyStudent($param);//វគ្គចូលរៀន
+			$newArray['discountOptionList'] =$this->getDiscountListbyStudent($param);//វគ្គចូលរៀន
+
+			array_push($items, $newArray);
 		}
 
 		return $items;
@@ -4684,7 +4688,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (isset($data['isAutopayment']) and $data['isInititilize'] == 1) {
 			if ($data['isAutopayment'] != '') {
 				if($data['studentType']==1){
-					$sql .= " AND FIND_IN_SET(COALESCE((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),0),degreeOption) ";
+					//$sql .= " AND FIND_IN_SET(COALESCE((SELECT degree FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),0),degreeOption) ";
+					$sql .= " AND FIND_IN_SET(COALESCE((SELECT DISTINCT(grade) FROM `rms_group_detail_student` WHERE stu_id=$studentId ORDER BY gd_id DESC LIMIT 1),0),i.id) ";
 				} else {
 					$sql .= " AND i.is_autopayment=" . $data['isAutopayment'];
 				}

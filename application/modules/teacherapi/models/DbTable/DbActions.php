@@ -295,11 +295,35 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			$db = new Teacherapi_Model_DbTable_DbApi();
 			$submitRequest = $db->submitCriteriaScore($search);
 			
-			if($submitRequest){
+			if($submitRequest["status"]){
 				$arrResult = array(
 					"code" => "SUCCESS",
-					"result" =>$submitRequest,
-				);		
+					"result" =>$submitRequest["status"],
+				);	
+
+				/*
+				$dbPush = new Api_Model_DbTable_DbPushNotification();
+				$gradingTmpId = empty($submitRequest['value']) ? 0 : $submitRequest['value'];
+				$notify = array(
+					"typeNotify" => "criteriaStudentScore",
+					"optNotification" => 3,
+					"notificationId" => $gradingTmpId,
+					"studentId" => 3,
+				);
+				
+				$stTmpScore = $dbPush->getGradingTmpStudentList($gradingTmpId);
+				if(!empty($stTmpScore)) foreach($stTmpScore as $st){
+					$notify["studentId"] = empty($st["studentId"]) ? 0 : $st["studentId"];
+					$title = $st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]." ថ្នាក់ ".$st["groupCode"];
+					$title = $title." - ".$st["criteriaTitle"]." Of ".$st["subjectTitle"]." Class ".$st["groupCode"];
+					$subTitle = " សម្រាប់ពិន្ទូទទូលបាន ".$st["totalGrading"]." ពិន្ទុ លើ".$st["criteriaTitle"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"];
+					$subTitle = $subTitle." Score ".$st["totalGrading"]." Pt(s) for ".$st["criteriaTitleKh"]." Of ".$st["subjectTitle"];
+					
+					$notify["title"] = $title;
+					$notify["subTitle"] = $subTitle;
+					$dbPush->pushNotificationAPI($notify);	
+				}	
+				*/	
 				
 			}else{
 				$arrResult = array(

@@ -83,8 +83,9 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			$notificationId = empty($_data['notificationId']) ? 0 : $_data['notificationId'];
 			
 			$_data['optNotification'] = empty($_data['optNotification']) ? 1 : $_data['optNotification'];
-			$notificationTitle = "Notification Title";
-			$notificationSubTitle = "Notification Sub Title";
+			$notificationTitle = empty($_data['title']) ? "Notification Title" : $_data['title'];
+			$notificationSubTitle = empty($_data['subTitle']) ? "Notification Sub Title" : $_data['subTitle'];
+			
 			$notificationDescription = "";
 			$typeNotify = empty($_data['typeNotify']) ? "successfulRegister" : $_data['typeNotify'];
 			
@@ -136,6 +137,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				$notificationSubTitle = $description;
 				$notificationDescription = $description;
 				$recordDetail = array($info);
+			}else if($typeNotify == "criteriaStudentScore"){
 				
 			}else if($typeNotify == "schoolBusOnline"){
 			}
@@ -175,8 +177,10 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				'Content-Type: application/json; charset=utf-8',
-				'Authorization: Basic '.$apiKey
+				"Authorization: Basic $apiKey",
+				"Content-Type: application/json; charset=utf-8",
+				"accept: application/json"
+			
 			));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -270,11 +274,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-			
-		
 	}
-	
-	
 	function getLastActiveDeviceInfo($data){
 		
 		$apiKey = APP_API_KEY;
@@ -352,6 +352,44 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			}
 		}
 		return 1;
+	}
+	
+	
+	function getGradingTmpStudentList($gradingTmpId){
+		try{
+			$db = $this->getAdapter();
+			$sql="
+				SELECT 
+					grdTmp.`id` AS gradingTmpId
+					,grdTmpD.`studentId`
+					,grdTmp.`criteriaId`
+					,g.`group_code` AS groupCode
+					,(SELECT CONCAT(COALESCE(ac.fromYear),'-',COALESCE(ac.toYear)) FROM rms_academicyear AS ac WHERE ac.id=g.academic_year LIMIT 1) AS academicYearTitle
+					,(SELECT subj.subject_titleen FROM `rms_subject` AS subj WHERE subj.id = grdTmp.`subjectId` LIMIT 1) AS subjectTitle
+					,(SELECT subj.subject_titlekh FROM `rms_subject` AS subj WHERE subj.id = grdTmp.`subjectId` LIMIT 1) AS subjectTitleKh
+					,(SELECT cri.title_en FROM `rms_exametypeeng` AS cri WHERE cri.id = grdTmp.`criteriaId` LIMIT 1) AS criteriaTitle
+					,(SELECT cri.title FROM `rms_exametypeeng` AS cri WHERE cri.id = grdTmp.`criteriaId` LIMIT 1) AS criteriaTitleKh
+
+					,grdTmpD.`totalGrading`
+					,grdTmpD.`subCriterialTitleEng`
+					,grdTmpD.`subCriterialTitleKh`
+					,(SELECT sEnT.`title` FROM `rms_score_entry_setting` AS sEnT WHERE sEnT.id = grdTmp.`settingEntryId` LIMIT 1 ) AS entrySettingTitle
+
+					,(SELECT t.teacher_name_kh  FROM `rms_teacher` AS t WHERE t.id =grdTmp.`teacherId` LIMIT 1) AS teacherName
+					
+				FROM `rms_grading_tmp` AS grdTmp 
+					JOIN `rms_grading_detail_tmp` AS grdTmpD ON grdTmp.`id` = grdTmpD.`gradingId`
+					LEFT JOIN `rms_group` AS g ON g.id = grdTmp.groupId
+				WHERE 1 
+					AND grdTmp.`id` = $gradingTmpId 
+					AND grdTmpD.`totalGrading` > 0
+			";
+			
+			$row = $db->fetchAll($sql);
+			return $row;
+		}catch (Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 	}
 	
 	

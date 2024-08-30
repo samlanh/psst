@@ -467,18 +467,25 @@ class Allreport_StockController extends Zend_Controller_Action {
 				$search = array(
 						'title'	        =>	'',
 						'branch_id'		=>  '',
-						'category_id'	=>  0,
+						'closeStockId'	=>  '',
+						'category_id'	=>  '',
 						'product'		=>  '',
-						'sort_by'		=>  -1,
 						'product_type'	=>  '',
+						
+						'status_search'	=> 1,
+						'sort_by'		=>  -1,
 						'start_date'	=>	date('Y-m-d'),
 						'end_date'		=>	date('Y-m-d'),
-						'status_search'	=> 1
 				);
+				$dbGb = new Stock_Model_DbTable_DbClosingStock();
+				$last = $dbGb->getLatestClosingStock();
+				if(!empty($last)){
+					$search["closeStockId"] = empty($last["id"]) ? '' : $last["id"];
+				}
 			}
 			$this->view->search = $search;
 			$db=new Allreport_Model_DbTable_DbRptSummaryStock();
-			$ds=$this->view->rows=$db->getAllProduct($search);
+			$ds=$this->view->rows=$db->getSummaryStockReport($search);
 	
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();

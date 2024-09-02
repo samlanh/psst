@@ -150,12 +150,17 @@ span.oldsup input[type=checkbox] {
 							
 												</div>
 												<div class="form-group">
-												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-												</label>
-												<div class="col-md-7 col-sm-7 col-xs-12">
-														<input id="branch"/>
+													<label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<select autoComplete="false" queryExpr="*${0}*" dojoType="dijit.form.FilteringSelect"   class="fullside" id="branch" name="branch" type="text" onchange="getPurchaseNo();">								
+															<?php if(!empty($this->branchopt)) foreach ($this->branchopt As $key=>$branch){?>
+																	<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+															<?php }?> 
+														</select>
+													</div>
 												</div>
-												</div>
+										
 												<div class="form-group">
 												<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PURCHASE_NO");?> 
 												</label>
@@ -297,48 +302,24 @@ span.oldsup input[type=checkbox] {
 		}, "itemId");
 
 		// new dijit.form.FilteringSelect({
-		// 	store: pro_store,
-		// 	queryExpr: "*${0}*",
-		// 	autoComplete: false,                     
-		// 	required: true,                        
-		// 	id: "pro_id",
-		// 	name: "pro_id",  
-		// 	class: 'fullside',  
-		// 	required:false,
-		// 	placeHolder:"<?php echo $tr->translate("SELECT_PRODUCT");?>",          
-		// 	onChange: function(){  
-		// 		pro_id   = dijit.byId('pro_id').get('value');
-		// 		if(pro_id==-1){
-		// 			branch = dijit.byId("branch").get("value");
-		// 			if(branch>0){
-		// 				window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/stock/product/add";?>','_blank');
-		// 			}else{
-		// 				alert("Please select branch !!! ");
-		// 				dijit.byId("branch").focus();
-		// 			}
-		// 		}else{
-		// 			addRow();
+		// store: branch_store,
+		// queryExpr: "*${0}*",
+		// autoComplete: false,                     
+		// required: true,                       
+		// id: "branch",
+		// name: "branch",           
+		// class: "fullside", 
+		// placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>​",          
+		// onChange: function() {  
+		// 		branch_id = dijit.byId('branch').get('value');
+		// 		if(branch_id==-1){
+		// 			dijit.byId("popup_add_branch").show();
 		// 		}
+		// 		getPurchaseNo();
 		// 	}
-		// }, "pro_id");
-		
-		new dijit.form.FilteringSelect({
-		store: branch_store,
-		queryExpr: "*${0}*",
-		autoComplete: false,                     
-		required: true,                       
-		id: "branch",
-		name: "branch",           
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_LOCATION");?>​",          
-		onChange: function() {  
-				branch_id = dijit.byId('branch').get('value');
-				if(branch_id==-1){
-					dijit.byId("popup_add_branch").show();
-				}
-				getPurchaseNo();
-			}
-		}, "branch");
+		// }, "branch");
+
+		getPurchaseNo();
 		$('#old_cu').hide();
 
 		$("#parentcategory").select2(

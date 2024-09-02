@@ -379,19 +379,21 @@
 						</tbody>
 					</table>
 					<div style="display: flex;width: 100%;text-align: right;align-content: end;flex-wrap: wrap;flex-direction: column;margin-top: 10px;">
-						<table class="content-data" style="width: 25%; text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
+						<table class="content-data" style=" text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
 							<tr>
-								<td colspan="3" align="center"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
+								<td colspan="4" align="center" style=" background-color :#c1d0f3;"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
 							</tr>
 							<tr>
-								<td width="20%"align="right"><?php echo $tr->translate("GRAND_TOTAL");?></td>
-								<td width="45%" align="center"><?php echo sprintf('%02d', count($this->rowStDailyPmt));?></td>
-								<td width="35%" align="right"><?php echo number_format($gTotalPaid,2);?></td>
+								<td width="25%" align="right"><?php echo $tr->translate("GRAND_TOTAL");?></td>
+								<td width="25%" align="right"><?php echo sprintf('%02d', count($this->rowStDailyPmt));?></td>
+								<td width="25%" align="right">$</td>
+								<td width="25%" align="right"><?php echo number_format($gTotalPaid,2);?></td>
 							</tr>
 							<?php if(!empty($summaryInfoArray)) foreach($summaryInfoArray as $sum){?>
 							<tr>
 								<td align="right"><?php echo $sum["methodTitle"];?></td>
-								<td align="center"><?php echo sprintf('%02d', $sum["totalRecord"]);?></td>
+								<td align="right"><?php echo sprintf('%02d', $sum["totalRecord"]);?></td>
+								<td align="right">$</td>
 								<td align="right"><?php echo number_format($sum["totalPaidAmt"],2);?></td>
 							</tr>
 							<?php } ?>

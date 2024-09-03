@@ -6,6 +6,13 @@
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
 <style>
+	ul.optListRow {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		padding-left: 35px;
+	}
+
 	.dijitTextArea[cols].dijitTextArea[cols]{
 		width: 99%;
 	}
@@ -30,6 +37,7 @@
 		background:#eee;
 	}
 </style>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -202,7 +210,7 @@
 							<div class="card-blogform">
 								<div class="card-body"> 
 									<div class="row"> 
-										<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-9 col-sm-9 col-xs-12">
 											<div class="d-flex "> 
 												<div class="settings-main-icon ">
 													<i class="glyphicon glyphicon-education"></i>	
@@ -214,13 +222,13 @@
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												&nbsp; 
 											</div>
-											<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+											<!-- <div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 												<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
 												<div class="col-md-5 col-sm-5 col-xs-12">
 													<input id="degree" name="degree" />
 												</div>
 												<div class="clearfix"></div>
-											</div>
+											</div> -->
 											<table class="collape tablesorter" id="table_term_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
 												<thead>
 													<tr id="head-title1" class="head-td" align="center" style="width: 100%;">
@@ -240,6 +248,35 @@
 											<input type="hidden" name="identity_term" id="identity_term" dojoType="dijit.form.TextBox" value="" >
 											<input type="button" label="<?php echo $tr->translate('ADD_TERM');?>" dojoType="dijit.form.Button" 
 											class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addTermRow();" />
+										</div>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<div class="card-blogform">
+												<div class="card-body"> 
+													<div class="row"> 
+														<div class="col-md-12 col-sm-12 col-xs-12"> 
+															<div class="d-flex"> 
+																<div class="settings-main-icon ">
+																	<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+																</div> 
+																<div class="col-md-10 col-sm-10 col-xs-12"> 
+																	<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+																</div> 
+															</div>
+															<br />
+															<div class="custom-control custom-checkbox ">
+																<input type="checkbox" class="checkbox custom-control-input" checked="checked"  name="checkAllDegree" id="checkAllDegree" value="all" OnChange="CheckAllTotalDegree(0);"  >
+																<label class="custom-control-label" for="checkAllDegree">
+																	<?php echo $tr->translate('CHECK_ALL');?>
+																</label>
+															</div>
+															<div class="form-group">
+																<ul class="optListRow" id="degreeCheck">
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -340,7 +377,52 @@ dojo.ready(function(){
 	});
 	 getAllGradeBySchoolOption();
 	 getAllDegreeByBranch();
+	 getDegreeOption();
 });
+function getDegreeOption(){
+	var urlGetDegreeUrl = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"get-degree-list")); ?>';
+	dojo.query("#degreeCheck").append('');
+	dojo.xhrPost({
+		url: urlGetDegreeUrl,
+		form: dojo.byId("frmUser"),
+		handleAs:"json",
+		load: function(data) {
+			temp='';
+			for(var i=0;i<data.length;i++) {
+				temp+='<li class="opt-items">';
+					temp+='<div class="custom-control custom-checkbox">';
+						temp+='<input type="checkbox" class="degreeCheckbox custom-control-input" id="degreeOptionList'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="degreeSelector[]" OnChange="CheckAllTotalDegree(1);"   >';
+						temp+='<label class="custom-control-label" for="degreeOptionList'+data[i].id+'">';
+							temp+=data[i].name;
+						temp+='</label>';
+					temp+='</div>';
+				temp+='</li>';
+			}
+			dojo.query("#degreeCheck").append(temp);
+		},
+		error: function(err) {
+		}
+	});
+}
+function CheckAllTotalDegree(index){
+	if(index==0){
+		if($('#checkAllDegree').is(":checked")){
+			$('.degreeCheckbox').each(function() { //loop through each checkbox
+				this.checked = true;  
+			});
+		}else{
+			$('.degreeCheckbox').each(function() { //loop through each checkbox
+				this.checked = false;  
+			});
+		}
+	}else{
+		var a = $("input:checked").val();
+		var identity = [];
+		$('.degreeCheckbox:checked').each(function(i){
+			identity[i] = $(this).val();
+		});
+	}
+}
 
 url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
 	function getAllDegreeByBranch(){
@@ -645,4 +727,6 @@ var col1= 0; var no1=0;
 		$('#identity_term').val(strings1);
 		dojo.query("#row_term"+index).remove();
 	}
+
+	
 </script>

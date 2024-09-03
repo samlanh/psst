@@ -52,7 +52,10 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 		$rs = $db->fetchAll($sql);
 		if(!empty($rs)) foreach($rs as $key => $cate){
 			$subList = $this->getMulitpleSubCategory($cate["id"]);
-			$rs[$key]["listSubId"] = empty($subList) ? "" : $subList;
+
+			$subListss = empty($subList) ? "" : $subList;
+			$subListss = empty($subList) ? $cate["id"] : $subList.",".$cate["id"];
+			$rs[$key]["listSubId"] = $subListss;
 			
 		}
 		return $rs;

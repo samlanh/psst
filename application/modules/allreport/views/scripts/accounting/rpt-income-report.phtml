@@ -8,6 +8,7 @@
 	$dateFormat ="d/m/Y";
 	
 	$parentCol = $this->parentCol;
+
 	$countCol = count($parentCol);
 	$dbAcc = new Allreport_Model_DbTable_DbAccountReport();
 ?>
@@ -108,7 +109,7 @@
 				word-break: break-all;
 				line-height: 10px;
 				white-space: normal;
-				width: 100px;
+				width: 50px;
 				display: block;
 			}
 			table tr td{
@@ -378,8 +379,8 @@
 						
 						</tbody>
 					</table>
-					<div style="display: flex;width: 100%;text-align: right;align-content: end;flex-wrap: wrap;flex-direction: column;margin-top: 10px;">
-						<table class="content-data" style=" text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
+					<div style="display: flex; text-align: right;align-content: end;flex-wrap: wrap;flex-direction: column;margin-top: 10px; margin-right:183px;">
+						<table  class="content-data" style=" width:22%; text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
 							<tr>
 								<td colspan="4" align="center" style=" background-color :#c1d0f3;"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
 							</tr>

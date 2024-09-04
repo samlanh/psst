@@ -4528,7 +4528,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.=" AND g.academic_year = ".$_data['academicYear'];	
 			}
 		
-		$sql .=' ORDER BY g.id DESC';	
+		$sql .=' ORDER BY g.degree DESC,g.id DESC';	
 		return $db->fetchAll($sql);
 	}
 	function getAllCriteriaByStudent($_data){

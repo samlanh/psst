@@ -83,14 +83,17 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			$notificationId = empty($_data['notificationId']) ? 0 : $_data['notificationId'];
 			
 			$_data['optNotification'] = empty($_data['optNotification']) ? 1 : $_data['optNotification'];
-			$notificationTitle = empty($_data['title']) ? "Notification Title" : $_data['title'];
-			$notificationSubTitle = empty($_data['subTitle']) ? "Notification Sub Title" : $_data['subTitle'];
+			$notificationTitle = empty($_data['title']) ? "" : $_data['title'];
+			$notificationSubTitle = empty($_data['subTitle']) ? "" : $_data['subTitle'];
+			$notificationDescription = $notificationSubTitle;
 			
-			$notificationDescription = "";
+			
 			$typeNotify = empty($_data['typeNotify']) ? "successfulRegister" : $_data['typeNotify'];
 			
-			
-			$androidToken = $this->getMobileToken($_data);
+			$androidToken = null;
+			if($_data['optNotification']!=1){
+				$androidToken = $this->getMobileToken($_data);
+			}
 			
 			$recordDetail = array();
 			if($typeNotify == "successfulRegister"){
@@ -162,7 +165,6 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 			$appId = APP_ID;
 			$fields = array(
 				'app_id' => APP_ID,
-				'include_player_ids' => $androidToken,
 				'data' => $dataNotify,
 				'headings' => $headings,
 				'contents' => $content,
@@ -170,9 +172,15 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 				"ios_badgeType" => "Increase",
 				"ios_badgeCount" => 1,
 			);
+			
+			if($_data['optNotification']==1){
+				$fields["target_channel"] = "push";
+				$fields["included_segments"] = ["Subscribed Users"];
+			}else{
+				$fields["include_player_ids"] = $androidToken;
+			}
 	
 			$fields = json_encode($fields);
-	
 	
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
@@ -190,6 +198,7 @@ class Api_Model_DbTable_DbPushNotification extends Zend_Db_Table_Abstract
 	
 			$response = curl_exec($ch);
 			curl_close($ch);
+			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}

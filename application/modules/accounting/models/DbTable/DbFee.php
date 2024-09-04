@@ -123,7 +123,7 @@ class Accounting_Model_DbTable_DbFee extends Zend_Db_Table_Abstract
 	    		}
 				if(!empty($_data['identity_term'])){
 
-					$degreeSelector= implode(',', $_data['degreeSelector']);
+					$degreeSelector= implode(',', $_data['selector']);
 					$id_st_term = explode(',', $_data['identity_term']);
 					foreach ($id_st_term as $t){
 						$arr = array(

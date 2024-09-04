@@ -6,13 +6,11 @@
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
 <style>
-	ul.optListRow {
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-		padding-left: 35px;
+	.optListRow li.opt-items input[type=checkbox],
+	input[type=radio] {
+		margin: -9px 0 0 !important;
 	}
-
+	
 	.dijitTextArea[cols].dijitTextArea[cols]{
 		width: 99%;
 	}
@@ -68,6 +66,18 @@
 				if(identity==''){
 					alert('Please set fee for grade !!! ');
 					return false;
+				}
+
+				identity_term = dijit.byId('identity_term').get('value');
+				if(identity_term!=''){
+					var identity_degree = [];
+						$('.degreeCheckbox:checked').each(function(i){
+							identity_degree[i] = $(this).val();
+					});
+					if(identity_degree==""){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+						return false;
+					}
 				}
     			return true;
   			 }else {
@@ -264,15 +274,28 @@
 															</div>
 															<br />
 															<div class="custom-control custom-checkbox ">
-																<input type="checkbox" class="checkbox custom-control-input" checked="checked"  name="checkAllDegree" id="checkAllDegree" value="all" OnChange="CheckAllTotalDegree(0);"  >
-																<label class="custom-control-label" for="checkAllDegree">
+																<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" checked >
+																<label class="custom-control-label" for="check_all">
 																	<?php echo $tr->translate('CHECK_ALL');?>
 																</label>
 															</div>
 															<div class="form-group">
-																<ul class="optListRow" id="degreeCheck">
+																<ul class="optListRow">
+																	<?php 
+																		if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+																		?>
+																		<li class="opt-items"> 
+																			<div class="custom-control custom-checkbox">
+																				<input type="checkbox" class="checkbox degreeCheckbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]" checked >
+																				<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
+																					<?php echo $rs['name'];?>
+																				</label>
+																			</div>
+																		</li>
+																	<?php } ?>
 																</ul>
 															</div>
+															
 														</div>
 													</div>
 												</div>
@@ -377,50 +400,13 @@ dojo.ready(function(){
 	});
 	 getAllGradeBySchoolOption();
 	 getAllDegreeByBranch();
-	 getDegreeOption();
 });
-function getDegreeOption(){
-	var urlGetDegreeUrl = '<?php echo $this->url(array("module"=>"rsvacl","controller"=>"user","action"=>"get-degree-list")); ?>';
-	dojo.query("#degreeCheck").append('');
-	dojo.xhrPost({
-		url: urlGetDegreeUrl,
-		form: dojo.byId("frmUser"),
-		handleAs:"json",
-		load: function(data) {
-			temp='';
-			for(var i=0;i<data.length;i++) {
-				temp+='<li class="opt-items">';
-					temp+='<div class="custom-control custom-checkbox">';
-						temp+='<input type="checkbox" class="degreeCheckbox custom-control-input" id="degreeOptionList'+data[i].id+'" checked type="checkbox" value="'+data[i].id+'" name="degreeSelector[]" OnChange="CheckAllTotalDegree(1);"   >';
-						temp+='<label class="custom-control-label" for="degreeOptionList'+data[i].id+'">';
-							temp+=data[i].name;
-						temp+='</label>';
-					temp+='</div>';
-				temp+='</li>';
-			}
-			dojo.query("#degreeCheck").append(temp);
-		},
-		error: function(err) {
-		}
-	});
-}
-function CheckAllTotalDegree(index){
-	if(index==0){
-		if($('#checkAllDegree').is(":checked")){
-			$('.degreeCheckbox').each(function() { //loop through each checkbox
-				this.checked = true;  
-			});
-		}else{
-			$('.degreeCheckbox').each(function() { //loop through each checkbox
-				this.checked = false;  
-			});
-		}
+
+function checkall(){
+	if ($('#check_all').is(':checked')) {
+		$(".checkbox").prop('checked', true);
 	}else{
-		var a = $("input:checked").val();
-		var identity = [];
-		$('.degreeCheckbox:checked').each(function(i){
-			identity[i] = $(this).val();
-		});
+		$(".checkbox").prop('checked', false);
 	}
 }
 
@@ -491,6 +477,18 @@ function alertBeforeSubmit(save_type){
 		if(identity==''){
 			dijit.byId("grade").focus();
 			return false;
+		}
+
+		var identity_term = $('#identity_term').val();
+		if(identity_term!=''){
+			var identity_degree = [];
+				$('.degreeCheckbox:checked').each(function(i){
+					identity_degree[i] = $(this).val();
+			});
+			if(identity_degree==""){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+				return false;
+			}
 		}
 		
 		dijit.byId('save_type').attr('value',save_type);

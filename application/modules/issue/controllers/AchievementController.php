@@ -52,7 +52,21 @@ class Issue_AchievementController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="INSERT_SUCCESS";
-				$_db->addStudentAchievement($_data);
+				$rs = $_db->addStudentAchievement($_data);
+				
+				$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
+				$notify = array(
+					"notificationId" => $rs,
+					"optNotification" => 3,
+					"studentId" 	=> $_data["studentId"],
+					"typeNotify" 	=> "studentAchievement",
+					"title" 		=> $_data["title"],
+					"subTitle" 		=> $_data["description"],
+				);
+				if (!empty($_data["push_notify"])) {
+					$dbPushNoti->pushNotificationAPI($notify);
+				}
+				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL);
 				}else{
@@ -80,7 +94,19 @@ class Issue_AchievementController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="EDIT_SUCCESS";
-				$_db->updateIssueLetterpraise($_data);
+				$rs = $_db->updateIssueLetterpraise($_data);
+				$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
+				$notify = array(
+					"notificationId" => $rs,
+					"optNotification" => 3,
+					"studentId" 	=> $_data["studentId"],
+					"typeNotify" 	=> "studentAchievement",
+					"title" 		=> $_data["title"],
+					"subTitle" 		=> $_data["description"],
+				);
+				if (!empty($_data["push_notify"])) {
+					$dbPushNoti->pushNotificationAPI($notify);
+				}
 				Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL);
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

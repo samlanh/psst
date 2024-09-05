@@ -64,6 +64,7 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 		try{
 			$_arr= array(
 					'branchId'			=>$_data['branch_id'],
+					'academic_year'		=>$_data['academic_year'],
 					'achievementType'	=>$_data['achievementType'],
 					'groupId'			=>$_data['groupId'],
 					'studentId'			=>$_data['studentId'],
@@ -96,6 +97,7 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 			$status = empty($_data['status'])?0:1;
 			$_arr= array(
 					'branchId'			=>$_data['branch_id'],
+					'academic_year'		=>$_data['academic_year'],
 					'achievementType'	=>$_data['achievementType'],
 					'groupId'			=>$_data['groupId'],
 					'studentId'			=>$_data['studentId'],

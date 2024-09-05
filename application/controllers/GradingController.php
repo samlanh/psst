@@ -101,6 +101,31 @@ class GradingController extends Zend_Controller_Action
 
 			try {
 				$rs = $db->addScoreGradingByClass($_data);
+				
+				/*
+				$dbPush = new Api_Model_DbTable_DbPushNotification();
+				$gradingTmpId = empty($rs) ? 0 : $rs;
+				$notify = array(
+					"typeNotify" => "criteriaStudentScore",
+					"optNotification" => 3,
+					"notificationId" => $gradingTmpId,
+					"studentId" => 3,
+				);
+				
+				$stTmpScore = $dbPush->getGradingTmpStudentList($gradingTmpId);
+				if(!empty($stTmpScore)) foreach($stTmpScore as $st){
+					$notify["studentId"] = empty($st["studentId"]) ? 0 : $st["studentId"];
+					$title = $st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]." ថ្នាក់ ".$st["groupCode"];
+					$title = $title." - ".$st["criteriaTitle"]." Of ".$st["subjectTitle"]." Class ".$st["groupCode"];
+					$subTitle = "ពិន្ទូទទូលបាន ".$st["totalGrading"]." ពិន្ទុ លើ".$st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]."។";
+					$subTitle = $subTitle." Score ".$st["totalGrading"]." Pt(s) for ".$st["criteriaTitle"]." Of ".$st["subjectTitle"].".";
+					
+					$notify["title"] = $title;
+					$notify["subTitle"] = $subTitle;
+					$dbPush->pushNotificationAPI($notify);	
+				}
+				*/
+				
 				if(isset($_data['save_new'])){
 					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/add");
 				}else {
@@ -172,6 +197,29 @@ class GradingController extends Zend_Controller_Action
 
 			try{
 				$rs = $db->UpdateScoreGradingByClass($_data);
+				
+				$dbPush = new Api_Model_DbTable_DbPushNotification();
+				$gradingTmpId = empty($_data['recordId']) ? 0 : $_data['recordId'];
+				$notify = array(
+					"typeNotify" => "criteriaStudentScore",
+					"optNotification" => 3,
+					"notificationId" => $gradingTmpId,
+					"studentId" => 3,
+				);
+				
+				$stTmpScore = $dbPush->getGradingTmpStudentList($gradingTmpId);
+				if(!empty($stTmpScore)) foreach($stTmpScore as $st){
+					$notify["studentId"] = empty($st["studentId"]) ? 0 : $st["studentId"];
+					$title = $st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]." ថ្នាក់ ".$st["groupCode"];
+					$title = $title." - ".$st["criteriaTitle"]." Of ".$st["subjectTitle"]." Class ".$st["groupCode"];
+					$subTitle = "ពិន្ទូទទូលបាន ".$st["totalGrading"]." ពិន្ទុ លើ".$st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]."។";
+					$subTitle = $subTitle." Score ".$st["totalGrading"]." Pt(s) for ".$st["criteriaTitle"]." Of ".$st["subjectTitle"].".";
+					
+					$notify["title"] = $title;
+					$notify["subTitle"] = $subTitle;
+					$dbPush->pushNotificationAPI($notify);	
+				}
+				
 				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");				
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

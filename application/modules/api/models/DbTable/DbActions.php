@@ -564,6 +564,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 			);
 		}
+		
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
@@ -1875,6 +1876,10 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					"message" => $row['value'],
 				);
 			}
+			
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($_data);
+			
 			print_r(Zend_Json::encode($arrResult));
 			exit();
 		}catch(Exception $e){

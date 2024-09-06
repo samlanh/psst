@@ -4367,7 +4367,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 
 		$order = " ORDER BY gs.`itemType` ASC ";
-		Application_Model_DbTable_DbUserLog::writeMessageError($sql . $order);
+		// Application_Model_DbTable_DbUserLog::writeMessageError($sql . $order);
 		return $db->fetchAll($sql . $order);
 	}
 	public function getAllTermbyItemdetail($data)
@@ -5098,37 +5098,54 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				FROM `rms_dis_setting` AS ds
 					LEFT JOIN rms_discount_student disc
 					ON ds.`id`=disc.`discountGroupId`
-				WHERE ds.isCurrent=1 AND disc.isCurrent=1";
-		}
-		
-		//$secondCondition = "  ds.discountFor=2 ";
-		if (!empty($data['id'])) {//discount setting id
-			$sql .= " AND ds.id=" . $data['id'];
-		}
-		
-		if (!empty($data['discountId'])) {//discount category id
-			$sql .= " AND ds.discountId=" . $data['discountId'];
-		}
-		if (!empty($data['studentId'])) {
-			$sql .= " AND disc.studentId=" . $data['studentId'];
-		}
-		if (!empty($data['degree'])) {
-			$sql .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
-		}
-		if (!empty($data['grade'])) {
-			$sql .= " AND FIND_IN_SET((SELECT d.items_id FROM `rms_itemsdetail` d WHERE d.id=".$data['grade']." LIMIT 1),ds.degree)";
+				WHERE ds.isCurrent=1 ";
 		}
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
+
+		$sqldiscountId = '';
+		$sqldiscountCateId = '';
+		$sqlStuId = '';
+		$sqldegree = '';
+		$sqlGrade = '';
+		$sqlPeriod = '';
+		$sqlPeriod = '';
+
+		if (!empty($data['id'])) {//discount setting id
+			$sqldiscountId .= " AND ds.id=" . $data['id'];
+		}
+		
+		if (!empty($data['discountId'])) {//discount category id
+			$sqldiscountCateId .= " AND ds.discountId=" . $data['discountId'];
+		}
+		if (!empty($data['studentId'])) {
+			$sqlStuId .= " AND disc.studentId=" . $data['studentId'];
+		}
+		if (!empty($data['degree'])) {
+			$sqldegree .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
+		}
+		if (!empty($data['grade'])) {
+			$sqlGrade .= " AND FIND_IN_SET((SELECT d.items_id FROM `rms_itemsdetail` d WHERE d.id=".$data['grade']." LIMIT 1),ds.degree)";
+		}
+		
+		
+		$condition1 =$sqldiscountId.$sqldegree.$sqlGrade.$sqldiscountCateId;
+		$condition2 = " AND disc.isCurrent=1".$sqldiscountId.$sqlStuId.$sqldegree.$sqlGrade.$sqldiscountCateId;
+		$sql .= " AND CASE 
+					WHEN `discountFor`=3 THEN `discountFor`=3 $condition1 		
+					WHEN (`discountFor`=1 OR `discountFor`=2) THEN 1 $condition2
+					END ";
+
 		$from_date =" ds.startDate <= '".date("Y-m-d")."'";
 		$to_date =" ds.endDate >= '".date("Y-m-d")."'";
-	    $WherediscountPromotion = " AND ".$from_date." AND ".$to_date;
+		$WherediscountPromotion = " AND ".$from_date." AND ".$to_date;//check discount period first 
 
-		$sql.=" OR (ds.discountFor=3 AND discountPeriod=2 $WherediscountPromotion)";
-		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
+		$sql .= " AND CASE 
+			WHEN `discountPeriod`=2 THEN `discountPeriod`=2 $WherediscountPromotion 		
+		END";
 
-		if (!empty($data['fetchAll'])) {
+		if(!empty($data['fetchAll'])){
 			$result =  $this->getAdapter()->fetchAll($sql);
 			if (!empty($result) AND !empty($data['optionList'])) {
 				$options = '';

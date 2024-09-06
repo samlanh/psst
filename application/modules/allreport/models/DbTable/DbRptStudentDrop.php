@@ -173,15 +173,21 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			$school_name = "school_nameen";
     	}
     	$sql="SELECT gr.id,gr.year_id,
+			gr.branch_id,
     		gr.group_id,
-    		gr.branch_id,
+			(SELECT rms_group.degree FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) as degree,
 			(SELECT fromYear FROM `rms_academicyear` WHERE id=gr.year_id LIMIT 1) AS from_year,
 			(SELECT toYear FROM `rms_academicyear` WHERE id=gr.year_id LIMIT 1) AS to_year,
+			(SELECT photo FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_logo,
     		(SELECT branch_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS branch_name,
 			(SELECT $school_name FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS school_name,
+			(SELECT school_namekh FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS school_namekh,
+			(SELECT school_nameen FROM `rms_branch` WHERE br_id=gr.branch_id LIMIT 1) AS school_nameen,
     		(SELECT group_code FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) AS group_code,
 			(SELECT $teacherRoom  FROM `rms_teacher` WHERE  rms_teacher.id=(SELECT teacher_id FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) )AS teacher_room,
 			(SELECT tel  FROM `rms_teacher` WHERE  rms_teacher.id=(SELECT teacher_id FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) )AS teacher_tel,
+			(SELECT $teacherRoom  FROM `rms_teacher` WHERE  rms_teacher.id=(SELECT teacher_assistance FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) )AS teacher_ta,
+			(SELECT tel  FROM `rms_teacher` WHERE  rms_teacher.id=(SELECT teacher_assistance FROM rms_group WHERE rms_group.id=gr.group_id LIMIT 1) )AS ta_tel,
     		gr.day_id,gr.from_hour,gr.to_hour,
 			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.from_hour LIMIT 1) AS fromHourTitle,
 			(SELECT t.title FROM rms_timeseting As t WHERE t.value =gr.to_hour LIMIT 1) AS toHourTitle,
@@ -194,9 +200,9 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
     	FROM rms_group_reschedule AS gr";
     	 
     	$where =' where 1';
-    	$from_date =(empty($search['start_date']))? '1': "gr.create_date >= '".$search['start_date']." 00:00:00'";
-    	$to_date = (empty($search['end_date']))? '1': "gr.create_date <= '".$search['end_date']." 23:59:59'";
-    	$where.= " AND ".$from_date." AND ".$to_date;
+    	// $from_date =(empty($search['start_date']))? '1': "gr.create_date >= '".$search['start_date']." 00:00:00'";
+    	// $to_date = (empty($search['end_date']))? '1': "gr.create_date <= '".$search['end_date']." 23:59:59'";
+    	// $where.= " AND ".$from_date." AND ".$to_date;
     
     	if(!empty($search['adv_search'])){
     		$s_where = array();
@@ -343,44 +349,48 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 			    	AND gr.subject_id =$subject_id
     			ORDER BY 
     				subject_name,gr.subject_id DESC ";
-    	
     	$row = $db->fetchAll($sql);
-    	$hour=0;
-    	$min=0;
-    	if (!empty($row)){
-	    	foreach ($row as $rs){
-	    		$fromHour = explode(".", $rs['from_hour']);
-	    		$to_hour = explode(".", $rs['to_hour']);
-	    		
-	    		$HourFro = $fromHour[0]; 
-	    		$HourTo = $to_hour[0];	
-	    		
-	    		$MinFro = end($fromHour);
-	    		$MinTo = end($to_hour);
-	    		
-	    		$hour = $hour + ($HourTo - $HourFro);
-	    		$min = $min+($MinTo - $MinFro);
-		
-	    		if(($MinTo - $MinFro)<0 && $min<60){
-	    			$hour = $hour -1;
-	    			$min = 60 + $min;
-	    			if($min>=60){
-	    				$min = $min%60;
-	    				$hour = $hour+1;
-	    			}
-	    		}else if($min>=60){
-	    			$min = $min%60;
-	    			$hour = $hour+1;
-	    		}else if(($MinTo - $MinFro)<0){
-	    			$hour = $hour -1;
-	    			$min = 60 + $min;
-	    		}
-	    	}
-    	}
-		if($min>0){
-			$hour=$hour+1;
-			$min =0;
+		if(!empty($row)){
+			$hour=count($row);  // section count
+		}else{
+			$hour=0;
 		}
+    	$min=0;
+    	// if (!empty($row)){
+	    // 	foreach ($row as $rs){
+	    // 		$fromHour = explode(".", $rs['from_hour']);
+	    // 		$to_hour = explode(".", $rs['to_hour']);
+	    		
+	    // 		$HourFro = $fromHour[0]; 
+	    // 		$HourTo = $to_hour[0];	
+	    		
+	    // 		$MinFro = end($fromHour);
+	    // 		$MinTo = end($to_hour);
+	    		
+	    // 		$hour = $hour + ($HourTo - $HourFro);
+	    // 		$min = $min+($MinTo - $MinFro);
+		
+	    // 		if(($MinTo - $MinFro)<0 && $min<60){
+	    // 			$hour = $hour -1;
+	    // 			$min = 60 + $min;
+	    // 			if($min>=60){
+	    // 				$min = $min%60;
+	    // 				$hour = $hour+1;
+	    // 			}
+	    // 		}else if($min>=60){
+	    // 			$min = $min%60;
+	    // 			$hour = $hour+1;
+	    // 		}else if(($MinTo - $MinFro)<0){
+	    // 			$hour = $hour -1;
+	    // 			$min = 60 + $min;
+	    // 		}
+	    // 	}
+    	// }
+		// if($min>0){
+		// 	$hour=$hour+1;
+		// 	$min =0;
+		// }
+
     	$lblHour="Hr";
     	if ($hour>1){
     		$lblHour="Hrs";

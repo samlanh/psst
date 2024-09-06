@@ -316,8 +316,8 @@ class Teacherapi_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 					$notify["studentId"] = empty($st["studentId"]) ? 0 : $st["studentId"];
 					$title = $st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]." ថ្នាក់ ".$st["groupCode"];
 					$title = $title." - ".$st["criteriaTitle"]." Of ".$st["subjectTitle"]." Class ".$st["groupCode"];
-					$subTitle = " សម្រាប់ពិន្ទូទទូលបាន ".$st["totalGrading"]." ពិន្ទុ លើ".$st["criteriaTitle"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"];
-					$subTitle = $subTitle." Score ".$st["totalGrading"]." Pt(s) for ".$st["criteriaTitleKh"]." Of ".$st["subjectTitle"];
+					$subTitle = "ពិន្ទូទទូលបាន ".$st["totalGrading"]." ពិន្ទុ លើ".$st["criteriaTitleKh"]." នៃមុខវិជ្ជា ".$st["subjectTitleKh"]."។";
+					$subTitle = $subTitle." Score ".$st["totalGrading"]." Pt(s) for ".$st["criteriaTitle"]." Of ".$st["subjectTitle"].".";
 					
 					$notify["title"] = $title;
 					$notify["subTitle"] = $subTitle;

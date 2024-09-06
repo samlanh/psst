@@ -96,6 +96,18 @@ class Mobileapp_NotificationController extends Zend_Controller_Action
 	      $_data = $this->getRequest()->getPost();
 	      try{
 	        $rs = $db->add($_data);
+			
+			$notify = array(
+						"notificationId" => $rs,
+						"optNotification" => $_data["opt_notification"],
+						"degreeId" => $_data["degree"],
+						"groupId" => $_data["groupId"],
+						"studentId" => $_data["studentId"],
+						"typeNotify" => "notificationArticle",
+					);
+				$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
+				$dbPushNoti->pushNotificationAPI($notify);
+				
 	       	Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'), self::REDIRECT_URL);
 	      }catch(Exception $e){
 	        $err =$e->getMessage();

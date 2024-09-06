@@ -52,6 +52,13 @@ table.tb-footer tr.style-head {
 					<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
 							showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 				</div>
+				<div class="col-md-3 col-sm-2 col-xs-12">
+					<label class="control-label custom-switch float-start "> 
+						<a href="javascript:void(0);"  class="switchButton status"><?php echo $tr->translate("SHOW_PRODUCT_INFO");?></a> 
+						<input type="checkbox"  id="IsShowPrice" name="IsShowPrice" class="custom-switch-input"  onChange="Checkchange();" checked> 
+						<span class="custom-switch-indicator custom-radius switch-status"></span> 
+					</label>
+				</div>
 			</div>
 		</form>
 	<div style="min-height:22cm; margin:0 auto;">
@@ -78,7 +85,7 @@ table.tb-footer tr.style-head {
 					.style1:hover{ background: #ccc; }
 					table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
 					table { page-break-inside:auto }
-					tr{ page-break-inside:avoid; page-break-after:auto; }
+			
 					#header {
 					  display: table-header-group;
 					  page-break-inside:avoid; page-break-after:auto;
@@ -140,13 +147,12 @@ table.tb-footer tr.style-head {
 								<tr class="style" align="center">
 									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td scope="col" colspan="4">&nbsp;<?php echo $tr->translate("PRODUCT_INFO");?>&nbsp;</td>
-									<td scope="col" colspan="5">&nbsp;<?php echo $tr->translate("STOCK_INFO");?>&nbsp;</td>
-									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("DATE");?>&nbsp;</td>
+									<td scope="col" id="head_info" colspan="5">&nbsp;<?php echo $tr->translate("STOCK_INFO");?>&nbsp;</td>
 									<?php if($show_image==1){?>
-									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("IMAGE");?>&nbsp;</td>
+									<td class="hideClass" scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("IMAGE");?>&nbsp;</td>
 									<?php }?>
-									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
-									<td scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("STATUS");?>&nbsp;</td>
+									<td class="hideClass" scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("NOTE");?>&nbsp;</td>
+									<td class="showClass" scope="col" rowspan="2">&nbsp;<?php echo $tr->translate("OTHER_INFOMATION");?>&nbsp;</td>
 								</tr>
 								<tr class="style " align="center">
 									<td scope="col">&nbsp;<?php echo $tr->translate('PRODUCT_CATEGORY');?>&nbsp;</td>
@@ -154,10 +160,11 @@ table.tb-footer tr.style-head {
 									<td scope="col">&nbsp;<?php echo $tr->translate('PRODUCT_NAME');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('QTY');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
-									<td scope="col">&nbsp;<?php echo $tr->translate('PRICE_SET');?>&nbsp;</td>
+									<td class="showClass" scope="col">&nbsp;<?php echo $tr->translate('COUNT_QTY');?>&nbsp;</td>
+									<td class="hideClass" scope="col">&nbsp;<?php echo $tr->translate('UNIT_PRICE');?>&nbsp;</td>
+									<td class="hideClass" scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+									<td class="hideClass" scope="col">&nbsp;<?php echo $tr->translate('SELL_PRICE');?>&nbsp;</td>
+									<td class="hideClass" scope="col">&nbsp;<?php echo $tr->translate('PRICE_SET');?>&nbsp;</td>
 							   </tr>
 						   </thead>
 						<?php 
@@ -179,19 +186,19 @@ table.tb-footer tr.style-head {
 							    <td class="wrapcontent" data-label="<?php echo $tr->translate("PRODUCT_NAME");?>" align="left">&nbsp;<?php echo $rs['pro_name'];?></td​>
 								<td class="nowrap" data-label="<?php echo $tr->translate("TYPE");?>" align="left">&nbsp;<?php echo $rs['product_type'];?></td>
 							    <td data-label="<?php echo $tr->translate("QTY");?>"><?php echo number_format($rs['pro_qty'],0); ?></td>
-							    <td data-label="<?php echo $tr->translate("UNIT_PRICE");?>"><?php echo number_format($rs['costing'],2);?></td>
-							    <td data-label="<?php echo $tr->translate("TOTAL");?>"  align="right"><strong><?php echo number_format($rs['pro_qty']*$rs['costing'],2);?></strong></td>
+								<td class="showClass"  data-label="<?php echo $tr->translate("COUNT_QTY");?>"></td>
+							    <td class="hideClass" data-label="<?php echo $tr->translate("UNIT_PRICE");?>"><?php echo number_format($rs['costing'],2);?></td>
+							    <td class="hideClass" data-label="<?php echo $tr->translate("TOTAL");?>"  align="right"><strong><?php echo number_format($rs['pro_qty']*$rs['costing'],2);?></strong></td>
 								    <?php 
 								    $total_cost = $total_cost+($rs['pro_qty']*$rs['costing']);
 								    ?>
-								<td data-label="<?php echo $tr->translate("SELL_PRICE");?>"  align="right"><?php echo number_format($rs['pro_price'],2);?></td>
-								<td data-label="<?php echo $tr->translate("PRICE_SET");?>"  align="right"><?php echo number_format($rs['price_set'],2);?></td>
-							    <td data-label="<?php echo $tr->translate("DATE");?>"><?php echo date("d/m/Y",strtotime($rs['date']));?></td>
+								<td class="hideClass" data-label="<?php echo $tr->translate("SELL_PRICE");?>"  align="right"><?php echo number_format($rs['pro_price'],2);?></td>
+								<td class="hideClass" data-label="<?php echo $tr->translate("PRICE_SET");?>"  align="right"><?php echo number_format($rs['price_set'],2);?></td>
 							    <?php if($show_image==1){?>
-									<td><a target="_blank" href="<?php echo $this->baseUrl().'/images/proimage/'.$rs['images'];?>"><img style="max-height:30px;" <?php if(!empty($rs['images'])){echo "src='".$this->baseUrl().'/images/proimage/'.$rs['images']."'";}?> /></a></td>
+									<td class="hideClass" ><a target="_blank" href="<?php echo $this->baseUrl().'/images/proimage/'.$rs['images'];?>"><img style="max-height:30px;" <?php if(!empty($rs['images'])){echo "src='".$this->baseUrl().'/images/proimage/'.$rs['images']."'";}?> /></a></td>
 							    <?php }?>
-							    <td data-label="<?php echo $tr->translate("NOTE");?>"><?php echo $rs['note']; ?></td>
-							    <td data-label="<?php echo $tr->translate("STATUS");?>"><?php echo $rs['status']; ?></td>
+							    <td class="hideClass" data-label="<?php echo $tr->translate("NOTE");?>"><?php echo $rs['note']; ?></td>
+								<td class="showClass" data-label="<?php echo $tr->translate("OTHER_INFOMATION");?>"></td>
 							</tr>
 								<?php
 									} 
@@ -203,8 +210,8 @@ table.tb-footer tr.style-head {
 						     <br />
 						     <table width="25%"  style="float:right;font-family:'Times New Roman','Khmer OS Battambang'; border: 1px solid #000; border-collapse: collapse;white-space: nowrap;"  border="1"  >
 						           <tr align="center" style="font-size:12px; height: 20px; background-color: #ccd9ff; line-height: 30px;" align="center">
-						               <td><?php echo $tr->translate('TOTAL_UNIT_PRICE');?> :</td>
-						               <td align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</strong></td>
+						               <td class="hideClass" ><?php echo $tr->translate('TOTAL_UNIT_PRICE');?> :</td>
+						               <td class="hideClass"  align="right"><strong>&nbsp;$&nbsp;<?php echo number_format($total_cost,2);?>&nbsp;</strong></td>
 						           </tr>
 						     </table>
 						<?php }?>	
@@ -227,6 +234,7 @@ table.tb-footer tr.style-head {
 	require(["dojo/ready"], function(ready){
 		ready(function(){
 			getProductByCate();
+			Checkchange();
 		});
 		new dijit.form.FilteringSelect({
 			store: item_store,
@@ -258,4 +266,32 @@ table.tb-footer tr.style-head {
 				}
 			});
 	}
+	function Checkchange(){
+		var cell = document.getElementById('head_info');
+		if (dojo.byId("IsShowPrice").checked){
+		
+			$(".hideClass").css("display", "table-cell");
+			$(".showClass").css("display", "none");
+			cell.colSpan = 5; 
+		}else{
+			$(".hideClass").css("display", "none");
+			$(".showClass").css("display", "table-cell");	
+			cell.colSpan =2; 
+		}
+		// $(".examtype_display").css("display", "flow-root");
+		// $(".annaul_exam_display").css("display", "flow-root");
+		// if (exam_type == 2) {
+		// 	dijit.byId('for_month').set("readOnly", true);
+		// 	$(".examtype_display").css("display", "none");
+		// } else if (exam_type == 3) {
+		// 	dijit.byId('for_month').attr("value", '');
+		// 	dijit.byId('for_semester').attr("value", '');
+
+		// 	dijit.byId('for_month').set("required", false);
+		// 	dijit.byId('for_semester').set("required", false);
+
+		// 	$(".annaul_exam_display").css("display", "none");
+		// }
+	}
+	
 </script>

@@ -39,6 +39,24 @@ class Issue_Form_FrmAchievement extends Zend_Dojo_Form
     		}
     	}
 		
+		$academic_year = new Zend_Dojo_Form_Element_FilteringSelect('academic_year');
+		$academic_year->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+			'class'=>'fullside',
+			'onChange'=>'getAllGroupByBranch();',
+			'required'=>'false',
+			'queryExpr'=>'*${0}*',
+			'autoComplete'=>'false',
+		));
+		
+		$academic_year->setValue($request->getParam("academic_year"));
+		$rows =  $_dbgb->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$academic_year->setMultiOptions($opt);
+
 		$achievementType=  new Zend_Dojo_Form_Element_FilteringSelect('achievementType');
     	$achievementType->setAttribs(
 			array(
@@ -97,6 +115,7 @@ class Issue_Form_FrmAchievement extends Zend_Dojo_Form
     	if(!empty($data)){
 
     		$_branch_id->setValue($data["branchId"]);
+			$academic_year->setValue($data["academic_year"]);
     		$_branch_id->setAttribs(array('readonly'=>'readonly'));
     		$achievementType->setValue($data["achievementType"]);
     		$title->setValue($data["title"]);
@@ -111,6 +130,7 @@ class Issue_Form_FrmAchievement extends Zend_Dojo_Form
     	$this->addElements(
 			array(
     			$_branch_id,
+				$academic_year ,
     			$achievementType,
     			$title,
     			$description,

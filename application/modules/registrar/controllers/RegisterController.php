@@ -81,7 +81,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       		}else{
       			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register/add");
       		}
-      		//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
+      		Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");
       		//Application_Form_FrmMessage::message($this->tr->translate('INSERT_SUCCESS'));
       	}catch (Exception $e) {
       		Application_Form_FrmMessage::message($this->tr->translate('INSERT_FAIL'));

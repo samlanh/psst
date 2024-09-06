@@ -19,6 +19,7 @@ class Issue_AchievementController extends Zend_Controller_Action {
 				$search = array(
 					'adv_search' => '',
 					'branch_id' => '',
+					'academic_year' => '',
 					'group' => '',
 					'status' => -1,
 					'start_date'=> date('Y-m-d'),
@@ -30,11 +31,11 @@ class Issue_AchievementController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllAchievement($search);
 			$list = new Application_Form_Frmtable();
 				
-			$collumns = array("BRANCH","GROUP_CODE","STUDENT","USER","DATE","STATUS");
+			$collumns = array("BRANCH","ACADEMIC_YEAR","GROUP_CODE","STUDENT","USER","DATE","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'achievement','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'academic_year'=>$link,'group_code'=>$link));
 			
 			$this->view->search = $search;
 		}catch (Exception $e){
@@ -52,7 +53,21 @@ class Issue_AchievementController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="INSERT_SUCCESS";
-				$_db->addStudentAchievement($_data);
+				$rs = $_db->addStudentAchievement($_data);
+				
+				$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
+				$notify = array(
+					"notificationId" => $rs,
+					"optNotification" => 3,
+					"studentId" 	=> $_data["studentId"],
+					"typeNotify" 	=> "studentAchievement",
+					"title" 		=> $_data["title"],
+					"subTitle" 		=> $_data["description"],
+				);
+				if (!empty($_data["push_notify"])) {
+					$dbPushNoti->pushNotificationAPI($notify);
+				}
+				
 				if(isset($_data['save_close'])){
 					Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL);
 				}else{
@@ -80,7 +95,19 @@ class Issue_AchievementController extends Zend_Controller_Action {
 			$_data = $this->getRequest()->getPost();
 			try{
 				$sms="EDIT_SUCCESS";
-				$_db->updateIssueLetterpraise($_data);
+				$rs = $_db->updateIssueLetterpraise($_data);
+				$dbPushNoti = new Api_Model_DbTable_DbPushNotification();
+				$notify = array(
+					"notificationId" => $rs,
+					"optNotification" => 3,
+					"studentId" 	=> $_data["studentId"],
+					"typeNotify" 	=> "studentAchievement",
+					"title" 		=> $_data["title"],
+					"subTitle" 		=> $_data["description"],
+				);
+				if (!empty($_data["push_notify"])) {
+					$dbPushNoti->pushNotificationAPI($notify);
+				}
 				Application_Form_FrmMessage::Sucessfull($sms,self::REDIRECT_URL);
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");

@@ -6,6 +6,11 @@
 	$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 ?>
 <style>
+	.optListRow li.opt-items input[type=checkbox],
+	input[type=radio] {
+		margin: -9px 0 0 !important;
+	}
+	
 	.dijitTextArea[cols].dijitTextArea[cols]{
 		width: 99%;
 	}
@@ -30,6 +35,7 @@
 		background:#eee;
 	}
 </style>
+
 <div class="card">
 	<div class="card-content collapse show">
 		<div class="card-box">
@@ -60,6 +66,18 @@
 				if(identity==''){
 					alert('Please set fee for grade !!! ');
 					return false;
+				}
+
+				identity_term = dijit.byId('identity_term').get('value');
+				if(identity_term!=''){
+					var identity_degree = [];
+						$('.degreeCheckbox:checked').each(function(i){
+							identity_degree[i] = $(this).val();
+					});
+					if(identity_degree==""){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+						return false;
+					}
 				}
     			return true;
   			 }else {
@@ -202,7 +220,7 @@
 							<div class="card-blogform">
 								<div class="card-body"> 
 									<div class="row"> 
-										<div class="col-md-12 col-sm-12 col-xs-12">
+										<div class="col-md-9 col-sm-9 col-xs-12">
 											<div class="d-flex "> 
 												<div class="settings-main-icon ">
 													<i class="glyphicon glyphicon-education"></i>	
@@ -214,13 +232,13 @@
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												&nbsp; 
 											</div>
-											<div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
+											<!-- <div class="form-group" style=" background: #d8e0e2; padding: 5px 15px; margin: 0; border: solid 1px #697996; border-radius: 2px;">
 												<label class="control-label bold col-md-2 col-sm-2 col-xs-12"><?php echo $tr->translate("DEGREE");?> </label>
 												<div class="col-md-5 col-sm-5 col-xs-12">
 													<input id="degree" name="degree" />
 												</div>
 												<div class="clearfix"></div>
-											</div>
+											</div> -->
 											<table class="collape tablesorter" id="table_term_row" style="width:100%; white-space: nowrap;border:1px solid #ddd;">
 												<thead>
 													<tr id="head-title1" class="head-td" align="center" style="width: 100%;">
@@ -240,6 +258,48 @@
 											<input type="hidden" name="identity_term" id="identity_term" dojoType="dijit.form.TextBox" value="" >
 											<input type="button" label="<?php echo $tr->translate('ADD_TERM');?>" dojoType="dijit.form.Button" 
 											class="button-class button-primary" iconClass="glyphicon glyphicon-sort-by-attributes" onclick="addTermRow();" />
+										</div>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<div class="card-blogform">
+												<div class="card-body"> 
+													<div class="row"> 
+														<div class="col-md-12 col-sm-12 col-xs-12"> 
+															<div class="d-flex"> 
+																<div class="settings-main-icon ">
+																	<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
+																</div> 
+																<div class="col-md-10 col-sm-10 col-xs-12"> 
+																	<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("DEGREE");?></p>
+																</div> 
+															</div>
+															<br />
+															<div class="custom-control custom-checkbox ">
+																<input type="checkbox" class="checkbox custom-control-input" onchange="checkall();" class="checkbox" id="check_all"  name="check_all" checked >
+																<label class="custom-control-label" for="check_all">
+																	<?php echo $tr->translate('CHECK_ALL');?>
+																</label>
+															</div>
+															<div class="form-group">
+																<ul class="optListRow">
+																	<?php 
+																		if (!empty($this->faculty)) foreach ($this->faculty as $rs){
+																		?>
+																		<li class="opt-items"> 
+																			<div class="custom-control custom-checkbox">
+																				<input type="checkbox" class="checkbox degreeCheckbox custom-control-input" id="depts<?php echo $rs['id'];?>" value="<?php echo $rs['id'];?>"  name="selector[]" checked >
+																				<label class="custom-control-label" for="depts<?php echo $rs['id'];?>">
+																					<?php echo $rs['name'];?>
+																				</label>
+																			</div>
+																		</li>
+																	<?php } ?>
+																</ul>
+															</div>
+															
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -342,6 +402,14 @@ dojo.ready(function(){
 	 getAllDegreeByBranch();
 });
 
+function checkall(){
+	if ($('#check_all').is(':checked')) {
+		$(".checkbox").prop('checked', true);
+	}else{
+		$(".checkbox").prop('checked', false);
+	}
+}
+
 url_getdegree= '<?php echo $this->url(array('module'=>'global','controller'=>'degree','action'=>'getdegreebybranch'));?>';
 	function getAllDegreeByBranch(){
 		dijit.byId('degree').reset();
@@ -409,6 +477,18 @@ function alertBeforeSubmit(save_type){
 		if(identity==''){
 			dijit.byId("grade").focus();
 			return false;
+		}
+
+		var identity_term = $('#identity_term').val();
+		if(identity_term!=''){
+			var identity_degree = [];
+				$('.degreeCheckbox:checked').each(function(i){
+					identity_degree[i] = $(this).val();
+			});
+			if(identity_degree==""){
+				alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+				return false;
+			}
 		}
 		
 		dijit.byId('save_type').attr('value',save_type);
@@ -645,4 +725,6 @@ var col1= 0; var no1=0;
 		$('#identity_term').val(strings1);
 		dojo.query("#row_term"+index).remove();
 	}
+
+	
 </script>

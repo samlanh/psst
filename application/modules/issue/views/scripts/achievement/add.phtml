@@ -65,6 +65,12 @@
 										</div>
 									 </div>
 									 <div class="form-group">
+										<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR");?></label>
+										<div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("academic_year");?>
+										</div>
+									 </div>
+									 <div class="form-group">
 									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" id="lblNameControl" ><?php echo $tr->translate("GROUP");?> <span class="required">*</span>:</label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
 											<input id="groupId" />
@@ -94,6 +100,7 @@
 							 </div>
 						 </div>
 					 </div>
+					 
 		         </div>
 				 <div class="col-md-8 col-sm-8 col-xs-12">
 					<div class="card-blogform">
@@ -120,6 +127,31 @@
 											<?php echo $frm->getElement("description");?>
 										</div>
 									 </div>
+								 </div>
+							 </div>
+						 </div>
+					 </div>
+					 <div class="card-blogform">
+						<div class="card-body"> 
+							<div class="row"> 
+								<div class="col-md-12 col-sm-12 col-xs-12"> 
+									<div class="form-group">
+										<div class="d-flex">
+											<div class="settings-main-icon ">
+												<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+											</div>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("APP_NOTIFICATION"); ?></p>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="custom-switch">
+											<input type="checkbox" onChange="pushFucntionCheck();" id="push_notify" name="push_notify" class="custom-switch-input">
+											<span class="custom-switch-indicator custom-radius"></span>
+											<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('PUSH_NOTIFICATION') ?></a>
+										</label>
+									</div>
 								 </div>
 							 </div>
 						 </div>
@@ -224,7 +256,7 @@ function getAllGroupByBranch(){
 		dijit.byId('branch_id').focus();
 		return false;
 	}
-	academic_year ="";
+	academic_year = dijit.byId('academic_year').get('value');
 	
 	dojo.xhrPost({
 		url: url_getgroup,

@@ -19,6 +19,7 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 			SELECT 
 				ac.id
 				,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = ac.branchId LIMIT 1) AS branch_name
+				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = ac.academic_year LIMIT 1) AS academic_year
 				,CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS `group_code`
 				,CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentName
 				,(SELECT first_name FROM rms_users WHERE rms_users.id = ac.userId LIMIT 1) AS userName
@@ -46,6 +47,9 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 	    if(!empty($search['branch_id'])){
 	    	$where.=' AND ac.branchId='.$search['branch_id'];
 	    }
+		if(!empty($search['academic_year'])){
+	    	$where.=' AND ac.academic_year='.$search['academic_year'];
+	    }
 	    if(!empty($search['group'])){
 	    	$where.=' AND ac.branchId='.$search['group'];
 	    }
@@ -64,6 +68,7 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 		try{
 			$_arr= array(
 					'branchId'			=>$_data['branch_id'],
+					'academic_year'		=>$_data['academic_year'],
 					'achievementType'	=>$_data['achievementType'],
 					'groupId'			=>$_data['groupId'],
 					'studentId'			=>$_data['studentId'],
@@ -96,6 +101,7 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 			$status = empty($_data['status'])?0:1;
 			$_arr= array(
 					'branchId'			=>$_data['branch_id'],
+					'academic_year'		=>$_data['academic_year'],
 					'achievementType'	=>$_data['achievementType'],
 					'groupId'			=>$_data['groupId'],
 					'studentId'			=>$_data['studentId'],

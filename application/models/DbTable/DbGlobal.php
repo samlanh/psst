@@ -5121,8 +5121,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];
 		}
-		$from_date =" ds.startDate >= '".date("Y-m-d")."'";
-		$to_date =" ds.endDate <= '".date("Y-m-d")."'";
+		$from_date =" ds.startDate <= '".date("Y-m-d")."'";
+		$to_date =" ds.endDate >= '".date("Y-m-d")."'";
 	    $WherediscountPromotion = " AND ".$from_date." AND ".$to_date;
 
 		$sql.=" OR (ds.discountFor=3 AND discountPeriod=2 $WherediscountPromotion)";

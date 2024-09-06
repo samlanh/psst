@@ -72,6 +72,8 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		
 		$rows = $model->getAllPaymentTerm($id=null,$hidemonth=1);
 		$this->view->term_option =	$rows ;
+		
+		$this->view->faculty = $model->getAllDegreeName();
     }
  	
     public function editAction()
@@ -167,6 +169,7 @@ class Accounting_FeeController extends Zend_Controller_Action {
 		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
+		$this->view->faculty = $model->getAllDegreeName();
 
 		$row=0;$indexterm=1;$key=0;
 		$rows = $_db->getFeeDetailById($id);

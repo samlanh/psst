@@ -6,7 +6,6 @@
 	$db_global = new Application_Model_DbTable_DbGlobal();
 	$session_lang = new Zend_Session_Namespace('lang');
 	$lang_id = $session_lang->lang_id;
-	$principalInfo = $this->principalInfo;
 ?>	
 
 <div style="min-height:15cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
@@ -20,6 +19,26 @@
     	</div>
     </div>
 	<form  id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<script type="dojo/method" event="onSubmit">   
+			if(this.validate()){
+				branch_id = dijit.byId('branch_id').get('value');
+				if(branch_id==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_BRANCH");?>");
+					dijit.byId("branch_id").focus();
+					return false;
+				}
+				academic_year = dijit.byId('academic_year').get('value');
+				if(academic_year==""){
+					alert("<?php echo $tr->translate("PLEASE_SELECT_YEAR");?>");
+					dijit.byId("academic_year").focus();
+					return false;
+				}
+				loadingBlock();
+				return true;
+			}else {
+				return false;
+			}
+		</script>
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<?php echo $frm->getElement("adv_search");?>
@@ -126,6 +145,12 @@
 				tr.head_schedule {
 				    background-color: #ffdbdb;
 				}
+				tr.head_schedule_blue th {
+				    text-align: center;
+				}
+				tr.head_schedule_blue {
+				    color:blue;
+				}
 				
 				ul.subject {
 				    list-style: none;
@@ -155,21 +180,21 @@
 				line-height: 12px;
 				}
 				@media print {
-						@page {
-							page:A4;
-							margin:0.8cm 0.8cm 0cm 0.8cm;
-						}
+					@page {
+						page:A4;
+						margin:0.8cm 0.8cm 0cm 0.8cm;
 					}
-					.pages-break {
-						page-break-inside: always;
-						page-break-before: always;
-					}
-					.blue{
-						color: blue;
-					}
-					.red{
-						color: red;
-					}
+				}
+				.pages-break {
+					page-break-inside: always;
+					page-break-before: always;
+				}
+				.blue{
+					color: blue;
+				}
+				.red{
+					color: red;
+				}
 			</style>
 				<?php $title=0; $titles=0; $year='';$group='';$hour=''; if(!empty($this->rs)) 
 					foreach ($this->rs As $rs){
@@ -178,54 +203,132 @@
 						$day = $db_global->getDaySchedule($rs['branch_id'],$rs['year_id'],$rs['group_id']);
 						$amt_day = count($day);
 						$break_page = "pages-break";
+
+						$logo = $this->baseUrl() . '/images/logo/logo.png';
+						if (!empty($rs['branch_logo'])) {
+							$logo = $this->baseUrl() . '/images/logo/' .$rs['branch_logo'];
+						}
+						$class_head_schedule="head_schedule";
+						$color_time="";
+						$color_teacher="red";
+						$blue="";
+						if($rs['degree']==1){
+							$class_head_schedule="head_schedule_blue";
+							$color_time="red";
+							$color_teacher="blue";
+							$blue="blue";
+						}
+
+						$dbSetting = new Setting_Model_DbTable_Dbduty();
+						$dregreeId = empty($rs['degree']) ? 0 : $rs['degree'];
+						$principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
 				?>
-				<tr class="<?php echo $break_page; ?> ">
-					<td colspan="2" valign="bottom">
-						<h2 class="headerKhmer padding-top"><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
-						<h2 class="headerKhmer ">
-							<?php echo $rs['school_name']?>
-						</h2>
-					</td>
-					<td align="center" valign="top" width="35%">
-						<h2 class="headerKhmer" style="font-size:15px;"><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
-						<h2 class="headerKhmer"><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
-						<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
-					</td>
-				</tr>
-				<tr >
-					<td colspan="3" align="center">
-						<?php // echo $this->rsheader;?>
-						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span></br>
-						<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("ACADEMIC_YEAR");?>:
-						 <?php
-								if ($lang_id == 1) { ?>
-									<?php echo $db_global->getNumberInkhmer(date($rs['from_year'])); ?>-
-									<?php echo $db_global->getNumberInkhmer(date($rs['to_year'])); ?>
-								<?php }else{ ?>
-									<?php echo $rs['from_year']; ?>-
-									<?php echo $rs['to_year']; ?>
-								<?php } ?>
-						</span>
-						
-					</td>
-				</tr>
+
+				<?php if($rs['degree']==1) {?>
+					<tr class="<?php echo $break_page; ?> ">
+						<td colspan="3" valign="top" style="margin-top:20px;">
+							<table width="100%">
+								<tr>
+									<td align="center" valign="top"  width="30%">
+										<img style="max-height:100px; margin-top: -8px;" src="<?php echo $logo; ?>">
+									</td>
+									<td  align="center" width="40%" valign="top" >
+										<h2 class="headerKhmer blue ">
+											<?php echo $rs['school_namekh']?>
+										</h2>
+										<h2 class="headerKhmer red ">
+											<?php echo $rs['school_nameen']?>
+										</h2>
+										<h2 class="headerKhmer blue ">
+											កាលវិភាគឆ្នាំសិក្សា
+											<?php echo $db_global->getNumberInkhmer(date($rs['from_year'])); ?>-
+											<?php echo $db_global->getNumberInkhmer(date($rs['to_year'])); ?>
+										</h2>
+										<h2 class="headerKhmer blue " valign="top" >
+											SCHEDULE FOR ACADEMIC YEAR 
+											<?php echo $rs['from_year']; ?>-
+											<?php echo $rs['to_year']; ?>
+										</h2>
+									</td>
+									<td align="center" width="30%">
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				<?php }else{ ?>
+					<tr class="<?php echo $break_page; ?> ">
+						<td colspan="2" valign="bottom">
+							<h2 class="headerKhmer padding-top"><?php echo $tr->translate('DEPARTMENT_OF_EDUCATION_YOUTH_AND_SPORT');?></h2>
+							<h2 class="headerKhmer ">
+								<?php echo $rs['school_name']?>
+							</h2>
+						</td>
+						<td align="center" valign="top" width="35%">
+							<h2 class="headerKhmer" style="font-size:15px;"><?php echo $tr->translate('NATIONALITY_OFKINGDOM');?></h2>
+							<h2 class="headerKhmer"><?php echo $tr->translate('NATION_RELIGION_KING');?></h2>
+							<img alt="" src="<?php echo $this->baseUrl() . "/images/sign.PNG" ?>" style=" width: 120px;">
+						</td>
+					</tr>
+
+					<tr >
+						<td colspan="3" align="center">
+							<?php // echo $this->rsheader;?>
+							<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_RESCHEDULE_BYGROUP");?></span></br>
+							<span style=" font-size:12px;font-weight: initial;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("ACADEMIC_YEAR");?>:
+							<?php
+									if ($lang_id == 1) { ?>
+										<?php echo $db_global->getNumberInkhmer(date($rs['from_year'])); ?>-
+										<?php echo $db_global->getNumberInkhmer(date($rs['to_year'])); ?>
+									<?php }else{ ?>
+										<?php echo $rs['from_year']; ?>-
+										<?php echo $rs['to_year']; ?>
+									<?php } ?>
+							</span>
+							
+						</td>
+					</tr>
+
+				<?php } ?>
 				<tr>
 					<td colspan="3">
 						<table class="main_table"  width="100%" cellpadding="0"​  cellspacing="0"​ style="color: #000; margin:0 auto;width:100%;white-space: normal;" >
 							<thead>
 								<tr>
 									<td align="left" colspan="<?php echo $amt_day+1?>" style="font-size:10px;border:1px solid #fff;border-bottom:1px solid #000;">
-									
+									<?php if($rs['degree']==1) {?>
 										<table width="100%" border="0">
 											<tr>
-												<td align="left" style="font-size:10px;border:1px solid #fff;">
+												<td align="left" style="font-size:10px;border:1px solid #fff;" width="30%">
 													<ul class="subject">
-														<!-- <li><?php echo $tr->translate("BRANCH");?>:&nbsp;<?php echo $rs['branch_name']?></li> -->
+														<li><span class="blue"><?php echo $tr->translate("GROUP");?> : </span><span class="red"><?php echo $rs['group_code']?></span></li>
+														<li><span class="blue"><?php echo $tr->translate("ROOM");?> : </span><span class="red"><?php echo $rs['room_name']?></span></li>		
+													</ul>
+												</td>
+												<td align="center" style="font-size:10px;border:1px solid #fff;" width="40%">
+													<ul class="subject">
+														<li><span class="blue"><?php echo $tr->translate("TEACHER_ROOM");?> : </span><span class="red"><?php echo $rs['room_name']?></span></li>
+														<li><span class="blue"><?php echo $tr->translate("TEACHER_ASSISTANCE");?> : </span><span class="red"><?php echo $rs['teacher_ta']?></span></li>
+													</ul>
+												</td>
+												<td align="right" style="font-size:10px;border:1px solid #fff;" width="30%">
+													<ul class="subject">
+														<li><span class="blue"><?php echo $tr->translate("PHONE");?> : </span><span class="red"><?php echo $rs['teacher_tel']?></span></li>
+														<li><span class="blue"><?php echo $tr->translate("PHONE");?> : </span><span class="red"><?php echo $rs['ta_tel']?></span></li>
+													</ul>
+												</td>
+											</tr>
+										</table>
+									<?php }else{ ?>
+										<table width="100%" border="0">
+											<tr>
+												<td align="left" style="font-size:12px;border:1px solid #fff;" >
+													<ul class="subject">
 														<li><?php echo $tr->translate("GROUP");?>:&nbsp;<?php echo $rs['group_code']?></li>	
 														<li><?php echo $tr->translate("ROOM");?>:&nbsp;<?php echo $rs['room_name']?></li>
 													</ul>
 												</td>
-												<td align="right" style="font-size:10px;border:1px solid #fff;">
+												<td align="right" style="font-size:12px;border:1px solid #fff;">
 													<ul class="subject">
 														<li><?php echo $tr->translate("TEACHER_ROOM");?>:&nbsp;<?php echo $rs['teacher_room']?></li>
 														<li><?php echo $tr->translate("PHONE");?>:&nbsp;<?php echo $rs['teacher_tel']?></li>	
@@ -233,13 +336,15 @@
 												</td>
 											</tr>
 										</table>
+									<?php } ?>
+										
 									</td>
 								</tr>
-								<tr class="head_schedule" style="font-size:10px;line-height:16px;" align="center" >
+								<tr class="<?php echo $class_head_schedule; ?>" style="font-size:10px;line-height:16px;" align="center" >
 									<td rowspan="2" ><?php echo $tr->translate("TIME");?></td>
 									<td colspan="<?php echo $amt_day?>" ><?php echo $tr->translate("DAYS");?></td>
 								</tr>
-								<tr class="head_schedule" style="font-size:11px;line-height:16px;" align="center" >
+								<tr class="<?php echo $class_head_schedule; ?>" style="font-size:11px;line-height:16px;" align="center" >
 								<?php foreach ($day as $key => $days){?>
 									<td><?php echo $days['name'];?></td>
 								<?php }?>
@@ -262,7 +367,7 @@
 							}
 							?>
 							<tr class="hover" align="center" >
-								<td width="10%" align="center" style=""><strong><?php echo $time['times'];?></strong></td>
+								<td width="10%" align="center" class="<?php echo $color_time; ?>" ><strong><?php echo $time['times'];?></strong></td>
 								<?php foreach ($day as $key => $days){
 									$strTime=$time['from_hour'].'-'.$time['to_hour'];
 									$subjecNteacher = $db_sub->getSubjectTeacherByScheduleAndGroup($rs['year_id'],$rs['group_id'],$strTime, $days['id'])
@@ -280,8 +385,8 @@
 											}
 								 		}
 										?>
-										<span class= "red"><?php 	if (!empty($subjecNteacher['teacher_name'])){echo "".$subjecNteacher['teacher_name'];} ?> </span><br>
-										<span class= "red"><?php 	if (!empty($subjecNteacher['teacher_phone'])){echo "".$subjecNteacher['teacher_phone'];} ?> </span>
+										<span class= "<?php echo $color_teacher; ?>"><?php 	if (!empty($subjecNteacher['teacher_name'])){echo "".$subjecNteacher['teacher_name'];} ?> </span><br>
+										<span class= "<?php echo $color_teacher; ?>"><?php 	if (!empty($subjecNteacher['teacher_phone'])){echo "".$subjecNteacher['teacher_phone'];} ?> </span>
 								<?php   }?>
 								</td>
 								<?php }?>
@@ -310,20 +415,20 @@
 											$totalTime = $db_sub->getSubjectForCalculateTime($rs['year_id'], $rs['group_id'], $rs_list['subject_id']);
 											$num++;
 										 ?>
-										<li style="width: 25%;float: left;list-style-type: none;line-height:18px;"><?php echo $num;?>.&nbsp;<?php echo $SubjectName;?>:&nbsp;<?php echo $totalTime;?></li>
+										<li class="<?php echo $blue; ?>" style="width: 25%;float: left;list-style-type: none;line-height:18px;"><?php echo $num;?>.&nbsp;<?php echo $SubjectName;?>:&nbsp;<?php echo $totalTime;?></li>
 									 <?php }}?>
 									 </ul>
 									 <?php 
 										 $engDate = $this->search['end_date'];
 										 $time  = strtotime($engDate);
 									  ?>
-									 <span class="className valueLabel" style="font-size: 12px;"><i>Note:</i> The effective date of this schedule is <?php echo date("l", $time );?>, <?php echo date("d", $time);?> <?php echo date("F", $time);?>, <?php echo date("Y", $time);?>. This schedule is subject to change as deemed necessary.</span>
+									 <span class="className valueLabel <?php echo $color_time; ?> " style="font-size: 12px;"><i>Note:</i> The effective date of this schedule is <?php echo date("l", $time );?>, <?php echo date("d", $time);?> <?php echo date("F", $time);?>, <?php echo date("Y", $time);?>. This schedule is subject to change as deemed necessary.</span>
 							 	</td>
 							 </tr>
 							</table>											
 					</td>
 				</tr>
-				<tr>
+					<tr>
 						<td  align="center" width="33%" valign="top">
 						</td>
 						<td colspan="2" align="center" >
@@ -335,7 +440,7 @@
 							
 						</td>
 						<td></td>
-						<td align="center" style="font-size:11px;" valign="top">
+						<td align="center" style="font-size:11px;" valign="top" class="<?php echo $blue; ?>" >
 								<label id="lunarDate" class="LabelTeacher" >
 								<?php 
 									$dbgb = new Application_Model_DbTable_DbGlobal();
@@ -373,7 +478,7 @@
 					</td>
 					<td >
 					</td>
-					<td colspan="2" align="center" >
+					<td colspan="2" align="center" class="<?php echo $blue; ?>" >
 						<div class="seenApproved headerKhmer">បានឃើញ និងឯកភាព
 								<span class="interimPrincipal"><?php echo $principalInfo['positionkh']; ?></span>
 						</div>

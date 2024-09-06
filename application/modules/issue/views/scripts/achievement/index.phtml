@@ -23,6 +23,9 @@
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<?php echo $frm->getElement("branch_id");?>
                    </div>
+				   <div class="col-md-2 col-sm-2 col-xs-12">
+                   		<?php echo $frm->getElement("academic_year");?>
+                   </div>
                    <div class="col-md-2 col-sm-2 col-xs-12">
                    		<input id="group" />
                    </div>
@@ -72,36 +75,47 @@ dojo.ready(function(){
 	}, "group");
 	var branch_id = dijit.byId('branch_id');
 	 branch_id.on('change', function(evt) {
-		 getCompleteGroup();
+		getAllGroupByBranch();
 	});
-	getCompleteGroup();
+	var academic_year = dijit.byId('academic_year');
+	academic_year.on('change', function(evt) {
+		getAllGroupByBranch();
+	});
+	getAllGroupByBranch();
 }); 
 var oldBranch='<?php echo $this->search['branch_id'];?>';
-var url_getgroup = '<?php echo $this->url(array("module"=>"issue","controller"=>"index","action"=>"getgroupcomplete"));?>';										
-function getCompleteGroup(){
-	 dijit.byId('group').reset();  
+
+url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+function getAllGroupByBranch(){
+	dijit.byId('group').reset();
 	branch_id = dijit.byId('branch_id').get('value');
 	if(branch_id=='' || branch_id==-1){
 		var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		 dijit.byId('group').set('store',group_store);  
+		dijit.byId('group').set('store',group_store);  
+		dijit.byId('branch_id').focus();
 		return false;
 	}
+	academic_year = dijit.byId('academic_year').get('value');
+	
 	dojo.xhrPost({
-		url:url_getgroup,
+		url: url_getgroup,
 		content:{
-			'branch_id':branch_id
+			'branch_id':branch_id,
+			'academic_year':academic_year,
+			'noaddnew':1,
+			'forfilter':1
 			},
 		handleAs:"json",
 		load: function(data) {
 			group_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('group').set('store',group_store);  
-		    if(oldBranch == branch_id ){
+			dijit.byId('group').set('store',group_store);   
+			if(oldBranch == branch_id ){
 		    	 dijit.byId('group').set('value','<?php echo $this->search['group'];?>'); 
 		    }
 		},
 		error: function(err) {
-			document.getElementsByClassName("overlay")[0].style.display="none";s
 		}
 	});
 }
+
 </script>

@@ -19,6 +19,7 @@ class Issue_AchievementController extends Zend_Controller_Action {
 				$search = array(
 					'adv_search' => '',
 					'branch_id' => '',
+					'academic_year' => '',
 					'group' => '',
 					'status' => -1,
 					'start_date'=> date('Y-m-d'),
@@ -30,11 +31,11 @@ class Issue_AchievementController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllAchievement($search);
 			$list = new Application_Form_Frmtable();
 				
-			$collumns = array("BRANCH","GROUP_CODE","STUDENT","USER","DATE","STATUS");
+			$collumns = array("BRANCH","ACADEMIC_YEAR","GROUP_CODE","STUDENT","USER","DATE","STATUS");
 			$link=array(
 					'module'=>'issue','controller'=>'achievement','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'group_code'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('branch_name'=>$link,'academic_year'=>$link,'group_code'=>$link));
 			
 			$this->view->search = $search;
 		}catch (Exception $e){

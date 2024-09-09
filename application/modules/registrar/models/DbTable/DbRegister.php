@@ -331,7 +331,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'degree'		=> $rs_stu['degree'],
 					'grade'			=> $rs_stu['grade'],
 					'degree_culture'=> $rs_stu['calture'],
-					'is_current'=> $rs_stu['balance_due']>0?1:0,//1 ជំពាក់
+					'is_current'=> $data['balance_due']>0?1:0,//1 ជំពាក់
 				);
 				$paymentid = $this->insert($arr);
 		

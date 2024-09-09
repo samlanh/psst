@@ -201,6 +201,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$this->view->row = $db->getStudentDocumentById($id);
 		//$this->view->currentFee =  $db->getCurentFeeStudentHistory($id);
 		$this->view->currentStudy =  $db->getCurentStudentStudy($id);
+		$this->view->mainGrade =  $db->getMainGradeStudy($id);
 		
 		$tsub= new Foundation_Form_FrmStudentRegister();
 		$frm_register=$tsub->FrmStudentRegister($student_rs);

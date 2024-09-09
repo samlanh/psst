@@ -642,6 +642,30 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			}
 			
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
+
+			$detailstudylist = '';
+			if(!empty($_data['identity_study'])){
+				$ids = explode(',', $_data['identity_study']);
+	    		foreach ($ids as $i){
+	    			if (empty($detailstudylist)){
+	    				if (!empty($_data['detailid_study'.$i])){
+	    					$detailstudylist= $_data['detailid_study'.$i];
+	    				}
+	    			}else{
+	    				if (!empty($_data['detailid_study'.$i])){
+	    					$detailstudylist = $detailstudylist.",".$_data['detailid_study'.$i];
+	    				}
+	    			}
+	    		}
+			}
+			
+			$this->_name = 'rms_group_detail_student';
+			$where="stu_id = ".$_data["id"];
+			if (!empty($detailstudylist)){ 
+				$where.=" AND gd_id NOT IN (".$detailstudylist.")";
+			}
+			$this->delete($where);
+
 			if(!empty($_data['identity_study'])){
 				$ids = explode(',', $_data['identity_study']);
 				foreach ($ids as $i){
@@ -844,6 +868,28 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				AND sh.is_current=1 AND sh.is_pass=0";
 		$sql.=" ORDER BY sh.gd_id ASC ";
 		return $db->fetchAll($sql);
+	}
+	function getMainGradeStudy($student_id){
+		$db=$this->getAdapter();
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$colunmname='title_en';
+		if ($currentLang==1){
+			$colunmname='title';
+		}
+		$sql="SELECT sh.*,
+				(SELECT rms_items.$colunmname FROM `rms_items` WHERE `id`=sh.degree AND type=1 LIMIT 1) AS degreeTitle,
+				(SELECT CONCAT(rms_itemsdetail.$colunmname) FROM `rms_itemsdetail` WHERE `id`=sh.grade AND items_type=1 LIMIT 1) AS gradeTitle,
+				(SELECT g.group_code FROM `rms_group` AS g WHERE g.id = sh.group_id LIMIT 1) AS groupCode
+			FROM rms_group_detail_student AS sh 
+			WHERE 
+				sh.itemType=1 
+				AND sh.stu_id=$student_id 
+				AND sh.is_current=1 
+				AND sh.is_pass=0
+				AND sh.is_maingrade=1
+				";
+		return $db->fetchRow($sql);
 	}
 	function getStudentStudyInfo($studyId){
 		$db = $this->getAdapter();

@@ -362,6 +362,17 @@ class Setting_Model_DbTable_DbGeneral extends Zend_Db_Table_Abstract
 				$where=" keyName= 'branch_display_setting'";
 				$this->update($arr, $where);
 			}
+
+			$rows = $this->geLabelByKeyName('study_info_setting');
+			if (empty($rows)){
+				$arr = array('keyValue'=>$data['study_info_setting'],'keyName'=>'study_info_setting','note'=>"Set student study information ",'user_id'=>$dbg->getUserId());
+				$this->insert($arr);
+			}else{
+				$arr = array('keyValue'=>$data['study_info_setting']);
+				$where=" keyName= 'study_info_setting'";
+				$this->update($arr, $where);
+			}
+			
 	
 			$schoolOption = $this->getAllSchoolOption();
 			if (!empty($schoolOption)){

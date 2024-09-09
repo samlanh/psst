@@ -71,6 +71,8 @@ public function init()
 		$row['branch_display_setting'] = $db_gs->geLabelByKeyName('branch_display_setting');
 
 		$row['receive_note_print'] = $db_gs->geLabelByKeyName('receive_note_print');
+
+		$row['study_info_setting'] = $db_gs->geLabelByKeyName('study_info_setting');
 		
 		$this->view->allSchoolOption = $db_gs->getAllSchoolOption();
 		$this->view->allAudioGrade = $db_gs->getAllGradeAudio();

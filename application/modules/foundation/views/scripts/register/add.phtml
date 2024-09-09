@@ -3,6 +3,9 @@
 	echo $this->headTitle($tr->translate('ADD_STUDENT_REGISTER')); 
 	$frm = $this->frm; 
 	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+
+	$study_info_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('study_info_setting');
+	$school_option_setting = empty($study_info_setting)?1:$study_info_setting;
 ?>
 <div class="card">
 	<div class="card-content collapse show">
@@ -31,26 +34,41 @@
 						return false;
 					}
 
-					var identity_study = $('#identity_study').val();
-					if(identity_study==''){
-						alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION");?>");
-						dijit.byId("degree").focus();
-						return false;
-					}
-
-					var arrays = identity_study.split(',');
-					if(arrays.length>0){
-						var checkIsMain  = 0;
-						var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
-						if(selValueByClass !== undefined){
-							checkIsMain=1;
-						}
-						if(checkIsMain==0){
-							alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION_IS_MAIN_GRADE");?>");
+					var school_option_setting = $('#school_option_setting').val();
+					if(school_option_setting==1){
+						degree = dijit.byId('degree').get('value');
+						if(degree==''){
+							alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+							dijit.byId('degree').focus();
 							return false;
 						}
-					}
+						grade = dijit.byId('grade').get('value');
+						if(grade==''){
+							alert("<?php echo $tr->translate("SELECT_GRADE");?>");
+							dijit.byId('grade').focus();
+							return false;
+						}
+					}else{
+						var identity_study = $('#identity_study').val();
+						if(identity_study==''){
+							alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION");?>");
+							dijit.byId("degree").focus();
+							return false;
+						}
 
+						var arrays = identity_study.split(',');
+						if(arrays.length>0){
+							var checkIsMain  = 0;
+							var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
+							if(selValueByClass !== undefined){
+								checkIsMain=1;
+							}
+							if(checkIsMain==0){
+								alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION_IS_MAIN_GRADE");?>");
+								return false;
+							}
+						}
+					}
 
 					loadingBlock();
 					return true;
@@ -669,6 +687,7 @@
 													</div> 
 												</div>
 											</div>
+											
 											<div class="form-group">
 												<div class="col-md-3 col-sm-3 col-xs-12">
 													<input id="degree" />
@@ -679,9 +698,15 @@
 												<div class="col-md-3 col-sm-3 col-xs-12">
 													<input id="group" />
 												</div>
+												<input type="hidden" name="school_option_setting" id="school_option_setting" value="<?php echo $school_option_setting; ?>" />
+
+												<?php if($school_option_setting==2){ ?>
+
 												<div class="col-md-3 col-sm-3 col-xs-12">
 													<input class="button-class button-warning" iconClass="glyphicon glyphicon-sort-by-attributes" type="button" label="<?php echo $tr->translate('Add Study Record');?>" dojoType="dijit.form.Button" onclick="addRowStudy();" />
 												</div>
+
+												<?php } ?>
 											</div>
 											<div class="form-group">
 												<table id="table_row_study" style="border-collapse: collapse; border:1px solid #ccc;">

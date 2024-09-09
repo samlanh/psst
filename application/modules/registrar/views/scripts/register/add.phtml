@@ -1364,7 +1364,7 @@ $(document).ready(function() {
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" name="total_discount' + col + '" id="total_discount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
 		template += '<div class="form-group"><input type="text" placeHolder="<?php echo $tr->translate('OTHER_FREE'); ?>" class="fullside" onkeyup="calculateTotal(' + col + ');" name="extra_fee' + col + '" id="extra_fee' + col + '" value="" dojoType="dijit.form.NumberTextBox"  /></div></td>';
 		template += '<td><div class="form-group"><input type="text" class="fullside" readonly="readonly" onkeyup="calculateTotal(' + col + ');netTotal(' + col + ');"  name="total_amount' + col + '" value="0" id="total_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /></div>';
-		template += '<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID'); ?>" class="fullside" onkeyup="paidAmount(' + col + ');"  name="paid_amount' + col + '" id="paid_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="0" name="isoldBalance' + col + '" id="isoldBalance' + col + '" dojoType="dijit.form.TextBox"  /></div></td>';
+		template += '<div class="form-group"><input type="text" required="true" placeHolder="<?php echo $tr->translate('PAID'); ?>" class="fullside" onkeyup="paidAmount(' + col + ');"  name="paid_amount' + col + '" id="paid_amount' + col + '" dojoType="dijit.form.NumberTextBox"  /><input type="hidden" value="" name="isoldBalance' + col + '" id="isoldBalance' + col + '" dojoType="dijit.form.TextBox"  /></div></td>';
 		template += '<td><input type="text" class="fullside" name="remark' + col + '" id="remark' + col + '" dojoType="dijit.form.Textarea" placeholder="<?php echo $tr->translate("NOTE"); ?>" style="min-height:60px;" />';
 		template += '<input type="hidden" value="' + serviceId + '" dojoType="dijit.form.TextBox" name="item_id' + col + '" id="item_id' + col + '"/><input type="hidden" dojoType="dijit.form.TextBox" name="service_type_' + col + '" id="service_type_' + col + '"/></td>';
 
@@ -1405,13 +1405,13 @@ $(document).ready(function() {
 
 			dijit.byId('service_type_' + col).attr('value', dataRow.itemType);
 			
-			if (dataRow.feeId > 0) {
-				$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
-			}
+			
 			
 			if (balance!=0 && balance!=null) {// have old balance
 				
 				dijit.byId('price_' + col).attr('value', balance);
+				dijit.byId('paid_amount' + col).attr('value', balance);
+				dijit.byId('total_amount' + col).attr('value', balance);
 				dojo.style('paid_amount' + col, "color", "red");
 				dijit.byId('isoldBalance' + col).attr('value', 1);
 				$("#term_study").select2({disabled:'readonly'});
@@ -1424,10 +1424,9 @@ $(document).ready(function() {
 				dijit.byId('validate_' + col).set('readOnly', true);
 				netTotal();
 			} else {
-			
-				/*if (dataRow.endDate = !'') {
-					dijit.byId('date_start_' + col).attr('value', dataRow.endDate);
-				}*/
+				if (dataRow.feeId > 0) {
+					$("#academic_year_"+col).val(dataRow.feeId).trigger('change');
+				}
 				getservicefee(col);
 			}
 			getDiscountforStudent(col);
@@ -1506,6 +1505,7 @@ $(document).ready(function() {
 	var url_service_fee = "<?php echo $this->url(array('module' => 'accounting', 'controller' => 'servicecharge', 'action' => 'getservicefee')); ?>";
 	function getservicefee(key) {
 		if (dijit.byId('isoldBalance' + key).get('value') == 1) {
+			alert(22);
 			return;
 		}
 		stu_type = dijit.byId('student_type').get('value');

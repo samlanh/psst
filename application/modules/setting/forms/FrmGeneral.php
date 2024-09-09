@@ -281,6 +281,14 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'placeholder'=>$this->tr->translate("RECEIPT_PRINT")
 		));
+
+		$study_info_setting = new Zend_Dojo_Form_Element_FilteringSelect('study_info_setting');
+		$study_info_setting->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside'));
+		$study_info_opt = array(
+				1=>$this->tr->translate("ONE_PROGRAM_ONLY"),
+				2=>$this->tr->translate("MULTY_PROGRAM"),
+				);
+		$study_info_setting->setMultiOptions($study_info_opt);
 		
 		if($data!=null){
 			$_sale_stock->setValue($data['sale_cut_stock']['keyValue']);
@@ -323,6 +331,8 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 			$branch_display_setting->setValue($data['branch_display_setting']['keyValue']);
 			
 			$receive_note_print->setValue($data['receive_note_print']['keyValue']);
+			
+			$study_info_setting->setValue($data['study_info_setting']['keyValue']);
 
 		}
 		$this->addElements(array(
@@ -361,6 +371,7 @@ Class Setting_Form_FrmGeneral extends Zend_Dojo_Form {
 				,$branch_display_setting
 				,$ReceiptStartSetting
 				,$receive_note_print
+				,$study_info_setting
 				));
 		
 		return $this;

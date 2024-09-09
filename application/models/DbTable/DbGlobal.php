@@ -5076,6 +5076,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					ds.discountTitle,
 					$sqlDiscountFor AS discountFor,
 					disc.studentId,
+					disc.grade,
 					ds.discountId AS discountTypeId,
 					(SELECT
 						dis_name
@@ -5088,6 +5089,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					ds.degree,
 					ds.DisValueType as DiscountValueType,
 					ds.discountValue,
+					
 					
 					CONCAT(ds.discountValue, 
 					(CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType,	
@@ -5142,16 +5144,23 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$WherediscountPromotion = " AND ".$from_date." AND ".$to_date;//check discount period first 
 
 		$sql .= " AND CASE 
-			WHEN `discountPeriod`=2 THEN `discountPeriod`=2 $WherediscountPromotion 		
+			WHEN `discountPeriod`=2 THEN `discountPeriod`=2 $WherediscountPromotion 	
+			ELSE  1	
 		END";
-
+		// Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		if(!empty($data['fetchAll'])){
 			$result =  $this->getAdapter()->fetchAll($sql);
 			if (!empty($result) AND !empty($data['optionList'])) {
 				$options = '';
 				$options .= '<option data-discountype="" data-discount-value="" value="" ></option>';
 				foreach ($result as $value) {
-					$options .= '<option selected="selected" data-discountype="'.$value['DiscountValueType'].'" data-discount-value="'.$value['discountValue'].'" value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'], ENT_QUOTES) . '</option>';
+					$selected =count($result)==1?"selected='selected'":"";
+					if (!empty($data['grade'])) {
+						if ($data['grade'] ==$value['grade']) {
+							$selected = "selected='selected'";
+						}
+					}
+					$options .= '<option '.$selected.'  data-discountype="'.$value['DiscountValueType'].'" data-discount-value="'.$value['discountValue'].'" value="'.$value['id'].'" >' . htmlspecialchars($value['discountTitle'], ENT_QUOTES) . '</option>';
 				}
 			return $options;
 			} else {

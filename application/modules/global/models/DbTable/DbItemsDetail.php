@@ -286,11 +286,11 @@
 			
 			$dbgb = new Application_Model_DbTable_DbGlobal();
 			$itemsCode = $dbgb->getItemsDetailCodeByItemsType(3);
-			
+			$code= empty($_data['code']) ? $itemsCode : $_data['code'] ;
 			$_arr=array(
 					'items_id'		=> $_data['items_id'],
 					'items_type'	=> $_data['items_type'],
-					'code'			=> $itemsCode,
+					'code'			=> $code,
 					'title'	 	 	=> $_data['title'],
 					'title_en'		=> $_data['title'],
 					'note'    		=> $_data['note'],
@@ -319,20 +319,6 @@
 				$this->_name='rms_product_location';
 				$this->insert($_arr);
 			}
-				
-// 			$this->_name='rms_product_location';
-// 			$ids = explode(',', $_data['identity']);
-// 			foreach ($ids as $i){
-// 				$_arr = array(
-// 						'pro_id'=>$id,
-// 						'branch_id'=>$_data['brand_name_'.$i],
-// 						'pro_qty'=>$_data['qty_'.$i],
-// 						'price'=>$_data['price_'.$i],
-// 						'stock_alert'=>$_data['qty_alert_'.$i],
-// 						'note'=>$_data['note_'.$i],
-// 				);
-// 				$this->insert($_arr);
-// 			}
 			return $id;
 		}catch(exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

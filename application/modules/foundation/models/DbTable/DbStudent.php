@@ -643,136 +643,196 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
 			$dbGroup = new Foundation_Model_DbTable_DbGroup();
 
-			$detailstudylist = '';
-			if(!empty($_data['identity_study'])){
-				$ids = explode(',', $_data['identity_study']);
-	    		foreach ($ids as $i){
-	    			if (empty($detailstudylist)){
-	    				if (!empty($_data['detailid_study'.$i])){
-	    					$detailstudylist= $_data['detailid_study'.$i];
-	    				}
-	    			}else{
-	    				if (!empty($_data['detailid_study'.$i])){
-	    					$detailstudylist = $detailstudylist.",".$_data['detailid_study'.$i];
-	    				}
-	    			}
-	    		}
-			}
-			
-			$this->_name = 'rms_group_detail_student';
-			$where="stu_id = ".$_data["id"];
-			if (!empty($detailstudylist)){ 
-				$where.=" AND gd_id NOT IN (".$detailstudylist.")";
-			}
-			$this->delete($where);
+			$study_info_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('study_info_setting');
+			$school_option_setting = empty($study_info_setting)?1:$study_info_setting;
 
-			if(!empty($_data['identity_study'])){
-				$ids = explode(',', $_data['identity_study']);
-				foreach ($ids as $i){
-					if (!empty($_data['detailid_study'.$i])){
-						
-						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
-						$is_setgroup = empty($_data['group_'.$i])?0:1;
-						$group_info = $dbGroup->getGroupById($group_id);
-						$isMain = 0;
-						if(!empty($_data['is_main']) AND $i==$_data['is_main']){ $isMain =1;}
-						
-						$_arr = array(
-								'stu_id'			=>$stu_id,
-								'is_newstudent'		=>$_data['stu_denttype'],
-								'itemType'			=>1,
-								'status'			=>1,
-								'group_id'			=>$group_id,
-								'degree'			=>$_data['degree_'.$i],
-								'grade'				=>$_data['grade_'.$i],
-								'is_current'		=>1,
-								'is_setgroup'		=>$is_setgroup,
-								'is_maingrade'		=>$isMain,
-								'note'				=>'From Edit Student',
-								'create_date'		=>date("Y-m-d H:i:s"),
-								'modify_date'		=>date("Y-m-d H:i:s"),
-								'user_id'			=>$this->getUserId(),
-						);
-						
-						if (!empty($group_info)){
-							$_arr['session'] = $group_info['session'];
-							$academic_year = $group_info['academic_year'];
+			if($school_option_setting == 1){  // one program
+
+				$group_id = empty($_data['group'])?0:$_data['group'];
+				$is_setgroup = empty($_data['group'])?0:1;
+				$group_info = $dbGroup->getGroupById($group_id);
+				$isMain = 1;
+				
+				$_arr = array(
+					'stu_id'			=>$stu_id,
+					'is_newstudent'		=>$_data['stu_denttype'],
+					'itemType'			=>1,
+					'status'			=>1,
+					'group_id'			=>$group_id,
+					'degree'			=>$_data['degree'],
+					'grade'				=>$_data['grade'],
+					'is_current'		=>1,
+					'is_setgroup'		=>$is_setgroup,
+					'is_maingrade'		=>$isMain,
+					'note'				=>'From Edit Student',
+					'create_date'		=>date("Y-m-d H:i:s"),
+					'modify_date'		=>date("Y-m-d H:i:s"),
+					'user_id'			=>$this->getUserId(),
+				);
+				
+				if (!empty($group_info)){
+					$_arr['session'] = $group_info['session'];
+					$academic_year = $group_info['academic_year'];
+				}else{
+					$academic_year=0;
+					if(!empty($_data['academic_year'])){
+						$_dbf = new Accounting_Model_DbTable_DbFee();
+						$rowfee = $_dbf->getFeeById($_data['academic_year']);
+						if(!empty($rowfee)){
+							$academic_year = $rowfee['academic_year'];
+						}
+					}
+				}
+				
+				$_arr['academic_year'] = $academic_year;
+				
+				$this->_name="rms_group_detail_student";
+				$where=  "stu_id = $stu_id AND is_maingrade = 1 ";
+				$this->update($_arr, $where);
+				
+				if($group_id>0){
+					$this->_name = 'rms_group';
+					$data_gro = array(
+							'is_use'=> 1,//ប្រើប្រាស់
+							'is_pass'=> 2,//កំពុងសិក្សា
+					);
+					$whereGroup = 'id = '.$group_id;
+					$this->update($data_gro, $whereGroup);
+				}
+
+			}else{ // multi-program
+
+				$detailstudylist = '';
+				if(!empty($_data['identity_study'])){
+					$ids = explode(',', $_data['identity_study']);
+					foreach ($ids as $i){
+						if (empty($detailstudylist)){
+							if (!empty($_data['detailid_study'.$i])){
+								$detailstudylist= $_data['detailid_study'.$i];
+							}
 						}else{
-							$academic_year=0;
-							if(!empty($_data['academic_year'])){
-								$_dbf = new Accounting_Model_DbTable_DbFee();
-								$rowfee = $_dbf->getFeeById($_data['academic_year']);
-								if(!empty($rowfee)){
-									$academic_year = $rowfee['academic_year'];
-								}
+							if (!empty($_data['detailid_study'.$i])){
+								$detailstudylist = $detailstudylist.",".$_data['detailid_study'.$i];
 							}
 						}
-						
-						$_arr['academic_year'] = $academic_year;
-						
-						$this->_name="rms_group_detail_student";
-						$where=  "stu_id = $stu_id AND gd_id=".$_data['detailid_study'.$i];
-						$this->update($_arr, $where);
-						
-						if($group_id>0){
-							$this->_name = 'rms_group';
-							$data_gro = array(
-									'is_use'=> 1,//ប្រើប្រាស់
-									'is_pass'=> 2,//កំពុងសិក្សា
+					}
+				}
+				
+				$this->_name = 'rms_group_detail_student';
+				$where="stu_id = ".$_data["id"];
+				if (!empty($detailstudylist)){ 
+					$where.=" AND gd_id NOT IN (".$detailstudylist.")";
+				}
+				$this->delete($where);
+
+				if(!empty($_data['identity_study'])){
+					$ids = explode(',', $_data['identity_study']);
+					foreach ($ids as $i){
+						if (!empty($_data['detailid_study'.$i])){
+							
+							$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+							$is_setgroup = empty($_data['group_'.$i])?0:1;
+							$group_info = $dbGroup->getGroupById($group_id);
+							$isMain = 0;
+							if(!empty($_data['is_main']) AND $i==$_data['is_main']){ $isMain =1;}
+							
+							$_arr = array(
+									'stu_id'			=>$stu_id,
+									'is_newstudent'		=>$_data['stu_denttype'],
+									'itemType'			=>1,
+									'status'			=>1,
+									'group_id'			=>$group_id,
+									'degree'			=>$_data['degree_'.$i],
+									'grade'				=>$_data['grade_'.$i],
+									'is_current'		=>1,
+									'is_setgroup'		=>$is_setgroup,
+									'is_maingrade'		=>$isMain,
+									'note'				=>'From Edit Student',
+									'create_date'		=>date("Y-m-d H:i:s"),
+									'modify_date'		=>date("Y-m-d H:i:s"),
+									'user_id'			=>$this->getUserId(),
 							);
-							$whereGroup = 'id = '.$group_id;
-							$this->update($data_gro, $whereGroup);
-						}
-						
-					}else{
-						$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
-						$group_info = $dbGroup->getGroupById($group_id);
-						$is_setgroup = empty($_data['group_'.$i])?0:1;
-						$isMain = 0;
-						if($i==$_data['is_main']){ $isMain =1;}
-						$_arr = array(
-								'stu_id'			=>$stu_id,
-								'is_newstudent'		=>$_data['stu_denttype'],
-								'itemType'			=>1,
-								'status'			=>1,
-								'group_id'			=>$group_id,
-								'degree'			=>$_data['degree_'.$i],
-								'grade'				=>$_data['grade_'.$i],
-								'is_current'		=>1,
-								'is_setgroup'		=>$is_setgroup,
-								'is_maingrade'		=>$isMain,
-								'note'				=>'From Edit Student',
-								'create_date'		=>date("Y-m-d H:i:s"),
-								'modify_date'		=>date("Y-m-d H:i:s"),
-								'user_id'			=>$this->getUserId(),
-								'entryFrom'			=>3,
-						);
-						
-						if (!empty($group_info)){
-							$_arr['session'] = $group_info['session'];
-							$academic_year = $group_info['academic_year'];
-								
-						}else{
-							$academic_year=0;
-							if(!empty($_data['academic_year'])){
-								$_dbf = new Accounting_Model_DbTable_DbFee();
-								$rowfee = $_dbf->getFeeById($_data['academic_year']);
-								if(!empty($rowfee)){
-									$academic_year = $rowfee['academic_year'];
+							
+							if (!empty($group_info)){
+								$_arr['session'] = $group_info['session'];
+								$academic_year = $group_info['academic_year'];
+							}else{
+								$academic_year=0;
+								if(!empty($_data['academic_year'])){
+									$_dbf = new Accounting_Model_DbTable_DbFee();
+									$rowfee = $_dbf->getFeeById($_data['academic_year']);
+									if(!empty($rowfee)){
+										$academic_year = $rowfee['academic_year'];
+									}
 								}
 							}
-						}
-						$_arr['academic_year'] = $academic_year;
-						$this->_name="rms_group_detail_student";
-						$this->insert($_arr);
-						if($group_id>0){
-							$this->_name = 'rms_group';
-							$data_gro = array(
-									'is_use'=> 1,//ប្រើប្រាស់
-									'is_pass'=> 2,//កំពុងសិក្សា
+							
+							$_arr['academic_year'] = $academic_year;
+							
+							$this->_name="rms_group_detail_student";
+							$where=  "stu_id = $stu_id AND gd_id=".$_data['detailid_study'.$i];
+							$this->update($_arr, $where);
+							
+							if($group_id>0){
+								$this->_name = 'rms_group';
+								$data_gro = array(
+										'is_use'=> 1,//ប្រើប្រាស់
+										'is_pass'=> 2,//កំពុងសិក្សា
+								);
+								$whereGroup = 'id = '.$group_id;
+								$this->update($data_gro, $whereGroup);
+							}
+							
+						}else{
+							$group_id = empty($_data['group_'.$i])?0:$_data['group_'.$i];
+							$group_info = $dbGroup->getGroupById($group_id);
+							$is_setgroup = empty($_data['group_'.$i])?0:1;
+							$isMain = 0;
+							if($i==$_data['is_main']){ $isMain =1;}
+							$_arr = array(
+									'stu_id'			=>$stu_id,
+									'is_newstudent'		=>$_data['stu_denttype'],
+									'itemType'			=>1,
+									'status'			=>1,
+									'group_id'			=>$group_id,
+									'degree'			=>$_data['degree_'.$i],
+									'grade'				=>$_data['grade_'.$i],
+									'is_current'		=>1,
+									'is_setgroup'		=>$is_setgroup,
+									'is_maingrade'		=>$isMain,
+									'note'				=>'From Edit Student',
+									'create_date'		=>date("Y-m-d H:i:s"),
+									'modify_date'		=>date("Y-m-d H:i:s"),
+									'user_id'			=>$this->getUserId(),
+									'entryFrom'			=>3,
 							);
-							$whereGroup = 'id = '.$group_id;
-							$this->update($data_gro, $whereGroup);
+							
+							if (!empty($group_info)){
+								$_arr['session'] = $group_info['session'];
+								$academic_year = $group_info['academic_year'];
+									
+							}else{
+								$academic_year=0;
+								if(!empty($_data['academic_year'])){
+									$_dbf = new Accounting_Model_DbTable_DbFee();
+									$rowfee = $_dbf->getFeeById($_data['academic_year']);
+									if(!empty($rowfee)){
+										$academic_year = $rowfee['academic_year'];
+									}
+								}
+							}
+							$_arr['academic_year'] = $academic_year;
+							$this->_name="rms_group_detail_student";
+							$this->insert($_arr);
+							if($group_id>0){
+								$this->_name = 'rms_group';
+								$data_gro = array(
+										'is_use'=> 1,//ប្រើប្រាស់
+										'is_pass'=> 2,//កំពុងសិក្សា
+								);
+								$whereGroup = 'id = '.$group_id;
+								$this->update($data_gro, $whereGroup);
+							}
 						}
 					}
 				}

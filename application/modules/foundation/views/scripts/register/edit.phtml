@@ -27,25 +27,43 @@
 					alert("<?php echo $tr->translate("ALREADY_EXISTING_RECORD_STUDENT");?>");
 					return false;
 				}
-				var identity_study = $('#identity_study').val();
-				if(identity_study==''){
-					alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION");?>");
-					dijit.byId("degree").focus();
-					return false;
-				}
 
-				var arrays = identity_study.split(',');
-				if(arrays.length>0){
-					var checkIsMain  = 0;
-					var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
-					if(selValueByClass !== undefined){
-						checkIsMain=1;
-					}
-					if(checkIsMain==0){
-						alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION_IS_MAIN_GRADE");?>");
+				school_option_setting = dijit.byId('school_option_setting').get('value');
+                if(school_option_setting==1){
+					degree = dijit.byId('degree').get('value');
+					if(degree==''){
+						alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
+						dijit.byId('degree').focus();
 						return false;
 					}
+					grade = dijit.byId('grade').get('value');
+					if(grade==''){
+						alert("<?php echo $tr->translate("SELECT_GRADE");?>");
+						dijit.byId('grade').focus();
+						return false;
+					}
+				}else{
+					var identity_study = $('#identity_study').val();
+					if(identity_study==''){
+						alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION");?>");
+						dijit.byId("degree").focus();
+						return false;
+					}
+
+					var arrays = identity_study.split(',');
+					if(arrays.length>0){
+						var checkIsMain  = 0;
+						var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
+						if(selValueByClass !== undefined){
+							checkIsMain=1;
+						}
+						if(checkIsMain==0){
+							alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION_IS_MAIN_GRADE");?>");
+							return false;
+						}
+					}
 				}
+				
 				loadingBlock();
 				return true;
 			}else {
@@ -677,6 +695,7 @@
 												<input id="group" />
 												<input dojoType="dijit.form.TextBox" class="fullside" name="recordEdit" id="recordEdit" value="" type="hidden">
 												<input dojoType="dijit.form.TextBox" class="fullside" name="rowIndex" id="rowIndex" value="" type="hidden">
+												<input dojoType="dijit.form.TextBox" class="fullside" name="school_option_setting" id="school_option_setting" value="<?php echo $school_option_setting; ?>" type="hidden">
 											</div>
 											<?php if($school_option_setting==2){ ?>
 												<div class="col-md-3 col-sm-3 col-xs-12">
@@ -1239,9 +1258,8 @@ dojo.ready(function(){
 		filterDistrict();
 		<?php if($school_option_setting ==2){ ?>
 			initializeStudy();
-		<?php }else { ?>
-			setMainGrade();
 		<?php } ?>
+		
     }, 200);
 
 	setTimeout(function () {
@@ -1372,6 +1390,16 @@ function getAllNation(){
 	});
 }
 
+<?php if($school_option_setting ==1){ ?>
+	oldDegree = '<?php echo $this->mainGrade['degree'];?>';
+	oldgrade = '<?php echo $this->mainGrade['grade'];?>';
+	oldGroup = '<?php echo $this->mainGrade['group_id'];?>';
+<?php }else{ ?>
+	oldDegree = '';
+	oldgrade = '';
+	oldGroup = '';
+<?php } ?>
+
 url_getallgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 function getAllGroup(){
 	dijit.byId('group').reset();
@@ -1402,11 +1430,17 @@ function getAllGroup(){
 		load: function(data) {
 		    group_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('group').set('store',group_store);   
+
+			if(oldGroup!=''){
+				dijit.byId('group').set('value',oldGroup);  
+			}
+			
 		},
 		error: function(err) {
 		}
 	});
 }
+
 function getRefreshItems(){
 	dijit.byId('degree').reset();   
 	var url_getItems = '<?php echo $this->url(array("module"=>"global","controller"=>"degree","action"=>"refreshitems"));?>';										
@@ -1419,6 +1453,9 @@ function getRefreshItems(){
 		load: function(data) {
 			degree_store  = getDataStorefromJSON('id','name', data);
 			dijit.byId('degree').set('store',degree_store);  
+			if(oldDegree!=''){
+				dijit.byId('degree').set('value',oldDegree);  
+			}
 		    document.getElementsByClassName("overlay")[0].style.display="none";
 		},
 		error: function(err) {
@@ -1426,6 +1463,8 @@ function getRefreshItems(){
 		}
 	});
 }
+
+
 var grade_store  = getDataStorefromJSON('id','name', <?php print_r(array())?> );
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 function getallGrade(){
@@ -1441,6 +1480,9 @@ function getallGrade(){
 			load: function(data) {
 				grade_store  = getDataStorefromJSON('id','name', data);
 			    dijit.byId('grade').set('store',grade_store);   
+				if(oldgrade!=''){
+					dijit.byId('grade').set('value',oldgrade);  
+				}
 			},
 			error: function(err) {
 			}
@@ -2134,11 +2176,6 @@ function initialize() {
 	    	dijit.byId('rowIndex').attr("value",index);
 	    }
 
-		function setMainGrade() {
-	    	dijit.byId("degree").attr("value",<?php echo $this->mainGrade['degree'];?>);
-	    	dijit.byId("grade").attr("value",<?php echo $this->mainGrade['grade'];?>);
-	    	dijit.byId("group").attr("value",<?php echo $this->mainGrade['group_id'];?>);
-	    }
 	
 function addStudentTypePop(){
 	var urlAddViewType = '<?php echo $this->url(array("module"=>"global","controller"=>"studenttype","action"=>"add-view-popup")); ?>';

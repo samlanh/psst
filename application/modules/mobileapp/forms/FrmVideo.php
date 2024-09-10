@@ -60,6 +60,18 @@ Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 		$public_date->setValue(date("Y-m-d"));
 		$id = new Zend_Form_Element_Hidden("id");
 		
+		$_arrTypeOfVideo=array(
+				"1"=>$this->tr->translate("FOR_STUDENT"),
+				"2"=>$this->tr->translate("FOR_TEACHER"),
+		);
+		$typeOfVideo = new Zend_Dojo_Form_Element_FilteringSelect("typeOfVideo");
+		$typeOfVideo->setMultiOptions($_arrTypeOfVideo);
+		$typeOfVideo->setAttribs(array(
+				'class'=>'fullside',
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'required'=>'true',
+		));
+		
 		$_btn_search = new Zend_Dojo_Form_Element_SubmitButton('btn_search');
 		$_btn_search->setAttribs(array(
 				'dojoType'=>'dijit.form.Button',
@@ -116,6 +128,8 @@ Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 			$_category->setValue($data['category']);
 			$public_date->setValue($data['publish_date']);
 			$_ordering->setValue($data['ordering']);
+			$data['typeOfVideo'] = empty($data['typeOfVideo']) ? 1 : $data['typeOfVideo'];
+			$typeOfVideo->setValue($data['typeOfVideo']);
 		}
 		
 		$this->addElements(array($id,
@@ -123,6 +137,7 @@ Class Mobileapp_Form_FrmVideo extends Zend_Dojo_Form {
 				$video_link,
 				$public_date,
 				$_ordering,
+				$typeOfVideo,
 				$_btn_search,$_status,$_adv_search,$_status_search,$from_date,$to_date));
 		return $this;
 	}	

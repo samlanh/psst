@@ -71,6 +71,9 @@ class Teacherapi_IndexController extends Zend_Controller_Action
     			$_dbAction->getEvaluationCommentByDegreeAction($GetData);
 			}else if ($GetData['url']=="assessmentList"){
     			$_dbAction->getAssessmentListOfClassAction($GetData);
+			
+			}else if ($GetData['url']=="teacherTutorial"){
+    			$_dbAction->getVideoTeacherTutorialAction($GetData);
     		}
     		else{
     			echo Zend_Http_Response::responseCodeAsText(401,true);

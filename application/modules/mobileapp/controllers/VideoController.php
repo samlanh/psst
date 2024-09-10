@@ -28,11 +28,11 @@ public function indexAction(){
 			}
 			$rs_rows= $db->getAllArticle($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","CATEGORY","PUBLISH_DATE","BY_USER","STATUS");
+			$collumns = array("TITLE","TYPE","DEGREE","PUBLISH_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'video','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('title'=>$link,'branch_name'=>$link,'zone_num'=>$link));
+			$this->view->list=$list->getCheckList(10, $collumns, $rs_rows,array('titleRecord'=>$link,'degreeListTitle'=>$link,'zone_num'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -62,6 +62,7 @@ public function indexAction(){
    	
    		$dbglobal = new Application_Model_DbTable_DbGlobal();
    		$this->view->lang = $dbglobal->getLaguage();
+		$this->view->faculty = $dbglobal->getAllDegreeName();
    		
    		$frm1 = new Mobileapp_Form_FrmVideo();
    		$frm=$frm1->FrmAddVideo();
@@ -94,6 +95,7 @@ public function indexAction(){
    	
 	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
 	   	$this->view->lang = $dbglobal->getLaguage();
+		$this->view->faculty = $dbglobal->getAllDegreeName();
 	   	
 	   	$frm1 = new Mobileapp_Form_FrmVideo();
 	   	$frm=$frm1->FrmAddVideo($row);
@@ -121,7 +123,8 @@ public function indexAction(){
 	   
 	   	$dbglobal = new Application_Model_DbTable_DbGlobal();
 	   	$this->view->lang = $dbglobal->getLaguage();
-	   	
+	   	$this->view->faculty = $dbglobal->getAllDegreeName();
+		
 	   	$frm1 = new Mobileapp_Form_FrmVideo();
 	   	$frm=$frm1->FrmAddVideo($row);
 	   	Application_Model_Decorator::removeAllDecorator($frm);

@@ -83,7 +83,7 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 					'examType'		=>$_data['examType'],
 					'forMonth'		=>$_data['forMonth'],
 					'forSemester'	=>$_data['forSemester'],
-					'academicYear'	=>$_data['academicYear'],
+					'academicYear'	=>empty($_data['academicYear']) ? 0 : $_data['academicYear'],
 			);
 			$this->_name='rms_score_entry_setting';
 			$this->insert($_arr);
@@ -130,7 +130,7 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 			'examType'		=>$_data['examType'],
 			'forMonth'		=>$_data['forMonth'],
 			'forSemester'	=>$_data['forSemester'],
-			'academicYear'	=>$_data['academicYear'],
+			'academicYear'	=>empty($_data['academicYear']) ? 0 : $_data['academicYear'],
    		);
    		$this->_name='rms_score_entry_setting';
    		$where=' id='.$_data['id'];

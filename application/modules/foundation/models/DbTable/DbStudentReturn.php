@@ -306,7 +306,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 					'returnDate'		 => $_data['return_date'],
 					'note'	 => $_data['note'],						
 					'userId'	 => $this->getUserId(),
-					'modify_date'=> date('Y-m-d H:i:s'),
+					'modifyDate'=> date('Y-m-d H:i:s'),
 					'status' 	=>$_data['status']
 			);
 			$this->_name="rms_student_return";
@@ -327,7 +327,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 				
 				$oldGroupId = $record['group'];
 			
-				$stu_id = $record['stu_id'];
+				$stu_id = $record['stuId'];
 				$newGroupId = $record['group_id_return'];
 				
 				

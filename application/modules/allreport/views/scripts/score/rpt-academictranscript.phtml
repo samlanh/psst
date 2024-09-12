@@ -535,6 +535,9 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 										<?php } ?>
 									<?php } ?>
 
+									<!-- start -->
+									<?php if($currentLang > 1) { ?>
+
 									<tr class="cheader" align="center">
 										<td rowspan="4" colspan="2"><?php echo ($currentLang == 1) ? 'Khmer Program Assessment' : 'English Program Assessment' ?></td>
 										<td ><?php echo $totalSubMaxScore; ?></td>
@@ -671,13 +674,12 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 											</strong>
 										</td>
 									</tr>
-
+									<?php } ?>
+									<!-- End -->
 									<!-- Both Program -->
-									 <?php if($currentLang == 2){ ?>
-
 									<tr class="style hover" align="center">
 										<td  rowspan="4" colspan="2" class="khmerBoldFont"> 
-											<strong>Both-Programs Assessment</strong>
+											<strong><?php echo ($currentLang == 1) ? 'Khmer Program Assessment' : 'Overall Assessment of the Program' ?></strong>
 										</td>
 										<td ><strong><?php echo $totalMaxScore; ?></strong></td>
 										<td ><strong><?php echo $GrandtotalScoreSemesterI; ?></strong></td>
@@ -777,7 +779,7 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 											</strong>
 										</td>
 									</tr>
-									<?php } ?>
+								<!--end-->
 								</table>
 								<br>
 								<table class="header" width="100%" border="1" style="width:100%; border-collapse:collapse;border: solid 2px #000;">

@@ -280,7 +280,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 								'user_id'			=>$this->getUserId(),
 						);
 						$this->_name="rms_group_detail_student";
-						$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=1 ";
+						$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=1 ";
 						if(!empty($oldGroupId)){
 							$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
 						}
@@ -350,7 +350,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 							'user_id'			=>$this->getUserId(),
 					);
 					$this->_name="rms_group_detail_student";
-					$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=0 ";
+					$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=0 ";
 					if(!empty($oldGroupId)){
 						$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
 					}
@@ -363,7 +363,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 							'user_id'			=>$this->getUserId(),
 					);
 					$this->_name="rms_group_detail_student";
-					$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=1 ";
+					$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=1 ";
 					if(!empty($oldGroupId)){
 						$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
 					}

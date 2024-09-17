@@ -81,6 +81,8 @@ class Foundation_StudentreturnController extends Zend_Controller_Action {
 			{
 				try{
 					$data = $this->getRequest()->getPost();
+					// print_r($data);
+					// exit();
 					$db->updateStudentDropReturn($data);
 					Application_Form_FrmMessage::Sucessfull("EDIT_SUCCESS","/foundation/studentreturn/index");
 				}catch(Exception $e){

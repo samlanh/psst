@@ -24,6 +24,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	{
 		$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
 		$lang = $this->currentlang();
+		$string = "branch_namekh";
 		if($branch_display_setting==1){
 			if($lang==1){// khmer
 				$string = "branch_namekh";
@@ -3064,7 +3065,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 						   $student_type=$tr->translate("New Student");
 						   $style="style='color:#99e5fd'";
 					   }*/
-
+		$str_parentinfo="";
 		if (!empty($rs)) {
 
 			$degree = empty($rs['degree']) ? '' : $rs['degree'];

@@ -254,6 +254,9 @@ dojo.ready(function(){
 	  });
 	getallGrade();
 	getAllGroupByBranch();
+	<?php if($this->search['student_group_status']>-1){?>
+	 dijit.byId('student_group_status').attr('value','<?php echo $this->search['student_group_status']?>'); 
+	<?php } ?>	 
 });
 
 var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';

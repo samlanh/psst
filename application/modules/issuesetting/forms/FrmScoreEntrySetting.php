@@ -38,6 +38,7 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 				$_branch_id->setValue($row['id']);
 			}
 		}
+		
 
 		$title = new Zend_Dojo_Form_Element_TextBox('title');
 		$title->setAttribs(array(
@@ -49,6 +50,22 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			'queryExpr' => '*${0}*',
 			'missingMessage' => $this->tr->translate("Forget Enter Title")
 		));
+		
+		$academicYear = new Zend_Dojo_Form_Element_FilteringSelect('academicYear');
+		$academicYear->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'placeholder'=>$this->tr->translate("ACADEMIC_YEAR"),
+			'class'=>'fullside',
+			'required'=>'false',
+			'queryExpr'=>'*${0}*',
+			'autoComplete'=>'false',
+		));
+		$rows =  $_dbgb->getAllAcademicYear();
+		$opt=array();
+		array_unshift($rows, array('id'=>'','name'=>$this->tr->translate("SELECT_YEAR")));
+		if(!empty($rows))foreach($rows As $row)$opt[$row['id']]=$row['name'];
+		$academicYear->setMultiOptions($opt);
+		$academicYear->setValue($request->getParam("academicYear"));
 
 		$description =  new Zend_Form_Element_Textarea('description');
 		$description->setAttribs(array(
@@ -219,6 +236,7 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$forMonth->setValue($data["forMonth"]);
 			$_status->setValue($data["status"]);
 			$id->setValue($data["id"]);
+			$academicYear->setValue($data["academicYear"]);
 		}
 		$this->addElements(array(
 			$_branch_id,
@@ -236,7 +254,8 @@ class Issuesetting_Form_FrmScoreEntrySetting extends Zend_Dojo_Form
 			$exam_end_date,
 			$examType,
 			$forSemester,
-			$forMonth
+			$forMonth,
+			$academicYear
 		));
 		return $this;
 	}

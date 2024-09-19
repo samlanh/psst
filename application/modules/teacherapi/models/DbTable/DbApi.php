@@ -471,7 +471,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$sql.=" FROM 
 						`rms_group_subject_detail` AS gsjb
-						JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 
+						JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 AND g.is_pass=2
 						JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1
 							LEFT JOIN (rms_student AS s JOIN `rms_group_detail_student` AS gds ON  gds.stu_id = s.stu_id AND s.status = 1 AND s.customer_type=1 AND gds.stop_type = 0) ON  gds.group_id = g.id
 							LEFT JOIN (`rms_grading_tmp` AS tmp JOIN `rms_exametypeeng` AS cri ON cri.id = tmp.criteriaId AND cri.criteriaType=2 ) ON tmp.settingEntryId = sett.id AND tmp.groupId = gsjb.group_id AND tmp.subjectId = gsjb.subject_id
@@ -2379,7 +2379,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND g.`teacher_id` ='.$userId;
 			$sql.=' 
 					AND g.`is_use` = 1 
-					
+					AND g.is_pass=2
 					AND g.`status` =1
 					AND sc.`status` =1
 				';
@@ -2687,6 +2687,66 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}
 			$sql.="
 				ORDER BY ass.id DESC, g.id ASC
+			";
+			
+			if(!empty($_data['LimitStart'])){
+				$sql.=" LIMIT ".$_data['LimitStart'].",".$_data['limitRecord'];
+			}else if(!empty($_data['limitRecord'])){
+				$sql.=" LIMIT ".$_data['limitRecord'];
+			}
+			$row = $_db->fetchAll($sql);
+			
+			$row = empty($row) ? array() : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+			
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	
+	function getVideoTeacherTutorial($_data){
+		$_db = $this->getAdapter();
+		try{
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			$colunmName='title_en';
+			$label = 'name_en';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+			}
+			$sql="
+				SELECT
+		    	act.`id`
+				,act.video_link AS videoYoutubeId
+				,act.ordering AS ordering
+		    	,(SELECT ad.title FROM `mobile_video_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS title
+		    	,(SELECT ad.description FROM `mobile_video_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$currentLang LIMIT 1) AS description
+		    	,(SELECT GROUP_CONCAT( COALESCE(i.shortcut,i.$colunmName) ) FROM `rms_items` AS i WHERE i.type=1 AND FIND_IN_SET(i.id,act.`degreeList`) LIMIT 1) AS degreeListTitle
+				,act.`publish_date` AS publishDate
+		    	,(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS userName
+			";
+			
+			$sql.=" FROM `mobile_video` AS act 
+				";
+			$sql.=' WHERE act.status = 1 AND act.typeOfVideo = 2 ';
+			$sql.='';
+			if(!empty($_data['degree'])){
+				$sql.=" AND FIND_IN_SET(".$_data['degree'].",act.`degreeList`) ";
+			}
+			$sql.="
+				ORDER BY act.ordering ASC
 			";
 			
 			if(!empty($_data['LimitStart'])){

@@ -11,19 +11,23 @@ public static function getUserId(){
     	$db=$this->getAdapter();
     	
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$label = $this->tr->translate("ALL_BRANCH");
+    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    	$label = $tr->translate("ALL_BRANCH");
     	$lang = $dbp->currentlang();
     	$sql="SELECT
-		    	act.`id`,
-		    	(SELECT ad.title FROM `mobile_video_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS title,
-		    	(SELECT cat.title FROM `mobile_category_video_detail` AS cat WHERE cat.news_id = act.`category` AND cat.lang=$lang LIMIT 1) AS cate_title,
-		    	act.`publish_date`,
-		    	(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
-		    	";
-    	
-    	
-    	$sql.=$dbp->caseStatusShowImage("act.`status`");
+		    	act.`id`
+		    	,(SELECT ad.title FROM `mobile_video_detail` AS ad WHERE ad.news_id = act.`id` AND ad.lang=$lang LIMIT 1) AS titleRecord
+		    	,CASE 
+					WHEN act.`typeOfVideo` = 1 THEN '".$tr->translate("FOR_STUDENT")."' 
+					WHEN act.`typeOfVideo` = 2 THEN '".$tr->translate("FOR_TEACHER")."' 
+					ELSE '' 
+				END AS typeOfVideoTitle
+				,(SELECT GROUP_CONCAT( COALESCE(i.shortcut,i.title) ) FROM `rms_items` AS i WHERE i.type=1 AND FIND_IN_SET(i.id,act.`degreeList`) LIMIT 1) AS degreeListTitle
+				,act.`publish_date`
+		    	,(SELECT u.first_name FROM `rms_users` AS u WHERE u.id = act.`user_id` LIMIT 1) AS user_name
+			";
+    	$sql.=",act.`status` AS statusRecord";
+    	$sql.=",(SELECT cat.title FROM `mobile_category_video_detail` AS cat WHERE cat.news_id = act.`category` AND cat.lang=$lang LIMIT 1) AS subTitleRecord";
     	$sql.=" FROM `mobile_video` AS act WHERE 1 ";
     	
     	$where='';
@@ -59,13 +63,18 @@ public static function getUserId(){
     	try{
     		$dbglobal = new Application_Model_DbTable_DbGlobal();
     		$lang = $dbglobal->getLaguage();
+			
+			$degreeSelector= implode(',', $data['selector']);
     		$arr = array(
     				'category'		=>$data['category'],
-    				'video_link'		=>$data['video_link'],
-    				'publish_date'		=>$data['public_date'],
+    				'video_link'	=>$data['video_link'],
+    				'publish_date'	=>$data['public_date'],
     				'ordering'		=>$data['ordering'],
+    				
     				'modify_date'	=>date("Y-m-d H:i:s"),
     				'user_id'		=>$this->getUserId(),
+					'typeOfVideo'	=>$data['typeOfVideo'],
+					'degreeList'	=>$degreeSelector,
     		);
     		
     		if (!empty($data['id'])){

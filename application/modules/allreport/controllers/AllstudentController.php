@@ -443,7 +443,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'academic_year'=> '',
 					'grade' 	=> '',
 					'group'		=> '',
-					'student_group_status'	=> -1,
+					'student_group_status'	=> 0,
 			);
 		}
 		$group= new Allreport_Model_DbTable_DbRptAllStudent();

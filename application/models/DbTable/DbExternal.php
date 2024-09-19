@@ -1380,7 +1380,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			,COALESCE(gd.isLock,'0') AS isLock
 		FROM 
 			`rms_group_subject_detail` AS gsjb
-			JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 
+			JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1  AND g.is_pass=2
 			JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1
 			AND CASE  WHEN sett.examType = 1 THEN gsjb.amount_subject >0 ELSE gsjb.amount_subject_sem END  >0
 			LEFT JOIN `rms_grading` AS gd ON gd.groupId= g.`id`  AND gd.subjectId = gsjb.subject_id AND gd.settingEntryId= sett.`id`  AND gd.teacherId= gsjb.teacher

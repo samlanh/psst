@@ -24,6 +24,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	{
 		$branch_display_setting=Setting_Model_DbTable_DbGeneral::geValueByKeyName('branch_display_setting');
 		$lang = $this->currentlang();
+		$string = "branch_namekh";
 		if($branch_display_setting==1){
 			if($lang==1){// khmer
 				$string = "branch_namekh";

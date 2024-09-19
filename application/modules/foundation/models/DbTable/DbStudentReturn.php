@@ -246,10 +246,10 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 								'user_id'			=>$this->getUserId(),
 						);
 						$this->_name="rms_group_detail_student";
-						$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=1 ";
-						if(!empty($oldGroupId)){
-							$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
-						}
+						$whereOldGroupDetail=" stu_id = ".$stu_id." AND itemType=1 AND is_current=1 ";
+						// if(!empty($oldGroupId)){
+						// 	$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
+						// }
 						$this->update($_arrOldGroupDetail,$whereOldGroupDetail);
 						$isSetgroup=0;
 						(!empty($newGroupId))?$isSetgroup=1:($isSetgroup=0);
@@ -280,7 +280,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 								'user_id'			=>$this->getUserId(),
 						);
 						$this->_name="rms_group_detail_student";
-						$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=1 ";
+						$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=1 ";
 						if(!empty($oldGroupId)){
 							$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
 						}
@@ -306,7 +306,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 					'returnDate'		 => $_data['return_date'],
 					'note'	 => $_data['note'],						
 					'userId'	 => $this->getUserId(),
-					'modify_date'=> date('Y-m-d H:i:s'),
+					'modifyDate'=> date('Y-m-d H:i:s'),
 					'status' 	=>$_data['status']
 			);
 			$this->_name="rms_student_return";
@@ -315,9 +315,10 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 			
 			if($_data['status']==0){
 				
-				
-				$record = $this->getStudentDropReturnById($id);;
-				$dropId = $record['dropId'];
+				// $record = $this->getStudentDropReturnById($id);
+				// $dropId = $record['dropId'];
+
+				$dropId = $_data['drop_id'];
 				$_arrStuDropRecord=array(
 						'isReturn'	=>0,
 				);
@@ -325,10 +326,10 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 				$this->_name="rms_student_drop";
 				$this->update($_arrStuDropRecord,$whereStuDropRecord);
 				
-				$oldGroupId = $record['group'];
+				$oldGroupId = $_data['groupId'];
 			
-				$stu_id = $record['stu_id'];
-				$newGroupId = $record['group_id_return'];
+				$stu_id = $_data['stu_id'];
+				$newGroupId = $_data['group'];
 				
 				
 				$dbStuDrop= new Foundation_Model_DbTable_DbStudentDrop();
@@ -349,7 +350,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 							'user_id'			=>$this->getUserId(),
 					);
 					$this->_name="rms_group_detail_student";
-					$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=0 ";
+					$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=0 ";
 					if(!empty($oldGroupId)){
 						$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
 					}
@@ -362,7 +363,7 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 							'user_id'			=>$this->getUserId(),
 					);
 					$this->_name="rms_group_detail_student";
-					$whereOldGroupDetail="stu_id = ".$stu_id." AND is_current=1 ";
+					$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=1 ";
 					if(!empty($oldGroupId)){
 						$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
 					}
@@ -420,7 +421,6 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) FROM `rms_student` AS s WHERE s.stu_id=dr.stu_id LIMIT 1) AS `name` 
 		FROM `rms_student_drop` AS dr 
 		WHERE dr.status=1
-			AND dr.isReturn=0
 			AND dr.id=$drop_id 
 			LIMIT 1
 		";

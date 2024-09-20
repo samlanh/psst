@@ -337,22 +337,24 @@ class Foundation_Model_DbTable_DbStudentReturn extends Zend_Db_Table_Abstract
 				$stopType = $rowDrop['type'];
 				if($oldGroupId!=$newGroupId){
 					
-					$this->_name = 'rms_group_detail_student';
-					$whereDeleteNewStudy="stu_id = ".$stu_id." AND is_current=1 ";
-					if(!empty($newGroupId)){
-						$whereDeleteNewStudy.=" AND group_id=$newGroupId ";
-					}
-					$this->delete($whereDeleteNewStudy);
+					// $this->_name = 'rms_group_detail_student';
+					// $whereDeleteNewStudy="stu_id = ".$stu_id." AND is_current=1 ";
+					// if(!empty($newGroupId)){
+					// 	$whereDeleteNewStudy.=" AND group_id=$newGroupId ";
+					// }
+					// $this->delete($whereDeleteNewStudy);
 					
 					$_arrOldGroupDetail = array(
+							'group_id'			=>$oldGroupId,
+							'stop_type'			=>$stopType,
 							'is_current'		=>1,
 							'modify_date'		=>date("Y-m-d H:i:s"),
 							'user_id'			=>$this->getUserId(),
 					);
 					$this->_name="rms_group_detail_student";
-					$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=0 ";
+					$whereOldGroupDetail="stu_id = ".$stu_id." AND itemType=1 AND is_current=1 ";
 					if(!empty($oldGroupId)){
-						$whereOldGroupDetail.=" AND group_id=$oldGroupId ";
+						$whereOldGroupDetail.=" AND group_id=$newGroupId ";
 					}
 					$this->update($_arrOldGroupDetail,$whereOldGroupDetail);
 				}else{

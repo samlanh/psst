@@ -1012,7 +1012,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
     	$sql = "SELECT 
 		stu_id AS id, 
 			CONCAT(stu_khname,'-',last_name,' ',stu_enname,'-',stu_code) AS name
-		 FROM `rms_student` WHERE branch_id = $branch_id ";
+		 FROM `rms_student` WHERE status =1 AND branch_id = $branch_id ";
     	return $db->fetchAll($sql);
     }
 	function getStdyInfoById($stu_id){

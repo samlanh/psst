@@ -25,7 +25,7 @@ class Stock_TransferController extends Zend_Controller_Action {
     		}
     		$rs_rows= $db->getAllTransfer($search);
     		$list = new Application_Form_Frmtable();
-    		$collumns = array("TRANSFER_NUMBER","TRANSFER_DATE","FROM_LOCATION","TO_LOCATION","NOTE","BY_USER","STATUS");
+    		$collumns = array("TRANSFER_NUMBER","TRANSFER_DATE","FROM_LOCATION","TO_LOCATION","NOTE","TRANSFER_STATUS","BY_USER","STATUS");
     		$link=array(
     				'module'=>'stock','controller'=>'transfer','action'=>'edit',
     		);
@@ -42,21 +42,23 @@ class Stock_TransferController extends Zend_Controller_Action {
     }
 	public function addAction(){
 		$db = new Stock_Model_DbTable_DbTransferstock();
-		if($this->getRequest()->isPost()){
-			try{
+		try{
+			if($this->getRequest()->isPost()){
 				$data = $this->getRequest()->getPost();
 				$db->addTransferStock($data);
-				Application_Form_FrmMessage::message("INSERT_SUCCESS");
-			}catch(Exception $e){
-				Application_Form_FrmMessage::message("APPLICATION_ERROR");
-				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/stock/transfer");
 			}
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
-		$this->view->tran_no = $db->getTransferNo();
-		$db = new Application_Model_DbTable_DbGlobal();
 		
-		$branch = $db->getAllBranch();
+		$this->view->tran_no = $db->getTransferNo();
+		$dbg = new Application_Model_DbTable_DbGlobal();
+		
+		$branch = $dbg->getAllBranch();
     	$this->view->branchopt = $branch;
+		$this->view->rsmaincategory = $dbg->getAllItems(3,null,null,0,'','',1,1);
 		
 		$db = new Global_Model_DbTable_DbItemsDetail();
 		$d_row= $db->getAllProductInBranch();

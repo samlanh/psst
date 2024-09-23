@@ -298,7 +298,7 @@
 				for (i = 0; i < data.length; i++) { index++; keyno++;
 				  template='<td width="2%" align="center">'+keyno+'</td>';
 				  template+='<td>&nbsp;'+data[i].product_name+'&nbsp;<input value="'+data[i].pro_id+'" dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-				  template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" value="'+data[i].qty_after+'" required="true" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+				  template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" value="'+data[i].qty_after+'" readOnly="true"  required="true" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
 				  template+='<td width="100px"><input dojoType="dijit.form.TextBox" class="fullside" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 				  	tmp='<tr id="row'+index+'">';
 					tmp+="</tr>";

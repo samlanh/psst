@@ -1300,7 +1300,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				foreach ($result as $value) {
 					$param = array(
 						'branch_id'=>empty($data['branch_id'])?:$data['branch_id'],
-						'academic_year'=>$value['id'],
+						//'academic_year'=>$value['id'],
+						'feeId'=>$value['id'],
 						'degree'=>empty($data['degree'])?'':$data['degree'],
 						'serviceType'=>1
 					);

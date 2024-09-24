@@ -249,7 +249,7 @@
 			 index++;
 			  template='<td width="2%" align="center"><?php echo $index;?></td>';
 			  template+='<td>&nbsp;<?php echo $rs['product_name'];?>&nbsp;<input value="<?php echo $rs['pro_id'];?>" dojoType="dijit.form.TextBox" type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" ></td>';
-			  template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['qty'];?>" required="true" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
+			  template+='<td width="100px"><input dojoType="dijit.form.NumberTextBox" value="<?php echo $rs['qty'];?>" readOnly="true"  required="true" class="fullside" type="text" id="qty_'+index+'" name="qty_'+index+'" ></td>';
 			  template+='<td width="100px"><input dojoType="dijit.form.TextBox" class="fullside" value="<?php echo $rs['note'];?>" type="text" id="remark_'+index+'" name="remark_'+index+'" ></td>';
 			  	tmp='<tr id="row'+index+'">';
 				tmp+="</tr>";

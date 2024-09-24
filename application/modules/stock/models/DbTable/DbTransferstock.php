@@ -71,6 +71,18 @@ class Stock_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     	}
     	return $db->fetchAll($sql);
     }
+	function getReceiveNoteNo($branch_id){
+    	$db = $this->getAdapter();
+    	$sql="SELECT (id+1)FROM `rms_received_note` WHERE branch_id = $branch_id ORDER BY id DESC  LIMIT 1";
+    	$acc_no = $db->fetchOne($sql);
+    	$new_acc_no= (int)$acc_no+1;
+    	$acc_no= strlen((int)$acc_no+1);
+    	$pre="RC";
+    	for($i = $acc_no;$i<5;$i++){
+    		$pre.='0';
+    	}
+    	return $pre.$new_acc_no;
+    }
     public function addTransferStock($_data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
@@ -97,6 +109,26 @@ class Stock_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
 		    			$_arr['is_received']=0;
 		    		}
 	    		$tranid= $this->insert($_arr);
+
+				/// Recived Auto
+
+				if ($condictionTransfer!=1){
+					$receive_no = $this->getReceiveNoteNo($_data['branch']);
+					$_arr = array(
+						'branch_id' 	=>$_data['branch'],
+						'transfer_id' 	=> $tranid,
+						'receive_no'	=>$receive_no,
+						'receive_date'	=>$_data['receive_date'],
+						'note'=>$_data['note'],
+						'create_date'=>date("Y-m-d H:i:s"),
+						'modify_date'=>date("Y-m-d H:i:s"),
+						'user_id'=>$this->getUserId(),
+						'status'=>1,
+					);
+					$this->_name ="rms_received_note";
+					$receive_id = $this->insert($_arr);
+				}
+
 	    	
 	    		$ids = explode(',', $_data['identity']);
 	    		foreach ($ids as $i){
@@ -111,6 +143,19 @@ class Stock_Model_DbTable_DbTransferstock extends Zend_Db_Table_Abstract
     				$this->insert($_arr);
     				
     				if ($condictionTransfer!=1){
+						
+						/// Received Detail
+
+						$_arr = array(
+    						'receive_id'=> $receive_id,
+    						'pro_id'	=> $_data['pro_id_'.$i],
+    						'qty'		=> $_data['qty_'.$i],
+    						'note'		=> 'Auto Recieved ',
+						);
+						$this->_name='rms_received_note_detail';
+						$this->insert($_arr);
+
+						/// From Loation
     					$qty_main_stock = $this->getProductLocation($_data['pro_id_'.$i],$_data['f_branch']);
 						$this->_name="rms_product_location";
 						if(!empty($qty_main_stock)){

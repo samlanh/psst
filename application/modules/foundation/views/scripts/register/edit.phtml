@@ -28,39 +28,24 @@
 					return false;
 				}
 
-				school_option_setting = dijit.byId('school_option_setting').get('value');
-                if(school_option_setting==1){
-					degree = dijit.byId('degree').get('value');
-					if(degree==''){
-						alert("<?php echo $tr->translate("PLEASE_SELECT_DEGREE");?>");
-						dijit.byId('degree').focus();
-						return false;
-					}
-					grade = dijit.byId('grade').get('value');
-					if(grade==''){
-						alert("<?php echo $tr->translate("SELECT_GRADE");?>");
-						dijit.byId('grade').focus();
-						return false;
-					}
-				}else{
-					var identity_study = $('#identity_study').val();
-					if(identity_study==''){
+				degree = dijit.byId('degree').get('value');
+				if(degree=='' || degree==-1){
+					dijit.byId('degree').focus();
+					return false;
+				}
+				grade = dijit.byId('grade').get('value');
+				if(grade=='' || grade==-1){
+					dijit.byId('grade').focus();
+					return false;
+				}
+				
+				var isMulti = $('#isSingleProgram').val();
+				if( isMulti == 2 ){
+					var identityStudy = $('#identity_study').val();
+					if(identityStudy==''){
 						alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION");?>");
-						dijit.byId("degree").focus();
+						dijit.byId("degreeAddRow").focus();
 						return false;
-					}
-
-					var arrays = identity_study.split(',');
-					if(arrays.length>0){
-						var checkIsMain  = 0;
-						var selValueByClass = $("input[type='radio'][name='is_main']:checked").val();
-						if(selValueByClass !== undefined){
-							checkIsMain=1;
-						}
-						if(checkIsMain==0){
-							alert("<?php echo $tr->translate("PLEASE_SET_STUDY_INFORMATION_IS_MAIN_GRADE");?>");
-							return false;
-						}
 					}
 				}
 				

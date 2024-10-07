@@ -1346,7 +1346,7 @@ $(document).ready(function() {
 		template += '<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
 		checked = 'checked';
 		disabled = '';
-		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' />';
+		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' onChange="checkingRowRequired(' + col + ');" />';
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
 		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ',7);getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
@@ -1430,6 +1430,7 @@ $(document).ready(function() {
 				getservicefee(col);
 			}
 			getDiscountforStudent(col);
+			checkingRowRequired(col);
 			
 		}catch(err){
 
@@ -1525,6 +1526,10 @@ $(document).ready(function() {
 			dijit.byId("price_" + key).set('readOnly', false);
 			dijit.byId("price_" + key).attr("value", 0);
 			calculateTotal(key);
+			
+			$('#term_study'+key).select2("val", "");
+			$('#term_study'+key).empty().trigger("change");
+			$('#term_study'+key).append("").trigger('change');
 			return 0;
 		} else {
 			dijit.byId("price_" + key).set('readOnly', true);
@@ -1562,6 +1567,9 @@ $(document).ready(function() {
 					$("#autoNextPay" + key).prop("disabled", true);
 					dijit.byId('date_start_' + key).reset();
 					dijit.byId('validate_' + key).reset();
+					
+					dijit.byId('date_start_'+key).set('required',false); 
+					dijit.byId('validate_'+key).set('required',false); 
 				}
 				$('#term_study'+key).empty().trigger("change");
 				$('#term_study'+key).append(data.resultPeriod).trigger('change');
@@ -1959,6 +1967,15 @@ function getDiscountforStudent(index){
 	}else{
 		dijit.byId('discount_'+index).attr('value',discountValue);
 		dijit.byId('discount_amount'+index).attr('value','');
+	}
+}
+function checkingRowRequired(index){
+	if($('#autoNextPay'+index).is(":checked")){
+		dijit.byId('date_start_'+index).set('required',true); 
+		dijit.byId('validate_'+index).set('required',true); 
+	}else{
+		dijit.byId('date_start_'+index).set('required',false); 
+		dijit.byId('validate_'+index).set('required',false); 
 	}
 }
 </script>

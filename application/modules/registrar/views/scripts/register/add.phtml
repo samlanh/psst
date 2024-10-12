@@ -1346,7 +1346,7 @@ $(document).ready(function() {
 		template += '<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
 		checked = 'checked';
 		disabled = '';
-		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' onChange="checkingRowRequired(' + col + ');" />';
+		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' />';
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
 		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ',7);getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
@@ -1506,7 +1506,6 @@ $(document).ready(function() {
 	var url_service_fee = "<?php echo $this->url(array('module' => 'accounting', 'controller' => 'servicecharge', 'action' => 'getservicefee')); ?>";
 	function getservicefee(key) {
 		if (dijit.byId('isoldBalance' + key).get('value') == 1) {
-			alert(22);
 			return;
 		}
 		stu_type = dijit.byId('student_type').get('value');
@@ -1522,6 +1521,7 @@ $(document).ready(function() {
 		if (termRecord == '') {
 			return false;
 		}
+		checkingRowRequired(key);
 		if (termRecord == 6) {//other term
 			dijit.byId("price_" + key).set('readOnly', false);
 			dijit.byId("price_" + key).attr("value", 0);
@@ -1567,9 +1567,6 @@ $(document).ready(function() {
 					$("#autoNextPay" + key).prop("disabled", true);
 					dijit.byId('date_start_' + key).reset();
 					dijit.byId('validate_' + key).reset();
-					
-					dijit.byId('date_start_'+key).set('required',false); 
-					dijit.byId('validate_'+key).set('required',false); 
 				}
 				$('#term_study'+key).empty().trigger("change");
 				$('#term_study'+key).append(data.resultPeriod).trigger('change');
@@ -1970,7 +1967,8 @@ function getDiscountforStudent(index){
 	}
 }
 function checkingRowRequired(index){
-	if($('#autoNextPay'+index).is(":checked")){
+	var termRecord = $('#term_' + index).val();
+	if(termRecord !=6 ){
 		dijit.byId('date_start_'+index).set('required',true); 
 		dijit.byId('validate_'+index).set('required',true); 
 	}else{

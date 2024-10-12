@@ -5216,7 +5216,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql="
 			SELECT 
 				pd.*
-				,(SELECT GROUP_CONCAT(DISTINCT(COALESCE(pdd.`academicFeeTermId`,0))) FROM `rms_student_paymentdetail` AS pdd JOIN `rms_student_payment` AS pp  ON pp.`id` = pdd.`payment_id` WHERE pdd.`service_type` = 1 AND pdd.itemdetail_id = pd.`itemdetail_id` LIMIT 1) AS termId
+				,(SELECT GROUP_CONCAT(DISTINCT(COALESCE(pdd.`academicFeeTermId`,0))) FROM `rms_student_paymentdetail` AS pdd JOIN `rms_student_payment` AS pp  ON pp.`id` = pdd.`payment_id` WHERE pdd.`service_type` = 1 AND pdd.itemdetail_id = pd.`itemdetail_id` AND pp.`student_id` = p.`student_id` LIMIT 1) AS termId
 				,COALESCE((SELECT te.`title` FROM `rms_startdate_enddate` AS te WHERE te.id =pd.`academicFeeTermId` LIMIT 1),'') AS termTitle
 				,COALESCE((SELECT te.`periodId` FROM `rms_startdate_enddate` AS te WHERE te.id =pd.`academicFeeTermId` LIMIT 1),0) AS periodId
 				FROM `rms_student_paymentdetail` AS pd

@@ -1522,7 +1522,7 @@ $(document).ready(function() {
 			return false;
 		}
 		checkingRowRequired(key);
-		if (termRecord == 6) {//other term
+		if (termRecord == 5 || termRecord == 6) {//one time & other term
 			dijit.byId("price_" + key).set('readOnly', false);
 			dijit.byId("price_" + key).attr("value", 0);
 			calculateTotal(key);
@@ -1968,12 +1968,13 @@ function getDiscountforStudent(index){
 }
 function checkingRowRequired(index){
 	var termRecord = $('#term_' + index).val();
-	if(termRecord !=6 ){
-		dijit.byId('date_start_'+index).set('required',true); 
-		dijit.byId('validate_'+index).set('required',true); 
-	}else{
+	if (termRecord == 5 || termRecord == 6) {//one time & other term
 		dijit.byId('date_start_'+index).set('required',false); 
 		dijit.byId('validate_'+index).set('required',false); 
+	}else{
+		dijit.byId('date_start_'+index).set('required',true); 
+		dijit.byId('validate_'+index).set('required',true); 
+		
 	}
 }
 </script>

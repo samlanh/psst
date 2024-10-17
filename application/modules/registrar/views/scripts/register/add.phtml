@@ -1522,7 +1522,7 @@ $(document).ready(function() {
 			return false;
 		}
 		checkingRowRequired(key);
-		if (termRecord == 5 || termRecord == 6) {//one time & other term
+		if (termRecord == 6) {//other term
 			dijit.byId("price_" + key).set('readOnly', false);
 			dijit.byId("price_" + key).attr("value", 0);
 			calculateTotal(key);

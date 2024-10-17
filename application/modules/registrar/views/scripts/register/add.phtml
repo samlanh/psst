@@ -1586,9 +1586,13 @@ $(document).ready(function() {
 		additional_fee = dijit.byId('extra_fee' + index).get('value');
 		additional_fee = isNaN(additional_fee) ? 0 : additional_fee;
 		total = subtotal + additional_fee;
-		discount = $('#discount_amount' + index).get('value');
+		
+		//discount = $('#discount_amount' + index).get('value');
+		discount = dijit.byId('discount_amount' + index).get('value');
 		discount = isNaN(discount) ? 0 : discount;
 		if (discount > total) {
+			discount = total;
+			dijit.byId('discount_amount' + index).attr('value', discount);
 			//alert("the value must be <=" + total);
 		}
 
@@ -1965,6 +1969,8 @@ function getDiscountforStudent(index){
 		dijit.byId('discount_'+index).attr('value',discountValue);
 		dijit.byId('discount_amount'+index).attr('value','');
 	}
+	
+	calculateTotal(index);
 }
 function checkingRowRequired(index){
 	var termRecord = $('#term_' + index).val();

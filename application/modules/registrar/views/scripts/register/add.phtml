@@ -1414,9 +1414,12 @@ $(document).ready(function() {
 				dijit.byId('total_amount' + col).attr('value', balance);
 				dojo.style('paid_amount' + col, "color", "red");
 				dijit.byId('isoldBalance' + col).attr('value', 1);
-				$("#term_study").select2({disabled:'readonly'});
 				dijit.byId('remark' + col).attr('value', 'Previous Balance');
-
+				
+				$("#term_study"+ col).select2("readonly", true);
+				$("#term_study"+ col).val(dataRow.academicFeeTermId).trigger("change");
+				
+				
 				dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
 				dijit.byId('date_start_' + col).set('readOnly', true);
 

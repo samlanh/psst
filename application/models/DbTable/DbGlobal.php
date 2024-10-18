@@ -2232,7 +2232,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 	function getAllStudyPeriod($data)
 	{
-
 		$db = $this->getAdapter();
 		$sql = " SELECT id,
 			CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name, 
@@ -2266,6 +2265,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			if (!empty($data['serviceType']) and $data['serviceType'] == 1) {// SCHOOL FEE ONLY 
 				$sql .= " AND FIND_IN_SET((SELECT items_id FROM `rms_itemsdetail` WHERE id=" . $data['grade'] . " ), degreeId) ";
 			}
+			$lastPaidTuitionInfo = array();
+			if(!empty($data['studentId'])){
+				$lastPaidTuitionInfo = $this->getStuLastPaidTutionFee($data);
+			}
+			if(!empty($lastPaidTuitionInfo)){
+				if(!empty($lastPaidTuitionInfo["termId"])){
+					if($data['grade'] == $lastPaidTuitionInfo["itemdetail_id"]){
+						$sql .= " AND id NOT IN (" . $lastPaidTuitionInfo['termId'].")";
+					}
+				}
+			}
 		}
 
 		$sql .= " ORDER BY academic_year DESC ";
@@ -2277,8 +2287,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$options = " <option value=''>" . $tr->translate("SELECT_TERM") . "</option> ";
 			if (!empty($rows)) {
-				foreach ($rows as $row) {
-					$options .= '<option data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+				foreach ($rows as $indexKey => $row) {
+					$selected="";
+					if($indexKey==0){
+						$selected="selected";
+					}
+					$options .= '<option '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
 				}
 			}
 			return $options;
@@ -4480,6 +4494,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'itemDetaillabel' => $item['itemDetaillabel'],
 				'is_onepayment' => $item['is_onepayment'],
 			);
+			
+			if($item['itemType']==1 && $item['balance']>0){
+				$arrFilter =array(
+					'studentId'=>$data['studentId'],
+					'itemDetailId' => $item['itemDetailId'],
+				); 
+				$lastPaidTuition = $this->getStuLastPaidTutionFee($arrFilter);
+				if(!empty($lastPaidTuition)){
+					$newArray['academicFeeTermId'] = $lastPaidTuition["academicFeeTermId"];
+				}
+			}else{
+				$newArray['academicFeeTermId'] = 0;
+			}
 
 			$param = array(
 				'branchId' => $data['branch_id'],//not yet pass data
@@ -5194,7 +5221,39 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			}
 		}
 		return $idetity;
-	  }
+	}
+	
+	function getStuLastPaidTutionFee($data){
+		$db = $this->getAdapter();
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$serviceType = empty($data["serviceType"]) ? 1 : $data["serviceType"];
+		$sql="
+			SELECT 
+				pd.*
+				,p.academic_year AS feeId
+				,COALESCE((SELECT vTp.termPaidList FROM v_studenttermpaid AS vTp WHERE vTp.`serviceType` = 1 AND vTp.gradeId = pd.`itemdetail_id` AND vTp.`studentId` = p.`student_id` LIMIT 1),0) AS termId
+				,COALESCE((SELECT te.`title` FROM `rms_startdate_enddate` AS te WHERE te.id =pd.`academicFeeTermId` LIMIT 1),'') AS termTitle
+				,COALESCE((SELECT te.`periodId` FROM `rms_startdate_enddate` AS te WHERE te.id =pd.`academicFeeTermId` LIMIT 1),0) AS periodId
+		";
+		$sql.=" FROM `rms_student_paymentdetail` AS pd
+					JOIN `rms_student_payment` AS p  ON p.`id` = pd.`payment_id`  
+			";
+		$sql.=" WHERE 
+					p.`status` = 1
+					AND pd.`service_type` = $serviceType
+					AND p.`is_void` = 0
+					AND p.`student_id` = $studentId  
+				";
+		if(!empty($data["paymentId"])){
+			$sql.=" AND p.`id` = ".$data["paymentId"];
+		}
+		if(!empty($data["itemDetailId"])){
+			$sql.=" AND pd.`itemdetail_id` = ".$data["itemDetailId"];
+		}
+		$sql.=" ORDER BY p.id DESC ";
+		$sql.=" LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
 
 }
 ?>

@@ -302,6 +302,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     				'serviceType'=>$data['serviceType'],
     				'periodId'=>$data['term'],
     				'option'=>$option,
+					'studentId'=>empty($data['studentid']) ? 0 : $data['studentid'],
     		);
     		
     		$resultPeriod = $dbg->getAllStudyPeriod($param);

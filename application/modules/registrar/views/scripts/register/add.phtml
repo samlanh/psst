@@ -1841,6 +1841,20 @@ $(document).ready(function() {
 	}
 	function printSubmit() {
 		checkSession();
+		var hasStockProduct=0;
+		var rowId = $('#identity').val();
+		var rowIDArray = rowId.split(',');
+		if (rowId != '') {
+			for (var n = 0; n < rowIDArray.length; n++) {
+				var itemsType = dijit.byId("service_type_" + rowIDArray[n]).get("value");
+				var qtyAmt = dijit.byId("qty_" + rowIDArray[n]).get("value");
+				qtyAmt = isNaN(qtyAmt) ? 0 : qtyAmt;
+				if(itemsType==3 && qtyAmt>0){
+					hasStockProduct = 1;
+					break;
+				}
+			}
+		}
 		dijit.byId('comfirmSavePrint').set('disabled', true);
 		var url_submit = '<?php echo $this->url(array('module' => 'registrar', 'controller' => 'register', 'action' => 'addregistra')); ?>';
 		dojo.xhrPost({
@@ -1875,7 +1889,15 @@ $(document).ready(function() {
 				hideDialog1();
 				hideDialog();
 				alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?>!');
-				window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+				<?php if($saleCutStock!=1) {?>
+					if(hasStockProduct==1){
+						window.location.href = "<?php echo $this->baseUrl(); ?>/stock/cutstock/receipt/id/"+data.cutStockId+"?auto-print=true";
+					}else{
+						window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+					}
+				<?php }else{?>
+					window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+				<?php }?>
 			},
 			error: function (e) {
 				alert('<?php echo $tr->translate('ERROR_PRINTING_ACCURED'); ?>!');

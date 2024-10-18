@@ -511,6 +511,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 
 				$stuResult = $gdb->getStudentinfoGlobalById($stu_id);
 				$stuResult['receipt_number'] = $receipt_number;
+				$cut_id = empty($cut_id) ? 0 : $cut_id;
+				$stuResult['cutStockId'] = $cut_id;
+				
 				return $stuResult;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

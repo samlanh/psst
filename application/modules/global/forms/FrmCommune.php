@@ -111,6 +111,7 @@ Class Global_Form_FrmCommune extends Zend_Dojo_Form {
 				'queryExpr'=>'*${0}*',
 		));
 		$_province->setMultiOptions($opt_province);
+		$_province->setValue($request->getParam("province_name"));
 		
 		$_arr = array(1=>$this->tr->translate("ACTIVE"),0=>$this->tr->translate("DACTIVE"));
 		$_status = new Zend_Dojo_Form_Element_FilteringSelect("status");

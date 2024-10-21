@@ -1123,7 +1123,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$periodList = array();
 		if(!empty($rs['payment_term'])){
 			$data = array(
-				'feeId'=>$rs['academic_year'],
+				'feeId'=>$rs['feeId'],
 				'periodId'=>$rs['payment_term'],
 				'degree'=>$rs['degreeId']
 			);

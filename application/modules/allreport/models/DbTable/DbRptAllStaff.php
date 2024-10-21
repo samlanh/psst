@@ -390,7 +390,7 @@ class Allreport_Model_DbTable_DbRptAllStaff extends Zend_Db_Table_Abstract
 				AND sch.group_id =$groupId
 				AND schDetail.subject_id = $subjectId
 		";
-		$order=" ORDER BY schDetail.day_id ASC ";
+		$order=" ORDER BY schDetail.day_id,schDetail.from_hour  ASC ";
 		return $db->fetchAll($sql.$order);
 	}
 

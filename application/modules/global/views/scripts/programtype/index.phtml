@@ -1,0 +1,29 @@
+<?php
+	$request = Zend_Controller_Front::getInstance ()->getRequest ();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate("PROGRAM_TYPE"));
+	$frm =  $this->form_search;
+?>
+<div class="card">
+	<div class="card-header">
+		<h5 class="card-title mb-0"><i class="ti ti-school"></i>&nbsp;<?php echo $tr->translate('PROGRAM_TYPE');?></h5>
+		<div class="justify-content-between align-items-center ">
+			<form id="list" name="list" action="" dojoType="dijit.form.Form" method="post">
+				<div class="row g-3">
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement("title");?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<?php echo $frm->getElement('status_search');?>
+					</div>
+					<div class="col-md-2 col-sm-2 col-xs-12">
+						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="card-body">
+		<?php echo $this->list;?> 
+	</div>
+</div>

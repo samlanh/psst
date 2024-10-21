@@ -220,7 +220,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 				cd.proId,
 				cd.qtyBegining,
 				cd.qtyClosing,
-				(SELECT pro_qty FROM `rms_product_location` AS pl WHERE pl.pro_id = cd.proId LIMIT 1) AS currentQty,
+				(SELECT pro_qty FROM `rms_product_location` AS pl WHERE pl.branch_id = cl.branchId AND pl.pro_id = cd.proId LIMIT 1) AS currentQty,
 				cl.isClosed
 							
 				FROM `rms_closing` AS cl 

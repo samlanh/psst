@@ -7,6 +7,10 @@ $username = $session_user->last_name . $session_user->first_name;
 $settingNewStuID = NEW_STU_ID_FROM_TEST;
 $settingShowGroup = SHOW_GROUP_INPAYMENT;
 $settingAmtReceipt = AMOUNT_RECEIPT;
+
+$key = new Application_Model_DbTable_DbKeycode();
+$keySetting = $key->getKeyCodeMiniInv(TRUE);
+$saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_stock'];
 ?>
 <style>
 	span.user-badge.bg-warning {
@@ -837,6 +841,21 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			?>
 		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+		<?php 
+		$checked="";
+		$classCheckLetter="d-none";
+		if($saleCutStock!=1) {
+			$checked="checked";
+			$classCheckLetter="";
+		}?>
+		<div class="text-center w-100 <?php echo $classCheckLetter;?>">
+			<div class="custom-control custom-checkbox ">
+				<input type="checkbox" <?php echo $checked;?> class="checkbox custom-control-input" id="printReceiveStock" name="printReceiveStock"  >
+				<label class="custom-control-label" for="printReceiveStock">
+					<?php echo $tr->translate('PRINT_RECEIVED_STOCK');?>
+				</label>
+			</div>
+		</div>
 		<button dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-repeat"
 			type="button" onclick="hideDialog();"><?php echo $tr->translate("CANCEL"); ?></button>
 		<button dojoType="dijit.form.Button" class="button-class button-primary"
@@ -1891,13 +1910,12 @@ $(document).ready(function() {
 				alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?>!');
 				<?php if($saleCutStock!=1) {?>
 					if(hasStockProduct==1){
-						window.location.href = "<?php echo $this->baseUrl(); ?>/stock/cutstock/receipt/id/"+data.cutStockId+"?auto-print=true";
-					}else{
-						window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+						if($('#printReceiveStock').is(":checked")){
+							window.open( "<?php echo $this->baseUrl(); ?>/stock/cutstock/receipt/id/"+data.cutStockId+"?auto-print=true&inFrame=true", '_blank');
+						}
 					}
-				<?php }else{?>
-					window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
-				<?php }?>
+				<?php } ?>
+				window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
 			},
 			error: function (e) {
 				alert('<?php echo $tr->translate('ERROR_PRINTING_ACCURED'); ?>!');

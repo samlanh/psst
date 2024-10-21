@@ -15,12 +15,13 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 		$branch = $dbp->getBranchDisplay();
 		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		
+
     	$sql = "
 			SELECT 
 				ac.id
 				,(SELECT b.$branch FROM `rms_branch` AS b  WHERE b.br_id = ac.branchId LIMIT 1) AS branch_name
-				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = ac.academic_year LIMIT 1) AS academic_year
-				,CONCAT( g.group_code,' ',(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1)) AS `group_code`
+				,(SELECT CONCAT(c.fromYear,'-',c.toYear) FROM `rms_academicyear` AS c WHERE c.id = ac.academic_year LIMIT 1) AS academic_year
+				,CONCAT( g.group_code,' ',(SELECT CONCAT(c.fromYear,'-',c.toYear) FROM `rms_academicyear` AS c WHERE c.id = g.academic_year LIMIT 1)) AS `group_code`
 				,CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS studentName
 				,(SELECT first_name FROM rms_users WHERE rms_users.id = ac.userId LIMIT 1) AS userName
 				,ac.createDate
@@ -51,7 +52,7 @@ class Issue_Model_DbTable_DbAchievement extends Zend_Db_Table_Abstract
 	    	$where.=' AND ac.academic_year='.$search['academic_year'];
 	    }
 	    if(!empty($search['group'])){
-	    	$where.=' AND ac.branchId='.$search['group'];
+	    	$where.=' AND ac.groupId='.$search['group'];
 	    }
 	    if($search['status']>-1){
 	    	$where.=' AND ac.status='.$search['status'];

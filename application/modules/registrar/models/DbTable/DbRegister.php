@@ -423,6 +423,17 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 								'is_parent'     =>$spd_id,
 								'academicFeeTermId'=>$data["term_study".$i],
 							);
+						if($rs_item['items_type']==1){
+							$arrFilter =array(
+								'studentId'=>$data['old_stu'],
+								'itemDetailId' => $data['item_id'.$i],
+							); 
+							$lastPaidTuition = $gdb->getStuLastPaidTutionFee($arrFilter);
+							if(!empty($lastPaidTuition)){
+								$_arr["previous_startdate"] = $lastPaidTuition["start_date"];
+								$_arr["previous_enddate"] = $lastPaidTuition["validate"];
+							}
+						}
 						$this->_name="rms_student_paymentdetail";
 						$paymentDetailId = $this->insert($_arr);
 					}
@@ -500,6 +511,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 
 				$stuResult = $gdb->getStudentinfoGlobalById($stu_id);
 				$stuResult['receipt_number'] = $receipt_number;
+				$cut_id = empty($cut_id) ? 0 : $cut_id;
+				$stuResult['cutStockId'] = $cut_id;
+				
 				return $stuResult;
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -882,6 +896,43 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 // 			}
 // 		}
 // 	}
+
+	function getPrevioustPaymentDetail($data){
+		$db = $this->getAdapter();
+		
+		$_dbGb  = new Application_Model_DbTable_DbGlobal();
+		$paymentId = empty($data["paymentId"]) ?0 : $data["paymentId"];
+		$studentId = empty($data["studentId"]) ? 0 : $data["studentId"];
+		$sql="
+			SELECT
+				sp.id
+			FROM rms_student_payment as sp
+			WHERE sp.is_void = 0 
+				AND sp.id < $paymentId 
+				AND sp.student_id = $studentId 
+			";
+		$sql.= $_dbGb->getUserAccessPermission('sp.branch_id');
+		$sql.= " ORDER BY sp.id DESC LIMIT 1 ";
+		$previousRecord = $db->fetchOne($sql);
+		
+		if(!empty($previousRecord)){
+			$sqlPrev="
+				SELECT 
+					pd.*
+					,p.academic_year AS feeId
+				FROM `rms_student_paymentdetail` AS pd
+						JOIN `rms_student_payment` AS p  ON p.`id` = pd.`payment_id` 
+				WHERE 
+						p.`status` = 1
+						AND p.`is_void` = 0
+						AND p.`student_id` = $studentId  					
+			";
+			$sqlPrev.=" AND p.`id` = ".$previousRecord;
+			$sqlPrev.=" ORDER BY pd.id DESC";
+			return $db->fetchAll($sqlPrev);
+		}
+		return null;
+	}
 	
 	function updateRegister($data){
 		$db = $this->getAdapter();//ស្ពានភ្ជាប់ទៅកាន់Data Base
@@ -909,6 +960,27 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$voidOldreceipt = 0;
 					if ($lastPayId!=$payment_id){//void old receipt
 						$voidOldreceipt=1;
+					}
+					
+					$arrFilter =array(
+						'paymentId'=>$payment_id,
+						'studentId'=>$data['old_stu'],
+					); 
+					$prevPmtDetail = $this->getPrevioustPaymentDetail($arrFilter);
+					if(!empty($prevPmtDetail)) foreach($prevPmtDetail AS $rowDe){
+						$previousBalance = $rowDe["totalpayment"] - $rowDe["paidamount"];
+						if($previousBalance>0){
+							$arr = array(
+								'feeId'=>$rowDe['feeId'],
+								'startDate'=>$rowDe['start_date'],
+								'endDate'=>$rowDe['validate'],
+								'balance'=>$previousBalance,
+								'isoldBalance'=>1,
+							);
+							$this->_name='rms_group_detail_student';
+							$where = "stu_id=".$data['old_stu']." AND grade=".$rowDe['itemdetail_id'];
+							$this->update($arr, $where);
+						}
 					}
 		
 					if($rsold['data_from']!=1 AND $voidOldreceipt==0){ // not student study payments

@@ -1414,9 +1414,12 @@ $(document).ready(function() {
 				dijit.byId('total_amount' + col).attr('value', balance);
 				dojo.style('paid_amount' + col, "color", "red");
 				dijit.byId('isoldBalance' + col).attr('value', 1);
-				$("#term_study").select2({disabled:'readonly'});
 				dijit.byId('remark' + col).attr('value', 'Previous Balance');
-
+				
+				$("#term_study"+ col).select2("readonly", true);
+				$("#term_study"+ col).val(dataRow.academicFeeTermId).trigger("change");
+				
+				
 				dijit.byId('date_start_' + col).attr('value', dataRow.startDate);
 				dijit.byId('date_start_' + col).set('readOnly', true);
 
@@ -1430,6 +1433,7 @@ $(document).ready(function() {
 				getservicefee(col);
 			}
 			getDiscountforStudent(col);
+			checkingRowRequired(col);
 			
 		}catch(err){
 
@@ -1505,7 +1509,6 @@ $(document).ready(function() {
 	var url_service_fee = "<?php echo $this->url(array('module' => 'accounting', 'controller' => 'servicecharge', 'action' => 'getservicefee')); ?>";
 	function getservicefee(key) {
 		if (dijit.byId('isoldBalance' + key).get('value') == 1) {
-			alert(22);
 			return;
 		}
 		stu_type = dijit.byId('student_type').get('value');
@@ -1521,10 +1524,15 @@ $(document).ready(function() {
 		if (termRecord == '') {
 			return false;
 		}
+		checkingRowRequired(key);
 		if (termRecord == 6) {//other term
 			dijit.byId("price_" + key).set('readOnly', false);
 			dijit.byId("price_" + key).attr("value", 0);
 			calculateTotal(key);
+			
+			$('#term_study'+key).select2("val", "");
+			$('#term_study'+key).empty().trigger("change");
+			$('#term_study'+key).append("").trigger('change');
 			return 0;
 		} else {
 			dijit.byId("price_" + key).set('readOnly', true);
@@ -1581,9 +1589,13 @@ $(document).ready(function() {
 		additional_fee = dijit.byId('extra_fee' + index).get('value');
 		additional_fee = isNaN(additional_fee) ? 0 : additional_fee;
 		total = subtotal + additional_fee;
-		discount = $('#discount_amount' + index).get('value');
+		
+		//discount = $('#discount_amount' + index).get('value');
+		discount = dijit.byId('discount_amount' + index).get('value');
 		discount = isNaN(discount) ? 0 : discount;
 		if (discount > total) {
+			discount = total;
+			dijit.byId('discount_amount' + index).attr('value', discount);
 			//alert("the value must be <=" + total);
 		}
 
@@ -1829,6 +1841,20 @@ $(document).ready(function() {
 	}
 	function printSubmit() {
 		checkSession();
+		var hasStockProduct=0;
+		var rowId = $('#identity').val();
+		var rowIDArray = rowId.split(',');
+		if (rowId != '') {
+			for (var n = 0; n < rowIDArray.length; n++) {
+				var itemsType = dijit.byId("service_type_" + rowIDArray[n]).get("value");
+				var qtyAmt = dijit.byId("qty_" + rowIDArray[n]).get("value");
+				qtyAmt = isNaN(qtyAmt) ? 0 : qtyAmt;
+				if(itemsType==3 && qtyAmt>0){
+					hasStockProduct = 1;
+					break;
+				}
+			}
+		}
 		dijit.byId('comfirmSavePrint').set('disabled', true);
 		var url_submit = '<?php echo $this->url(array('module' => 'registrar', 'controller' => 'register', 'action' => 'addregistra')); ?>';
 		dojo.xhrPost({
@@ -1863,7 +1889,15 @@ $(document).ready(function() {
 				hideDialog1();
 				hideDialog();
 				alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?>!');
-				window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+				<?php if($saleCutStock!=1) {?>
+					if(hasStockProduct==1){
+						window.location.href = "<?php echo $this->baseUrl(); ?>/stock/cutstock/receipt/id/"+data.cutStockId+"?auto-print=true";
+					}else{
+						window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+					}
+				<?php }else{?>
+					window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+				<?php }?>
 			},
 			error: function (e) {
 				alert('<?php echo $tr->translate('ERROR_PRINTING_ACCURED'); ?>!');
@@ -1960,6 +1994,22 @@ function getDiscountforStudent(index){
 		dijit.byId('discount_'+index).attr('value',discountValue);
 		dijit.byId('discount_amount'+index).attr('value','');
 	}
+<<<<<<< HEAD
 	calculateTotal(index);
+=======
+	
+	calculateTotal(index);
+}
+function checkingRowRequired(index){
+	var termRecord = $('#term_' + index).val();
+	if (termRecord == 5 || termRecord == 6) {//one time & other term
+		dijit.byId('date_start_'+index).set('required',false); 
+		dijit.byId('validate_'+index).set('required',false); 
+	}else{
+		dijit.byId('date_start_'+index).set('required',true); 
+		dijit.byId('validate_'+index).set('required',true); 
+		
+	}
+>>>>>>> 54c875dfd2d5a3abf20e874d2420705ed22f5b98
 }
 </script>

@@ -346,6 +346,57 @@ class Application_Model_DbTable_DbGlobalUp extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	public function getAllProgramTypeList($data=array()){
+		$db = $this->getAdapter();
+		
+		$_dbgb = new Application_Model_DbTable_DbGlobal();
+		$labelShortCut= $_dbgb->getViewLabelDisplay("shortcut");
+		$labelFull= $_dbgb->getViewLabelDisplay("full");
+		
+		$currentLang = $_dbgb->currentlang();
+		$col = 'title';
+		if ($currentLang == 1) {
+			$col = 'title';
+		}
+		
+		
+		$sql = " 
+			SELECT 
+				pt.`id` AS id
+				,pt.$col AS `name`
+				,pt.`title` AS `titleKh`
+				,pt.`titleEn` AS titleEn
+				,pt.`isSingleProgram`
+				,pt.`degreeList`
+				
+		";
+		$fromStatment = " FROM `rms_program_type` AS pt  ";
+		$where = " WHERE pt.`status`=1 ";
+		if (!empty($data['isNotThisOpt'])) {
+			$where.=" AND pt.`isSingleProgram` != ".$data['isNotThisOpt'];
+		}
+		if (!empty($data['isSingleProgram'])) {
+			$where.=" AND pt.`isSingleProgram` = ".$data['isSingleProgram'];
+		}
+		$sql.=$fromStatment;
+		$sql.=$where;
+		
+		$rows = $db->fetchAll($sql);
+		if (!empty($data['option'])) {
+			$options = '';
+			if (!empty($rows)){
+				foreach ($rows as $value) {
+					$options .= '<option  data-record-info="' . htmlspecialchars(Zend_Json::encode($value)) . '"  value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
+				}
+			}else{
+				$options= '<option value="1">' . $this->tr->translate("GENERAL") . '</option>';
+			}
+			return $options;
+		} else {
+			return $rows;
+		}
+	}
+	
 
 }
 ?>

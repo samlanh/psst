@@ -1351,6 +1351,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 							$dbPush = new Api_Model_DbTable_DbPushNotification();
 							$notify = array(
 								"typeNotify" => "successfulRegister",
+								"optNotification" => 3,
 							);
 							$notify["notificationId"]  = $resultSubmit['value'];
 							$dbPush->pushNotificationAPI($notify);

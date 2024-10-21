@@ -2426,7 +2426,9 @@ span.addtional-info.bottom-info {
     padding: 3px;
     font-weight: normal;
 }
-
+.d-none {
+    display: none !important;
+}
 small.subtitle-row {
     display: block;
 	color: #4b4b4b;

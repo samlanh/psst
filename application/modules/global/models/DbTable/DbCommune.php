@@ -50,11 +50,18 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 	}
 	function getAllCommune($search=null){
 		$db = $this->getAdapter();
-		$sql = " SELECT com.com_id,com.commune_namekh,com.commune_name,
-		(SELECT d.district_namekh FROM ln_district as d where d.dis_id = com.district_id LIMIT 1) as district_name,
-			com.modify_date,com.status,
-			(SELECT first_name FROM rms_users WHERE id=user_id LIMIT 1) As user_name
-			FROM ln_commune AS com";
+		$sql = " 
+			SELECT 
+				com.com_id
+				,com.commune_namekh
+				,com.commune_name
+				,d.district_namekh AS district_name
+				,com.modify_date
+				,com.status
+				,(SELECT u.first_name FROM rms_users AS u WHERE u.id=com.user_id LIMIT 1) As user_name
+			FROM ln_commune AS com 
+				LEFT JOIN ln_district AS d ON d.dis_id = com.district_id
+			";
 		
 		$where = ' WHERE 1 ';
 		if(!empty($search['adv_search'])){
@@ -69,13 +76,17 @@ class Global_Model_DbTable_DbCommune extends Zend_Db_Table_Abstract
 		if(!empty($search['district_name'])){
 			$where.=" AND com.district_id=".$search['district_name'];
 		}
+		if(!empty($search['province_name'])){
+			$where.=" AND d.pro_id=".$search['province_name'];
+		}
 		if($search['search_status']>-1){
 			$where.=" AND com.status=".$search['search_status'];
 		}
 		$order = " ORDER BY com.com_id DESC ";
+		
 		return $db->fetchAll($sql.$where.$order);	
 	}
-        public function getCommuneBydistrict($distict_id){
+	public function getCommuneBydistrict($distict_id){
 		$db = $this->getAdapter();
 		
 		$_dbgb = new Application_Model_DbTable_DbGlobal();

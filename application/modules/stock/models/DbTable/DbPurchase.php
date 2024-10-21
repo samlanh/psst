@@ -229,7 +229,7 @@ class Stock_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
 				);
 		
 			$this->_name = "rms_product_location";
-			$where = " pro_id = ".$result['id'];
+			$where = " branch_id=".$branch ." AND pro_id = ".$result['id'];
 			$this->update($array, $where);
     	}
     }

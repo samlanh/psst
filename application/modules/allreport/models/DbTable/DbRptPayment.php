@@ -55,6 +55,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     				sp.paid_amount,
     				sp.balance_due,
     				sp.note,
+					sp.academic_year AS feeId,
     				COALESCE(sp.degree,0) AS degreeId,
     			   (SELECT $label FROM rms_view where rms_view.type = 8 and key_code=sp.payment_method LIMIT 1) AS payment_method,
     			   (SELECT bank_name from `rms_bank` where id=sp.bank_id LIMIT 1) AS bankName,

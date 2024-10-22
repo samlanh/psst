@@ -1461,4 +1461,42 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->form_search = $frms;
 	
 	}
+	public function rptIncomeStatisticAction(){
+		try{
+    		if($this->getRequest()->isPost()){
+    			$formdata=$this->getRequest()->getPost();
+    		}
+    		else{
+    			$formdata = array(
+    					"adv_search"=>'',
+    					"branch_id"=>'',
+    					"academicYearEnroll"=>'',
+    					"status"=>-1,
+    					"grade"=>-1,
+    					'studentType'=>'',
+    					'pay_term'=>-1,
+    					'start_date'=> date('Y-m-d'),
+    					'end_date'=>date('Y-m-d'),
+    			);
+    		}
+			$this->view->search = $formdata;
+    		$_db = new Allreport_Model_DbTable_DbNewAccounting();
+			$this->view->dataPayment = $_db->getAllPaymentStatistic($formdata);
+				
+			$branch_id = empty($formdata['branch_id'])?null:$formdata['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
+		
+    	}catch (Exception $e){
+    		Application_Form_FrmMessage::message("Application Error");
+    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+    	}
+
+		$form = new Application_Form_FrmCombineSearchGlobal();
+    	$frm = $form->FormIncomeStatisticFilter();
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->FormIncomeStatisticFilter = $frm;
+		
+	}
 }

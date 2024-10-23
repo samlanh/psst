@@ -30,6 +30,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 					ds.id 
 					,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=ds.branchId LIMIT 1) AS branch
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM rms_academicyear AS ac WHERE ac.id=ds.academicYear LIMIT 1) as academicYear
+					,ds.discountCode
 					,ds.discountTitle
 					,$sqlDiscountFor AS discountForText
 					,(SELECT v.$colunmname FROM `rms_view` AS v WHERE v.type=38 AND v.key_code=ds.discountForType LIMIT 1) AS discountForOption
@@ -97,8 +98,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 				'branchId' => $_data['branch_id'],
 				'academicYear' => $_data['academic_year'],
 				'discountTitle' => $_data['discountTitle'],
+				'discountCode' => $_data['discountCode'],
 				'discountFor' => $_data['discountFor'],
-				'studentId' => $_data['studentId'],
+				// 'studentId' => $_data['studentId'],
 				'discountForType' => $_data['discountforType'],
 				'degree' => $dept,
 				'discountId' => $_data['discount_id'],
@@ -156,8 +158,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 			'branchId' => $_data['branch_id'],
 			'academicYear' => $_data['academic_year'],
 			'discountTitle' => $_data['discountTitle'],
+			'discountCode' => $_data['discountCode'],
 			'discountFor' => $_data['discountFor'],
-			'studentId' => $_data['studentId'],
+			// 'studentId' => $_data['studentId'],
 			'discountForType' => $_data['discountforType'],
 			'degree' => $dept,
 			'discountId' => $_data['discount_id'],
@@ -691,6 +694,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		$sql = "SELECT ds.id, 
 					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
+					discountCode,
 					discountTitle
 					,$sqlDiscountFor AS discountForText
 					,(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName,

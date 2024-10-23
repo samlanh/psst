@@ -51,6 +51,7 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		if (!empty($search['title'])) {
 			$s_where = array();
 			$s_search = addslashes(trim($search['title']));
+			$s_where[] = " ds.discountCode LIKE '%{$s_search}%'";
 			$s_where[] = " ds.discountTitle LIKE '%{$s_search}%'";
 			$s_where[] = " ds.discountValue LIKE '%{$s_search}%'";
 			$where .= ' AND ( ' . implode(' OR ', $s_where) . ')';

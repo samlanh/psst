@@ -22,7 +22,13 @@
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-score-statistic')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 						<script type="dojo/method" event="onSubmit">			
 								if(this.validate()) {
-									
+									academic_year=dijit.byId('academic_year').get('value');
+									if(academic_year=='' || academic_year==0){
+										alert('<?php echo $tr->translate('SELECT_ACADEMIC_YEAR');?>!');
+										dijit.byId('academic_year').focus(); 
+										return false;
+									}
+
 									exam_type=dijit.byId('exam_type').get('value');
 									if(exam_type=='' || exam_type==0){
 										alert('<?php echo $tr->translate('SELECT_EXAM_TYPE');?>!');

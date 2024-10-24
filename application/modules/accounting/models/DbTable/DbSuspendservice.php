@@ -42,6 +42,7 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 			   		
 			   		$array=array(
 		   				'stop_type'=> 1, 
+						'note' => $data['reason_'.$i],
 			   		);
 			   		$where=" stu_id =".$data['studentId']." AND grade=".$data['spd_id_'.$i];
 			   		$this->_name = 'rms_group_detail_student';

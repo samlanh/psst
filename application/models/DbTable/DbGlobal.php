@@ -1530,6 +1530,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		   		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =sgd.academic_year LIMIT 1) AS academic_year_label,
 		   		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYearEnroll LIMIT 1) AS academicYearEnroll,
 		   		sgd.feeId AS fee_id,
+				COALESCE(sgd.group_id,0) AS groupId,
 				(SELECT group_code FROM `rms_group` WHERE rms_group.id=sgd.group_id AND sgd.is_maingrade=1 AND sgd.is_current=1 LIMIT 1) AS group_name
 				
 				
@@ -3093,6 +3094,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				'grade' => $grade,
 				'degree' => $degree,
 				'feeId' => empty($rs['fee_id']) ? '' : $rs['fee_id'],
+				'groupId' => empty($rs['groupId']) ? 0 : $rs['groupId'],
 				'creditAmountAfter' => empty($rs['total_amountafter']) ? '' : $rs['total_amountafter'],
 				'creditMemoId' => empty($rs['credit_memo_id']) ? '' : $rs['credit_memo_id'],
 			);

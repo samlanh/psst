@@ -343,6 +343,7 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 								</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<input id="group_id" />
+									<input type="hidden" id="groupId" name="groupId" dojoType="dijit.form.TextBox" />
 									<input type="hidden" id="degree" name="degree" dojoType="dijit.form.TextBox" />
 									<input type="hidden" id="grade" name="grade" dojoType="dijit.form.TextBox" />
 								</div>
@@ -1188,7 +1189,8 @@ $(document).ready(function() {
 					if(studentFeeId>0){
 						$('#study_year').val(studentData.feeId).trigger('change');
 					}
-					
+					dijit.byId("group_id").set('value', studentData.groupId);
+					dijit.byId("groupId").set('value', studentData.groupId);
 					dijit.byId("degree").set('value', studentData.degree);
 					dijit.byId("grade").set('value', studentData.grade);
 

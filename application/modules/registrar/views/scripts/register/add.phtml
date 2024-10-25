@@ -7,6 +7,10 @@ $username = $session_user->last_name . $session_user->first_name;
 $settingNewStuID = NEW_STU_ID_FROM_TEST;
 $settingShowGroup = SHOW_GROUP_INPAYMENT;
 $settingAmtReceipt = AMOUNT_RECEIPT;
+
+$key = new Application_Model_DbTable_DbKeycode();
+$keySetting = $key->getKeyCodeMiniInv(TRUE);
+$saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_stock'];
 ?>
 <style>
 	span.user-badge.bg-warning {
@@ -339,6 +343,7 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 								</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<input id="group_id" />
+									<input type="hidden" id="groupId" name="groupId" dojoType="dijit.form.TextBox" />
 									<input type="hidden" id="degree" name="degree" dojoType="dijit.form.TextBox" />
 									<input type="hidden" id="grade" name="grade" dojoType="dijit.form.TextBox" />
 								</div>
@@ -837,6 +842,21 @@ $settingAmtReceipt = AMOUNT_RECEIPT;
 			?>
 		</div>
 		<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+		<?php 
+		$checked="";
+		$classCheckLetter="d-none";
+		if($saleCutStock!=1) {
+			$checked="checked";
+			$classCheckLetter="";
+		}?>
+		<div class="text-center w-100 <?php echo $classCheckLetter;?>">
+			<div class="custom-control custom-checkbox ">
+				<input type="checkbox" <?php echo $checked;?> class="checkbox custom-control-input" id="printReceiveStock" name="printReceiveStock"  >
+				<label class="custom-control-label" for="printReceiveStock">
+					<?php echo $tr->translate('PRINT_RECEIVED_STOCK');?>
+				</label>
+			</div>
+		</div>
 		<button dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-repeat"
 			type="button" onclick="hideDialog();"><?php echo $tr->translate("CANCEL"); ?></button>
 		<button dojoType="dijit.form.Button" class="button-class button-primary"
@@ -1169,7 +1189,8 @@ $(document).ready(function() {
 					if(studentFeeId>0){
 						$('#study_year').val(studentData.feeId).trigger('change');
 					}
-					
+					dijit.byId("group_id").set('value', studentData.groupId);
+					dijit.byId("groupId").set('value', studentData.groupId);
 					dijit.byId("degree").set('value', studentData.degree);
 					dijit.byId("grade").set('value', studentData.grade);
 
@@ -1593,11 +1614,7 @@ $(document).ready(function() {
 		//discount = $('#discount_amount' + index).get('value');
 		discount = dijit.byId('discount_amount' + index).get('value');
 		discount = isNaN(discount) ? 0 : discount;
-		if (discount > total) {
-			discount = total;
-			dijit.byId('discount_amount' + index).attr('value', discount);
-			//alert("the value must be <=" + total);
-		}
+		
 
 		total_pay = parseFloat(total) - parseFloat(discount);
 		discount_percent = dijit.byId('discount_' + index).get('value');
@@ -1642,10 +1659,7 @@ $(document).ready(function() {
 		credit_memo = dijit.byId('credit_memo').get('value');
 		credit_memo = isNaN(credit_memo) ? 0 : credit_memo;
 		netPaidAmount = PaidAmount - credit_memo;
-		if(netPaidAmount<0){
-			netPaidAmount=0;
-		}
-
+	
 		dijit.byId('paid_amount').attr('value', netPaidAmount.toFixed(2));
 		balance = totalPayment - netPaidAmount - credit_memo;
 		if (balance < 0) {
@@ -1891,13 +1905,12 @@ $(document).ready(function() {
 				alert('<?php echo $tr->translate('INSERT_SUCCESS'); ?>!');
 				<?php if($saleCutStock!=1) {?>
 					if(hasStockProduct==1){
-						window.location.href = "<?php echo $this->baseUrl(); ?>/stock/cutstock/receipt/id/"+data.cutStockId+"?auto-print=true";
-					}else{
-						window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
+						if($('#printReceiveStock').is(":checked")){
+							window.open( "<?php echo $this->baseUrl(); ?>/stock/cutstock/receipt/id/"+data.cutStockId+"?auto-print=true&inFrame=true", '_blank');
+						}
 					}
-				<?php }else{?>
-					window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
-				<?php }?>
+				<?php } ?>
+				window.location.href = "<?php echo $this->baseUrl(); ?>/registrar/register/add";
 			},
 			error: function (e) {
 				alert('<?php echo $tr->translate('ERROR_PRINTING_ACCURED'); ?>!');
@@ -1994,10 +2007,6 @@ function getDiscountforStudent(index){
 		dijit.byId('discount_'+index).attr('value',discountValue);
 		dijit.byId('discount_amount'+index).attr('value','');
 	}
-<<<<<<< HEAD
-	calculateTotal(index);
-=======
-	
 	calculateTotal(index);
 }
 function checkingRowRequired(index){
@@ -2008,8 +2017,6 @@ function checkingRowRequired(index){
 	}else{
 		dijit.byId('date_start_'+index).set('required',true); 
 		dijit.byId('validate_'+index).set('required',true); 
-		
 	}
->>>>>>> 54c875dfd2d5a3abf20e874d2420705ed22f5b98
 }
 </script>

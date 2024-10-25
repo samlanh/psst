@@ -308,6 +308,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$sql = "SELECT ds.id, 
 					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
+					discountCode,
 					discountTitle,
 					$sqlDiscountFor AS discountForText,
 					(SELECT $colunmname FROM `rms_view` WHERE TYPE=38 AND key_code=ds.discountForType LIMIT 1) AS discountForOption,
@@ -804,6 +805,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$sql = "SELECT  ds.id, 
 					(SELECT $branch FROM `rms_branch` WHERE br_id=ds.branchId LIMIT 1) AS branch,
 					(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academicYear LIMIT 1) as academicYear,
+					discountCode,
 					discountTitle,
 					(CASE 
 						WHEN ds.discountFor=2 THEN $sqlDiscountFor

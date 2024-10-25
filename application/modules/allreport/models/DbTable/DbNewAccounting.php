@@ -72,10 +72,10 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 			$where.= " AND s.studentType = ".$search['studentType'];
 		}
 		if(!empty($search['pay_term'])){
-			$where.= " AND s.stu_id IN (SELECT studentId FROM `v_studenttermpaid` WHERE payment_term=".$search['pay_term'].")";
+			$where.= " AND s.stu_id IN (SELECT studentId FROM `v_studenttutionfeepaid` WHERE payment_term=".$search['pay_term'].")";
 		}
 		if(!empty($search['payment_date'])){
-			$where.= " AND s.stu_id IN (SELECT studentId FROM `v_studenttermpaid` WHERE  FIND_IN_SET ('".$search['payment_date']."',PaidDateList))";
+			$where.= " AND s.stu_id IN (SELECT studentId FROM `v_studenttutionfeepaid` WHERE  FIND_IN_SET ('".$search['payment_date']."',PaidDateList))";
 		}
 
 		

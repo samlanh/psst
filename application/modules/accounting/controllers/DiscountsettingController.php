@@ -29,7 +29,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action
 			$rs_rows = $db->getAllDiscountset($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH", "ACADEMIC_YEAR", "TITLE", "DISCOUNT_FOR_TYPE", "DISCOUNT_OPTION", "COURSE_SERVICE_PRODUCT", "DISCOUNT_TYPE", "DIS_MAX", "DISCOUNT_PERIOD", "BY_USER", "CREATE_DATE", "STATUS");
+			$collumns = array("BRANCH", "ACADEMIC_YEAR","DISCOUNT_CODE", "TITLE", "DISCOUNT_FOR_TYPE", "DISCOUNT_OPTION", "COURSE_SERVICE_PRODUCT", "DISCOUNT_TYPE", "DIS_MAX", "DISCOUNT_PERIOD", "BY_USER", "CREATE_DATE", "STATUS");
 			$link = array(
 				'module' => 'accounting',
 				'controller' => 'discountsetting',
@@ -42,6 +42,7 @@ class Accounting_DiscountSettingController extends Zend_Controller_Action
 				array(
 					'branch' => $link,
 					'academicYear' => $link,
+					'discountCode' => $link,
 					'discountTitle' => $link,
 					'discountForText' => $link,
 					'studentName' => $link,

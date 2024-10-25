@@ -327,7 +327,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'user_id'		=> $this->getUserId(),
 					'academic_year'	=> $data['study_year'],
 					'paystudent_type'=>$rs_stu['is_stu_new'],//
-					'group_id'		=> $data['group_id'],
+					'group_id'		=> empty($data['groupId']) ? 0 : $data['groupId'],
 					'degree'		=> $rs_stu['degree'],
 					'grade'			=> $rs_stu['grade'],
 					'degree_culture'=> $rs_stu['calture'],
@@ -459,6 +459,26 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					$this->update($arr, $where);
 					
 					if(!empty($rs_item) AND !empty($data['autoNextPay'.$i])){
+							if($rs_item['items_type']!=1){
+								$arrF = array(
+									'studentId' => $data['old_stu'],
+									'degree'	=> $rs_item['items_id'],
+									'grade' 	=> $data['item_id'.$i],
+									'isCurrent' => 1,
+								);
+								$stuItemInfo = $this->getStudentGroupDetailInfoByItems($arrF);
+								if(!empty($stuItemInfo)){
+									if($stuItemInfo["stop_type"]!=0){ // update is_current of stoped service
+										$_arrStuItemInfo=array(
+											'is_current'=>0,
+										);
+										$this->_name ='rms_group_detail_student';
+										$whereStuItemInfo = "gd_id = ".$stuItemInfo["gd_id"];
+										$this->update($_arrStuItemInfo, $whereStuItemInfo);
+									}
+								}
+							}
+						
 							$_arr= array(
 								'branch_id'		=> $data['branch_id'],
 								'studentId'		=> $data['old_stu'],
@@ -1126,5 +1146,48 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$sql.=" LIMIT 1 ";
     	return $db->fetchRow($sql);
     }
+	
+	function getStudentGroupDetailInfoByItems($data)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT
+				gs.*
+			FROM
+				`rms_group_detail_student` AS gs,
+				rms_student as st
+			WHERE 	st.stu_id=gs.stu_id ";
+		if (!empty($data['item_type'])) {
+			$sql .= " AND gs.`itemType` = " . $data['item_type'];
+		}
+		if (!empty($data['group_id'])) {
+			$sql .= " AND gs.`group_id` = " . $data['group_id'];
+		}
+		if (!empty($data['studentId'])) {
+			$sql .= " AND gs.`stu_id` = " . $data['studentId'];
+		}
+		if (isset($data['isMaingrade'])) {
+			$sql .= " AND gs.`is_maingrade` = " . $data['isMaingrade'];
+		}
+		if (isset($data['isCurrent'])) {
+			$sql .= " AND gs.`is_current` = " . $data['isCurrent'];
+		}
+		if (!empty($data['degree'])) {
+			$sql .= " AND gs.`degree` = " . $data['degree'];
+		}
+		if (!empty($data['grade'])) {
+			$sql .= " AND gs.`grade` = " . $data['grade'];
+		}
+		if (isset($data['stopType'])) {	//0 = normal,1 stop ,2 suspend,3 = passed,4 graduate
+			$sql .= " AND gs.`stop_type` = " . $data['stopType'];
+		}
+		if (!empty($data['groupId'])) {
+			$sql .= " AND gs.`group_id` = " . $data['groupId'];
+		}
+		if (!empty($data['branchId'])) {
+			$sql .= " AND s.`branch_id` = " . $data['branchId'];
+		}
+		$sql .= " LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
 
 }

@@ -1712,7 +1712,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 								`rms_metionscore_setting` AS m 
 									INNER JOIN `rms_metionscore_setting_detail` AS md 
 						ON m.`id`=md.`metion_score_id` 
-						WHERE m.`degree`= " . $search['degree'] . " ORDER BY md.`max_score` DESC";
+						WHERE m.`degree`= " . $search['degree'] . " AND m.`academic_year`= " . $search['academic_year'] . "  ORDER BY md.`max_score` DESC";
 		$mentionResult = $db->fetchAll($sqlMention);
 		$mentionResultArr = array(
 			"0" => 0,

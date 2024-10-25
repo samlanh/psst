@@ -40,6 +40,15 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 			)
 		);
 
+		$discountCode = new Zend_Dojo_Form_Element_ValidationTextBox('discountCode');
+		$discountCode->setAttribs(
+			array(
+				'dojoType' => 'dijit.form.TextBox',
+				'class' => 'fullside',
+				'required' => false
+			)
+		);
+
 		$_discount = new Zend_Dojo_Form_Element_FilteringSelect('discount_id');
 		$_discount->setAttribs(
 			array(
@@ -204,6 +213,7 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 			$_branch_id->setValue($data['branchId']);
 			$acadmicyear->setValue($data['academicYear']);
 			$discountTitle->setValue($data['discountTitle']);
+			$discountCode->setValue($data['discountCode']);
 			$discountFor->setValue($data['discountFor']);
 			$discountforType->setValue($data['discountForType']);
 
@@ -230,6 +240,7 @@ class Accounting_Form_FrmDiscount extends Zend_Dojo_Form
 				$acadmicyear,
 				$discountPeriod,
 				$discountTitle,
+				$discountCode,
 				$discountforType
 			)
 		);

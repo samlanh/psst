@@ -93,10 +93,10 @@
     						$r++?>
     					<tr class="context-menu-one"  oncontextmenu="setrowdata('<?php echo $rs['id']; ?>');return false;">
     						<td style="text-align:center;" ><?php echo $r;?></td>
-							<td class="itesms text-center" id="branchValue"><?php echo $rs['branch_name']?></td>
-    						<td class="itesms text-center" id="receiptValue"><?php echo $rs['receipt_number']?></td>
-							<td class="itesms text-center" id="stuCodeValue"><?php echo $rs['stu_code']?></td>
-							<td class="itesms text-center" id="stuNameValue"><?php echo $rs['stu_khname']?></td>
+							<td class="itesms text-center" id="branchValue<?php echo $rs['id']; ?>"><?php echo $rs['branch_name']?></td>
+    						<td class="itesms text-center" id="receiptValue<?php echo $rs['id']; ?>"><?php echo $rs['receipt_number']?></td>
+							<td class="itesms text-center" id="stuCodeValue<?php echo $rs['id']; ?>"><?php echo $rs['stu_code']?></td>
+							<td class="itesms text-center" id="stuNameValue<?php echo $rs['id']; ?>"><?php echo $rs['stu_khname']?></td>
 							<td class="itesms text-center" ><?php echo $rs['sex']?></td>
 							<td class="itesms text-center" ><?php echo $rs['YEAR']?></td>
 							<td class="itesms text-center" ><?php echo $rs['grand_total']?></td>
@@ -105,7 +105,7 @@
 							<td class="itesms text-center" ><?php echo $rs['balance_due']?></td>
 							<td class="itesms text-center" ><?php echo $rs['payment_method']?></td>
 							<td class="itesms text-center" ><?php echo $rs['number']?></td>
-							<td class="itesms text-center" id="dateValue" ><?php echo $rs['create_date']?></td>
+							<td class="itesms text-center" id="dateValue<?php echo $rs['id']; ?>" ><?php echo $rs['create_date']?></td>
 							<td class="itesms text-center" ><?php echo $rs['user']?></td>
 							<td class="itesms text-center" ><?php echo $rs['void']?></td>
 							<td class="itesms text-center" ><?php echo $rs['void_by']?></td>
@@ -326,10 +326,10 @@
 		row = index;
 		var strinfo="";
 		
-		strinfo+='<small >'+$("#branchValue").text()+'</small>';
-		strinfo+='<h3 class="text-danger red"><small class="text-primary " ><?php echo $tr->translate("RECEIPT_NO");?>:</small > '+$("#receiptValue").text()+'</h3>';
-		strinfo+='<p><?php echo $tr->translate("STUDENT_NAME");?>: <strong class="text-primary ">'+$("#stuCodeValue").text()+' '+$("#stuNameValue").text()+' </strong> </p>';
-		strinfo+='<p><?php echo $tr->translate("DATE_PAY");?>: <strong class="text-primary ">'+$("#dateValue").text()+'</strong></p>';
+		strinfo+='<small >'+$("#branchValue"+index).text()+'</small>';
+		strinfo+='<h3 class="text-danger red"><small class="text-primary " ><?php echo $tr->translate("RECEIPT_NO");?>:</small > '+$("#receiptValue"+index).text()+'</h3>';
+		strinfo+='<p><?php echo $tr->translate("STUDENT_NAME");?>: <strong class="text-primary ">'+$("#stuCodeValue"+index).text()+' '+$("#stuNameValue"+index).text()+' </strong> </p>';
+		strinfo+='<p><?php echo $tr->translate("DATE_PAY");?>: <strong class="text-primary ">'+$("#dateValue"+index).text()+'</strong></p>';
 		
 		$( "#contentInfoPop" ).html( strinfo );
 	}

@@ -164,6 +164,10 @@ class Stock_CutstockController extends Zend_Controller_Action {
 
 		$id=$this->getRequest()->getParam('id');
 		$paymentId=$this->getRequest()->getParam('paymentId');
+		
+		$autoPrint = $this->getRequest()->getParam('auto-print');
+		$autoPrint = empty($autoPrint) ? false : $autoPrint;
+		$this->view->autoPrint = $autoPrint;
 
 		if(!empty($paymentId)){
 			$rowcutstock = $db->getCutStockByPaymentId($paymentId);

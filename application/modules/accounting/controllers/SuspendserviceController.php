@@ -69,6 +69,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 		 
 	}
 	public function editAction(){
+		Application_Form_FrmMessage::redirector('/accounting/suspendservice/index');
 		$id=$this->getRequest()->getParam("id");
 		if($this->getRequest()->isPost())
 		{

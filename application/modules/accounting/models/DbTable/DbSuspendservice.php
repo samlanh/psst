@@ -36,6 +36,10 @@ class Accounting_Model_DbTable_DbSuspendservice extends Zend_Db_Table_Abstract
 			   				'suspendservice_id'	=> $id,
 			   				'spd_id'			=> $data['spd_id_'.$i],
 			   				'reason'			=> $data['reason_'.$i],
+							'studentId'			=> $data['studentId'],
+			   				'stopDate'			=> $data['stopDate'.$i],
+							'create_date'		=> date("Y-m-d"),
+							'user_id'	 		=> $this->getUserId()
 			   			);
 			   		$this->_name = 'rms_suspendservicedetail';
 			   		$this->insert($_arr);

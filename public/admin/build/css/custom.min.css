@@ -2440,3 +2440,20 @@ small.subtitle-row {
     padding: 5px 10px;
 }
 
+.btn-rounded-pill {
+    border-radius: 50rem !important;
+}
+.btn-icon {
+    padding: 0 !important;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    margin: 0 !important;
+}
+
+.btn-icon span.fa {
+    margin: 0 !important;
+}

@@ -4,6 +4,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
     public function init()
     {    	
      /* Initialize action controller here */
+	 	$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
     	header('content-type: text/html; charset=utf8');
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
@@ -28,7 +29,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 			$db_student= new Foundation_Model_DbTable_DbStudentDrop();
 			$rs_rows = $db_student->getAllStudentDrop($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","TYPE","STOP_DATE","REASON","returnStudy","USER","STATUS");
+			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","ACADEMIC_YEAR","DEGREE","GRADE","GROUP","SESSION","ROOM_NAME","TYPE","STOP_DATE","REASON","NOTE","returnStudy","USER","STATUS");
 			$link=array(
 					'module'=>'foundation','controller'=>'studentdrop','action'=>'edit',
 			);
@@ -45,6 +46,7 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 		}
 	}
 	function addAction(){
+		$dbg = new Application_Model_DbTable_DbGlobal();
 		try{
 			if($this->getRequest()->isPost()){
 				try{
@@ -61,14 +63,21 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 					Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				}
 			}
-			$tsub = new Global_Form_FrmAddClass();
-			$frm_student=$tsub->FrmAddGroup();
-			Application_Model_Decorator::removeAllDecorator($frm_student);
-			$this->view->frm = $frm_student;			
+					
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("INSERT_FAIL");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+
+		$tsub = new Global_Form_FrmAddClass();
+		$frm_student=$tsub->FrmAddGroup();
+		Application_Model_Decorator::removeAllDecorator($frm_student);
+		$this->view->frm = $frm_student;	
+
+		$rsStopReason= $dbg->getViewByType(43,null);
+		array_unshift($rsStopReason, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($rsStopReason, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
+		$this->view->reason = $rsStopReason;
 	}
 	public function editAction(){
 		try{	
@@ -116,7 +125,12 @@ class Foundation_StudentdropController extends Zend_Controller_Action {
 		);
 		$d_row= $db_global->getAllItemDetail($param);
 		$this->view->grade_name=$d_row;
-			
+		
+		$rsStopReason= $db_global->getViewByType(43,null);
+		array_unshift($rsStopReason, array ( 'id' => -1,'name' =>$this->tr->translate("ADD_NEW")));
+		array_unshift($rsStopReason, array ( 'id' => 0,'name' =>$this->tr->translate("SELECT")));
+		$this->view->reason = $rsStopReason;
+
 		$tsub= new Global_Form_FrmAddClass();
 		$frm_student=$tsub->FrmAddDrup($row);
 		Application_Model_Decorator::removeAllDecorator($frm_student);

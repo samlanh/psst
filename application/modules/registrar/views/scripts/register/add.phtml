@@ -1614,7 +1614,6 @@ $(document).ready(function() {
 		//discount = $('#discount_amount' + index).get('value');
 		discount = dijit.byId('discount_amount' + index).get('value');
 		discount = isNaN(discount) ? 0 : discount;
-		
 
 		total_pay = parseFloat(total) - parseFloat(discount);
 		discount_percent = dijit.byId('discount_' + index).get('value');

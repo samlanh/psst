@@ -56,16 +56,21 @@ class Home_CrmController extends Zend_Controller_Action
     }
     public function addAction()
     {
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
+		
     	if($this->getRequest()->isPost()){
     		$_data = $this->getRequest()->getPost();
     		try{
     			$db = new Home_Model_DbTable_DbCRM();
     			$row = $db->AddCRM($_data);
     	
+				$inFrame = empty($_data['inFrame']) ? "" : "true";
     			if(isset($_data['save_close'])){
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index?inFrame=".$inFrame);
     			}else{
-    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+    				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add?inFrame=".$inFrame);
     			}
     			Application_Form_FrmMessage::message("INSERT_SUCCESS");
     		}catch(Exception $e){

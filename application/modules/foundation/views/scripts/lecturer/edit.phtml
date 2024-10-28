@@ -42,7 +42,7 @@
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
 				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
-					alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+					alert('សូមពិនិត្រ ពាក្យសំងាត់ទាំង 2 របស់អ្នក មិនដូចគ្នាទេ, សូមបញ្ចូល ម្តងទៀត..');
 					dojo.byId('password').value = '';
 					dojo.byId('confirm_password').value = '';
 					dijit.byId('password').focus();
@@ -182,14 +182,13 @@
 											<i class="glyphicon glyphicon-screenshot"></i>
 										</div> 
 										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("CURRENT_ADDRESS");?></p>
+											<p class="tx-20 font-weight-semibold d-flex ">
+												<?php echo $tr->translate("CURRENT_ADDRESS");?>&nbsp;
+												<a onclick="AllRefresh();" title="<?php echo $tr->translate('REFRESH');?>" href="javascript:void(0);" class="ms-1 btn btn-sm btn-rounded-pill btn-icon btn-default">
+												  <span class="fa fa-refresh text-primary"></span>
+												</a>
+											</p>
 										</div> 
-									</div>
-									<br />
-									<div class="form-group">
-									   <div class="col-md-12 col-sm-12 col-xs-12">
-											<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
-									   </div>
 									</div>
 									<div class="form-group">
 									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("NUMBER_HOME");?> :
@@ -271,7 +270,7 @@
 									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input readOnly dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+											<input readOnly dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យសំងាត់យ៉ាងតិច មាន 6 តួអក្សរ"
 												 class="fullside" id="password" name="password" value="" type="password">
 									   </div>
 									</div>
@@ -279,7 +278,7 @@
 									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input readOnly dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យ​សំងាត់យ៉ាង​តិច មាន 6​ តួអក្សរ"
+											<input readOnly dojoType="dijit.form.ValidationTextBox" regExp="\w{6,}" invalidMessage="ពាក្យសំងាត់យ៉ាងតិច មាន 6 តួអក្សរ"
 												 class="fullside" id="confirm_password" name="confirm_password" value="" type="password">
 									   </div>
 									</div>
@@ -360,14 +359,15 @@
 										</div>
 									 </div>
 									 <div class="form-group">
-										<label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DEPARTMENT");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
+										<label class="control-label col-md-5 col-sm-5 col-xs-12" >
+											<a onclick="AllRefreshDepart();" title="<?php echo $tr->translate('REFRESH');?>" href="javascript:void(0);" class="me-1  btn btn-xs btn-rounded-pill btn-icon btn-default">
+												<span class="fa fa-refresh text-primary"></span>
+											</a>
+											<?php echo $tr->translate("DEPARTMENT");?> <span class="required">*</span>
+										</label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
 											<input id="department" />
 										</div>
-										<div class="col-md-3 col-sm-3 col-xs-12">
-											<input class="button-class button-primary" iconClass="glyphicon glyphicon-refresh"  type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefreshDepart();"/>
-										 </div>
 									 </div>
 									<div class="form-group">
 									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("POSITION");?>
@@ -670,7 +670,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			searchAttr: "name",
 			class: 'fullside',
 			placeHolder:"<?php echo $tr->translate("PLEASE_DISTRICT_NAME");?>",
-			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
+			missingMessage:"អ្នកភ្លេចបំពេញ ឈ្មោះ ស្រុក/ខ័ណ្ឌ!",	
 				onChange: function() {
 					district_name = dijit.byId('district_name').get('value');
 					if(district_name==-1){
@@ -690,7 +690,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			searchAttr: "name",
 			class: 'fullside',
 			placeHolder:"<?php echo $tr->translate("PLEASE_COMMUNE_NAME");?>",
-			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",	
+			missingMessage:"អ្នកភ្លេចបំពេញ ឃុំ/សង្កាត់",	
 				onChange: function() {
 					commune_name = dijit.byId('commune_name').get('value');
 					if(commune_name==-1){
@@ -712,7 +712,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			searchAttr: "name",
 			class: 'fullside',
 			placeHolder:"<?php echo $tr->translate("PLEASE_VILLAGE_NAME");?>",
-			missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះភូមិ!",	
+			missingMessage:"អ្នកភ្លេចបំពេញ ឈ្មោះភូមិ!",	
 				onChange: function() {
 					vill = dijit.byId('village_name').get('value');
 					if(vill==-1){
@@ -997,7 +997,7 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 				return false;
 			}
 			if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
-				alert('សូម​ពិនិត្រ ពាក្យ​​សំងាត់​ទាំង​ 2 របស់​អ្នក មិន​ដូច​គ្នា​ទេ, សូម​បញ្ចូល ​ម្តង​ទៀត..');
+				alert('សូមពិនិត្រ ពាក្យសំងាត់ទាំង 2 របស់អ្នក មិនដូចគ្នាទេ, សូមបញ្ចូល ម្តងទៀត..');
 				dojo.byId('password').value = '';
 				dojo.byId('confirm_password').value = '';
 				dijit.byId('password').focus();

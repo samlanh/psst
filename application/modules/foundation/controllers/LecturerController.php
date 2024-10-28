@@ -52,6 +52,11 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 	}
 	
 	function addAction(){
+		
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
+		
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			if (empty($_data)){
@@ -65,10 +70,11 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 				if($id==-1){
 					$sms = "RECORD_EXIST";
 				}
+				$inFrame = empty($_data['inFrame']) ? "" : "true";
 				if(!empty($_data['save_close'])){
-					Application_Form_FrmMessage::Sucessfull($sms,'/foundation/lecturer');
+					Application_Form_FrmMessage::Sucessfull($sms,'/foundation/lecturer?inFrame='.$inFrame);
 				} 
-				Application_Form_FrmMessage::Sucessfull($sms,'/foundation/lecturer/add');
+				Application_Form_FrmMessage::Sucessfull($sms,'/foundation/lecturer/add?inFrame='.$inFrame);
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

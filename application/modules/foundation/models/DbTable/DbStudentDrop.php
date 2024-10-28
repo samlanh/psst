@@ -53,6 +53,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 				,(SELECT room_name FROM rms_room WHERE room_id=s.room LIMIT 1) AS room
 				,(SELECT $label FROM `rms_view` WHERE TYPE=5 AND key_code = s.type LIMIT 1) AS type
 				,date_stop
+				,(SELECT $label FROM `rms_view` WHERE TYPE=43 AND key_code = s.type LIMIT 1) AS reasontype
 				,reason
 				,CASE WHEN s.isReturn = 1 
 					THEN '".$tr->translate('returnStudy')."'
@@ -127,6 +128,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'type'		 => $_data['type'],
 						'date_stop'	 => $_data['datestop'],
 						'reason'	 => $_data['reason'],
+						'reasonId'	 => $_data['reasonId'],
 						'group'		 => $_data['group'],
 						'academic_year'	=> $_data['academic_year'],
 						'calture'	 => $_data['calture'],
@@ -176,6 +178,7 @@ class Foundation_Model_DbTable_DbStudentDrop extends Zend_Db_Table_Abstract
 						'academic_year'	=>$_data['academic_year'],
 						'calture'	=>$_data['calture'],
 						'session'	=>$_data['session'],
+						'reasonId'	 => $_data['reasonId'],
 						'degree'	=>$_data['degree'],
 						'grade'		=>$_data['grade'],
 						'room'		=>$_data['room'],

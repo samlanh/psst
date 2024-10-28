@@ -165,8 +165,9 @@ class Stock_Model_DbTable_DbReceivedNote extends Zend_Db_Table_Abstract
     	$result = $db->fetchRow($sql);
     	
     	if(!empty($result)){
-    		$total_amount_in_stock = $result['pro_qty'] * $result['costing'];
-    		$total_qty_sum = $result['pro_qty'] + $qty;
+			$stock_qty = ($result['pro_qty']<0)? '0': $result['pro_qty'];
+    		$total_amount_in_stock = $stock_qty * $result['costing'];
+    		$total_qty_sum = $stock_qty + $qty;
     		
     		$last_cost = ($total_amount_in_stock + $total_amount_transfer)/$total_qty_sum;
 

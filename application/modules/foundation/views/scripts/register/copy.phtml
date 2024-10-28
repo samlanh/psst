@@ -176,12 +176,14 @@
 													<div class="settings-main-icon ">
 														<i class="fa fa-users"></i>
 													</div> 
-													<div class="col-md-6 col-sm-6 col-xs-12">
-														<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("ADDRESS_INFO");?></p>
+													<div class="col-md-12 col-sm-12 col-xs-12">
+														<p class="tx-20 font-weight-semibold d-flex ">
+															<?php echo $tr->translate("PARENT_INFO");?>&nbsp;
+															<a onclick="AllRefresh();" title="<?php echo $tr->translate('REFRESH');?>" href="javascript:void(0);" class="me-1  btn btn-xs btn-rounded-pill btn-icon btn-default">
+																<span class="fa fa-refresh text-primary"></span>
+															</a>
+														</p>
 													</div> 
-													<div class="col-md-6 col-sm-6 col-xs-12">
-														<input class="button-class button-warning" iconClass="glyphicon glyphicon-refresh" type="button" label="<?php echo $tr->translate('REFRESH');?>" dojoType="dijit.form.Button" onclick="AllRefresh();"/>
-													</div>
 												</div>
 											</div>
 											<div class="form-group">

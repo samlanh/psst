@@ -65,7 +65,7 @@
 									<div class="form-group">
 										<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("NOTE");?> </label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
-											<textarea row="4" name="note" id="note"> </textarea>
+											<textarea class="fullside" style="min-height:80px"  name="note" id="note" dojoType="dijit.form.Textarea"> </textarea>
 										</div>
 									</div>
 								</div>
@@ -103,9 +103,10 @@
 											<thead>
 												<tr id="head-title" class="head-td" align="right" style="width: 100%;">
 													<th width="10%"><?php echo $tr->translate("DEL");?></th>
-													<th width="10%"><?php echo $tr->translate("N_O");?></th>
-													<th width="40%"><?php echo $tr->translate("SERVICE");?></th>
-													<th width="40%"><?php echo $tr->translate("REASON");?></th>
+													<th width="5%"><?php echo $tr->translate("N_O");?></th>
+													<th width="30%"><?php echo $tr->translate("SERVICE");?></th>
+													<th width="25%"><?php echo $tr->translate("STOP_DATE");?></th>
+													<th width="35%"><?php echo $tr->translate("REASON");?></th>
 												</tr>
 											</thead>
 											<tbody id="table_row">
@@ -137,6 +138,7 @@
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dojo.NodeList-manipulate");
+	dojo.require("dijit.form.DateTextBox");
     dojo.require("dijit.form.Textarea");
 	
 	student_store = getDataStorefromJSON('id','name');
@@ -199,6 +201,7 @@
 		template+='<td align="center"><img onclick="deleteRecord('+col+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center">'+no+'</td>';
 		template+='<td>&nbsp;'+label_service+'<input type="hidden" dojoType="dijit.form.TextBox" required="true" id="spd_id_'+col+'" name="spd_id_'+col+'" value="'+spd_id+'" /></td>';			
+		template+='<td><input class="fullside" type="text" value="<?php echo date("Y-m-d");?>" placeHolder="<?php echo $tr->translate('STOP_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="stopDate' + col + '" id="stopDate' + col + '" dojoType="dijit.form.DateTextBox" /></td>';			
 		template+='<td><input type="text" name="reason_'+col+'" id="reason_'+col+'" class="fullside" dojoType="dijit.form.TextBox" /></td>';
 		tmp='<tr id="row'+col+'">';
 		tmp+="</tr>";

@@ -1497,7 +1497,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql = "
 			SELECT 
-			
+				s.*,
 				fam.fatherNameKh AS father_khname 
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
@@ -1512,7 +1512,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianNation AS guardian_nation 
 				,fam.guardianPhone AS guardian_tel
-				,s.*
+				
 				,DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
 	   			sgd.grade,
 	   			sgd.degree,
@@ -1557,7 +1557,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		$sql = "
 		SELECT 
-			
+			s.*,
 			fam.fatherNameKh AS father_khname 
 			,fam.fatherName AS father_enname  
 			,fam.fatherNation AS father_nation
@@ -1572,7 +1572,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			,fam.guardianName AS guardian_enname 
 			,fam.guardianNation AS guardian_nation 
 			,fam.guardianPhone AS guardian_tel
-			,s.*
+			
 			,'N/A' as group_name,
 			(SELECT name_kh FROM `rms_view` WHERE type=3 AND key_code=s.calture LIMIT 1) as degree_culture,
 			(SELECT total_amountafter FROM rms_creditmemo WHERE student_id = $stu_id and total_amountafter>0 ) AS total_amountafter,

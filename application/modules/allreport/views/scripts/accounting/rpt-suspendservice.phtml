@@ -17,16 +17,16 @@
     </div>	
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-suspendservice')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
-       		<div class="col-md-1 col-sm-1 col-xs-12">
+       		<div class="col-md-3 col-sm-3 col-xs-12">
 				<?php echo $frm->getElement("adv_search");?>
 			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-3 col-sm-3 col-xs-12">
 				<?php echo $frm->getElement("branch_id");?>
 			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-3 col-sm-3 col-xs-12">
        			<input id="stu_name" />
        		</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-3 col-sm-3 col-xs-12">
 				<select name="category" id="category" class="fullside" dojoType="dijit.form.FilteringSelect" >
 					<option value=""><?php echo $tr->translate('SELECT_CATEGORY')?></option>
 					<?php if(!empty($this->category)){foreach($this->category as $cate){?>
@@ -34,13 +34,15 @@
 					<?php }}?>
 				</select>
 			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
+		</div>
+		<div class="form-group">
+			<div class="col-md-3 col-sm-3 col-xs-12">
 				<?php echo $frm->getElement("start_date");?>
 			</div>
-			<div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-3 col-sm-3 col-xs-12">
 				<?php echo $frm->getElement("end_date");?>
 			</div>
-			<div class="col-md-1 col-sm-2 col-xs-12 text-right">
+			<div class="col-md-3 col-sm-3 col-xs-12">
 				<button  class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
 			</div>
        	</div>
@@ -136,6 +138,20 @@
 						font-weight: 600;
 						color: #f80000;
 					}
+					span.stuName {
+						display: block;
+						line-height: 15px;
+					}
+					span.noteIfo {
+						display: block;
+						width: 200px;
+						min-width: 200px;
+						font-size: 90%;
+						font-style: italic;
+						white-space: pre-line;
+						line-height: 11px;
+						padding: 4px 2px;
+					}
 					@media print{
 						@page{
 							margin:0.3cm 0.7cm 0cm 0.7cm;
@@ -148,37 +164,52 @@
 							page: A4;
 						}
 					}
+					label.hideprintdate {
+						font-size: 10px;
+						line-height: 14px;
+					}
 				</style>
 				<td colspan="3" id="exporteExcel">
 					<table class="content-data" width="100%" border="1" align="center" >
-						
-						<thead>
-							<tr class="style" align="center">
-								<td scope="col">&nbsp;<?php echo $tr->translate('N_O')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('BRANCH')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_ID')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_NAME')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('CATEGORY')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('SERVICE')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('REASON')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('CREATE_DATE')?>&nbsp;</td>
-								<td scope="col">&nbsp;<?php echo $tr->translate('USER')?>&nbsp;</td>
-							</tr>
-						</thead>
-						<?php $i=0; if(!empty($this->rs)){foreach($this->rs as $rs){$i++;?>
-							<tr class="hover style"	align="center">
-								<td data-label="<?php echo $tr->translate("N_O");?>"> <?php echo $i;?></td>
-								<td data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $rs['branch']; ?></td>
-								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $rs['code']; ?></td>
-								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left"> <?php echo $rs['kh_name']." - ".$rs['en_name']; ?></td>
-								<td data-label="<?php echo $tr->translate("CATEGORY");?>" align="left"><?php echo $rs['category']; ?></td>
-								<td data-label="<?php echo $tr->translate("SERVICE");?>" align="left"><?php echo $rs['service_name']; ?></td>
-								<td data-label="<?php echo $tr->translate("REASON");?>" align="left"> <?php echo $rs['reason']; ?></td>
-								<td data-label="<?php echo $tr->translate("CREATE_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['create_date'])); ?></td>
-								<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $rs['user']; ?></td>
-							</tr>
-						<?php } }?>
-					</table>
+							<thead>
+								<tr class="style" align="center">
+									<td scope="col" rowspan="2"><?php echo $tr->translate('N_O')?></td>
+									<td scope="col" colspan="3"><?php echo $tr->translate('STUDENT_INFO')?></td>
+									<td scope="col" colspan="5"><?php echo $tr->translate('SERVICE_INFO')?></td>
+									<td scope="col" rowspan="2"><?php echo $tr->translate('USER')?></td>
+								</tr>
+								<tr class="style" align="center">
+									<td scope="col"><?php echo $tr->translate('BRANCH')?></td>
+									<td scope="col"><?php echo $tr->translate('STUDENT_ID')?></td>
+									<td scope="col"><?php echo $tr->translate('STUDENT_NAME')?></td>
+									
+									<td scope="col"><?php echo $tr->translate('CATEGORY')?></td>
+									<td scope="col"><?php echo $tr->translate('SERVICE')?></td>
+									<td scope="col" style="width:200px;"><?php echo $tr->translate('REASON')?></td>
+									<td scope="col"><?php echo $tr->translate('STOP_DATE')?></td>
+									<td scope="col"><?php echo $tr->translate('CREATE_DATE')?></td>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $i=0; if(!empty($this->rs)){foreach($this->rs as $rs){$i++;?>
+								<tr class="hover style"	align="center">
+									<td data-label="<?php echo $tr->translate("N_O");?>"> <?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $rs['branchName']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><?php echo $rs['stuCode']; ?></td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left">
+										<span class="stuName"><?php echo $rs['stuNameKh']; ?></span>
+										<span class="stuName"><?php echo $rs['stuNameEn']; ?></span>
+									</td>
+									<td data-label="<?php echo $tr->translate("CATEGORY");?>" align="left"><?php echo $rs['category']; ?></td>
+									<td data-label="<?php echo $tr->translate("SERVICE");?>" align="left"><?php echo $rs['service_name']; ?></td>
+									<td data-label="<?php echo $tr->translate("REASON");?>" align="left"><span class="noteIfo"><?php echo $rs['reason']; ?></span></td>
+									<td data-label="<?php echo $tr->translate("CREATE_DATE");?>"><?php echo date("d-M-y",strtotime($rs['stopDate'])); ?></td>
+									<td data-label="<?php echo $tr->translate("CREATE_DATE");?>"><?php echo date("d-M-y",strtotime($rs['create_date'])); ?></td>
+									<td data-label="<?php echo $tr->translate("USER");?>"><?php echo $rs['user']; ?></td>
+								</tr>
+							<?php } }?>
+							</tbody>
+						</table>
 				</td>
 			</tr>
 			<tr>

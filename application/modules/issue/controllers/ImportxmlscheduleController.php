@@ -20,7 +20,6 @@ class Issue_ImportxmlscheduleController extends Zend_Controller_Action {
 				// $adapter->receive();
 				// $file = $adapter->getFileInfo();
 				// $inputFileName = $file['file_xml']['tmp_name'];
-				
  				// try {
 				// 	$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 				// } catch(Exception $e) {

@@ -158,9 +158,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 	function importxmlSubject($data)
 	{
 		$array = $this->getXmlDataFromFile();
-		/**
-		 * check subject
-		 */
+	
 		
 		$step = $data['step'];
 		$branchId = 1;

@@ -24,10 +24,10 @@ class Home_IndexController extends Zend_Controller_Action
       $db = new Allreport_Model_DbTable_DbRptAllStudent();
       $this->view->rsamountstudent =$db->getAmountStudent();
       $this->view->rsnewstudent = $db->getAmountNewStudent();
-      $this->view->rsdropstudent = $db->getAmountDropStudent();
-      $this->view->rsteststudent = $db->getAmountStudentTest();
-      $this->view->rsteststuregistered = $db->getAmountStudentTestRegistered();
-      $this->view->rsupdateresult = $db->getAmountStudentUpdateresult();
+      $this->view->rsdropstudent = 0;//$db->getAmountDropStudent();
+      $this->view->rsteststudent = 0;//$db->getAmountStudentTest();
+      $this->view->rsteststuregistered = 0;//$db->getAmountStudentTestRegistered();
+      $this->view->rsupdateresult = 0;//$db->getAmountStudentUpdateresult();
       
       $_db = new Allreport_Model_DbTable_DbRptIncomeExpense();
       $this->view->totalExpense = 0;//$_db->getAmountExpest();
@@ -42,9 +42,9 @@ class Home_IndexController extends Zend_Controller_Action
       $this->view->dissetting = $_db->getSettingDiscountNearlyExpire();
       
       $ddgb = new Application_Model_DbTable_DbGlobal();
-      $this->view->news = $ddgb->getAllNew(10);
-      $notread = $ddgb->getNewNotreadByUser();
-      $this->view->notread = empty($notread)?0:$notread;
+     // $this->view->news = $ddgb->getAllNew(10);
+      //$notread = $ddgb->getNewNotreadByUser();
+     // $this->view->notread = empty($notread)?0:$notread;
       
       $db_yeartran = new Allreport_Model_DbTable_DbRptAllStudent();
       $this->view->yearly =$ddgb->getAllAcademicYear(null,1);

@@ -1358,7 +1358,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$where .= " AND gds.itemType=" . $data['itemType'];
 		}
 		if (!empty($data['activStudent'])) {
-			$where .= " AND AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4) ";
+			$where .= " AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4) ";
 		}
 		if (isset($data['isCurrent'])) {
 			$where .= " AND gds.is_current=" . $data['isCurrent'];
@@ -2667,8 +2667,20 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['itemsType'])) {//
 			$sql .= " AND i.items_type=" . $data['itemsType'];
 		}
+		if (!empty($data['itemsTypeList'])) {//
+			$sql .= " AND i.items_type IN (" . $data['itemsTypeList'].")";
+		}
 		if (!empty($data['itemId'])) {//
-			$sql .= " AND i.items_id=" . $data['itemId'];
+			//$sql .= " AND i.items_id=" . $data['itemId'];
+			$arrCon = array(
+				"categoryId" => $data['itemId'],
+			);
+			$condiction = $this->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$sql.=" AND i.items_id IN ($condiction)";
+			}else{
+				$sql.=" AND i.items_id=".$data['itemId'];
+			}
 		}
 		if (!empty($data['parentId'])) {//want to get product in this location
 			$sql .= " AND  i.items_id IN (SELECT id FROM `rms_items` WHERE id is NOT NULL AND parent=" . $data['parentId'] . ")";
@@ -2680,7 +2692,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= " AND i.is_productseat=" . $data['isProductset'];
 		}
 		if (!empty($data['proLocation'])) {//want to get product in this location
-			$sql .= " AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=" . $data['proLocation'] . ")";
+			//$sql .= " AND  i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=" . $data['proLocation'] . ")";
+			$sql .= " 
+				AND  
+					CASE 
+						WHEN i.`items_type` =3 THEN 
+							i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=" . $data['proLocation'] . ")
+						ELSE  1 
+					End			
+				";
 		}
 		if (!empty($data['includeProLocation'])) {//want to get product in this location
 			$sql .= " OR ( i.id IN (SELECT pro_id FROM `rms_product_location` WHERE pro_id is NOT NULL AND branch_id=" . $data['includeProLocation'] . "))";
@@ -5148,7 +5168,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['id'])) {//discount setting id
 			$sqldiscountId .= " AND ds.id=" . $data['id'];
 		}
-		
+		if (!empty($data['discountForType'])) {
+			$sqldiscountId.= " AND ds.discountForType=" . $data['discountForType'];
+		}
 		if (!empty($data['discountId'])) {//discount category id
 			$sqldiscountCateId .= " AND ds.discountId=" . $data['discountId'];
 		}

@@ -3518,7 +3518,31 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				AND $scoreAverage>=sd.max_score
 				ORDER BY sd.max_score DESC
 				LIMIT 1";
+			// echo $sql;
 		return $db->fetchOne($sql);
+	}
+	function getMentionScoreNew($data)
+	{
+		$db = $this->getAdapter();
+	
+		$academic = empty($data['academic_year']) ? 0 : $data['academic_year'];
+		$degree = empty($data['degree']) ? 0 : $data['degree'];
+		$score = empty($data['score']) ? 0 : $data['score'];
+		$maxScore = empty($data['max_score']) ? 0 : $data['max_score'];
+		$scoreAverage = $score / $maxScore * 100;
+		
+		$sql = "SELECT sd.metion_grade,sd.metion_in_khmer,sd.mention_in_english
+			FROM `rms_metionscore_setting_detail` AS sd,
+				`rms_metionscore_setting` AS s
+			WHERE s.id = sd.metion_score_id
+				AND s.academic_year=$academic
+				AND degree = $degree
+				AND $scoreAverage>=sd.max_score ";
+
+			$sql.= " ORDER BY sd.max_score DESC
+				LIMIT 1 ";
+			// echo $sql;
+		return $db->fetchRow($sql);
 	}
 	function updateReadNotif($type, $notif_id)
 	{

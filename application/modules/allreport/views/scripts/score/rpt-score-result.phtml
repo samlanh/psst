@@ -749,13 +749,11 @@
 								$sex = $tr->translate("FEMALE_SHORT");
 								$f = $f + 1;
 							}
-							$subj = $db->getSubjectScoreGroup($rs['group_id'], null, $rs['exam_type']);
 					?>
   						<?php if ($old_groupid != $rs['group_id']) { ?>
   							<?php
 								$i = 0;
 								$count_fail = 0;
-								$count = count($subj);
 								if ($rs['exam_type'] == 1) {
 									$monthChar = empty($monthKH[$rs['for_month_id']]) ? "" : $monthKH[$rs['for_month_id']];
 									$titleKh = 'លទ្ធផលសិក្សាប្រចាំខែ ' . (!empty($rs['title_score']) ? $rs['title_score'] : $monthChar);
@@ -892,14 +890,22 @@
   										<td align="center"><?php echo number_format($rs['total_avg'], 2); ?></td>
   										<td class="red bold" align="center"><label id="record<?php echo $i; ?>"></label><?php echo $old_rank; ?></td>
   										<input type='hidden' dojoType="dijit.form.TextBox" name="rank<?php echo $i; ?>" id="rank<?php echo $i; ?>" value="<?php echo $old_rank; ?>" />
+										
   										<td class="red border-right-none" align="center" style=" <?php echo $stringBgResult; ?>">
-  											<?php echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['totalMaxScore']); ?>
+  											<?php
+												$mentionScore=explode(',',$rs['mentionScore']) ;
+												echo !empty($mentionScore[0])?$mentionScore[0]:'';
+											  ?>
   										</td>
-  										<td class="border-right-none" align="center" style="white-space:nowrap; style=" <?php echo $stringBgResult; ?>">
-  											<?php echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['totalMaxScore']); ?>
+  										<td class="border-right-none" align="center" style="white-space:nowrap;  <?php echo $stringBgResult; ?>">
+  											<?php 
+												echo !empty($mentionScore[1])?$mentionScore[1]:'';
+											?>
   										</td>
   										<td class="border-right-none" align="center" style="white-space:nowrap; <?php echo $stringBgResult; ?>">
-  											<?php echo $dbgb->getMentionScore($total_score, $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['totalMaxScore']); ?>
+  											<?php 
+												echo !empty($mentionScore[2])?$mentionScore[2]:'';
+											 ?>
   										</td>
   									</tr>
   									<?php

@@ -111,44 +111,18 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	{ //តាមមុខវិជ្ជាលម្អិត
 		$id = $this->getRequest()->getParam("id");
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
-		if ($this->getRequest()->isPost()) {
-			$search = $this->getRequest()->getPost();
-			$resultScore = $db->getStundetScoreDetailGroup($search, null, 1);
-		} else {
-			$row = $db->getScoreExamByID($id);
-			$search = array(
+	
+		$row = $db->getScoreExamByID($id);
+		
+		$this->view->subj = $db->getSubjectScoreGroup($row ['group_id'], null, $row ['exam_type']);
 
-				'group' => $row['group_id'],
-				'study_year' => $row['for_academic_year'],
-				'exam_type' => $row['exam_type'],
-				'branch_id' => $row['branch_id'],
-				'for_month' => $row['for_month'],
-				'for_semester' => $row['for_semester'],
-				'grade' => '',
-				'degree' => '',
-				'session' => '',
-			);
-			$resultScore = $db->getStundetScoreDetailGroup($search, $id, 1);
-		}
-
-
-		$this->view->studentgroup = $resultScore;
-		$this->view->search = $search;
-
-		$frm = new Application_Form_FrmGlobal();
-		$branch_id = empty($resultScore[0]['branch_id']) ? 1 : $resultScore[0]['branch_id'];
-		$this->view->header = $frm->getHeaderReceipt($branch_id);
-		$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
-
-		$form = new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search = $form;
+		$this->view->studentgroup  = $db->getStundetScoreDetailGroup($id);
+		
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data = $key->getKeyCodeMiniInv(TRUE);
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$dregreeId = empty($resultScore[0]['degree_id']) ? 0 : $resultScore[0]['degree_id'];
+		$dregreeId = empty($row['degree']) ? 0 : $row['degree'];
 		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
 	}
 

@@ -97,7 +97,7 @@
 	
 	<form id="submitApprove" name="submitApprove" action="" dojoType="dijit.form.Form" method="post">		
 		<div class="card mb-1 ">
-			<div class="reportblog">
+			<div style=" margin: 0 auto; padding: 0.5cm 0.5cm 0cm 0.5cm; min-height: 26cm;  width: 100%;">
 				<div id="divPrint">
 					<style type="text/css">
 						.headReportRespone{
@@ -108,7 +108,7 @@
 						table tr td span{
 							color: #002c7b;
 							font-family: 'Times New Roman','Khmer OS Battambang';
-							    font-size: 10px;
+							font-size: 14px;
 							line-height: 16px;
 						}
 						table tr td small {
@@ -118,7 +118,7 @@
 						table.content-data{
 							border-collapse:collapse;
 							border:1px solid #000; 
-							font-size:10px;
+							font-size:14px;
 							width: 100%;
 						}
 						table.content-data thead tr.style {
@@ -346,7 +346,7 @@
 											<td data-label="មតិយោបល់របស់គ្រូ/Teacher Comment" align="left" >
 												<input class="fullside" type="hidden"  name="studentId<?php echo $rowIndex;?>" id="studentId<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo $student['studentId'];?>"/>
 												<input class="fullside" type="hidden"  name="detailId<?php echo $rowIndex;?>" id="detailId<?php echo $rowIndex;?>" dojoType="dijit.form.TextBox" value="<?php echo $student['detailId'];?>"/>
-												<input class="fullside" type="text" style="line-height: 16px; font-size:12px;  min-height:80px !important;"  name="teacherComment<?php echo $rowIndex;?>" id="teacherComment<?php echo $rowIndex;?>" dojoType="dijit.form.Textarea" value="<?php echo $student['teacherComment'];?>" />
+												<input class="fullside" type="text" style="line-height: 20px; font-size:14px;  min-height:80px !important; padding: 10px 5px;"  name="teacherComment<?php echo $rowIndex;?>" id="teacherComment<?php echo $rowIndex;?>" dojoType="dijit.form.Textarea" value="<?php echo $student['teacherComment'];?>" />
 
 											</td>
 											<td align="center" style="vertical-align: middle;">
@@ -375,9 +375,18 @@
 		</div>
 		
 		<div id="submitApproveChecking" class="col-md-12 col-sm-12 col-xs-12 text-center"> 
+			<div class="mt-1 mb-10" style="margin:0 auto;width:120px;margin-bottom: 10px;">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="checkbox custom-control-input" id="isApproved" name="isApproved" >
+					<label class="custom-control-label" for="isApproved">
+						<?php echo $tr->translate('APPROVED');?>
+					</label>
+				</div>
+			</div>
+			
 			<input type="hidden" id="identity" name="identity" value="<?php echo $identity;?>"  dojoType="dijit.form.TextBox" />
 			<input type="hidden" id="assessmentId" name="assessmentId" value="<?php echo $rs["assessmentId"];?>"  dojoType="dijit.form.TextBox" />
-			<button class="button-class button-success" iconClass="glyphicon glyphicon-floppy-disk" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("APPROVED");?></button>
+			<button class="button-class button-success" iconClass="glyphicon glyphicon-floppy-disk" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SAVE");?></button>
 		</div>
 		
 	</form>

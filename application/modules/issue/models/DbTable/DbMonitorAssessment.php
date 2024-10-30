@@ -193,8 +193,10 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 		try{
 			$assessmentID = empty($_data["assessmentId"]) ? 0 : $_data["assessmentId"];
 			$this->_name='rms_studentassessment';
+			
+			$isApproved = empty($_data['isApproved']) ? 0 : 1;
 			$_arr = array(
-					'isLock'	 	=>1,
+					'isLock'	 	=>$isApproved,
 					'lockBy'		=>$this->getUserId(),
 					);
 			$where = " id = ".$assessmentID;

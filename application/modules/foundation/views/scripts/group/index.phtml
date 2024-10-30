@@ -111,6 +111,9 @@ dojo.ready(function(){
 
 	getallGrade();
 	getPartTimeListByDregree();
+	<?php if (!empty($this->search['academic_year'])){?>
+		dijit.byId('academic_year').set('value',<?php echo $this->search['academic_year'];?>);
+	<?php }?>
 });
 
 var urlGetParttime = '<?php echo $this->url(array('module'=>'global','controller'=>'parttimelist','action'=>'get-parttime')); ?>';

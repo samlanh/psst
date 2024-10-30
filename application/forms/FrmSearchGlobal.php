@@ -681,6 +681,17 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 		$updateOption->setMultiOptions($updateopt);
 		$updateOption->setValue($request->getParam("updateOption"));
 
+		$schoolFeeOption = new Zend_Dojo_Form_Element_FilteringSelect('schoolFeeOption');
+		$schoolFeeOption->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$feeopt = array(
+				''=>$this->tr->translate("SELECT_TYPE"),
+				1=>$this->tr->translate("ADD_TO_FEE"),
+				2=>$this->tr->translate("UPGRADE_FEE"),
+				
+			);
+		$schoolFeeOption->setMultiOptions($feeopt);
+		$schoolFeeOption->setValue($request->getParam("schoolFeeOption"));
+
 		$discountStatus=  new Zend_Dojo_Form_Element_FilteringSelect('discountStatus');
 		$discountStatus->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
 		$discountstatusopt = array(
@@ -770,7 +781,8 @@ Class Application_Form_FrmSearchGlobal extends Zend_Dojo_Form {
 				$limit,
 				$termOption,
 				$discountStatus,
-				$student_status
+				$student_status,
+				$schoolFeeOption 
 				)
 			);
 		return $this;

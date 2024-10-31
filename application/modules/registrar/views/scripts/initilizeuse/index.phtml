@@ -16,255 +16,290 @@
     		</div>
     	</div>
 		<div class="card-box">
-			<form id="list" name="list" action="<?php echo $this->url(array('module'=>'accounting','controller'=>'discountsetting','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-				<div class="col-md-8 col-sm-8 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-2 col-sm-2 col-xs-12"> 
+			<div class="row g-3">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<ul class="nav nav-tabs bar_tabs" role="tablist">
+						<li role="presentation" class="active">
+							<a class="nav-link " data-toggle="tab" href="#student-service-list" role="tab"><i class="fa fa-graduation-cap ml-2"></i> <?php echo $tr->translate("STUDENT_SERVICE_LIST");?></a>
+						</li>
+						<li role="presentation">
+							<a class="nav-link" data-toggle="tab" href="#student-by-service" role="tab">
+							<i class="fa fa-money ml-2"></i> <?php echo $tr->translate("STUDENT_BY_SERVICE");?>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="tab-content vertical">
+				<div class="tab-pane fade in active" id="student-service-list" role="tabpanel">
+					<div class="x_panel">
+						<div class="x_title">
+							<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION");?> <small><?php echo $tr->translate("STUDENT_INFO");?></small></h2>
+							<ul class="nav navbar-right panel_toolbox">
+							  <li>
+								<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+							  </li>
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content" >
+							<form id="searchingData" name="list" action="" dojoType="dijit.form.Form" method="get">
+								<div class="form-group">
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<?php echo $frm->getElement("adv_search");?>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<?php echo $frm->getElement("branch_id");?>
+									</div>
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<input id="academic_year" />
+								   </div>
+								   <div class="col-md-3 col-sm-3 col-xs-12">
+										<input id="groupId" />
+								   </div>
 								</div>
-								<div class="col-md-10 col-sm-10 col-xs-12"> 
-									<div class="row"> 
-										<div class="d-flex"> 
-											<div class="settings-main-icon ">
-												<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
-											</div> 
-											<div class="col-md-10 col-sm-10 col-xs-12"> 
-												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
-											</div> 
-										</div>
+								<div class="form-group">
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<?php echo $frm->getElement("degree");?>
 									</div>
-									<div class="col-md-6 col-sm-6 col-xs-12"> 
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("នាមត្រកូល-ខ្លួន");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ជាអក្សរឡាតាំង");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("អត្តលេខ");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ថ្ងៃ-ខែ-ឆ្នាំកំណើត");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
+									<div class="col-md-3 col-sm-3 col-xs-12">
+										<input id="gradeId" />
+										<input type="hidden" id="pages" name="pages" dojoType="dijit.form.TextBox" value="1" />
 									</div>
-									<div class="col-md-6 col-sm-6 col-xs-12"> 
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("លេខទូរសព្ទ");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ទីកន្លែងកំណើត");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
-										<div class="form-group">
-										   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("អាសយដ្ឋានបច្ចុប្បន្ន");?>
-										   </label>
-										   <div class="col-md-7 col-sm-7 col-xs-12">
-										   </div>
-										</div>
+									<div class="col-md-2 col-sm-2 col-xs-12">
+										<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
+										<button onClick="getSearching(1);" class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="button"><?php echo $tr->translate("SEARCH");?></button>
 									</div>
 								</div>
-							</div>
+							</form>
 						</div>
 					</div>
-					<div class="card-blogform">
-						<div class="card-body"> 
-								<div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="row"> 
-										<div class="d-flex"> 
-											<div class="settings-main-icon ">
-												<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
-											</div> 
-											<div class="col-md-10 col-sm-10 col-xs-12"> 
-												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDY_INFO");?></p>
-											</div> 
-										</div>
-									</div>
-									<div class="col-md-12 col-sm-12 col-xs-12"> 
-										<ul class="optListRow">
-											<li class="opt-items"><i class="glyphicon glyphicon-hand-right" aria-hidden="true"></i>&nbsp;<span class="lbl-tt">កម្រិត/វគ្គ</span>: <span class="text-value">2021-2022</span></li>
-											<li class="opt-items"><span class="lbl-tt">ថ្នាក់/កម្រិត</span>: <span class="text-value">Primary School</span></li>
-										</ul>
-										<div></div>
-										<ul class="optListRow">
-											<li class="opt-items"><i class="glyphicon glyphicon-hand-right" aria-hidden="true"></i>&nbsp; <span class="lbl-tt">កម្រិត/វគ្គ</span>: <span class="text-value">2021-2022</span></li>
-											<li class="opt-items"><span class="lbl-tt">ថ្នាក់/កម្រិត</span>: <span class="text-value">Primary School</span></li>
-										</ul>
-									</div> 
-								</div>
-								<div class="col-md-4 col-sm-4 col-xs-12">
-									<div class="row"> 
-										<div class="d-flex"> 
-											<div class="settings-main-icon ">
-												<i class="glyphicon glyphicon-bed" aria-hidden="true"></i>
-											</div> 
-											<div class="col-md-10 col-sm-10 col-xs-12"> 
-												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("SERVICE_USING");?></p>
-											</div> 
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4 col-sm-4 col-xs-12"> 
-									<div class="row"> 
-										<div class="d-flex"> 
-											<div class="settings-main-icon ">
-												<i class="glyphicon glyphicon-book" aria-hidden="true"></i>
-											</div> 
-											<div class="col-md-10 col-sm-10 col-xs-12"> 
-												<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PRODUCT_USING");?></p>
-											</div> 
-										</div>
-									</div>
-								</div>
-						</div>
+					<div id="searching-result" class="min-px-300">
+						
 					</div>
-					
-	             </div>
-	             <div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("UNPAID_SERVICE_INFO");?></p>
-										</div> 
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("USER_NAME");?>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("PASSWORD");?>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("CONFIRM_PASSWORD");?>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-									   </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon">
-											<i class="glyphicon glyphicon-usd" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PAYMENT_HISTORY");?></p>
-										</div> 
-									</div>
-									<div class="form-group">
-									   <label class="control-label  col-md-5 col-sm-5 col-xs-12" >
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-									   	
-									   	<a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="glyphicon glyphicon-paperclip" aria-hidden="true"></i> ទាញយក</a>
-									   </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-	             </div>
-			</form>
-		</div>
-		<div class="card-box">
-			<?php echo $this->list;?>
+				</div>
+				<div class="tab-pane fade" id="student-by-service" role="tabpanel">
+					<iframe scrolling="auto" frameborder="0" src="<?php echo $this->baseUrl();?>/allreport/accounting/rpt-student-service?inFrame=true" style="width:100%;height:100%;"></iframe>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="modal-info" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-simple modal-dialog-centered modal-add-new-role">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="d-block text-end mb-1 w-100">
+					<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">
+						<span class="text-danger" aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="d-flex justify-content-between align-items-center mb-1">
+					<h6 class="fw-normal mb-0 ">
+						<i class="ti ti-building-bank ti-26px me-1"></i>
+						<span class="modal-top-left"></span>
+					</h6>
+					<div >
+						<span class="d-block rounded bg-label-primary  p-2 mb-10">
+							<i class="fa fa-briefcase ti-26px me-1"></i>
+							<span class="modal-top-right"></span>
+						</span>
+					</div>
+				</div>
+				<div class="text-center mb-10">
+				  <h4 class="modal-title text-primary mb-1"></h4>
+				  <p class="modal-title-desc mb-0"></p>
+				</div>
+				
+				<div class="col-12 contentInfo">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/ Modal -->
+<style>
+.card.card-info {
+    background-clip: padding-box;
+    box-shadow: 0 .25rem 1.125rem rgba(75, 70, 92, .1);
+}
+.p-2 {
+    padding: 0.45rem !important;
+}
+.mb-5 {
+    margin-bottom: 5px !important;
+}
+.rounded {
+    border-radius: 5px;
+}
+.pt-1 {
+    padding-top: .25rem !important;
+}
+.px-2 {
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
+}
+</style>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
-var disname_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode($this->discount));?> );
+var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 dojo.ready(function(){
 	new dijit.form.FilteringSelect({
-		required: false,  
-		autoComplete: false,
-		queryExpr: "*${0}*",                      
-	    id: "studentId",
-	    name: "studentId",  
-	    tabindex: "1",         
-	    class: 'fullside',  
-	    placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME")?>", 
-	    
-	}, "studentId");
-
-	new dijit.form.FilteringSelect({
-		store: disname_store,
-		required: false,   
-		autoComplete: false,
-		queryExpr: "*${0}*",  
-		id: "discountId",
-		name: "discountId", 
-		value:"<?php echo $this->adv_search['discountId'];?>",          
-		class: "fullside", 
-		placeHolder:"<?php echo $tr->translate("SELECT_DISCOUNT");?>",          
+		store: academic_store,
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                     
+		id: "academic_year",
+		name: "academic_year",
+		class: "fullside", 		
+		placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",          
 		onChange: function() {  
+			academic_year = dijit.byId('academic_year').get('value');
+			getGroupByBranch()
 		}
-	}, "discountId");
+	}, "academic_year");
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                      
+		id: "groupId",
+		name: "groupId",  
+		class: 'fullside', 
+		readonly:false,
+		placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
+	}, "groupId");
+	
+	new dijit.form.FilteringSelect({
+		queryExpr: "*${0}*",
+		autoComplete: false,                     
+		required: false,                        
+		id: "gradeId",
+		name: "gradeId",  
+		class: 'fullside',  
+		placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+		onChange: function() {  
 
-	branchId = dijit.byId('branch_id');
-	branchId.on('change',function(evt){
-		branchId = dijit.byId('branch_id').get('value');
-		if(branchId==''){
-			dijit.byId("branch_id").focus();
-			return false;
 		}
-		getAllstudentBranch();
-		
+	}, "gradeId");
+	
+	 var branch_id = dijit.byId('branch_id');
+	 branch_id.on('change', function(evt) {
+		 getAllAcademicByBranch();
+		 getGroupByBranch();
 	});
-
-	getAllstudentBranch();
+	 getAllAcademicByBranch();
+	 getGroupByBranch();
+	 getallGrade();
 });
-
-function getAllstudentBranch(){
-	dijit.byId("studentId").reset();
-	branchId = dijit.byId('branch_id').get('value');
-	if(branchId==''){
-		 dijit.byId('branch_id').focus();
-		 return false;
+var oldBranch = "<?php echo $this->adv_search['branch_id']?>";
+function getAllAcademicByBranch(){
+	let url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
+	
+	dijit.byId('academic_year').reset();
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		dijit.byId('branch_id').focus();
+		return false;
 	}
 	
-	var urlGet = '<?php echo $this->url(array('module'=>'registrar','controller'=>'register','action'=>'getliststudenturl')); ?>';
-	
 	contentData = {
-			'branchId':branchId,
-			'customerType':1
-			}
-	selectedId='<?php echo $this->adv_search['studentId'];?>';
-	getAllStudentByBranch(urlGet,contentData,selectedId);
+		'branch_id':branch_id
+	}
+	selectedId = '';
+	if(oldBranch==branch_id){
+		selectedId = '<?php echo $this->search['academic_year']?>';
+	}
+	getAllYear(url_getacademic,contentData,selectedId,'academic_year');
+}
+function getGroupByBranch(){
+	let url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
+	branch_id = dijit.byId('branch_id').get('value');
+	if(branch_id=='' || branch_id==-1){
+		dijit.byId('branch_id').focus();
+		return false;
+	}
+
+	contentData = {
+			'branch_id':branch_id,
+			'academic_year':dijit.byId('academic_year').get('value'),
+			'noaddnew':1
+		}
+		selectedId = '';
+		if(oldBranch==branch_id){
+			selectedId = '<?php echo $this->search['groupId']?>';
+		}
+		getAllGroupByBranch(url_getgroup,contentData,selectedId);
+}
+
+function getallGrade(){
+	dept_id = dijit.byId('degree').get('value');
+	if(dept_id==''){dijit.byId('degree').focus();return false;}
+	let url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
+
+	contentData = {
+			'dept_id':dept_id,
+			'noaddnew':1
+		}
+		selectedId = '';
+		if('<?php echo $this->search['degree']?>'==dept_id){
+			selectedId = '<?php echo $this->search['gradeId']?>';
+		}
+		getGradebyDegree(url_dept,contentData,selectedId);
+}
+function getSearching(pages=1){
+	dijit.byId('pages').attr('value', pages);
+	var url_submit = '<?php echo $this->url(array('module' => 'registrar', 'controller' => 'initilizeuse', 'action' => 'searching')); ?>';
+	loadingBlock();
+	$("#searching-result").html("");
+	dojo.xhrPost({
+		url: url_submit,
+		form: dojo.byId("searchingData"),
+		handleAs: "json",
+		load: function (data) {
+			
+			$("#searching-result").html(data.htmlContent);
+			HideloadingBlock();
+		},
+		error: function(request, status, error) {
+			HideloadingBlock();
+		}	
+	});	
+}	
+function getContentInfo(type=1,recordId){
+	var getUrl = "<?PHP echo $this->baseUrl()."/registrar/initilizeuse/get-stuservice";?>";
+	loadingBlock();
+	$(".modal-title").html("");
+	$(".modal-title-desc").html("");
+	$(".modal-top-left").html("");
+	$(".modal-top-right").html("");
+	$(".contentInfo").html("");
+	
+	$.ajax({
+		url: getUrl,
+		type: 'post',
+		dataType: 'json',
+		data: {
+			"type": type,
+			"recordId": recordId
+		},
+		success: function (data) {
+				
+			$(".modal-title").html($(".stu-code-"+recordId).html());
+			$(".modal-title-desc").html($(".stu-namekh-"+recordId).html()+' '+$(".stu-nameen-"+recordId).html());
+			$(".modal-top-left").html($(".branch-"+recordId).html());
+			$(".modal-top-right").html($(".stu-aca-"+recordId).html());
+			$(".contentInfo").html(data.content);
+			$('#modal-info').modal('show');
+			HideloadingBlock();
+			
+		},
+		error: function(request, status, error) {
+			HideloadingBlock();
+		}
+	});
 }
 </script>

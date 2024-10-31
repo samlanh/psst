@@ -24,11 +24,16 @@ class Foundation_GroupController extends Zend_Controller_Action
 					'partTimeList' 	=> '',
 					'status'	=> -1,
 					'teacher' 	=> '',
-					'start_date' => date('Y-m-d'),
 					'end_date' => date('Y-m-d'),
 				);
+				$dbGb = new Application_Model_DbTable_DbGlobal();
+				$last = $dbGb->getLatestAcadmicYear();
+				if(!empty($last)){
+					$search["academic_year"] = empty($last["id"]) ? 0 : $last["id"];
+				}
 			}
 			$this->view->adv_search = $search;
+			$this->view->search = $search;
 			$db = new Foundation_Model_DbTable_DbGroup();
 			$rs_rows = $db->getAllGroups($search);
 			$list = new Application_Form_Frmtable();

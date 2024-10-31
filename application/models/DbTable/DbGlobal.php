@@ -1502,16 +1502,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
 				,fam.fatherPhone AS father_phone
+				,fam.fatherPhoto AS fatherPhoto
 				
 				,fam.motherNameKh AS mother_khname 
 				,fam.motherName AS mother_enname  
 				,fam.motherNation AS mother_nation  
 				,fam.motherPhone AS mother_phone  
+				,fam.motherPhoto AS motherPhoto  
 				
 				,fam.guardianNameKh AS guardian_khname 
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianNation AS guardian_nation 
 				,fam.guardianPhone AS guardian_tel
+				,fam.guardianPhoto AS guardianPhoto
 				
 				,DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
 	   			sgd.grade,

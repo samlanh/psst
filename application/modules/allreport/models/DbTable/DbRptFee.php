@@ -113,7 +113,121 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
 	    	 	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=rms_tuitionfee.academic_year LIMIT 1) AS year
 	    	 	FROM rms_tuitionfee WHERE 1  $branch_id  ";
 	    	return $db->fetchAll($sql);
-	}    
+	}
+	
+	function getAllStudentCurrentService($search = array()){
+		$_db = $this->getAdapter();
+		
+		$dbGb = new Application_Model_DbTable_DbGlobal();
+		$lang = $dbGb->currentlang();
+		
+		$branch = $dbGb->getBranchDisplay();
+		$titleCol = "title_en";
+		$titleColGrade = "gradeTitleEn";
+		$titleColDegree = "degreeTitleEn";
+		$label = "name_en";
+		if($lang==1){
+			$titleCol = "title";
+			$titleColGrade = "gradeTitleKh";
+			$titleColDegree = "degreeTitleKh";
+			$label = "name_kh";
+		}
+		$sql="SELECT
+				gds.`gd_id` AS id
+				,gds.`stu_id` AS studentId
+				,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=vs.branchId LIMIT 1) AS branchName
+				,(SELECT CONCAT(aca.fromYear,'-',aca.toYear) FROM rms_academicyear AS aca WHERE aca.id=vs.`academicYear` LIMIT 1) AS academicYearTitle
+				,vs.`stuCode`
+				,vs.`stuNameKh`
+				,vs.`stuNameEn`
+				,vs.`tel`
+				,vs.`sex`
+				,vs.`groupCode`
+				,vs.`photo`
+				,(SELECT v.$label FROM rms_view AS v where v.type=2 AND v.key_code=vs.sex LIMIT 1) AS sexTitle
+				,COALESCE(vs.`degreeShortcut`,vs.$titleColDegree) AS degreeTitle
+				,COALESCE(vs.`gradeShortcut`,vs.$titleColGrade) AS gradeTitle
+				,vs.`academicYear`
+				,gds.`itemType`
+				,gds.`gd_id` AS detailId
+				,gds.`grade`
+				,itd.`title` AS itemTitle
+				,gds.`degree`
+				,it.`title` AS categoryTitle
+				,gds.`stop_type`
+				,gds.`startDate`
+				,gds.`endDate`
+				,COALESCE(gds.`feeId`,0) AS feeId
+				,gds.`balance`
+				,gds.`discount_type`
+				,gds.`discount_amount`
+				,gds.note
+				,gds.`is_current`
+			";
+		$sql.="
+			FROM (`rms_group_detail_student` AS gds  JOIN `v_stu_study_info` AS vs  ON vs.`studentId` = gds.`stu_id` AND vs.`itemType` =1)
+				JOIN `rms_itemsdetail` AS itd ON itd.`id` = gds.`grade` AND itd.`is_onepayment` = 0
+				LEFT JOIN `rms_items` AS it ON it.`id` = gds.`degree`
+		";
+		$sql.="WHERE 1 
+			AND gds.`itemType` !=1 
+			AND gds.`stop_type` = 0
+			AND gds.`is_current` = 1
+			AND gds.`endDate` !='0000-00-00'
+		";
+		if(!empty($search['adv_search'])){
+			$s_where=array();
+			$s_search=addslashes(trim($search['adv_search']));
+			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+			
+			$s_where[]= " REPLACE(vs.`stuCode`,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(vs.`stuNameKh`,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(vs.`stuNameEn`,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(vs.`degreeTitleKh`,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(vs.`degreeTitleEn`,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(vs.`gradeTitleEn`,' ','') LIKE '%{$s_search}%'";
+			$s_where[]= " REPLACE(vs.`gradeTitleKh`,' ','') LIKE '%{$s_search}%'";
+			
+			$sql.=' AND ('.implode(' OR ', $s_where).')';
+		}
+		if(!empty($search['academic_year'])){
+    		$sql.= " AND vs.`academicYear` = ".$_db->quote($search['academic_year']);
+    	}
+		if(!empty($search['studentId'])){
+    		$sql.= " AND gds.`stu_id` = ".$_db->quote($search['studentId']);
+    	}
+		if(!empty($search['branch_id'])){
+    		$sql.= " AND vs.`branchId` = ".$_db->quote($search['branch_id']);
+    	}
+		if(!empty($search['groupId'])){
+    		$sql.= " AND vs.`groupId` = ".$_db->quote($search['groupId']);
+    	}
+		if(!empty($search['degree'])){
+    		$sql.= " AND vs.`degree` = ".$_db->quote($search['degree']);
+    	}
+		if(!empty($search['grade_all'])){
+    		$sql.= " AND vs.`grade` = ".$_db->quote($search['grade_all']);
+    	}
+		if(!empty($search['item'])){
+    		//$sql.= " AND gds.`degree` = ".$_db->quote($search['item']);
+			$arrCon = array(
+				"categoryId" => $search['item'],
+			);
+			$condiction = $dbGb->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$sql.=" AND gds.`degree` IN ($condiction)";
+			}else{
+				$sql.=" AND gds.`degree`=".$search['item'];
+			}
+    	}
+		if(!empty($search['service'])){
+    		$sql.= " AND gds.`grade` = ".$_db->quote($search['service']);
+    	}
+		$sql.= $dbGb->getAccessPermission('vs.`branchId`');
+		$sql.= $dbGb->getDegreePermission('COALESCE(vs.`degree`,0)');
+		$orderby = " ORDER BY gds.`degree` ASC, gds.`grade` ASC, gds.`endDate` ASC,vs.`stuCode` ASC ";
+		return $_db->fetchAll($sql.$orderby);
+	}
 }
    
     

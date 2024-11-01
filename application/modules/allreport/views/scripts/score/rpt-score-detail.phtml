@@ -234,7 +234,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 		</style>
 		<table style="width:100%;background:#fff; margin: 0 auto; color: #4839bd;font-family: 'Times New Roman','Khmer OS Battambang'; ">
 			<?php
-			$old_groupid = 0;
+			///$scoreBySubjectJason = $db->getScoreBySubjectJason();
+			//print_r($scoreBySubjectJason);
+
 			$i = 0;
 			$count_fail = 0;
 			$count = 0;
@@ -249,40 +251,24 @@ $link = "/allreport/score/rpt-monthlytranscript";
 			$fail_female = 0;
 
 			$subj = $this->subj;
+			$scoreResult = $this->scoreResult;
 
-			if (!empty($this->studentgroup)) {
-				foreach ($this->studentgroup as $key => $rs) {
-					if ($rs['type'] == 2) {
-						continue;
-					}
-					if ($rs['sex'] == 1) {
-						$sex = $tr->translate("MALE_SHORT");
-						$m = $m + 1;
-					} else {
-						$sex = $tr->translate("FEMALE_SHORT");
-						$f = $f + 1;
-					}
-			?>
-					<?php if ($old_groupid != $rs['group_id']) {
-						$count = count($subj); ?>
-						<?php $i = 0;
-						$count_fail = 0;
-						$dbbranch = new Application_Model_DbTable_DbGlobal();
-						$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-						$styleLogo = "max-width: 98%;max-height:70px;min-height:40px;";
-						$imgSing = "agreementsign.jpg";
-						$logo = "";
-						$branch_info = $dbbranch->getBranchInfo($rs['branch_id']);
-						if (!empty($branch_info)) {
+			$dbbranch = new Application_Model_DbTable_DbGlobal();
+			$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
+			$styleLogo = "max-width: 98%;max-height:70px;min-height:40px;";
+			$imgSing = "agreementsign.jpg";
+			$logo = "";
+			$branch_info = $dbbranch->getBranchInfo($scoreResult['branch_id']);
+			if (!empty($branch_info)) {
 
-							if (!empty($branch_info['photo'])) {
-								if (file_exists(PUBLIC_PATH . "/images/logo/" . $branch_info['photo'])) {
-									$logo = $baseUrl . '/images/logo/' . $branch_info['photo'];
-								}
-							}
-							$school_name_kh = $branch_info['school_namekh'];
-							$school_name_en = $branch_info['school_nameen'];
-						}
+				if (!empty($branch_info['photo'])) {
+					if (file_exists(PUBLIC_PATH . "/images/logo/" . $branch_info['photo'])) {
+						$logo = $baseUrl . '/images/logo/' . $branch_info['photo'];
+					}
+				}
+				$school_name_kh = $branch_info['school_namekh'];
+				$school_name_en = $branch_info['school_nameen'];
+			}
 						?>
 						<tr style="border-bottom: 1px solid #000;">
 							<td colspan="4" align="center">
@@ -318,31 +304,31 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										</tr>
 									</tbody>
 								</table>
-							
 							</td>
 						</tr>
 						<?php
 
-						if ($rs['exam_type'] == 1) {
-							$monthChar = empty($monthKH[$rs['for_month']]) ? "" : $monthKH[$rs['for_month']];
-							$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ ' . (!empty($rs['title_score']) ? $rs['title_score'] : $monthChar);
+						if ($scoreResult['exam_type'] == 1) {
+							$monthChar = empty($monthKH[$scoreResult['for_month']]) ? "" : $monthKH[$scoreResult['for_month']];
+							$titleKh = 'លទ្ធផលប្រឡងប្រចាំខែ ' . (!empty($scoreResult['title_score']) ? $scoreResult['title_score'] : $monthChar);
 
-							$monthCharEn = empty($monthENG[$rs['for_month']]) ? "" : $monthENG[$rs['for_month']];
-							$titleENG = (!empty($rs['title_score_en']) ? $rs['title_score_en'] : $monthCharEn) . ' RESULT ';
-						} else if ($rs['exam_type'] == 2) {
+							$monthCharEn = empty($monthENG[$scoreResult['for_month']]) ? "" : $monthENG[$scoreResult['for_month']];
+							$titleENG = (!empty($scoreResult['title_score_en']) ? $scoreResult['title_score_en'] : $monthCharEn) . ' RESULT ';
+						} else if ($scoreResult['exam_type'] == 2) {
 							$arrRomanNum = array(1 => "I", 2 => "II");
-							$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
-							$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
+							$romanNumber = empty($arrRomanNum[$scoreResult['for_semester']]) ? "" : $arrRomanNum[$scoreResult['for_semester']];
+							$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆមាសទី' . $dbgb->getNumberInkhmer($scoreResult['for_semester']);
 							$titleENG = "SEMESTER " . $romanNumber . " RESULT";
 						} else {
 							$titleKh = 'លទ្ធផលប្រឡងប្រចាំឆ្នាំ';
 							$titleENG = "ANNUAL RESULT";
 						}
-						$title =	$titleKh . ' ថ្នាក់ទី​' . $rs['group_code'];
+						$title =	$titleKh . ' ថ្នាក់ទី​' . $scoreResult['group_code'];
 						$this->headTitle($title);
 						echo $this->headTitle();
 
 						?>
+
 						<tr>
 							<td align="center" style=" border-top: 1px solid #fff;  border-left: 1px solid #fff; border-right: 1px solid #fff;">
 								<ul class="scoreTitle">
@@ -353,15 +339,18 @@ $link = "/allreport/score/rpt-monthlytranscript";
 										<?php echo $titleENG; ?>
 									</li>
 									<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-										ថ្នាក់ទី/GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $rs['group_code']; ?></span>
+										ថ្នាក់ទី/GRADE: <span style="font-family: 'Times New Roman','Khmer OS Battambang';"><?php echo $scoreResult['group_code']; ?></span>
 									</li>
 									<li style="font-family:'Times New Roman','Khmer OS Muol Light';">
-										ឆ្នាំសិក្សា / ACADEMIC YEAR:<?php echo $rs['academic_year']; ?>
+										ឆ្នាំសិក្សា / ACADEMIC YEAR:<?php echo $scoreResult['academic_year']; ?>
 									</li>
 								</ul>
 							</td>
 							<td align="center" valign="top"></td>
 						</tr>
+
+						
+
 
 
 						<tr>
@@ -381,9 +370,9 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td colspan="<?php echo count($subj); ?>"><?php echo $tr->translate("SUBJECT"); ?></td>
 										<?php } ?>
 										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("TOTAL_SCORE"); ?></td>
-										<?php if ($rs['exam_type'] == 1) { ?>
+										<?php if ($scoreResult['exam_type'] == 1) { ?>
 											<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("AVERAGE"); ?></td>
-										<?php } else if ($rs['exam_type'] == 2) { ?>
+										<?php } else if ($scoreResult['exam_type'] == 2) { ?>
 
 											<td style="width:50px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("EXAM_AVG_SCORE"); ?></td>
 											<td style="width:50px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MONTHLY_AVG_SCORE"); ?></td>
@@ -430,6 +419,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 												}
 											} ?>
 										</tr>
+										
 										<tr class="program">
 											<td align="center" colspan="<?php echo $langKhmer; ?>"><?php echo $tr->translate("KHMER_PROGRAM"); ?></td>
 											<?php if (!empty($langEng)) { ?>
@@ -440,145 +430,176 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<?php } ?>
 										</tr>
 									<?php } ?>
-								<?php }
-							$i++; ?>
-								<tr class="style hover context-menu-one" oncontextmenu="setrowdata('<?php echo $rs['id']; ?>','<?php echo $rs['student_id']; ?>','<?php echo $i; ?>','<?php echo $rs['group_id']; ?>','<?php echo $rs['exam_type']; ?>','<?php echo $rs['for_semester']; ?>','<?php echo $rs['for_month']; ?>');return false;">
-									<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
-									<td align="center"><a target="_blank" style="text-decoration: none; color: inherit;" href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>">&nbsp;<?php echo $rs['stu_code']; ?></a>&nbsp;</td>
-									<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id == 1) ? $rs['stu_khname'] : $rs['stu_enname']; ?>&nbsp;</td>
-									<td align="center">&nbsp;<?php echo $sex; ?>&nbsp;</td>
-									<?php
+								<?php 
+							 ?>
+					<?php
+							$i = 0;
+							$count_fail = 0;
+
+						if (!empty($this->studentgroup)) {
+							foreach ($this->studentgroup as $key => $rs) {
+								if ($rs['type'] == 2) {
+									continue;
+								}
+								if ($rs['sex'] == 1) {
+									$sex = $tr->translate("MALE_SHORT");
+									$m = $m + 1;
+								} else {
+									$sex = $tr->translate("FEMALE_SHORT");
+									$f = $f + 1;
+								}
+								$i++;
+						?>
+							<tr class="style hover context-menu-one" oncontextmenu="setrowdata('<?php echo $scoreResult['id']; ?>','<?php echo $rs['student_id']; ?>','<?php echo $i; ?>','<?php echo $scoreResult['group_id']; ?>','<?php echo $scoreResult['exam_type']; ?>','<?php echo $scoreResult['for_semester']; ?>','<?php echo $scoreResult['for_month']; ?>');return false;">
+								<td align="center">&nbsp;<?php echo $i; ?>&nbsp;</td>
+								<td align="center"><a target="_blank" style="text-decoration: none; color: inherit;"
+										href="<?php echo $this->baseUrl() . $link . "/scoreid/" . $rs['id'] . "/stuid/" . $rs['student_id']; ?>">&nbsp;<?php echo $rs['stu_code']; ?></a>&nbsp;
+								</td>
+								<td style="white-space:nowrap;">&nbsp;<?php echo ($lang_id == 1) ? $rs['stu_khname'] : $rs['stu_enname']; ?>&nbsp;
+								</td>
+								<td align="center">&nbsp;<?php echo $sex; ?>&nbsp;</td>
+								<?php
+	
+								$subjson = json_decode( $rs["jsonScoreSubjectDetail"], true );
+								if(!empty($subjson)){
+									$subject_array_collum = array_column($subjson,'score','subjectId');
+								}
+								
+								$total_score = 0;
+								if ($this->data['scoreresulttye'] == 1) {
 									$total_score = 0;
-									if ($this->data['scoreresulttye'] == 1) {
-										$total_score = 0;
-										if (!empty($subj)) foreach ($subj as $subject) {
-									?>
+									if (!empty($subj))
+										foreach ($subj as  $subject) {
+											?>
 											<td align="center">
 												<?php
-												$score = $db->getScoreBySubjectTranscript($rs['id'], $rs['student_id'], $subject['subject_id']);
-
-												if ($score['score_cut'] >= $score['score']) {
-													$tscore_subject = 0;
-												} else {
-													$tscore_subject = $score['score'] - $score['score_cut'];
-												}
-												echo (float) $tscore_subject;
-												$total_score = $total_score + $tscore_subject;
+													echo !empty($subject_array_collum[$subject['subject_id']])?number_format($subject_array_collum[$subject['subject_id']],2):'_';
 												?>
 											</td>
 										<?php } ?>
-									<?php }
-									if ($rs['exam_type'] == 1) {
-										$avg_rang = $old_average;
-										$avg_score = $rs['average'];
-									} else {
-										$avg_rang = $old_overral_average;
-										$avg_score = $rs['overallAssessmentSemester'];
-									}
-									if ($avg_score  == $avg_rang) {
-										$duplicate = $duplicate + 1;
-									} else {
-										$old_rank = $old_rank + 1 + $duplicate;
-										$duplicate = 0;
-									}
-									$total_score = $rs['total_score'];
+								<?php }
+								if ($scoreResult['exam_type'] == 1) {
+									$avg_rang = $old_average;
+									$avg_score = $rs['average'];
+								} else {
+									$avg_rang = $old_overral_average;
+									$avg_score = $rs['overallAssessmentSemester'];
+								}
+								if ($avg_score == $avg_rang) {
+									$duplicate = $duplicate + 1;
+								} else {
+									$old_rank = $old_rank + 1 + $duplicate;
+									$duplicate = 0;
+								}
+								$total_score = $rs['total_score'];
+								?>
+								<td align="center">
+									<?php
+									echo (float) $total_score;
 									?>
-									<td align="center">
+								</td>
+								<?php
+								$average = $rs['average'];
+								$smester_average = $rs['monthlySemesterAvg'];
+								$overal_semester_avg = $rs['overallAssessmentSemester'];
+								?>
+								<?php
+
+								$mentionScore=explode(',',$rs['mentionScore']) ;
+
+								 if ($scoreResult['exam_type'] == 1) { ?>
+									<td align="center"><?php echo number_format($average, 2); ?></td>
+									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 										<?php
-										echo (float) $total_score;
+											
+											if ($rs['totalMaxScore'] > 0) {
+												echo !empty($mentionScore[0])?$mentionScore[0]:'';
+											} else {
+												echo "-";
+											}
+										?>
+										&nbsp;
+									</td>
+									<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
+										<?php
+											if ($rs['totalMaxScore'] > 0) {
+												echo !empty($mentionScore[1])?$mentionScore[1]:'';
+											} else {
+												echo "-";
+											}
+										?>
+										&nbsp;
+									</td>
+									<td class="red" align="center" style="white-space: nowrap;">&nbsp;
+										<?php
+											if ($rs['totalMaxScore'] > 0) {
+												echo !empty($mentionScore[2])?$mentionScore[2]:'';
+											} else {
+												echo "-";
+											}
+										?>
+										&nbsp;
+									</td>
+									<td align="center" class="red"><label id="record<?php echo $i; ?>"></label>
+										<?php 
+											if ($rs['totalMaxScore'] > 0) {
+												echo $old_rank;
+											} else {
+												echo "-";
+											} 
+									   ?>
+									</td>
+									<td align="center" >
+										<?php
+										if ($rs['totalMaxScore'] > 0) {
+											if ($total_score >= ($rs['totalMaxScore'] / 2)) {
+												echo $tr->translate("STUDENT_PASS");
+												$count_pass++;
+												if ($rs['sex'] == 2) {
+													$pass_female = $pass_female + 1;
+												} //femail
+											} else {
+												$count_fail++;
+												echo $tr->translate("STUDENT_FAIL");
+												if ($rs['sex'] == 2) {
+													$fail_female = $fail_female + 1;
+												}
+											}
+										} else {
+											echo '-';
+										}
 										?>
 									</td>
-									<?php
-									$average = $rs['average'];
-									$smester_average = $rs['monthlySemesterAvg'];
-									$overal_semester_avg = $rs['overallAssessmentSemester'];
-									?>
-									<?php if ($rs['exam_type'] == 1) {   ?>
-										<td align="center"><?php echo number_format($average, 2); ?></td>
-										<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-											<?php
-											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['totalMaxScore']);
-											} else {
-												echo "-";
-											}
-											?>
-											&nbsp;</td>
-										<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
-											<?php
-											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['totalMaxScore']);
-											} else {
-												echo "-";
-											}
-											?>
-											&nbsp;</td>
-										<td class="red" align="center" style="white-space: nowrap;">&nbsp;
-											<?php
-											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($rs['total_score'], $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['totalMaxScore']);
-											} else {
-												echo "-";
-											}
-											?>
-											&nbsp;
-										</td>
-										<td align="center" class="red"><label id="record<?php echo $i; ?>"></label><?php if ($rs['totalMaxScore'] > 0) {
-																														echo $old_rank;
-																													} else {
-																														echo "-";
-																													}  ?></td>
-										<td align="center" <?php if ($total_score < ($rs['totalMaxScore'] / 2)) {
-																echo '';
-															} ?>>
-											<?php
-											if ($rs['totalMaxScore'] > 0) {
-												if ($total_score >= ($rs['totalMaxScore'] / 2)) {
-													echo $tr->translate("STUDENT_PASS");
-													$count_pass++;
-													if ($rs['sex'] == 2) {
-														$pass_female = $pass_female + 1;
-													} //femail
-												} else {
-													$count_fail++;
-													echo $tr->translate("STUDENT_FAIL");
-													if ($rs['sex'] == 2) {
-														$fail_female = $fail_female + 1;
-													}
-												}
-											} else {
-												echo '-';
-											}
-											?>
-										</td>
-
-									<?php	} else if ($rs['exam_type'] == 2) {  ?>
-
+							
+								<?php } else if ($scoreResult['exam_type'] == 2) { ?>
+							
 										<td align="center"><?php echo number_format($average, 2); ?></td>
 										<td align="center"><?php echo number_format($smester_average, 2); ?></td>
 										<td align="center"><?php echo number_format($overal_semester_avg, 2); ?></td>
 										<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 											<?php
 											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($overal_semester_avg, $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterTotalAverage']);
+												echo !empty($mentionScore[0])?$mentionScore[0]:'';
 											} else {
 												echo "-";
 											}
 											?>
-											&nbsp;</td>
+											&nbsp;
+										</td>
 										<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 											<?php
 											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($overal_semester_avg, $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['semesterTotalAverage']);
+												echo !empty($mentionScore[1])?$mentionScore[1]:'';
 											} else {
 												echo "-";
 											}
 											?>
-											&nbsp;</td>
+											&nbsp;
+										</td>
 										<td class="red" align="center" style="white-space: nowrap;">&nbsp;
 											<?php
 											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($overal_semester_avg, $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['semesterTotalAverage']);
+												echo !empty($mentionScore[2])?$mentionScore[2]:'';
 											} else {
 												echo "-";
 											}
@@ -586,16 +607,16 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											&nbsp;
 										</td>
 										<td align="center" class="red"><label id="record<?php echo $i; ?>"></label><?php if ($rs['totalMaxScore'] > 0) {
-																														echo $old_rank;
-																													} else {
-																														echo "-";
-																													}  ?></td>
-										<td align="center" <?php if ($overal_semester_avg < ($rs['semesterTotalAverage'] / 2)) {
-																echo '';
-															} ?>>
+											   echo $old_rank;
+										   } else {
+											   echo "-";
+										   } ?></td>
+										<td align="center" > <?php if ($overal_semester_avg < ($scoreResult['semesterTotalAverage'] / 2)) {
+											echo '';
+										} ?>
 											<?php
-											if ($rs['semesterTotalAverage'] > 0) {
-												if ($overal_semester_avg >= ($rs['semesterTotalAverage'] / 2)) {
+											if ($scoreResult['semesterTotalAverage'] > 0) {
+												if ($overal_semester_avg >= ($scoreResult['semesterTotalAverage'] / 2)) {
 													echo $tr->translate("STUDENT_PASS");
 													$count_pass++;
 													if ($rs['sex'] == 2) {
@@ -613,34 +634,36 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											}
 											?>
 										</td>
-
-									<?php } else { ?>
-
+							
+								<?php } else { ?>
+							
 										<td align="center"><?php echo number_format($rs['overalSemester1'], 2); ?></td>
 										<td align="center"><?php echo number_format($rs['overalSemester2'], 2); ?></td>
 										<td align="center"><?php echo number_format($overal_semester_avg, 2); ?></td>
 										<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 											<?php
 											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($overal_semester_avg, $rs['for_academic_year'], $rs['degree_id'], 1, $rs['grade'], $rs['semesterTotalAverage']);
+												echo !empty($mentionScore[0])?$mentionScore[0]:'';
 											} else {
 												echo "-";
 											}
 											?>
-											&nbsp;</td>
+											&nbsp;
+										</td>
 										<td class="border-right-none red" align="center" style="white-space: nowrap;">&nbsp;
 											<?php
 											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($overal_semester_avg, $rs['for_academic_year'], $rs['degree_id'], 2, $rs['grade'], $rs['semesterTotalAverage']);
+												echo !empty($mentionScore[1])?$mentionScore[1]:'';
 											} else {
 												echo "-";
 											}
 											?>
-											&nbsp;</td>
+											&nbsp;
+										</td>
 										<td class="red" align="center" style="white-space: nowrap;">&nbsp;
 											<?php
 											if ($rs['totalMaxScore'] > 0) {
-												echo $dbgb->getMentionScore($overal_semester_avg, $rs['for_academic_year'], $rs['degree_id'], 3, $rs['grade'], $rs['semesterTotalAverage']);
+												echo !empty($mentionScore[2])?$mentionScore[2]:'';
 											} else {
 												echo "-";
 											}
@@ -648,16 +671,16 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											&nbsp;
 										</td>
 										<td align="center" class="red"><label id="record<?php echo $i; ?>"></label><?php if ($rs['totalMaxScore'] > 0) {
-																														echo $old_rank;
-																													} else {
-																														echo "-";
-																													}  ?></td>
-										<td align="center" <?php if ($overal_semester_avg < ($rs['semesterTotalAverage'] / 2)) {
-																echo '';
-															} ?>>
+											   echo $old_rank;
+										   } else {
+											   echo "-";
+										   } ?></td>
+										<td align="center" <?php if ($overal_semester_avg < ($scoreResult['semesterTotalAverage'] / 2)) {
+											echo '';
+										} ?> >
 											<?php
-											if ($rs['semesterTotalAverage'] > 0) {
-												if ($overal_semester_avg >= ($rs['semesterTotalAverage'] / 2)) {
+											if ($scoreResult['semesterTotalAverage'] > 0) {
+												if ($overal_semester_avg >= ($scoreResult['semesterTotalAverage'] / 2)) {
 													echo $tr->translate("STUDENT_PASS");
 													$count_pass++;
 													if ($rs['sex'] == 2) {
@@ -675,17 +698,16 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											}
 											?>
 										</td>
-
-									<?php	} ?>
-								</tr>
-								<?php
-								$old_overral_average = $rs['overallAssessmentSemester'];
-								$old_average = $rs['average'];
-								$old_groupid = $rs['group_id']; ?>
-						<?php }
-				} ?>
+								<?php } ?>
+							</tr>
+							<?php
+							$old_overral_average = $rs['overallAssessmentSemester'];
+							$old_average = $rs['average'];
+						}
+					}
+				 ?>
 								</table>
-								<?php if (!empty($this->studentgroup)) { ?>
+								<?php if (!empty($scoreResult)) { ?>
 									<table cellpadding="0" cellspacing="0" width="100%">
 										<tr>
 											<td>&nbsp;</td>
@@ -693,7 +715,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td align="center">
 												<label id="lunarDate" class="LabelTeacher">
 													<?php
-													$inputDate = $this->studentgroup[0]['date_input'];
+													$inputDate = $scoreResult['date_input'];
 													$time  = strtotime($inputDate);
 													$day   = date('d', $time);
 													$month = date('m', $time);
@@ -756,12 +778,12 @@ $link = "/allreport/score/rpt-monthlytranscript";
 
 											</td>
 											<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-												<?php if (!empty($rs['teacher_sigature'])) { ?>
-													<div id="teachersigature" style="display:none"><img src="<?php echo $this->baseUrl() . '/images/photo/' . $rs['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
+												<?php if (!empty($scoreResult['teacher_sigature'])) { ?>
+													<div id="teachersigature" style="display:none"><img src="<?php echo $this->baseUrl() . '/images/photo/' . $scoreResult['teacher_sigature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
 												<?php } else { ?>
 													<div id="teachersigature" style="height: 100px;"></div>
 												<?php } ?>
-												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $rs['teacher'] ?></span>
+												<span style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $scoreResult['teacher'] ?></span>
 											</td>
 										</tr>
 										<tr>
@@ -792,51 +814,6 @@ $urlOutStandingNoPhoto = $this->baseUrl() . $link;
 <script src="<?php echo $this->baseUrl(); ?>/admin/js/global.js" type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dojo.data.ItemFileWriteStore");
-
-	var row = 0;
-	var url = "";
-	$(function() {
-		$.contextMenu({
-			selector: '.context-menu-one',
-			callback: function(key, options) {
-				var m = "clicked: " + key;
-				if (key == "letterofprais") {
-					url = '<?php echo $urlOutStanding; ?>';
-					gotoAction();
-				} else if (key == "transcript") {
-					url = '<?php echo $urlOutStandingNoPhoto; ?>';
-					gotoAction1();
-				}
-
-			},
-			items: {
-				"transcript": {
-					name: "<?php echo $tr->translate("TRANSCRIPT"); ?>",
-					icon: "fa-file",
-				},
-				"letterofprais": {
-					name: "<?php echo $tr->translate("HORNOR_CERTIFICATE"); ?>",
-					icon: "fa-file",
-				},
-			}
-		});
-	});
-
-	function setrowdata(id, stu_id, index, group, exam_type, for_semester, for_month) {
-		rank = dijit.byId('rank' + index).get("value");
-		row = id;
-		student_id = stu_id;
-	}
-
-	var recordid = '';
-
-	function gotoAction() {
-		window.open(url + row + '/stu_id/' + student_id + '/rank/' + rank);
-	}
-
-	function gotoAction1() {
-		window.open(url + '/scoreid/' + row + '/stuid/' + student_id);
-	}
 
 	var academic_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
 	var group_store = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);

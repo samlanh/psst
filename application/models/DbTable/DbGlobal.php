@@ -1502,16 +1502,19 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
 				,fam.fatherPhone AS father_phone
+				,fam.fatherPhoto AS fatherPhoto
 				
 				,fam.motherNameKh AS mother_khname 
 				,fam.motherName AS mother_enname  
 				,fam.motherNation AS mother_nation  
 				,fam.motherPhone AS mother_phone  
+				,fam.motherPhoto AS motherPhoto  
 				
 				,fam.guardianNameKh AS guardian_khname 
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianNation AS guardian_nation 
 				,fam.guardianPhone AS guardian_tel
+				,fam.guardianPhoto AS guardianPhoto
 				
 				,DATE_FORMAT(s.dob,'%d-%m-%Y') AS dob,
 	   			sgd.grade,
@@ -3518,7 +3521,31 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				AND $scoreAverage>=sd.max_score
 				ORDER BY sd.max_score DESC
 				LIMIT 1";
+			// echo $sql;
 		return $db->fetchOne($sql);
+	}
+	function getMentionScoreNew($data)
+	{
+		$db = $this->getAdapter();
+	
+		$academic = empty($data['academic_year']) ? 0 : $data['academic_year'];
+		$degree = empty($data['degree']) ? 0 : $data['degree'];
+		$score = empty($data['score']) ? 0 : $data['score'];
+		$maxScore = empty($data['max_score']) ? 0 : $data['max_score'];
+		$scoreAverage = $score / $maxScore * 100;
+		
+		$sql = "SELECT sd.metion_grade,sd.metion_in_khmer,sd.mention_in_english
+			FROM `rms_metionscore_setting_detail` AS sd,
+				`rms_metionscore_setting` AS s
+			WHERE s.id = sd.metion_score_id
+				AND s.academic_year=$academic
+				AND degree = $degree
+				AND $scoreAverage>=sd.max_score ";
+
+			$sql.= " ORDER BY sd.max_score DESC
+				LIMIT 1 ";
+			// echo $sql;
+		return $db->fetchRow($sql);
 	}
 	function updateReadNotif($type, $notif_id)
 	{

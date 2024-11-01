@@ -31,11 +31,21 @@ a.btnstyle:hover{color:#eee;}
 						dijit.byId('branch_id').focus();
 						return false;
 					}
-					fromFeeid = dijit.byId('fromFeeid').get('value');
-					if(fromFeeid==''){
-						alert('<?php echo $tr->translate("PLEASE_SELECT_STUDENT_FEE");?>');
-						dijit.byId('fromFeeid').focus();
+					schoolFeeOption = dijit.byId('schoolFeeOption').get('value');
+					if(schoolFeeOption==0 || schoolFeeOption==""){
+						alert('<?php echo $tr->translate('SELECT_TYPE'); ?>');
+						dijit.byId('schoolFeeOption').focus();
+						HideloadingBlock();
 						return false;
+					}
+					if(schoolFeeOption==2){
+						fromFeeid = dijit.byId('fromFeeid').get('value');
+						if(fromFeeid==0 || fromFeeid==""){
+							alert('<?php echo $tr->translate('PLEASE_SELECT_STUDENT_FEE'); ?>');
+							dijit.byId('fromFeeid').focus();
+							HideloadingBlock();
+							return false;
+						}
 					}
 
 					academic_year_fee = dijit.byId('academic_year_fee').get('value');
@@ -76,6 +86,30 @@ a.btnstyle:hover{color:#eee;}
 																	<i class="glyphicon glyphicon-education"></i>
 																</div> 
 																<div class="col-md-10 col-sm-10 col-xs-12"> 
+																	<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("TYPE");?></p>
+																</div> 
+															</div>
+															<div class="form-group">
+																<div class="col-md-12 col-sm-12 col-xs-12">
+																	<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TYPE");?> </label>
+																	<div class="col-md-7 col-sm-7 col-xs-12">
+																		<?php echo $frm->getElement("schoolFeeOption");?>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="card-blogform">
+												<div class="card-body"> 
+													<div class="row"> 
+														<div class="col-md-12 col-sm-12 col-xs-12">
+															<div class="d-flex"> 
+																<div class="settings-main-icon ">
+																	<i class="glyphicon glyphicon-education"></i>
+																</div> 
+																<div class="col-md-10 col-sm-10 col-xs-12"> 
 																	<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("STUDENT_INFO");?></p>
 																</div> 
 															</div>
@@ -85,7 +119,7 @@ a.btnstyle:hover{color:#eee;}
 																	<?php echo $frm->getElement("branch_id");?>
 																</div>
 															</div>
-															<div class="form-group">
+															<div class="form-group oldFee ">
 																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("OLD_FEEID");?>  :
 																</label>
 																<div class="col-md-7 col-sm-7 col-xs-12">
@@ -108,13 +142,7 @@ a.btnstyle:hover{color:#eee;}
 																	</div>
 																</div>
 															</div>
-															<div class="form-group">
-																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEARCH")?>  :
-																</label>
-																<div class="col-md-7 col-sm-7 col-xs-12">
-																	<?php echo $frm->getElement("adv_search");?>
-																</div>
-															</div>
+															
 														</div>
 													</div>
 												</div>
@@ -158,12 +186,18 @@ a.btnstyle:hover{color:#eee;}
 																	<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("GRADE");?>  :
 																	</label>
 																	<div class="col-md-7 col-sm-7 col-xs-12">
-																			<input id="grade" />
+																		<input id="grade" />
 																	</div>
 																	</div>
 																</div>
 															</div>
-															
+															<div class="form-group">
+																<label class="control-label  col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("SEARCH")?>  :
+																</label>
+																<div class="col-md-7 col-sm-7 col-xs-12">
+																	<?php echo $frm->getElement("adv_search");?>
+																</div>
+															</div>
 															<div class="form-group">
 																<div class="col-md-12 col-sm-12 col-xs-12">
 																	<div class="form-group">
@@ -283,6 +317,7 @@ a.btnstyle:hover{color:#eee;}
 										<input id="academic_year_fee" />
 										<input type="hidden" name="branch" id="branch" dojoType="dijit.form.TextBox" /> 
 										<input type="hidden" name="OldFee" id="OldFee" dojoType="dijit.form.TextBox" /> 
+										<input type="hidden" name="type" id="type" dojoType="dijit.form.TextBox" /> 
 									</div>
 								</div>
 								<div class="form-group">
@@ -395,11 +430,31 @@ dojo.ready(function(){
 	 branch_id.on('change', function(evt) {
 		 getAllAcademicByBranch();
   	});
+
+	var schoolFeeOption = dijit.byId('schoolFeeOption');
+	schoolFeeOption.on('change', function(evt) {
+		
+		 dojo.byId('data_table').innerHTML = "";
+		 $("#identity").val('');
+		 dijit.byId('fromFeeid').attr('value','');
+		 OptionChange();
+  	});
 	 oldFeeId='<?php echo $this->search['fromFeeid'];?>';
 	 oldGrade='<?php echo $this->search['grade'];?>';
 	 getAllAcademicByBranch();
 	 getallGrade();
 });
+
+function OptionChange() {
+	schoolFeeOption = dijit.byId("schoolFeeOption").get("value");
+	dijit.byId('type').attr('value',schoolFeeOption);
+	$(".oldFee").css("display", "flow-root");
+	
+	if (schoolFeeOption == 1) {
+		$(".oldFee").css("display", "none");
+	}
+	
+}
 
 url_getacademic = '<?php echo $this->url(array('module'=>'accounting','controller'=>'fee','action'=>'getfeeid'));?>';
 function getAllAcademicByBranch(){
@@ -466,14 +521,22 @@ function getStudentFromSearch(){
 	loadingBlock()
 	$("#identity").val('');
 	
-	fromFeeid = dijit.byId('fromFeeid').get('value');
-	if(fromFeeid==0 || fromFeeid==""){
-		alert('<?php echo $tr->translate('PLEASE_SELECT_STUDENT_FEE'); ?>');
-		dijit.byId('fromFeeid').focus();
+	schoolFeeOption = dijit.byId('schoolFeeOption').get('value');
+	if(schoolFeeOption==0 || schoolFeeOption==""){
+		alert('<?php echo $tr->translate('SELECT_TYPE'); ?>');
+		dijit.byId('schoolFeeOption').focus();
 		HideloadingBlock();
 		return false;
 	}
-
+    if(schoolFeeOption==2){
+		fromFeeid = dijit.byId('fromFeeid').get('value');
+		if(fromFeeid==0 || fromFeeid==""){
+			alert('<?php echo $tr->translate('PLEASE_SELECT_STUDENT_FEE'); ?>');
+			dijit.byId('fromFeeid').focus();
+			HideloadingBlock();
+			return false;
+		}
+	}
 	branch_id = dijit.byId('branch_id').get('value');
 	academicYearEnroll = dijit.byId('academicYearEnroll').get('value');
 	studentType = dijit.byId('studentType').get('value');
@@ -497,6 +560,7 @@ function getStudentFromSearch(){
 			'grade':grade,
 			'adv_search':adv_search,
 			'limit':limit,
+			'schoolFeeOption':schoolFeeOption,
 			
 			},
 		handleAs:"json",

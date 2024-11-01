@@ -86,19 +86,33 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				if(!empty($_data['identity'])){
 					$ids=explode(',', $_data['identity']);
 					foreach ($ids as $k){
-						if(!empty($_data['OldFee'])){
+						if($_data['type']==1){
+
 							$this->_name = 'rms_group_detail_student';
 							$data_gro = array(
 									'is_current'=> 1,
 									'feeId'=> $feeId,
 							);
 							$where = 'itemType=1 AND stu_id = '.$_data['stu_id_'.$k]."  AND is_current=1 
-								AND CASE 
-								WHEN COALESCE(feeId,0) > 0 THEN feeId
-								ELSE oldFeeId END = ".$_data['OldFee'];
-						
+								AND COALESCE(feeId,0) =0 AND COALESCE(oldFeeId,0) = 0 ";
 							$this->update($data_gro, $where);
+							
+						}else{
+							if(!empty($_data['OldFee'])){
+								$this->_name = 'rms_group_detail_student';
+								$data_gro = array(
+										'is_current'=> 1,
+										'feeId'=> $feeId,
+								);
+								$where = 'itemType=1 AND stu_id = '.$_data['stu_id_'.$k]."  AND is_current=1 
+									AND CASE 
+									WHEN COALESCE(feeId,0) > 0 THEN feeId
+									ELSE oldFeeId END = ".$_data['OldFee'];
+							
+								$this->update($data_gro, $where);
+							}
 						}
+					
 					}
 				}
 			}
@@ -142,11 +156,19 @@ class Accounting_Model_DbTable_DbUpdateStudenFee extends Zend_Db_Table_Abstract
 				AND sd.stop_type=0
 				AND s.stu_id=sd.stu_id
 				AND sd.is_current=1 ";
-		if(!empty($search['fromFeeid'])){
-			$sql.=" AND CASE 
-					WHEN COALESCE(sd.feeId,0) > 0 THEN sd.feeId
-					ELSE sd.oldFeeId END = ".$search['fromFeeid'];
+		
+		if(!empty($search['schoolFeeOption'])){
+			if($search['schoolFeeOption']==1){
+				$sql.=" AND COALESCE(sd.feeId,0) =0 AND COALESCE(sd.oldFeeId,0) = 0  ";
+			}else{
+				if(!empty($search['fromFeeid'])){
+					$sql.=" AND CASE 
+							WHEN COALESCE(sd.feeId,0) > 0 THEN sd.feeId
+							ELSE sd.oldFeeId END = ".$search['fromFeeid'];
+				}
+			}
 		}
+	
 		if(!empty($search['branch_id'])){
 			$sql.=" AND s.branch_id =".$search['branch_id'];
 		}

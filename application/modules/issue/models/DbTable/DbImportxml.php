@@ -219,7 +219,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				$param = array(
 					'groupId'=>$groupId,
 				);
-				$this->addSchedule($param);
+				//$this->addSchedule($param);
 			}
 
 			/**
@@ -233,45 +233,67 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				// $db->fetchRow($sql);
 				$tableData = $array["cards"]["card"];
 				if(!empty($tableData)) foreach($tableData as $row){//use
-					$lessionId = $row["@attributes"]['lessonid'];
-					$period = $row["@attributes"]['period'];
-					$days = $row["@attributes"]['days'];
+						$lessionId = $row["@attributes"]['lessonid'];
+						$period = $row["@attributes"]['period'];
+						$days = $row["@attributes"]['days'];
 						$this->addcard($lessionId,$period,$days);
 				}
 				return 7;
 			} elseif ($step == 7) {
+
+				//update
 				$tableData = $array["lessons"]["lesson"];
 				$periodsColumn = $array["classes"]["@attributes"]["columns"];
 				$columnList = explode(',', $periodsColumn);
 
-				if (!empty($tableData))
-					foreach ($tableData as $row) {
-						$subjectId = $this->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
-						$teacherId = $this->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
-						$groupId = $this->getGroupIdbyStrId($row["@attributes"]['classids']);
+				if(!empty($tableData)) foreach($tableData as $row){
+					$subjectId= $this->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
+					$teacherId = $this->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
+					$groupId = $this->getGroupIdbyStrId($row["@attributes"]['classids']);
+					
+					$lessionId = $row["@attributes"]['id'];
+					$data = array(
+						'subject_id'=>$subjectId,
+						'techer_id' =>$teacherId,
+						'note'=>'abc',
+						);
+					$this->updateExistingSchedule($lessionId,$data,$groupId);
+				}
+				
 
-						$lessionId = $row["@attributes"]['id'];
+				//add new schedule
+				// $tableData = $array["lessons"]["lesson"];
+				// $periodsColumn = $array["classes"]["@attributes"]["columns"];
+				// $columnList = explode(',', $periodsColumn);
 
-						$resultCards = $this->getDataFromCard($lessionId);
+				// if (!empty($tableData))
+				// 	foreach ($tableData as $row) {
+				// 		$subjectId = $this->getSubjectIdbyStrId($row["@attributes"]['subjectid']);
+				// 		$teacherId = $this->getTeacherIdbyStrId($row["@attributes"]['teacherids']);
+				// 		$groupId = $this->getGroupIdbyStrId($row["@attributes"]['classids']);
 
-						if (!empty($resultCards)) {
-							$this->_name = 'rms_group_reschedule';
-							foreach ($resultCards as $card) {
-								$arr = array(
-									'branch_id' => $branchId,
-									'group_id' => $groupId,
-									'year_id' => $academicYear,
-									'day_id' => $card['daystrId'],
-									'from_hour' => $card['fromhr'],
-									'to_hour' => $card['tohr'],
-									'subject_id' => $subjectId,
-									'techer_id' => $teacherId,
-									'create_date' => date('Y-m-d'),
-								);
-								$this->insert($arr);
-							}
-						}
-					}
+				// 		$lessionId = $row["@attributes"]['id'];
+
+				// 		$resultCards = $this->getDataFromCard($lessionId);
+
+				// 		if (!empty($resultCards)) {
+				// 			$this->_name = 'rms_group_reschedule';
+				// 			foreach ($resultCards as $card) {
+				// 				$arr = array(
+				// 					'branch_id' => $branchId,
+				// 					'group_id' => $groupId,
+				// 					'year_id' => $academicYear,
+				// 					'day_id' => $card['daystrId'],
+				// 					'from_hour' => $card['fromhr'],
+				// 					'to_hour' => $card['tohr'],
+				// 					'subject_id' => $subjectId,
+				// 					'techer_id' => $teacherId,
+				// 					'create_date' => date('Y-m-d'),
+				// 				);
+				// 				$this->insert($arr);
+				// 			}
+				// 		}
+				// 	}
 				return 8;
 			}
 		}else{

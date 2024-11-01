@@ -99,7 +99,7 @@
 			";
     	$sql.=$dbgb->getAccessPermission('d.branch_id');
     	$sql.=$dbgb->getDegreePermission('d.degree');
-    	$order =" ORDER BY d.id DESC";
+    	$order =" ORDER BY d.id DESC LIMIT 10 ";
     	return $db->fetchAll($sql.$order);
     }
     function getSettingDiscountNearlyExpire(){

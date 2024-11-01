@@ -266,8 +266,7 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 								</div>
 							</div>
 							<div class="form-group">
-								<label
-									class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH"); ?>
+								<label class="control-label col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH"); ?>
 									<span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<select class="fullside" name="branch_id" id="branch_id"
@@ -294,9 +293,11 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 								</div>
 							</div>
 							<div class="form-group">
-								<label
-									class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_TYPE"); ?>
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STUDENT_TYPE"); ?>
 									<span class="required">*</span>
+									<a onClick="getallstudentname();" title="<?php echo $tr->translate("REFRESH"); ?>" href="javascript:void(0);" class="me-1  btn btn-xs btn-rounded-pill btn-icon btn-default">
+									  <span class="fa fa-refresh "></span>
+									</a>
 								</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<select type="text" name="student_type" id="student_type" class="fullside"
@@ -978,9 +979,17 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 			class: 'fullside',
 			placeHolder: "<?php echo $tr->translate("SELECT_STUDENT_NAME"); ?>",
 			onChange: function () {
-				getOldStudentInfo();
-				getExistingService();
+				
+				var thisStuType = dijit.byId('student_type').get('value');
 				stu_id = dijit.byId('old_stu').get('value');
+				if(stu_id == "-1"){
+					if(thisStuType==3){
+						addTab('<?php echo $tr->translate("CREATE_CRM");?>','<?php echo $this->baseUrl() . "/home/crm/add".'?inFrame=true'; ?>');
+					}
+				}else{
+					getOldStudentInfo();
+					getExistingService();
+				}
 			}
 		}, "old_stu");
 

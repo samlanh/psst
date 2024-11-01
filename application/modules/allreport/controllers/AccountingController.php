@@ -1552,4 +1552,52 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}
+	
+	function  rptStudentServiceAction(){
+		
+		try{
+			if($this->getRequest()->isPost()){
+				$search=$this->getRequest()->getPost();
+			}else{
+				$search=array(
+					'adv_search' =>'',
+					'branch_id' =>'',
+					'study_year'=>'',
+					'grade_all' =>'',
+					'degree' =>'',
+					'group'		=>0,
+					'item'		=>0,
+					'service_type'=>0,
+					'end_date'	=>date('Y-m-d'),
+					'service'	=>''
+				);
+				
+				$dbGb = new Application_Model_DbTable_DbGlobal();
+				$last = $dbGb->getLatestAcadmicYear();
+				if(!empty($last)){
+					$search["study_year"] = empty($last["id"]) ? 0 : $last["id"];
+				}
+			}
+			$db = new Allreport_Model_DbTable_DbRptFee();
+			$row = $db->getAllStudentCurrentService($search);
+			
+			$this->view->row = $row;
+			$this->view->search = $search;
+			
+			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+		$this->view->search = $search;
+		$form=new Registrar_Form_FrmSearchInfor();
+		$form->FrmSearchRegister();
+		Application_Model_Decorator::removeAllDecorator($form);
+		$this->view->form_search=$form;
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$this->view->rs_type = $_db->getAllItems();
+	}
 }

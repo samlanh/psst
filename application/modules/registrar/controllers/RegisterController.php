@@ -309,6 +309,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$db = new Application_Model_DbTable_DbGlobal();
 			$branch_id = !empty($data['branch_id'])?$data['branch_id']:null;
 			$rows = $db->getAllCrmstudent($branch_id,3);
+			
+			$dbUser = new Application_Model_DbTable_DbUsers();
+			$crmPer = $dbUser->getAccessUrl("home","crm","add");
+			if (!empty($crmPer)){
+				array_unshift($rows, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+			}
+			
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

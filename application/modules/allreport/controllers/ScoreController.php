@@ -204,12 +204,9 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	{
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		$id = $this->getRequest()->getParam("id");
-		if ($this->getRequest()->isPost()) {
-			$search = $this->getRequest()->getPost();
-		} else {
+		if(!empty($id)){
 
 			$row = $db->getScoreExamByID($id);
-			//	print_r($row); exit();
 			$search = array(
 				'group' => $row['group_id'],
 				'study_year' => $row['for_academic_year'],
@@ -227,9 +224,6 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$studentgroup = $db->getStudentScoreResult($search, $id, 2);
 		$this->view->studentgroup = $studentgroup;
 
-		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
-
-		$this->view->g_all_name = $db->getAllgroupStudyNotPass();
 		$form = new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
@@ -241,10 +235,6 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->branchInfo = $db->getBranchInfo($branch_id);
-
-		// $dbSetting = new Setting_Model_DbTable_Dbduty();
-		// $principalId = empty($studentgroup[0]['principalId']) ? 0 : $studentgroup[0]['principalId'];
-		// $this->view->principalInfo = $dbSetting->getDutyById($principalId);
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
 		$dregreeId = empty($studentgroup[0]['degree_id']) ? 0 : $studentgroup[0]['degree_id'];
@@ -269,7 +259,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 		$this->view->studentgroup = $db->getStudentScoreResult($search, $id, 2);
 
-		$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
+		//$this->view->all_student = $db->getStundetScoreDetailGroup($search, $id, 1);
 
 		$this->view->g_all_name = $db->getAllgroupStudyNotPass();
 		$form = new Registrar_Form_FrmSearchInfor();

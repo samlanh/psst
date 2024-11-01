@@ -175,17 +175,6 @@ $branchInfo = $this->branchInfo;
 				$rank4 = "";
 				$rank5 = "";
 
-				if (!empty($this->all_student)) {
-					foreach ($this->all_student as $key => $rs) {
-						if ($rs['sex'] == 1) {
-							$sex = $tr->translate("MALE");
-						} else {
-							$sex = $tr->translate("FEMALE");
-							$female++;
-						}
-					}
-				}
-
 				if (!empty($this->studentgroup)) {
 					foreach ($this->studentgroup as $key => $rs) {
 						if ($rs['total_score'] == $old_totalscore) {
@@ -445,7 +434,8 @@ $branchInfo = $this->branchInfo;
 		</style>
 		<div id="divPrint">
 			<style type="text/css">
-				<?php $image = $this->baseUrl() . '/images/card/certificate/pis.png'; ?>.backgroundOutStanding {
+				<?php $image = $this->baseUrl() . '/images/card/certificate/pis.png'; ?>
+				.backgroundOutStanding {
 					background-image: url('<?php echo $image; ?>');
 					background-size: 20.5cm 29cm;
 					background-repeat: no-repeat;
@@ -526,17 +516,6 @@ $branchInfo = $this->branchInfo;
 					$rank3 = "";
 					$rank4 = "";
 					$rank5 = "";
-
-					if (!empty($this->all_student)) {
-						foreach ($this->all_student as $key => $rs) {
-							if ($rs['sex'] == 1) {
-								$sex = $tr->translate("MALE");
-							} else {
-								$sex = $tr->translate("FEMALE");
-								$female++;
-							}
-						}
-					}
 
 					if (!empty($this->studentgroup)) {
 						foreach ($this->studentgroup as $key => $rs) {

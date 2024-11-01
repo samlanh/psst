@@ -1257,7 +1257,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		g.group_code,
 		g.semesterTotalAverage,
 		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academic_year,
-		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonth,
 
 		(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
 		(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature

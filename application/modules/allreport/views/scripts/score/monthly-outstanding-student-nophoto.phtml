@@ -169,16 +169,6 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 				$rank3 = "";
 				$rank4 = "";
 				$rank5 = "";
-				if (!empty($this->all_student)) {
-					foreach ($this->all_student as $key => $rs) {
-						if ($rs['sex'] == 1) {
-							$sex = $tr->translate("MALE");
-						} else {
-							$sex = $tr->translate("FEMALE");
-							$female++;
-						}
-					}
-				}
 				if (!empty($this->studentgroup)) {
 					foreach ($this->studentgroup as $key => $rs) {
 						if ($rs['total_score'] == $old_totalscore) {
@@ -262,11 +252,14 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 													$titleKh = 'តារាងកិត្តិយសប្រចាំខែ' . $monthChar;
 													$monthCharEn = empty($monthENG[$this->studentgroup[0]['for_month_id']]) ? "" : $monthENG[$this->studentgroup[0]['for_month_id']];
 													$titleENG = "Honorable Table For " . $monthCharEn;
-												}else{
+												}elseif($rs['exam_type'] == 2){
 													$arrRomanNum = array(1 => "I", 2 => "II");
 													$romanNumber = empty($arrRomanNum[$rs['for_semester']]) ? "" : $arrRomanNum[$rs['for_semester']];
 													$titleKh = 'តារាងកិត្តិយសឆមាសទី' . $dbgb->getNumberInkhmer($rs['for_semester']);
 													$titleENG = "Honorable Table For Semester " . $romanNumber;
+												}else{
+													$titleKh = 'តារាងកិត្តិយសប្រចាំឆ្នាំ';
+													$titleENG = "Honorable Table For Annaul";
 												}
 											?>
 											<ul class="scoreTitle">
@@ -462,16 +455,6 @@ $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
 							$rank3 = "";
 							$rank4 = "";
 							$rank5 = "";
-							if (!empty($this->all_student)) {
-								foreach ($this->all_student as $key => $rs) {
-									if ($rs['sex'] == 1) {
-										$sex = $tr->translate("MALE");
-									} else {
-										$sex = $tr->translate("FEMALE");
-										$female++;
-									}
-								}
-							}
 							if (!empty($this->studentgroup)) {
 								foreach ($this->studentgroup as $key => $rs) {
 									if ($rs['total_score'] == $old_totalscore) {

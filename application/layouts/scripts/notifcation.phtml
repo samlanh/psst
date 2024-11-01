@@ -15,382 +15,500 @@ $class='soria';
 $them_style='soria';
 $level=$session_user->level;
 
+$limitRecord = 10;
+$showAllAmt = 8;
 $dbNotification = new Application_Model_DbTable_DbNotification();
 $teacher_doc = array();
 if (empty($session_user->isnot_lecturer_acl)){
-	$teacher_doc = $dbNotification->getTeachDocumentAlert();
+	$arrCon = array(
+		"limitRecord" =>$limitRecord
+	);
+	$teacher_doc = $dbNotification->getTeachDocumentAlert($arrCon);
 }
 $stuproduct = array();
 $stuproductNew = array();
 if (empty($session_user->isnot_cutstock_acl)){
-	//$stuproduct = $dbNotification->getStuProductAlert();
-	//$stuproductNew = $dbNotification->getStuProductAlert(1);
+	
+	$arrCon = array(
+		"limitRecord" =>$limitRecord
+	);
+	//$stuproduct = $dbNotification->getStuProductAlert($arrCon);
+	$arrCon["new"] = 1;
+	//$stuproductNew = $dbNotification->getStuProductAlert($arrCon);
 }
 $stu_doc = array();
 if (empty($session_user->isnot_student_acl)){
-	$stu_doc = $dbNotification->getStuDocumentAlert();
-	$stu_nogroup = $dbNotification->getStudentNotYetGroup();
+	$arrCon = array(
+		"limitRecord" =>$limitRecord
+	);
+	$stu_doc = $dbNotification->getStuDocumentAlert($arrCon);
+	$stu_nogroup = $dbNotification->getStudentNotYetGroup($arrCon);
 }
 
 $crmNotif = array();
 if (empty($session_user->isnot_crm_acl)){
-	$crmNotif = $dbNotification->getCrmNextContactNoti();
+	$arrCon = array(
+		"limitRecord" =>$limitRecord
+	);
+	$crmNotif = $dbNotification->getCrmNextContactNoti($arrCon);
 }
 
 $creditNotif = array();
 if (empty($session_user->isnot_creditmemo_acl)){
-	$creditNotif = $dbNotification->getCreditMemoNearExpired();
+	$arrCon = array(
+		"limitRecord" =>$limitRecord
+	);
+	$creditNotif = $dbNotification->getCreditMemoNearExpired($arrCon);
 }
 ?>
+<style>
+.top_nav .dropdown-menu li div.bg-style{
+	background: url(<?php echo $this->baseUrl()."/images/logo.png";?>);  
+	background-repeat: no-repeat; 
+	background-size: 100%;
+}
+</style>
 								<?php if (empty($session_user->isnot_crm_acl)){?>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("CRM For Follow Up");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-globe "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if (count($crmNotif)>0){ echo count($crmNotif);}?></span>
+										<?php 
+										$countingCrm = count($crmNotif);
+										if ($countingCrm>0){ 
+											$stSupCrm="";
+											if($countingCrm>9){
+												$countingCrm=9;
+												$stSupCrm='<sup>+</sup>';
+											}
+										?>
+					                    <span id="countNews" class="badge bg-green"><?php  echo $countingCrm.$stSupCrm; ?></span>
+										<?php } ?>
 					                  </a>
 					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><i class="fa fa-phone "></i> <?php echo $tr->translate("CRM For Follow Up");?></h4>
-						                  </li>
-						                  <?php if(!empty($crmNotif)){?>
-						                  	<?php foreach($crmNotif as $key=> $crmn){
-				                          	$url = $this->url(array('module'=>'home','controller'=>'crm','action'=>'contact'), null, true)."/id/".$crmn['crm_id'];
-					                          	$style="";
-					                          	if (!empty($crmn['branch_logo'])){
-					                          		if (file_exists(PUBLIC_PATH.'/images/'.$crmn['branch_logo'])) {
-					                          			$style="background: url(/elt/trunk/public/images/".$crmn['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
-					                          		}
-					                          	}
-				                          	?>
-				                          	<li class="event " title="<?php echo $crmn['kh_name']."/".$crmn['first_name']." ".$crmn['last_name'];?>">
-				                         	 <a href="<?php echo $url;?>">
-				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="media-body">
-					                              <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $crmn['branch_name'];?></span><br />
-					                              <span class="title bold" ><?php echo $crmn['kh_name'];?>/<?php echo $crmn['first_name']." ".$crmn['last_name'];?></span><br />
-					                              <span class="title"  ><?php echo $tr->translate("TEL")." : <strong style='color: red;'>".$crmn['tel']."</strong>";?></span><br />
-					                              <small ><?php echo $tr->translate("NEXT_DATE_CONTACT")." : <strong style='color: red;'>".date("d-M-Y",strtotime($crmn['next_contact']))."</strong>";?></small>
-					                            </div>
-				                            </a>
-				                          </li>
-				                          	<?php }?>
-				                          <?php }?>
+											<li class="dropdown-menu-header border-bottom">
+												<div class="dropdown-header d-flex align-items-center justify-content-center">
+												  <h6 class="text-white m-0 me-auto"><i class="fa fa-phone"></i> <?php echo $tr->translate("CRM For Follow Up");?></h6>
+												</div>
+											</li>
+											
+											<?php if(!empty($crmNotif)){?>
+											<li class="dropdown-notifications-list scrollable-container">
+												<ul class="list-group list-group-flush">
+													<?php foreach($crmNotif as $key=> $crmn){
+														$url = $this->url(array('module'=>'home','controller'=>'crm','action'=>'contact'), null, true)."/id/".$crmn['crm_id'];
+														$cusName = $crmn['nameKh'];
+														$cusName = empty($cusName) ? $crmn['nameEng'] : $cusName;
+													?>
+													<li class="event " title="<?php echo $crmn['kh_name']."/".$crmn['first_name']." ".$crmn['last_name'];?>">
+														<span class="title text-primary" ><i class="fa fa-map-marker" ></i> <strong><?php echo $crmn['branch_name'];?></strong></span>
+														<a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+															<div class="profile-list char-profile bg-label-primary">
+																<span class="profileChar">
+																	<?php echo mb_substr($cusName, 0, 1,'UTF8');?>
+																</span>
+															</div>
+															<div class="bg-style"></div>
+															<div class="media-body">
+																
+																<span class="title text-truncate" ><?php echo $crmn['nameKh'];?> / <?php echo $crmn['nameEng'];?></span><br />
+																<span ><?php echo $tr->translate("TEL")." : <strong style='color: red;'>".$crmn['tel']."</strong>";?></span><br />
+																<small ><?php echo $tr->translate("NEXT_DATE_CONTACT")." : <strong style='color: red;'>".date("d-M-Y",strtotime($crmn['next_contact']))."</strong>";?></small>
+															</div>
+														</a>
+													</li>
+													<?php }?>
+												</ul>
+											</li>
+										  <?php }?>
+												
+										  <?php if ($countingCrm>1){?>
+											<li class="dropdown-menu-footer border-top">
+												<a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-crm"?>" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-30  align-items-center">
+												  <?php echo $tr->translate("SHOW_ALL");?>
+												</a>
+											</li>
+										   <?php }?>
 						               </ul>
 					            </li>
 					            <?php }?>
 					            <?php if (empty($session_user->isnot_student_acl)){?>
 				                <li role="presentation" class="dropdown">
-					                  <a title="<?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+									<a title="<?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if (count($stu_nogroup)>0){ echo count($stu_nogroup);}?></span>
-					                  </a>
-					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?></h4>
-						                  </li>
-						                  <?php if(!empty($stu_nogroup)){?>
-						                  	<?php foreach($stu_nogroup as $key=> $stunogro){
-				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$stunogro['stu_id'];
-					                          	$style="";
-					                          	if (!empty($stunogro['branch_logo'])){
-					                          		if (file_exists(PUBLIC_PATH.'/images/'.$stunogro['branch_logo'])) {
-					                          			$style="background: url(/elt/trunk/public/images/".$stunogro['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
-					                          		}
-					                          	}
-				                          	?>
+										<?php 
+										$countingSt = count($stu_nogroup);
+										if ($countingSt>0){ 
+											$stSup="";
+											if($countingSt>9){
+												$countingSt=9;
+												$stSup='<sup>+</sup>';
+											}
+										?> <span id="countNews" class="badge bg-green"><?php  echo $countingSt.$stSup; ?></span>
+										<?php } ?>
+									</a>
+									<ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+										<li class="dropdown-menu-header border-bottom">
+											<div class="dropdown-header d-flex align-items-center justify-content-center">
+											  <h6 class="text-white m-0 me-auto"><i class="fa fa-file-text-o"></i> <?php echo $tr->translate("STUDENT_NOT_YET_GROUP");?></h6>
+											</div>
+										</li>
+									  <?php if(!empty($stu_nogroup)){?>
+										<li class="dropdown-notifications-list scrollable-container">
+											<ul class="list-group list-group-flush">
+												<?php foreach($stu_nogroup as $key=> $stunogro){
+													$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$stunogro['stu_id'];
+													$stuName = $stunogro['studentNameKh'];
+													$stuName = empty($stuName) ? $stunogro['studentNameEng'] : $stuName;
+												?>
 				                          	<li class="event " title="<?php echo $stunogro['stu_khname']." ".$stunogro['stu_code'];?>">
-				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $stunogro['branch_name'];?></span>
-				                         	 <a href="<?php echo $url;?>">
-				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-				                         	 	
-					                            <div class="media-body">
-					                              <?php if (!empty($stunogro['stu_code'])){?>
-					                              <span ><?php echo $stunogro['stu_code'];?>  
-					                              </span><br />
-					                              <?php }?>
-					                              <span class="title bold" ><?php echo $stunogro['stu_khname'];?></span><br />
-					                              <span class="title bold" ><?php echo $stunogro['stu_enname']." ".$stunogro['last_name'];?></span><br />
-					                              <span class="title" ><?php echo $tr->translate("DEGREE")." : ".$stunogro['degree_title'];?></span><br />
-					                              <span class="title" ><?php echo $tr->translate("GRADE")." : ".$stunogro['grade_title'];?></span>
-					                            </div>
-				                            </a>
-				                          </li>
+												<span class="text-primary"><i class="fa fa-map-marker" ></i> <strong><?php echo $stunogro['branch_name'];?></strong></span>
+												<a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+													<div class="profile-list char-profile bg-label-primary">
+														<span class="profileChar">
+															<?php echo mb_substr($stuName, 0, 1,'UTF8');?>
+														</span>
+													</div>
+													<div class="bg-style"></div>
+													<div class="media-body">
+													  <span class="title text-truncate"><?php echo empty($stunogro['stu_code']) ? "" : $stunogro['stu_code'];?> <?php echo $stuName;?></span><br />
+													  <span  ><?php echo $tr->translate("DEGREE")." : ".$stunogro['degree_title'];?></span><br />
+													  <span  ><?php echo $tr->translate("GRADE")." : ".$stunogro['grade_title'];?></span>
+													</div>
+												</a>
+											  </li>
 				                          	<?php }?>
+											</ul>
+										</li>
 						                <?php }?> 
-						                  <?php if (count($stu_nogroup)>9){?>
-						                  <li>
-						                      <div class="text-center">
-						                        <a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-notyetgr"?>">
-						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
-						                          <i class="fa fa-angle-right"></i>
-						                        </a>
-						                      </div>
-						                    </li>
-						                   <?php }?>
-						               </ul>
+											
+										<?php if ($countingSt>1){?>
+										<li class="dropdown-menu-footer border-top">
+											<a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-notyetgr"?>" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-30  align-items-center">
+											  <?php echo $tr->translate("SHOW_ALL");?>
+											</a>
+										</li>
+									   <?php }?>
+									</ul>
 					            </li>
 					            <?php }?>
 					            <?php 
 					            if (empty($session_user->isnot_cutstock_acl)){
 					            ?>
 				                <li role="presentation" class="dropdown">
-					                  <a title="<?php echo $tr->translate("STUDENT_PRODUCT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+									<a title="<?php echo $tr->translate("STUDENT_PRODUCT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-cubes "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if ((count($stuproduct)+count($stuproductNew))>0){ echo (count($stuproduct)+count($stuproductNew));}?></span>
-					                  </a>
-					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><i class="fa fa-cubes "></i> <?php echo $tr->translate("STUDENT_PRODUCT");?></h4>
-						                  </li>
-						                  <?php if(!empty($stuproductNew)){?>
-						                  <li class=" event ">
-						                  	<span><i class="fa fa-cubes "></i> <?php echo $tr->translate("NEW_RECEIPT_PRODUCT");?></span>
-						                  </li>
-						                  	<?php foreach($stuproductNew as $key=> $rspro){
-				                          	$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
-					                          	$style="";
-					                          	if (!empty($rspro['pro_images'])){
-					                          		if (file_exists(PUBLIC_PATH.'/images/proimage/'.$rspro['pro_images'])) {
-					                          			$style="background: url(".$this->baseUrl()."/images/proimage/".$rspro['pro_images'].");  background-repeat: no-repeat; background-size: 100%;";
-					                          		}
-					                          	}
-				                          	?>
-				                          	<li class="event " title="<?php echo $rspro['items_name'];?>">
-				                          		<span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rspro['branch_name'];?></span>
-				                         	 <a href="<?php echo $url;?>">
-				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="media-body">
-					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
-					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
-					                              <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
-					                              <span class="title" ><?php echo $rspro['items_name'];?></span><br />
-					                              <span ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
-					                            </div>
-				                            </a>
-				                          </li>
-				                          	<?php }?>
-						                  <?php }?>
-						                  <?php if(!empty($stuproduct)){?>
-						                  <li class=" event ">
-						                  	<span><i class="fa fa-cubes "></i> <?php echo $tr->translate("OLD_RECEIPT_PRODUCT");?></span>
-						                  </li>
-						                  	<?php foreach($stuproduct as $key=> $rspro){
-				                          	$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
-					                          	$style="";
-						                  		if (!empty($rspro['pro_images'])){
-					                          		if (file_exists(PUBLIC_PATH.'/images/proimage/'.$rspro['pro_images'])) {
-					                          			$style="background: url(".$this->baseUrl()."/images/proimage/".$rspro['pro_images'].");  background-repeat: no-repeat; background-size: 100%;";
-					                          		}
-					                          	}
-					                          	$end_dat=date("Y-m-d");
-					                          	$total_day=strtotime($end_dat)-strtotime($rspro['remide_date']);
-					                          	$total_late_day=$total_day/(60*60*24);
-				                          	?>
-				                          	<li class="event " title="<?php echo $rspro['items_name'];?>">
-				                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rspro['branch_name'];?></span>
-				                         	 <a href="<?php echo $url;?>">
-				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="media-body">
-					                              <span class="title stu bold" ><?php echo $rspro['stu_code'];?>  <?php echo $rspro['stu_enname']." ".$rspro['last_name'];?></span>
-					                               <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
-					                              <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
-					                              <span class="title" ><?php echo $rspro['items_name'];?></span><br />
-					                              <span  ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
-					                              <p> 
-					                              <?php if ($total_late_day>0){?>
-					                              <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
-					                              <?php }?>
-					                              <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rspro['remide_date'])); ?></small>
-					                              </p>
-					                            </div>
-				                            </a>
-				                          </li>
-				                          	<?php }?>
-						                  <?php }?>
-						                  <?php if ((count($stuproduct)+count($stuproductNew))>19){?>
-						                  <li>
-						                      <div class="text-center">
-						                        <a href="<?php echo $this->baseUrl()."/allreport/stock/rpt-student-product"?>">
-						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
-						                          <i class="fa fa-angle-right"></i>
-						                        </a>
-						                      </div>
-						                    </li>
-						                  <?php }?>
-						              </ul>
-						         </li>
-						         <?php }?>
-						         <?php if (empty($session_user->isnot_student_acl)){?>
+										<?php 
+										$countingStuProduct = (count($stuproduct)+count($stuproductNew));
+										if ($countingStuProduct>0){ 
+											$stSupProduct="";
+											if($countingStuProduct>9){
+												$countingStuProduct=9;
+												$stSupProduct='<sup>+</sup>';
+											}
+										?>
+										<span id="countNews" class="badge bg-green"><?php  echo $countingStuProduct.$stSupProduct; ?></span>
+										<?php } ?>
+									</a>
+									<ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+										<li class="dropdown-menu-header border-bottom">
+											<div class="dropdown-header d-flex align-items-center justify-content-center">
+											  <h6 class="text-white m-0 me-auto"><i class="fa fa-cubes"></i> <?php echo $tr->translate("STUDENT_PRODUCT");?></h6>
+											</div>
+										</li>
+										<li class="dropdown-notifications-list scrollable-container">
+											<ul class="list-group list-group-flush">
+											  <?php if(!empty($stuproductNew)){?>
+												<li class=" event ">
+													<span><i class="fa fa-cubes "></i> <?php echo $tr->translate("NEW_RECEIPT_PRODUCT");?></span>
+												</li>
+												<?php foreach($stuproductNew as $key=> $rspro){
+													$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
+													$stuName = $rspro['studentNameKh'];
+													$stuName = empty($stuName) ? $rspro['studentNameEng'] : $stuName;
+												?>
+												<li class="event " title="<?php echo $rspro['items_name'];?>">
+													<span class="text-primary"><i class="fa fa-map-marker" ></i> <strong><?php echo $rspro['branch_name'];?></strong></span>
+													<a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+														<div class="profile-list char-profile bg-label-primary">
+															<span class="profileChar">
+																<?php echo mb_substr($stuName, 0, 1,'UTF8');?>
+															</span>
+														</div>
+														<div class="bg-style" ></div>
+														<div class="media-body">
+															<span class="title stu text-truncate" ><?php echo $rspro['studentCode'];?>  <?php echo $stuName;?></span>
+															<span ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
+															<span ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
+															<span ><?php echo $rspro['items_name'];?></span><br />
+															<span ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
+														</div>
+													</a>
+												  </li>
+												<?php }?>
+											  <?php }?>
+											  <?php if(!empty($stuproduct)){?>
+											  <li class=" event ">
+												<span><i class="fa fa-cubes "></i> <?php echo $tr->translate("OLD_RECEIPT_PRODUCT");?></span>
+											  </li>
+												<?php foreach($stuproduct as $key=> $rspro){
+													$url = $this->url(array('module'=>'stock','controller'=>'cutstock','action'=>'add'), null, true)."/id/".$rspro['stu_id'];
+													$end_dat=date("Y-m-d");
+													$total_day=strtotime($end_dat)-strtotime($rspro['remide_date']);
+													$total_late_day=$total_day/(60*60*24);
+													
+													$stuName = $rspro['studentNameKh'];
+													$stuName = empty($stuName) ? $rspro['studentNameEng'] : $stuName;
+												?>
+												<li class="event " title="<?php echo $rspro['items_name'];?>">
+													 <span class="title text-primary" ><i class="fa fa-map-marker" ></i> <strong><?php echo $rspro['branch_name'];?></strong></span>
+													 <a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+														<div class="profile-list char-profile bg-label-primary">
+															<span class="profileChar">
+																<?php echo mb_substr($stuName, 0, 1,'UTF8');?>
+															</span>
+														</div>
+														<div class="bg-style" ></div>
+														<div class="media-body">
+														  <span class="title stu bold text-truncate" ><?php echo $rspro['studentCode'];?>  <?php echo $stuName;?></span>
+														   <span class="title" ><?php echo $tr->translate("TEL")." : ".$rspro['tel'];?></span><br />
+														  <span class="title" ><?php echo $tr->translate("RECEIPT")." : ".$rspro['receipt_number'];?></span><br />
+														  <span class="title" ><?php echo $rspro['items_name'];?></span><br />
+														  <span  ><?php echo $tr->translate("AMOUNT")." <strong>".$rspro['qty_balance']."</strong>";?></span>
+														  <p> 
+														  <?php if ($total_late_day>0){?>
+														  <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+														  <?php }?>
+														  <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rspro['remide_date'])); ?></small>
+														  </p>
+														</div>
+													</a>
+												  </li>
+												<?php }?>
+											  <?php }?>
+											</ul>
+										</li>
+										<?php if ($countingStuProduct>1){?>
+										<li class="dropdown-menu-footer border-top">
+											<a href="<?php echo $this->baseUrl()."/allreport/stock/rpt-student-product"?>" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-30  align-items-center">
+											  <?php echo $tr->translate("SHOW_ALL");?>
+											</a>
+										</li>
+									   <?php }?>
+									</ul>
+								</li>
+							 <?php }?>
+							 <?php if (empty($session_user->isnot_student_acl)){?>
 				                <li role="presentation" class="dropdown">
-					                  <a title="<?php echo $tr->translate("STUDENT_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
-					                    <i class="fa fa-file-text-o "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if (count($stu_doc)>0){ echo count($stu_doc);}?></span>
-					                  </a>
-					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("STUDENT_DOCUMENT");?></h4>
-						                  </li>
-						                    <?php if(!empty($stu_doc)){?>
+									<a title="<?php echo $tr->translate("STUDENT_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-file-text-o "></i>
+										<?php 
+										$countingStDoc = count($stu_doc);
+										if ($countingStDoc>0){ 
+											$stSupDoc="";
+											if($countingStDoc>9){
+												$countingStDoc=9;
+												$stSupDoc='<sup>+</sup>';
+											}
+										?>
+										<span id="countNews" class="badge bg-green"><?php  echo $countingStDoc.$stSupDoc; ?></span>
+										<?php } ?>
+									</a>
+									<ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+										<li class="dropdown-menu-header border-bottom">
+											<div class="dropdown-header d-flex align-items-center justify-content-center">
+											  <h6 class="text-white m-0 me-auto"><i class="fa fa-file-text-o"></i> <?php echo $tr->translate("STUDENT_DOCUMENT");?></h6>
+											</div>
+										</li>
+										<?php if(!empty($stu_doc)){?>
+										<li class="dropdown-notifications-list scrollable-container">
+											<ul class="list-group list-group-flush">
 						                  	<?php foreach($stu_doc as $key=> $rsdoc){
-				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rsdoc['stu_id'];
-					                          	$style="";
-					                          	if (!empty($rsdoc['branch_logo'])){
-					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rsdoc['branch_logo'])) {
-					                          			$style="background: url(/elt/trunk/public/images/".$rsdoc['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
-					                          		}
-					                          	}
+												$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rsdoc['stu_id'];
+					                          	
 					                          	$end_dat=date("Y-m-d");
 					                          	$total_day=strtotime($end_dat)-strtotime($rsdoc['date_end']);
 					                          	$total_late_day=$total_day/(60*60*24);
+												
+												$stuName = $rsdoc['studentNameKh'];
+												$stuName = empty($stuName) ? $rsdoc['studentNameEng'] : $stuName;
 				                          	?>
-				                          	<li class="event " title="<?php echo $rsdoc['document_type'];?>">
-				                         	  <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rsdoc['branch_name'];?></span>
-				                         	 	<a href="<?php echo $url;?>">
-				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="media-body">
-					                            <?php if (!empty($rsdoc['stu_code'])){?>
-					                              <span ><?php echo $rsdoc['stu_code'];?>  
-					                              </span><br />
-					                              <?php }?>
-					                              <span class="title bold" ><?php echo $rsdoc['stu_enname']." ".$rsdoc['last_name'];?></span><br />
-					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
-					                              <span class="title" ><?php echo $rsdoc['document_type'];?></span>
-					                              <p> 
-					                               <?php if ($total_late_day>0){?>
-					                              <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
-					                              <?php }?>
-					                              <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rsdoc['date_end'])); ?></small>
-					                              </p>
-					                            </div>
-				                            </a>
-				                          </li>
-				                          	<?php }?>
-				                          <?php }?>
-						                  <?php if (count($stu_doc)>15){?>
-						                  <li>
-						                      <div class="text-center">
-						                        <a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-document"?>">
-						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
-						                          <i class="fa fa-angle-right"></i>
-						                        </a>
-						                      </div>
-						                    </li>
-						                   <?php }?>
-						               </ul>
+												<li class="event " title="<?php echo $rsdoc['document_type'];?>">
+													<span class="title text-primary" ><i class="fa fa-map-marker" ></i> <strong><?php echo $rsdoc['branch_name'];?></strong></span>
+													<a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+														<div class="profile-list char-profile bg-label-primary">
+															<span class="profileChar">
+																<?php echo mb_substr($stuName, 0, 1,'UTF8');?>
+															</span>
+														</div>
+														<div class="bg-style"></div>
+														<div class="media-body">
+															<span class="title text-truncate" ><?php echo $rsdoc['studentCode']." ".$stuName;?></span>
+															<span><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
+															<span class="text-truncate"><?php echo $rsdoc['document_type'];?></span>
+															<p> 
+															<?php if ($total_late_day>0){?>
+															<small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+															<?php }?>
+															<small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rsdoc['date_end'])); ?></small>
+															</p>
+														</div>
+													</a>
+											  </li>
+										<?php } ?>
+											</ul>
+										</li>
+									  <?php }?>
+										<?php if ($countingStDoc>1){?>
+										<li class="dropdown-menu-footer border-top">
+											<a href="<?php echo $this->baseUrl()."/allreport/allstudent/rpt-student-document"?>" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-30  align-items-center">
+											  <?php echo $tr->translate("SHOW_ALL");?>
+											</a>
+										</li>
+									   <?php }?>
+								   </ul>
 					            </li>
 					             <?php }?>
 					            <?php if (empty($session_user->isnot_lecturer_acl)){?>
 					            <li role="presentation" class="dropdown">
-					                  <a title="<?php echo $tr->translate("TEACHER_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+									<a title="<?php echo $tr->translate("TEACHER_DOCUMENT");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
 					                    <i class="fa fa-file-text-o "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if (count($teacher_doc)>0){ echo count($teacher_doc);}?></span>
-					                  </a>
-					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><i class="fa fa-file-text-o "></i> <?php echo $tr->translate("TEACHER_DOCUMENT");?></h4>
-						                  </li>
-						                   <?php if(!empty($teacher_doc)){?>
+										<?php 
+										$countingTeacherDoc = count($teacher_doc);
+										if ($countingTeacherDoc>0){ 
+											$tSupDoc="";
+											if($countingTeacherDoc>9){
+												$countingTeacherDoc=9;
+												$tSupDoc='<sup>+</sup>';
+											}
+										?>
+											<span id="countNews" class="badge bg-green"><?php  echo $countingTeacherDoc.$tSupDoc; ?></span>
+										<?php } ?>
+					                    
+									</a>
+									<ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+										<li class="dropdown-menu-header border-bottom">
+											<div class="dropdown-header d-flex align-items-center justify-content-center">
+											  <h6 class="text-white m-0 me-auto"><i class="fa fa-file-text-o"></i> <?php echo $tr->translate("TEACHER_DOCUMENT");?></h6>
+											</div>
+										</li>
+									   <?php if(!empty($teacher_doc)){?>
+										<li class="dropdown-notifications-list scrollable-container">
+											<ul class="list-group list-group-flush">
 							                  	<?php foreach($teacher_doc as $key=> $rsdoc){
-					                          	$url = $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
-						                          	$style="";
-						                          	if (!empty($rsdoc['branch_logo'])){
-						                          		if (file_exists(PUBLIC_PATH.'/images/'.$rsdoc['branch_logo'])) {
-						                          			$style="background: url(/elt/trunk/public/images/".$rsdoc['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
-						                          		}
-						                          	}
+													$url = $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'edit'), null, true)."/id/".$rsdoc['stu_id'];
+						                          	
 						                          	$end_dat=date("Y-m-d");
 						                          	$total_day=strtotime($end_dat)-strtotime($rsdoc['date_end']);
 						                          	$total_late_day=$total_day/(60*60*24);
+													
+													$teacName = $rsdoc['teacher_name_kh'];
+													$teacName = empty($teacName) ? $rsdoc['studentNameEng'] : $teacName;
 					                          	?>
 					                          	<li class="event " title="<?php echo $rsdoc['document_type'];?>">
-					                         	 <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rsdoc['branch_name'];?></span>
-					                         	 <a href="<?php echo $url;?>">
-					                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-						                            <div class="media-body">
-						                              <span ><?php echo $rsdoc['teacher_code'];?>  
-						                              </span><br />
-						                              <span class="title bold" ><?php echo $rsdoc['teacher_name_kh'];?></span><br />
-						                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
-						                              <span class="title" ><?php echo $rsdoc['document_type'];?></span>
-						                              <p> 
-						                               <?php if ($total_late_day>0){?>
-						                              <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
-						                              <?php }?>
-						                              <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rsdoc['date_end'])); ?></small>
-						                              </p>
-						                            </div>
-					                            </a>
-					                          </li>
+													<span class="title text-primary" ><i class="fa fa-map-marker" ></i> <strong><?php echo $rsdoc['branch_name'];?></strong></span>
+													 <a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+														<div class="profile-list char-profile bg-label-primary">
+															<span class="profileChar">
+																<?php echo mb_substr($teacName, 0, 1,'UTF8');?>
+															</span>
+														</div>
+														<div class="bg-style"></div>
+														<div class="media-body">
+														  
+														  <span class="title text-truncate" ><?php echo $rsdoc['teacher_code']." ".$teacName;?></span><br />
+														  <span  ><?php echo $tr->translate("TEL")." : ".$rsdoc['tel'];?></span><br />
+														  <span class="text-truncate" ><?php echo $rsdoc['document_type'];?></span>
+														  <p> 
+														   <?php if ($total_late_day>0){?>
+														  <small><?php echo $tr->translate("LATE")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+														  <?php }?>
+														  <small><?php echo $tr->translate("DATE_GIVE")." : ".date("d/M/Y",strtotime($rsdoc['date_end'])); ?></small>
+														  </p>
+														</div>
+													</a>
+												</li>
 					                          	<?php }?>
-						                 	<?php }?>
-						                  <?php if (count($teacher_doc)>15){?>
-						                  <li>
-						                      <div class="text-center">
-						                        <a href="<?php echo $this->baseUrl()."/allreport/allstaff/rpt-teacheralert"?>">
-						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
-						                          <i class="fa fa-angle-right"></i>
-						                        </a>
-						                      </div>
-						                    </li>
-						                   <?php }?>
-						               </ul>
+											</ul>
+										</li>
+										<?php }?>
+										<?php if ($countingTeacherDoc>1){?>
+										<li class="dropdown-menu-footer border-top">
+											<a href="<?php echo $this->baseUrl()."/allreport/allstaff/rpt-teacheralert"?>" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-30  align-items-center">
+											  <?php echo $tr->translate("SHOW_ALL");?>
+											</a>
+										</li>
+									   <?php }?>
+								   </ul>
 					            </li>
-					             <?php }?>
-					             <?php if (empty($session_user->isnot_creditmemo_acl)){?>
+							<?php }?>
+							<?php if (empty($session_user->isnot_creditmemo_acl)){?>
 					            <li role="presentation" class="dropdown">
-					                  <a title="<?php echo $tr->translate("Credit Memo Expired");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
-					                    <i class="fa fa-credit-card "></i>
-					                    <span id="countNews" class="badge bg-green"><?php if (count($creditNotif)>0){ echo count($creditNotif);}?></span>
-					                  </a>
-					                  <ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
-						                 <li class=" event title">
-						                  	<h4><i class="fa fa-credit-card "></i> <?php echo $tr->translate("Credit Memo Expired");?></h4>
-						                  </li>
-						                  <?php if(!empty($creditNotif)){?>
-						                  	<?php foreach($creditNotif as $key=> $rscrd){
-				                          	$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rscrd['id'];
-					                          	$style="";
-					                          	if (!empty($rscrd['branch_logo'])){
-					                          		if (file_exists(PUBLIC_PATH.'/images/'.$rscrd['branch_logo'])) {
-					                          			$style="background: url(/elt/trunk/public/images/".$rscrd['branch_logo'].");  background-repeat: no-repeat; background-size: 100%;";
-					                          		}
-					                          	}
-					                          	$end_dat=date("Y-m-d");
-					                          	$total_day=strtotime($end_dat)-strtotime($rscrd['end_date']);
-					                          	$total_late_day=$total_day/(60*60*24);
-				                          	?>
-				                          	<li class="event " title="<?php echo $rscrd['stu_enname']." ".$rscrd['last_name'];?>">
-				                         	  <span class="title bold" style="color: #1abb9c;" ><i class="fa fa-map-marker" aria-hidden="true"></i> <?php echo $rscrd['branch_name'];?></span>
-				                         	 	<a href="<?php echo $url;?>">
-				                         	 	<div class="bg-style" style="<?php echo $style;?>"></div>
-					                            <div class="media-body">
-					                            <?php if (!empty($rscrd['stu_code'])){?>
-					                              <span ><?php echo $rscrd['stu_code'];?>  
-					                              </span><br />
-					                              <?php }?>
-					                              <span class="title bold" ><?php echo $rscrd['stu_enname']." ".$rscrd['last_name'];?></span><br />
-					                              <span class="title" ><?php echo $tr->translate("TEL")." : ".$rscrd['tel'];?></span><br />
-					                              <p> 
-					                               <?php if ($total_late_day>0){?>
-					                              <small><?php echo $tr->translate("EXPIRED")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
-					                              <?php }?>
-					                              <small><?php echo $tr->translate("EXPIRE_DATE")." : ".date("d/M/Y",strtotime($rscrd['end_date'])); ?></small>
-					                              </p>
-					                            </div>
-				                            </a>
-				                          </li>
+									<a title="<?php echo $tr->translate("Credit Memo Expired");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-credit-card "></i>
+										 <?php 
+										  $countingCredit = count($creditNotif);
+										  if ($countingCredit>0){ 
+												$stSupCredit="";
+												if($countingCredit>9){
+													$countingCredit=9;
+													$stSupCredit='<sup>+</sup>';
+												}
+										  ?>
+										  <span id="countNews" class="badge bg-green"><?php  echo $countingCredit.$stSupCredit; ?></span>
+										<?php } ?>
+										
+									</a>
+									<ul id="menu1" class="dropdown-menu list-unstyled " role="menu">
+										<li class="dropdown-menu-header border-bottom">
+											<div class="dropdown-header d-flex align-items-center justify-content-center">
+											  <h6 class="text-white m-0 me-auto"><i class="fa fa-credit-card"></i> <?php echo $tr->translate("Credit Memo Expired");?></h6>
+											</div>
+										</li>
+										<?php if(!empty($creditNotif)){?>
+										<li class="dropdown-notifications-list scrollable-container">
+											<ul class="list-group list-group-flush">
+												<?php foreach($creditNotif as $key=> $rscrd){
+													$url = $this->url(array('module'=>'home','controller'=>'searchstudentinfo','action'=>'student-detail'), null, true)."/id/".$rscrd['id'];
+													
+													$end_dat=date("Y-m-d");
+													$total_day=strtotime($end_dat)-strtotime($rscrd['end_date']);
+													$total_late_day=$total_day/(60*60*24);
+													
+													$stuName = $rscrd['studentNameKh'];
+													$stuName = empty($stuName) ? $rscrd['studentNameEng'] : $stuName;
+												?>
+												<li class="event " title="<?php echo $rscrd['stu_enname']." ".$rscrd['last_name'];?>">
+													<span class="title text-primary" ><i class="fa fa-map-marker" ></i> <strong><?php echo $rscrd['branch_name'];?></strong></span>
+													<a class="d-flex align-content-center align-items-center" href="<?php echo $url;?>">
+														<div class="profile-list char-profile bg-label-primary">
+															<span class="profileChar">
+																<?php echo mb_substr($stuName, 0, 1,'UTF8');?>
+															</span>
+														</div>
+														<div class="bg-style" ></div>
+														<div class="media-body">
+														  <span class="title text-truncate" ><?php echo $rscrd['studentCode']." ".$stuName;?></span><br />
+														  <span ><?php echo $tr->translate("TEL")." : ".$rscrd['tel'];?></span><br />
+														  <p> 
+														   <?php if ($total_late_day>0){?>
+														  <small><?php echo $tr->translate("EXPIRED")." : ".abs($total_late_day)." ".$tr->translate("DAY"); ?></small><br />
+														  <?php }?>
+														  <small><?php echo $tr->translate("EXPIRE_DATE")." : ".date("d/M/Y",strtotime($rscrd['end_date'])); ?></small>
+														  </p>
+														</div>
+													</a>
+												  </li>
 				                          	<?php }?>
-						                  <?php }?>
-						                  <?php if (count($creditNotif)>15){?>
-						                  <li>
-						                      <div class="text-center">
-						                        <a href="<?php echo $this->baseUrl()."/allreport/accounting/rpt-creditmemo"?>">
-						                          <strong><?php echo $tr->translate("SHOW_ALL");?></strong>
-						                          <i class="fa fa-angle-right"></i>
-						                        </a>
-						                      </div>
-						                    </li>
-						                   <?php }?>
-						               </ul>
+											</ul>
+										</li>
+									  <?php }?>
+										<?php if ($countingCredit>1){?>
+										<li class="dropdown-menu-footer border-top">
+											<a href="<?php echo $this->baseUrl()."/allreport/accounting/rpt-creditmemo"?>" class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-30  align-items-center">
+											  <?php echo $tr->translate("SHOW_ALL");?>
+											</a>
+										</li>
+									   <?php }?>
+									</ul>
 					            </li>
 					            <?php }?>

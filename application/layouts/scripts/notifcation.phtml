@@ -61,13 +61,7 @@ if (empty($session_user->isnot_creditmemo_acl)){
 	$creditNotif = $dbNotification->getCreditMemoNearExpired($arrCon);
 }
 ?>
-<style>
-.top_nav .dropdown-menu li div.bg-style{
-	background: url(<?php echo $this->baseUrl()."/images/logo.png";?>);  
-	background-repeat: no-repeat; 
-	background-size: 100%;
-}
-</style>
+
 								<?php if (empty($session_user->isnot_crm_acl)){?>
 				                <li role="presentation" class="dropdown">
 					                  <a title="<?php echo $tr->translate("CRM For Follow Up");?>" href="javascript:;"  class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="true">

@@ -472,7 +472,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" FROM 
 						`rms_group_subject_detail` AS gsjb
 						JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 AND g.is_pass=2
-						JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1
+						JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1 AND sett.academicYear = g.academic_year
 							LEFT JOIN (rms_student AS s JOIN `rms_group_detail_student` AS gds ON  gds.stu_id = s.stu_id AND s.status = 1 AND s.customer_type=1 AND gds.stop_type = 0) ON  gds.group_id = g.id
 							LEFT JOIN (`rms_grading_tmp` AS tmp JOIN `rms_exametypeeng` AS cri ON cri.id = tmp.criteriaId AND cri.criteriaType=2 ) ON tmp.settingEntryId = sett.id AND tmp.groupId = gsjb.group_id AND tmp.subjectId = gsjb.subject_id
 							LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs 
@@ -759,7 +759,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						$stringWhere = " AND ass.id = ".$_data['assessmentId'];
 					}
 					$sqlColScoreValue.="
-						,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id LIMIT 1),'') AS teacherComment
+						,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id ORDER BY assD.teacherComment DESC LIMIT 1),'') AS teacherComment
 						,COALESCE((SELECT assD.commentId FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id LIMIT 1),'0') AS isEvaluated
 					";
 				}
@@ -1140,17 +1140,20 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					";
 			}
 			$sql.=$sqlColScoreValue;
+			if(!empty($_data['forIssueMonthly'])){
+				$subjectId = empty($_data['subjectId'])?0:$_data['subjectId'];
+				$sql.=",COALESCE((SELECT subd.`max_score` FROM `rms_group_subject_detail` AS subd WHERE gds.group_id = subd.`group_id` AND subd.`subject_id`= $subjectId LIMIT 1 ),0) AS maxSubjectScore";
+				$sql.=",COALESCE((SELECT subd.`semester_max_score` FROM `rms_group_subject_detail` AS subd WHERE gds.group_id = subd.`group_id` AND subd.`subject_id`= $subjectId LIMIT 1 ),0) AS maxSubjectScoreSemester";
+			}
 			$sql.="
 				FROM 
-					`rms_group_detail_student` AS gds,
-					rms_student AS s  
+					`rms_group_detail_student` AS gds JOIN rms_student AS s ON gds.stu_id = s.stu_id 
 			";
 			$sql.=$sqlTmpJoin;
 			
 			
 			$sql.="WHERE 
-					gds.stu_id = s.stu_id 
-					AND gds.itemType=1 
+					gds.itemType=1 
 					AND s.status = 1 
 					AND s.customer_type=1
 					AND gds.stop_type = 0 ";
@@ -1373,7 +1376,8 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			elseif($rs['attendanceType']==5 AND $rowStudentInfo["totalEalyLeave"] >0){
 				$totalDeduct = $totalDeduct+($rowStudentInfo['totalEalyLeave']*$rs['scoreDeduct']);
 			}
-			if($key==0){$maxAttendance = $rs["attendanceScore"];}
+			//if($key==0){$maxAttendance = $rs["attendanceScore"];}
+			if($key==0){$maxAttendance = empty($rowStudentInfo["maxSubjectScore"]) ? 0 : $rowStudentInfo["maxSubjectScore"];}
 		}
 		$scoreAttendance = $maxAttendance - $totalDeduct;
 		if($scoreAttendance<0){
@@ -2172,7 +2176,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.=" AND g.is_pass =".$_data['groupProcess'];
 			}
 			$sql.=" GROUP BY g.id ";
-			$sql.=" ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
+			$sql.=" ORDER BY g.`academic_year` DESC ,g.degree ASC,g.grade ASC,g.group_code ASC ";
 			
 			if(!empty($_data['LimitStart'])){
 				$sql.=" LIMIT ".$_data['LimitStart'].",".$_data['limitRecord'];
@@ -2510,6 +2514,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$db->beginTransaction();
     	try{
 			$format = 'Y-m-d';
+			
 			$_data['userId']	= empty($_data['userId'])?0:$_data['userId'];
 			$_data['studentId']	= empty($_data['studentId'])?0:$_data['studentId'];
 			
@@ -2575,16 +2580,18 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				
 			}
 			if(!empty($commentList)){
-				foreach($commentList as $comment){
+				foreach($commentList as $key => $comment){
+					$teacherComment=  ($key>0) ? null : $_data['teacherComment'];
 					if(!empty($comment['detailId'])){
 						$arrDetail = array(
 							'assessmentId'		=>$assessmentId,
 							'studentId'			=>$_data['studentId'],
 							'commentId'			=>$comment['commentId'],
 							'ratingId'			=>$comment['ratingValue'],
-							'teacherComment'	=>$_data['teacherComment'],
+							'teacherComment'	=>$teacherComment,
 							
 						);
+						
 						$this->_name='rms_studentassessment_detail';
 						$whereDetail = " id =".$comment['detailId'];
 						$this->update($arrDetail, $whereDetail);
@@ -2594,7 +2601,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							'studentId'			=>$_data['studentId'],
 							'commentId'			=>$comment['commentId'],
 							'ratingId'			=>$comment['ratingValue'],
-							'teacherComment'	=>$_data['teacherComment'],
+							'teacherComment'	=>$teacherComment,
 						);
 						$this->_name='rms_studentassessment_detail';
 						$this->insert($arrDetail);

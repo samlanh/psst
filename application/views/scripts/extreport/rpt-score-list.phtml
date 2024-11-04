@@ -322,39 +322,12 @@
 							</tr>
 							<tr>
 								<td colspan="3" id="exportExcel" valign="top">
-									<table class="content-data"  cellpadding="2"​  border="1" style="border-bottom: solid 1px #3c4b76;">
+									
+									<table class="content-data"  cellpadding="2" border="1" >
 										<thead>
-											<tr class="style" align="left" >
-												<td width="40%" style="padding-left: 20px;">
-													<?php echo $rs['subjectTitleKh']." / ".$rs['subjectTitleEng']; ?>
-												</td>	
-												<td width="60%">
-													គ្រូបង្រៀន / Teacher : <?php echo $rs['teaccherNameKh']." / ".$rs['teaccherNameEng']; ?>
-												</td>	
-											</tr>
-										</thead>
-									</table>
-									<table class="content-data"  cellpadding="2"​  border="1" >
-										<thead>
-											
-											<tr class="style" align="center" >
-												<td	scope="col" rowspan="3">
-													<span class="khmerLabel">ល.រ</span>
-													<span class="englishLabel">N<sup>o</sup></span>
-												</td>
-												<td scope="col" rowspan="3">
-													<span class="khmerLabel">អត្តលេខ</span>
-													<span class="englishLabel">ID</span>
-												</td>
-												<td scope="col" rowspan="3" colspan="2">
-													<span class="khmerLabel">គោត្តនាម-នាម</span>
-													<span class="englishLabel">Student Name</span>
-												</td>
-												<td scope="col" rowspan="3">
-													<span class="khmerLabel">ភេទ</span>
-													<span class="englishLabel">Sex</span>
-												</td>
-												<?php 
+											<?php 
+											$htmlContent="";
+											$mainColSpan=1;
 													$subCol="";
 													$subColII="";
 													$colSpan=1;
@@ -381,12 +354,14 @@
 																	$subColII.='<td scope="col">';
 																	$subColII.=$maxSubjectScore;
 																	$subColII.='</td>';
+																	$mainColSpan = $mainColSpan+1;
 																}
 															}else{
 																
 																$subCol.='<td rowspan="2" scope="col">';
 																$subCol.=$maxSubjectScore;
 																$subCol.='</td>';
+																$mainColSpan = $mainColSpan+1;
 															}
 							
 														}else{
@@ -402,6 +377,7 @@
 															$currentTimeInput = count($rsScore);
 
 															if($currentTimeInput>1){
+																
 																$colSpan=$currentTimeInput;
 																$subCol.='<td colspan="'.$colSpan.'"scope="col">';
 																$subCol.=$criterial['criterialTitleEng'];
@@ -410,6 +386,7 @@
 																$subColII.='<td colspan="'.$colSpan.'"scope="col">';
 																$subColII.=$maxSubjectScore;
 																$subColII.='</td>';
+																$mainColSpan = $mainColSpan+$currentTimeInput;
 															}else{
 																$colSpan=1;
 																$subCol.='<td scope="col">';
@@ -419,16 +396,45 @@
 																$subColII.='<td scope="col">';
 																$subColII.=$maxSubjectScore;
 																$subColII.='</td>';
+																$mainColSpan = $mainColSpan+1;
 															}
 														}
-												?>
-												<td scope="col" colspan="<?php echo $colSpan;?>">
-													<span class="khmerLabel"><?php echo $criterial['criterialTitle'];?></span>
-													<?php if(!empty($criterial['subjectId'])){?>
-													<span class="englishLabel"><?php echo $criterial['criterialTitleEng'];?></span>
-													<?php } ?>
+														
+														$htmlContent.='
+														<td scope="col" colspan="'.$colSpan.'">
+															<span class="khmerLabel">'.$criterial['criterialTitle'].'</span>';
+														if(!empty($criterial['subjectId'])){
+															$htmlContent.='<span class="englishLabel">'.$criterial['criterialTitleEng'].'</span>';
+														}
+												$htmlContent.='</td>';
+												 } ?>
+												
+											<tr class="style" align="left" >
+												<td colspan="4" style="padding-left: 20px;">
+													<?php echo $rs['subjectTitleKh']." / ".$rs['subjectTitleEng']; ?>
+												</td>	
+												<td colspan="<?php echo ($mainColSpan+4);?>">
+													គ្រូបង្រៀន / Teacher : <?php echo $rs['teaccherNameKh']." / ".$rs['teaccherNameEng']; ?>
+												</td>	
+											</tr>
+											<tr class="style" align="center" >
+												<td	scope="col" rowspan="3">
+													<span class="khmerLabel">ល.រ</span>
+													<span class="englishLabel">N<sup>o</sup></span>
 												</td>
-												<?php } ?>
+												<td scope="col" rowspan="3">
+													<span class="khmerLabel">អត្តលេខ</span>
+													<span class="englishLabel">ID</span>
+												</td>
+												<td scope="col" rowspan="3" colspan="2">
+													<span class="khmerLabel">គោត្តនាម-នាម</span>
+													<span class="englishLabel">Student Name</span>
+												</td>
+												<td scope="col" rowspan="3">
+													<span class="khmerLabel">ភេទ</span>
+													<span class="englishLabel">Sex</span>
+												</td>
+												<?php echo $htmlContent; ?>
 												
 												<td scope="col" rowspan="3">
 													<span class="khmerLabel">មធ្យមភាគ	</span>

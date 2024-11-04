@@ -1377,6 +1377,10 @@ $(document).ready(function() {
 		template += '<div class="form-group"><a href="javascript:void(0);" class="switchButton status"></a>';
 		checked = 'checked';
 		disabled = '';
+		if(isInititilize==1){
+			checked = '';
+			disabled="disabled"
+		}
 		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' />';
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';

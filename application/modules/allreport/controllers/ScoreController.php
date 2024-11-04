@@ -113,10 +113,19 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	
 		$row = $db->getScoreExamByID($id);
-		
+		$this->view->scoreResult=$row;
+
 		$this->view->subj = $db->getSubjectScoreGroup($row ['group_id'], null, $row ['exam_type']);
 
-		$this->view->studentgroup  = $db->getStundetScoreDetailGroup($id);
+		$param=array(
+			'group_id' => $row['group_id'],
+			'for_academic_year' => $row['for_academic_year'],
+			'degree' => $row['degree'],
+			'exam_type' => $row['exam_type'],
+			'semesterTotalAverage' => $row['semesterTotalAverage'],
+		);
+
+		$this->view->studentgroup  = $db->getStundetScoreDetailGroup($id,$param);
 		
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data = $key->getKeyCodeMiniInv(TRUE);

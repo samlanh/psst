@@ -197,100 +197,80 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$order = " ORDER BY s.id DESC,g.`id` DESC ,s.for_academic_year,s.for_semester,s.for_month ";
 		return $db->fetchAll($sql . $where . $order);
 	}
-	public function getStundetScoreDetailGroup($id = null)
-	{ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា//តារាងកិត្តិយសមានរូបថត និង អត់រូបថត(២action)
+	public function getStundetScoreDetailGroup($id = null,$param=null)
+	{ // លទ្ធផលប្រចាំខែលម្អិតតាមមុខវិជ្ជា//
 		$db = $this->getAdapter();
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$lang = $_db->currentlang();
-		if ($lang == 1) { // khmer
-			$label = "name_kh";
-			$grade = "rms_itemsdetail.title";
-			$degree = "rms_items.title";
-			$branch = "b.branch_namekh";
-			$month = "month_kh";
-		} else { // English
-			$label = "name_en";
-			$grade = "rms_itemsdetail.title_en";
-			$degree = "rms_items.title_en";
-			$branch = "b.branch_nameen";
-			$month = "month_en";
-		}
 
-		// $exam_type = empty($search['exam_type']) ? 0 : $search['exam_type'];
+		$group = empty($param['group_id']) ? 0 : $param['group_id'];
+		$for_academic_year = empty($param['for_academic_year']) ? 0 : $param['for_academic_year'];
+		$degree = empty($param['degree']) ? 0 : $param['degree'];
+		$exam_type = empty($param['exam_type']) ? 0 : $param['exam_type'];
+		$semesterTotalAverage = empty($param['semesterTotalAverage']) ? 0 : $param['semesterTotalAverage'];
 
 		$sql = "SELECT
-		   	smd.`id`,
-			smd.`student_id`,
-			smd.`group_id`,
-		   	g.`branch_id`,
-			g.semesterTotalAverage,
-			(SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
-			(SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
-			(SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh,
-			(SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameEng,
-		 
-		   	g.`group_code`,
-		   	g.academic_year as for_academic_year,
-		   	`g`.`degree` as degree_id,
-		   	(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear r WHERE r.id=g.academic_year LIMIT 1) AS academic_year,
-		   	(SELECT from_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS start_year,
-		   	(SELECT to_academic FROM rms_tuitionfee AS f WHERE f.id=g.academic_year AND `status`=1 GROUP BY from_academic,to_academic,generation LIMIT 1) AS end_year,
-		   	(SELECT $degree FROM `rms_items` WHERE `rms_items`.`id`=`g`.`degree` AND `rms_items`.`type`=1 LIMIT 1) AS degree,
-		   	(SELECT $grade FROM `rms_itemsdetail` WHERE `rms_itemsdetail`.`id`=`g`.`grade` AND `rms_itemsdetail`.`items_type`=1 LIMIT 1 ) AS grade,
-		   	`g`.`semester` AS `semester`,
-		   	(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
-			(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature,
+		   	sml.`score_id` AS id,
+			sml.`student_id`,
 		   	st.`stu_code`,
 			st.stu_khname,
 			CONCAT(COALESCE(st.last_name,''),' ',COALESCE(st.stu_enname,'')) AS stu_enname,	
 		   	st.`sex`,
-		   	st.photo,
-		   	(SELECT month_kh FROM rms_month WHERE rms_month.id = smd.for_month LIMIT 1) AS for_month,
-		   	smd.exam_type,
-		   	smd.for_semester,
-		   	smd.for_month,
-		   	smd.reportdate,
-			smd.date_input,
-		   	smd.title_score,
-			smd.title_score_en,
-			smd.principalId,
-		   	smd.max_score,
-		   	g.total_score AS total_scoreallsubject,
-
-			smd.total_score,
-			smd.`total_avg` AS average,
-			smd.`monthlySemesterAvg`,
-			smd.overallAssessmentSemester,
-			smd.totalMaxScore,
-			smd.`type`
+			sml.total_score,
+			sml.`total_avg` AS average,
+			sml.`monthlySemesterAvg`,
+			sml.overallAssessmentSemester,
+			sml.totalMaxScore,
+			sml.`type`,
+			vvv.`jsonScoreSubjectDetail`,
+			(SELECT vs.overallAssessmentSemester FROM  v_overall_semester_score AS vs WHERE 
+				vs.`for_semester` = 1 
+				AND vs.student_id = sml.`student_id`
+				AND vs.group_id = $group LIMIT 1) AS overalSemester1,	
+			(SELECT vs.overallAssessmentSemester FROM  v_overall_semester_score AS vs WHERE 
+				vs.`for_semester` = 2
+				AND vs.student_id = sml.`student_id`
+				AND vs.group_id = $group LIMIT 1) AS overalSemester2
 		  ";
-
-		//if ($exam_type == 3) {
-			$sql .= "
-			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = smd.`group_id`  LIMIT 1) AS overalSemester1,
-			(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= st.stu_id AND d.group_id = smd.`group_id`   LIMIT 1) AS overalSemester2 ";
-	//	}
+		  if($exam_type==1){
+				$sql .= "	,(SELECT CONCAT(sd.metion_grade,',',sd.metion_in_khmer,',',sd.mention_in_english)
+					FROM `rms_metionscore_setting_detail` AS sd,
+						`rms_metionscore_setting` AS s
+					WHERE s.id = sd.metion_score_id
+						AND s.academic_year= $for_academic_year
+						AND s.degree = $degree
+						AND (sml.total_score/sml.totalMaxScore*100) >=sd.max_score 
+						ORDER BY sd.max_score DESC
+					LIMIT 1  ) AS mentionScore
+				";
+		  	}else{
+				$sql .= "	,(SELECT CONCAT(sd.metion_grade,',',sd.metion_in_khmer,',',sd.mention_in_english)
+					FROM `rms_metionscore_setting_detail` AS sd,
+						`rms_metionscore_setting` AS s
+					WHERE s.id = sd.metion_score_id
+						AND s.academic_year= $for_academic_year
+						AND s.degree = $degree
+						AND (sml.overallAssessmentSemester/$semesterTotalAverage*100) >=sd.max_score 
+						ORDER BY sd.max_score DESC
+					LIMIT 1  ) AS mentionScore
+				";
+			}
 
 		$sql .= " FROM 
-   			`v_score_ft_scoredetail` AS smd
-			LEFT JOIN  `rms_student` AS st ON st.`stu_id` = smd.`student_id`
-			LEFT JOIN  `rms_group` AS g ON g.`id` = smd.`group_id`
+   			`rms_score_monthly` AS sml
+			LEFT JOIN  `rms_student` AS st ON st.`stu_id` = sml.`student_id`
+			LEFT JOIN `v_student_scordetail` AS vvv ON vvv.`score_id` = sml.`score_id` AND vvv.`student_id` = sml.`student_id`
    		WHERE 1 ";
-		   $sql .= " AND smd.id = $id ";
+		   $sql .= " AND sml.score_id = $id ";
 	
 		$where = '';
-		
-		$where .= $_db->getAccessPermission('smd.branch_id');
-		$where .= $_db->getDegreePermission('g.degree');
 		$order = "  ORDER BY  ";
 		
-		// if ($exam_type == 1) {
-			$order .= " smd.total_score  DESC ";
-		// } else {
-		// 	$order .= " smd.overallAssessmentSemester DESC";
-		// }
-		$order .= " ,smd.for_academic_year,smd.for_semester,smd.for_month,smd.`group_id`,smd.`student_id` ASC	";
-		echo $sql . $where . $order;
+		if ($exam_type == 1) {
+			$order .= " sml.total_score  DESC ";
+		} else {
+			$order .= " sml.overallAssessmentSemester DESC ";
+		}
+		$order .= " ,sml.`student_id` ASC	";
+	//	echo $sql . $where . $order; exit();
 		return $db->fetchAll($sql . $where . $order);
 	}
 	public function getAllStudentIdByScoreResult($search, $scoreId = null, $limit = 0)
@@ -430,8 +410,15 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		} else if ($search['exam_type'] == 3) {
 			$sql .= "
 			,g.semesterTotalAverage as semesterScale
-			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=1 AND ml.student_id= st.stu_id AND d.group_id = smd.`group_id`  LIMIT 1) AS overalSemester1
-			,(SELECT ml.overallAssessmentSemester FROM rms_score_monthly AS ml INNER JOIN rms_score AS d ON d.`id` = ml.score_id WHERE d.exam_type=2 AND  d.`for_semester`=2 AND ml.student_id= st.stu_id AND d.group_id = smd.`group_id`   LIMIT 1) AS overalSemester2
+			,(SELECT vs.overallAssessmentSemester FROM  v_overall_semester_score AS vs WHERE 
+				vs.`for_semester` = 1 
+				AND vs.student_id = smd.`student_id`
+				AND vs.group_id = smd.`group_id` LIMIT 1) AS overalSemester1
+			,(SELECT vs.overallAssessmentSemester FROM  v_overall_semester_score AS vs WHERE 
+				vs.`for_semester` = 2
+				AND vs.student_id = smd.`student_id`
+				AND vs.group_id = smd.`group_id` LIMIT 1) AS overalSemester2
+
 			,(g.semesterTotalAverage/2) as passAverage
 			,smd.overallAssessmentSemester
 			,FIND_IN_SET( 
@@ -902,6 +889,18 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
    		AND sd.`subject_id`=$subject_id ";
 		return $db->fetchRow($sql);
 	}
+	public function getScoreBySubjectJason($score_id ,$student_id)
+	{
+		$db = $this->getAdapter();
+		$sql=" SELECT jsonScoreSubjectDetail FROM  v_student_scordetail 
+		WHERE `score_id`=$score_id 
+		AND `student_id`=$student_id ";
+		//echo $sql; exit();
+		$result = $db->fetchOne($sql);
+		//print_r($result);
+		return  json_decode($result,true );
+		
+	}
 	function getAllgroupStudyNotPass()
 	{
 		$db = $this->getAdapter();
@@ -1254,13 +1253,27 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = "SELECT
 	   	s.*,
-		(SELECT g.degree FROM rms_group AS g WHERE g.id=s.group_id LIMIT 1 ) AS degree
+		g.degree,
+		g.group_code,
+		g.semesterTotalAverage,
+		(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academic_year,
+		(SELECT month_kh FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS for_month,
+
+		(SELECT teacher_name_kh from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher,
+		(SELECT signature from rms_teacher as t where t.id = g.teacher_id LIMIT 1) as teacher_sigature
+
 		 FROM
 	   	`rms_score` AS s
-	   	WHERE s.id = $score_id
+		LEFT JOIN rms_group AS g ON g.id=s.group_id
+	   	WHERE s.id = $score_id 
 	    LIMIT 1";
 		return $db->fetchRow($sql);
 	}
+	// (SELECT $branch FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_name,
+	// (SELECT b.photo FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS branch_logo,
+	// (SELECT b.school_namekh FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameKh,
+	// (SELECT b.school_nameen FROM rms_branch as b WHERE b.br_id=g.`branch_id` LIMIT 1) AS schoolNameEng,	
+  
 
 
 	function getAllStudentPassed($search)

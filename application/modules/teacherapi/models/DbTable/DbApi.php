@@ -2172,7 +2172,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.=" AND g.is_pass =".$_data['groupProcess'];
 			}
 			$sql.=" GROUP BY g.id ";
-			$sql.=" ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
+			$sql.=" ORDER BY g.`academic_year` DESC ,g.degree ASC,g.grade ASC,g.group_code ASC ";
 			
 			if(!empty($_data['LimitStart'])){
 				$sql.=" LIMIT ".$_data['LimitStart'].",".$_data['limitRecord'];

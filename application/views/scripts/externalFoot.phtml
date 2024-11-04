@@ -24,6 +24,9 @@
   </div>
   <div class="clearfix"></div>
 </footer>
+<?php if($controller=='extreport' AND $action!='index'){?>
+<script type="text/javascript" src="<?php echo $this->baseUrl() . ""; ?>/admin/tableExport-master/tableExport.js"></script>
+<?php } ?>
 <script type="text/javascript">
 var url_changelang = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'changelange'));?> ';
 function changeLange(lang){

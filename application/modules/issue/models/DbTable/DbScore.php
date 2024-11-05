@@ -1105,6 +1105,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 						WHERE sm.`student_id` = sgh.`stu_id` 
 						AND s.for_semester=" . $data['forSemester'] . "
 						AND s.exam_type=1 
+						AND s.status=1 
 						AND s.group_id=sgh.group_id LIMIT 1 ),2), 0) AS monthlySemesterAvg ";
 		}
 		$sql .=	$sqlstr;

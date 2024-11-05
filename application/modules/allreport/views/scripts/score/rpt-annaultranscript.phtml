@@ -690,7 +690,11 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 							<td valign="top" class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
 						</tr>
 						<tr>
-							<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
+							<?php 
+								$dbSetting = new Setting_Model_DbTable_Dbduty();
+								$principalInfo = $dbSetting->getDutyByDegree($degreeId, 1);
+							?>
+							<td class=" ">&nbsp;<?php echo $principalInfo['positionkh']." ".$principalInfo['positionen']; ?></td>
 							<td colspan="4">&nbsp;</td>
 							<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
 						</tr>

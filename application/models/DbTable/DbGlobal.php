@@ -5305,6 +5305,56 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql.=" LIMIT 1 ";
 		return $db->fetchRow($sql);
 	}
-
+	public function getPaytermTypeList($data=array())
+	{
+		$ptList = array(
+				array(
+					'id' => "1",
+					'name' => $this->tr->translate("TERM_1"),
+					'parent' => 2,
+				),
+				array(
+					'id' => "2",
+					'name' => $this->tr->translate("TERM_2"),
+					'parent' => 2,
+				),
+				array(
+					'id' => "3",
+					'name' => $this->tr->translate("TERM_3"),
+					'parent' => 2,
+				),
+				array(
+					'id' => "4",
+					'name' => $this->tr->translate("TERM_4"),
+					'parent' => 2,
+				),
+				array(
+					'id' => "1,2",
+					'name' => $this->tr->translate("SEMSTER_1"),
+					'parent' => 3,
+				),
+				array(
+					'id' => "3,4",
+					'name' => $this->tr->translate("SEMSTER_2"),
+					'parent' => 3,
+				),
+				array(
+					'id' => "1,2,3,4",
+					'name' => $this->tr->translate("YEAR"),
+					'parent' => 4,
+				),
+			);
+		if (!empty($ptList) AND !empty($data['optionList'])) {
+			$options = '';
+			$options .= '<option data-parent="" value="0" ></option>';
+			foreach ($ptList as $key => $value) {
+				$selected = ($key==0)? "selected='selected'":"";
+				$options .= '<option '.$selected.'  data-parent="'.$value['parent'].'" value="'.$value['id'].'" >' . htmlspecialchars($value['name'], ENT_QUOTES) . '</option>';
+			}
+			return $options;
+		}else{
+			return $ptList;
+		}
+	}
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 	$request = Zend_Controller_Front::getInstance ()->getRequest ();
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	echo $this->headTitle($tr->translate("DISCOUNTSETTING"));
+	echo $this->headTitle($tr->translate("INITILIZE_USE"));
 ?>	
 <?php $frm =  $this->form_search;?>
 <div class="card pb-10 pt-10 pl-10 pr-10">
@@ -9,7 +9,7 @@
 		<div class="card-box">
                	<div class="col-sm-12 border-botom">
 		    		<div class="col-sm-8 pd-0">
-		    			<h4 class="m-b-0"><i class="fa fa-shield " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('DISCOUNTSETTING');?></h4>
+		    			<h4 class="m-b-0"><i class="fa fa-shield " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('INITILIZE_USE');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -34,7 +34,7 @@
 				<div class="tab-pane fade in active" id="student-service-list" role="tabpanel">
 					<div class="x_panel">
 						<div class="x_title">
-							<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("FINDING_ALL_STUDENT_INFORMATION");?> <small><?php echo $tr->translate("STUDENT_INFO");?></small></h2>
+							<h2><i class="fa fa-filter"></i> <?php echo $tr->translate("SEARCH");?> <small><?php echo $tr->translate("STUDENT_INFO");?></small></h2>
 							<ul class="nav navbar-right panel_toolbox">
 							  <li>
 								<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -43,7 +43,7 @@
 							<div class="clearfix"></div>
 						</div>
 						<div class="x_content" >
-							<form id="searchingData" name="list" action="" dojoType="dijit.form.Form" method="get">
+							<form onSubmit="getSearching(1); return false;" id="searchingData" name="list" action="" dojoType="dijit.form.Form" method="">
 								<div class="form-group">
 									<div class="col-md-3 col-sm-3 col-xs-12">
 										<?php echo $frm->getElement("adv_search");?>
@@ -67,6 +67,7 @@
 										<input type="hidden" id="pages" name="pages" dojoType="dijit.form.TextBox" value="1" />
 									</div>
 									<div class="col-md-2 col-sm-2 col-xs-12">
+										<input type="submit" class="d-none" />
 										<input type="hidden" name="recordcopy" id="recordcopy" dojoType="dijit.form.TextBox" />
 										<button onClick="getSearching(1);" class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="button"><?php echo $tr->translate("SEARCH");?></button>
 									</div>

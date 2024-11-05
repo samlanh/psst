@@ -25,7 +25,7 @@ class Accounting_TermController extends Zend_Controller_Action {
 			$db = new Global_Model_DbTable_DbTerm();
 			$rs_rows = $db->getAllTerm($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","TITLE","PERIOD","DEGREE","START_DATE","END_DATE","USER");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","TITLE","PERIOD","PERIOD_TYPE","DEGREE","START_DATE","END_DATE","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'term','action'=>'edit',
     		);
@@ -66,6 +66,8 @@ class Accounting_TermController extends Zend_Controller_Action {
 		$rows = $dbg->getAllPaymentTerm($id=null,$hidemonth=1);
 		$this->view->term_option =	$rows ;
 
+		$this->view->paymentTermList =  $dbg->getPaytermTypeList();
+
     }
 	public function editAction(){
 		$db = new Global_Model_DbTable_DbTerm();
@@ -100,6 +102,7 @@ class Accounting_TermController extends Zend_Controller_Action {
 
 		$rows = $dbg->getAllPaymentTerm($id=null,$hidemonth=1);
 		$this->view->term_option =	$rows ;
+		$this->view->paymentTermList =  $dbg->getPaytermTypeList();
 	}
 	function gettermstudyAction(){
 		if($this->getRequest()->isPost()){

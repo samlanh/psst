@@ -2,6 +2,9 @@
      $this->tr=Application_Form_FrmLanguages::getCurrentlanguage();
      $tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	 $term=$this->term_option; 
+	 $paymentTermList=$this->paymentTermList; 
+
+	
 ?>
 <style>
 #table tr td{
@@ -198,6 +201,9 @@ ul.optListRow {
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
 <script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
+
+	var payTermTypeListJson  = <?php print_r(Zend_Json::encode($paymentTermList));?>;
+
 	dojo.require("dijit.form.DateTextBox");
 	dojo.require("dojo.data.ItemFileWriteStore");  
 	dojo.require("dojo.NodeList-manipulate");
@@ -221,6 +227,7 @@ ul.optListRow {
 	
 		getAllAcademicByBranch();
 		getTermOption();
+		getTermList();
 		addRow();
 		getDegreeOption();
 	
@@ -299,30 +306,35 @@ function CheckAllTotalDegree(index){
 		
 		return term_option;
 	}
+
+	function getTermList(indexRow=0){
+		if(indexRow>0){
+			dijit.byId('installmentOrdering'+indexRow).attr('value','');
+			thisTermId = dijit.byId('term_'+indexRow).get('value');
+			const filteringData = payTermTypeListJson.filter(d => d.parent == thisTermId);
+			var dataJsonParent =[];
+			if(filteringData.length > 0){
+				dataJsonParent = filteringData;
+			}
+		
+			var newStoreData = getDataStorefromJSON('id', 'name', dataJsonParent);
+			dijit.byId('installmentOrdering'+indexRow).set('store', newStoreData);
+		}
+	}
 	
 	var col= 0; var no=0;
 	var title = 0;
-	var orderingtermselect='';
+	
 	function addRow() {
 		col++;no++;
 		template='';
 		temp = "";
-
-		orderingtermselect='<option value=""></option>';
-		orderingtermselect+='<option value="1"><?php echo $tr->translate("TERM1");?></option>';
-		orderingtermselect+='<option value="2"><?php echo $tr->translate("TERM2");?></option>';
-		orderingtermselect+='<option value="3"><?php echo $tr->translate("TERM3");?></option>';
-		orderingtermselect+='<option value="4"><?php echo $tr->translate("TERM4");?></option>';
-		orderingtermselect+='<option value="1,2"><?php echo $tr->translate("SEMESTERI");?></option>';
-		orderingtermselect+='<option value="3,4"><?php echo $tr->translate("SEMESTERII");?></option>';
-		orderingtermselect+='<option value="1,2,3,4"><?php echo $tr->translate("YEAR");?></option>';
-
 		if(title!=1){
 			temp+='<td><?php echo $tr->translate("DEL");?></td>';
 			temp+='<td><?php echo $tr->translate("N_O");?></td>';
 			temp+='<td><?php echo $tr->translate("TITLE");?></td>';
 			temp+='<td><?php echo $tr->translate("PERIOD");?></td>';
-			temp+='<td><?php echo $tr->translate("ORDER");?></td>';
+			temp+='<td><?php echo $tr->translate("PERIOD_TYPE");?></td>';
 			temp+='<td><?php echo $tr->translate("START_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("END_DATE");?></td>';
 			temp+='<td><?php echo $tr->translate("NOTE");?></td>';
@@ -333,8 +345,8 @@ function CheckAllTotalDegree(index){
 		template+='<td width="2%" align="center"><img onclick="deleteRecord('+col+');" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 		template+='<td align="center" width="2%">'+no+'</td>';
 		template+='<td width="10%"><input required="ture" dojoType="dijit.form.ValidationTextBox" class="fullside" id="title_'+col+'" name="title_'+col+'" placeholder="'+'<?php echo $tr->translate("TITLE")." ";?> " value="" type="text"  ></td>';
-		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('PERIOD');?>" onChange="periodChange('+col+');" class="fullside"  required="true" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></td>';	
-		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('ORDER');?>" class="fullside"  required="true" dojoType="dijit.form.FilteringSelect" name="installmentOrdering'+col+'" id="installmentOrdering'+col+'" >'+orderingtermselect+'</select></td>';	
+		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('PERIOD');?>" onChange="getTermList('+col+');" class="fullside"  required="true" dojoType="dijit.form.FilteringSelect" name="term_'+col+'" id="term_'+col+'" >'+term_option+'</select></td>';	
+		template+='<td width="10%"><select placeHolder="<?php echo $tr->translate('PERIOD_TYPE');?>" class="fullside"  required="true" dojoType="dijit.form.FilteringSelect" name="installmentOrdering'+col+'" id="installmentOrdering'+col+'" ></select></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox" value="now" class="fullside" id="startdate_'+col+'" name="startdate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="6%"><input constraints='+'{datePattern:"dd/MM/yyyy"}'+' dojoType="dijit.form.DateTextBox"  value="now" class="fullside" id="enddate_'+col+'" name="enddate_'+col+'" value="" type="text" required="required" ></td>';	
 		template+='<td width="10%"><input dojoType="dijit.form.ValidationTextBox" class="fullside" id="remark_'+col+'" name="remark_'+col+'" value="" type="text"  ></td>';	

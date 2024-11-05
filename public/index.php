@@ -25,7 +25,7 @@ defined('SHOW_IN_DEGREE') || define('SHOW_IN_DEGREE', 0);//1=show , 0=hide
 defined('SHOW_IN_GRADE') || define('SHOW_IN_GRADE', 0);//1=show , 0=hide
 defined('SUTUDENT_SESSION') || define('SUTUDENT_SESSION', 'student_auth');//1=true to show,0=false not show
 defined('AUTO_PUSH_NOTIFICATION') || define('AUTO_PUSH_NOTIFICATION', 0);//1=push , 0=not push
-defined('APP_ID') || define('APP_ID', 'dfc704ab-e023-4b0b-b030-e300f13b74eb');
+
 defined('RECEIPT_TYPE') || define('RECEIPT_TYPE', 2);//1elt,2nws,3psis
 defined('ICODE') || define('ICODE', '100323');
 defined('SCORE_RESULT_TEMPLATE') || define('SCORE_RESULT_TEMPLATE', 2);//1=for general,2=for AHS
@@ -39,6 +39,10 @@ defined('FEATURE_SCAN_CALLOUT') || define('FEATURE_SCAN_CALLOUT', 1);//0=Disable
 defined('SCORE_RESULT_TEMPLATE') || define('SCORE_RESULT_TEMPLATE', 2);//1=for general,2=for AHS
 defined('URL_STUDENT_PROFILE') || define('URL_STUDENT_PROFILE', 'SchoolDemo.cam-app.com/schoolDemo/');//
 defined('classHideHeight') || define('classHideHeight', '110px');//
+
+defined('EXAM_CRITERIA_ID') || define('EXAM_CRITERIA_ID', 9);
+defined('APP_ID') || define('APP_ID', 'f0051d43-e9b9-4b98-97b1-a7e7146b5400');
+defined('APP_API_KEY') || define('APP_API_KEY', 'MjllM2YwOGUtMWI5OS00YWZmLTliOTEtOTY5OTA0OTM3NzU0');
 
 
 // Ensure library/ is on include_path

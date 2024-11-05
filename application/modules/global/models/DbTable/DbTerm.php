@@ -19,6 +19,14 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 		$term=$tr->translate('TERM');
 		$semster=$tr->translate('SEMESTER');
 		$year=$tr->translate('YEAR');
+
+		$term1=$tr->translate('TERM_1');
+		$term2=$tr->translate('TERM_2');
+		$term3=$tr->translate('TERM_3');
+		$term4=$tr->translate('TERM_4');
+		
+		$semester1=$tr->translate('SEMSTER_1');
+		$semester2=$tr->translate('SEMSTER_2');
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentlang = $dbp->currentlang();
@@ -35,6 +43,15 @@ class Global_Model_DbTable_DbTerm extends Zend_Db_Table_Abstract
 					WHEN std.periodId = 3 THEN '$semster'
 					WHEN std.periodId = 4 THEN '$year'
 				END as Period
+				,CASE
+					WHEN std.installmentOrdering = '1' THEN '$term1'
+					WHEN std.installmentOrdering = '2' THEN '$term2'
+					WHEN std.installmentOrdering = '3' THEN '$term3'
+					WHEN std.installmentOrdering = '4' THEN '$term4'
+					WHEN std.installmentOrdering = '1,2' THEN '$semester1'
+					WHEN std.installmentOrdering = '3,4' THEN '$semester2'
+					WHEN std.installmentOrdering = '1,2,3,4' THEN '$year'
+				END as PeriodType
 				,(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,std.degreeId) LIMIT 1) AS degreeList
 				,std.start_date
 				,std.end_date

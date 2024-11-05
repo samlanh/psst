@@ -296,10 +296,10 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 														<td rowspan="2" align="center"><strong><?php echo $scoreInfo['rankingInKhmer']; ?></strong></td>
 													</tr>
 													<tr class="style hover">
-														<td colspan="5" align="center" class=" ">&nbsp;
+														<td colspan="4" align="center" class=" ">&nbsp;
 															មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Ranks
 														</td>
-														<td align="center">
+														<td align="center" colspan="2">
 															<strong>
 																<?php
 																$totalmultiSubSubject = $totalSubMaxScore / $monthlyScale;
@@ -389,10 +389,10 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 										<td rowspan="2" align="center"> <strong><?php echo $scoreInfo['rankingInEnglish']; ?></strong></td>
 									</tr>
 									<tr class="style hover">
-										<td colspan="5" align="center" class=" ">&nbsp;
+										<td colspan="4" align="center" class=" ">&nbsp;
 											មធ្យមភាគ និងចំណាត់ថ្នាក់ Grade Point Average (GPA)/Rank
 										</td>
-										<td align="center">
+										<td align="center" colspan="2">
 											<strong>
 												<?php
 
@@ -575,7 +575,11 @@ $monthview = array("01" => "មករា", "02" => "កុម្ភៈ", "03" =>
 							<td valign="top" class="borderSolidBottom ">&nbsp;កាលបរិច្ឆេទ Date</td>
 						</tr>
 						<tr>
-							<td class=" ">&nbsp;នាយកស្តីទី Interim Principal</td>
+							<?php 
+								$dbSetting = new Setting_Model_DbTable_Dbduty();
+								$principalInfo = $dbSetting->getDutyByDegree($degreeId, 1);
+							?>
+							<td class=" ">&nbsp;<?php echo $principalInfo['positionkh']." ".$principalInfo['positionen']; ?></td>
 							<td colspan="4">&nbsp;</td>
 							<td class=" ">&nbsp;កាលបរិច្ឆេទ Date</td>
 						</tr>

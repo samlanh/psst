@@ -833,14 +833,13 @@ function getCountSubjectLang($subjectArray, $subjectLang)
 												<?php echo date("Y");?> 
 											</label>
 											<br>
-											<span class="fontBold">Interim Principal</span>
+											<?php 
+												$dbSetting = new Setting_Model_DbTable_Dbduty();
+												$principalInfo = $dbSetting->getDutyByDegree($degreeId, 1);
+											?>
+											<span class="fontBold"><?php echo $principalInfo['positionen']; ?></span>
 										</td>
 									</tr>
-									<!-- <tr>
-										<td class=" ">Interim Principal</td>
-										<td colspan="4">&nbsp;</td>
-										<td class=" ">Date</td>
-									</tr> -->
 								</table>
 							</td>
 						</tr>

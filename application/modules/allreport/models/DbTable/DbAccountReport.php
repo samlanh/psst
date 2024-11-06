@@ -76,6 +76,7 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 		
 		$paymentId = empty($data["paymentId"]) ? 0 : $data["paymentId"];
 		$subList = empty($data["listSubId"]) ? 0 : $data["listSubId"];
+		//--,(SELECT v.$labelView FROM rms_view  AS v WHERE v.type=6 AND v.key_code=spmtd.payment_term LIMIT 1) AS payTerm
 		$sql="
 			SELECT 
 			spmtd.`service_type`
@@ -90,7 +91,8 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			,SUM(spmtd.`extra_fee`) AS totalExtraFee
 			,spmtd.`extra_fee`
 			,SUM(spmtd.`totalpayment`) AS gTotalPayment
-			,(SELECT v.$labelView FROM rms_view  AS v WHERE v.type=6 AND v.key_code=spmtd.payment_term LIMIT 1) AS payTerm
+			,(SELECT ss.title FROM `rms_startdate_enddate` ss WHERE ss.id=spmtd.academicFeeTermId LIMIT 1) AS payTerm
+
 
 			FROM `rms_student_paymentdetail` AS spmtd 
 		LEFT JOIN `rms_itemsdetail` AS itd ON itd.id = spmtd.`itemdetail_id`

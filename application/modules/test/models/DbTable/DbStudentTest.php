@@ -236,7 +236,8 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 	function getStudentTestById($id){
 		$db = $this->getAdapter();
 		$sql=" SELECT 
-				fam.fatherNameKh AS father_khname 
+				s.* 
+				,fam.fatherNameKh AS father_khname 
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
 				,fam.fatherPhone AS father_phone
@@ -250,7 +251,7 @@ class Test_Model_DbTable_DbStudentTest extends Zend_Db_Table_Abstract
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianNation AS guardian_nation 
 				,fam.guardianPhone AS guardian_tel
-				,s.* 
+				
 				FROM rms_student AS s
 				LEFT JOIN rms_family AS fam ON fam.id = s.familyId
 				WHERE s.stu_id=$id AND s.is_studenttest=1 

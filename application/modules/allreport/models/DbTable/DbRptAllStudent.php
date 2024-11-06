@@ -37,8 +37,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 			$stu_name = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
     	}
     	$sql ="SELECT 
-		
-					fam.fatherNameKh AS father_khname 
+					s.*
+					
+    				,fam.fatherNameKh AS father_khname 
 					,fam.fatherName AS father_enname  
 					,fam.fatherNation AS father_nation
 					,fam.fatherPhone AS father_phone
@@ -50,7 +51,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 					,fam.guardianNameKh AS guardian_khname 
 					,fam.guardianName AS guardian_enname 
 					,fam.guardianPhone AS guardian_tel
-    				,s.*
     				
 					,s.branch_id
 					,(SELECT $branch FROM `rms_branch` WHERE br_id=s.branch_id LIMIT 1) AS branch_name
@@ -764,8 +764,9 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 		
     	$sql ='
 			SELECT 
-			
-				CONCAT(fam.fatherName," - ",fam.fatherNameKh)AS father_name
+				s.*
+				
+				,CONCAT(fam.fatherName," - ",fam.fatherNameKh)AS father_name
 				,fam.fatherNameKh AS father_khname 
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
@@ -781,7 +782,6 @@ class Allreport_Model_DbTable_DbRptAllStudent extends Zend_Db_Table_Abstract
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianPhone AS guardian_tel
 				
-				,s.*
 				,CONCAT(s.stu_khname," - ",s.stu_enname," ",s.last_name) AS name
 				,(SELECT b.branch_nameen FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name
 			

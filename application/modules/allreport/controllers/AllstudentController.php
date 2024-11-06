@@ -202,6 +202,11 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 					'study_type'=>0
 			);
 		}
+		
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
+		
 		$this->view->search = $search;
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$result = $db->getStudentGroupReport($id,$search,0);
@@ -220,8 +225,13 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		$db = new Allreport_Model_DbTable_DbRptGroup();
 		$id=$this->getRequest()->getParam("id");
 		$id = (empty($id))?0:$id;
+		
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		
+		
 		if(empty($id)){
-			$this->_redirect("/allreport/allstudent/student-group");
+			$this->_redirect("/allreport/allstudent/student-group?inFrame=".$inFrame);
 		}
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
@@ -231,6 +241,7 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 			if(!empty($row[0]['group_id'])){
 				$result = $db->getGroupDetailByID($row[0]['group_id']);
 			}
+			
 		}
 		else{
 			$search = array(
@@ -244,9 +255,9 @@ class Allreport_AllstudentController extends Zend_Controller_Action {
 		
 		$result = $db->getGroupDetailByID($id);
 		if(empty($result)){
-			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group");
+			Application_Form_FrmMessage::Sucessfull("NO_RECORD","/allreport/allstudent/student-group?inFrame=".$inFrame);
 		}
-		
+		$this->view->inFrame = $inFrame;
 		$this->view->search = $search;
 		
 		$row = $db->getStudentGroupReport($id,$search,1);

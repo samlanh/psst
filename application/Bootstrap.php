@@ -30,5 +30,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		Zend_Layout::StartMvc();
 	}	
 
+
 }
 ?>
+

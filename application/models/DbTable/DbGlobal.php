@@ -3002,6 +3002,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$prefixOpt = Setting_Model_DbTable_DbGeneral::geValueByKeyName('studentPrefixOpt');
 		if ($prefixOpt == 1) {//branch
 			$pre = $this->getPrefixCode($branch_id);//by branch
+			
+			$settingFor = 100; //PSIS CHV
+			if($settingFor==100){
+				$lastedAca = $this->getLatestAcadmicYear();
+				if(!empty($lastedAca)){
+					$fromYear = empty($lastedAca["fromYear"]) ? "" : $lastedAca["fromYear"]."-";
+					$pre = $fromYear.$pre."-";
+				}
+			}
 		} elseif ($prefixOpt == 2) {
 			$pre = $this->getPrefixByDegree($degree);
 		} elseif ($prefixOpt == 3) {

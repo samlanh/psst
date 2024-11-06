@@ -5,7 +5,7 @@
 	
 	$frm =  $this->form_search;
 	$classHideHeight=classHideHeight;
-	$dateFormat ="d/m/Y";
+	$dateFormat ="d/m/y";
 	
 	$parentCol = $this->parentCol;
 
@@ -129,6 +129,7 @@
 			.redColor{
 				color : #e00000 !important;
 			}
+			.setfontsize{font-size:10px !important;}
 			
 			@media print {
 				.hide {
@@ -142,6 +143,7 @@
 				.bgRow {
 					background: #d6e2ff !important;
 					}
+				.branchName{font-size: 11px;}
 			}
 		</style>
 		<table style="width:100%;">
@@ -151,11 +153,11 @@
 			<tr>
 				<td width="15%" align="center"></td>
 				<td align="center" width="70%">
-					<div style="color: #000;font-family: 'Times New Roman', 'Khmer OS Muol Light';"><?php echo $pageTitle; ?>
+					<div style="font-size:12px;color: #000;font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $pageTitle; ?>
 					</div>
-					<div class="branchName"></div>
+						<div  class="setfontsize branchName"></div>
 						<?php if(!empty($this->search["start_date"])){?>
-						<div style="margin-bottom:5px; color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></div><?php }?>
+						<div class="setfontsize" style="margin-bottom:5px; color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></div><?php }?>
 				</td>
 				<td width="15%">
 					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
@@ -280,7 +282,6 @@
 									<td colspan="7" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
 									<td></td>
 									<?php echo $strTotalByMethod;?>
-									
 									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
 									<td></td>
 									<td></td>
@@ -385,7 +386,7 @@
 								<td colspan="4" align="center" style=" background-color :#c1d0f3;"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
 							</tr>
 							<tr>
-								<td width="25%" align="right"><?php echo $tr->translate("GRAND_TOTAL");?></td>
+								<td width="25%" align="right" style="white-space:nowrap;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
 								<td width="25%" align="right"><?php echo sprintf('%02d', count($this->rowStDailyPmt));?></td>
 								<td width="25%" align="right">$</td>
 								<td width="25%" align="right"><?php echo number_format($gTotalPaid,2);?></td>

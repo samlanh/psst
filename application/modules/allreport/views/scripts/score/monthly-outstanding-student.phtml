@@ -177,7 +177,15 @@ $branchInfo = $this->branchInfo;
 
 				if (!empty($this->studentgroup)) {
 					foreach ($this->studentgroup as $key => $rs) {
-						if ($rs['total_score'] == $old_totalscore) {
+						if($rs['exam_type']==1){
+							$overral_average= $rs['total_score'];
+						 }else{
+							$overral_average= $rs['overallAssessmentSemester'];
+						 }
+						if ($overral_average == $old_totalscore) {
+							if ($key == 0) {
+								$rank1 = $old_rank;
+							}
 							if ($key == 1) {
 								$rank2 = $old_rank;
 							}
@@ -212,7 +220,12 @@ $branchInfo = $this->branchInfo;
 								$old_rank = "៥";
 							}
 						}
-						$old_totalscore = $rs['total_score'];
+
+						if($rs['exam_type']==1){
+							$old_totalscore= $rs['total_score'];
+						}else{
+							$old_totalscore= $rs['overallAssessmentSemester'];
+						}
 				?>
 				<?php }
 				} ?>
@@ -516,10 +529,19 @@ $branchInfo = $this->branchInfo;
 					$rank3 = "";
 					$rank4 = "";
 					$rank5 = "";
+					$rank6 = "";
 
 					if (!empty($this->studentgroup)) {
 						foreach ($this->studentgroup as $key => $rs) {
-							if ($rs['total_score'] == $old_totalscore) {
+							 if($rs['exam_type']==1){
+								$overral_average= $rs['total_score'];
+							 }else{
+								$overral_average= $rs['overallAssessmentSemester'];
+							 }
+							if ($overral_average == $old_totalscore) {
+								if ($key == 0) {
+									$rank1 = $old_rank;
+								}
 								if ($key == 1) {
 									$rank2 = $old_rank;
 								}
@@ -531,6 +553,9 @@ $branchInfo = $this->branchInfo;
 								}
 								if ($key == 4) {
 									$rank5 = $old_rank;
+								}
+								if ($key == 5) {
+									$rank6 = $old_rank;
 								}
 							} else {
 								if ($key == 0) {
@@ -553,9 +578,17 @@ $branchInfo = $this->branchInfo;
 									$rank5 = "៥";
 									$old_rank = "៥";
 								}
+								if ($key == 5) {
+									$rank6 = "៦";
+									$old_rank = "៦";
+								}
 							}
-							$old_totalscore = $rs['total_score'];
 
+							if($rs['exam_type']==1){
+								$old_totalscore= $rs['total_score'];
+							}else{
+								$old_totalscore= $rs['overallAssessmentSemester'];
+							}
 							
 					?>
 					<?php }
@@ -686,48 +719,49 @@ $branchInfo = $this->branchInfo;
 							}
 				
 						</style>
-						<tr>
-							<td colspan="3" align="center">
-								<table width="100%" class="honorInfo">
-									<tr align="center" >
-										<td class="number">
-											<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank1; ?></div>
-										</td>
-									</tr>
-									<tr>
-										<td align="center">
-											<table width="100px" height="120px">
-												<tr>
-													<td class="picborder">
-														<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[0])) {
-																										if (!empty($this->studentgroup[0]['photo'])) {
-																											echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'] . '"';
-																										}
-																									} ?>>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-									<tr align="center">
-										<td class="studentname">
-											<?php if (!empty($this->studentgroup[0])) {
-												if (!empty($this->studentgroup[0]['stu_khname'])) {
-													echo $this->studentgroup[0]['stu_khname'];
-												} else {
-													echo $this->studentgroup[0]['stu_enname'];
-												}
-											} ?>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<div style="margin-top: -120px;">
+						<?php if($rank1==$rank2){ ?>
+							
+							<tr>
+								<td colspan="3">
 									<table width="100%">
 										<tr>
+											<td width="40%">
+												<table width="50%" class="honorInfo">
+													<tr align="center">
+														<td class="number">
+															<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank1; ?></div>
+														</td>
+													</tr>
+													<tr>
+														<td align="center">
+															<table width="100px" height="120px">
+																<tr>
+																	<td class="picborder">
+																		<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[0])) {
+																														if (!empty($this->studentgroup[0]['photo'])) {
+																															echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'] . '"';
+																														}
+																													} ?>>
+																	</td>
+																</tr>
+															</table>
+														</td>
+													</tr>
+													<tr align="center">
+														<td class="studentname">
+															<?php if (!empty($this->studentgroup[0])) {
+																if (!empty($this->studentgroup[0]['stu_khname'])) {
+																	echo $this->studentgroup[0]['stu_khname'];
+																} else {
+																	echo $this->studentgroup[0]['stu_enname'];
+																}
+															} ?>
+														</td>
+													</tr>
+												</table>
+											</td>
+											<td width="20%">
+											</td>
 											<td width="40%">
 												<table width="50%" class="honorInfo">
 													<tr align="center">
@@ -763,185 +797,378 @@ $branchInfo = $this->branchInfo;
 													</tr>
 												</table>
 											</td>
-											<td width="20%">
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div style="margin-top: -120px;">
+										<table width="100%" class="honorInfo">
+											<tr align="center" >
+												<td class="number">
+													<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank3; ?></div>
+												</td>
+											</tr>
+											<tr>
+												<td align="center">
+													<table width="100px" height="120px">
+														<tr>
+															<td class="picborder">
+																<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[2])) {
+																												if (!empty($this->studentgroup[2]['photo'])) {
+																													echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'] . '"';
+																												}
+																											} ?>>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr align="center">
+												<td class="studentname">
+													<?php if (!empty($this->studentgroup[2])) {
+														if (!empty($this->studentgroup[2]['stu_khname'])) {
+															echo $this->studentgroup[2]['stu_khname'];
+														} else {
+															echo $this->studentgroup[2]['stu_enname'];
+														}
+													} ?>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</td>
+							</tr>
+						<?php }else{ ?>	
+							<tr>
+								<td colspan="3" align="center">
+									<table width="100%" class="honorInfo">
+										<tr align="center" >
+											<td class="number">
+												<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank1; ?></div>
 											</td>
-											<td width="40%">
-												<table width="50%" class="honorInfo">
-													<tr align="center">
-														<td class="number">
-															<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank3; ?></div>
-														</td>
-													</tr>
+										</tr>
+										<tr>
+											<td align="center">
+												<table width="100px" height="120px">
 													<tr>
-														<td align="center">
-															<table width="100px" height="120px">
-																<tr>
-																	<td class="picborder">
-																		<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[2])) {
-																														if (!empty($this->studentgroup[2]['photo'])) {
-																															echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'] . '"';
-																														}
-																													} ?>>
-																	</td>
-																</tr>
-															</table>
-														</td>
-													</tr>
-													<tr align="center">
-														<td class="studentname">
-															<?php if (!empty($this->studentgroup[2])) {
-																if (!empty($this->studentgroup[2]['stu_khname'])) {
-																	echo $this->studentgroup[2]['stu_khname'];
-																} else {
-																	echo $this->studentgroup[2]['stu_enname'];
-																}
-															} ?>
+														<td class="picborder">
+															<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[0])) {
+																											if (!empty($this->studentgroup[0]['photo'])) {
+																												echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'] . '"';
+																											}
+																										} ?>>
 														</td>
 													</tr>
 												</table>
 											</td>
 										</tr>
-									</table>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<div >
-									<table width="100%">
-										<tr>
-											<td width="40%">
-												<table width="50%" class="honorInfo">
-													<tr align="center">
-														<td class="number">
-															<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank4; ?></div>
-														</td>
-													</tr>
-													<tr>
-														<td align="center">
-															<table width="100px" height="120px">
-																<tr>
-																	<td class="picborder">
-																		<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[3])) {
-																														if (!empty($this->studentgroup[3]['photo'])) {
-																															echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[3]['photo'] . '"';
-																														}
-																													} ?>>
-																	</td>
-																</tr>
-															</table>
-														</td>
-													</tr>
-													<tr align="center">
-														<td style="" class="studentname">
-															<?php if (!empty($this->studentgroup[3])) {
-																if (!empty($this->studentgroup[3]['stu_khname'])) {
-																	echo $this->studentgroup[3]['stu_khname'];
-																} else {
-																	echo $this->studentgroup[3]['stu_enname'];
-																}
-															} ?>
-														</td>
-													</tr>
-												</table>
-											</td>
-											<td width="20%">
-											</td>
-											<td width="40%">
-												<table width="50%" class="honorInfo" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 16px;<?php if (!empty($this->studentgroup[4]) && !empty($this->studentgroup[5])) {
-																																				if ($this->studentgroup[4]['total_score'] == $this->studentgroup[5]['total_score']) {
-																																					echo "float:left;";
-																																				}
-																																			} ?>">
-													<tr align="center">
-														<td class="number">
-															<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank5; ?></div>
-														</td>
-													</tr>
-													<tr>
-														<td align="center">
-															<table width="100px" height="120px">
-																<tr>
-																	<td class="picborder">
-																		<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[4])) {
-																														if (!empty($this->studentgroup[4]['photo'])) {
-																															echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[4]['photo'] . '"';
-																														}
-																													} ?>>
-																	</td>
-																</tr>
-															</table>
-														</td>
-													</tr>
-
-													<tr align="center">
-														<td class="studentname">
-															<?php if (!empty($this->studentgroup[4])) {
-																if (!empty($this->studentgroup[4]['stu_khname'])) {
-																	echo $this->studentgroup[4]['stu_khname'];
-																} else {
-																	echo $this->studentgroup[4]['stu_enname'];
-																}
-															} ?>
-															<?php if (!empty($this->studentgroup[4])) {
-																$score = $this->studentgroup[4]['total_score'];
-															} ?>
-														</td>
-													</tr>
-												</table>
-
-												<?php $i = -1;
-												if (!empty($this->studentgroup)) {
-													foreach ($this->studentgroup as $student) {
-														$i++; ?>
-														<?php
-														if ($i > 4) {
-															if ($score == $student['total_score']) {
-														?>
-
-																<table width="50%" class="honorInfo" style="float:left;">
-																	<tr align="center">
-																		<td class="number">
-																			<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank5; ?></div>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td align="center">
-																			<table width="100px" height="120px">
-																				<tr>
-																					<td class="picborder">
-																						<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[$i])) {
-																																		if (!empty($this->studentgroup[$i]['photo'])) {
-																																			echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[$i]['photo'] . '"';
-																																		}
-																																	} ?>">
-																					</td>
-																				</tr>
-																			</table>
-																		</td>
-																	</tr>
-
-																	<tr align="center">
-																		<td class="studentname">
-																			<?php if (!empty($student['stu_khname'])) {
-																				echo $student['stu_khname'];
-																			} else {
-																				echo $student['stu_enname'];
-																			} ?>
-																		</td>
-																	</tr>
-																</table>
-
-														<?php }
-														} ?>
-												<?php }
+										<tr align="center">
+											<td class="studentname">
+												<?php if (!empty($this->studentgroup[0])) {
+													if (!empty($this->studentgroup[0]['stu_khname'])) {
+														echo $this->studentgroup[0]['stu_khname'];
+													} else {
+														echo $this->studentgroup[0]['stu_enname'];
+													}
 												} ?>
 											</td>
 										</tr>
 									</table>
-								</div>
-							</td>
-						</tr>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div style="margin-top: -120px;">
+										<table width="100%">
+											<tr>
+												<td width="40%">
+													<table width="50%" class="honorInfo">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank2; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[1])) {
+																															if (!empty($this->studentgroup[1]['photo'])) {
+																																echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[1]['photo'] . '"';
+																															}
+																														} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr align="center">
+															<td class="studentname">
+																<?php if (!empty($this->studentgroup[1])) {
+																	if (!empty($this->studentgroup[1]['stu_khname'])) {
+																		echo $this->studentgroup[1]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[1]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td width="20%">
+												</td>
+												<td width="40%">
+													<table width="50%" class="honorInfo">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank3; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[2])) {
+																															if (!empty($this->studentgroup[2]['photo'])) {
+																																echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'] . '"';
+																															}
+																														} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr align="center">
+															<td class="studentname">
+																<?php if (!empty($this->studentgroup[2])) {
+																	if (!empty($this->studentgroup[2]['stu_khname'])) {
+																		echo $this->studentgroup[2]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[2]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</td>
+							</tr>
+
+						<?php } ?>
+                             
+						<?php if($rank5 == $rank6){ ?> 
+							<tr>
+								<td colspan="3">
+									<div >
+										<table width="100%">
+											<tr>
+												<td width="40%">
+													<table width="50%" class="honorInfo">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank4; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[3])) {
+																				if (!empty($this->studentgroup[3]['photo'])) {
+																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[3]['photo'] . '"';
+																				}
+																			} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr align="center">
+															<td style="" class="studentname">
+																<?php if (!empty($this->studentgroup[3])) {
+																	if (!empty($this->studentgroup[3]['stu_khname'])) {
+																		echo $this->studentgroup[3]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[3]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td width="20%">
+													<table width="50%" class="honorInfo" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 16px;">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank5; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[4])) {
+																				if (!empty($this->studentgroup[4]['photo'])) {
+																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[4]['photo'] . '"';
+																				}
+																			} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+												
+														<tr align="center">
+															<td class="studentname">
+																<?php if (!empty($this->studentgroup[4])) {
+																	if (!empty($this->studentgroup[4]['stu_khname'])) {
+																		echo $this->studentgroup[4]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[4]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td width="40%">
+													<table width="50%" class="honorInfo" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 16px;">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank6; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[5])) {
+																				if (!empty($this->studentgroup[5]['photo'])) {
+																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[5]['photo'] . '"';
+																				}
+																			} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+												
+														<tr align="center">
+															<td class="studentname">
+																<?php if (!empty($this->studentgroup[5])) {
+																	if (!empty($this->studentgroup[5]['stu_khname'])) {
+																		echo $this->studentgroup[5]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[5]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</td>
+							</tr>
+
+						<?php }else{ ?>
+							<tr>
+								<td colspan="3">
+									<div >
+										<table width="100%">
+											<tr>
+												<td width="40%">
+													<table width="50%" class="honorInfo">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank4; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[3])) {
+																				if (!empty($this->studentgroup[3]['photo'])) {
+																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[3]['photo'] . '"';
+																				}
+																			} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr align="center">
+															<td style="" class="studentname">
+																<?php if (!empty($this->studentgroup[3])) {
+																	if (!empty($this->studentgroup[3]['stu_khname'])) {
+																		echo $this->studentgroup[3]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[3]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td width="20%">
+												</td>
+												<td width="40%">
+													<table width="50%" class="honorInfo" style="margin: 0 auto;font-family: Khmer OS Muol Light;font-size: 16px">
+														<tr align="center">
+															<td class="number">
+																<div class="rankborder">ចំណាត់ថ្នាក់លេខ <?php echo $rank5; ?></div>
+															</td>
+														</tr>
+														<tr>
+															<td align="center">
+																<table width="100px" height="120px">
+																	<tr>
+																		<td class="picborder">
+																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[4])) {
+																				if (!empty($this->studentgroup[4]['photo'])) {
+																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[4]['photo'] . '"';
+																				}
+																			} ?>>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+							
+														<tr align="center">
+															<td class="studentname">
+																<?php if (!empty($this->studentgroup[4])) {
+																	if (!empty($this->studentgroup[4]['stu_khname'])) {
+																		echo $this->studentgroup[4]['stu_khname'];
+																	} else {
+																		echo $this->studentgroup[4]['stu_enname'];
+																	}
+																} ?>
+															</td>
+														</tr>
+													</table>
+							
+												</td>
+											</tr>
+										</table>
+									</div>
+								</td>
+							</tr>
+
+						<?php	} ?>
 						
 						<tr>
 							<td colspan="3">

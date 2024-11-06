@@ -154,7 +154,7 @@ table.tb-footer tr.style-head {
 					<td width="70%" align="center">
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">Student Payment Report</span><br />
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblreportType"></label><br /></span>
-						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo date("d-M-Y");?></span>
+						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo date("d-M-y");?></span>
 					</td>
 					<td width="15%" align="center"></td>
 				</tr>
@@ -171,7 +171,7 @@ table.tb-footer tr.style-head {
 										<td rowspan="2">Student Type</td>
 										<td rowspan="2">Status</td>
 										<td rowspan="2">Grade</td>
-										<td rowspan="2">Registration Date	</td>
+										<td rowspan="2">Registration Date</td>
 										<td rowspan="2">Discount</td>
 										<td rowspan="2">Pay Type</td>
 										<td colspan="2">Term1</td​>
@@ -223,13 +223,13 @@ table.tb-footer tr.style-head {
 										$resultPayment['term3'] = empty(($resultPayment['payment3'])) ? $resultPayment['term3'] : 0;
 										$resultPayment['term4'] = empty(($resultPayment['payment4'])) ? $resultPayment['term4'] : 0;
 									?>
-									<td class="<?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/Y',strtotime($resultPayment['periodDate1'])):""; ?></td>
+									<td class="<?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/y',strtotime($resultPayment['periodDate1'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo ($resultPayment['payment1']!='')?number_format($resultPayment['payment1'],2):''; ?></td>
-									<td class="<?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/Y',strtotime($resultPayment['periodDate2'])):""; ?></td>
+									<td class="<?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/y',strtotime($resultPayment['periodDate2'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment2']!='')?number_format($resultPayment['payment2'],2):''; ?></td>
-									<td class="<?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" ><?php echo !empty($resultPayment['periodDate3'])?date('d/m/Y',strtotime($resultPayment['periodDate3'])):""; ?></td>
+									<td class="<?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" ><?php echo !empty($resultPayment['periodDate3'])?date('d/m/y',strtotime($resultPayment['periodDate3'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment3']!='')?number_format($resultPayment['payment3'],2):''; ?></td>
-									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/Y',strtotime($resultPayment['periodDate4'])):""; ?></td>
+									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/y',strtotime($resultPayment['periodDate4'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment4']!='')?number_format($resultPayment['payment4'],2):''; ?></td>
 								</tr>
 								<?php

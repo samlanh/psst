@@ -511,7 +511,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		$order .= " ,smd.for_academic_year,smd.for_semester,smd.for_month,smd.`group_id`,smd.`student_id` ASC ";
 
 		if ($limit == 2) {
-			$limit = " limit 5";
+			$limit = " limit 6";
 		} else {
 			$limit = " ";
 		}

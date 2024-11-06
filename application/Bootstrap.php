@@ -1,3 +1,4 @@
+
 <?php
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
@@ -16,6 +17,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		date_default_timezone_set("Asia/Bangkok");
 		//Zend_Controller_Front::getInstance()->registerPlugin(
 		//new Application_Model_CustomAuth(Zend_Auth::getInstance()));	
+
 		date_default_timezone_set('Asia/Phnom_Penh');
 		$view = new Zend_View();
 		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
@@ -27,13 +29,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$view = $layout->getView();
 		Zend_Layout::StartMvc();
 	}	
-	protected function _initNavigationXml()
-	{
-// 		$this->bootstrap('layout');
-// 		$layout = $this->getResource('layout');
-// 		$view = $layout->getView();
-		//$config = new Zend_Config_Xml(APPLICATION_PATH.'/configs/navigation.xml');
-		//$navigation = new Zend_Navigation($config);
-		//$view->navigation($navigation);
-	}
+
+
 }
+?>
+

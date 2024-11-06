@@ -150,8 +150,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		}
 
 		$sql = "SELECT 
-				
-				fam.fatherNameKh AS father_khname 
+				s.*
+				,fam.fatherNameKh AS father_khname 
 				,fam.fatherName AS father_enname  
 				,fam.fatherNation AS father_nation
 				,fam.fatherPhone AS father_phone
@@ -163,7 +163,6 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				,fam.guardianNameKh AS guardian_khname 
 				,fam.guardianName AS guardian_enname 
 				,fam.guardianPhone AS guardian_tel
-				,s.*
 				
  				 ,DATE_FORMAT(`s`.`dob`,'%d/%M/%Y') AS `dob`,
  				(SELECT branch_namekh FROM `rms_branch` WHERE br_id=s.`branch_id` LIMIT 1) AS branch_name,

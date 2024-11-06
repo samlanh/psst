@@ -1,3 +1,4 @@
+
 <?php
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
@@ -38,3 +39,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		//$view->navigation($navigation);
 	}
 }
+?>
+

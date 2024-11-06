@@ -288,7 +288,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->rsfooteracc = $frm->getFooterAccount();
 	}
 	function rptDiscountdetailAction(){
+		
 		$id=$this->getRequest()->getParam("id");
+		$id = empty($id) ? 0 : $id;
+		
 		$db = new Allreport_Model_DbTable_DbRptPayment();
 
 		if ($this->getRequest()->isPost()) {

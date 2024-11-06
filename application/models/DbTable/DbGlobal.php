@@ -5094,9 +5094,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql = "
 			SELECT 
 				ac.* 
-				FROM `rms_academicyear` AS  ac 
-			WHERE ac.`status` = 1 
-			ORDER BY ac.`id` DESC 
+				,CONCAT(COALESCE(ac.`fromYear`,''),'-',COALESCE(ac.`toYear`,'')) AS academicYear
+			FROM 
+				`rms_academicyear` AS  ac 
+			WHERE 
+				ac.`status` = 1 
+				AND ac.isCurrent = 1
+				ORDER BY ac.`id` DESC 
 			LIMIT 1
 		";
 		return $db->fetchRow($sql);

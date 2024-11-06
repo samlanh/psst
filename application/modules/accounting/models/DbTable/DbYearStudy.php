@@ -38,7 +38,18 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 					'status'  	  => 1,
 					'userId'	  => $this->getUserId()
 			);
-			$this->insert($_arr);
+			$id = $this->insert($_arr);
+			
+			if($isCurrent==1){
+				$_arrCurrent=array(
+					'isCurrent'  => 0,
+					'modifyDate' => date("Y-m-d H:i:s"),
+					'userId'	  => $this->getUserId()
+				);
+				$where=" isCurrent = 1 AND id !=".$id;
+				$this->update($_arrCurrent, $where);
+			}
+			
 		}catch (Exception $e){
 			$db->rollBack();
 		}
@@ -76,6 +87,17 @@ class Accounting_Model_DbTable_DbYearStudy extends Zend_Db_Table_Abstract
 			);
 			$where=" id = ".$_data['id'];
 			$this->update($_arr, $where);
+			
+			if($isCurrent==1){
+				$_arrCurrent=array(
+					'isCurrent'  => 0,
+					'modifyDate' => date("Y-m-d H:i:s"),
+					'userId'	  => $this->getUserId()
+				);
+				$whereCurrent=" isCurrent = 1 AND id !=".$_data['id'];
+				$this->update($_arrCurrent, $whereCurrent);
+			}
+			
 		}catch (Exception $e){
 		    Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			$db->rollBack();

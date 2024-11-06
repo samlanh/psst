@@ -1474,15 +1474,19 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     		}
     		else{
     			$formdata = array(
+						'reportType'=>1,
     					"adv_search"=>'',
     					"branch_id"=>'',
-    					"academicYearEnroll"=>'',
-    					"status"=>-1,
+    					"academic_year"=>'',
+						"degree"=>'',
     					"grade"=>-1,
     					'studentType'=>'',
+						'study_type'=>'',
     					'pay_term'=>-1,
+						'termList'=>0,
+						'paymentstatus'=>-1,
     					'start_date'=> date('Y-m-d'),
-    					'end_date'=>date('Y-m-d'),
+    					'payment_date'=>date('Y-m-d'),
     			);
     		}
 			$this->view->search = $formdata;
@@ -1498,7 +1502,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     		Application_Form_FrmMessage::message("Application Error");
     		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
     	}
-
 		$form = new Application_Form_FrmCombineSearchGlobal();
     	$frm = $form->FormIncomeStatisticFilter();
     	Application_Model_Decorator::removeAllDecorator($frm);

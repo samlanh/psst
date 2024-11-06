@@ -216,10 +216,10 @@ class Global_GradeController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$data=$this->getRequest()->getPost();
 			$_dbgb = new Application_Model_DbTable_DbGlobal();
-			$data = array(
+			$param = array(
 				'categoryId'=>$data['dept_id']
 			);
-			$grade = $_dbgb->getAllGradeStudyByDegree($data);
+			$grade = $_dbgb->getAllGradeStudyByDegree($param);
 			if(empty($data['noaddnew'])){
 				array_unshift($grade, array ( 'id' => -1, 'name' =>$this->tr->translate("ADD_NEW")));
 			}

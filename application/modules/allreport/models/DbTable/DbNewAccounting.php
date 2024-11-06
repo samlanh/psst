@@ -22,34 +22,51 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 	   		$label = "name_en";
 	   		$grade = "it.title_en";
 	   	}
+			$viewName = " v_studenttutionfeepaid";
+
+		$condiontion = " AND itemType=1 AND dg.is_maingrade=1 ";
+		if($search['reportType']==2){
+			$viewName = " v_studentlunchfeepaid";
+			$condiontion = " AND dg.itemType=2 AND dg.grade=361 ";
+		 }elseif($search['reportType']==3){
+			$viewName = " v_studentnapfeepaid";
+			$condiontion = " AND dg.itemType=2 AND dg.grade=360 ";
+		 }
 
 		$sql = "SELECT 
 				s.stu_id,
 				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,
 				s.stu_code,
-				CONCAT(stu_khname,'-',stu_enname) AS student_name,
-				s.tel,
+				stu_khname AS student_name,
+				CASE
+					WHEN primary_phone=1 THEN s.tel
+					WHEN primary_phone=2 THEN (SELECT f.fatherPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
+					WHEN primary_phone=3 THEN (SELECT f.motherPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
+					WHEN primary_phone=4 THEN (SELECT f.guardianPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
+				END tel,
 				(SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
+				(SELECT $label FROM `rms_view` WHERE type=5 and key_code=dg.stop_type LIMIT 1) AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
 				(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
 				dg.grade as gradeId,
-				dg.feeId
+				dg.feeId,
+				vpm.paymentList,
+				vpm.stpaymentType,
+				vpm.discountCode,
+				(SELECT SUBSTRING_INDEX(installmentOrdering,',',1) AS installmentOrdering FROM `rms_startdate_enddate` WHERE id=vpm.termPaidStartId) as startTerm
 			  FROM 
 				 rms_student AS s
 				INNER JOIN `rms_group_detail_student` AS dg
-				ON s.stu_id = dg.stu_id  
+				ON s.stu_id = dg.stu_id $condiontion
+				LEFT JOIN $viewName AS vpm
+				ON s.stu_id=vpm.studentId 
+
 			  WHERE
 			   	s.status=1
-				 AND s.customer_type=1
-				 AND dg.itemType=1 
-				 AND dg.is_maingrade=1
-				 AND dg.is_current=1
-				 AND dg.stop_type=0";
+				AND s.customer_type=1
+				";
+		$where = "";// 
 	
-		// $from_date =(empty($search['start_date']))? '1': " $str_date >= '".$search['start_date']." 00:00:00'";
-		// $to_date = (empty($search['end_date']))? '1': " $str_date <= '".$search['end_date']." 23:59:59'";
-
-		$where = "";// " AND ".$from_date." AND ".$to_date;
 		if (!empty($search['adv_search'])){
 			$s_where = array();
 			$s_search = trim(addslashes($search['adv_search']));
@@ -62,47 +79,66 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		if(!empty($search['branch_id'])){
 			$where.= " AND s.branch_id = ".$search['branch_id'];
 		}
-		if(!empty($search['start_date'])){
-			$where.= " AND DATE_FORMAT(s.create_date, '%Y-%m-%d') ='".$search['start_date']."'";
+		if(!empty($search['academic_year'])){
+			$where.= " AND dg.academic_year = ".$search['academic_year'];
+		}
+		if(!empty($search['degree'])){
+			$where.= " AND dg.degree = ".$search['degree'];
 		}
 		if(!empty($search['grade']) AND $search['grade']>0){
 			$where.= " AND dg.grade = ".$search['grade'];
 		}
+		
+		if(!empty($search['start_date'])){//enroll date
+			$where.= " AND DATE_FORMAT(s.create_date, '%Y-%m-%d') ='".$search['start_date']."'";
+		}
+		if($search['study_type']!=''){
+			$where.= " AND dg.stop_type = ".$search['study_type'];
+			if ($search['study_type'] == 0) {
+				$where.= " AND dg.is_current=1";
+			}
+		}
+		
 		if(!empty($search['studentType'])){
 			$where.= " AND s.studentType = ".$search['studentType'];
 		}
 		if(!empty($search['pay_term'])){
-			$where.= " AND s.stu_id IN (SELECT studentId FROM `v_studenttutionfeepaid` WHERE payment_term=".$search['pay_term'].")";
+			$where.= " AND vpm.payment_term=".$search['pay_term'];
 		}
 		if(!empty($search['payment_date'])){
-			$where.= " AND s.stu_id IN (SELECT studentId FROM `v_studenttutionfeepaid` WHERE  FIND_IN_SET ('".$search['payment_date']."',PaidDateList))";
+			$where.= " AND FIND_IN_SET ('".$search['payment_date']."',vpm.PaidDateList)";
 		}
-
 		
 		$where.=$_db->getAccessPermission('s.branch_id');
 		
 		$order=" order by s.stu_id DESC ";
 		$db = $this->getAdapter();
+		
 		$resultStudent =  $db->fetchAll($sql.$where.$order);
+	
 		if (!empty($resultStudent)) {
 			foreach ($resultStudent as $key=> $result) {
-				$param = array(
-					'studentId'=>$result['stu_id'],
-					'gradeId'=>$result['gradeId'],
-					'feeId'=>$result['feeId'],
-					'paidDate'=>empty($search['payment_date'])?'':$search['payment_date'],
-				);
-				$dataPayment = $this->getStudentPaymentStatistic($param);
-				$extraColumns =  $this->ExtraColumns($dataPayment);
+				$dataPayment = json_decode($result['paymentList'],true);
+				$extraColumns =  $this->ExtraColumns($dataPayment,$result['startTerm']);
 				$resultStudent[$key]['paymentList'] = $extraColumns;// $this->getStudentPaymentStatistic($param);
 			}
 		}
+		
+		$paymentStatus = $search['paymentstatus']>-1?$search['paymentstatus']:-1; // or Finance etc.
+		$filterTerm = ($search['termList']>0)?$search['termList']:0;
+
+		if($paymentStatus>-1 AND $filterTerm>0){
+			$resultStudent = array_filter($resultStudent, function ($var) use ($paymentStatus,$filterTerm) {
+				return ($var['paymentList']['term'.$filterTerm] == $paymentStatus);
+			});
+		}
 		return $resultStudent;
 	}
-	function ExtraColumns($dataPayment)
+	function ExtraColumns($dataPayment,$startTerm)
 	{
 		$arrExtra = array(
 			'stpaymentType'=>'',
+			'discountCode'=>'',
 			'term1' => 0,
 			'term2' => 0,
 			'term3' => 0,
@@ -118,10 +154,13 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 			'payment3'=>'',
 			'payment4'=>'',
 		);
+	
 		if (!empty($dataPayment)) {
+			$startTerm = !empty($startTerm)?$startTerm:0;
+			
+			
 			foreach($dataPayment as $key=> $resultPayment){
-				$arrExtra['stpaymentType'] = $resultPayment['stpaymentType'];
-				if ($key > 3) {
+				if ($startTerm > 4) {
 					break;
 				}
 				if($resultPayment['payment_term']==4){//year
@@ -133,13 +172,14 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 					$arrExtra['payment1'] = $resultPayment['totalpayment'];
 					break;
 				}
-				if($resultPayment['payment_term']==3){//semester
-					if ($key == 0) {// semester 1
+				if($resultPayment['payment_term']==3){//semestere
+					
+					if ($startTerm == 1) {// semester 1
 						$arrExtra['term1'] = 1;
 						$arrExtra['term2'] = 1;
 						$arrExtra['periodDate1'] = $resultPayment['paidDate'];
 						$arrExtra['payment1'] = $resultPayment['totalpayment'];
-					}elseif($key == 1){//semester 2
+					}elseif($startTerm == 3){//semester 2
 						$arrExtra['term3'] = 1;
 						$arrExtra['term4'] = 1;
 						
@@ -148,90 +188,29 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 					}
 				}
 				if($resultPayment['payment_term']==2){//term1
-					if ($key == 0) {
+					if ($startTerm == 1) {
 						$arrExtra['term1'] = 1;
 						$arrExtra['periodDate1'] = $resultPayment['paidDate'];
 						$arrExtra['payment1'] = $resultPayment['totalpayment'];
-					}elseif($key == 1){//term2
+					}elseif($startTerm == 2){//term2
 						$arrExtra['term2'] = 1;
 						$arrExtra['periodDate2'] = $resultPayment['paidDate'];
 						$arrExtra['payment2'] = $resultPayment['totalpayment'];
-				}elseif($key == 2){//term3
+				}elseif($startTerm == 3){//term3
 						$arrExtra['term3'] = 1;
 						$arrExtra['periodDate3'] =  $resultPayment['paidDate'];
 						$arrExtra['payment3'] = $resultPayment['totalpayment'];
-				}elseif($key == 3){//term4
+				}elseif($startTerm == 4){//term4
 						$arrExtra['term4'] = 1;
 						$arrExtra['periodDate4'] = $resultPayment['paidDate'];
 						$arrExtra['payment4'] = $resultPayment['totalpayment'];
 					}
 				}
+				$startTerm=$startTerm+1;
+				
 			}
 		} 
 		return $arrExtra;
-	}
-	function getStudentPaymentStatistic($search=null){
-		try{
-			$dbGb = new Application_Model_DbTable_DbGlobal();
-			$currentLang = $dbGb->currentlang();
-			$branch_id = $dbGb->getAccessPermission('sm.branch_id');
-			$branch = $dbGb->getBranchDisplay();
-			
-			$labelFull = $dbGb->getViewLabelDisplay();
-			$labelShort = $dbGb->getViewLabelDisplay("shortcut");
-			
-			$columnItem = 'title_en';
-			if ($currentLang == 1) {
-				$columnItem = 'title';
-			}
-			
-			$db=$this->getAdapter();
-			$fromDate =(empty($search['start_date']))? '1': " DATE_FORMAT(spmt.`create_date`, '%Y-%m-%d %H:%i:%s') >= '".$search['start_date']." 00:00:00'";
-			$toDate = (empty($search['end_date']))? '1': " DATE_FORMAT(spmt.`create_date`, '%Y-%m-%d %H:%i:%s') <= '".$search['end_date']." 23:59:59'";
-			$sql=" SELECT 
-					sm.create_date as paidDate,
-					smd.itemdetail_id,
-					smd.payment_term,
-					(SELECT name_en FROM `rms_view` WHERE type=6 and key_code=smd.payment_term LIMIT 1) AS stpaymentType,
-					smd.totalpayment,
-					smd.start_date,
-					smd.validate,
-					smd.academicFeeTermId
-
-					FROM 
-						`rms_student_payment` sm
-						JOIN `rms_student_paymentdetail` smd
-						ON sm.id=smd.payment_id 
-					WHERE 
-						sm.`status`=1 
-						AND sm.is_void=0
-						AND smd.service_type=1
-						AND payment_term!=5 
-						AND payment_term!=6
-						$branch_id ";
-
-			if(!empty($search['branch_id'])){
-				$sql.= " AND sm.branch_id = ".$search['branch_id'];
-			}
-			if(!empty($search['studentId'])){
-				$sql.= " AND sm.student_id = ".$search['studentId'];
-			}
-			if(!empty($search['gradeId'])){
-				$sql.= " AND smd.itemdetail_id = ".$search['gradeId'];
-			}
-			if(!empty($search['feeId'])){
-				$sql.= " AND smd.feeId = ".$search['feeId'];
-			}
-			if(!empty($search['paidDate'])){
-				$sql.= " AND DATE_FORMAT(sm.create_date, '%Y-%m-%d') = '".$search['paidDate']."'";
-			}
-			
-			$order = " ORDER BY payment_term DESC , sm.create_date ASC ";
-			return $db->fetchAll($sql.$order);
-		}catch(Exception $e){
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-		}
 	}
 } 
     

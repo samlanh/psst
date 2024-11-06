@@ -2239,6 +2239,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$sql = " SELECT id,
 			CONCAT(title,' ( ',DATE_FORMAT(start_date, '%d/%m/%Y'),' - ',DATE_FORMAT(end_date, '%d/%m/%Y'),' )') as name, 
+			title,
 			academic_year AS academicYear,
 			periodId,
 			degreeId,
@@ -2296,7 +2297,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					if($indexKey==0){
 						$selected="selected";
 					}
-					$options .= '<option '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+					$options .= '<option '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'" data-title="'.htmlspecialchars($row['title']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
 				}
 			}
 			return $options;

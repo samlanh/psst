@@ -101,20 +101,28 @@
 				background: #c1d0f3;
 				font-weight: 600;
 			}
+			table.content-data thead tr.styleheader td {
+				white-space: pre-line;
+				line-height: 14px;
+			}
+			table.content-data tbody td span.text-truncate {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				line-height: inherit;
+				width: 100px;
+				display: block;
+			}
 			table.content-data tr.style {
 				white-space: nowrap;
 			}
 			.noted {
-				word-wrap: break-word;
-				word-break: break-all;
-				line-height: 10px;
-				white-space: normal;
-				width: 50px;
-				display: block;
+				width: 60px !important;
 			}
 			table tr td{
 				font-family: 'Times New Roman', 'Khmer OS Battambang';
 			}
+			
 			.row_data{
 				white-space: normal; max-width: 200px;
 			}
@@ -138,13 +146,14 @@
 				}
 				@page {
 					page: A4;
-					margin: 0.6cm 0.5cm;
+					margin: 0.2cm 0.5cm;
 				}
 				.bgRow {
 					background: #d6e2ff !important;
 					}
 				.branchName{font-size: 11px;}
 			}
+			
 		</style>
 		<table style="width:100%;">
 			<tr>
@@ -153,11 +162,14 @@
 			<tr>
 				<td width="15%" align="center"></td>
 				<td align="center" width="70%">
-					<div style="font-size:12px;color: #000;font-family: 'Times New Roman','Khmer OS Muol Light';"><?php echo $pageTitle; ?>
-					</div>
+					<div style="width:100%;margin-top: -25px;">
+						<div style="font-size:12px;color: #000;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<?php echo $pageTitle; ?>
+						</div>
 						<div  class="setfontsize branchName"></div>
-						<?php if(!empty($this->search["start_date"])){?>
+							<?php if(!empty($this->search["start_date"])){?>
 						<div class="setfontsize" style="margin-bottom:5px; color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></div><?php }?>
+					</div>
 				</td>
 				<td width="15%">
 					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
@@ -188,84 +200,87 @@
 					<table class="content-data" width="100%" border="1" align="center">
 						<thead>
 							<tr class="styleheader" align="center">
-								<td scope="col"><?php echo $tr->translate("N_O");?></td>
-								<td scope="col"><?php echo $tr->translate("RECEIPT_NO");?></td>
-								<td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
-								<td scope="col"><?php echo $tr->translate("PAID_DATE");?></td>
-								<td scope="col"><?php echo $tr->translate("GRADE");?></td>
-								<td scope="col"><?php echo $tr->translate("TYPE");?></td>
-								<td scope="col"><?php echo $tr->translate("TOTAL_TUITION");?></td>
-								<td scope="col"><?php echo $tr->translate("DISCOUNT");?></td>
+								<td scope="col"><?php echo $tr->translate("No");?></td>
+								<td scope="col" width="50px"><?php echo $tr->translate("Receipt No");?></td>
+								<td scope="col" width="100px"><?php echo $tr->translate("Student Name");?></td>
+								<td scope="col" width="50px"><?php echo $tr->translate("Paid Date");?></td>
+								<td scope="col"><?php echo $tr->translate("Grade");?></td>
+								<td scope="col"><?php echo $tr->translate("Type");?></td>
+								<td scope="col"><?php echo $tr->translate("Tuition");?></td>
+								<td scope="col"><?php echo $tr->translate("Discount");?></td>
 								<?php if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){?>
-								<td scope="col"><?php echo $mainParent["title"];?></td>
+								<td scope="col" width="50px"><?php echo $mainParent["title"];?></td>
 								<?php } ?>
-								<td scope="col"><?php echo $tr->translate("PAID_AMOUNT");?></td>
-								<td scope="col"><?php echo $tr->translate("PAYMENT_METHOD");?></td>
-								<td scope="col"><?php echo $tr->translate("NOTE");?></td>
-								<td scope="col"><?php echo $tr->translate("TELLER");?></td>
+								<td scope="col"><?php echo $tr->translate("Paid");?></td>
+								<td scope="col"><?php echo $tr->translate("Method");?></td>
+								
+								<td scope="col"><?php echo $tr->translate("Teller");?></td>
+								<td scope="col"><?php echo $tr->translate("Note");?></td>
 							</tr>
 						</thead>
 						<tbody>
 							<?php 
 							foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
 								$i++; 
-								$arr = array(
-									"parentCol"=>$parentCol
-									,"paymentId"=>$rs["paymentId"]
-								);
-								$result = $dbAcc->getPaymentInfoParent($arr);
 								$payTerm="";
 								$tutionTotalFeeLabel="";
 								$tutionFeeDisPer="";
-								$tutionFeeDisAmt="";								
-								if(!empty($result[0]["paymentInfo"]["itemsName"])){
-									$payTerm = empty($result[0]["paymentInfo"]["payTerm"]) ? $tr->translate("OTHER") : $result[0]["paymentInfo"]["payTerm"];
-									$tutionTotalFeeLabel = empty($result[0]["paymentInfo"]["gSubTotalFee"]) ? 0 : $result[0]["paymentInfo"]["gSubTotalFee"];
-									$tutionFeeDisPer = empty($result[0]["paymentInfo"]["totalDiscountPercent"] ANd$result[0]["paymentInfo"]["totalDiscountPercent"]!="0.00") ? '' : str_replace(".00","",number_format($result[0]["paymentInfo"]["totalDiscountPercent"],2))."%";
-									$tutionFeeDisAmt = empty($result[0]["paymentInfo"]["totalDiscountAmt"] AND $result[0]["paymentInfo"]["totalDiscountAmt"]!="0.00" ) ? '' : "+".$result[0]["paymentInfo"]["totalDiscountAmt"];
-								}
+								$tutionFeeDisAmt="";	
+								
+								$pmtDetailJson = json_decode($rs['pmtDetailJson'], TRUE);
 							?>
 							
 								<?php 
 									$strTotalByMethod="";
 									$columnTypeStr="";
-									if(!empty($result)) foreach($result AS $k =>$mainParent){ 
+									if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){ 
 										$columnClass="";
-										$currentAmtLabel="";
+										$expl = explode(',', $mainParent["listSubId"]);
+										$totalPaymentLabel="";
+										$totalPayment=0;
 										$gTotalPayment = 0;
-										$parentCol[$k]["totalByMethod"] = empty($parentCol[$k]["totalByMethod"]) ? 0 : $parentCol[$k]["totalByMethod"];
-										if(!empty($mainParent["paymentInfo"]["itemsName"])){
-											$currentAmtLabel = 0;
-											if(!empty($mainParent["paymentInfo"]["gTotalPayment"])){
-												$gTotalPayment = $mainParent["paymentInfo"]["gTotalPayment"];
+										if(!empty($pmtDetailJson)) foreach($pmtDetailJson as $detail){
+											$category = empty($detail["category"]) ? 0 : $detail["category"];
+											$keyIndex = in_array($category, $expl);
+											if(in_array($category, $expl)) {
+												$thisTotal= empty($detail["totalPayment"]) ? 0 : $detail["totalPayment"];
+												$totalPayment = $totalPayment + $thisTotal;
 												
-												$currentAmtLabel = number_format($gTotalPayment,2);
-												if($gTotalPayment<0){
-													$columnClass="redColor";
-													$currentAmtLabel = "(".$currentAmtLabel.")";
+											
+												if($detail["itemType"]==1){
+													$tutionTotalFeeLabel=$detail["fee"];
+													$payTerm= empty($detail["payTermTitle"]) ?  $tr->translate("OTHER") :  $detail["payTermTitle"];
+													$tutionFeeDisPer=($detail["disPer"]>0) ?  str_replace(".00","",$detail["disPer"])."%" : "";
+													$tutionFeeDisAmt=($detail["disAmt"]>0) ? "+".$detail["disAmt"] : "";
 												}
-												
-												$parentCol[$k]["gTotal"] = empty($parentCol[$k]["gTotal"]) ? 0 : $parentCol[$k]["gTotal"];
-												$parentCol[$k]["gTotal"] = $parentCol[$k]["gTotal"] + $gTotalPayment;
-												
 											}
+											
 										}
+										$gTotalPayment = $gTotalPayment + $totalPayment;
+										$totalPaymentLabel= empty($totalPayment) ? "" : number_format($totalPayment,2);
+										if($totalPayment<0){
+											$columnClass="redColor";
+											$totalPaymentLabel = "(".number_format($totalPayment,2).")";
+										}
+										
 										$currTotalMethod = empty($parentCol[$k]["totalByMethod"]) ? "" : number_format($parentCol[$k]["totalByMethod"],2);
 										$strTotalByMethod.= '<td align="right"><strong>'.$currTotalMethod.'</strong></td>';
-										if($paymentMethod !=$rs["payment_method"] || $bankId !=$rs["bank_id"]){
+										if($paymentMethod !=$rs["pmtMethod"] || $bankId !=$rs["bankId"]){
 											$parentCol[$k]["totalByMethod"] = 0;
 										}
 										$parentCol[$k]["totalByMethod"] = $parentCol[$k]["totalByMethod"] + $gTotalPayment;
+										$parentCol[$k]["gTotal"] = empty($parentCol[$k]["gTotal"]) ? 0 : $parentCol[$k]["gTotal"];
+										$parentCol[$k]["gTotal"] = $parentCol[$k]["gTotal"] + $gTotalPayment;
 										
-												
-										$columnTypeStr.= '<td class="'.$columnClass.'" data-label="'.$mainParent["title"].'" align="right">'.$currentAmtLabel.'</td>';
+										
+										$columnTypeStr.= '<td class="'.$columnClass.'" align="right" data-label="'.$mainParent["title"].'">'.$totalPaymentLabel.'</td>';
 									}
 								?>
 									
 								<?php 
-									if($paymentMethod !=$rs["payment_method"] || $bankId !=$rs["bank_id"]){
+									if($paymentMethod !=$rs["pmtMethod"] || $bankId !=$rs["bankId"]){
 										$rowLabel = $rs["bankName"];
-										if($rs["payment_method"]==1){
+										if($rs["pmtMethod"]==1){
 											$rowLabel = $rs["paymentMethodTitle"];
 										}
 								?>
@@ -299,26 +314,26 @@
 									<td colspan="<?php echo 12+$countCol;?>" align="left"><strong><?php echo $rowLabel;?></strong></td>
 								</tr>
 								<?php }?>
-								 <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['paymentId'];?>,1);return false;" style="<?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?>" >
-									<td data-label="<?php echo $tr->translate("N_O");?>" align="center"><?php echo $i;?></td>
-									<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>" class="bold" align="center"><?php echo $rs['receipt_number']; ?></td>
-									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" ><?php echo $rs['studentNameKh']; ?></td>
-									<td data-label="<?php echo $tr->translate("PAID_DATE");?>" align="center"><?php echo date($dateFormat, strtotime($rs['create_date'])); ?></td>
-									<td data-label="<?php echo $tr->translate("GRADE");?>" align="center"><?php echo $rs['gradeTitle']; ?></td>
-									<td data-label="<?php echo $tr->translate("TYPE");?>" align="center"><?php echo $payTerm;?></td>
-									<td data-label="<?php echo $tr->translate("TOTAL_TUITION");?>" align="right"><?php echo $tutionTotalFeeLabel;?></td>
-									<td data-label="<?php echo $tr->translate("DISCOUNT");?>" align="center"><?php echo $tutionFeeDisPer.$tutionFeeDisAmt;?></td>
+								 <tr class="context-menu-one style hover" oncontextmenu="setrowdata(<?php echo $rs['paymentId'];?>,1);return false;" style="<?php if ($rs['isVoid']==1){echo "background: #ffd9d9;"; }?>" >
+									<td data-label="<?php echo $tr->translate("No");?>" align="center"><?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("Receipt No");?>" class="bold" align="center"><?php echo $rs['receptNo']; ?></td>
+									<td data-label="<?php echo $tr->translate("Student Name");?>" ><span class="text-truncate"><?php echo $rs['studentNameKh']; ?></span></td>
+									<td data-label="<?php echo $tr->translate("Paid Date");?>" align="center"><?php echo date($dateFormat, strtotime($rs['createDate'])); ?></td>
+									<td data-label="<?php echo $tr->translate("Grade");?>" align="center"><?php echo $rs['gradeTitle']; ?></td>
+									<td data-label="<?php echo $tr->translate("Type");?>" align="center"><?php echo $payTerm;?></td>
+									<td data-label="<?php echo $tr->translate("Tuition");?>" align="right"><?php echo $tutionTotalFeeLabel;?></td>
+									<td data-label="<?php echo $tr->translate("Discount");?>" align="center"><?php echo $tutionFeeDisPer.$tutionFeeDisAmt;?></td>
 									
 									<?php echo $columnTypeStr; ?>
 									<?php 
 										$creditMemoLabel = "";
 										
-										if(!empty($rs['credit_memo'])){
-											if($rs['credit_memo']>0){
-												$creditMemoLabel = "(-".number_format($rs['credit_memo'],2).")";
+										if(!empty($rs['creditMemo'])){
+											if($rs['creditMemo']>0){
+												$creditMemoLabel = "(-".number_format($rs['creditMemo'],2).")";
 											}
 										}
-										$paidAmount = $rs['paid_amount'];
+										$paidAmount = $rs['paidAmt'];
 										$paidAmountLabel = number_format($paidAmount,2);
 										$paidClass="";
 										if($paidAmount<0){
@@ -327,21 +342,22 @@
 										}		
 									?>
 									
-									<td data-label="<?php echo $tr->translate("PAID_AMOUNT");?>" align="right" class="<?php echo $paidClass;?>"><?php echo $paidAmountLabel; ?></td>
-									<td data-label="<?php echo $tr->translate("PAYMENT_METHOD");?>" align="center"><?php echo $rowLabel; ?></td>
-									<td data-label="<?php echo $tr->translate("NOTE");?>"><span	class="noted"><?php echo $rs['note']; ?></span></td>
-									<td data-label="<?php echo $tr->translate("TELLER");?>" align="center"><?php echo $rs['byUserName'];?></td>
+									<td data-label="<?php echo $tr->translate("Paid");?>" align="right" class="<?php echo $paidClass;?>"><?php echo $paidAmountLabel; ?></td>
+									<td data-label="<?php echo $tr->translate("Method");?>" align="center"><?php echo $rowLabel; ?></td>
+									
+									<td data-label="<?php echo $tr->translate("Teller");?>" align="center"><?php echo $rs['byUserName'];?></td>
+									<td data-label="<?php echo $tr->translate("Note");?>"><span	class="noted text-truncate"><?php echo $rs['note']; ?></span></td>
 								</tr>
 								
 								<?php 
-									if ($rs['is_void']!=1){
+									if ($rs['isVoid']!=1){
 									
 										$totalPaidByMethod = $totalPaidByMethod + $paidAmount;
 										$gTotalPaid = $gTotalPaid + $paidAmount;
 									}
 									
-									$paymentMethod=$rs["payment_method"];
-									$bankId=$rs["bank_id"];
+									$paymentMethod=$rs["pmtMethod"];
+									$bankId=$rs["bankId"];
 								?>
 							<?php }
 								$arryTotal = array(
@@ -422,7 +438,7 @@
 			id: "grade_all",
 			name: "grade_all",  
 			class: 'fullside',  
-			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
+			placeHolder:"<?php echo $tr->translate("SELECT_Grade");?>",          
 			onChange: function() {  
 			}
 		}, "grade_all");

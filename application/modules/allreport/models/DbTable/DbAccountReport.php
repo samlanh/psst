@@ -41,7 +41,7 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 		$sql="
 		SELECT 
 			i.`id`
-			,i.$columnItem AS title
+			,COALESCE(NULLIF(i.shortcut,''),i.$columnItem) AS title
 			,'' AS listSubId
 			,'0' AS totalByMethod
 			,'0' AS gTotal
@@ -91,7 +91,7 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			,SUM(spmtd.`extra_fee`) AS totalExtraFee
 			,spmtd.`extra_fee`
 			,SUM(spmtd.`totalpayment`) AS gTotalPayment
-			,(SELECT ss.title FROM `rms_startdate_enddate` ss WHERE ss.id=spmtd.academicFeeTermId LIMIT 1) AS payTerm
+			,(SELECT ss.title FROM `rms_startdate_enddate` ss WHERE ss.id=Max(spmtd.academicFeeTermId) LIMIT 1) AS payTerm
 
 
 			FROM `rms_student_paymentdetail` AS spmtd 
@@ -133,7 +133,7 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 		try{
 			$dbGb = new Application_Model_DbTable_DbGlobal();
 			$currentLang = $dbGb->currentlang();
-			$branch_id = $dbGb->getAccessPermission('spmt.branch_id');
+			$branch_id = $dbGb->getAccessPermission('spt.`branchId`');
 			$branch = $dbGb->getBranchDisplay();
 			
 			$labelFull = $dbGb->getViewLabelDisplay();
@@ -145,37 +145,42 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			}
 			
 			$db=$this->getAdapter();
-			$fromDate =(empty($search['start_date']))? '1': " DATE_FORMAT(spmt.`create_date`, '%Y-%m-%d %H:%i:%s') >= '".$search['start_date']." 00:00:00'";
-			$toDate = (empty($search['end_date']))? '1': " DATE_FORMAT(spmt.`create_date`, '%Y-%m-%d %H:%i:%s') <= '".$search['end_date']." 23:59:59'";
+			$fromDate =(empty($search['start_date']))? '1': " DATE_FORMAT(spt.`createDate`, '%Y-%m-%d %H:%i:%s') >= '".$search['start_date']." 00:00:00'";
+			$toDate = (empty($search['end_date']))? '1': " DATE_FORMAT(spt.`createDate`, '%Y-%m-%d %H:%i:%s') <= '".$search['end_date']." 23:59:59'";
 			$sql=" SELECT
-						(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = spmt.branch_id LIMIT 1) AS branchName
-						,s.`stu_code` AS studentCode
-						,s.`stu_khname` AS studentNameKh
-						,CONCAT(s.`stu_enname`,' ',s.`last_name`) AS studentNameEn
-						,(SELECT v.$labelFull FROM `rms_view` AS v WHERE v.type =8 AND v.key_code = spmt.`payment_method` LIMIT 1) AS paymentMethodTitle
-						,COALESCE((SELECT b.`bank_name` FROM `rms_bank` AS b WHERE b.id = spmt.`bank_id` LIMIT 1),'N/A') AS bankName
+						(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = spt.`branchId` LIMIT 1) AS branchName
+						
+						,spt.`studentCode` AS studentCode
+						,spt.`studentNameKh` AS studentNameKh
+						,spt.`studentNameEn`
+						
+						,(SELECT v.$labelFull FROM `rms_view` AS v WHERE v.type =8 AND v.key_code = spt.`pmtMethod` LIMIT 1) AS paymentMethodTitle
+						,COALESCE((SELECT b.`bank_name` FROM `rms_bank` AS b WHERE b.id = spt.`bankId` LIMIT 1),'N/A') AS bankName
 						,fam.`laonNumber`
 						,fam.`street`
 						,fam.`houseNo`
+						
 						,(SELECT v.$labelShort FROM `rms_view` AS v WHERE v.type =41 AND v.key_code = fam.`familyType` LIMIT 1) AS familyTypeTitle
-						,(SELECT COALESCE(i.shortcut,i.$columnItem) FROM `rms_items` AS i WHERE i.type=1 AND i.id = spmt.degree LIMIT 1) AS degreeTitle
-						,(SELECT COALESCE(itd.shortcut,itd.$columnItem) FROM `rms_itemsdetail` AS itd WHERE itd.`items_type`=1 AND itd.id = spmt.grade LIMIT 1) AS gradeTitle
-						,(SELECT u.first_name FROM rms_users AS u WHERE u.id = spmt.user_id LIMIT 1) AS byUserName
-						,spmt.id AS paymentId
-						,spmt.receipt_number
-						,spmt.create_date
-						,spmt.credit_memo
-						,spmt.grand_total
-						,spmt.penalty
-						,spmt.paid_amount
-						,spmt.balance_due
-						,spmt.payment_method
-						,spmt.bank_id
-						,spmt.note
-						,spmt.is_void
+						,(SELECT COALESCE(i.shortcut,i.$columnItem) FROM `rms_items` AS i WHERE i.type=1 AND i.id = spt.degree LIMIT 1) AS degreeTitle
+						,(SELECT COALESCE(itd.shortcut,itd.$columnItem) FROM `rms_itemsdetail` AS itd WHERE itd.`items_type`=1 AND itd.id = spt.grade LIMIT 1) AS gradeTitle
+						,(SELECT u.first_name FROM rms_users AS u WHERE u.id = spt.userId LIMIT 1) AS byUserName
+						
+						,spt.paymentId
+						,spt.`receptNo`
+						,spt.`createDate`
+						,spt.`creditMemo`
+						,spt.`grandTotal`
+						,spt.`penalty`
+						,spt.`paidAmt`
+						,spt.`balanceDue`
+						,spt.`pmtMethod`
+						,spt.`bankId`
+						,spt.note
+						,spt.`isVoid`
+						,spt.`pmtDetailJson`
 				  FROM
-						`rms_student_payment` AS spmt 
-						JOIN (`rms_student` AS s LEFT JOIN `rms_family` AS fam ON fam.`id` = s.`familyId`) ON s.`stu_id` = spmt.`student_id`
+						`v_stupmt_ft_detail_info` AS spt 
+							LEFT JOIN `rms_family` AS fam ON fam.`id` = spt.`familyId`
 				  WHERE 1
 						
 						$branch_id ";
@@ -185,43 +190,42 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			if(!empty($search['adv_search'])){
 				$s_where=array();
 				$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
-				$s_where[] = " REPLACE(s.`stu_code`,' ','') LIKE '%{$s_search}%'";
-				$s_where[] = " REPLACE(s.`stu_khname`,' ','') LIKE '%{$s_search}%'";
-				$s_where[] = " REPLACE(s.`stu_enname`,' ','') LIKE '%{$s_search}%'";
-				$s_where[] = " REPLACE(s.`last_name`,' ','') LIKE '%{$s_search}%'";
-				$s_where[]=	 " REPLACE(CONCAT(s.last_name,s.stu_enname),' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(spt.`studentCode`,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(spt.`studentNameKh`,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(spt.`studentNameEn`,' ','') LIKE '%{$s_search}%'";
+				
 				$s_where[] = " REPLACE(fam.`laonNumber`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(fam.`street`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(fam.`houseNo`,' ','') LIKE '%{$s_search}%'";
-				$s_where[] = " REPLACE(spmt.receipt_number,' ','') LIKE '%{$s_search}%'";
+				$s_where[] = " REPLACE(spt.receptNo,' ','') LIKE '%{$s_search}%'";
 				$where.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(!empty($search['branch_id'])){
-				$sql.= " AND spmt.branch_id = ".$search['branch_id'];
+				$sql.= " AND spt.branchId = ".$search['branch_id'];
 			}
 			if(!empty($search['userId'])){
-					$sql.= " AND spmt.user_id = ".$search['userId'];
+					$sql.= " AND spt.userId = ".$search['userId'];
 			}
 			if(!empty($search['degree'])){
-				$sql.= " AND spmt.degree = ".$search['degree'];
+				$sql.= " AND spt.degree = ".$search['degree'];
 			}
 			if(!empty($search['grade_all'])){
-				$sql.= " AND spmt.grade = ".$search['grade_all'];
+				$sql.= " AND spt.grade = ".$search['grade_all'];
 			}
 			if(!empty($search['stu_name'])){
-				$sql.= " AND spmt.student_id = ".$search['stu_name'];
+				$sql.= " AND spt.studentId = ".$search['stu_name'];
 			}
 			if(!empty($search['receiptStatus'])){
 				if($search['receiptStatus']==1){
-					$sql.= " AND spmt.is_void = 0 ";
+					$sql.= " AND spt.isVoid = 0 ";
 				}else if($search['receiptStatus']==2){
-					$sql.= " AND spmt.is_void = 1 ";
+					$sql.= " AND spt.isVoid = 1 ";
 				}
 			}
 	
-			$order=" ORDER BY spmt.`payment_method` DESC,spmt.`bank_id` ASC,spmt.id DESC ";
+			$order=" ORDER BY spt.`pmtMethod` DESC,spt.`bankId` ASC,spt.paymentId DESC ";
 			if($search['receipt_order']==0){
-				$order=" ORDER BY spmt.`payment_method` DESC,spmt.`bank_id` ASC,spmt.id ASC ";
+				$order=" ORDER BY spt.`pmtMethod` DESC,spt.`bankId` ASC,spt.paymentId ASC ";
 			}
 			return $db->fetchAll($sql.$order);
 		}catch(Exception $e){

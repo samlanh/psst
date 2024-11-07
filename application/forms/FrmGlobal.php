@@ -271,7 +271,7 @@ class Application_Form_FrmGlobal
 			<table width='100%' class='tableTop'>
 				<tr>
 					<td width='100%' valign='center' style='vertical-align: middle;  display: flex;    align-items: center;' >
-						<img style='max-height: 75px;display: inline-block;margin-right: 10px;' src=" . $logo . ">
+						<img style='max-height: 55px;display: inline-block;margin-right: 10px;' src=" . $logo . ">
 						<div style='display: inline-block;width:90%;vertical-align: middle;'>
 							<h2 style='padding: 0;margin: 0; font-weight:normal; font-family: Times New Roman , Khmer OS Muol Light;font-size:12px; color: inherit;'>" . $rs['school_namekh'] . "</h2>
 							<h2 style='white-space:nowrap; font-weight:bold; font-size:12px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>" . $rs['school_nameen'] . "</h2>

@@ -66,10 +66,11 @@ class RsvAcl_Model_DbTable_DbUserType extends Zend_Db_Table_Abstract
 	public function insertUserType($arr)
 	{
 		$data=array(); 
-		
+		$isSuperUser = empty($arr['isSuperUser'])?0:1;
 		$data['user_type']=$arr['user_type'];  
 		$data['parent_id']=$arr['parent_id'];  	
      	$data['status']='1';
+		$data['isSuperUser']=$isSuperUser;
      	return $this->insert($data); 
 	}	
 	//update user
@@ -80,10 +81,13 @@ class RsvAcl_Model_DbTable_DbUserType extends Zend_Db_Table_Abstract
 	
 		
 		$status = empty($arr['status'])?0:1;
+		$isSuperUser = empty($arr['isSuperUser'])?0:1;
 		
 		$data['user_type']=$arr['user_type'];   
 		$data['parent_id']=$arr['parent_id']; 	
 		$data['status']=$status;
+		$data['isSuperUser']=$isSuperUser;
+		
     	$where=$this->getAdapter()->quoteInto('user_type_id=?',$user_type_id);
 		$this->update($data,$where); 
 	}
@@ -105,9 +109,19 @@ class RsvAcl_Model_DbTable_DbUserType extends Zend_Db_Table_Abstract
 	}
 	public function getAlluserType(){
 		$db = $this->getAdapter();
-		$sql = "SELECT u.user_type_id,u.user_type,
-		(SELECT u1.user_type FROM `rms_acl_user_type` u1 WHERE u1.user_type_id = u.parent_id LIMIT 1)
-		 parent_id, status FROM `rms_acl_user_type` u ";
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$sql = "
+			SELECT 
+				u.user_type_id
+				,u.user_type
+				,(SELECT u1.user_type FROM `rms_acl_user_type` u1 WHERE u1.user_type_id = u.parent_id LIMIT 1) parent_id
+				,CASE 
+					WHEN u.isSuperUser = 1 THEN '".$tr->translate("IS_SUPERUSER")."'
+					ELSE ''
+				END AS isSuperUserTitle
+				,status 
+			FROM `rms_acl_user_type` u 
+		";
 		return $db->fetchAll($sql);
 	}
 }

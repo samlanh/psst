@@ -66,6 +66,13 @@
 									</div>
 									<div class="form-group">
 										<label class="control-label custom-switch float-end "> 
+											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("IS_SUPERUSER");?></a> 
+											<input type="checkbox" id="isSuperUser" name="isSuperUser" class="custom-switch-input"  <?php if(!empty($rs["isSuperUser"])){ echo "checked";} ?> > 
+											<span class="custom-switch-indicator custom-radius switch-status"></span> 
+										</label>
+									</div>
+									<div class="form-group">
+										<label class="control-label custom-switch float-end "> 
 											<a href="javascript:void(0);" class="switchButton status"><?php echo $tr->translate("STATUS");?></a> 
 											<input type="checkbox" id="status" name="status" class="custom-switch-input"  <?php if(!empty($rs["status"])){ echo "checked";} ?> > 
 											<span class="custom-switch-indicator custom-radius switch-status"></span> 

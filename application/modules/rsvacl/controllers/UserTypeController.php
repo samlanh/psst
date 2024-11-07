@@ -24,7 +24,7 @@ class Rsvacl_UsertypeController extends Zend_Controller_Action
     		else{
     			$result = Application_Model_DbTable_DbGlobal::getResultWarning();
     		}
-    		$collumns = array("USER_TYPE","PARENT","STATUS");
+    		$collumns = array("USER_TYPE","PARENT","IS_SUPERUSER","STATUS");
     		$link=array(
     				'module'=>'rsvacl','controller'=>'usertype','action'=>'edit',
     		);

@@ -535,7 +535,7 @@ if ($module != 'default') {
 					var left = Number((screen.width/2)-(w/2));
 					var tops = Number((screen.height/2)-(h/2));
 
-					var winPrint = window.open('', '', 'toolbar=0,scrollbars=0,status=0,width='+w+', height='+h+', top='+tops+', left='+left);
+					var winPrint = window.open(' ', '', 'toolbar=0,scrollbars=0,status=0,width='+w+', height='+h+', top='+tops+', left='+left);
 					winPrint.document.write('<title>'+currentTitle+'</title>'+dojo.byId('divPrint').innerHTML);
 					winPrint.document.close();
 					winPrint.focus();

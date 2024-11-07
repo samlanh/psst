@@ -144,10 +144,7 @@
 					visibility: visible;
 					height: <?php echo $classHideHeight;?>;
 				}
-				@page {
-					page: A4;
-					margin: 0.2cm 0.5cm;
-				}
+				<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 				.bgRow {
 					background: #d6e2ff !important;
 					}

@@ -1704,5 +1704,18 @@ class Application_Form_FrmGlobal
 		return $str;
 	} //
 
-
+	function getPrintPageFormat($data=array())
+	{
+		//$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$pageSize = empty($data["pageSize"]) ? "A4" : $data["pageSize"];
+		$marginTop = empty($data["marginTop"]) ? "0.5cm" : $data["marginTop"];
+		$marginRight = empty($data["marginRight"]) ? "0.5cm" : $data["marginRight"];
+		$marginBottom = empty($data["marginBottom"]) ? "1cm" : $data["marginBottom"];
+		$marginLeft = empty($data["marginLeft"]) ? "0.5cm" : $data["marginLeft"];
+		$str="@page {";
+				$str.="page: $pageSize;";
+				$str.="margin: $marginTop $marginRight $marginBottom $marginLeft;";
+		$str.="}";
+		return $str;
+	}
 }

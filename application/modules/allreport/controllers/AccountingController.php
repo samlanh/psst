@@ -1425,6 +1425,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
+		$this->view->printFormat = $frm->getPrintPageFormat();
 		
 		$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();

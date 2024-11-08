@@ -1358,7 +1358,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$where .= " AND gds.itemType=" . $data['itemType'];
 		}
 		if (!empty($data['activStudent'])) {
-			$where .= " AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4) ";
+			$where .= " AND (gds.stop_type=0) ";
+			//OR gds.stop_type=3 OR gds.stop_type=4
 		}
 		if (isset($data['isCurrent'])) {
 			$where .= " AND gds.is_current=" . $data['isCurrent'];
@@ -1392,6 +1393,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 
 		$group = " GROUP BY s.stu_id ORDER BY stu_code ASC, stu_khname ASC ";
+	
 		$rows = $db->fetchAll($sql . $where . $group);
 		if (!empty($data['opt'])) {
 			$options = array(0 => $tr->translate("CHOOSE"));

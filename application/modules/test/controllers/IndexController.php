@@ -67,14 +67,14 @@ class Test_IndexController extends Zend_Controller_Action
 			$db = new Test_Model_DbTable_DbStudentTest();	
 			try {
 				$db->addStudentTest($data);
+				$inFrame = empty($data['inFrame']) ? "" : "true";
 				if(!empty($data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL);
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/index?inFrame=".$inFrame);
 					exit();
 				}else{
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add?inFrame=".$inFrame);
 					exit();
 				}		
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS",self::REDIRECT_URL."/add");
 			} catch (Exception $e) {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -91,6 +91,10 @@ class Test_IndexController extends Zend_Controller_Action
     	$frm->FrmAddStudentTest(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_crm = $frm;
+
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
     }
     
     public function editAction()

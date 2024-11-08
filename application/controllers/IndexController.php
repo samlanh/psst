@@ -51,7 +51,6 @@ class IndexController extends Zend_Controller_Action
 				$db_user=new Application_Model_DbTable_DbUsers();
 				if($db_user->userAuthenticate($user_name,$password)){					
 					
-					$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 					$user_id=$db_user->getUserID($user_name);
 					$user_info = $db_user->getUserInfo($user_id);
 					$arr_acl=$db_user->getArrAcl($user_info['user_type']);
@@ -64,7 +63,8 @@ class IndexController extends Zend_Controller_Action
 					$arr_module=(array_unique($arr_module));
 					$arr_actin=(array_unique($arr_actin));
 					$arr_module=$this->sortMenu($arr_module);
-						
+					
+					$session_user=new Zend_Session_Namespace(SYSTEM_SES);
 					$session_user->arr_acl = $arr_acl;
 					$session_user->arr_module = $arr_module;
 					$session_user->arr_actin = $arr_actin;
@@ -73,12 +73,12 @@ class IndexController extends Zend_Controller_Action
 					$session_user->user_name=$user_name;
 					$session_user->pwd=$password;
 					$session_user->level= $user_info['user_type'];
+					$session_user->issupper_user= $user_info['isSuperUser'];
 					$session_user->last_name= $user_info['last_name'];
 					$session_user->first_name= $user_info['first_name'];
 					$session_user->branch_id= $user_info['branch_id'];
 					$session_user->branch_list= $user_info['branch_list'];
 					$session_user->schoolOption= $user_info['schoolOption'];
-					
 
 					$db = new Application_Model_DbTable_DbUsers();
 					

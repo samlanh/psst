@@ -10,8 +10,10 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 	{		
 		if (!empty($user_id)){	
 			$select=$this->select();
-				$select->from($this,array('user_type', 'last_name' ,'first_name','branch_id','branch_list','schoolOption'))
-				->where('id=?',$user_id);			
+			$select->from($this,array('user_type', 'last_name' ,'first_name','branch_id','branch_list','schoolOption',
+			'(SELECT isSuperUser FROM `rms_acl_user_type` WHERE user_type_id=rms_users.user_type) as isSuperUser'))
+			->where('id=?',$user_id);
+
 			$row=$this->fetchRow($select);		
 			if(!$row) return NULL;
 			return $row;

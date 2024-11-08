@@ -74,6 +74,7 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$db = new Application_Model_DbTable_DbGlobal();
 	}
 	function addAction(){
+
 		$db = new Foundation_Model_DbTable_DbStudent();
 		if($this->getRequest()->isPost()){
 			try{
@@ -83,14 +84,15 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 					exit();
 				}
 					$exist = $db->addStudent($_data);
+					$inFrame = empty($_data['inFrame']) ? "" : "true";
 					if($exist==-1){
 						Application_Form_FrmMessage::message("RECORD_EXIST");
 					}else{
 						if(isset($_data['save_close'])){
-							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register");
+							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register?inFrame=".$inFrame);
 							exit();
 						}else{
-							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add");
+							Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/foundation/register/add?inFrame=".$inFrame);
 							exit();
 						}
 					}
@@ -137,6 +139,10 @@ class Foundation_RegisterController extends Zend_Controller_Action {
 		$frm_register=$tsub->FrmStudentRegister();
 		Application_Model_Decorator::removeAllDecorator($frm_register);
 		$this->view->frm = $frm_register;
+
+		$inFrame=$this->getRequest()->getParam("inFrame");
+		$inFrame = empty($inFrame) ? "" : $inFrame;
+		$this->view->inFrame = $inFrame;
 	}
 	public function editAction(){
 		$id=$this->getRequest()->getParam("id");

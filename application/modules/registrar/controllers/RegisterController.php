@@ -115,6 +115,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	   
 	   $dbclass = new Application_Model_GlobalClass();
 	   $this->view->term_option = $dbclass->getAllPayMentTermOption();
+
+	   $session_user=new Zend_Session_Namespace(SYSTEM_SES);
+	   $this->view->issupper_user = $session_user->issupper_user;
 	   
 	//   $data =  array(
 	//    		'branch_id'=>1,
@@ -125,7 +128,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 	//   		'stopType'=>0,
 	//   		'isAutopayment'=>3,
 	//    		'isInititilize'=>1);
-	   $db = new Application_Model_DbTable_DbGlobal();
+	//    $db = new Application_Model_DbTable_DbGlobal();
 		// $param = array(
 		// 	'academicYear'=>2,
 		// 	'itemType'=>1
@@ -284,6 +287,13 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Application_Model_DbTable_DbGlobal();
 			$rows = $db->getAllstudentTest($data);
+
+			$dbUser = new Application_Model_DbTable_DbUsers();
+			$permission = $dbUser->getAccessUrl("test","index","add");
+			
+			if (!empty($permission)){
+				array_unshift($rows, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+			}
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}
@@ -297,7 +307,12 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 			if ($customer_type==2){
 				$rows = $db->getAllCustomer(null,$branch_id);
 			}else{
+				$dbUser = new Application_Model_DbTable_DbUsers();
+				$permission = $dbUser->getAccessUrl("foundation","register","add");
 				$rows = $db->getAllListStudent($data);
+				if (!empty($permission)){
+					array_unshift($rows, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+				}
 			}
 			print_r(Zend_Json::encode($rows));
 			exit();

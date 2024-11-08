@@ -983,7 +983,13 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 				var thisStuType = dijit.byId('student_type').get('value');
 				stu_id = dijit.byId('old_stu').get('value');
 				if(stu_id == "-1"){
-					if(thisStuType==3){
+					if(thisStuType==1){
+						addTab('<?php echo $tr->translate("CREATE_STUDENT");?>','<?php echo $this->baseUrl() . "/foundation/register/add".'?inFrame=true'; ?>');
+					}
+					else if(thisStuType==2){
+						addTab('<?php echo $tr->translate("PLACEMENT_TEST");?>','<?php echo $this->baseUrl() . "/test/index/add".'?inFrame=true'; ?>');
+					}
+					else if(thisStuType==3){
 						addTab('<?php echo $tr->translate("CREATE_CRM");?>','<?php echo $this->baseUrl() . "/home/crm/add".'?inFrame=true'; ?>');
 					}
 				}else{
@@ -1350,9 +1356,12 @@ $(document).ready(function() {
 	var numberRange = 0;
 	tmp = '';
 	temp = '';
+	let is_supper_user ='<?php echo $this->issupper_user;?>';
+	let disableControl = (is_supper_user=1)?'':'disabled="disabled"';
 
 	function addRow(serviceId, dataLabel, dataRow = null,termOption) {
 		try{
+			alert(is_supper_user);
 		strCol6 = '<div class="col-md-6 col-sm-6 col-xs-12">';
 		study_year = $('#study_year').val();
 
@@ -1384,7 +1393,7 @@ $(document).ready(function() {
 		template += '<input type="checkbox" id="autoNextPay' + col + '" name="autoNextPay' + col + '" class="custom-switch-input" ' + checked + ' ' + disabled + ' />';
 		template += '<span class="custom-switch-indicator custom-radius switch-status"></span>';
 		template += '</label></div>';
-		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ',7);getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
+		template += '<td ><div class="form-group"><select class="custome-select-opt fullside" onchange="getservicefee(' + col + ',7);getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('ACADEMIC_YEAR'); ?>" required="false" '+disableControl+' name="academic_year_' + col + '" id="academic_year_' + col + '" >' + academicOption + '</select></div>';
 		template += '<div class="form-group"><select class="custome-select-opt fullside" required="false" onchange="getservicefee(' + col + ');getValidate(' + col + ')" id="term_' + col + '" name="term_' + col + '" >' + termOption + '</select></div>';
 		template += '<td class="bgBox removePadding"><div class="form-group" ><select class="custome-select-opt fullside" placeHolder="Valid Date" required="false" onchange="getTermStudy(' + col + ');" id="term_study' + col + '" name="term_study' + col + '" >' + term_study_option + '</select></div>';
 		template += strCol6 + '<input class="fullwidth" type="text" onchange="getValidate(' + col + ');" placeHolder="<?php echo $tr->translate('START_DATE'); ?>" constraints=' + '{datePattern:"dd/MM/yyyy"}' + '  name="date_start_' + col + '" id="date_start_' + col + '" dojoType="dijit.form.DateTextBox" /></div>';

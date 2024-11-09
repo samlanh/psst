@@ -1110,6 +1110,49 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		$_active_type->setValue($this->request->getParam("active_type"));
 		return $_active_type;
 	}
+	
+	function getServiceTypeSearch($_data=null){
+		$service_type = new Zend_Dojo_Form_Element_FilteringSelect("service_type");
+		$service_type->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		
+		$_arr =array(
+				''=>$this->tr->translate("PLEASE_SELECT"),
+				1=>$this->tr->translate("TUITION_FEE"),
+				2=>$this->tr->translate("SERVICE"),
+				3=>$this->tr->translate("PRODUCT")
+		);
+		$service_type->setMultiOptions($_arr);
+		
+		$service_type->setValue($this->request->getParam('service_type'));	
+		return $service_type;
+	}
+	function getNearlyPaymetySortSearch($_data=null){
+		$nearlyPaymetySort = new Zend_Dojo_Form_Element_FilteringSelect("nearlyPaymetySort");
+		$nearlyPaymetySort->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		
+		$_arr =array(
+				1=>$this->tr->translate("STUDENT"),
+				2=>$this->tr->translate("SERVICE"),
+		);
+		$nearlyPaymetySort->setMultiOptions($_arr);
+		
+		$nearlyPaymetySort->setValue($this->request->getParam('nearlyPaymetySort'));	
+		return $nearlyPaymetySort;
+	}
 
 	
 	

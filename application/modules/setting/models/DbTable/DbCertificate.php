@@ -153,6 +153,23 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 			if (!empty($photo_name) and file_exists($part . $_data['old_photo'])) { //delelete old file
 				unlink($part . $_data['old_photo']);
 			}
+
+			// outstanding Background
+			$outstanding_bg = $_FILES['outstanding_bg']['name'];
+			if (!empty($outstanding_bg)) {
+				//unset old file here
+				$tem = explode(".", $outstanding_bg);
+				$image_name = "background_outstanding_" . date("Y") . date("m") . date("d") . time() . "." . end($tem);
+				$tmp = $_FILES['outstanding_bg']['tmp_name'];
+				if (move_uploaded_file($tmp, $part . $image_name)) {
+					move_uploaded_file($tmp, $part . $image_name);
+					$photo = $image_name;
+					$_arr['outstanding_bg'] = $photo;
+				}
+			}
+			if (!empty($outstanding_bg) and file_exists($part . $_data['old_outstanding_bg'])) { //delelete old file
+				unlink($part . $_data['old_outstanding_bg']);
+			}
 			
 			$this->_name ="rms_certificate_setting";
 			$where=$this->getAdapter()->quoteInto("id=?", $id);

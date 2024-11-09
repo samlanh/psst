@@ -216,6 +216,12 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 		));
 		$code_top->setValue(0);
 
+		$qrLink = new Zend_Dojo_Form_Element_NumberTextBox('qrLink');
+		$qrLink->setAttribs(array(
+			'dojoType'=>'dijit.form.ValidationTextBox',
+			'class'=>'fullside',
+			
+		));
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($data)){
@@ -243,6 +249,7 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 			$group_top->setValue($data['grouptop']);
 			$code_left->setValue($data['qrcodeleft']);
 			$code_top->setValue($data['qrcodetop']);
+			$qrLink->setValue($data['qrLink']);
 
 		}
 		
@@ -271,7 +278,8 @@ Class Setting_Form_FrmCardMg extends Zend_Dojo_Form {
 				$group_left,
 				$group_top,
 				$code_left,
-				$code_top
+				$code_top,
+				$qrLink
 		));
 		
 		return $this;

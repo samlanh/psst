@@ -103,7 +103,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 	function getAllStudentNearlyEndTuition($search){
     	$db=$this->getAdapter();
     	$_db = new Application_Model_DbTable_DbGlobal();
-    	$branch_id = $_db->getAccessPermission('s.`branchId`');
+    	$branch_id = $_db->getAccessPermission('s.`branch_id`');
     	
     	$key = new Application_Model_DbTable_DbKeycode();
     	$data=$key->getKeyCodeMiniInv(TRUE);
@@ -112,59 +112,126 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		$alert = $data['payment_day_alert'];
     		$search['end_date'] = date('Y-m-d',strtotime($search['end_date']."+$alert day"));
     	}
-
     	$lang = $_db->currentlang();
 		$branch= $_db->getBranchDisplay();
 		
 		$label = "name_en";
 		$item = "title_en";
-		$itemDetail = "gradeTitleEn";
+		$itemDetail = "title_en";
     	if($lang==1){// khmer
     		$label = "name_kh";
-    		$itemDetail = "gradeTitle";
+    		$itemDetail = "title";
     		$item = "title";
     	}
     	$sql="SELECT 
-		
-				vl.* 
-				,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=s.`branchId` LIMIT 1) AS branchName
+				gd.`itemType`
+				,gd.`stu_id` AS studentId
+				,s.`branch_id` AS branchId
+				,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=s.`branch_id` LIMIT 1) AS branchName
 				
-				
-				,COALESCE(NULLIF(s.stopType,''),0) AS stopType 
-				,s.`stuNameEn`
-				,s.`stuNameKh`
-				,s.`stuCode`
-				,s.`branchId`
+				,s.`stu_code` AS stuCode
+				,s.`stu_khname` AS stuNameKh
+				,CONCAT(COALESCE(s.`last_name`,''),' ',COALESCE(s.`stu_enname`,'')) AS stuNameEn
+				,s.sex
 				,s.`tel`
-				,s.`groupCode`
-				,s.`academicYear`
-				,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id =s.academicYear LIMIT 1) AS academicYearTitle
- 
-				,(SELECT v.$label FROM rms_view AS v where v.type=2 AND v.key_code=s.sex LIMIT 1) AS sexTitle
-				,(SELECT $item FROM `rms_items` WHERE rms_items.id= item.items_id LIMIT 1 ) AS categoryName
-				,vl.$itemDetail AS serviceTitle
+				,gd.`is_maingrade`
+				,gd.`is_current`
+				,COALESCE(NULLIF(gd.`stop_type`,''),0) AS stopType
+				,gd.`academic_year` AS academicYear
+				,gd.`degree`
+				,i.`title`
+				,i.`title_en`
+				,gd.`grade`
 				
-			FROM `v_last_record_paid_tuition` AS vl
-				JOIN `v_stu_study_info` AS s ON s.`studentId` = vl.`studetnId` AND s.`grade` = vl.`grade` 
-				LEFT JOIN `rms_itemsdetail` AS item ON item.id=vl.grade
-			WHERE 1
-				AND vl.`endDate` IS NOT NULL
-				AND COALESCE(NULLIF(s.stopType,''),0) = 0
-				$branch_id
+				,idd.`title` AS gradeTitle
+				,idd.`title_en` AS gradeTitleEn
+				
+				
+				,CASE WHEN (NULLIF(gd.`endDate`,'') IS NOT NULL OR gd.`endDate` !='0000-00-00')
+							THEN gd.`startDate`
+						WHEN (NULLIF(v.`endDate`,'') IS NOT NULL OR v.`endDate` !='0000-00-00')
+							THEN v.`startDate`
+					ELSE 1 END AS startDate
+				,CASE WHEN (NULLIF(gd.`endDate`,'') IS NOT NULL OR gd.`endDate` !='0000-00-00')
+							THEN gd.`endDate`
+						WHEN (NULLIF(v.`endDate`,'') IS NOT NULL OR v.`endDate` !='0000-00-00')
+							THEN v.`endDate`
+					ELSE '' END AS endDate
+					
+				,v.`receiptNo`
+				,v.`feeId`
+				,v.`academicYear` AS paymentAcademicYear
+				,v.`creadDate` AS paymentDate
+				,v.`startDate` AS pmtStartDate
+				,v.`endDate` AS pmtEndDate
+				,COALESCE(v.`paymentId`,0) AS paymentId 
+				,v.`groupId` AS pmtGroupId
+				,v.`grade` AS pmtGrade
+				,v.`degree` AS pmtDegree
+				,v.`pmtDetailId` AS pmtDetailId
+				,CASE 
+						WHEN gd.`itemType` = 1 
+							THEN (SELECT g.group_code FROM `rms_group` AS g WHERE g.id = gd.`group_id` LIMIT 1)
+						ELSE (SELECT g.group_code FROM `rms_group` AS g WHERE g.id = v.`groupId` LIMIT 1)
+					END AS groupCode
+				,CASE 
+						WHEN gd.`itemType` = 1 
+							THEN (SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id =gd.`academic_year` LIMIT 1)
+						ELSE (SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id =v.`academicYear` LIMIT 1)
+					END AS academicYearTitle
+				,(SELECT v.$label FROM rms_view AS v where v.type=2 AND v.key_code=s.sex LIMIT 1) AS sexTitle
+				,COALESCE(NULLIF(i.`shortcut`,''),i.$item) AS categoryName
+				,COALESCE(NULLIF(idd.`shortcut`,''),idd.$itemDetail) AS serviceTitle
+				
+			FROM (`rms_group_detail_student` AS gd JOIN `rms_student` AS s ON s.`stu_id` = gd.`stu_id` AND s.`customer_type` = 1)
+				LEFT JOIN v_stu_item_pmtinfo v ON v.paymentId = (
+					SELECT paymentId
+						FROM v_stu_item_pmtinfo fa 
+						WHERE fa.itemDetailId = gd.grade AND fa.studentId = gd.`stu_id` AND  fa.itemDetailId = gd.`grade`
+						ORDER BY `paymentId` DESC
+					LIMIT 1
+				) AND v.`studentId` = gd.`stu_id` AND v.itemDetailId = gd.`grade`
+				LEFT JOIN `rms_items` AS i ON i.`id` = gd.`degree`
+				LEFT JOIN `rms_itemsdetail` AS idd ON idd.`id` =  gd.`grade`
+			WHERE gd.`stop_type` NOT IN (1,2)
+				AND idd.`is_onepayment` = 0
+				AND COALESCE(v.`paymentId`,0) !=0
+				AND  
+					CASE WHEN gd.`itemType` = 1 
+							THEN gd.`is_maingrade` = 1 AND (NULLIF(gd.`endDate`,'') IS NOT NULL AND gd.`endDate` !='0000-00-00')
+						 WHEN gd.`itemType` != 1 
+							THEN  (NULLIF(gd.`endDate`,'') IS NOT NULL AND gd.`endDate` !='0000-00-00')
+							
+				ELSE 1 END
+			
+				
 			";
-    	$sql.=" ";
+		$toDate = (empty($search['end_date']))? '1': "gd.`endDate` <= '".$search['end_date']." 23:59:59'";
+		$toDatePmt = (empty($search['end_date']))? '1': "v.`endDate` <= '".$search['end_date']." 23:59:59'";
+    	$sql.=" 
+		AND  
+					CASE WHEN (NULLIF(gd.`endDate`,'') IS NOT NULL OR gd.`endDate` !='0000-00-00')
+							THEN $toDate
+						WHEN (NULLIF(v.`endDate`,'') IS NOT NULL OR v.`endDate` !='0000-00-00')
+							THEN $toDatePmt
+					ELSE 1 END
+				
+				$branch_id
+		";
      	$where=" ";
-     	$to_date = (empty($search['end_date']))? '1': "vl.endDate <= '".$search['end_date']." 23:59:59'";
+     	//$to_date = (empty($search['end_date']))? '1': "vl.endDate <= '".$search['end_date']." 23:59:59'";
      	
-     	$where .= " AND ".$to_date;
+     	//$where .= " AND ".$to_date;
 
 		 if(!empty($search['adv_search'])){
     		$s_where = array();
-    		$s_search = addslashes(trim($search['adv_search']));
-    		$s_where[] = " vl.receiptNo LIKE '%{$s_search}%'";
-    		$s_where[] = " s.`stuNameEn` LIKE '%{$s_search}%'";
-    		$s_where[] = " s.`stuNameKh` LIKE '%{$s_search}%'";
-    		$s_where[] = " s.stuCode LIKE '%{$s_search}%'";
+			$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+			$s_where[]=" REPLACE(s.stu_code,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.last_name,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(s.stu_enname,' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(CONCAT(COALESCE(s.`last_name`,''),' ',COALESCE(s.`stu_enname`,'')),' ','')   	LIKE '%{$s_search}%'";
+			$s_where[]=" REPLACE(v.receiptNo,' ','')   	LIKE '%{$s_search}%'";
+			
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}  
 
@@ -175,30 +242,42 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 			);
 			$condiction = $_db->getChildItems($arrCon);
 			if (!empty($condiction)){
-				$where.=" AND item.items_id IN ($condiction)";
+				$where.=" AND gd.degree IN ($condiction)";
 			}else{
-				$where.=" AND item.items_id=".$search['item'];
+				$where.=" AND gd.degree=".$search['item'];
 			}
      	}
 
      	if(!empty($search['service'])){
-     		$where .=" AND vl.grade=".$search['service'];
+     		$where .=" AND gd.grade=".$search['service'];
      	}
  
      	if(($search['branch_id']>0)){
-     		$where.= " AND s.branchId = ".$search['branch_id'];
+     		$where.= " AND s.branch_id = ".$search['branch_id'];
      	}
      	if(!empty($search['study_year'])){
-			$where.= " AND s.academicYear = ".$search['study_year'];
+			//$where.= " AND gd.`academic_year` = ".$search['study_year'];
+			$where.="
+				AND CASE 
+						WHEN gd.`itemType` = 1 
+							THEN gd.`academic_year` = ".$search['study_year']."
+						ELSE v.`academicYear` = ".$search['study_year']."	 
+					END
+			";
+			//$where.= " AND gd.`academic_year` = ".$search['study_year'];
 		}
-		if(!empty($search['degree'])){
-			$where.= " AND s.degree = ".$search['degree'];
+		/*if(!empty($search['degree'])){
+			$where.= " AND gd.degree = ".$search['degree'];
 		}
 		if(!empty($search['grade_all'])){
-			$where.= " AND s.grade = ".$search['grade_all'];
+			$where.= " AND gd.grade = ".$search['grade_all'];
+		}*/
+    	$order=" ORDER BY gd.`degree` ASC, gd.`grade` ASC, s.`stu_code` ASC ";
+		$nearlyPaymetySort = empty($search['nearlyPaymetySort']) ? 1 : $search['nearlyPaymetySort'];
+		if($nearlyPaymetySort==1){
+			$order=" ORDER BY s.`stu_code` ASC , gd.`degree` ASC , gd.`grade` ASC ";
 		}
-    	$order=" ORDER by vl.grade ASC,s.`stuCode` ASC ";
-    	//$order.=" LIMIT 100 ";
+    	//$order.=" LIMIT 10 ";
 		
 		//echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);

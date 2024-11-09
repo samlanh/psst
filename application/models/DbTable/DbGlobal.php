@@ -1357,9 +1357,10 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['itemType'])) {
 			$where .= " AND gds.itemType=" . $data['itemType'];
 		}
-		if (!empty($data['activStudent'])) {
+		if (!empty($data['activeStudent'])) {
 			$where .= " AND (gds.stop_type=0) ";
-			//OR gds.stop_type=3 OR gds.stop_type=4
+		}else{
+			$where .= " AND (gds.stop_type!=0) ";
 		}
 		if (isset($data['isCurrent'])) {
 			$where .= " AND gds.is_current=" . $data['isCurrent'];
@@ -3225,8 +3226,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 					if (!empty($Discount['endDay'])) {
 						$strListDay = "<a class='pull-left date'>
-											<p class='month'>" . $Discount['endDay'] . "</p>
-											<p class='day'>" . $Discount['endYear'] . "</p>
+											<p class='day'>" . $Discount['DisValueType']. "</p>
 										</a>";
 					} else {
 						$strListDay = "<a class='pull-left border-green profile_thumb'>
@@ -5168,6 +5168,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				SELECT
 					ds.id,
 					ds.discountTitle,
+					ds.discountCode,
 					$sqlDiscountFor AS discountFor,
 					disc.studentId,
 					disc.grade,

@@ -92,14 +92,14 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$s_where[]=" REPLACE(s.tel,' ','') LIKE '%{$s_search}%'";
 			
 			$s_where[]=" REPLACE(COALESCE(fam.familyCode,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.fatherPhone,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.motherPhone,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.guardianPhone,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.fatherName,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.fatherNameKh,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.motherName,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.guardianName,''),' ','') LIKE '%{$s_search}%'";
-			$s_where[]=" REPLACE(COALESCE(fam.guardianNameKh,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.fatherPhone,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.motherPhone,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.guardianPhone,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.fatherName,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.fatherNameKh,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.motherName,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.guardianName,''),' ','') LIKE '%{$s_search}%'";
+			// $s_where[]=" REPLACE(COALESCE(fam.guardianNameKh,''),' ','') LIKE '%{$s_search}%'";
 			
 			$s_where[]=" REPLACE(s.remark,' ','') LIKE '%{$s_search}%'";
 			$s_where[]=" REPLACE(s.home_num,' ','') LIKE '%{$s_search}%'";
@@ -110,7 +110,6 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			
 			$where .=' AND ( '.implode(' OR ',$s_where).')';
 		}
-		
 
 		if(!empty($search['groupId'])){
 			$where.=" AND COALESCE(ds.group_id,0) = ".$search['groupId'];

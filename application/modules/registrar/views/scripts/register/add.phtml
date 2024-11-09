@@ -323,7 +323,7 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"
 									id="lblNameControl"><?php echo $tr->translate("STUDENT_STATUS"); ?></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select class="fullside" name="student_status" id="student_status" dojoType="dijit.form.FilteringSelect">
+									<select class="fullside" name="student_status" id="student_status" dojoType="dijit.form.FilteringSelect" onchange="getallstudentname();">
 										<option value="1">Active Student</option>
 										<option value="0">Inactive Student</option>
 									</select>
@@ -1136,7 +1136,7 @@ $(document).ready(function() {
 			content: {
 				'student_name': 1,
 				'branch_id': branch_id,
-				'activStudent': dijit.byId("student_status").attr("value"),
+				'activeStudent': dijit.byId("student_status").attr("value"),
 				'branchId': branch_id,
 				'customerType': customer_type,
 				'joinGroup': 1,

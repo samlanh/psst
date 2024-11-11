@@ -773,6 +773,25 @@ class Application_Form_FrmGlobal
 						.all-border{border:1px solid #000;}
 						.textright{text-align:right;}
 						.paddingright{padding-right:1px;}
+						
+						div.lbl_periodstudy {
+							text-align: center;
+							width: 85%;
+							margin: 0 auto;
+						}
+						div.lbl_periodstudy span.terminf {
+							line-height: inherit;
+							display: inline-block;
+						}
+						div.lbl_periodstudy span.terminf.titleTerm {
+							width: 50%;
+							text-align: left;
+						}						
+						div.lbl_periodstudy span.terminf.termValidePmt {
+							width: 45%;
+							text-align: right;
+						}
+						
 					</style>
 					<table broder='1' width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
 						<tr style='height:$paddingTop'>

@@ -2247,7 +2247,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			periodId,
 			degreeId,
 			DATE_FORMAT(start_date, '%Y-%m-%d') startDate,
-			DATE_FORMAT(end_date, '%Y-%m-%d') endDate
+			DATE_FORMAT(end_date, '%Y-%m-%d') endDate,
+			DATE_FORMAT(start_date, '%d-%m-%Y') startDateSecondFmt,
+			DATE_FORMAT(end_date, '%d-%m-%Y') endDateSecondFmt
   		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 AND degreeId!='' ";
 		if (!empty($data['branch_id'])) {
 			$sql .= " AND branch_id = " . $data['branch_id'];
@@ -2285,6 +2287,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				}
 			}
 		}
+		
+		if (!empty($data['academicFeeTermId'])) {
+			$academicFeeTermId = $data['academicFeeTermId'];
+			$sql .= " AND id != $academicFeeTermId";
+			if (!empty($data['startDatePmt'])) {
+				$startDatePmt = new DateTime($data['startDatePmt']);
+				$startDatePmtD =  $startDatePmt->format("Y-m-d");
+				$sql .= " AND start_date > '$startDatePmtD'";
+			}
+		}
 
 		$sql .= " ORDER BY academic_year DESC ";
 		$rows = $db->fetchAll($sql);
@@ -2300,7 +2312,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					if($indexKey==0){
 						$selected="selected";
 					}
-					$options .= '<option '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'" data-title="'.htmlspecialchars($row['title']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+					$resultPeriodJson =  htmlspecialchars(json_encode($rows));
+					$options .= '<option data-datajson="'.$resultPeriodJson.'" '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'" data-title="'.htmlspecialchars($row['title']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
 				}
 			}
 			return $options;

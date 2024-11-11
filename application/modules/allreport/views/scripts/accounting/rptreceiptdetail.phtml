@@ -60,8 +60,9 @@ function setDatatoReceipt(){
 		
 		var periodStr = '<ul>';
 		<?php foreach($this->periodList  as $key=> $period){ ?>
-			periodName='<?php echo $period['name']; ?>';
-			periodStr+='<li>'+periodName+'</li>';
+			periodName='<?php echo $period['title']; ?>';
+			periodLimited='<?php echo $period['startDateSecondFmt']; ?>';
+			periodStr+='<li><span class="terminf titleTerm">'+periodName+'</span><span class="terminf termValidePmt">'+periodLimited+'</span></li>';
 		<?php } ?> 
 		periodStr+= '</ul>'
 		$("#lbl_period_year").append(periodStr);

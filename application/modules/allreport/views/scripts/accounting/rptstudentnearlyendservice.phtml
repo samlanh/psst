@@ -3,6 +3,8 @@
 	echo $this->headTitle($tr->translate('STUDENT_NEARLY_END_REPORT')); 
 	$frm =  $this->form_search;
 	$classHideHeight=classHideHeight;
+	$nearlyPaymetySort = empty($this->search["nearlyPaymetySort"]) ? 1 : $this->search["nearlyPaymetySort"];
+	
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<div class="card-box">
@@ -52,6 +54,9 @@
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("end_date");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("nearlyPaymetySort");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
@@ -194,103 +199,166 @@
 				</style>
 				<tr>
 					<td colspan="2" id="exportExcel" >
-				
-						<table cellpadding="2" class="content-data" border="1"  >
-							<thead>
-								<tr class="style" align="center" >
-									<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
-									<td scope="col" colspan="5"><?php echo $tr->translate("STUDENT_INFO"); ?></td>
-									<td scope="col" rowspan="2"><?php echo $tr->translate("STUDY_INFO");?></td>
-									<td scope="col" colspan="5"><?php echo $tr->translate("PAYMENT_INFO");?></td>
+						<?php if($nearlyPaymetySort == 1){?>
+							<table cellpadding="2" class="content-data" border="1"  >
+								<thead>
+									<tr class="style" align="center" >
+										<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
+										<td scope="col" colspan="5"><?php echo $tr->translate("SERVICE_INFO"); ?></td>
+										<td scope="col" rowspan="2"><?php echo $tr->translate("STUDY_INFO");?></td>
+										<td scope="col" colspan="5"><?php echo $tr->translate("PAYMENT_INFO");?></td>
+										
+									</tr>
+									<tr class="style" align="center" >
+										<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
+										<td scope="col"><?php echo $tr->translate("SERVICE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("STUDENT"); ?></td>
+										<td scope="col"><?php echo $tr->translate("SEX"); ?></td>
+										<td scope="col"><?php echo $tr->translate("PHONE");?></td>
+										
+										<td scope="col"><?php echo $tr->translate("PAID_DATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("RECEIPT_NO"); ?></td>
+										<td scope="col"><?php echo $tr->translate("START_DATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("VALIDATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
+										
+									</tr>
+								</thead>
+								<?php  
+									$studentId="";
+									$i=0;
+									if(!empty($this->row)){
+										foreach ($this->row AS $row) { $i++;
+											$end_dat=$row['endDate'];
+											$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
+											$day=(int)($total_day/(60*60*24));
+											$daylate =$day;
+											if($day>=0){
+												$daylate ="Remain ".abs($day);
+											}else{
+												$daylate ="Late ".abs($day);
+											}
+									?>
+									<?php if($studentId != $row['studentId']){?>
+									<tr class="style bg-category"  >
+										<td  colspan="13" align="center">
+											<?php echo $row['stuCode'];?>: <strong><?php  echo $row['stuNameEn'];?></strong>
+										</td>
+									</tr>
+									<?php } ?>
 									
-								</tr>
-								<tr class="style" align="center" >
-									<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
-									<td scope="col"><?php echo $tr->translate("STUDENT_ID"); ?></td>
-									<td scope="col"><?php echo $tr->translate("STUDENT"); ?></td>
-									<td scope="col"><?php echo $tr->translate("SEX"); ?></td>
-									<td scope="col"><?php echo $tr->translate("PHONE");?></td>
+									<tr  class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['pmtDetailId'];?>,<?php echo $row['paymentId'];?>,<?php echo $row['studentId'];?>);return false;"  style="white-space:nowrap;">
+										<td data-label="<?php echo $tr->translate("N_O");?>" align="center" ><?php echo $i;?></td>
+										<td data-label="<?php echo $tr->translate("BRANCH");?>"  >
+											<span class="branchName_<?php echo $row['pmtDetailId'];?>">
+												<?php echo $row['branchName'];?>
+											</span>
+										</td>
+									</tr>
 									
-								    <td scope="col"><?php echo $tr->translate("PAID_DATE"); ?></td>
-								    <td scope="col"><?php echo $tr->translate("RECEIPT_NO"); ?></td>
-									<td scope="col"><?php echo $tr->translate("START_DATE"); ?></td>
-									<td scope="col"><?php echo $tr->translate("VALIDATE"); ?></td>
-									<td scope="col"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
-									
-								</tr>
-							</thead>
-						<?php  
-							$serviceId="";
-							$i=0;
-							$totalpaid=0;
-							$totalbalance=0; 
-							if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
-							$end_dat=$row['endDate'];
-							$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
-							$day=(int)($total_day/(60*60*24));
-							$daylate =$day;
-							if($day>=0){
-								$daylate ="Remain ".abs($day);
-							}else{
-								$daylate ="Late ".abs($day);
-							}
-						
+									<?php $studentId =$row['studentId']; ?>	 
+									<?php } ?>
+								<?php } ?>
+							</table>
+						<?php }else{?>
+							<table cellpadding="2" class="content-data" border="1"  >
+								<thead>
+									<tr class="style" align="center" >
+										<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
+										<td scope="col" colspan="5"><?php echo $tr->translate("STUDENT_INFO"); ?></td>
+										<td scope="col" rowspan="2"><?php echo $tr->translate("STUDY_INFO");?></td>
+										<td scope="col" colspan="5"><?php echo $tr->translate("PAYMENT_INFO");?></td>
+										
+									</tr>
+									<tr class="style" align="center" >
+										<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
+										<td scope="col"><?php echo $tr->translate("STUDENT_ID"); ?></td>
+										<td scope="col"><?php echo $tr->translate("STUDENT"); ?></td>
+										<td scope="col"><?php echo $tr->translate("SEX"); ?></td>
+										<td scope="col"><?php echo $tr->translate("PHONE");?></td>
+										
+										<td scope="col"><?php echo $tr->translate("PAID_DATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("RECEIPT_NO"); ?></td>
+										<td scope="col"><?php echo $tr->translate("START_DATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("VALIDATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
+										
+									</tr>
+								</thead>
+							<?php  
+								$serviceId="";
+								$i=0;
+								$totalpaid=0;
+								$totalbalance=0; 
+								if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
+								$end_dat=$row['endDate'];
+								$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
+								$day=(int)($total_day/(60*60*24));
+								$daylate =$day;
+								if($day>=0){
+									$daylate ="Remain ".abs($day);
+								}else{
+									$daylate ="Late ".abs($day);
+								}
 							
-							//count(json_decode($row['paymentList'], TRUE))
-						?>
-						
-							<?php if($serviceId != $row['grade']){?>
-							<tr class="style bg-category"  >
-								<td  colspan="13" align="center">
-									<?php echo $row['categoryName'];?>: <strong><?php  echo $row['serviceTitle'];?></strong>
-								</td>
-							</tr>
-							<?php } ?>
-							<tr  class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['pmtDetailId'];?>,<?php echo $row['paymentId'];?>,<?php echo $row['studetnId'];?>);return false;"  style="white-space:nowrap;">
-								<td data-label="<?php echo $tr->translate("N_O");?>" align="center" ><?php echo $i;?></td>
-								<td data-label="<?php echo $tr->translate("BRANCH");?>"  >
-									<span class="branchName_<?php echo $row['pmtDetailId'];?>">
-										<?php echo $row['branchName'];?>
-									</span>
-								</td>
-								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" align="center">
-									<span class="stuCode_<?php echo $row['pmtDetailId'];?>">
-										<?php echo $row['stuCode'];?>
-									</span>
-								</td>
-								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"   >
-									<span class="stuName_<?php echo $row['pmtDetailId'];?> wrapcontent"><?php echo $row['stuNameKh'];?></span>
-									<span class="stuNameEn_<?php echo $row['pmtDetailId'];?> wrapcontent"><?php echo $row['stuNameEn'];?></span>
-								</td>	
-								<td data-label="<?php echo $tr->translate("SEX");?>"  align="center" ><?php echo $row['sexTitle'];?></td>
-								<td data-label="<?php echo $tr->translate("PHONE");?>"  align="left">
-									<span class="phone_<?php echo $row['pmtDetailId'];?> wrapcontent widthCol-px-100"><?php echo $row['tel'];?></span>
-								</td>
-								<td data-label="<?php echo $tr->translate("GROUP");?>"  align="center"  >
-									<small class="d-block"><?php echo $row['academicYearTitle'];?></small>
-									<span class="d-block bold groupCode_<?php echo $row['pmtDetailId'];?>"><?php echo $row['groupCode'];?></span>
-								</td>
-								<td data-label="<?php echo $tr->translate("PAID_DATE");?>"  align="center"><?php echo date("d-M-y",strtotime($row['paymentDate']));?></td>
-								<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"  align="center">
-									<a onClick="addTab('<?php echo $tr->translate("RECEIPT");?>','<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/".$row['paymentId']."?inFrame=true";?>')"; href="javascript:void(0);">
-										<?php echo $row['receiptNo'];?>
-									</a>
-								</td>
-								<td data-label="<?php echo $tr->translate("START_DATE");?>" align="center">
-									<?php echo date("d-M-y",strtotime($row['startDate']));?>  
-									<input type="hidden" dojoType="dijit.form.TextBox" name="start_date_<?php echo $row['pmtDetailId']; ?>" id="start_date_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['startDate'];?>" />
-									<input type="hidden" name="studentId_<?php echo $row['pmtDetailId']; ?>" id="studentId_<?php echo $row['studetnId']; ?>" value="<?php echo $row['studetnId'];?>" />
-									<input type="hidden" name="categoryName_<?php echo $row['pmtDetailId']; ?>" id="categoryName_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['categoryName'];?>" />
-									<input type="hidden" name="serviceName_<?php echo $row['pmtDetailId']; ?>" id="serviceName_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['serviceTitle'];?>" />
-									<input type="hidden" name="gradeId_<?php echo $row['pmtDetailId']; ?>" id="gradeId_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['grade'];?>" />
-								</td>
-								<td data-label="<?php echo $tr->translate("VALIDATE");?>" align="center"><?php echo date("d-M-y",strtotime($row['endDate']));?>  <input type="hidden" dojoType="dijit.form.TextBox" name="validate_<?php echo $row['pmtDetailId']; ?>" id="validate_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['endDate'];?>" /></td>
 								
-								<td data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: red;font-weight: bold;"><?php echo $daylate;?></td>
- 							</tr>
-							<?php $serviceId =$row['grade']; ?>	 
-							<?php }}?>	 
-						</table>
+								//count(json_decode($row['paymentList'], TRUE))
+							?>
+							
+								<?php if($serviceId != $row['grade']){?>
+								<tr class="style bg-category"  >
+									<td  colspan="13" align="center">
+										<?php echo $row['categoryName'];?>: <strong><?php  echo $row['serviceTitle'];?></strong>
+									</td>
+								</tr>
+								<?php } ?>
+								<tr  class="style hover context-menu-one" oncontextmenu="setrowdata(<?php echo $row['pmtDetailId'];?>,<?php echo $row['paymentId'];?>,<?php echo $row['studentId'];?>);return false;"  style="white-space:nowrap;">
+									<td data-label="<?php echo $tr->translate("N_O");?>" align="center" ><?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("BRANCH");?>"  >
+										<span class="branchName_<?php echo $row['pmtDetailId'];?>">
+											<?php echo $row['branchName'];?>
+										</span>
+									</td>
+									<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" align="center">
+										<span class="stuCode_<?php echo $row['pmtDetailId'];?>">
+											<?php echo $row['stuCode'];?>
+										</span>
+									</td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"   >
+										<span class="stuName_<?php echo $row['pmtDetailId'];?> wrapcontent"><?php echo $row['stuNameKh'];?></span>
+										<span class="stuNameEn_<?php echo $row['pmtDetailId'];?> wrapcontent"><?php echo $row['stuNameEn'];?></span>
+									</td>	
+									<td data-label="<?php echo $tr->translate("SEX");?>"  align="center" ><?php echo $row['sexTitle'];?></td>
+									<td data-label="<?php echo $tr->translate("PHONE");?>"  align="left">
+										<span class="phone_<?php echo $row['pmtDetailId'];?> wrapcontent widthCol-px-100"><?php echo $row['tel'];?></span>
+									</td>
+									<td data-label="<?php echo $tr->translate("GROUP");?>"  align="center"  >
+										<small class="d-block"><?php echo $row['academicYearTitle'];?></small>
+										<span class="d-block bold groupCode_<?php echo $row['pmtDetailId'];?>"><?php echo $row['groupCode'];?></span>
+									</td>
+									<td data-label="<?php echo $tr->translate("PAID_DATE");?>"  align="center"><?php echo date("d-M-y",strtotime($row['paymentDate']));?></td>
+									<td data-label="<?php echo $tr->translate("RECEIPT_NO");?>"  align="center">
+										<a onClick="addTab('<?php echo $tr->translate("RECEIPT");?>','<?php echo $this->baseUrl()."/allreport/accounting/rptreceiptdetail/id/".$row['paymentId']."?inFrame=true";?>')"; href="javascript:void(0);">
+											<?php echo $row['receiptNo'];?>
+										</a>
+									</td>
+									<td data-label="<?php echo $tr->translate("START_DATE");?>" align="center">
+										<?php echo date("d-M-y",strtotime($row['startDate']));?>  
+										<input type="hidden" dojoType="dijit.form.TextBox" name="start_date_<?php echo $row['pmtDetailId']; ?>" id="start_date_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['startDate'];?>" />
+										<input type="hidden" name="studentId_<?php echo $row['pmtDetailId']; ?>" id="studentId_<?php echo $row['studentId']; ?>" value="<?php echo $row['studentId'];?>" />
+										<input type="hidden" name="categoryName_<?php echo $row['pmtDetailId']; ?>" id="categoryName_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['categoryName'];?>" />
+										<input type="hidden" name="serviceName_<?php echo $row['pmtDetailId']; ?>" id="serviceName_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['serviceTitle'];?>" />
+										<input type="hidden" name="gradeId_<?php echo $row['pmtDetailId']; ?>" id="gradeId_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['grade'];?>" />
+									</td>
+									<td data-label="<?php echo $tr->translate("VALIDATE");?>" align="center"><?php echo date("d-M-y",strtotime($row['endDate']));?>  <input type="hidden" dojoType="dijit.form.TextBox" name="validate_<?php echo $row['pmtDetailId']; ?>" id="validate_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['endDate'];?>" /></td>
+									
+									<td data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: red;font-weight: bold;"><?php echo $daylate;?></td>
+								</tr>
+								<?php $serviceId =$row['grade']; ?>	 
+								<?php }}?>	 
+							</table>
+						<?php }?>
+						
 											
 					</td>
 				</tr>
@@ -413,6 +481,7 @@ dojo.ready(function(){
 	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
 	 getgradebyDegree();
+	 
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";

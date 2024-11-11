@@ -235,6 +235,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 
 		$db = new Application_Model_DbTable_DbGlobal();
 		$this->view->branchInfo = $db->getBranchInfo($branch_id);
+		$this->view->certificateSetting = $db->getCertificateSetting(1);
 
 		$dbSetting = new Setting_Model_DbTable_Dbduty();
 		$dregreeId = empty($studentgroup[0]['degree_id']) ? 0 : $studentgroup[0]['degree_id'];

@@ -2740,8 +2740,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
 		$user = $this->getUserInfo();
-		$level = $user['level'];
+		$level = empty($user['level']) ? 0 : $user['level'];
 		if ($level != 1) {
+			$user['schoolOption'] = empty($user['schoolOption']) ? 0 : $user['schoolOption'];
 			$sql .= ' AND i.schoolOption  IN (' . $user['schoolOption'] . ')';
 
 			$userSelect = $this->getUserProfile();

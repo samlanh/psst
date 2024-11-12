@@ -357,6 +357,7 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		$old_photo = new Zend_Form_Element_Hidden('old_photo');
+		$old_outstanding_bg = new Zend_Form_Element_Hidden('old_outstanding_bg');
 		if(!empty($data)){
 			$branch_id->setValue($data['branch_id']);
 			$title->setValue($data['title']);
@@ -389,6 +390,9 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 			$describe_top->setValue($data['describe_top']);
 			$old_photo->setValue($data['background']);
 			$describe_font->setValue($data['describe_font']);
+
+			$old_outstanding_bg->setValue($data['outstanding_bg']);
+			
 		}
 		
 		$this->addElements(array(
@@ -421,7 +425,8 @@ Class Setting_Form_FrmPickupCard extends Zend_Dojo_Form {
 				$month_top,
 				$day_top,
 				$describe_left,
-				$describe_top
+				$describe_top,
+				$old_outstanding_bg ,
 		));
 		
 		return $this;

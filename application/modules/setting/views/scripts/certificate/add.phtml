@@ -43,237 +43,322 @@ $defaultBackground = $this->baseUrl()."/images/Logo/Logo.png";
 				}
 			</script>
 			<div class="card-box">
-				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="fa fa-university" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO");?></p>
-										</div> 
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("BRANCH");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">	
-											<?php echo $frm->getElement("branch_id");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("TITLE");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("title");?>
-									   </div>
-									</div>
-									 <div class="form-group">
-									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("School Option");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<input id="schoolOption" />
-									   </div>
-									</div>
-									
-									<div class="form-group">
-									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("DESCRIBE");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("certificate_describe");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("FONT_SIZE");?> <span class="required">*</span>
-									   </label>
-									   <div class="col-md-7 col-sm-7 col-xs-12">
-											<?php echo $frm->getElement("font_size");?>
-									   </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-	           </div>
-	           <div class="col-md-4 col-sm-4 col-xs-12">
-			   <div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-screenshot" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("POSITION_SETTING");?></p>
-										</div>
-									</div>
-									<div class="form-group bg-primary">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center " ><i class="glyphicon glyphicon-move" aria-hidden="true"></i><br><?php echo $tr->translate("NAME_POSITION");?> 
-									   </label>
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center" ><i class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></i><br><?php echo $tr->translate("LEFT");?>
-									   </label>
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center" ><i class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></i><br> <?php echo $tr->translate("TOP");?>
-									   </label>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-12 col-sm-12 col-xs-12 " >
-									   </label>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("NAME");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("name_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("name_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("GENDER");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("gender_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("gender_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("DATE");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("date_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("date_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("STUDENT_CODE");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("code_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("code_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("ACADEMIC_YEAR");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("academic_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("academic_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("RANK");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("rank_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("rank_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("GRADE");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("grade_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("grade_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("DESCRIBE");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("describe_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("describe_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("DAY");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("day_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("day_top");?>
-									   </div>
-									</div>
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("MONTH");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("month_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("month_top");?>
-									   </div>
-									</div>
-
-									<div class="form-group">
-									   <label class="control-label bold col-md-4 col-sm-4 col-xs-12 " ><?php echo $tr->translate("YEAR");?> 
-									   </label>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-											<?php echo $frm->getElement("year_left");?>
-									   </div>
-									   <div class="col-md-4 col-sm-4 col-xs-12">
-									 	  <?php echo $frm->getElement("year_top");?>
-									   </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-            	</div>
-            	<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body"> 
-							<div class="row"> 
-								<div class="col-md-12 col-sm-12 col-xs-12"> 
-									<div class="d-flex"> 
-										<div class="settings-main-icon ">
-											<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
-										</div> 
-										<div class="col-md-10 col-sm-10 col-xs-12"> 
-											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PHOTO");?>(<?php echo $tr->translate("BACK");?>)</p>
-										</div> 
-									</div>
-									<div class="form-group">
-									   <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-											<div class="account-image">
-												<div class="image-box">
-													<img id="certificate_back_wiew" src="<?php echo $defaultBackground;?>" alt=""  />
-												</div>
-												<div class="button_browse">
-												<div id='preview'></div>	
-													<span>Upload <span ><i class="fa fa-camera" aria-hidden="true"></i></span></span>
-													<input class="btn_borwse_image"  type="file" id="photo" name="photo"  >
+				<div class="col-md-3 col-sm-3 col-xs-12">
+					<ul class="nav verticle-tab md-pills pills-primary nav-tab" role="tablist">
+						<li class="nav-item active">
+							<a class="nav-link " data-toggle="tab" href="#panelSetting1" role="tab"><i class="fa fa-certificate"></i> <?php echo $tr->translate("CERTIFICATE_SETTING");?></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#panelSetting2" role="tab">
+							<i class="fa fa-list-ol ml-2"></i> <?php echo $tr->translate("HONOR_LIST_SETTING");?>
+							</a>
+						</li>
+					</ul>
+				</div>
+				
+				<div class="col-md-9 col-sm-9 col-xs-12">
+					<!-- Tab panels -->
+					<div class="tab-content vertical">
+						<!--Panel 1-->
+						<div class="tab-pane fade in active " id="panelSetting1" role="tabpanel">
+							<div class="col-md-12 col-sm-12 col-xs-12">
+								<div class="card-box">
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="card-blogform">
+											<div class="card-body"> 
+												<div class="row"> 
+													<div class="d-flex"> 
+														<div class="settings-main-icon ">
+															<i class="fa fa-university" aria-hidden="true"></i>
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("BRANCH_INFO"); ?>
+															</p>
+														</div>
+													</div>
+													<div class="form-group">
+														<label
+															class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("BRANCH"); ?>
+															<span class="required">*</span>
+														</label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("branch_id"); ?>
+														</div>
+													</div>
+													<div class="form-group">
+														<label
+															class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("TITLE"); ?>
+															<span class="required">*</span>
+														</label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("title"); ?>
+														</div>
+													</div>
+													<div class="form-group">
+														<label
+															class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("School Option"); ?>
+															<span class="required">*</span>
+														</label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<input id="schoolOption" />
+														</div>
+													</div>
+								
+													<div class="form-group">
+														<label
+															class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("DESCRIBE"); ?>
+															<span class="required">*</span>
+														</label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("certificate_describe"); ?>
+														</div>
+													</div>
+													<div class="form-group">
+														<label
+															class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FONT_SIZE"); ?>
+															<span class="required">*</span>
+														</label>
+														<div class="col-md-7 col-sm-7 col-xs-12">
+															<?php echo $frm->getElement("font_size"); ?>
+														</div>
+													</div>
 												</div>
 											</div>
-									   </div>
+										</div>
+										<div class="card-blogform">
+											<div class="card-body"> 
+												<div class="row"> 
+													<div class="col-md-12 col-sm-12 col-xs-12"> 
+															<div class="d-flex"> 
+																<div class="settings-main-icon ">
+																	<i class="glyphicon glyphicon-screenshot" aria-hidden="true"></i>
+																</div> 
+																<div class="col-md-10 col-sm-10 col-xs-12"> 
+																		<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("POSITION_SETTING"); ?></p>
+															</div>
+														</div>
+														<div class="form-group bg-primary">
+															<label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center "><i
+																	class="glyphicon glyphicon-move"
+																	aria-hidden="true"></i><br><?php echo $tr->translate("NAME_POSITION"); ?>
+															</label>
+															<label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center"><i
+																	class="glyphicon glyphicon-resize-horizontal"
+																	aria-hidden="true"></i><br><?php echo $tr->translate("LEFT"); ?>
+															</label>
+															<label class="control-label bold col-md-4 col-sm-4 col-xs-12 text-center"><i
+																	class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></i><br>
+																<?php echo $tr->translate("TOP"); ?>
+															</label>
+														</div>
+														<div class="form-group">
+															<label class="control-label bold col-md-12 col-sm-12 col-xs-12 ">
+															</label>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("NAME"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("name_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("name_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("GENDER"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("gender_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("gender_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("DATE"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("date_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("date_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("STUDENT_CODE"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("code_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("code_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("ACADEMIC_YEAR"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("academic_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("academic_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("RANK"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("rank_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("rank_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("GRADE"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("grade_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("grade_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("DESCRIBE"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("describe_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("describe_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("DAY"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("day_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("day_top"); ?>
+															</div>
+														</div>
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("MONTH"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("month_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("month_top"); ?>
+															</div>
+														</div>
+									
+														<div class="form-group">
+															<label
+																class="control-label bold col-md-4 col-sm-4 col-xs-12 "><?php echo $tr->translate("YEAR"); ?>
+															</label>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("year_left"); ?>
+															</div>
+															<div class="col-md-4 col-sm-4 col-xs-12">
+																<?php echo $frm->getElement("year_top"); ?>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="card-blogform">
+											<div class="card-body"> 
+												<div class="row"> 
+													<div class="col-md-12 col-sm-12 col-xs-12"> 
+														<div class="d-flex"> 
+															<div class="settings-main-icon ">
+																<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+															</div> 
+															<div class="col-md-10 col-sm-10 col-xs-12"> 
+																<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("PHOTO"); ?>(<?php echo $tr->translate("BACK"); ?>)</p>
+															</div>
+														</div>
+														<div class="form-group">
+															<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+																<div class="account-image">
+																	<div class="image-box">
+																		<img id="certificate_back_wiew" src="<?php echo $defaultBackground; ?>" alt="" />
+																	</div>
+																	<div class="button_browse">
+																		<div id='preview'></div>
+																		<span>Upload <span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+																		<input class="btn_borwse_image" type="file" id="photo" name="photo">
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+					<!--panel 2-->
+					<div class="tab-pane fade in  " id="panelSetting2" role="tabpanel">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="card-box">
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="card-blogform">
+										<div class="card-body"> 
+											<div class="row"> 
+												<div class="col-md-12 col-sm-12 col-xs-12"> 
+													<div class="d-flex"> 
+														<div class="settings-main-icon ">
+															<i class="glyphicon glyphicon-picture" aria-hidden="true"></i>
+														</div> 
+														<div class="col-md-10 col-sm-10 col-xs-12"> 
+															<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("OUT_STANDING_BG"); ?></p>
+														</div>
+													</div>
+													<div class="form-group">
+														<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+															<div class="outstanding-image">
+																<div class="outstanding-box">
+																	<img id="bg_img" src="<?php echo $defaultBackground; ?>" alt="" />
+																</div>
+																<div class="button_browse">
+																	<div id='preview'></div>
+																	<span>Upload <span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+																	<input class="btn_borwse_image" type="file" id="outstanding_bg" name="outstanding_bg">
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-            	</div>	
-            <div class="card-box">
-	         	
-	         </div>          
-            <div class="clearfix"></div>
+				</div>	
+			</div>    
 	         <div class="card-box mt-20">
                	<div class="col-md-12 col-sm-12 col-xs-12 border-top mt-20 ptb-10 text-center">
 				  	<input type="reset" class="button-class button-danger"  iconClass="glyphicon glyphicon-repeat" value="សំអាត" label="<?php echo $tr->translate('CLEAR');?>" dojoType="dijit.form.Button" />
@@ -315,12 +400,29 @@ input.btn_borwse_image {
     height:300px;
     margin: 0 auto !important;
 }
+.form-group div.outstanding-image {
+    border: solid 1px #eee;
+    width: 100%;
+    height:400px;
+    margin: 0 auto !important;
+}
+.outstanding-box {
+    text-align: center;
+    /*width: 11.8cm;
+   */
+    height: 9.5cm;
+}
+.outstanding-box img {
+
+    height: 9.5cm;
+}
 .image-box {
     text-align: center;
     /*width: 11.8cm;
    */
     height: 7.5cm;
 }
+
 .image-box img {
     /*width: 11.8cm;*/
     height: 7.5cm;
@@ -388,8 +490,22 @@ function readURLBack(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+function readOutStandingBg(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#bg_img').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 $("#photo").change(function(){
 	readURLBack(this);
+});
+
+$("#outstanding_bg").change(function(){
+	readOutStandingBg(this);
 });
 
 </script>

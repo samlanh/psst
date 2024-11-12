@@ -70,6 +70,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT p.`title`  FROM `rms_parttime_list` AS p WHERE p.`id` = (SELECT gds.`session` FROM `rms_group_detail_student` as gds WHERE  gds.stu_id = s.stu_id AND gds.is_current=1 AND gds.is_maingrade=1 LIMIT 1 ) LIMIT 1) as parttimeTitle,
 					(SELECT group_code FROM `rms_group` WHERE rms_group.id=(SELECT ds.group_id FROM rms_group_detail_student AS ds 
 					WHERE ds.itemType=1 AND ds.stu_id=s.stu_id AND ds.is_maingrade=1 AND ds.grade=sp.grade AND ds.degree=sp.degree ORDER BY ds.gd_id DESC LIMIT 1) LIMIT 1) AS group_name
+					
+					,COALESCE((SELECT spd.`academicFeeTermId` FROM `rms_student_paymentdetail` AS spd WHERE spd.`payment_id` = sp.`id` AND spd.`service_type` = 1 LIMIT 1 ),0) AS academicFeeTermId
+					,(SELECT spd.`start_date` FROM `rms_student_paymentdetail` AS spd WHERE spd.`payment_id` = sp.`id` AND spd.`service_type` = 1 LIMIT 1 ) AS startDatePmt
     			FROM
     				rms_student_payment as sp 
 					JOIN rms_student as s ON sp.student_id=s.stu_id 

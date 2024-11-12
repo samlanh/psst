@@ -566,7 +566,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'item'		=>-1,
 					'service_type'=>-1,
 					'end_date'	=>date('Y-m-d'),
-					'service'	=>''
+					'service'	=>'',
+					'nearlyPaymetySort'	=>1,
 				);
 				
 				$dbGb = new Application_Model_DbTable_DbGlobal();
@@ -576,21 +577,28 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				}
 			}
 			$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
-			$abc = $this->view->row = $db->getAllStudentNearlyEndTuition($search);
+			$abc = $this->view->row = $db->getAllStudentNearlyEndService($search);
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			$this->view->rsfooteracc = $frm->getFooterAccount();
+			$this->view->printFormat = $frm->getPrintPageFormat();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view->search = $search;
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
+		//$form=new Registrar_Form_FrmSearchInfor();
+		//$form->FrmSearchRegister();
+		//Application_Model_Decorator::removeAllDecorator($form);
+		//$this->view->form_search=$form;
+		
+		$form = new Application_Form_FrmCombineSearchGlobal();
+    	$frm = $form->FormNealyPaymentFilter();
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->form_search = $frm;
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}
@@ -1134,8 +1142,11 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$data = array(
 				'feeId'=>$rs['feeId'],
 				'periodId'=>$rs['payment_term'],
-				'degree'=>$rs['degreeId']
+				'degree'=>$rs['degreeId'],
+				'academicFeeTermId'=>$rs['academicFeeTermId'],
+				'startDatePmt'=>$rs['startDatePmt'],
 			);
+			
 			$periodList = $dbg->getAllStudyPeriod($data);
 		}
 		$this->view->periodList = $periodList;
@@ -1511,53 +1522,6 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->FormIncomeStatisticFilter = $frm;
 		
-	}
-	
-	public function rptStudentNearlyServproAction(){
-		try{
-			if($this->getRequest()->isPost()){
-				$search=$this->getRequest()->getPost();
-			}else{
-				$search=array(
-					'adv_search' =>'',
-					'branch_id' =>'',
-					'study_year'=>'',
-					'grade_all' =>'',
-					'degree' =>'',
-					'group'		=>-1,
-					'item'		=>-1,
-					'service_type'=>-1,
-					'end_date'	=>date('Y-m-d'),
-					'service'	=>''
-				);
-				
-				$dbGb = new Application_Model_DbTable_DbGlobal();
-				$last = $dbGb->getLatestAcadmicYear();
-				if(!empty($last)){
-					$search["study_year"] = empty($last["id"]) ? 0 : $last["id"];
-				}
-			}
-			$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
-			$abc = $db->getAllStudentNearlyEndService($search);
-			
-			$this->view->row = $abc;
-			$this->view->search = $search;
-			
-			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-			$frm = new Application_Form_FrmGlobal();
-			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-			$this->view->rsfooteracc = $frm->getFooterAccount();
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
-		$this->view->search = $search;
-		$form=new Registrar_Form_FrmSearchInfor();
-		$form->FrmSearchRegister();
-		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
-		$_db = new Application_Model_DbTable_DbGlobal();
-		$this->view->rs_type = $_db->getAllItems();
 	}
 	
 	function  rptStudentServiceAction(){

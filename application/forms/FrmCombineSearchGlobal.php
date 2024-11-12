@@ -161,4 +161,27 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		));
 		return $this;
 	}
+	
+	function FormNealyPaymentFilter($search=null)
+	{
+		$frm = new Application_Form_FrmSearchGlobalNew();
+		$textSearch = $frm->controlTextSearch($search);
+		$branchFilter = $frm->getBranchSearch($search);
+		$yearFilter = $frm->getAcademicYearSearch($search);
+		$degreeFilter = $frm->getDegreeSearch($search);
+		$endDateFilter = $frm->getEndDateSearch($search);
+		$getServiceTypeSearch = $frm->getServiceTypeSearch($search);
+		$nearlyPaymetySort = $frm->getNearlyPaymetySortSearch($search);
+
+		$this->addElements(array(
+			$textSearch,
+			$branchFilter,
+			$yearFilter,
+			$degreeFilter,
+			$endDateFilter,
+			$getServiceTypeSearch,
+			$nearlyPaymetySort
+		));
+		return $this;
+	}
 }

@@ -30,7 +30,22 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
     			else
     				$string = "Image Upload failed";
     		}
-			
+
+			$outstanding_bg = $_FILES['outstanding_bg']['name'];
+
+    		$outstanding_photo='';
+    		$dbg = new Application_Model_DbTable_DbGlobal();
+    		if (!empty($outstanding_bg)){
+    			$ss = 	explode(".", $outstanding_bg);
+    			$bg_name = "background_outstanding_".date("Y").date("m").date("d").time().".".end($ss);
+    			$tmp = $_FILES['outstanding_bg']['tmp_name'];
+    			if(move_uploaded_file($tmp, $part.$bg_name)){
+    				$outstanding_photo = $bg_name;
+    			}
+    			else
+    				$string = "Image Upload failed";
+    		}
+
 	    	$_arr = array(
 	    			'branch_id'	    => $_data['branch_id'],
 	    			'schoolOption'	=> $_data['schoolOption'],
@@ -64,7 +79,9 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 	    			'status'		=>1,
 					'modify_date'	=>date("Y-m-d H:i:s"),
 					'create_date'	=>date("Y-m-d H:i:s"),
-	    			'user_id'		=>$this->getUserId(),					
+	    			'user_id'		=>$this->getUserId(),	
+					
+					'outstanding_bg' =>$outstanding_photo,
 	    			);
 	    	$this->_name ="rms_certificate_setting";
 	    	$this->insert($_arr);//insert data
@@ -135,6 +152,23 @@ class Setting_Model_DbTable_DbCertificate extends Zend_Db_Table_Abstract
 			}
 			if (!empty($photo_name) and file_exists($part . $_data['old_photo'])) { //delelete old file
 				unlink($part . $_data['old_photo']);
+			}
+
+			// outstanding Background
+			$outstanding_bg = $_FILES['outstanding_bg']['name'];
+			if (!empty($outstanding_bg)) {
+				//unset old file here
+				$tem = explode(".", $outstanding_bg);
+				$image_name = "background_outstanding_" . date("Y") . date("m") . date("d") . time() . "." . end($tem);
+				$tmp = $_FILES['outstanding_bg']['tmp_name'];
+				if (move_uploaded_file($tmp, $part . $image_name)) {
+					move_uploaded_file($tmp, $part . $image_name);
+					$photo = $image_name;
+					$_arr['outstanding_bg'] = $photo;
+				}
+			}
+			if (!empty($outstanding_bg) and file_exists($part . $_data['old_outstanding_bg'])) { //delelete old file
+				unlink($part . $_data['old_outstanding_bg']);
 			}
 			
 			$this->_name ="rms_certificate_setting";

@@ -1359,7 +1359,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		if (!empty($data['activeStudent'])) {
 			$where .= " AND (gds.stop_type=0) ";
-			//OR gds.stop_type=3 OR gds.stop_type=4
 		}else{
 			$where .= " AND (gds.stop_type!=0) ";
 		}

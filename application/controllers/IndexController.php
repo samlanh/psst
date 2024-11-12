@@ -73,7 +73,7 @@ class IndexController extends Zend_Controller_Action
 					$session_user->user_name=$user_name;
 					$session_user->pwd=$password;
 					$session_user->level= $user_info['user_type'];
-					$session_user->issupper_user= $user_info['isSuperUser'];
+					$session_user->issupper_user= empty($user_info['isSuperUser']) ? 0 : $user_info['isSuperUser'];
 					$session_user->last_name= $user_info['last_name'];
 					$session_user->first_name= $user_info['first_name'];
 					$session_user->branch_id= $user_info['branch_id'];

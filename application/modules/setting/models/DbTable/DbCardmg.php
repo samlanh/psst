@@ -52,6 +52,8 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 			$whereother=" branch_id=".$_data['branch_id']." AND schoolOption=".$_data['schoolOption']." AND card_type=".$_data['card_type'];
 			$this->update($_arrother, $whereother);
 			
+			$isShowQr = empty($_data['isShowQr'])?0:1;
+			
 	    	$_arr = array(
 	    			'branch_id'	    =>$_data['branch_id'],
 	    			'title' =>$_data['title'],
@@ -80,7 +82,8 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 					'grouptop'	=>$_data['group_top'],
 					'qrcodeleft'	=>$_data['code_left'],
 					'qrcodetop'	=>$_data['code_top'],
-					
+					'qrLink'	=>$_data['qrLink'],
+					'isShowQr'	=>$isShowQr,
 	    			);
 	    	
 	    	$dept = "";
@@ -152,6 +155,7 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				
 				$default=1;
 			}
+			$isShowQr = empty($_data['isShowQr'])?0:1;
 			$_arr = array(
 				'branch_id'	    =>$_data['branch_id'],
 				'title' =>$_data['title'],
@@ -178,6 +182,8 @@ class Setting_Model_DbTable_DbCardmg extends Zend_Db_Table_Abstract
 				'grouptop'	=>$_data['group_top'],
 				'qrcodeleft'	=>$_data['code_left'],
 				'qrcodetop'	=>$_data['code_top'],
+				'qrLink'	=>$_data['qrLink'],
+				'isShowQr'	=>$isShowQr,
 			);
 			
 			$dept = "";

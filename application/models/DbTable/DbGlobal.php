@@ -1359,6 +1359,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		if (!empty($data['activeStudent'])) {
 			$where .= " AND (gds.stop_type=0) ";
+			//OR gds.stop_type=3 OR gds.stop_type=4
 		}else{
 			$where .= " AND (gds.stop_type!=0) ";
 		}
@@ -1378,7 +1379,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['branchId'])) {
 			$where .= " AND s.branch_id=" . $data['branchId'];
 		}
-
 		if (!empty($data['customerType'])) {
 			$where .= " AND s.customer_type=" . $data['customerType'];
 		}
@@ -2247,7 +2247,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			periodId,
 			degreeId,
 			DATE_FORMAT(start_date, '%Y-%m-%d') startDate,
-			DATE_FORMAT(end_date, '%Y-%m-%d') endDate
+			DATE_FORMAT(end_date, '%Y-%m-%d') endDate,
+			DATE_FORMAT(start_date, '%d-%m-%Y') startDateSecondFmt,
+			DATE_FORMAT(end_date, '%d-%m-%Y') endDateSecondFmt
   		FROM rms_startdate_enddate WHERE status=1 AND forDepartment=1 AND degreeId!='' ";
 		if (!empty($data['branch_id'])) {
 			$sql .= " AND branch_id = " . $data['branch_id'];
@@ -2285,6 +2287,16 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				}
 			}
 		}
+		
+		if (!empty($data['academicFeeTermId'])) {
+			$academicFeeTermId = $data['academicFeeTermId'];
+			$sql .= " AND id != $academicFeeTermId";
+			if (!empty($data['startDatePmt'])) {
+				$startDatePmt = new DateTime($data['startDatePmt']);
+				$startDatePmtD =  $startDatePmt->format("Y-m-d");
+				$sql .= " AND start_date > '$startDatePmtD'";
+			}
+		}
 
 		$sql .= " ORDER BY academic_year DESC ";
 		$rows = $db->fetchAll($sql);
@@ -2300,7 +2312,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					if($indexKey==0){
 						$selected="selected";
 					}
-					$options .= '<option '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'" data-title="'.htmlspecialchars($row['title']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
+					$resultPeriodJson =  htmlspecialchars(json_encode($rows));
+					$options .= '<option data-datajson="'.$resultPeriodJson.'" '.$selected.' data-start-date="'.htmlspecialchars($row['startDate']).'" data-end-date="'.htmlspecialchars($row['endDate']).'" data-title="'.htmlspecialchars($row['title']).'"  value="' . $row['id'] . '" >' . htmlspecialchars($row['name'], ENT_QUOTES) . '</option>';
 				}
 			}
 			return $options;
@@ -2727,8 +2740,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql .= ' AND ( ' . implode(' OR ', $s_where) . ')';
 		}
 		$user = $this->getUserInfo();
-		$level = $user['level'];
+		$level = empty($user['level']) ? 0 : $user['level'];
 		if ($level != 1) {
+			$user['schoolOption'] = empty($user['schoolOption']) ? 0 : $user['schoolOption'];
 			$sql .= ' AND i.schoolOption  IN (' . $user['schoolOption'] . ')';
 
 			$userSelect = $this->getUserProfile();
@@ -3226,7 +3240,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 					if (!empty($Discount['endDay'])) {
 						$strListDay = "<a class='pull-left date'>
-											<p class='day'>" . $Discount['DisValueType']. "</p>
+											<p class='month'>" . $Discount['endDay'] . "</p>
+											<p class='day'>" . $Discount['endYear'] . "</p>
 										</a>";
 					} else {
 						$strListDay = "<a class='pull-left border-green profile_thumb'>
@@ -5168,7 +5183,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				SELECT
 					ds.id,
 					ds.discountTitle,
-					ds.discountCode,
 					$sqlDiscountFor AS discountFor,
 					disc.studentId,
 					disc.grade,

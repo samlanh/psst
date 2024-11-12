@@ -286,7 +286,7 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 								</label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<select class="fullside" name="customer_type" id="customer_type"
-										dojoType="dijit.form.FilteringSelect">
+										dojoType="dijit.form.FilteringSelect" >
 										<option value="1">Student Payment</option>
 										<option value="2">Customer Payment</option>
 									</select>
@@ -930,6 +930,36 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 	var group_store = getDataStorefromJSON('id', 'name');
 
 	function getdataJson(){
+		$("#lbl_period_year").html(" ");
+		var identity = $('#identity').val();
+		if(identity!=""){
+			var arrays = identity.split(',');
+			for (var i = 0; i < arrays.length; i++) {
+				var thisServiceType = dijit.byId("service_type_" + arrays[i]).get('value');
+				var thisTermStudy = $('#term_study' + arrays[i]).val();
+				if(thisServiceType ==1 ){
+					var datajson = $('#term_study'+arrays[i]).find(":selected").val();
+					if(typeof datajson !=="undefined" ){
+						var datajsonInfo = ($("#term_study"+arrays[i]).find(':selected').data('datajson'));
+						var stringPeriodList='<ul>';
+						if(datajsonInfo.length>0){
+							for (i = 0; i < datajsonInfo.length; i++) {
+								if(thisTermStudy!=datajsonInfo[i].id){
+									stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+								}
+							}
+						}
+						stringPeriodList+= '</ul>';
+						$("#lbl_period_year").html(stringPeriodList);
+					}
+					break;
+				}
+			}
+				
+			
+		}
+		return false;
+		/*
 		var datajson = $('#study_year').find(":selected").val();
 		if(typeof datajson !=="undefined" ){
 			var datajsonInfo = ($("#study_year").find(':selected').data('datajson'));
@@ -943,22 +973,23 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 				var degreeOfTerm = datajsonInfo[i].degreeId;
 				if(degreeOfTerm!=""){
 					if(degreeOfTerm.indexOf(currentDegree)>-1){
-					if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
-						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
+						if(datajsonInfo[i].periodId==2 && academicTerm==2){//term
+							stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+						}
+						if(datajsonInfo[i].periodId==3 && academicTerm==3){//semester
+							stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+						}
+						if(datajsonInfo[i].periodId==4 && academicTerm==4){//year
+							stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+						}
 					}
-					if(datajsonInfo[i].periodId==3 && academicTerm==3){//semester
-						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
-					}
-					if(datajsonInfo[i].periodId==4 && academicTerm==4){//year
-						stringPeriodList+= '<li>'+datajsonInfo[i].name+'</li>';
-					}
-				}
 				}
 				
 			}
 			stringPeriodList+= '</ul>';
 			$("#lbl_period_year").html(stringPeriodList);
 		}
+		*/
 	}
 	function filterSubCategory(){
 		var datajson = $('#parentcategory').find(":selected").val();
@@ -1632,6 +1663,7 @@ $(document).ready(function() {
 				}
 				$('#term_study'+key).empty().trigger("change");
 				$('#term_study'+key).append(data.resultPeriod).trigger('change');
+		
 			},
 			error: function (err) {
 			}
@@ -1746,6 +1778,7 @@ $(document).ready(function() {
 				dijit.byId("item").focus();
 				return false;
 			}
+			getdataJson();
 
 			today = dijit.byId("paid_date").get("value");
 			var dd = today.getDate();

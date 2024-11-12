@@ -131,6 +131,20 @@
 											<?php echo $frm->getElement("display_by");?>
 									   </div>
 									</div>
+									<div class="form-group">
+									   <label class="control-label bold col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("Link QR");?>
+									   </label>
+									   <div class="col-md-7 col-sm-7 col-xs-12">
+											<?php echo $frm->getElement("qrLink");?>
+									   </div>
+									</div>
+									<div class="form-group">
+										<label class="custom-switch "> 
+											<input type="checkbox" <?php if($this->rs['isShowQr']==1){ echo "checked";}else{ echo ''; } ?>  id="isShowQr" name="isShowQr"  class="custom-switch-input" > 
+											<span class="custom-switch-indicator custom-radius"></span> 
+											<a href="javascript:void(0);" class="tx-14 mb-0 me-2"><?php echo $tr->translate('Show QRCode')?></a> 
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>

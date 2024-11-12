@@ -1358,8 +1358,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$where .= " AND gds.itemType=" . $data['itemType'];
 		}
 		if (!empty($data['activeStudent'])) {
-			$where .= " AND (gds.stop_type=0) ";
-			//OR gds.stop_type=3 OR gds.stop_type=4
+			$where .= " AND (gds.stop_type=0 AND gds.is_current=1 ) ";
 		}else{
 			$where .= " AND (gds.stop_type!=0) ";
 		}
@@ -3236,24 +3235,21 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			if (!empty($rsDiscount)) {
 				$strDiscountList .= "<ul class='list-unstyled top_profiles scroll-view'>";
 				foreach($rsDiscount as $Discount){
-
-
+					$strListDay = "";
 					if (!empty($Discount['endDay'])) {
-						$strListDay = "<a class='pull-left date'>
-											<p class='month'>" . $Discount['endDay'] . "</p>
-											<p class='day'>" . $Discount['endYear'] . "</p>
-										</a>";
+						// $strListDay = "<a class='pull-left date'>
+						// 					<p class='month'>" . $Discount['DisValueType'] . "</p>
+						// 				</a>";
 					} else {
-						$strListDay = "<a class='pull-left border-green profile_thumb'>
-										<i class='fa fa-arrow-circle-up green'></i>
-				  						</a>";
+						// $strListDay = "<a class='pull-left border-green profile_thumb'>
+						// 				<i class='fa fa-arrow-circle-up green'></i>
+				  		// 				</a>";
 					}
-
+//discountTitle
 					$strDiscountList.= '<li class="media event">
-						'.$strListDay.'
-						<div class="media-body">
-							<a class="title">'.$Discount['discountTitle'].'</a>
-							<p><strong class="red">'.$Discount['DisValueType'].'</strong> '.$Discount['discountName'].' ('.$Discount['discountForType'].')</p>
+						'.$strListDay.'<div class="media-body">
+							<a class="title red"><strong>'.$Discount['DisValueType'].'-'.$Discount['discountCode'].'</strong></a>
+							<p>'.$Discount['discountName'].' ('.$Discount['discountForType'].')</p>
 							<p><small>'.$Discount['discountFor'].'</small><small class="blue"> ('.$Discount['discountPeriod'].')</small>
 							</p>
 						</div>
@@ -5182,6 +5178,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sql = "
 				SELECT
 					ds.id,
+					ds.discountCode,
 					ds.discountTitle,
 					$sqlDiscountFor AS discountFor,
 					disc.studentId,

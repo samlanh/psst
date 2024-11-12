@@ -45,7 +45,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 					WHEN primary_phone=4 THEN (SELECT f.guardianPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
 				END tel,
 				(SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
-				(SELECT $label FROM `rms_view` WHERE type=5 and key_code=dg.stop_type LIMIT 1) AS stopType,
+				dg.stop_type AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
 				(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
 				dg.grade as gradeId,
@@ -89,13 +89,16 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 			$where.= " AND dg.grade = ".$search['grade'];
 		}
 		
-		if(!empty($search['start_date'])){//enroll date
-			$where.= " AND DATE_FORMAT(s.create_date, '%Y-%m-%d') ='".$search['start_date']."'";
-		}
-		if($search['study_type']!=''){
-			$where.= " AND dg.stop_type = ".$search['study_type'];
-			if ($search['study_type'] == 0) {
-				$where.= " AND dg.is_current=1";
+		$from_date =(empty($search['start_date']))? '1': "s.create_date >= '".$search['start_date']." 00:00:00'";
+	    $to_date = (empty($search['end_date']))? '1': "s.create_date <= '".$search['end_date']." 23:59:59'";
+		$where .= " AND ".$from_date." AND ".$to_date;
+
+		if($search['active_type']>-1){
+			//$where.= " AND dg.stop_type = ".$search['active_type'];
+			if ($search['active_type'] == 0) {
+				$where.= " AND dg.stop_type=0 AND dg.is_current=1";
+			} else {
+				$where.= " AND dg.stop_type!=0";
 			}
 		}
 		

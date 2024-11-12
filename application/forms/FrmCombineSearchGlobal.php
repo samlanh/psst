@@ -10,12 +10,18 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$registrationDate = $frm->getStartDateSearch($search,'Registration Date');
 		$studentTypeFilter = $frm->getStudentTypeStatusTypeSearch($search);
 		$paymentTermFilter = $frm->getPaymentTermSearch($search);
+		$paymentTermFilter->removeMultiOption(1);
+		$paymentTermFilter->removeMultiOption(5);
 		$startDateFilter = $frm->getPaymentDateSearch($search);
+		$endDateFilter = $frm->getEndDateSearch($search);
 		$studentstatusFilter = $frm->getStudyTypeSearch($search);
+		$activeFilter = $frm->getActiveTypeSearch($search);
 		$paymentstatusFilter = $frm->getPaymentStatusSearch($search);
 		$termListFilter = $frm->getTermListSearch($search);
 
 		$this->addElements(array(
+			$endDateFilter,
+			$activeFilter,
 			$textSearch,
 			$yearFilter,
 			$branchFilter,

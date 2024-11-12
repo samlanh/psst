@@ -32,21 +32,21 @@ table.tb-footer tr.style-head {
 							<div class="form-check form-check-primary mt-1">
 								<input class="form-check-input checkbox" type="radio" value="1" id="reportType" name="reportType"
 									<?php echo ($this->search['reportType']==1)?"checked='checked'":'';?>> 
-								<label class="form-check-label">Tuition Fee Report</label>
+								<label class="form-check-label">Tuition Fee</label>
 							</div>
 						</div>
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="form-check form-check-primary mt-1">
 								<input class="form-check-input checkbox" type="radio" value="2" id="reportType" name="reportType"
 								<?php echo ($this->search['reportType']==2)?"checked='checked'":'';?>> 
-								<label class="form-check-label">Lunch Fee Report</label>
+								<label class="form-check-label">Lunch Fee</label>
 							</div>
 						</div>
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="form-check form-check-primary mt-1">
 								<input class="form-check-input checkbox" type="radio" value="3" id="reportType" name="reportType"
 								<?php echo ($this->search['reportType']==3)?"checked='checked'":'';?>> 
-								<label class="form-check-label">Nap Fee Report</label>
+								<label class="form-check-label">Nap Fee</label>
 							</div>
 						</div>
 					</div>
@@ -70,19 +70,27 @@ table.tb-footer tr.style-head {
 					<input id="grade" />
 				</div>
 				<div class="col-md-2 col-sm-2 col-xs-12">
-					<?php echo $frm->getElement('start_date'); ?>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement('studentType'); ?>
-					</div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement('study_type'); ?>
-					</div>
-					<div class="col-md-2 col-sm-2 col-xs-12">
-						<?php echo $frm->getElement('pay_term'); ?>
-					</div>
+					<?php echo $frm->getElement('studentType'); ?>
+				</div>		
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement('start_date'); ?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement('end_date'); ?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement('active_type'); ?>
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-12">
+					<?php echo $frm->getElement('pay_term'); ?>
+				</div>
+			</div>
+			<div class="form-group">
+					<div class="col-md-4 col-sm-4 col-xs-12"></div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement('paymentstatus'); ?>
 					</div>
@@ -92,10 +100,6 @@ table.tb-footer tr.style-head {
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<?php echo $frm->getElement('payment_date'); ?>
 					</div>
-				
-			</div>
-			<div class="form-group">
-					<div class="col-md-10 col-sm-10 col-xs-12"></div>
 					<div class="col-md-2 col-sm-2 col-xs-12">	
 						<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit">Search</button>
 					</div>
@@ -166,12 +170,12 @@ table.tb-footer tr.style-head {
 										<td rowspan="2">No.</td>
 										<td rowspan="2">Branch</td>
 										<td rowspan="2">Student Id</td>
-										<td  rowspan="2">Student Name</td​>
+										<td  rowspan="2">Student</td​>
 										<td rowspan="2">Phone Number</td>
 										<td rowspan="2">Student Type</td>
 										<td rowspan="2">Status</td>
 										<td rowspan="2">Grade</td>
-										<td rowspan="2">Registration Date</td>
+										<td rowspan="2">Registration</td>
 										<td rowspan="2">Discount</td>
 										<td rowspan="2">Pay Type</td>
 										<td colspan="2">Term1</td​>
@@ -205,7 +209,7 @@ table.tb-footer tr.style-head {
 									<td class="widthstudent" align="left"><?php echo $rs['student_name']; ?></td>
 									<td class="width-contact" align="left"><?php echo $rs['tel']; ?></td>
 									<td align="left"><?php echo $rs['studentType']; ?></td>
-									<td align="left"><?php echo $rs['stopType']; ?></td>
+									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
 									<td><?php echo $rs['grade']; ?></td>
 									<td><?php echo $rs['registrationDate']; ?></td>
 									<?php

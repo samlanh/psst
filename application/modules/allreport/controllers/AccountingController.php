@@ -1496,11 +1496,12 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						"degree"=>'',
     					"grade"=>-1,
     					'studentType'=>'',
-						'study_type'=>'',
+						'active_type'=>'',
     					'pay_term'=>-1,
 						'termList'=>0,
 						'paymentstatus'=>-1,
     					'start_date'=> date('Y-m-d'),
+    					'end_date'=> date('Y-m-d'),
     					'payment_date'=>date('Y-m-d'),
     			);
     		}

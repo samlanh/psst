@@ -655,7 +655,7 @@ class Application_Form_FrmGlobal
 			$showPic = SHOW_PIC_INRECEIPT;
 			$showPic = ($showPic == 1) ? 'display:block;' : 'display:none;';
 			$settingAmtReceipt = AMOUNT_RECEIPT;
-			$pageSetup = ($settingAmtReceipt == 1) ? 'page:A5;size:landscape;' : 'page:A4;size:portrait;';
+			$pageSetup = ($settingAmtReceipt == 1) ? 'page:A5;' : 'page:A4;';
 
 			$showReport = (SHOW_HEADER_RECEIPT == 1) ? 'visibility:visible' : 'visibility:hidden';
 

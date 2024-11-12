@@ -1718,10 +1718,11 @@ $(document).ready(function() {
 
 		var totalPayment = 0;
 		var PaidAmount = 0;
-
-		for (var n = 0; n < rowIDArray.length; n++) {
-			totalPayment += dijit.byId('total_amount' + rowIDArray[n]).get('value');
-			PaidAmount += isNaN(dijit.byId('paid_amount' + rowIDArray[n]).get('value')) ? 0 : dijit.byId('paid_amount' + rowIDArray[n]).get('value');;
+		if(rowId!=""){
+			for (var n = 0; n < rowIDArray.length; n++) {
+				totalPayment += dijit.byId('total_amount' + rowIDArray[n]).get('value');
+				PaidAmount += isNaN(dijit.byId('paid_amount' + rowIDArray[n]).get('value')) ? 0 : dijit.byId('paid_amount' + rowIDArray[n]).get('value');;
+			}
 		}
 
 		dijit.byId('grand_total').attr('value', totalPayment);

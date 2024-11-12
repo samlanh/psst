@@ -656,9 +656,17 @@ class Application_Form_FrmGlobal
 			$showPic = ($showPic == 1) ? 'display:block;' : 'display:none;';
 			$settingAmtReceipt = AMOUNT_RECEIPT;
 			$pageSetup = ($settingAmtReceipt == 1) ? 'page:A5;' : 'page:A4;';
+			
+			
+			$settingFor = 100; //PSIS CHV
+			if($settingFor==100){
+				$pageSetup = 'size:A4 portrait; 
+					margin-bottom : 7.5cm;
+					margin-top : '.$paddingTop.'; 
+					';
+			}
 
 			$showReport = (SHOW_HEADER_RECEIPT == 1) ? 'visibility:visible' : 'visibility:hidden';
-
 			$str = "<style>
 					.hearder_table{height:20px !important;}
 					.defaulheight{line-height:10px !important;}
@@ -669,7 +677,7 @@ class Application_Form_FrmGlobal
 						margin:0 auto;position:absolute;top:10px !important;left:100px;
 					}
 				</style>
-				<div id='PrintReceipt' style='width:100%cm !important; padding: 0px;'>
+				<div id='PrintReceipt' style='width:100% !important; padding: 0px; '>
 					<style>
 						.noted{
 							white-space: pre-wrap;
@@ -747,6 +755,12 @@ class Application_Form_FrmGlobal
 								transform: scale(0.5);
 							}
 							a{text-decoration:none;color:#000;}
+							
+							div.recept-header,
+							div.recept-footer{
+								display:block !important;
+								position:fixed;
+							}
 						}
 						#page {
 						   border-collapse: collapse;
@@ -793,11 +807,9 @@ class Application_Form_FrmGlobal
 						}
 						
 					</style>
+					<div class='recept-header'></div>
 					<table broder='1' width='100%' class='print' cellspacing='0'  cellpadding='0' style='font-family:Khmer OS Battambang,Times New Roman !important;  white-space:nowrap;'>
-						<tr style='height:$paddingTop'>
-							<td id='lbl_header' align='center' valign='top' style='" . $showReport . "' colspan='5'>
-							</td>
-						</tr>
+						<thead>
 						<tr>
 							<td colspan='4'></td>
 							<td  class='smallsize'>លេខបង្កាន់ដៃ/Receipt No : <strong><label id='lb_receipt_no'></label></strong></td>
@@ -853,6 +865,7 @@ class Application_Form_FrmGlobal
 							<td>ថ្នាក់/Class</td>
 							<td style='white-space: nowrap;'>: <label id='lb_group' class='one'></label><label id='lb_grade' class='one'>&nbsp;</label></td>
 						</tr>
+						</thead>
 					<tr>
 						<td colspan='5' style='padding-top:10px;'><div id='t_amountmoneytype'></div></td>
 					</tr>
@@ -933,7 +946,9 @@ class Application_Form_FrmGlobal
 						</div>
 					</div>
 				</div>
-			</div>";
+			</div>
+			
+			";
 			if ($settingAmtReceipt > 1) {
 				$str .= "<div id='divPrint1'>
 				<div style='vertical-align: middle;margin:10px 0px 10px 0px'></div>

@@ -1862,8 +1862,14 @@ $(document).ready(function() {
 					var isoldBalance = dijit.byId("isoldBalance" + rowIDArray[n]).get("value");
 					var term_label = "";
 					if (items_type != 3 && isoldBalance == 0) {
-						//term_label =  '-'+$('#term_'+rowIDArray[n]).select2('data').text;
-						term_label = '-'+$('#term_study'+rowIDArray[n]+' option:selected').attr('data-title');
+						var thisTerm = $('#term_' + rowIDArray[n]).val();
+						if (thisTerm != 5 && thisTerm != 6) {
+							//term_label =  '-'+$('#term_'+rowIDArray[n]).select2('data').text;
+							var thisTermLable = $('#term_study'+rowIDArray[n]+' option:selected').attr('data-title');
+							if (typeof thisTermLable != 'undefined') {
+								term_label = '-'+thisTermLable;
+							}
+						}
 					}
 					temp += '<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">' + i + '</td>';
 

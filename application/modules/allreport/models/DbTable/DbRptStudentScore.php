@@ -1713,14 +1713,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 	{ //using
 		$db = $this->getAdapter();
 
-		$sqlMention = "SELECT 
-								md.`max_score`, 
-								md.`metion_grade` FROM 
-								`rms_metionscore_setting` AS m 
-									INNER JOIN `rms_metionscore_setting_detail` AS md 
-						ON m.`id`=md.`metion_score_id` 
-						WHERE m.`degree`= " . $search['degree'] . " AND m.`academic_year`= " . $search['academic_year'] . "  ORDER BY md.`max_score` DESC";
-		$mentionResult = $db->fetchAll($sqlMention);
+		$mentionResult = $this->getMentoinGradeSetting($search);
 		$mentionResultArr = array(
 			"0" => 0,
 			"1" => 0,
@@ -1780,15 +1773,23 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$degree = "rms_items.title_en";
 		}
 		$sql = "SELECT s.id,s.title_score,s.title_score_en, 
-    			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academicYear,
-    			g.group_code, g.grade, g.degree,g.branch_id,
-				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
-				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
-				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
-				(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id AND sm.type=1 ) TotaStudent
-			FROM `rms_score` AS s  
-			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academicYear,
+    		g.group_code, g.grade, g.degree,g.branch_id,
+			
+			(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=g.branch_id LIMIT 1) AS branch_name, 
+			(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
+			sd.`subject_id`,sd.`teacher_id`,
+			(SELECT subject_titlekh FROM `rms_subject` WHERE rms_subject.id=sd.`subject_id` LIMIT 1) AS subject_name, 
+			(SELECT teacher_name_kh FROM `rms_teacher` WHERE rms_teacher.id=sd.`teacher_id` LIMIT 1) AS teacher_name, 
+			(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id AND sm.type=1 ) TotaStudent 
+			
+			FROM `rms_score` AS s 
+			LEFT JOIN `rms_group` AS g ON g.id = s.group_id 
+			INNER JOIN `rms_score_detail` AS sd ON s.`id` = sd.`score_id`
+		
     	";
+		
 
 		$where = ' WHERE 1 ';
 		if (($search['branch_id']) > 0) {
@@ -1818,13 +1819,21 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		if (!empty($search['sort_degree'])) {
 			$where .= ' AND g.degree in(' . $search['sort_degree'] . ')';
 		}
+		if (!empty($search['teacher'])) {
+			$where .= ' AND sd.teacher_id =' . $search['teacher'];
+		}
+		if (!empty($search['subjectId'])) {
+			$where .= ' AND sd.subject_id=' . $search['subjectId'];
+		}
 
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbp->getAccessPermission("s.branch_id");
 		$where .= $dbp->getDegreePermission("g.degree");
 
-		$orderBy = "  ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
-		echo $sql . $where . $orderBy; exit();
+		$orderBy = " 	
+				GROUP BY sd.`subject_id`,sd.score_id
+			ORDER BY  sd.teacher_id,sd.subject_id,g.degree,s.group_id  ASC ";
+		//echo $sql . $where . $orderBy; 
 		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
 
 		$resultInfo = array();
@@ -1839,9 +1848,13 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				$resultInfo[$key]['branch_id'] = $rs['branch_id'];
 				$resultInfo[$key]['branch_name'] = $rs['branch_name'];
 
+				$resultInfo[$key]['subject_name'] = $rs['subject_name'];
+				$resultInfo[$key]['teacher_name'] = $rs['teacher_name'];
+
 				$resultInfo[$key]['degree_name'] = $rs['degree_name'];
 				$resultInfo[$key]['grade_name'] = $rs['grade_name'];
 				$resultInfo[$key]['TotaStudent'] = $rs['TotaStudent'];
+			
 
 				$resultInfo[$key]['Total_A'] = 0;
 				$resultInfo[$key]['Total_B'] = 0;
@@ -1850,6 +1863,8 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				$resultInfo[$key]['Total_E'] = 0;
 				$resultInfo[$key]['Total_F'] = 0;
 
+				$search['subject_id'] = $rs['subject_id'];
+				$search['teacher_id'] = $rs['teacher_id'];
 				$search['degree'] = $rs['degree'];
 				$search['scoreId'] = $rs['id'];
 
@@ -1867,18 +1882,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		}
 		return $resultInfo;
 	}
+	
+
 	function getStudentGradeBySubject($search)
 	{ //using
 		$db = $this->getAdapter();
-
-		$sqlMention = "SELECT 
-								md.`max_score`, 
-								md.`metion_grade` FROM 
-								`rms_metionscore_setting` AS m 
-									INNER JOIN `rms_metionscore_setting_detail` AS md 
-						ON m.`id`=md.`metion_score_id` 
-						WHERE m.`degree`= " . $search['degree'] . " AND m.`academic_year`= " . $search['academic_year'] . "  ORDER BY md.`max_score` DESC";
-		$mentionResult = $db->fetchAll($sqlMention);
+		$mentionResult = $this->getMentoinGradeSetting($search);
 		$mentionResultArr = array(
 			"0" => 0,
 			"1" => 0,
@@ -1894,15 +1903,14 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			}
 		}
 		if ($search['exam_type'] == 1) {
-			$totalScore = "sm.total_score";
-			$totalMaxScore = "sm.totalMaxScore";
+			$totalScore = "sd.orgScore";
+			$totalMaxScore = "(SELECT  gs.max_score FROM `rms_group_subject_detail` AS gs WHERE gs.group_id = sd.group_id AND gs.subject_id= sd.`subject_id` AND gs.teacher= sd.`teacher_id` LIMIT 1)";
 		} else {
-			$totalScore = "sm.overallAssessmentSemester";
-			$totalMaxScore = "(SELECT  g.semesterTotalAverage FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 )";
+			$totalScore = "sd.orgScore";
+			$totalMaxScore = "(SELECT  gs.semester_max_score FROM `rms_group_subject_detail` AS gs WHERE gs.group_id = sd.group_id AND gs.subject_id= sd.`subject_id` AND gs.teacher= sd.`teacher_id` LIMIT 1)";
 		}
 
 		$sql = "SELECT  
-		 s.id,
 		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['0'] . "'   , " . $totalScore . ", NULL)) AS Total_A,
 		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['1'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['0'] . "'  , " . $totalScore . ", NULL)) AS Total_B,
 		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['2'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['1'] . "'  , " . $totalScore . ", NULL)) AS Total_C,
@@ -1910,16 +1918,35 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['4'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['3'] . "'  , " . $totalScore . ", NULL)) AS Total_E,
 		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['4'] . "'  , " . $totalScore . ", NULL)) AS Total_F
 		   
-		 FROM `rms_score` AS s  ,
-			`rms_score_monthly` AS sm  
-		WHERE s.`id` = sm.`score_id`  AND sm.`type` = 1 ";
-		$where = ' ';
+		FROM `rms_score_detail` AS sd ";
+		$where = ' where 1 ';
 		if (($search['scoreId']) > 0) {
-			$where .= ' AND s.id=' . $search['scoreId'];
+			$where .= ' AND sd.`score_id` =' . $search['scoreId'];
 		}
-		$where .= " GROUP BY sm.`score_id`";
+		if (!empty($search['subject_id'])) {
+			$where .= ' AND sd.subject_id =' . $search['subject_id'];
+		}
+		if (!empty($search['teacher_id'])) {
+			$where .= ' AND sd.teacher_id= ' . $search['teacher_id'];
+			//$where .= ' AND sd.teacher_id= 173 ';
+		}
+		$where .= " GROUP BY sd.`score_id`";
 		return $db->fetchAll($sql . $where);
 	}
+
+	function getMentoinGradeSetting($search){   /// Funtion Get Score Setting
+		$db = $this->getAdapter();
+		$sqlMention = "SELECT 
+		md.`max_score`, 
+		md.`metion_grade` FROM 
+		`rms_metionscore_setting` AS m 
+			INNER JOIN `rms_metionscore_setting_detail` AS md 
+		ON m.`id`=md.`metion_score_id` 
+		WHERE m.`degree`= " . $search['degree'] . " AND m.`academic_year`= " . $search['academic_year'] . "  ORDER BY md.`max_score` DESC";
+		$mentionResult = $db->fetchAll($sqlMention);
+		return $mentionResult;
+	}
+
 
 	public function getStatisticScoreResult($search, $id = null)
 	{ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo

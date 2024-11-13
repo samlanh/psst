@@ -563,12 +563,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'study_year'=>'',
 					'grade_all' =>'',
 					'degree' =>'',
-					'group'		=>-1,
-					'item'		=>-1,
-					'service_type'=>-1,
+					'group'		=>0,
+					'item'		=>0,
+					'service_type'=>0,
 					'end_date'	=>date('Y-m-d'),
 					'service'	=>'',
 					'nearlyPaymetySort'	=>1,
+					'periodDay'	=>7,
 				);
 				
 				$dbGb = new Application_Model_DbTable_DbGlobal();
@@ -576,6 +577,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				if(!empty($last)){
 					$search["study_year"] = empty($last["id"]) ? 0 : $last["id"];
 				}
+			}
+			if(!empty($search['periodDay'])){
+				$search['end_date'] = date('Y-m-d');
 			}
 			$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
 			$abc = $this->view->row = $db->getAllStudentNearlyEndService($search);

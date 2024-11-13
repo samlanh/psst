@@ -168,7 +168,7 @@ function setDatatoReceipt(){
 					  
 					  temp+='<tr style="font-size:11px;line-height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
-					  term = '<?php echo empty($rs['payment_term'])?"":"-".$rs['payment_term'];?>';
+					  term = '<?php if($rs['paymentTermId']!=5 AND $rs['paymentTermId']!=6){ echo empty($rs['academicFeeTermTitle'])?"":"-".$rs['academicFeeTermTitle']; }?>';
 					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;"><label class="notedDescription">&nbsp;'+item_label+term+'</label></td>'; 
 					  temp+='<td class="all-border">'+<?php echo number_format($rs['qty'],2);?>+'</td>';
 					  temp+='<td class="all-border textright paddingright">'+fee+'</td>';

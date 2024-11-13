@@ -472,6 +472,8 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 			    	spd.discount_amount,
 			    	spd.discount_percent,
 			    	spd.service_type
+					,spd.academicFeeTermId 
+					,(SELECT sed.title FROM rms_startdate_enddate AS sed WHERE sed.id =spd.academicFeeTermId  LIMIT 1 ) AS academicFeeTermTitle
     			FROM 
 			    	rms_student_payment as sp,
 			    	rms_student_paymentdetail AS spd ";

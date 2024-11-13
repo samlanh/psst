@@ -178,6 +178,7 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$endDateFilter = $frm->getEndDateSearch($search);
 		$getServiceTypeSearch = $frm->getServiceTypeSearch($search);
 		$nearlyPaymetySort = $frm->getNearlyPaymetySortSearch($search);
+		$periodDay = $frm->getPeriodDaySearch($search);
 
 		$this->addElements(array(
 			$textSearch,
@@ -186,7 +187,8 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$degreeFilter,
 			$endDateFilter,
 			$getServiceTypeSearch,
-			$nearlyPaymetySort
+			$nearlyPaymetySort,
+			$periodDay,
 		));
 		return $this;
 	}

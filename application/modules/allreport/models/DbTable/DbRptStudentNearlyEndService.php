@@ -108,10 +108,20 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$key = new Application_Model_DbTable_DbKeycode();
     	$data=$key->getKeyCodeMiniInv(TRUE);
     	
-    	if (!empty($data['payment_day_alert'])){
-    		$alert = $data['payment_day_alert'];
-    		$search['end_date'] = date('Y-m-d',strtotime($search['end_date']."+$alert day"));
-    	}
+		if (!empty($search['periodDay'])){
+			$periodDay = empty($search['periodDay']) ? 0 : $search['periodDay'];
+			$search['end_date'] = date('Y-m-d',strtotime("+$periodDay day"));
+			
+    	}else{
+			$search['end_date'] = empty($search['end_date']) ? date('Y-m-d') : $search['end_date'];
+			/*
+			if (!empty($data['payment_day_alert'])){
+				$alert = $data['payment_day_alert'];
+				$search['end_date'] = date('Y-m-d',strtotime($search['end_date']."+$alert day"));
+			}
+			*/
+		}
+    	
     	$lang = $_db->currentlang();
 		$branch= $_db->getBranchDisplay();
 		
@@ -240,7 +250,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				$where.=" AND vSt.degree=".$search['item'];
 			}
      	}
-
+		if(!empty($search['service_type'])){
+     		$where .=" AND vSt.`itemType` =".$search['service_type'];
+     	}
      	if(!empty($search['service'])){
      		$where .=" AND vSt.grade=".$search['service'];
      	}

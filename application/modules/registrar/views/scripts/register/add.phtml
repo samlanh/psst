@@ -941,11 +941,18 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 					var datajson = $('#term_study'+arrays[i]).find(":selected").val();
 					if(typeof datajson !=="undefined" ){
 						var datajsonInfo = ($("#term_study"+arrays[i]).find(':selected').data('datajson'));
+						
+						var selectedStartDateValue = ($("#term_study"+arrays[i]).find(':selected').data('startDate'));
+						let selectedStartDate = new Date(selectedStartDateValue);
+						
 						var stringPeriodList='<ul>';
 						if(datajsonInfo.length>0){
 							for (i = 0; i < datajsonInfo.length; i++) {
 								if(thisTermStudy!=datajsonInfo[i].id){
-									stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+									let thisRowDate = new Date(datajsonInfo[i].startDate);
+									if (thisRowDate > selectedStartDate) {
+										stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+									}
 								}
 							}
 						}
@@ -1718,10 +1725,11 @@ $(document).ready(function() {
 
 		var totalPayment = 0;
 		var PaidAmount = 0;
-
-		for (var n = 0; n < rowIDArray.length; n++) {
-			totalPayment += dijit.byId('total_amount' + rowIDArray[n]).get('value');
-			PaidAmount += isNaN(dijit.byId('paid_amount' + rowIDArray[n]).get('value')) ? 0 : dijit.byId('paid_amount' + rowIDArray[n]).get('value');;
+		if(rowId!=""){
+			for (var n = 0; n < rowIDArray.length; n++) {
+				totalPayment += dijit.byId('total_amount' + rowIDArray[n]).get('value');
+				PaidAmount += isNaN(dijit.byId('paid_amount' + rowIDArray[n]).get('value')) ? 0 : dijit.byId('paid_amount' + rowIDArray[n]).get('value');;
+			}
 		}
 
 		dijit.byId('grand_total').attr('value', totalPayment);
@@ -1861,8 +1869,14 @@ $(document).ready(function() {
 					var isoldBalance = dijit.byId("isoldBalance" + rowIDArray[n]).get("value");
 					var term_label = "";
 					if (items_type != 3 && isoldBalance == 0) {
-						//term_label =  '-'+$('#term_'+rowIDArray[n]).select2('data').text;
-						term_label = '-'+$('#term_study'+rowIDArray[n]+' option:selected').attr('data-title');
+						var thisTerm = $('#term_' + rowIDArray[n]).val();
+						if (thisTerm != 5 && thisTerm != 6) {
+							//term_label =  '-'+$('#term_'+rowIDArray[n]).select2('data').text;
+							var thisTermLable = $('#term_study'+rowIDArray[n]+' option:selected').attr('data-title');
+							if (typeof thisTermLable != 'undefined') {
+								term_label = '-'+thisTermLable;
+							}
+						}
 					}
 					temp += '<tr style="font-size:inherit;height: 15px;" align="center"><td align="center" style="border:1px solid #000;">' + i + '</td>';
 

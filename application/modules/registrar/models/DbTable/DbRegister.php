@@ -683,9 +683,23 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$recieptStart = 0;//psis=-506;
     	$new_acc_no = $new_acc_no+$recieptStart;//for psis
     	
+		$pre="";
+		$lenghtFormat = 5;
+		
+		$settingFor = 100; //PSIS CHV
+		if($settingFor==100){
+			$lenghtFormat = 6;
+			$branch = empty($branch) ? 0 : $branch;
+			$_dbGb = new Application_Model_DbTable_DbGlobal();
+			$rs= $_dbGb->getPrefixCode($branch); 
+			if(!empty($rs)){
+				$pre.=$rs."-";
+			}
+		}
+		
+		
     	$acc_length = strlen((int)$new_acc_no+1);
-    	$pre=0;
-    	for($i = $acc_length;$i<5;$i++){
+    	for($i = $acc_length;$i<$lenghtFormat;$i++){
     		$pre.='0';
     	}
     	return $pre.$new_acc_no;

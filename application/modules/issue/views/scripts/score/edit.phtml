@@ -404,7 +404,7 @@ $db_score = new Issue_Model_DbTable_DbScore();
 			<?php
 			$result_score = $db_score->checkSubjectScore($this->score_id, $subj["subject_id"], null);
 			?>
-			temp += '<td class="tdheader" title="' + stringsname + '"><input <?php if (!empty($result_score)) { ?>checked="checked"<?php } ?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/><input id="subject_lang<?php echo $subj["subject_id"]; ?>"  name="subject_lang<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subjectLang"]; ?>" type="hidden" ></td>';
+			temp += '<td class="tdheader" title="' + stringsname + '"><input <?php if (!empty($result_score)) { ?>checked="checked"<?php } ?> style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(<?php echo $subj["subject_id"]; ?>);"  class="checkbox" id="subject<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subject_id"]; ?>"  name="selector[]"/><input id="teacher<?php echo $subj["subject_id"]; ?>"  name="teacher<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["teacher"]; ?>" type="hidden" ><input id="subject_lang<?php echo $subj["subject_id"]; ?>"  name="subject_lang<?php echo $subj["subject_id"]; ?>" value="<?php echo $subj["subjectLang"]; ?>" type="hidden" ></td>';
 
 		<?php } ?>
 		temp += '<td class="tdheader">&nbsp;</td>';

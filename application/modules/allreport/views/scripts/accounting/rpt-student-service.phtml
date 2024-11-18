@@ -3,6 +3,7 @@
 	echo $this->headTitle($tr->translate('REPORT_STUDENT_SERVICE')); 
 	$frm =  $this->form_search;
 	$classHideHeight=classHideHeight;
+	$nearlyPaymetySort = empty($this->search["nearlyPaymetySort"]) ? 1 : $this->search["nearlyPaymetySort"];
 ?>	
 <div style="min-height:15cm; margin:0 auto; padding:0.2cm 0.2cm 0cm 0.2cm">
 	<div class="card-box">
@@ -44,6 +45,9 @@
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<input id="service" name="service" />
        		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("nearlyPaymetySort");?>
+       		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
        		</div>
@@ -51,21 +55,32 @@
        		</div>
        	</div>
 	</form>	
+	<style>
+		.hideprintdate {
+			display: none !important;
+		}
+		.hover:hover {
+			background: #ddd;
+		}
+	</style>
+
 	<div id="divPrint">
 			<table style="width:100%; white-space: nowrap;">
 				<tr>
-					<td colspan="2"><?php echo $this->rsheader;?></td>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
 				<tr>
 					<td></td>
 				</tr>
 				<tr>
-					
-					<td align="center" width="100%" colspan="2">
+					<td width="15%" align="center"></td>
+					<td align="center" width="70%">
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'khmer os muol light';"><?php echo $tr->translate('REPORT_STUDENT_SERVICE');?></strong><br />
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
 					</td>
-									
+					<td width="15%">
+						<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
+					</td>				
 				</tr>
 				<tr>
 					<td></td>
@@ -145,6 +160,12 @@
 					table.content-data tbody tr td{
 						padding:3px 1px;
 					}
+					table.content-data,
+					table.content-data td,
+					table.content-data th,
+					table.content-data td span {
+						line-height: 16px;
+					}
 					.bg-category {
 						background: #e1e7f8;
 					}
@@ -168,116 +189,210 @@
 						display: block !important;
 						line-height: 14px;
 					}
+					
+					table.content-data tbody td span.text-truncate {
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						line-height: inherit;
+						width: 100px;
+						display: block;
+					}
+					.w-px-100 {
+						width: 100px !important;
+					}
+					.w-px-120 {
+						width: 120px !important;
+					}
+					.w-px-150 {
+						width: 150px !important;
+					}
+					.w-px-200 {
+						width: 200px !important;
+					}
+					.hideprintdate{font-size: 9px ;}
 					@media print{
-						@page{
-							margin:0.3cm 0.7cm 0cm 0.7cm;
-							page-break-before: avoid;
-							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-							-ms-transform: scale(0.5);   /* IE 9 */
-							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-							transform: scale(0.5);
-							page: A4;
-						}
+						<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 					}
 					
 				</style>
 				<tr>
-					<td colspan="2" id="exportExcel" >
-				
-						<table cellpadding="2" class="content-data" border="1"  >
-							<thead>
-								<tr class="style" align="center" >
-									<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
-									<td scope="col" colspan="5"><?php echo $tr->translate("STUDENT_INFO"); ?></td>
-									<td scope="col" rowspan="2"><?php echo $tr->translate("STUDY_INFO");?></td>
-									<td scope="col" colspan="3"><?php echo $tr->translate("VALIDATE_INFO");?></td>
+					<td colspan="3" id="exportExcel" >
+						<?php if($nearlyPaymetySort == 1){?>
+							<table cellpadding="2" class="content-data" border="1"  >
+								<thead>
+									<tr class="style" align="center" >
+										<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
+										<td scope="col" colspan="3"><?php echo $tr->translate("SERVICE_INFO"); ?></td>
+										<td scope="col" colspan="3"><?php echo $tr->translate("VALIDATE_INFO");?></td>
+										
+									</tr>
+									<tr class="style" align="center" >
+										<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
+										<td scope="col" class="w-px-120"><?php echo $tr->translate("CATEGORY"); ?></td>
+										<td scope="col" class="w-px-200"><?php echo $tr->translate("SERVICE"); ?></td>
+										
+										<td scope="col"><?php echo $tr->translate("START_DATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("VALIDATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
+										
+									</tr>
+								</thead>
+								<?php  
+									$studentId="";
+									$i=0;
+									$totalpaid=0;
+									$totalbalance=0; 
+									if(!empty($this->row)){ 
+										foreach ($this->row AS $row) { $i++;
+										
+										
+										$end_dat=$row["endDate"];
+										$total_day=strtotime($end_dat)-strtotime(date("Y-m-d"));
+										$day=(int)($total_day/(60*60*24));
+										$daylate =$day;
+										$label = $tr->translate("REMAIN");
+										$color = "#000";
+										if($day>=0){
+											$daylate = abs($day);
+										}else{
+											$label = $tr->translate("EXPIRED");
+											$daylate =" ".abs($day);
+											$color = "red";
+										}
+								?>
+									<?php if($studentId != $row['studentId']){?>
+									<tr class="style bg-category"  >
+										<td  colspan="13" align="left">
+											<?php echo $row['stuCode'];?> <strong><?php  echo $row['stuNameKh']; echo empty($row['stuNameEn']) ? "" : "/".$row['stuNameEn'];?></strong> <?php echo $tr->translate("STUDY_INFO");?> : <strong><?php echo $row['groupCode'];?></strong>
+										</td>
+									</tr>
+									<?php } ?>
+									<tr  class="style hover "   style="white-space:nowrap;">
+										<td data-label="<?php echo $tr->translate("N_O");?>" align="center" ><?php echo $i;?></td>
+										<td data-label="<?php echo $tr->translate("BRANCH");?>"  >
+											<?php echo $row['branchName'];?>
+										</td>
+										<td data-label="<?php echo $tr->translate("CATEGORY");?>">
+											<span class="text-truncate w-px-120">
+												<?php echo $row['categoryTitle'];?>
+											</span>
+										</td>
+										<td data-label="<?php echo $tr->translate("SERVICE");?>">
+											<span class="text-truncate w-px-200">
+												<?php echo $row['itemTitle'];?>
+											</span>
+										</td>
+										<td data-label="<?php echo $tr->translate("START_DATE");?>" align="center">
+										<?php echo date("d-M-y",strtotime($row['startDate']));?>  
+										</td>
+										<td data-label="<?php echo $tr->translate("VALIDATE");?>" align="center">
+											<?php echo date("d-M-y",strtotime($row['endDate']));?>  
+										</td>
 									
-								</tr>
-								<tr class="style" align="center" >
-									<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
-									<td scope="col"><?php echo $tr->translate("STUDENT_ID"); ?></td>
-									<td scope="col"><?php echo $tr->translate("STUDENT"); ?></td>
-									<td scope="col"><?php echo $tr->translate("SEX"); ?></td>
-									<td scope="col"><?php echo $tr->translate("PHONE");?></td>
+										<td data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: <?php echo $color;?>;">
+											<?php echo $label;?> <span style="font-weight: bold;"><?php echo $daylate;?></span>
+										</td>
+									</tr>
+								
+									<?php $studentId =$row['studentId']; ?>	 								
+								<?php }
+									} ?>
+							</table>
+						<?php }else{?>
+							<table cellpadding="2" class="content-data" border="1"  >
+								<thead>
+									<tr class="style" align="center" >
+										<td scope="col" rowspan="2"><?php echo $tr->translate("N_O"); ?></td>
+										<td scope="col" colspan="5"><?php echo $tr->translate("STUDENT_INFO"); ?></td>
+										<td scope="col" rowspan="2"><?php echo $tr->translate("STUDY_INFO");?></td>
+										<td scope="col" colspan="3"><?php echo $tr->translate("VALIDATE_INFO");?></td>
+										
+									</tr>
+									<tr class="style" align="center" >
+										<td scope="col"><?php echo $tr->translate("BRANCH"); ?></td>
+										<td scope="col" class="w-px-100"><?php echo $tr->translate("STUDENT_ID"); ?></td>
+										<td scope="col" class="w-px-120"><?php echo $tr->translate("STUDENT"); ?></td>
+										<td scope="col"><?php echo $tr->translate("SEX"); ?></td>
+										<td scope="col" class="w-px-120"><?php echo $tr->translate("PHONE");?></td>
+										
+										<td scope="col"><?php echo $tr->translate("START_DATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("VALIDATE"); ?></td>
+										<td scope="col"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
+										
+									</tr>
+								</thead>
+							<?php  
+								$serviceId="";
+								$i=0;
+								$totalpaid=0;
+								$totalbalance=0; 
+								if(!empty($this->row)){ 
+									foreach ($this->row AS $row) { $i++;
 									
-									<td scope="col"><?php echo $tr->translate("START_DATE"); ?></td>
-									<td scope="col"><?php echo $tr->translate("VALIDATE"); ?></td>
-									<td scope="col"><?php echo $tr->translate("REMAIN_DAY")."/".$tr->translate("LATE"); ?>(Days)</td>
 									
-								</tr>
-							</thead>
-						<?php  
-							$serviceId="";
-							$i=0;
-							$totalpaid=0;
-							$totalbalance=0; 
-							if(!empty($this->row)){ 
-								foreach ($this->row AS $row) { $i++;
-								
-								
-								$end_dat=$row["endDate"];
-								$total_day=strtotime($end_dat)-strtotime(date("Y-m-d"));
-								$day=(int)($total_day/(60*60*24));
-								$daylate =$day;
-								$label = $tr->translate("REMAIN");
-								$color = "#000";
-								if($day>=0){
-									$daylate = abs($day);
-								}else{
-									$label = $tr->translate("EXPIRED");
-									$daylate =" ".abs($day);
-									$color = "red";
-								}
-						?>
-						
-							<?php if($serviceId != $row['grade']){?>
-							<tr class="style bg-category"  >
-								<td  colspan="13" align="center">
-									<?php echo $row['categoryTitle'];?>: <strong><?php  echo $row['itemTitle'];?></strong>
-								</td>
-							</tr>
-							<?php } ?>
-							<tr  class="style hover "   style="white-space:nowrap;">
-								<td data-label="<?php echo $tr->translate("N_O");?>" align="center" ><?php echo $i;?></td>
-								<td data-label="<?php echo $tr->translate("BRANCH");?>"  >
-									<?php echo $row['branchName'];?>
-								</td>
-								<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" align="center">
-									<?php echo $row['stuCode'];?>
-								</td>
-								<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"   >
-									<span class="wrapcontent"><?php echo $row['stuNameKh'];?></span>
-									<span class="wrapcontent"><?php echo $row['stuNameEn'];?></span>
-								</td>	
-								<td data-label="<?php echo $tr->translate("SEX");?>"  align="center" ><?php echo $row['sexTitle'];?></td>
-								<td data-label="<?php echo $tr->translate("PHONE");?>"  align="left">
-									<span class="wrapcontent widthCol-px-100"><?php echo $row['tel'];?></span>
-								</td>
-								<td data-label="<?php echo $tr->translate("GROUP");?>"  align="center"  >
-									<small class="d-block"><?php echo $row['academicYearTitle'];?></small>
-									<span class="d-block bold"><?php echo $row['groupCode'];?></span>
-								</td>
-								
-								<td data-label="<?php echo $tr->translate("START_DATE");?>" align="center">
-									<?php echo date("d-M-y",strtotime($row['startDate']));?>  
-								</td>
-								<td data-label="<?php echo $tr->translate("VALIDATE");?>" align="center">
-									<?php echo date("d-M-y",strtotime($row['endDate']));?>  
-								</td>
+									$end_dat=$row["endDate"];
+									$total_day=strtotime($end_dat)-strtotime(date("Y-m-d"));
+									$day=(int)($total_day/(60*60*24));
+									$daylate =$day;
+									$label = $tr->translate("REMAIN");
+									$color = "#000";
+									if($day>=0){
+										$daylate = abs($day);
+									}else{
+										$label = $tr->translate("EXPIRED");
+										$daylate =" ".abs($day);
+										$color = "red";
+									}
+							?>
 							
-								<td data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: <?php echo $color;?>;">
-									<?php echo $label;?> <span style="font-weight: bold;"><?php echo $daylate;?></span>
-								</td>
- 							</tr>
-							<?php $serviceId =$row['grade']; ?>	 
-							<?php }}?>	 
-						</table>
-											
+								<?php if($serviceId != $row['grade']){?>
+								<tr class="style bg-category"  >
+									<td  colspan="13" align="center">
+										<?php echo $row['categoryTitle'];?>: <strong><?php  echo $row['itemTitle'];?></strong>
+									</td>
+								</tr>
+								<?php } ?>
+								<tr  class="style hover "   style="white-space:nowrap;">
+									<td data-label="<?php echo $tr->translate("N_O");?>" align="center" ><?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("BRANCH");?>"  >
+										<?php echo $row['branchName'];?>
+									</td>
+									<td data-label="<?php echo $tr->translate("STUDENT_ID");?>" align="center">
+										<span class="text-truncate w-px-100 "><?php echo $row['stuCode'];?></span>
+									</td>
+									<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>"   >
+										<span class="text-truncate w-px-120 "><?php echo $row['stuNameKh'];?></span>
+										<span class="text-truncate w-px-120"><?php echo $row['stuNameEn'];?></span>
+									</td>	
+									<td data-label="<?php echo $tr->translate("SEX");?>"  align="center" ><?php echo $row['sexTitle'];?></td>
+									<td data-label="<?php echo $tr->translate("PHONE");?>"  align="left">
+										<span class="text-truncate w-px-120"><?php echo $row['tel'];?></span>
+									</td>
+									<td data-label="<?php echo $tr->translate("GROUP");?>"  align="center"  >
+										<small class="d-block"><?php echo $row['academicYearTitle'];?></small>
+										<span class="d-block bold"><?php echo $row['groupCode'];?></span>
+									</td>
+									
+									<td data-label="<?php echo $tr->translate("START_DATE");?>" align="center">
+										<?php echo date("d-M-y",strtotime($row['startDate']));?>  
+									</td>
+									<td data-label="<?php echo $tr->translate("VALIDATE");?>" align="center">
+										<?php echo date("d-M-y",strtotime($row['endDate']));?>  
+									</td>
+								
+									<td data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: <?php echo $color;?>;">
+										<?php echo $label;?> <span style="font-weight: bold;"><?php echo $daylate;?></span>
+									</td>
+								</tr>
+								<?php $serviceId =$row['grade']; ?>	 
+								<?php }}?>	 
+							</table>
+						<?php } ?>					
 					</td>
 				</tr>
 				<tr >
-					<td colspan="2">
+					<td colspan="3">
 						<?php echo $this->rsfooteracc;?>
 					</td>
 				</tr>
@@ -344,7 +459,7 @@ dojo.ready(function(){
 	 getAllAcademicByBranch();
 	 getgradebyDegree();
 	 getallGrade();
-	
+	 dijit.byId('nearlyPaymetySort').set('value','<?php echo $nearlyPaymetySort; ?>'); 
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";

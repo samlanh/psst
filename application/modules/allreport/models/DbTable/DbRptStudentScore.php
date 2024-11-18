@@ -1763,6 +1763,164 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql . $where);
 	}
 
+	function getScoreSubjectByTeacher($search)
+	{ //using
+		$db = $this->getAdapter();
+		$_db = new Application_Model_DbTable_DbGlobal();
+		$lang = $_db->currentlang();
+		if ($lang == 1) { // khmer
+			$label = "name_kh";
+			$branch = "branch_namekh";
+			$grade = "rms_itemsdetail.title";
+			$degree = "rms_items.title";
+		} else { // English
+			$label = "name_en";
+			$branch = "branch_nameen";
+			$grade = "rms_itemsdetail.title_en";
+			$degree = "rms_items.title_en";
+		}
+		$sql = "SELECT s.id,s.title_score,s.title_score_en, 
+    			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academicYear,
+    			g.group_code, g.grade, g.degree,g.branch_id,
+				(SELECT $branch FROM rms_branch WHERE rms_branch.br_id=g.branch_id  LIMIT 1) AS branch_name,
+				(SELECT $degree FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
+				(SELECT $grade FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name,
+				(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id AND sm.type=1 ) TotaStudent
+			FROM `rms_score` AS s  
+			INNER JOIN `rms_group` AS g ON  g.id = s.group_id  
+    	";
+
+		$where = ' WHERE 1 ';
+		if (($search['branch_id']) > 0) {
+			$where .= ' AND s.branch_id=' . $search['branch_id'];
+		}
+		if (!empty($search['group'])) {
+			$where .= ' AND s.group_id=' . $search['group'];
+		}
+		if (!empty($search['academic_year'])) {
+			$where .= ' AND g.academic_year=' . $search['academic_year'];
+		}
+		if (!empty($search['degree'])) {
+			$where .= ' AND g.degree=' . $search['degree'];
+		}
+		if (!empty($search['grade'])) {
+			$where .= ' AND g.grade=' . $search['grade'];
+		}
+		if (!empty($search['exam_type'])) {
+			$where .= ' AND s.exam_type=' . $search['exam_type'];
+		}
+		if (!empty($search['for_semester'])) {
+			$where .= ' AND s.for_semester=' . $search['for_semester'];
+		}
+		if (!empty($search['for_month'])) {
+			$where .= ' AND s.for_month=' . $search['for_month'];
+		}
+		if (!empty($search['sort_degree'])) {
+			$where .= ' AND g.degree in(' . $search['sort_degree'] . ')';
+		}
+
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$where .= $dbp->getAccessPermission("s.branch_id");
+		$where .= $dbp->getDegreePermission("g.degree");
+
+		$orderBy = "  ORDER BY g.degree ASC,g.grade ASC,g.group_code ASC ";
+		echo $sql . $where . $orderBy; exit();
+		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
+
+		$resultInfo = array();
+		if (!empty($scoreInfo)) {
+			foreach ($scoreInfo as $key => $rs) {
+				$resultInfo[$key]['title_score'] = $rs['title_score'];
+				$resultInfo[$key]['title_score_en'] = $rs['title_score_en'];
+				$resultInfo[$key]['academicYear'] = $rs['academicYear'];
+				$resultInfo[$key]['group_code'] = $rs['group_code'];
+				$resultInfo[$key]['grade'] = $rs['grade'];
+				$resultInfo[$key]['degree'] = $rs['degree'];
+				$resultInfo[$key]['branch_id'] = $rs['branch_id'];
+				$resultInfo[$key]['branch_name'] = $rs['branch_name'];
+
+				$resultInfo[$key]['degree_name'] = $rs['degree_name'];
+				$resultInfo[$key]['grade_name'] = $rs['grade_name'];
+				$resultInfo[$key]['TotaStudent'] = $rs['TotaStudent'];
+
+				$resultInfo[$key]['Total_A'] = 0;
+				$resultInfo[$key]['Total_B'] = 0;
+				$resultInfo[$key]['Total_C'] = 0;
+				$resultInfo[$key]['Total_D'] = 0;
+				$resultInfo[$key]['Total_E'] = 0;
+				$resultInfo[$key]['Total_F'] = 0;
+
+				$search['degree'] = $rs['degree'];
+				$search['scoreId'] = $rs['id'];
+
+				$rsMention = $this->getStudentGradeBySubject($search);
+				if (!empty($rsMention))
+					foreach ($rsMention as $rsGrade) {
+						$resultInfo[$key]['Total_A'] = !empty($rsGrade['Total_A']) ? $rsGrade['Total_A'] : 0;
+						$resultInfo[$key]['Total_B'] = !empty($rsGrade['Total_B']) ? $rsGrade['Total_B'] : 0;
+						$resultInfo[$key]['Total_C'] = !empty($rsGrade['Total_C']) ? $rsGrade['Total_C'] : 0;
+						$resultInfo[$key]['Total_D'] = !empty($rsGrade['Total_D']) ? $rsGrade['Total_D'] : 0;
+						$resultInfo[$key]['Total_E'] = !empty($rsGrade['Total_E']) ? $rsGrade['Total_E'] : 0;
+						$resultInfo[$key]['Total_F'] = !empty($rsGrade['Total_F']) ? $rsGrade['Total_F'] : 0;
+					}
+			}
+		}
+		return $resultInfo;
+	}
+	function getStudentGradeBySubject($search)
+	{ //using
+		$db = $this->getAdapter();
+
+		$sqlMention = "SELECT 
+								md.`max_score`, 
+								md.`metion_grade` FROM 
+								`rms_metionscore_setting` AS m 
+									INNER JOIN `rms_metionscore_setting_detail` AS md 
+						ON m.`id`=md.`metion_score_id` 
+						WHERE m.`degree`= " . $search['degree'] . " AND m.`academic_year`= " . $search['academic_year'] . "  ORDER BY md.`max_score` DESC";
+		$mentionResult = $db->fetchAll($sqlMention);
+		$mentionResultArr = array(
+			"0" => 0,
+			"1" => 0,
+			"2" => 0,
+			"3" => 0,
+			"4" => 0,
+			"5" => 0,
+		);
+
+		if (!empty($mentionResult)) {
+			foreach ($mentionResult as $key => $row) {
+				$mentionResultArr[$key] = $row["max_score"];
+			}
+		}
+		if ($search['exam_type'] == 1) {
+			$totalScore = "sm.total_score";
+			$totalMaxScore = "sm.totalMaxScore";
+		} else {
+			$totalScore = "sm.overallAssessmentSemester";
+			$totalMaxScore = "(SELECT  g.semesterTotalAverage FROM `rms_group` AS g WHERE g.id=s.group_id LIMIT 1 )";
+		}
+
+		$sql = "SELECT  
+		 s.id,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['0'] . "'   , " . $totalScore . ", NULL)) AS Total_A,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['1'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['0'] . "'  , " . $totalScore . ", NULL)) AS Total_B,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['2'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['1'] . "'  , " . $totalScore . ", NULL)) AS Total_C,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['3'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['2'] . "'  , " . $totalScore . ", NULL)) AS Total_D,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 >= '" . $mentionResultArr['4'] . "' AND " . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['3'] . "'  , " . $totalScore . ", NULL)) AS Total_E,
+		  COUNT(IF(" . $totalScore . "/" . $totalMaxScore . "*100 < '" . $mentionResultArr['4'] . "'  , " . $totalScore . ", NULL)) AS Total_F
+		   
+		 FROM `rms_score` AS s  ,
+			`rms_score_monthly` AS sm  
+		WHERE s.`id` = sm.`score_id`  AND sm.`type` = 1 ";
+		$where = ' ';
+		if (($search['scoreId']) > 0) {
+			$where .= ' AND s.id=' . $search['scoreId'];
+		}
+		$where .= " GROUP BY sm.`score_id`";
+		return $db->fetchAll($sql . $where);
+	}
+
 	public function getStatisticScoreResult($search, $id = null)
 	{ // សម្រាប់លទ្ធផលប្រចាំខែ មិនលម្អិត/outstanding photo and no photo
 		//for view in page assessment/ rptScoreResult/rptMonthlytranscript/monthlyOutstandingStudent/monthlyOutstandingStudentNophoto/examscorepdf/

@@ -1,4 +1,5 @@
 <?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle('Student Payment Report');
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->FormIncomeStatisticFilter;
@@ -9,6 +10,14 @@
 	}else{
 		$lblReport = "(Nap Fee)";
 	}
+	
+	
+	//		print_r($this->dataPayment);exit();
+	$termOption = array(
+				"Term" =>0,
+				"Semester" =>0,
+				"Year" =>0,
+		);
 ?>
 <style>
 .hover:hover{ background:#ccc;}
@@ -147,6 +156,40 @@ table.tb-footer tr.style-head {
 					.fixedwidth td{width: 50px;}
 					.width-contact{width:150px;word-break: break-all;white-space:normal;}
 					.widthstudent{width: 150px; white-space:pre-line;}
+					
+					table.content-data tbody td span.text-truncate {
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						line-height: inherit;
+						width: 100px;
+						display: block;
+					}
+					.widthCol-px-30{
+						width: 30px !important;
+					}
+					.widthCol-px-40{
+						width: 40px !important;
+					}
+					.widthCol-px-50{
+						width: 50px !important;
+					}
+					.widthCol-px-60{
+						width: 60px !important;
+					}
+					.widthCol-px-70{
+						width: 70px !important;
+					}
+					.widthCol-px-100{
+						width: 100px !important;
+					}
+					.widthCol-px-120{
+						width: 120px !important;
+					}
+					@media print {
+						<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
+						
+					}
 				</style>	
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 				<tr>
@@ -170,45 +213,55 @@ table.tb-footer tr.style-head {
 										<td rowspan="2">No.</td>
 										<td rowspan="2">Branch</td>
 										<td rowspan="2">Student Id</td>
-										<td  rowspan="2">Student</td​>
-										<td rowspan="2">Phone Number</td>
-										<td rowspan="2">Student Type</td>
+										<td class="widthCol-px-70" rowspan="2">Student</td>
+										<td class="widthCol-px-70" rowspan="2">Phone Number</td>
+										<td class="widthCol-px-50" rowspan="2">Student Type</td>
 										<td rowspan="2">Status</td>
 										<td rowspan="2">Grade</td>
 										<td rowspan="2">Registration</td>
-										<td rowspan="2">Discount</td>
+										<td class="widthCol-px-40" rowspan="2">Discount</td>
 										<td rowspan="2">Pay Type</td>
-										<td colspan="2">Term1</td​>
+										<td colspan="2">Term1</td>
 										<td colspan="2">Term2</td>
 										<td colspan="2">Term3</td>
 										<td colspan="2">Term4</td>
 									</tr>
 									<tr class="style-head fixedwidth" align="center">
-										<td>Date</td>
-										<td>Amount</td>
-										<td>Date</td>
-										<td>Amount</td>
-										<td>Date</td​>
-										<td>Amount</td>
-										<td>Date</td>
-										<td>Amount</td>
+										<td class="widthCol-px-70" >Date</td>
+										<td class="widthCol-px-70" >Amount</td>
+										<td class="widthCol-px-70" >Date</td>
+										<td class="widthCol-px-70" >Amount</td>
+										<td class="widthCol-px-70" >Date</td>
+										<td class="widthCol-px-70" >Amount</td>
+										<td class="widthCol-px-70" >Date</td>
+										<td class="widthCol-px-70" >Amount</td>
 									</tr>
 								</thead>
-								<?php $num=1; 
+								<?php 
+								
+								$summaryInfoArray = array();
+								$num=1; 
 									$totalTerm1 = 0;
 									$totalTerm2 = 0;
 									$totalTerm3 = 0;
 									$totalTerm4 = 0;
 								$num = 0;
 								if(!empty($this->dataPayment)){ foreach($this->dataPayment as $key=>$rs){
+									
+									if(!empty($rs['stpaymentType'])){
+										if(isset($termOption[$rs['stpaymentType']])){
+											$termOption[$rs['stpaymentType']] = $termOption[$rs['stpaymentType']] +1;
+										}
+									}
+									
 								?>
 								<tr class="style-rowdata hover" align="center">
 									<td><?php echo $num+=1; ?></td>
 									<td align="left"><?php echo $rs['branch_name']; ?></td>
 									<td align="left"><?php echo $rs['stu_code']; ?></td>
-									<td class="widthstudent" align="left"><?php echo $rs['student_name']; ?></td>
-									<td class="width-contact" align="left"><?php echo $rs['tel']; ?></td>
-									<td align="left"><?php echo $rs['studentType']; ?></td>
+									<td align="left"><span class="widthCol-px-70 text-truncate"><?php echo $rs['student_name']; ?></span></td>
+									<td align="left"><span class="widthCol-px-70 text-truncate"><?php echo $rs['tel']; ?></span></td>
+									<td align="left"><span class="widthCol-px-50 text-truncate"><?php echo $rs['studentType']; ?></span></td>
 									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
 									<td><?php echo $rs['grade']; ?></td>
 									<td><?php echo $rs['registrationDate']; ?></td>
@@ -219,7 +272,7 @@ table.tb-footer tr.style-head {
 										$totalTerm3 +=  ($resultPayment['payment3']!='')?$resultPayment['payment3']:0;
 										$totalTerm4 +=  ($resultPayment['payment4']!='')?$resultPayment['payment4']:0;
 									?>
-									<td><?php echo $rs['discountCode']; ?></td>
+									<td><span class="widthCol-px-40 text-truncate"><?php echo $rs['discountCode']; ?></span></td>
 									<td align="center"><?php echo $rs['stpaymentType'];?></td>
 									<?php
 										$resultPayment['term1'] = empty(($resultPayment['payment1'])) ? $resultPayment['term1'] : 0;
@@ -249,6 +302,44 @@ table.tb-footer tr.style-head {
 									<td></td>
 									<td class="right btmborder"><?php echo number_format($totalTerm4, 2); ?></td>
 								</tr>
+								<?php
+								if(!empty($termOption)){ 
+								
+									$strSubTable='
+									<tr class="noborder">
+										<td colspan="12"></td>
+										<td colspan="7" style="padding-top: 5px !important;">
+									';
+									
+									$strColhead='<tr class="noborder" style="background-color :#c1d0f3;border: solid 1px #fff;"> ';
+									$strColVal='<tr class="noborder">';
+									foreach($termOption AS $thisKey =>$thisVal){
+										$strColhead.='
+											<td class="center" width="33.33%">'.$thisKey.'</td>
+										';
+										$strColVal.='
+											<td class="center bold">'.sprintf('%02d', $thisVal).'</td>
+										';
+									}
+									$strSubTable.='
+											<table class="content-data" style=" text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
+												<tbody>
+												'.$strColhead.'
+												'.$strColVal.'
+												
+												</tbody>
+											</table>
+										';
+									$strSubTable.='</td>
+									</tr>';
+									
+									$strColhead.='</tr>';
+									$strColVal.='</tr>';
+									
+										
+									echo $strSubTable;
+								}
+								?>
 							</table>
 					</td>
 				</tr>

@@ -408,7 +408,8 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 						amtsubject = subjectList[j].amount_subjectdivide;
 						stringsname = subjectList[j].name;
 						subLangId = subjectList[j].subjectLang;
-						temp += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname + '</span> <input id="subject_lang' + subjectList[j].subject_id + '"  name="subject_lang' + subjectList[j].subject_id + '" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
+						teacherId = subjectList[j].teacher;
+						temp += '<td class="tdheader verites-col criterialTitle" title="' + stringsname + '"><span class="rotate"><input  checked="checked" style=" display: inline-block; height: 15px; margin-right: 10px;" type="checkbox" onClick="CheckSubjectExam(' + subjectList[j].subject_id + ');"  class="checkbox" id="subject' + subjectList[j].subject_id + '" value="' + subjectList[j].subject_id + '"  name="selector[]"/> &nbsp;' + no + '-' + stringsname + '</span><input id="teacher' + subjectList[j].subject_id + '"  name="teacher' + subjectList[j].subject_id + '" value="' + teacherId + '" type="hidden" > <input id="subject_lang' + subjectList[j].subject_id + '"  name="subject_lang' + subjectList[j].subject_id + '" value="' + subLangId + '" type="hidden" >&nbsp;</td>';
 					}
 					temp += '<td rowspan="2" class="tdheader verites-col criterialTitle" ><span class="rotate"><?php echo $tr->translate('AMOUNT_SUBJECT'); ?></span></td>';
 

@@ -289,6 +289,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 							'gradingTotalId' => $gradingId,
 							'student_id'     => $_data['student_id' . $i],
 							'subject_id'     => $subject,
+							'teacher_id'     => $_data['teacher' . $subject],
 
 							'orgScore'       => $_data["score_" . $i . "_" . $subject],
 							'subjectExam'    => $_data['amount_subject' . $i],
@@ -741,7 +742,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 								'gradingTotalId' => $gradingId,
 								'student_id'     => $_data['student_id' . $i],
 								'subject_id'     => $subject,
-
+								'teacher_id'     => $_data['teacher' . $subject],
 								'orgScore'       => $_data["score_" . $i . "_" . $subject],
 								'subjectExam'    => $_data['amount_subject' . $i],
 

@@ -95,8 +95,9 @@
 				`rms_student` AS s
 			WHERE s.stu_id = d.stu_id 
 				AND d.status=1 
-				AND d.id NOT IN ((SELECT rr.notification_id FROM `rms_read_unread_notif` AS rr WHERE rr.notif_type=1))
+				AND d.isReturn=0
 			";
+			//AND d.id NOT IN ((SELECT rr.notification_id FROM `rms_read_unread_notif` AS rr WHERE rr.notif_type=1))
     	$sql.=$dbgb->getAccessPermission('d.branch_id');
     	$sql.=$dbgb->getDegreePermission('d.degree');
     	$order =" ORDER BY d.id DESC LIMIT 10 ";

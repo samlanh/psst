@@ -186,10 +186,14 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		    	(SELECT $dist FROM `ln_district` AS d WHERE d.dis_id = s.district_name LIMIT 1) AS district_name,
 				(SELECT $prov FROM rms_province WHERE province_id=s.province_id LIMIT 1) AS province_name,
 				ds.group_id,
-				(SELECT g.group_code FROM rms_group AS g WHERE g.id=ds.group_id LIMIT 1) AS group_name,
+				g.group_code AS group_name,
+				(SELECT room_name FROM rms_room WHERE room_id=g.room_id LIMIT 1 ) AS roomName,
 				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS year_name,
+				(SELECT CONCAT(fromYear,'-',toYear) FROM rms_academicyear WHERE rms_academicyear.id=ds.academic_year LIMIT 1) AS academicYear,
 				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degree_name,
+				(SELECT i.$colunmname FROM `rms_items` AS i WHERE i.id = ds.degree AND i.type=1 LIMIT 1) AS degreeTitle,
 			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS grade_name,
+			    (SELECT idd.$colunmname FROM `rms_itemsdetail` AS idd WHERE idd.id = ds.grade AND idd.items_type=1 LIMIT 1) AS gradeTitle,
 			  
 				
 				 (SELECT $occuTitle FROM rms_occupation WHERE occupation_id=fam.fatherJob LIMIT 1) fath_job,
@@ -200,8 +204,9 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				 (SELECT l.title FROM `rms_degree_language` AS l WHERE l.id = s.lang_level LIMIT 1) AS lang_level
 				  
 				FROM 
-					rms_student as s JOIN rms_group_detail_student AS ds ON ds.itemType=1  AND s.stu_id = ds.stu_id  AND ds.is_maingrade=1 
+					rms_student as s JOIN rms_group_detail_student AS ds ON ds.itemType=1  AND s.stu_id = ds.stu_id  AND ds.is_maingrade=1 AND ds.is_current=1 
 					LEFT JOIN rms_family AS fam ON fam.id = s.familyId
+					LEFT JOIN rms_group AS g ON g.id = ds.group_id
 				WHERE 
 					1
 					AND s.stu_id=$stu_id  ";

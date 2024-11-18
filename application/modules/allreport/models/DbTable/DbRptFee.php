@@ -203,21 +203,25 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     		$sql.= " AND vs.`groupId` = ".$_db->quote($search['groupId']);
     	}
 		if(!empty($search['degree'])){
-    		$sql.= " AND vs.`degree` = ".$_db->quote($search['degree']);
+			if($search['degree']!=-1){
+				$sql.= " AND vs.`degree` = ".$_db->quote($search['degree']);
+			}
     	}
 		if(!empty($search['grade_all'])){
     		$sql.= " AND vs.`grade` = ".$_db->quote($search['grade_all']);
     	}
 		if(!empty($search['item'])){
     		//$sql.= " AND gds.`degree` = ".$_db->quote($search['item']);
-			$arrCon = array(
-				"categoryId" => $search['item'],
-			);
-			$condiction = $dbGb->getChildItems($arrCon);
-			if (!empty($condiction)){
-				$sql.=" AND gds.`degree` IN ($condiction)";
-			}else{
-				$sql.=" AND gds.`degree`=".$search['item'];
+			if($search['item']!=-1){
+				$arrCon = array(
+					"categoryId" => $search['item'],
+				);
+				$condiction = $dbGb->getChildItems($arrCon);
+				if (!empty($condiction)){
+					$sql.=" AND gds.`degree` IN ($condiction)";
+				}else{
+					$sql.=" AND gds.`degree`=".$search['item'];
+				}
 			}
     	}
 		if(!empty($search['service'])){
@@ -226,6 +230,13 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
 		$sql.= $dbGb->getAccessPermission('vs.`branchId`');
 		$sql.= $dbGb->getDegreePermission('COALESCE(vs.`degree`,0)');
 		$orderby = " ORDER BY gds.`degree` ASC, gds.`grade` ASC, gds.`endDate` ASC,vs.`stuCode` ASC ";
+		
+		$nearlyPaymetySort = empty($search['nearlyPaymetySort']) ? 1 : $search['nearlyPaymetySort'];
+		if($nearlyPaymetySort==1){
+			$orderby=" ORDER BY vs.`stuCode` ASC , gds.`degree` ASC , gds.`grade` ASC , gds.`endDate` ASC";
+		}
+		
+		
 		return $_db->fetchAll($sql.$orderby);
 	}
 }

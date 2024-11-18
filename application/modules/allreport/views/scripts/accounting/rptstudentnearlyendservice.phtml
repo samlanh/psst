@@ -54,7 +54,7 @@
        		</div>
        	</div>
        	<div class="form-group">
-       		<div class="col-md-2 col-sm-2 col-xs-12">
+			<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("service_type");?>
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
@@ -68,16 +68,19 @@
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<input id="service" name="service" />
        		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
+       		</div>
+       	</div>
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("periodDay");?>
+       		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("end_date");?>
        		</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("nearlyPaymetySort");?>
-       		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
-       			<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
-       		</div>
-       		<div class="col-md-2 col-sm-2 col-xs-12">
        		</div>
        	</div>
 	</form>	
@@ -548,6 +551,16 @@ dojo.ready(function(){
 	 getAllAcademicByBranch();
 	 getAllGroupByBranch();
 	 getgradebyDegree();
+	 
+	<?php if(!empty($this->search['end_date'])){ ?>
+		dijit.byId('end_date').set('value','<?php echo $this->search['end_date']?>');  	
+	<?php } ?>	
+	<?php if(!empty($this->search['study_year'])){ ?>
+		dijit.byId('study_year').set('value','<?php echo $this->search['study_year']?>');  	
+	<?php } ?>
+	<?php if(!empty($this->search['periodDay'])){ ?>
+		dijit.byId('periodDay').set('value','<?php echo $this->search['periodDay']?>');  	
+	<?php } ?>
 	 
 });
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';

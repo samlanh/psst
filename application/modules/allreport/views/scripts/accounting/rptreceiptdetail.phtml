@@ -21,11 +21,6 @@
 	</style>
 	<div id="divPrint">
 		<style>
-				@page {
-					size:A5 landscape;
-					margin:0cm 0.7cm 0cm 0.7cm;
-					page-break-before: avoid;
-				}
 				table small{line-height: 3px;}
 		</style>
 		<?php 
@@ -144,7 +139,7 @@ function setDatatoReceipt(){
 		?>
 			template='';
 				 temp='<table class="tableDetail" width="100%" id="table">'
-					  temp+='<tr class="hearder_table">';
+					  temp+='<thead><tr class="hearder_table">';
 						  temp+='<td class="all-border">លរ<small>No. </small></td>';
 						  temp+='<td class="all-border">បរិយាយ<small>Description</small></td>';
 						  temp+='<td class="all-border">បរិមាណ<small>Quantity</small></td>';
@@ -152,7 +147,7 @@ function setDatatoReceipt(){
 						  temp+='<td class="all-border">បញ្ចុះតម្លៃ<small>Discount</small></td>';
 						  temp+='<td class="all-border">សេវាផ្សេងៗ<small>Other Services</small></td>';
 						  temp+='<td class="all-border">ប្រាក់ត្រូវប​ង់<small>Payment</small></td>';
-					  temp+='</tr>';
+					  temp+='</tr></thead>';
 					i=1;  
 					<?php foreach($this->row  as $key=> $rs) { 
 						$label="";
@@ -173,7 +168,7 @@ function setDatatoReceipt(){
 					  
 					  temp+='<tr style="font-size:11px;line-height:10px;"​ align="center"><td align="center" style="border:1px solid #000;">'+i+'</td>';
 					  item_label = '<?php echo addslashes ($label.$rs['service']);?>';
-					  term = '<?php echo empty($rs['payment_term'])?"":"-".$rs['payment_term'];?>';
+					  term = '<?php if($rs['paymentTermId']!=5 AND $rs['paymentTermId']!=6){ echo empty($rs['academicFeeTermTitle'])?"":"-".$rs['academicFeeTermTitle']; }?>';
 					  temp+='<td align="left" style="border:1px solid #000;line-height:10px;"><label class="notedDescription">&nbsp;'+item_label+term+'</label></td>'; 
 					  temp+='<td class="all-border">'+<?php echo number_format($rs['qty'],2);?>+'</td>';
 					  temp+='<td class="all-border textright paddingright">'+fee+'</td>';

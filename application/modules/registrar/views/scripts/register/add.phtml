@@ -941,11 +941,18 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 					var datajson = $('#term_study'+arrays[i]).find(":selected").val();
 					if(typeof datajson !=="undefined" ){
 						var datajsonInfo = ($("#term_study"+arrays[i]).find(':selected').data('datajson'));
+						
+						var selectedStartDateValue = ($("#term_study"+arrays[i]).find(':selected').data('startDate'));
+						let selectedStartDate = new Date(selectedStartDateValue);
+						
 						var stringPeriodList='<ul>';
 						if(datajsonInfo.length>0){
 							for (i = 0; i < datajsonInfo.length; i++) {
 								if(thisTermStudy!=datajsonInfo[i].id){
-									stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+									let thisRowDate = new Date(datajsonInfo[i].startDate);
+									if (thisRowDate > selectedStartDate) {
+										stringPeriodList+= '<li><span class="terminf titleTerm">'+datajsonInfo[i].title+'</span><span class="terminf termValidePmt">'+datajsonInfo[i].startDateSecondFmt+'</span></li>';
+									}
 								}
 							}
 						}

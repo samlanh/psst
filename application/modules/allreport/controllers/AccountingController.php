@@ -75,6 +75,13 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
 		$this->view->search = $search;
+		$paramFormat = array(
+			'marginTop'=>'0.6cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	function reprintOtherIncomeAction(){
 		$id=$this->getRequest()->getParam("id");
@@ -108,6 +115,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'),
 				);
 			}
+		}catch(Exception $e){
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
 			$db = new Allreport_Model_DbTable_DbRptOtherIncome();
 			$this->view->row = $db->getAllOtherIncome($search);
 			$form=new Registrar_Form_FrmSearchInfor();
@@ -121,13 +132,17 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			$this->view->rsfooteracc = $frm->getFooterAccount();
-				
-		}catch(Exception $e){
-			Application_Form_FrmMessage::message("APPLICATION_ERROR");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-		}
+
+			$paramFormat = array(
+				'marginTop'=>'0.6cm',
+				'marginRight'=>'0.8cm',
+				'marginBottom'=>'0.9cm',
+				'marginLeft'=>'0.6cm',
+			);
+			$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	public function rptExpenseAction(){
+		$frm = new Application_Form_FrmGlobal();
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -144,7 +159,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$this->view->search = $search;
 				
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-			$frm = new Application_Form_FrmGlobal();
+			
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
@@ -155,6 +170,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+
+		$paramFormat = array(
+			'marginTop'=>'0.6cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	
 	public function rptExpensedetailAction(){
@@ -215,6 +238,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
+
+		$paramFormat = array(
+			'marginTop'=>'0.6cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	function rptSpecaildiscountAction(){
 		try{
@@ -387,6 +418,15 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
+
+		$paramFormat = array(
+				'pageSize'=>'A4 landscape',
+				'marginTop'=>'0.3cm',
+				'marginRight'=>'0.7cm',
+				'marginBottom'=>'0.9cm',
+				'marginLeft'=>'0.7cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	function rptStudentpaymentdetailAction(){
 		try{
@@ -638,6 +678,15 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
+		$frm = new Application_Form_FrmGlobal();
+		$paramFormat = array(
+					'marginTop'=>'0.6cm',
+					'marginRight'=>'0.5cm',
+					'marginBottom'=>'0.9cm',
+					'marginLeft'=>'0.5cm',
+				);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
+
 	}
 	public function rptFeeAction(){
 		if($this->getRequest()->isPost()){
@@ -1078,8 +1127,17 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+
+		$paramFormat = array(
+			'marginTop'=>'0.6cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	function rptReceiptVoidAction(){
+		$frm = new Application_Form_FrmGlobal();
 		try{
 			if($this->getRequest()->isPost()){
 				$search=$this->getRequest()->getPost();
@@ -1114,7 +1172,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			}
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-			$frm = new Application_Form_FrmGlobal();
+			
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			$this->view->rsfooteracc = $frm->getFooterAccount();
 		}catch(Exception $e){
@@ -1124,6 +1182,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
 		$this->view->form_search=$form;
+
+		$paramFormat = array(
+			'marginTop'=>'0.6cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 
 	
@@ -1431,10 +1497,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$parentCol =  $db->getMainParentOfItems();
 		$this->view->parentCol =  $parentCol;
 		
-		
 		$rowStDailyPmt =  $db->getStudentPaymentDaily($search);
 		$this->view->rowStDailyPmt =  $rowStDailyPmt;
-		
 		
 		
 		$branch_id = empty($search['branch_id'])?null:$search['branch_id'];

@@ -57,7 +57,6 @@
                 </select>
         	</div>
         	<div class="col-md-2 col-sm-2 col-xs-12">
-        		<?php //echo $frm->getElement("service");?>
         		<input id="service" name="service" />
         	</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
@@ -120,17 +119,8 @@
 					font-weight: 600;				
 			}	
 			@media print{
-						@page{
-							margin:0.3cm 0.7cm 0cm 0.7cm;
-							page-break-before: avoid;
-							-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-							-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-							-ms-transform: scale(0.5);   /* IE 9 */
-							-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-							transform: scale(0.5);
-							page: A4;
-						}
-					}							
+				<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
+			}							
 		</style>
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
 			<tr>
@@ -140,7 +130,7 @@
 				<td width="25%">
 				</td>
 				<td align="center" width="50%">
-					<span style="color:#000; font-size: 14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></span><br />
+					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate('STUDENT_PAYMENT_BY_TYPE_REPORT');?></span><br />
 					<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?><?php echo $tr->translate('TO');?><?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></span>
 				</td>
 				<td width="25%">
@@ -164,10 +154,10 @@
 					  <?php 
 					  if($rs['items_id']!=$type){
 					  if($key>0){?>
-							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="right">
+							  <tr style="font-size:12px; color:#000; height: 18px;"​ align="right">
 								<td class="bold" colspan="18" >&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;$ <?php echo number_format($grand_total,2);?></td>
 							  </tr>
-							  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+							  <tr style="font-size:12px; color:#000; height: 18px;"​ align="center">
 								<td colspan="18">&nbsp;</td>
 							  </tr>
 						  <?php $i=1;
@@ -176,14 +166,12 @@
 						  ?>
 								<tr class="style-head" style="font-size:10px;" align="center">
 									<td>&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-									
-									<td>&nbsp;<?php echo $tr->translate('STUDENT');?>&nbsp;</td>
-									
+									<td>&nbsp;<?php echo $tr->translate('STUDENT_ID');?>&nbsp;</td>
+									<td>&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
 									<td><?php echo $tr->translate('PAID_DATE');?></td>
 									<td><?php echo $tr->translate('RECEIPT_NO');?></td>
-									<td>&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
-									<td><?php echo $tr->translate('SERVICE_NAME');?></td>
-									<td><?php echo $tr->translate('PAYMENT_TERM');?></td>
+									<td align="left"><?php echo $tr->translate('SERVICE_NAME');?></td>
+									<td align="left"><?php echo $tr->translate('PAYMENT_TERM');?></td>
 									<td><?php echo $tr->translate('QTY');?></td>
 									<td><?php echo $tr->translate('PRICE');?></td>
 									<td><?php echo $tr->translate('Deduct/Extra');?></td>
@@ -199,40 +187,21 @@
 					   }
 					   $type = $rs['items_id'];
 					   ?>
-					   <tr class="hover" style=" <?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?> font-size:11px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
+					   <tr class="hover" style=" <?php if ($rs['is_void']==1){echo "background: #ffd9d9;"; }?> font-size:10px; color:#000; height: 18px; border-bottom: 1px solid #000;font-family: 'Times New Roman','Khmer OS Battambang';"​ align="center">
 							<td align="center"><?php echo $i;?></td>
-							<td style="text-align:left">
-							<?php 
-							echo $rs['stu_code'];
-							echo !empty($rs['stu_khname'])?"/".$rs['stu_khname']:"/".$rs['stu_enname']; 
-							?>
+							<td style="text-align:left"><?php echo $rs['stu_code'];?></td>
+							<td style="text-align:left"><?php echo !empty($rs['stu_khname'])?" ".$rs['stu_khname']:" ".$rs['stu_enname'];?>
 							</td>
 							<td><?php echo date('d/m/Y', strtotime($rs['create_date']));?></td>
 							<td align="center" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['receipt_number']; ?></td>
-							<td style="text-align:left"><?php echo $rs['category']; ?></td>
-							<td style="text-align:left"><?php echo $rs['service_name']; ?></td>
+							<td style="text-align:left;max-width:120px;"><?php echo $rs['service_name']; ?></td>
 							<?php 
 								$total_day=strtotime($rs['validate'])-strtotime($rs['start_date']);
 								$day=(int)($total_day/(60*60*24));
 								$qty_month = number_format($day/30);
 								$qty_day = $day%30;
 							?>
-							<td align="center">
-								<?php /*
-									if($rs['payment_id']>0){
-										if($rs['payment_id']==5){
-											if($qty_month>0){
-												echo $qty_month." month+".$qty_day." days";
-											}else{
-												echo $qty_day." days";
-											}
-										}else{
-											echo $payment_term[$rs['payment_id']];
-										}
-									}*/
-								?>
-								<?php echo $rs['payment_term'];?>
-							</td>
+							<td align="left"><?php echo $rs['payment_term'];?></td>
 							<td><?php echo $rs['qty'];?></td>
 							<td><?php echo number_format($rs['fee'],2); ?></td>
 							<td><?php echo $rs['extra_fee'];?></td>
@@ -243,7 +212,7 @@
 								   }
 								?>
 							</td>
-							<td align="right" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
+							<td align="left" <?php if($rs['is_void']==1){echo 'style="color:red;"'; }?>><?php echo $rs['paidamount'];?></td>
 							<td><?php if($rs['is_onepayment']==0){
 									echo date('d/m/Y', strtotime($rs['start_date']));
 									echo "-".date('d/m/Y', strtotime($rs['validate']));
@@ -260,10 +229,10 @@
 						}
 					  ?>
 					  <?php } ?>
-					  <tr style="font-size:13px; color:#000; height: 18px;"​ align="right">
+					  <tr style="font-size:12px; color:#000; height: 18px;" align="right">
 						<td class="bold" colspan="18" >&nbsp;<?php echo $tr->translate('STUDENT_PAYMENT_INCOME');?>&nbsp;$ <?php echo number_format($grand_total,2);?></td>
 					  </tr>
-					  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+					  <tr style="font-size:12px; color:#000; height: 18px;" align="center">
 						<td colspan="18">&nbsp;</td>
 					  </tr>
 							  
@@ -281,7 +250,6 @@
 					<table class="content-data" cellpadding="5"​ align="center">
 						<tr class="style-head" style="font-size:10px;" align="center">
 							<td><?php echo $tr->translate('N_O')?></td>
-							<td><?php echo $tr->translate('CATEGORY')?></td>
 							<td><?php echo $tr->translate('INCOME_TITLE')?></td>
 							<td><?php echo $tr->translate('INVOICE_NO')?></td>
 							<td><?php echo $tr->translate('PAID_DATE')?></td>
@@ -295,9 +263,8 @@
 							$other_income = $other_income + $row['total_amount'];
 						}
 					?>
-						<tr class="style-rowdata hover" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> font-size:11px; height: 20px;border-bottom: 1px solid #000;" align="center" >
+						<tr class="style-rowdata hover" style="<?php if ($row['status']==0){echo "background: #ffd9d9;"; }?> font-size:10px; height: 20px;border-bottom: 1px solid #000;" align="center" >
 							<td><?php echo $i;?></td>
-							<td><?php echo $row['income_category'];?></td>	
 							<td align="left"><?php echo $row['title'];?></td>
 							<td><?php echo $row['invoice'];?></td>
 							<td><?php echo date('d-m-Y',strtotime($row['date']));?></td>
@@ -336,7 +303,7 @@
 							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($penalty,2)?></span></td>
 							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($other_income,2)?></span></td>
 							<td><span style="color: red;border-bottom:3px double #000;">$ <?php echo number_format($credit_memo,2)?></span></td>
-							<td><div style="color: red;border-bottom:3px double #000;font-weight: bold;font-size: 14px;">$ <?php echo number_format($all_grandtotal+$penalty+$other_income-$credit_memo,2)?></div></td>
+							<td><div style="color: red;border-bottom:3px double #000;font-weight: bold;font-size: 12px;">$ <?php echo number_format($all_grandtotal+$penalty+$other_income-$credit_memo,2)?></div></td>
 						</tr>
 					</table>
 				</td>
@@ -354,7 +321,6 @@
 <script type="text/javascript">
 	
 	dojo.require("dojo.data.ItemFileWriteStore"); 
-	
 
 	var service_store = getDataStorefromJSON('id','name');
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );

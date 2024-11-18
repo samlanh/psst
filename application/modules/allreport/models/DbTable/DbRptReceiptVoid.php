@@ -52,24 +52,23 @@ class Allreport_Model_DbTable_DbRptReceiptVoid extends Zend_Db_Table_Abstract
     
     public function getAllChangeProductVoid($search){
     	$db = $this->getAdapter();
-    	$sql =" select
+    	$sql =" SELECT
 			    	s.stu_code,
 			    	s.stu_khname,
 			    	s.stu_enname,
     				cp.*,
-			    	(select CONCAT(last_name,' ',first_name) from rms_users as u where u.id = cp.user_id) as user,
+			    	(SELECT CONCAT(last_name,' ',first_name) from rms_users as u where u.id = cp.user_id LIMIT 1) as user,
 			    	(SELECT name_en from rms_view where type=10 and key_code = is_void LIMIT 1) as vois_status
-    			from
+    			FROM
     				rms_change_product as cp,
     				rms_student as s
-    			where
+    			WHERE
     				cp.stu_id = s.stu_id
 			    	and s.status = 1
 			    	and cp.is_void = 1
     		";
     	 
     	$where=' ';
-    	 
     	$dbp = new Application_Model_DbTable_DbGlobal();
     	$where.=$dbp->getAccessPermission();
     	 
@@ -88,7 +87,6 @@ class Allreport_Model_DbTable_DbRptReceiptVoid extends Zend_Db_Table_Abstract
     		$s_where[] = " stu_khname LIKE '%{$s_search}%'";
     		$where .=' AND ( '.implode(' OR ',$s_where).')';
     	}
-    
     	return $db->fetchAll($sql.$where);
     }
     

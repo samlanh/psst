@@ -11,8 +11,6 @@
 		$lblReport = "(Nap Fee)";
 	}
 	
-	
-	//		print_r($this->dataPayment);exit();
 	$termOption = array(
 				"Term" =>0,
 				"Semester" =>0,
@@ -303,8 +301,8 @@ table.tb-footer tr.style-head {
 									<td class="right btmborder"><?php echo number_format($totalTerm4, 2); ?></td>
 								</tr>
 								<?php
-								if(!empty($termOption)){ 
-								
+								if(!empty($termOption)){
+									$totalPaid = 0;
 									$strSubTable='
 									<tr class="noborder">
 										<td colspan="12"></td>
@@ -312,8 +310,10 @@ table.tb-footer tr.style-head {
 									';
 									
 									$strColhead='<tr class="noborder" style="background-color :#c1d0f3;border: solid 1px #fff;"> ';
+									
 									$strColVal='<tr class="noborder">';
 									foreach($termOption AS $thisKey =>$thisVal){
+										$totalPaid += $thisVal;
 										$strColhead.='
 											<td class="center" width="33.33%">'.$thisKey.'</td>
 										';
@@ -321,12 +321,16 @@ table.tb-footer tr.style-head {
 											<td class="center bold">'.sprintf('%02d', $thisVal).'</td>
 										';
 									}
+									$strColhead.='<td class="center bold">Total</td>';
+									$strColVal.='
+											<td class="center bold">'.sprintf('%02d', $totalPaid).'</td>
+										';
 									$strSubTable.='
 											<table class="content-data" style=" text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
 												<tbody>
+												
 												'.$strColhead.'
 												'.$strColVal.'
-												
 												</tbody>
 											</table>
 										';

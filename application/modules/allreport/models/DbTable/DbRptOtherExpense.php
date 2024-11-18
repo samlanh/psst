@@ -84,9 +84,9 @@ class Allreport_Model_DbTable_DbRptOtherExpense extends Zend_Db_Table_Abstract
     	if(!empty($search['branch_id'])){
     		$where.=" AND e.branch_id = ".$search['branch_id'] ;
     	}
-    	if(!empty($search['user'])){
-    		$where.=" AND e.user_id = ".$search['user'] ;
-    	}
+    	// if(!empty($search['user'])){
+    	// 	$where.=" AND e.user_id = ".$search['user'] ;
+    	// }
     	if(!empty($search['txtsearch'])){
     		$s_where = array();
     		$s_search = addslashes(trim($search['txtsearch']));

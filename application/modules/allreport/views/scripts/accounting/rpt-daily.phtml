@@ -150,14 +150,11 @@
 					visibility: visible;
 					height: <?php echo $classHideHeight;?>;
 				}
-				@page {
-					page: A4;
-					margin: 0.6cm 0.5cm;
-				}
 				.bgRow {
 					background: #d6e2ff !important;
 					font-size: 11px;
-					}
+				}
+				<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 			}
 </style>
 		<table style="width:100%;">
@@ -477,6 +474,7 @@
 			</tr>
 		</table>
 	</div>
+	<div id="footer">Footer</div>
 </div>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"
 	type="text/javascript"></script>

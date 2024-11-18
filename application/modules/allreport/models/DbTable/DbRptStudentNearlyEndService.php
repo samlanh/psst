@@ -184,8 +184,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 						ELSE (SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id =v.`academicYear` LIMIT 1)
 					END AS academicYearTitle
 				,(SELECT v.$label FROM rms_view AS v where v.type=2 AND v.key_code=vSt.sex LIMIT 1) AS sexTitle
-				,COALESCE(NULLIF(vSt.`degreeShortcut`,''),vSt.$item) AS categoryName
-				,COALESCE(NULLIF(vSt.`gradeShortcut`,''),vSt.$itemDetail) AS serviceTitle
+				,vSt.$item AS categoryName
+				,vSt.$itemDetail AS serviceTitle
+				
 				
 			FROM v_stu_record_info AS vSt
 				LEFT JOIN v_stu_item_pmtinfo v ON v.paymentId = (
@@ -223,6 +224,11 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				$branch_id
 		";
      	$where=" ";
+		/*
+			,COALESCE(NULLIF(vSt.`degreeShortcut`,''),vSt.$item) AS categoryName
+			,COALESCE(NULLIF(vSt.`gradeShortcut`,''),vSt.$itemDetail) AS serviceTitle
+		*/
+				
      	//$to_date = (empty($search['end_date']))? '1': "vl.endDate <= '".$search['end_date']." 23:59:59'";
      	
      	//$where .= " AND ".$to_date;

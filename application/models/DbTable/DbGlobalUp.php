@@ -389,7 +389,15 @@ class Application_Model_DbTable_DbGlobalUp extends Zend_Db_Table_Abstract
 					$options .= '<option  data-record-info="' . htmlspecialchars(Zend_Json::encode($value)) . '"  value="' . $value['id'] . '" >' . htmlspecialchars($value['name']) . '</option>';
 				}
 			}else{
-				$options= '<option value="1">' . $this->tr->translate("GENERAL") . '</option>';
+				$value = array(
+					'id' =>1,
+					'name' =>$this->tr->translate("GENERAL"),
+					'titleKh' =>'ទូទៅ',
+					'titleEn' =>'General',
+					'isSingleProgram' =>1,
+					'degreeList' =>"1,2,3,4",
+				);
+				$options= '<option data-record-info="' . htmlspecialchars(Zend_Json::encode($value)) . '" value="1">' . $this->tr->translate("GENERAL") . '</option>';
 			}
 			return $options;
 		} else {

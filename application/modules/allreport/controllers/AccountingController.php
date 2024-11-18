@@ -1546,7 +1546,8 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'item'		=>0,
 					'service_type'=>0,
 					'end_date'	=>date('Y-m-d'),
-					'service'	=>''
+					'service'	=>'',
+					'nearlyPaymetySort'	=>2,
 				);
 				
 				$dbGb = new Application_Model_DbTable_DbGlobal();
@@ -1565,15 +1566,23 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 			$this->view->rsfooteracc = $frm->getFooterAccount();
+			$this->view->printFormat = $frm->getPrintPageFormat();
+			
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view->search = $search;
-		$form=new Registrar_Form_FrmSearchInfor();
+		/*$form=new Registrar_Form_FrmSearchInfor();
 		$form->FrmSearchRegister();
 		Application_Model_Decorator::removeAllDecorator($form);
-		$this->view->form_search=$form;
+		$this->view->form_search=$form;*/
+		
+		$form = new Application_Form_FrmCombineSearchGlobal();
+    	$frm = $form->FormNealyPaymentFilter();
+    	Application_Model_Decorator::removeAllDecorator($frm);
+    	$this->view->form_search = $frm;
+		
 		$_db = new Application_Model_DbTable_DbGlobal();
 		$this->view->rs_type = $_db->getAllItems();
 	}

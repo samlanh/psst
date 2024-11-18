@@ -8,6 +8,14 @@
 	$frm =  $this->form_search;
 	$photo= $this->frm_techer;
 	$db_global = new Application_Model_DbTable_DbGlobal();
+	
+	$key = new Application_Model_DbTable_DbKeycode();
+	$keySetting = $key->getKeyCodeMiniInv(TRUE);
+	$studyInfoSetting=empty($keySetting['study_info_setting']) ? 1 : $keySetting['study_info_setting'];
+	$multiProgramClass="d-none";
+	if($studyInfoSetting !=1){ 
+		$multiProgramClass = "";
+	}
 ?>
 <style>
  .bold{
@@ -253,6 +261,22 @@ table.content-data tr.style-rowdata {
 																			<div class="border"></div>
 																		</td>
 																	</tr>
+																	<?php if($studyInfoSetting==1){?>
+																	<tr>
+																		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
+																			<p class="padding-left">
+																				<label class="title"><?php echo $tr->translate('STUDY_YEAR');?> </label> : <label class="value"><?php echo $this->rs['academicYear'];?></label> 
+																				<label class="title"><?php echo $tr->translate('DEGREE');?> </label> : <label class="value"><?php echo $this->rs['degreeTitle'];?></label> 
+																				<label class="title"><?php echo $tr->translate('GRADE');?></label> : <label class="value"><?php echo $this->rs['gradeTitle'];?></label> 
+																				<label class="title"><?php echo $tr->translate('STUDENT_GROUP');?></label> : <label class="value"><?php echo $this->rs['group_name'];?> </label>
+																			</p>
+																			<p class="padding-left">
+																				<label class="title"><?php echo $tr->translate('SESSION');?> </label> : <label class="value"><?php echo $this->rs['father_khname'];?></label> 
+																				<label class="title"><?php echo $tr->translate('ROOM_NAME');?> </label> : <label class="value"><?php echo $this->rs['roomName'];?></label>
+																			</p>
+																		</td>
+																	</tr>
+																	<?php }else{?>
 																	<tr>
 																		<td style="font-size:14px; font-weight:600;  font-family:'Khmer OS Battambang';">
 																			<table class="padd" width="100%" border="1" align="center" style="border:1px solid #4839bd;border-collapse:collapse;white-space:nowrap;font-family: 'Khmer OS Battambang';">
@@ -291,6 +315,7 @@ table.content-data tr.style-rowdata {
 																			</table>
 																		</td>
 																	</tr>
+																	<?php } ?>
 																	<tr><td>&nbsp;</td></tr>
 																	<tr>
 																		<td style="font-size:14px; font-weight: initial; font-family:'Times New Roman','Khmer OS Muol Light';">

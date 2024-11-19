@@ -554,7 +554,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$location_id = $session_user->branch_id;
 			$branch_list = $session_user->branch_list;
 			$schoolOption = $session_user->schoolOption;
-			$info = array("user_name" => $userName, "user_id" => $GetUserId, "level" => $level, "branch_id" => $location_id, "branch_list" => $branch_list, "schoolOption" => $schoolOption);
+			$isSuperUser = empty($isSuperUser) ? 0 : $isSuperUser;
+			
+			$info = array(
+					"user_name" => $userName
+					, "user_id" => $GetUserId
+					, "level" => $level
+					, "branch_id" => $location_id
+					, "branch_list" => $branch_list
+					, "schoolOption" => $schoolOption
+					, "isSuperUser" => $isSuperUser
+				);
 			return $info;
 		} elseif (!empty($session_teacher->teacher_id)) {
 			$userName = $session_teacher->teacher_name;
@@ -562,7 +572,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$location_id = $session_teacher->branch_id;
 			$branch_list = $session_teacher->branch_list;
 			$schoolOption = $session_teacher->schoolOption;
-			$info = array("user_name" => $userName, "user_id" => $teacherId, "level" => null, "branch_list" => $branch_list, "schoolOption" => $schoolOption);
+			$isSuperUser = 0;
+			$info = array(
+				"user_name" => $userName
+				, "user_id" => $teacherId
+				, "level" => null
+				, "branch_list" => $branch_list
+				, "schoolOption" => $schoolOption
+				, "isSuperUser" => $isSuperUser
+				);
 			return $info;
 		}
 	}

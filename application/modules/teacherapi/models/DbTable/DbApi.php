@@ -2157,9 +2157,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						ELSE '0'
 					END AS isMainTeacher
 					,g.is_pass AS groupProcess
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
+					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.itemType=1 AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
+					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
+					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
 					
 				FROM `rms_group_subject_detail` AS gsjb
 						JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 AND g.`status` = 1

@@ -8,13 +8,13 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 	$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
+	
 ?>
-<link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
-<!-- Icons CSS -->
-<link href="<?php echo $this->baseUrl()."/"?>dashboard/css/icons.css" rel="stylesheet">
-<!-- Custom styles for this template -->
-<link href="<?php echo $this->baseUrl()."/"?>dashboard/css/style.css" rel="stylesheet"></div>
-
+<style type="text/css">
+svg {
+    position: relative !important;
+}
+</style>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0cm 0.5cm">	
 	<div class="card-box">
     	<div class="col-sm-12 border-botom">
@@ -185,7 +185,7 @@
 										bottom:0px;
 										margin:0;
 									}
-										.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
+									
 										
 									}
 									.center{text-align: center !important;}
@@ -347,7 +347,7 @@
 						  
 						  <?php
 
-						   $i=0; 
+						  $i=0; 
 						  $Total_Group_A_Percent =0;
 						  $Total_Group_B_Percent =0;
 						  $Total_Group_C_Percent =0;
@@ -357,8 +357,39 @@
 						  $oldGradeName=''; 
 						  $oldDegreeName=''; 
 
+						  $lineColors = array(
+								"#153c7f",
+								"#28c76f",
+								"#ea5455",
+								"#ff9f43",
+								"#2196f3",
+								"#673ab7",
+								"#153c7f",
+								"#28c76f",
+								"#ea5455",
+								"#ff9f43",
+								"#2196f3",
+								"#673ab7",
+							);
+
 						  $oldTeacher = '';  // Track previous teacher for rowspan
-						
+						 
+							$arrForBar = array(
+								array("y"=>"A"),
+								array("y"=>"B"),
+								array("y"=>"C"),
+								array("y"=>"D"),
+								array("y"=>"E"),
+								array("y"=>"F"),
+							);
+
+							$fullArrayByTeacher = array();
+							$yKey =array();
+							$arrRowColor =array();
+						  	$chartKey=0;
+						  	$chartKey=0;
+
+							$teacherClass=0;
 						  if (!empty($this->rs)){ foreach($this->rs as $key=> $rs ){ 
 
 								$i++;
@@ -368,12 +399,56 @@
 								$Total_Group_D_Percent =@str_replace('.00','',number_format($rs['Total_D']/$rs['TotaStudent']*100,2));
 								$Total_Group_E_Percent =@str_replace('.00','',number_format($rs['Total_E']/$rs['TotaStudent']*100,2));
 								$Total_Group_F_Percent =@str_replace('.00','',number_format($rs['Total_F']/$rs['TotaStudent']*100,2));
-							
+
+                                //// Chat Data
+								$thisColor  = empty($lineColors[$teacherClass]) ? "#673ab7" : $lineColors[$teacherClass];
+								array_push($arrRowColor,$thisColor);
+								array_push($yKey,$rs["group_code"]);
+								foreach($arrForBar as $keyA => $aa){
+									$val = empty($rs["Total_".$aa["y"]]) ? 0 : (int)$rs["Total_".$aa["y"]];
+									$arrForBar[$keyA][$rs["group_code"]] = $val;
+
+								}
+							//	techer
+								$teacherClass++;
 								if($oldTeacher!=$rs['teacher_name']  ){
-								 if($key!=0){ ?>
+
+								 if($key>0){ 
+									
+								
+									$chartKey++;
+									$arrRow = array(
+										"yKey"=>$yKey,
+										"data"=>$arrForBar,
+										"rowCode"=>$chartKey,
+										"colorBar"=>$arrRowColor,
+								
+									);
+									array_push($fullArrayByTeacher,$arrRow);
+
+									$arrForBar = array(
+										array("y"=>"A"),
+										array("y"=>"B"),
+										array("y"=>"C"),
+										array("y"=>"D"),
+										array("y"=>"E"),
+										array("y"=>"F"),
+									);
+									$yKey =array();
+									$arrRowColor =array();
+									$teacherClass=0;
+								?>
 									<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:10px; height: 70px; " align="center">
-										<td colspan="11" >
-											
+										<td colspan="11" style=" position: relative; ">
+											<?php echo $tr->translate("CHART").$chartKey ; ?>
+											<div class="text-center">
+												<ul class="list-inline chart-detail-list">
+													<li>
+														<h5 class="font-normal"><i class="fa fa-circle m-r-10 text-primary"></i><?php echo $tr->translate("Number Of Student")?></h5>
+													</li>
+												</ul>
+											</div>
+											<div id="bar-chart-<?php echo $chartKey; ?>" ></div>
 										</td>
 									</tr>
 									
@@ -446,11 +521,34 @@
 								<td><span class="separateColumn passedGrade"><?php echo @$rs['Total_F'];?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Group_F_Percent; ?></span></td>
 							</tr>
 							
-						<?php } } ?>
-							<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:10px; height: 70px; " align="center">
-								<td colspan="11" >
+						<?php }  
+							$chartKey++;
+							$arrRow = array(
+								"yKey"=>$yKey,
+								"data"=>$arrForBar,
+								"rowCode"=>$chartKey,
+								"colorBar"=>$arrRowColor,
+						
+							);
+							array_push($fullArrayByTeacher,$arrRow);
+
+						?>
+						
+							<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:10px; height: 70px; position:relative; " align="center">
+								<td colspan="11" style="position: relative; "  >
+									<?php echo $tr->translate("CHART").$chartKey; ?>
+									<div class="text-center" >
+										<ul class="list-inline chart-detail-list">
+											<li>
+												<h5 class="font-normal"><i class="fa fa-circle m-r-10 text-primary"></i><?php echo $tr->translate("Number Of Student")?></h5>
+											</li>
+										</ul>
+									</div>
+									<div id="bar-chart-<?php echo $chartKey;?>" ></div>
 								</td>
 							</tr>
+						
+							<?php }  ?>
 						</table>
 						<br>
 					</div>
@@ -544,7 +642,6 @@
 				</td>
 			</tr>
 			
-			
 		</table>
 	</div>	
 	<div class="card-box" id="hideStampSetting" >
@@ -555,6 +652,7 @@
 			</label> 
 	</div>
 </div>
+<link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
 <script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.min.js"></script>
 <script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/raphael/raphael-min.js"></script>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
@@ -766,39 +864,20 @@ function stampDisplay() {
   }
 }
 
-var $stckedData  = [
-			{ y: 'A', a: 4},
-			{ y: 'B', a: 5},
-			{ y: 'C', a: 5},
-			{ y: 'D', a: 5},
-		];
-	!function($) {
-		"use strict";
-		var Dashboard = function() {};
-		//creates Stacked chart
-		Dashboard.prototype.createStackedChart  = function(element, data, xkey, ykeys, labels, lineColors) {
-			Morris.Bar({
-				element: element,
-				data: data,
-				xkey: xkey,
-				ykeys: ykeys,
-				stacked: true,
-				labels: labels,
-				hideHover: 'auto',
-				resize: true, //defaulted to true
-				gridLineColor: '#ccc',
-				barColors: lineColors
-			});
-		},
-		Dashboard.prototype.init = function() {
-			this.createStackedChart('dashboard-bar-stacked', $stckedData, 'y', ['a'], ['<?php echo $tr->translate('TOTAL_STUDENT');?>'], ['#458bc4']);
-		},
-		$.Dashboard = new Dashboard, $.Dashboard.Constructor = Dashboard
-	
-	}(window.jQuery),
-	function($) {
-		"use strict";
-		$.Dashboard.init();
-	}(window.jQuery);
+<?php foreach($fullArrayByTeacher as $fullarr){ ?>
 
+	config<?php echo $fullarr['rowCode'] ?> = {
+      data: <?php echo Zend_Json::encode($fullarr['data']); ?>,
+      xkey: 'y',
+      ykeys: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
+      labels: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
+	  labelTop: true,
+      resize: true,
+	  barColors: <?php echo Zend_Json::encode($fullarr['colorBar']); ?>
+  };
+  config<?php echo $fullarr['rowCode'] ?>.element = 'bar-chart-<?php echo $fullarr['rowCode'] ?>';
+  Morris.Bar(config<?php echo $fullarr['rowCode'] ?>);
+
+ <?php } ?>
+   
 </script>

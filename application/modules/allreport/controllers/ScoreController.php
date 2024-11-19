@@ -845,6 +845,8 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'exam_type' => 0,
 				'for_semester' => 0,
 				'for_month' => 0,
+				'subjectId' => '',
+				'teacher' => '',
 				'start_date' => date('Y-m-d'),
 				'end_date' => date('Y-m-d'),
 				'sort_degree' => ''

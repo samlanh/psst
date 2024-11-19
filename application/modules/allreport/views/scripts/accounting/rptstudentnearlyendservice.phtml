@@ -96,7 +96,10 @@
 					<td align="center" width="100%" colspan="2">
 						<div style="width:100%; margin-top: -25px;">
 							<strong style="font-weight:normal; font-family: Arial Black;color:#000; font-size: 12px;font-family:'khmer os muol light';"><?php echo $tr->translate('STUDENT_NEARLY_END_REPORT');?></strong><br />
-							<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?>  </span>
+							<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Battambang';">
+								<span class="titleReportDatePrefix"></span>
+								<span class="titleReportDate"><?php if(!empty($this->search['end_date'])){?><?php echo date('d-M-Y',strtotime($this->search['end_date']));}?></span>
+							</span>
 						</div>
 					</td>			
 				</tr>
@@ -548,10 +551,15 @@ dojo.ready(function(){
 		 getAllAcademicByBranch();
 		 getAllGroupByBranch();
     });
-	 getAllAcademicByBranch();
-	 getAllGroupByBranch();
-	 getgradebyDegree();
+	getAllAcademicByBranch();
+	getAllGroupByBranch();
+	getgradebyDegree();
 	 
+	initialData();
+	 
+});
+
+function initialData(){
 	<?php if(!empty($this->search['end_date'])){ ?>
 		dijit.byId('end_date').set('value','<?php echo $this->search['end_date']?>');  	
 	<?php } ?>	
@@ -561,8 +569,13 @@ dojo.ready(function(){
 	<?php if(!empty($this->search['periodDay'])){ ?>
 		dijit.byId('periodDay').set('value','<?php echo $this->search['periodDay']?>');  	
 	<?php } ?>
-	 
-});
+	periodDay = dijit.byId('periodDay').get('value');
+	$(".titleReportDatePrefix").html("");
+	if(periodDay!=0){
+		var periodDayLabel = dijit.byId("periodDay").attr('displayedValue');
+		$(".titleReportDatePrefix").html(periodDayLabel+" : ");
+	}
+}
 url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
 var oldBranch = "<?php echo $this->search['branch_id']?>";
 function getAllAcademicByBranch(){

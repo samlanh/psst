@@ -554,7 +554,17 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$location_id = $session_user->branch_id;
 			$branch_list = $session_user->branch_list;
 			$schoolOption = $session_user->schoolOption;
-			$info = array("user_name" => $userName, "user_id" => $GetUserId, "level" => $level, "branch_id" => $location_id, "branch_list" => $branch_list, "schoolOption" => $schoolOption);
+			$isSuperUser = empty($isSuperUser) ? 0 : $isSuperUser;
+			
+			$info = array(
+					"user_name" => $userName
+					, "user_id" => $GetUserId
+					, "level" => $level
+					, "branch_id" => $location_id
+					, "branch_list" => $branch_list
+					, "schoolOption" => $schoolOption
+					, "isSuperUser" => $isSuperUser
+				);
 			return $info;
 		} elseif (!empty($session_teacher->teacher_id)) {
 			$userName = $session_teacher->teacher_name;
@@ -562,7 +572,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$location_id = $session_teacher->branch_id;
 			$branch_list = $session_teacher->branch_list;
 			$schoolOption = $session_teacher->schoolOption;
-			$info = array("user_name" => $userName, "user_id" => $teacherId, "level" => null, "branch_list" => $branch_list, "schoolOption" => $schoolOption);
+			$isSuperUser = 0;
+			$info = array(
+				"user_name" => $userName
+				, "user_id" => $teacherId
+				, "level" => null
+				, "branch_list" => $branch_list
+				, "schoolOption" => $schoolOption
+				, "isSuperUser" => $isSuperUser
+				);
 			return $info;
 		}
 	}
@@ -1332,8 +1350,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	function getAllListStudent($data)
 	{
 		$db = $this->getAdapter();
-		$branch_id = $this->getAccessPermission();
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 
 		$sql = " SELECT 
    		s.stu_id AS stu_id,
@@ -1342,9 +1358,9 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	   	CONCAT(COALESCE(s.stu_code,''),'-',COALESCE(s.stu_khname,''),'-',COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name
 	   	FROM rms_student AS s ";
 
-		if (!empty($data['joinGroup'])) {
+		if(!empty($data['joinGroup'])) {
 			$sql .= ', rms_group_detail_student as gds ';
-			$where = " WHERE gds.stu_id = s.stu_id";
+			$where = " WHERE gds.stu_id = s.stu_id ";
 			if (!empty($data['groupId'])) {
 				$where .= " AND gds.group_id=" . $data['groupId'];
 			}
@@ -1357,9 +1373,12 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['itemType'])) {
 			$where .= " AND gds.itemType=" . $data['itemType'];
 		}
-		if (!empty($data['activeStudent'])) {
-			$where .= " AND (gds.stop_type=0 AND gds.is_current=1 ) ";
-		}else{
+		
+
+		if($data["activeStudent"]==1){
+			$where .= " AND (gds.stop_type=0 AND gds.is_current=1)";
+		}
+		elseif($data["activeStudent"]==0){
 			$where .= " AND (gds.stop_type!=0) ";
 		}
 		if (isset($data['isCurrent'])) {
@@ -1382,7 +1401,6 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$where .= " AND s.customer_type=" . $data['customerType'];
 		}
 		$where .= " AND (s.stu_enname!='' OR s.stu_khname!='') ";
-
 		/*	WHERE 
 							
 							AND gds.stu_id = s.stu_id 
@@ -1396,6 +1414,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 	
 		$rows = $db->fetchAll($sql . $where . $group);
 		if (!empty($data['opt'])) {
+			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			$options = array(0 => $tr->translate("CHOOSE"));
 			if (!empty($rows))
 				foreach ($rows as $row) {

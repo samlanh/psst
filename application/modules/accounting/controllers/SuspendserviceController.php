@@ -28,10 +28,8 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			$rs = $db->getStudentSuspendService($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","CREATED_DATE","USER","STATUS");
-			$link=array(
-					'module'=>'accounting','controller'=>'suspendservice','action'=>'edit',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs,array('suspend_no'=>$link,'code'=>$link,'kh_name'=>$link,'en_name'=>$link));
+			
+			$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");

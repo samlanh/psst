@@ -285,6 +285,7 @@ table#table_row tr th {
 		dojo.xhrPost({
 			url:url_dept,
 			content:{
+
 				'student_id':studentId,
 				'is_stutested':is_stutested,
 				'groupDetailId':groupDetailId
@@ -310,7 +311,10 @@ table#table_row tr th {
 		
 		contentData = {
 				'branchId':branchId,
-				'customerType':1
+				'customerType':1,
+				'joinGroup':1,
+				'activeStudent':1,
+				'noaddNew':1,
 			}
 		getAllStudentByBranch(urlGet,contentData);
 	}
@@ -389,7 +393,7 @@ function getTermStudy(key){
 }
 
 var term_study_option = '';
-url_term_study = '<?php echo $this->url(array('module'=>'global','controller'=>'term','action'=>'gettermstudy'));?>';
+url_term_study = '<?php echo $this->url(array('module'=>'accounting','controller'=>'term','action'=>'gettermstudy'));?>';
 function getAllTermStudy(){
 	branch_id = dijit.byId('branch_id').get('value');
 	study_year = '';

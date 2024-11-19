@@ -15,10 +15,9 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 		
 		$currentLang = $dbp->currentlang();
 		$colunmname = 'name_en';
-		$strDegree = 'title_en';
+		$strDegree = 'shortcut';
 		if ($currentLang == 1) {
 			$colunmname = 'name_kh';
-			$strDegree = 'title';
 		}
 
 		$strStudent = "(SELECT CONCAT(COALESCE(s.stu_code,''),' ',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,'')) FROM rms_student AS s WHERE s.stu_id=ds.studentId LIMIT 1) ";
@@ -37,7 +36,10 @@ class Accounting_Model_DbTable_DbDiscountSetting extends Zend_Db_Table_Abstract
 					,(SELECT GROUP_CONCAT($strDegree) FROM `rms_items` WHERE FIND_IN_SET(id,ds.degree)) as degreeList
 					,(SELECT dis_name AS NAME FROM `rms_discount` WHERE disco_id=ds.discountId LIMIT 1) AS discName
 					,CONCAT(ds.discountValue, (CASE WHEN DisValueType=1 THEN '%' WHEN DisValueType=2 THEN '$' END )) AS DisValueType
-					,CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod
+					,CASE 
+						WHEN  ds.discountPeriod=2 THEN CONCAT(COALESCE(DATE_FORMAT(ds.startDate,'%d/%m/%Y'),''),'-',COALESCE(DATE_FORMAT(ds.endDate,'%d/%m/%Y'),''))
+						ELSE $sqlPeriod 
+					END AS discountPeriod
 					,(SELECT u.first_name FROM rms_users AS u WHERE u.id=ds.userId LIMIT 1 ) AS user_name
 					,ds.createDate
 				";

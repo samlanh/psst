@@ -298,10 +298,9 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 		$currentLang = $dbp->currentlang();
 		$branch= $dbp->getBranchDisplay();
 		$colunmname = 'name_en';
-		$strDegree = 'title_en';
+		$strDegree = 'shortcut';
 		if ($currentLang == 1) {
 			$colunmname = 'name_kh';
-			$strDegree = 'title';
 		}
 
 		$strStudent = "(SELECT CONCAT(COALESCE(s.stu_code,''),' ',COALESCE(s.stu_khname,''),'-',COALESCE(s.stu_enname,'')) FROM rms_student AS s WHERE s.stu_id=ds.studentId LIMIT 1) ";
@@ -322,7 +321,10 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id LIMIT 1 ) AS StuAmount,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=1  LIMIT 1 ) StuAmountUsed,
 					(SELECT COUNT(dc.studentId) FROM `rms_discount_student` AS dc WHERE dc.discountGroupId=ds.id AND dc.isCurrent=0  LIMIT 1 ) AmountStopUsed,		
-					CONCAT(COALESCE($sqlPeriod),'',COALESCE(DATE_FORMAT(ds.startDate,'%d-%m-%Y'),''),'/',COALESCE(DATE_FORMAT(ds.endDate,'%d-%m-%Y'),'')) AS discountPeriod, 
+					CASE 
+						WHEN  ds.discountPeriod=2 THEN CONCAT(COALESCE(DATE_FORMAT(ds.startDate,'%d/%m/%Y'),''),'-',COALESCE(DATE_FORMAT(ds.endDate,'%d/%m/%Y'),''))
+						ELSE $sqlPeriod
+					END AS discountPeriod,
 					(SELECT first_name FROM rms_users WHERE id=ds.userId LIMIT 1 ) AS user_name,
 					ds.createDate";
 
@@ -331,6 +333,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
 
 		$order =" ORDER BY id DESC ";
 		$where =" WHERE 1";
+	
 
 		if (!empty($search['title'])) {
 			$s_where = array();

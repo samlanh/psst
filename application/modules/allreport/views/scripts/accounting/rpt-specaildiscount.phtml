@@ -44,13 +44,11 @@
 </style>	
 	<div id="divPrint">
 		<form action="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'submitlist')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">	
-			<table style="background:#fff; margin: 0 auto; width: 100%; padding: 1cm; font-family:'Khmer OS Battambang';">
+			<table style="background:#fff; margin: 0 auto; width: 100%; font-family:'Khmer OS Battambang';">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
+				
 				<tr>
 					<td width="25%" align="left">
 					</td>
@@ -60,9 +58,6 @@
 					</td>
 					<td align="right" width="25%">&nbsp;</td>
 				</tr>
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
 				<tr> 
 					<td colspan="3" id="exportExcel" >
 						<style type="text/css">
@@ -70,31 +65,13 @@
 									line-height: 20px;font-size: 11px !important;
 									font-family: 'Times New Roman','Khmer OS Battambang';
 								}
-								.hideblog{display: none;}
-								.hiddenblog{display: block !important;}
-								.style1:hover{ background: #ccc; }
-								table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
 								table.content-data { page-break-inside:auto }
 								tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
-								#header {
-								display: table-header-group;
-								page-break-inside:avoid; page-break-after:auto;
-								margin-top: 100px;
+								#header{
+									display: table-header-group;
+									page-break-inside:avoid; page-break-after:auto;
+									margin-top: 100px;
 								}
-								.hide{visibility: hidden;}
-								@media print {
-								div.divFooter {
-									position: fixed;
-									top: 0;
-									width: 100%;
-									height: 100px;
-									bottom:0px;
-									margin:0;
-								}
-									.hide{visibility: visible; height: <?php echo $classHideHeight;?>;}
-									
-								}
-								.center{text-align: center !important;}
 								table.content-data{
 									border-collapse:collapse;
 									border:1px solid #000; 
@@ -107,56 +84,27 @@
 								}
 								table.content-data tr.style {
 								 white-space: nowrap;
-								
-								}
-								table.tb-footer{
-									border-collapse:collapse;
-									border:1px solid #000; 
-									font-size:11px;
-									font-family: 'Times New Roman','Khmer OS Battambang';
-								}
-								table.tb-footer tr{
-								line-height: 14px; font-size:11px; padding:2px 0px; height: 25px;
 								}
 								table tr td{
 									padding:0 2px;
 								}
-								tr.voidclass {
-									background: #fff7f7;
-								}
-								td.centerText{
-									text-align: center;
-								}
-								.redBold {
-									font-weight: 600;
-									color: #f80000;
-								}
 								@media print{
-									@page{
-										margin:0.3cm 0.7cm 0cm 0.7cm;
-										page-break-before: avoid;
-										-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-										-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-										-ms-transform: scale(0.5);   /* IE 9 */
-										-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-										transform: scale(0.5);
-										page: A4;
-									}
+									<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 								}
 						</style>
 						<table class="content-data" width="100%" border="1" align="center" >
 							  <thead>
 								  <tr class="style" align="center">
-								    <td scope="col" >&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
-								    <td scope="col" >&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('REQUEST_NAME');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('PHONE');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('PERIOD');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('EXPIRE_DATE');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
-									<td scope="col" >&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
+								    <td scope="col">&nbsp;<?php echo $tr->translate('N_O');?>&nbsp;</td>
+								    <td scope="col">&nbsp;<?php echo $tr->translate('STUDENT_NAME');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('REQUEST_NAME');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('PHONE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('DISCOUNT_TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('PERIOD');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('EXPIRE_DATE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('TYPE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('NOTE');?>&nbsp;</td>
+									<td scope="col">&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 								  </tr>
 							  </thead>
 							 <?php 

@@ -257,7 +257,7 @@ table.tb-footer tr.style-head {
 									<td><?php echo $num+=1; ?></td>
 									<td align="left"><?php echo $rs['branch_name']; ?></td>
 									<td align="left"><?php echo $rs['stu_code']; ?></td>
-									<td align="left"><span class="widthCol-px-70 text-truncate"><?php echo $rs['student_name']; ?></span></td>
+									<td align="left"><span class="widthCol-px-70"><?php echo $rs['student_name']; ?></span></td>
 									<td align="left"><span class="widthCol-px-70 text-truncate"><?php echo $rs['tel']; ?></span></td>
 									<td align="left"><span class="widthCol-px-50 text-truncate"><?php echo $rs['studentType']; ?></span></td>
 									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
@@ -270,8 +270,8 @@ table.tb-footer tr.style-head {
 										$totalTerm3 +=  ($resultPayment['payment3']!='')?$resultPayment['payment3']:0;
 										$totalTerm4 +=  ($resultPayment['payment4']!='')?$resultPayment['payment4']:0;
 									?>
-									<td><span class="widthCol-px-40 text-truncate"><?php echo $rs['discountCode']; ?></span></td>
-									<td align="center"><?php echo $rs['stpaymentType'];?></td>
+									<td><span class="widthCol-px-40"><?php echo $rs['discountCode']; ?></span></td>
+									<td align="left"><?php echo $rs['stpaymentType'];?></td>
 									<?php
 										$resultPayment['term1'] = empty(($resultPayment['payment1'])) ? $resultPayment['term1'] : 0;
 										$resultPayment['term2'] = empty(($resultPayment['payment2'])) ? $resultPayment['term2'] : 0;

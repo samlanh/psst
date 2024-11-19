@@ -277,6 +277,15 @@ class Allreport_AccountingController extends Zend_Controller_Action {
     	$frm = new Application_Form_FrmGlobal();
     	$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
     	$this->view->rsfooteracc = $frm->getFooterAccount();
+
+		$paramFormat = array(
+			'marginTop'=>'0.6cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
+
 	}
 	function rptDiscountsettingAction(){
 		try{
@@ -317,6 +326,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
+
+		$paramFormat = array(
+			'marginTop'=>'0.3cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	function rptDiscountdetailAction(){
 		
@@ -1254,6 +1271,14 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$frm = new Application_Form_FrmGlobal();
 		$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooteracc = $frm->getFooterAccount();
+
+		$paramFormat = array(
+			'marginTop'=>'0.5cm',
+			'marginRight'=>'0.5cm',
+			'marginBottom'=>'0.9cm',
+			'marginLeft'=>'0.5cm',
+		);
+		$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 	}
 	
 	public function rptClosingdailyAction()

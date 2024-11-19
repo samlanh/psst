@@ -201,19 +201,20 @@ class Registrar_RegisterController extends Zend_Controller_Action {
     		$data['dept_id'] = empty($data['dept_id'])?null:$data['dept_id'];
     		$is_stutested = empty($data['is_stutested'])?null:$data['is_stutested'];
     		$groupDetailId = empty($data['groupDetailId'])?null:$data['groupDetailId'];
+    		$parentCategoryId = empty($data['parentcagetoryId'])?null:$data['parentcagetoryId'];
 
 			$param = array(
 				'studentId'=>$student_id,
 				'isTestedStudent'=>$is_stutested,
 				'groupDetailId'=>$groupDetailId,
-				'parentcagetoryId'=>$data['parentcagetoryId']
+				'parentcagetoryId'=>$parentCategoryId
 			);
 
     		$rs = $db->getAllGradeStudyByDegree($param);//$data['dept_id'],$student_id,$is_stutested,$groupDetailId
 			
 			$data = array(
 				'categoryId'=>$data['dept_id'],
-				'parentcagetoryId'=>$data['parentcagetoryId'],
+				'parentcagetoryId'=>$parentCategoryId,
 			);
     		$rsproduct = $db->getProductbyBranch($data);
 
@@ -311,7 +312,9 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 				$permission = $dbUser->getAccessUrl("foundation","register","add");
 				$rows = $db->getAllListStudent($data);
 				if (!empty($permission)){
-					array_unshift($rows, array ('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+					if (empty($data['noaddNew'])){
+						array_unshift($rows, array('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
+					}
 				}
 			}
 			print_r(Zend_Json::encode($rows));

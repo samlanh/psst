@@ -49,16 +49,7 @@
 						tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 						.hideprintdate{display:block;font-size:10px;white-space:nowrap;}
 						@media print{
-							@page{
-								margin:0.3cm 0.7cm 0cm 0.7cm;
-								page-break-before: avoid;
-								-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-								-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-								-ms-transform: scale(0.5);   /* IE 9 */
-								-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-								transform: scale(0.5);
-								page: A4;
-							}
+							<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 						}
 					</style>
 					<table class="padd" width="100%" align="left" style="white-space:nowrap;font-family: Khmer OS Battambang;">
@@ -74,7 +65,6 @@
 						<style>td{padding:0 3px; }</style>
 						  <?php 
 							$i=0; 
-// 							$grand_total=0;
 							$total_penalty=0;
 							$credit_memo= 0;
 							$no=0;
@@ -86,7 +76,7 @@
 						 ?>
 						 <?php if(!empty($this->row)){ foreach($this->row as $key => $rs){ $i++;?>
 							<tr class="hover" style="font-size:12px; height: 20px;<?php if($key%2==0){echo "background:#eee;";}?>" align="center" >
-								<td style="text-align: right;"><?php echo $rs['item_name'];?></td>
+								<td style="text-align: left;"><?php echo $rs['item_name'];?></td>
 								<td style="white-space: nowrap;width:200px;">....................................................................</td>
 								<td style="text-align: center;"><?php echo number_format($rs['subtotal'],2);?></td>
 								<td style="text-align: center;"><?php echo number_format($rs['extra_fee'],2);?></td>
@@ -111,7 +101,7 @@
 							</tr>
 						  <?php }
 						  ?>
-						  <tr style="border: 1px solid #fff;border-top: 1px solid #000;">
+						  <tr style="border: 1px solid #fff;border-top: 1px solid #000;font-size:12px;">
 							<td colspan="2" style="text-align: right !important;"></td>
 							<td style="text-align: center;">$&nbsp;<strong style="border-bottom: 5px double #000;"><?php echo number_format($sub_total,2);?></strong></td>
 							<td style="text-align: center;">$&nbsp;<strong style="border-bottom: 5px double #000;text-align:center;"><?php echo number_format($extra_total,2);?></strong></td>

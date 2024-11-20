@@ -355,7 +355,7 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<input id="group_id" />
 									<input type="hidden" id="groupId" name="groupId" dojoType="dijit.form.TextBox" />
-									<input type="hidden" id="degree" name="degree" dojoType="dijit.form.TextBox" />
+									<input type="text" id="degree" name="degree" dojoType="dijit.form.TextBox" />
 									<input type="hidden" id="grade" name="grade" dojoType="dijit.form.TextBox" />
 								</div>
 							</div>
@@ -937,7 +937,7 @@ $saleCutStock = empty($keySetting['sale_cut_stock'])? 0 : $keySetting['sale_cut_
 			for (var i = 0; i < arrays.length; i++) {
 				var thisServiceType = dijit.byId("service_type_" + arrays[i]).get('value');
 				var thisTermStudy = $('#term_study' + arrays[i]).val();
-				if(thisServiceType ==1 ){
+				if(thisServiceType ==1 || thisServiceType==2){
 					var datajson = $('#term_study'+arrays[i]).find(":selected").val();
 					if(typeof datajson !=="undefined" ){
 						var datajsonInfo = ($("#term_study"+arrays[i]).find(':selected').data('datajson'));
@@ -1178,6 +1178,7 @@ $(document).ready(function() {
 				'branchId': branch_id,
 				'customerType': customer_type,
 				'joinGroup': 1,
+				'addNew': 1,
 				'issueResult': 1//for get student test get result
 			},
 			handleAs: "json",
@@ -1385,6 +1386,7 @@ $(document).ready(function() {
 				for (eRow = 0; eRow < data.length; eRow++) {
 					academicOption = data[eRow].academicYearList;
 					term_study_option =data[eRow].studyPeriodList;
+					
 					discountOptionList = data[eRow].discountOptionList;
 					serviceId = data[eRow].itemDetailId;
 					dataLabel = data[eRow].itemDetaillabel;
@@ -1641,6 +1643,7 @@ $(document).ready(function() {
 			content: {
 				'term': termRecord,
 				'service': item_id,
+				'degreeId': dijit.byId('degree').get('value'),
 				'serviceType': serviceType,
 				'year': study_year,
 				'studentid': studentid,
@@ -1656,7 +1659,7 @@ $(document).ready(function() {
 
 				calculateTotal(key);
 
-				if (resultFee.validate != null) {
+				if (resultFee.validate != null){
 					dijit.byId("date_start_" + key).attr("value", resultFee.validate);
 				} else {
 					dijit.byId('date_start_' + key).attr('value', '<?php echo date('Y-m-d'); ?>');
@@ -1670,7 +1673,7 @@ $(document).ready(function() {
 				}
 				$('#term_study'+key).empty().trigger("change");
 				$('#term_study'+key).append(data.resultPeriod).trigger('change');
-		
+				
 			},
 			error: function (err) {
 			}

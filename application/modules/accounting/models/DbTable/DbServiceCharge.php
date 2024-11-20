@@ -299,6 +299,7 @@ class Accounting_Model_DbTable_DbServiceCharge extends Zend_Db_Table_Abstract
     				'branch_id'=>$data['branch_id'],
     				'feeId'=>$feeId,
     				'grade'	=>$data['service'],//grade
+    				'degree'=>!empty($data['degreeId'])?$data['degreeId']:'',
     				'serviceType'=>$data['serviceType'],
     				'periodId'=>$data['term'],
     				'option'=>$option,

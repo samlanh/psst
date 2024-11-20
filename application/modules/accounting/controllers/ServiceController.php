@@ -7,9 +7,7 @@ class Accounting_ServiceController extends Zend_Controller_Action {
 		header('content-type: text/html; charset=utf8');
 		defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
-	public function start(){
-		return ($this->getRequest()->getParam('limit_satrt',0));
-	}
+	
 	public function indexAction()
     {
     	try{

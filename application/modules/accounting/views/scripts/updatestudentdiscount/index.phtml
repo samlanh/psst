@@ -112,7 +112,9 @@ function getAllstudentBranch(){
 	
 	contentData = {
 			'branchId':branchId,
-			'customerType':1
+			'customerType':1,
+			'joinGroup': 1,
+			'activeStudent': 1
 			}
 	selectedId='<?php echo $this->adv_search['studentId'];?>';
 	getAllStudentByBranch(urlGet,contentData,selectedId);

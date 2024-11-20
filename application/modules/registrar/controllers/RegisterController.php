@@ -312,7 +312,7 @@ class Registrar_RegisterController extends Zend_Controller_Action {
 				$permission = $dbUser->getAccessUrl("foundation","register","add");
 				$rows = $db->getAllListStudent($data);
 				if (!empty($permission)){
-					if (empty($data['noaddNew'])){
+					if (!empty($data['addNew'])){
 						array_unshift($rows, array('id' => -1, 'name' => $this->tr->translate("ADD_NEW")));
 					}
 				}

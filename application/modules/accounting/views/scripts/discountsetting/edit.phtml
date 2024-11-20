@@ -376,7 +376,9 @@ $degreeIds = explode(",",$result['degree']);
 		selectedId = '<?php echo $result['studentId']; ?>';
 		contentData = {
 			'branchId': branchId,
-			'customerType': 1
+			'customerType': 1,
+			'joinGroup': 1,
+			'activeStudent': 1
 		}
 		getAllStudentByBranch(urlGet, contentData, selectedId);
 	}

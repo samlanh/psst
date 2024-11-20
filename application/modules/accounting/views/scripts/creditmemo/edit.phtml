@@ -175,7 +175,10 @@
 		let SelectId = '<?php echo $this->row['student_id'];?>';
 		contentData = {
 				'branchId':branchId,
-				'customerType':1
+				'customerType':1,
+				'joinGroup': 1,
+				'activeStudent': 1,
+				
 				}
 		getAllStudentByBranch(urlGet,contentData,SelectId);
 	}

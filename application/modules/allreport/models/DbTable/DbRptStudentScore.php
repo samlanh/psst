@@ -1832,13 +1832,17 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 
 		$orderBy = " 	
 				GROUP BY sd.`subject_id`,sd.score_id
-			ORDER BY  sd.teacher_id,sd.subject_id,g.degree,s.group_id  ASC  limit 8 ";
+			ORDER BY  sd.teacher_id,sd.subject_id,g.degree,s.group_id  ASC ";
 		//echo $sql . $where . $orderBy; 
 		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
 
 		$resultInfo = array();
 		if (!empty($scoreInfo)) {
 			foreach ($scoreInfo as $key => $rs) {
+
+				$resultInfo[$key]['teacher_id'] = $rs['teacher_id'];
+				$resultInfo[$key]['subject_id'] = $rs['subject_id'];
+
 				$resultInfo[$key]['title_score'] = $rs['title_score'];
 				$resultInfo[$key]['title_score_en'] = $rs['title_score_en'];
 				$resultInfo[$key]['academicYear'] = $rs['academicYear'];
@@ -1854,7 +1858,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 				$resultInfo[$key]['degree_name'] = $rs['degree_name'];
 				$resultInfo[$key]['grade_name'] = $rs['grade_name'];
 				$resultInfo[$key]['TotaStudent'] = $rs['TotaStudent'];
-			
 
 				$resultInfo[$key]['Total_A'] = 0;
 				$resultInfo[$key]['Total_B'] = 0;

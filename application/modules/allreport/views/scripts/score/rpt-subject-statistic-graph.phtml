@@ -114,48 +114,50 @@ svg {
 </style>
 	<div id="divPrint">
 		<table style="background:#fff; margin: 0 auto; width: 100%;">
-			<tr>
-				<td colspan="3"><?php echo $this->rsheader;?></td>
-			</tr>
-			<tr>
-				<td width="28%" align="left"></td>
-				<td width="44%" align="center">
-					<?php 
-					$resulTilte="";
-					$academicYear="";
-					
-					if(!empty($this->rs)){ 
-						if(!empty($this->search)){
-							if($this->search['exam_type']==1){
-								$titleScore=$this->rs['0']['title_score'];
-								$resulTilte = "ប្រចាំខែ ".$titleScore;
-							}elseif($this->search['exam_type']==2){
-								if($this->search['for_semester']==1){
-									$resulTilte = "ប្រចាំ ឆមាសទី១";
-								}elseif($this->search['for_semester']==2){
-									$resulTilte = "ប្រចាំ ឆមាសទី២";
+			<thead>
+				<tr>
+					<td colspan="3"><?php echo $this->rsheader;?></td>
+				</tr>
+				<tr>
+					<td width="28%" align="left"></td>
+					<td width="44%" align="center">
+						<?php 
+						$resulTilte="";
+						$academicYear="";
+						
+						if(!empty($this->rs)){ 
+							if(!empty($this->search)){
+								if($this->search['exam_type']==1){
+									$titleScore=$this->rs['0']['title_score'];
+									$resulTilte = "ប្រចាំខែ ".$titleScore;
+								}elseif($this->search['exam_type']==2){
+									if($this->search['for_semester']==1){
+										$resulTilte = "ប្រចាំ ឆមាសទី១";
+									}elseif($this->search['for_semester']==2){
+										$resulTilte = "ប្រចាំ ឆមាសទី២";
+									}
+								}else{
+									$resulTilte = "ប្រចាំឆ្នាំ";
 								}
-							}else{
-								$resulTilte = "ប្រចាំឆ្នាំ";
+							 } 
+							 $academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academicYear'];
 							}
-						 } 
-						 $academicYear = "ឆ្នាំសិក្សា ".$this->rs[0]['academicYear'];
-						}
-					?>
-					<ul class="headerTitle">
-						<li>
-							<strong><?php echo $tr->translate("RPT_SUBJECT_STATISTIC_GRAPH");?></strong>
-						</li>
-						<li>
-							<?php echo $resulTilte;?>
-						</li>
-						<li>
-							<?php echo $academicYear;?>
-						</li>
-					</ul>
-				</td>
-				<td align="right" width="28%"></td>
-			</tr>
+						?>
+						<ul class="headerTitle">
+							<li>
+								<strong><?php echo $tr->translate("RPT_SUBJECT_STATISTIC_GRAPH");?></strong>
+							</li>
+							<li>
+								<?php echo $resulTilte;?>
+							</li>
+							<li>
+								<?php echo $academicYear;?>
+							</li>
+						</ul>
+					</td>
+					<td align="right" width="28%"></td>
+				</tr>
+			</thead>
 			<tr>
 				<td colspan="3" valign="top" id="exportExcel">
 						<style type="text/css">
@@ -168,25 +170,22 @@ svg {
 									.style1:hover{ background: #ccc; }
 									table tr td ul li{text-align: center;list-style: none;line-height: 25px; }
 									
-									table.content-data { page-break-inside:auto }
-									table.content-data tr{ page-break-inside:avoid; page-break-after:auto; }
+									table.content-data { page-break-inside:avoid; page-break-after:auto; }
 									#header {
-									display: table-header-group;
-									page-break-inside:avoid; page-break-after:auto;
-									margin-top: 100px;
+										display: table-header-group;
+										page-break-inside:avoid; page-break-after:auto;
+										margin-top: 100px;
 									}
 									.hide{visibility: hidden;}
 									@media print {
-									div.divFooter {
-										position: fixed;
-										top: 0;
-										width: 100%;
-										height: 100px;
-										bottom:0px;
-										margin:0;
-									}
-									
-										
+										div.divFooter {
+											position: fixed;
+											top: 0;
+											width: 100%;
+											height: 100px;
+											bottom:0px;
+											margin:0;
+										}
 									}
 									.center{text-align: center !important;}
 									table.content-data{
@@ -196,8 +195,12 @@ svg {
 										width:100%;
 								
 									}
+									table.content-data tr.style.header,
 									table.content-data thead tr.style {
-									line-height: 25px; font-size:12px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+										line-height: 25px; 
+										font-size:12px !important; 
+										padding:1px 0px; 
+										white-space: nowrap;height: 22px; 
 										background: #c1d0f3;
 										font-weight:600;
 									}
@@ -244,17 +247,7 @@ svg {
 									background:#dee5e7;}
 
 									@media print{
-										@page{
-											margin:0.5cm 0.7cm 0.2cm 0.7cm;
-											page-break-before: avoid;
-											-webkit-transform: scale(0.5);  /* Chrome, Safari 3.1+  */
-											-moz-transform: scale(0.5);  /* Firefox 3.5-15 */
-											-ms-transform: scale(0.5);   /* IE 9 */
-											-o-transform: scale(0.5);    /* Opera 10.50-12.00 */
-											transform: scale(0.5);
-											page: A4;
-											size:portrait;
-										}
+										<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 									}
 									.principalStamp {
 										position:relative;
@@ -336,6 +329,51 @@ svg {
 											
 										}
 										
+										.square {
+											width: 15px;
+											height: 12px;
+											display: inline-block;
+										}
+
+										ul.list-inline.chart-detail-list {
+											list-style: none;
+											margin: 0;
+											padding: 0;
+											width: 100%;
+											font-family: 'Times New Roman','Khmer OS Battambang';
+										}
+
+										ul.list-inline.chart-detail-list li {
+											display: inline-block;
+											padding-right: 10px;
+											vertical-align: middle;
+										}
+										ul.list-inline.chart-detail-list li h5 {
+											font-size: 12px;
+											line-height: inherit;
+											margin: 0;
+											padding: 0;
+											font-family: 'Times New Roman','Khmer OS Battambang';
+										}
+										.charTitle,
+										.charTitleBottom{
+											margin: 0;
+											padding: 0;
+											font-size: 14px;
+											line-height: inherit;
+											font-family: 'Times New Roman','Khmer OS Muol Light';
+										}
+										.charTitle {
+											margin-top: 10px;
+										}
+										.charTitleBottom{
+											margin-bottom: 10px;
+										}
+										
+										div.bar-chart{
+											height:220px;
+										}
+										
 						</style>
 						<?php 
 						
@@ -344,7 +382,6 @@ svg {
 					<div id="exportExcel">
 						
 					<table class="content-data" cellpadding="4" border="1">
-						  
 						  <?php
 
 						  $i=0; 
@@ -358,18 +395,21 @@ svg {
 						  $oldDegreeName=''; 
 
 						  $lineColors = array(
-								"#153c7f",
-								"#28c76f",
+								"#4394E5",
+								"#87BB62",
 								"#ea5455",
 								"#ff9f43",
-								"#2196f3",
+								"#92cad1",
 								"#673ab7",
 								"#153c7f",
 								"#28c76f",
-								"#ea5455",
-								"#ff9f43",
-								"#2196f3",
-								"#673ab7",
+								"#3D2785",
+								"#f4e604",
+								"#308fac",
+								"#ff7954",
+								"#79ccb3",
+								"#a73c5a",
+								"#631e50",
 							);
 
 						  $oldTeacher = '';  // Track previous teacher for rowspan
@@ -389,7 +429,9 @@ svg {
 						  	$chartKey=0;
 						  	$chartKey=0;
 
+							$thisColor  ="#673ab7";
 							$teacherClass=0;
+							$arrGroupColor =array();
 						  if (!empty($this->rs)){ foreach($this->rs as $key=> $rs ){ 
 
 								$i++;
@@ -400,22 +442,11 @@ svg {
 								$Total_Group_E_Percent =@str_replace('.00','',number_format($rs['Total_E']/$rs['TotaStudent']*100,2));
 								$Total_Group_F_Percent =@str_replace('.00','',number_format($rs['Total_F']/$rs['TotaStudent']*100,2));
 
-                                //// Chat Data
-								$thisColor  = empty($lineColors[$teacherClass]) ? "#673ab7" : $lineColors[$teacherClass];
-								array_push($arrRowColor,$thisColor);
-								array_push($yKey,$rs["group_code"]);
-								foreach($arrForBar as $keyA => $aa){
-									$val = empty($rs["Total_".$aa["y"]]) ? 0 : (int)$rs["Total_".$aa["y"]];
-									$arrForBar[$keyA][$rs["group_code"]] = $val;
-
-								}
+                               
 							//	techer
-								$teacherClass++;
-								if($oldTeacher!=$rs['teacher_name']  ){
-
-								 if($key>0){ 
-									
 								
+								if($oldTeacher!=$rs['teacher_name']  ){
+								 if($key>0){ 
 									$chartKey++;
 									$arrRow = array(
 										"yKey"=>$yKey,
@@ -426,6 +457,34 @@ svg {
 									);
 									array_push($fullArrayByTeacher,$arrRow);
 
+									
+								?>
+									<tr class="hover" style="height: 70px; " align="center">
+										<td colspan="11" style="position: relative;border-left: solid 1px #fff;border-right: solid 1px #fff; border-bottom: solid 1px #fff;">
+											<h2 class="charTitle"><?php echo $tr->translate("CHART"); ?></h2>
+											<div class="text-center">
+												<?php if(!empty($arrGroupColor)){?>
+												<ul class="list-inline chart-detail-list">
+													<?php foreach($arrGroupColor AS $rsG){
+														$gColor = $rsG["color"];
+													?>
+														<li>
+															<h5 class="font-normal">
+															<div class="square" style="background:<?php echo $gColor; ?>;"></div>
+															&nbsp;<?php echo $rsG["label"];?>
+															</h5>
+														</li>
+													<?php }?>
+												</ul>
+												<?php }?>
+											</div>
+											<div id="bar-chart-<?php echo $chartKey; ?>" class="bar-chart" ></div>
+											<h2 class="charTitleBottom"><?php echo $tr->translate("MENTION_GRADE"); ?></h2>
+										</td>
+									</tr>
+									</table>
+									<table class="content-data" cellpadding="4" border="1">
+								<?php 
 									$arrForBar = array(
 										array("y"=>"A"),
 										array("y"=>"B"),
@@ -437,25 +496,12 @@ svg {
 									$yKey =array();
 									$arrRowColor =array();
 									$teacherClass=0;
-								?>
-									<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:10px; height: 70px; " align="center">
-										<td colspan="11" style=" position: relative; ">
-											<?php echo $tr->translate("CHART").$chartKey ; ?>
-											<div class="text-center">
-												<ul class="list-inline chart-detail-list">
-													<li>
-														<h5 class="font-normal"><i class="fa fa-circle m-r-10 text-primary"></i><?php echo $tr->translate("Number Of Student")?></h5>
-													</li>
-												</ul>
-											</div>
-											<div id="bar-chart-<?php echo $chartKey; ?>" ></div>
-										</td>
-									</tr>
-									
-								<?php }
+									$arrGroupColor =array();
+								
+								}
 							?>
-							<thead>
-								<tr class="style" align="center">
+							
+								<tr class="style header" align="center">
 									<td >&nbsp;<?php echo $tr->translate("NUM");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("BRANCH");?>&nbsp;</td>
 									<td>&nbsp;<?php echo $tr->translate("SUBJECT");?>&nbsp;</td>
@@ -498,13 +544,29 @@ svg {
 										</div>
 									</td>
 								</tr>
-							</thead>
 
 							<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:10px; height: 25px; background: #dfe0e1;" align="center">
 								<td colspan="11" ><?php echo $tr->translate("TEACHER").' : '.$rs['teacher_name']; ?></td>
 							</tr>
-							<?php } 
-									$oldTeacher = $rs['teacher_name'];  
+							<?php  } 
+								
+								//// Chat Data
+								$thisColor  = empty($lineColors[$teacherClass]) ? "#673ab7" : $lineColors[$teacherClass];
+								array_push($arrRowColor,$thisColor);
+								array_push($yKey,$rs["group_code"].' - '.$rs["subject_name"]);
+								foreach($arrForBar as $keyA => $aa){
+									$val = empty($rs["Total_".$aa["y"]]) ? 0 : (int)$rs["Total_".$aa["y"]];
+									$arrForBar[$keyA][$rs["group_code"].' - '.$rs["subject_name"]] = $val;
+
+								}
+								$rowGroColor =array(
+									"label"=>$rs["group_code"].' - '.$rs["subject_name"],
+									"color"=>$thisColor,
+								);
+								
+								array_push($arrGroupColor,$rowGroColor);
+								$oldTeacher = $rs['teacher_name'];  
+								$teacherClass++;
 								?>
 
 								<tr class="style hover" align="center" >
@@ -534,17 +596,27 @@ svg {
 
 						?>
 						
-							<tr class="hover" style="font-family:'Times New Roman','Khmer OS Muol Light'; font-size:10px; height: 70px; position:relative; " align="center">
-								<td colspan="11" style="position: relative; "  >
-									<?php echo $tr->translate("CHART").$chartKey; ?>
+							<tr class="hover" style="position:relative; " align="center">
+								<td colspan="11" style="position: relative; border-left: solid 1px #fff; border-right: solid 1px #fff; border-bottom: solid 1px #fff;"  >
+									<h2 class="charTitle"><?php echo $tr->translate("CHART"); ?></h2>
 									<div class="text-center" >
-										<ul class="list-inline chart-detail-list">
-											<li>
-												<h5 class="font-normal"><i class="fa fa-circle m-r-10 text-primary"></i><?php echo $tr->translate("Number Of Student")?></h5>
-											</li>
-										</ul>
+										<?php if(!empty($arrGroupColor)){?>
+											<ul class="list-inline chart-detail-list">
+												<?php foreach($arrGroupColor AS $rsG){
+														$gColor = $rsG["color"];
+													?>
+												<li>
+													<h5 class="font-normal">
+													<div class="square" style="background:<?php echo $gColor; ?>;"></div>
+													&nbsp;<?php echo $rsG["label"];?>
+													</h5>
+												</li>
+												<?php }?>
+											</ul>
+										<?php }?>
 									</div>
-									<div id="bar-chart-<?php echo $chartKey;?>" ></div>
+									<div id="bar-chart-<?php echo $chartKey;?>" class="bar-chart"></div>
+									<h2 class="charTitleBottom"><?php echo $tr->translate("MENTION_GRADE"); ?></h2>
 								</td>
 							</tr>
 						
@@ -555,102 +627,9 @@ svg {
 				</td>
 			</tr>
 			
-			<?php 	
-				$dbbranch = new Application_Model_DbTable_DbGlobal();
-				$branch_id= empty($this->rs[0]['branch_id'])?0:$this->rs[0]['branch_id'];
-				$branchInfo =  $dbbranch->getBranchInfo($branch_id);
-			?>
-			<tr >
-				<td colspan="3" width="100%">
-					<table>
-						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td align="center" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;">
-							<label id="lunarDate" class="LabelTeacher">
-								<?php 
-										$inputDate =date("Y-m-d") ;
-										$time  = strtotime($inputDate);
-										$day   = date('d',$time);
-										$month = date('m',$time);
-										$year  = date('Y',$time);
-											
-										$lunaDate = date('Y-m-d',strtotime($inputDate));
-										$lunar = new Application_Model_DbTable_DbLunaCalendar($lunaDate);
-									?>
-									<?php echo $lunar->toLunarDate('ថ្ងៃW dN  ខែm ឆ្នាំa e ព.ស. b'); ?>
-									</label><label id="lunarBlankDate" class="LabelTeacher">ថ្ងៃ.....................ខែ............ឆ្នាំ...............<?php echo $lunar->toLunarDate('ព.ស. b'); ?></label>
-							</td>
-						</tr>
-						<tr>
-								<td valign="top" width="33%" style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;">
-									<div class="seenApproved">បានឃើញ និងឯកភាព
-										<span class="interimPrincipal"><?php echo $branchInfo['principal']; ?></span>
-									</div>
-								</td>
-								<td width="33%" valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
-								<td width="33%" style="white-space: nowrap;font-family:'Khmer os battambang'; font-size:12px; text-align: center;" valign="top">
-									<?php
-										if ($lang_id == 1) { ?>
-											<label id= "date" style="display:none">
-												ត្រូវនឹងថ្ងៃទី<?php echo $dbgb->getNumberInkhmer(date("d")); ?> ខែ<?php echo $dbgb->getMonthInkhmer(date("m")); ?> ឆ្នាំ<?php echo $dbgb->getNumberInkhmer(date("Y")); ?>
-											</label>
-										<?php }else{ ?>
-											<label id= "date" style="display:none">
-												Phnom Penh,
-												<?php echo date("l");?>,
-												<?php echo date("d");?> 
-												<?php echo date("F");?>,
-												<?php echo date("Y");?> 
-											</label>
-									<?php } ?>
-									<div id="blank_date" style="display:none">ត្រូវនឹង<?php echo $tr->translate("CREATE_WORK_DATE"); ?></div>
-								</td>
-						</tr>
-						<tr>
-								<td valign="top" style="font-family:'Khmer OS Muol Light','Time New Roman';font-size:14px;text-align: center;"></td>
-								<td valign="top" style="font-family:'Khmer OS Battambang';font-size:12px;text-align: center;"></td>
-								<td valign="top" style=" text-align: center;font-family:'Khmer os battambang'; font-size:12px;">ការិយាល័យសិក្សាធិការ</td>
-						</tr>
-						<tr>
-								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-									<div class="principalStamp" id="principalStamp" style="display:none;">
-										<div class="stamp" >
-											<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['stamp']; ?>"  />
-											<div class="signature">
-												<img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['signature']; ?>" />
-											</div>
-											<div class="principalName">
-												<span style=" color:red; font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;"><?php echo $branchInfo['deputy_principal'] ?></span>
-											</div>
-										</div>
-									</div>
-								</td>
-								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-								</td>
-								<td valign="top" style="font-family:'Khmer OS Muol Light';font-size:12px;text-align: center;">
-									<?php if (!empty($branchInfo['administration_signature'])) { ?>
-										<div id="administrator" style="display:none"  ><img src="<?php echo $this->baseUrl() . '/images/logo/' . $branchInfo['administration_signature']; ?>" style="width:200px;height:100px;position:relative;" /></div>
-									<?php } else { ?>
-										<div id="administrator" style="height: 100px;"></div>
-									<?php } ?>
-									<span  style="font-family:'Khmer OS Muol Light';font-size:14px;text-align: center;padding-left:20px;"><?php echo $branchInfo['admistration_name']; ?></span>
-								</td>
-						</tr>
-					</table>
-					
-				</td>
-			</tr>
-			
 		</table>
 	</div>	
-	<div class="card-box" id="hideStampSetting" >
-			<label class="control-label custom-switch float-midd "> 
-				<a href="javascript:void(0);" class="switchButton status"><span class="glyphicon glyphicon-pawn"></span> &nbsp; <?php echo $tr->translate("PRINT_STAMP");?></a> 
-				<input type="checkbox" id="stamp" name="stamp" class="custom-switch-input" onclick="stampDisplay()" checked> 
-				<span class="custom-switch-indicator custom-radius switch-status"></span> 
-			</label> 
-	</div>
+	
 </div>
 <link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
 <script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.min.js"></script>
@@ -721,8 +700,6 @@ svg {
 		 getAllSubject();
 		 getallGrade();
 		 getAllGroupByBranch();
-		// stampDisplay();
-		 dutySetting();
 	});
 	
 	urlGetSubjectStore = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoretmp','action'=>'getsubjectlist'));?>';
@@ -811,73 +788,24 @@ svg {
 			});
 	}
 
-function dutySetting() {
+	<?php foreach($fullArrayByTeacher as $fullarr){ ?>
 
-<?php if ($footerScoreDocument == 0) { ?>
+		config<?php echo $fullarr['rowCode'] ?> = {
+			data: <?php echo Zend_Json::encode($fullarr['data']); ?>,
+			xkey: 'y',
+			ykeys: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
+			labels: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
+		
+			dataLabelsPosition: "inside",
+			hideHover: 'auto',
+			gridTextColor: '#000',
+			showZero: false,
+			resize: true,
+			barColors: <?php echo Zend_Json::encode($fullarr['colorBar']); ?>
+	};
+	config<?php echo $fullarr['rowCode'] ?>.element = 'bar-chart-<?php echo $fullarr['rowCode'] ?>';
+	Morris.Bar(config<?php echo $fullarr['rowCode'] ?>);
 
-	document.getElementById("stamp").checked = false;
-	stampDisplay();
-	var hideStampSetting = document.getElementById("hideStampSetting");
- 	var administrator = document.getElementById("administrator");
-
- 	administrator.style.display = "block";
-	hideStampSetting.style.display = "none";
-
-<?php } else { ?>
-	document.getElementById("stamp").checked = true;
-	stampDisplay();
-<?php } ?>
-
-}
-
-function stampDisplay() {
-  var checkBox = document.getElementById("stamp");
-  var stamp = document.getElementById("principalStamp");
-
-  var administrator = document.getElementById("administrator");
-  var lunarBlankDate =  document.getElementById("lunarBlankDate");
-  var lunarDate =  document.getElementById("lunarDate");
-  
-  
-  var date = document.getElementById("date");
-  var blank_date = document.getElementById("blank_date");
-  
-  if (checkBox.checked == true){
-    stamp.style.display = "block";
-	
-	administrator.style.display = "block";
-	administrator.style.visibility = "visible";
-	
-	
-	date.style.display = "block";
-	blank_date.style.display = "none";
-	lunarBlankDate.style.display = "none";
-	lunarDate.style.display = "block";
-
-  } else {
-	stamp.style.display = "none";
-	administrator.style.visibility = "hidden";
-	date.style.display = "none";
-	blank_date.style.display = "block";
-	lunarBlankDate.style.display = "block";
-	lunarDate.style.display = "none";
-  }
-}
-
-<?php foreach($fullArrayByTeacher as $fullarr){ ?>
-
-	config<?php echo $fullarr['rowCode'] ?> = {
-      data: <?php echo Zend_Json::encode($fullarr['data']); ?>,
-      xkey: 'y',
-      ykeys: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
-      labels: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
-	  labelTop: true,
-      resize: true,
-	  barColors: <?php echo Zend_Json::encode($fullarr['colorBar']); ?>
-  };
-  config<?php echo $fullarr['rowCode'] ?>.element = 'bar-chart-<?php echo $fullarr['rowCode'] ?>';
-  Morris.Bar(config<?php echo $fullarr['rowCode'] ?>);
-
- <?php } ?>
+	<?php } ?>
    
 </script>

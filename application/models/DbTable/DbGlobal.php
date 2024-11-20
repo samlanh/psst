@@ -2318,7 +2318,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sql .= " ORDER BY academic_year DESC ";
 		$rows = $db->fetchAll($sql);
-		//Application_Model_DbTable_DbUserLog::writeMessageError($sql);
+		// Application_Model_DbTable_DbUserLog::writeMessageError($sql);
 		if (empty($data['option'])) {
 			return $rows;
 		} else {
@@ -3137,11 +3137,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		} else {//customer//WHERE s.customer_type=2 
 			$rs = $this->getCustomerinfoById($student_id);
 		}
-		$tr = $this->tr;
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$str = '';
 		$studyInfo = '';
 		$studentCode = array();
-		$style = '';
+		
 		$link = Zend_Controller_Front::getInstance()->getBaseUrl() . '/home/searchstudentinfo/student-detail/id/' . $student_id;
 		/*$student_type=$tr->translate("Old Student");
 					   $style="style='color:white'";
@@ -5225,7 +5225,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 				FROM `rms_dis_setting` AS ds
 					LEFT JOIN rms_discount_student disc
 					ON ds.`id`=disc.`discountGroupId`
-				WHERE ds.isCurrent=1 ";
+				WHERE ds.isCurrent=1 AND ds.status=1 ";
 		}
 		if (!empty($data['discountPeriod'])) {
 			$sql .= " AND ds.discountPeriod=" . $data['discountPeriod'];

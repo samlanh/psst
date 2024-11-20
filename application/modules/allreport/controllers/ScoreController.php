@@ -859,6 +859,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
 		$this->view->rsfooter = $frm->getFooterAccount(2);
+		$this->view->printFormat = $frm->getPrintPageFormat();
 
 		$form = new Application_Form_FrmSearchGlobal();
 		$forms = $form->FrmSearch();

@@ -1832,7 +1832,7 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 
 		$orderBy = " 	
 				GROUP BY sd.`subject_id`,sd.score_id
-			ORDER BY  sd.teacher_id,sd.subject_id,g.degree,s.group_id  ASC  limit 8 ";
+			ORDER BY  sd.teacher_id,sd.subject_id,g.degree,s.group_id  ASC ";
 		//echo $sql . $where . $orderBy; 
 		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
 

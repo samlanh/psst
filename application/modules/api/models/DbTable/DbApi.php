@@ -1789,7 +1789,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			,CASE
 					   	WHEN $currentLang = 1 THEN c.title
 					   	WHEN $currentLang = 2 THEN c.title_en
-					END AS titleHoliday 
+					END AS titleHoliday
     			FROM `mobile_calendar` AS c
 				WHERE c.`active` =1 ";
     			if (!empty($search['type_holiday'])){
@@ -1863,6 +1863,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							  DATE_FORMAT(mc.date, '%d') AS holiday_day,
 							  DATE_FORMAT(mc.date, '%a') AS holiday_string,
 							  DATE_FORMAT(mc.date, '%m') AS holiday_month
+							  ,mc.calendarType
 					   FROM `mobile_calendar` AS mc 
 						WHERE 
 							mc.`active` =1 
@@ -3189,14 +3190,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND sSecond.id=s.`id`
 					)
 				) AS overallSemesterChRank
+				,(SELECT assd.`teacherComment` FROM `rms_studentassessment` AS ass JOIN `rms_studentassessment_detail` AS assD ON ass.id = assd.`assessmentId` WHERE s.id = ass.scoreId AND assd.`studentId`=sm.`student_id` ORDER BY assd.`teacherComment` DESC LIMIT 1) AS teacherComment
 			FROM
-				`rms_score` AS s,
-				`rms_score_monthly` AS sm,
-				`rms_group` AS g
-			WHERE
-				 g.`id` = s.`group_id`
-				AND s.`id`=sm.`score_id`
-				AND s.status = 1 ";
+				rms_score AS s JOIN `rms_score_monthly` AS sm ON s.`id`=sm.`score_id`
+				LEFT JOIN `rms_group` AS g ON  g.`id` = s.`group_id`
+			WHERE  s.status = 1 ";
 				
 			$scoreId = empty($search['id'])?0:$search['id'];
 			$sql.=" AND sm.student_id = ".$studentId;

@@ -712,6 +712,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.$label FROM rms_view AS v WHERE v.type=4 AND v.key_code = g.`session` LIMIT 1) AS `sessionName`
 					,(SELECT gr.$grade FROM rms_itemsdetail AS gr WHERE gr.id=g.grade AND gr.items_type=1 LIMIT 1) AS gradeTitle
 					,(SELECT dg.$degree FROM rms_items AS dg WHERE dg.id=g.degree AND dg.type=1 LIMIT 1) AS degreeTitle
+					
 				
 			";
 			$sqlColScoreValue=",'0' AS scoreValue
@@ -755,10 +756,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				
 				if($_data['forEvaluationInfo']=="1"){//Evaluation
 					$stringWhere = " AND ass.scoreId = $scoreId ";
+					$stringWherePrevious = " AND ass.scoreId < $scoreId ";
 					if(!empty($_data['assessmentId'])){
 						$stringWhere = " AND ass.id = ".$_data['assessmentId'];
 					}
 					$sqlColScoreValue.="
+						,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWherePrevious AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id ORDER BY assD.teacherComment DESC LIMIT 1),'') AS previousTeacherComment
 						,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id ORDER BY assD.teacherComment DESC LIMIT 1),'') AS teacherComment
 						,COALESCE((SELECT assD.commentId FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id LIMIT 1),'0') AS isEvaluated
 					";
@@ -2140,10 +2143,16 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		try{
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$userId = empty($_data['userId'])?0:$_data['userId'];
-			
+			$label = "name_en";
+			$branch = "branch_nameen";
+			if($currentLang==1){// khmer
+				$label = "name_kh";
+				$branch = "branch_namekh";
+			}
 			$sql="
 				SELECT
 					g.id AS groupId
+					,(SELECT br.$branch FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
 					,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
 					,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameEn
 					,(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
@@ -2157,6 +2166,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						ELSE '0'
 					END AS isMainTeacher
 					,g.is_pass AS groupProcess
+					,(SELECT $label FROM rms_view AS v WHERE v.type=9 AND v.key_code=g.is_pass LIMIT 1) as groupProcessTitle
 					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.itemType=1 AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
 					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
 					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
@@ -2357,9 +2367,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
 					
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
+					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`itemType` = 1 LIMIT 1  ) AS totalStudent
+					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`itemType` = 1 LIMIT 1 ) AS maleStudent
+					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`itemType` = 1 LIMIT 1 ) AS femaleStudent
 					,CASE
 						WHEN COALESCE((SELECT ass.issueDate FROM `rms_studentassessment` AS ass WHERE ass.scoreId = sc.`id`  LIMIT 1),NULL) IS NOT NULL
 							THEN (SELECT ass.issueDate FROM `rms_studentassessment` AS ass WHERE ass.scoreId = sc.`id`  LIMIT 1)
@@ -2383,7 +2393,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND g.`teacher_id` ='.$userId;
 			$sql.=' 
 					AND g.`is_use` = 1 
-					AND g.is_pass=2
+				
 					AND g.`status` =1
 					AND sc.`status` =1
 				';
@@ -2406,7 +2416,6 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}else if(!empty($_data['limitRecord'])){
 				$sql.=" LIMIT ".$_data['limitRecord'];
 			}
-			
 			
 			$row = $_db->fetchAll($sql);
 			
@@ -2693,7 +2702,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.=" AND g.is_pass =".$_data['groupProcess'];
 			}
 			$sql.="
-				ORDER BY ass.id DESC, g.id ASC
+				ORDER BY g.academic_year DESC,ass.id DESC, g.id ASC
 			";
 			
 			if(!empty($_data['LimitStart'])){

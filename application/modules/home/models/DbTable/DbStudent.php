@@ -736,8 +736,8 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$sql = "SELECT
 					g.group_code
 					,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_id
-					,(SELECT rms_items.$title FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degree
-					,(SELECT rms_itemsdetail.$title FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade
+					,i.$title AS degree
+					,itd.$title AS grade
 					,(SELECT $view FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS session_id
 					,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`
 					,(select $teacher from rms_teacher as t where t.id = g.teacher_id) as teacher
@@ -749,12 +749,16 @@ class Home_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				FROM
 					rms_group_detail_student AS gds JOIN rms_student as s ON gds.stu_id = s.stu_id
 					LEFT JOIN rms_group AS g ON gds.group_id = g.id
+					LEFT JOIN rms_items AS i ON i.`id`=`g`.`degree` AND i.type=1
+					LEFT JOIN `rms_itemsdetail` AS itd ON itd.`id`=`g`.`grade` AND itd.items_type=1 
 					
 				WHERE 
 					gds.itemType=1 
 					AND gds.stu_id = $stu_id
 					AND gds.status=1
-				order by 
+				ORDER BY 
+					i.ordering ASC,
+					itd.ordering DESC,
 					gds.gd_id DESC,
 					gds.create_date DESC
 						

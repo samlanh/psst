@@ -237,8 +237,8 @@ class Application_Form_FrmGlobal
 							<table width='100%' >
 								<tr>
 									<td width='60%' align='left' valign='top'>
-										<h2 style=" . '"' . "padding: 0;margin: 0; font-weight:normal; font-family: 'Times New Roman' , 'Khmer OS Muol Light';font-size:12px; color: inherit;" . '"' . ">" . $rs['school_namekh'] . "</h2>
-										<h2 style='white-space:nowrap; font-weight:bold; font-size:12px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>" . $rs['school_nameen'] . "</h2>
+										<h2 style=" . '"' . "padding: 0;margin: 0; font-weight:normal; font-family: 'Times New Roman' , 'Khmer OS Muol Light';font-size:10px; color: inherit;" . '"' . ">" . $rs['school_namekh'] . "</h2>
+										<h2 style='white-space:nowrap; font-weight:bold; font-size:10px; padding: 0;margin: 0; font-family: Times New Roman , Khmer OS Muol; color: #inherit;'>" . $rs['school_nameen'] . "</h2>
 									</td>
 									<td width='40%' align='left' valign='top'>
 										<ul class='headReport'>
@@ -1747,7 +1747,7 @@ class Application_Form_FrmGlobal
 		$marginBottom = empty($data["marginBottom"]) ? "1cm" : $data["marginBottom"];
 		$marginLeft = empty($data["marginLeft"]) ? "0.5cm" : $data["marginLeft"];
 		$str="@page {";
-				$str.="page: $pageSize;";
+				$str.="size: $pageSize;";
 				$str.="margin: $marginTop $marginRight $marginBottom $marginLeft;";
 		$str.="}";
 		return $str;

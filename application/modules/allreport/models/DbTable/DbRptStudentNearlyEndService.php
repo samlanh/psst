@@ -135,11 +135,10 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     		
     	}
     	$sql="SELECT 
-				vSt.`itemType`
-				,vSt.`studentId` AS studentId
-				,vSt.`branchId` AS branchId
+				vSt.`branchId` AS branchId
 				,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=vSt.`branchId` LIMIT 1) AS branchName
-				
+				,vSt.`itemType`
+				,vSt.`studentId` AS studentId
 				,vSt.`stuCode` AS stuCode
 				,vSt.`stuNameKh` AS stuNameKh
 				,vSt.`stuNameEn` AS stuNameEn
@@ -151,6 +150,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 				,vSt.`academicYear` AS academicYear
 				,vSt.`degree`
 				,vSt.`grade`
+
 				,CASE WHEN (NULLIF(vSt.`endDate`,'') IS NOT NULL OR vSt.`endDate` !='0000-00-00')
 							THEN vSt.`startDate`
 						WHEN (NULLIF(v.`endDate`,'') IS NOT NULL OR v.`endDate` !='0000-00-00')
@@ -163,6 +163,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 					ELSE '' END AS endDate
 					
 				,v.`receiptNo`
+				,v.paidamount
+				,(SELECT title FROM `rms_startdate_enddate` WHERE id=v.paymentTerm LIMIT 1) AS paymentTerm
+				,v.academicFeeTermId
 				,v.`feeId`
 				,v.`academicYear` AS paymentAcademicYear
 				,v.`creadDate` AS paymentDate
@@ -183,7 +186,6 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 							THEN (SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id =vSt.`academicYear` LIMIT 1)
 						ELSE (SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id =v.`academicYear` LIMIT 1)
 					END AS academicYearTitle
-				,(SELECT v.$label FROM rms_view AS v where v.type=2 AND v.key_code=vSt.sex LIMIT 1) AS sexTitle
 				,vSt.$item AS categoryName
 				,vSt.$itemDetail AS serviceTitle
 				
@@ -290,7 +292,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 		}
     	//$order.=" LIMIT 10 ";
 		
-		//echo $sql.$where.$order;exit();
+		// echo $sql.$where.$order;exit();
     	return $db->fetchAll($sql.$where.$order);
     }
 

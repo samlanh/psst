@@ -4,11 +4,11 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm = $this->FormIncomeStatisticFilter;
 	if($this->search['reportType']==1){
-		$lblReport = "(Tuition Fee)";
+		$lblReport = "Tuition Fee";
 	}elseif($this->search['reportType']==2){
-		$lblReport = "(Lunch Fee)";
+		$lblReport = "Lunch Fee";
 	}else{
-		$lblReport = "(Nap Fee)";
+		$lblReport = "Nap Fee";
 	}
 	
 	$termOption = array(
@@ -18,10 +18,18 @@
 		);
 ?>
 <style>
-.hover:hover{ background:#ccc;}
+.hover:hover{ background:#ccd9ff;}
 table.content-data tr.style-head,
-table.tb-footer tr.style-head {
+table.tb-footer tr.style-head{
    font-weight: bold !important;
+}
+.hideprintdate {
+	display: none !important;
+}
+.content-data tr td{
+	font-size:11px !important; 
+	line-height: 20px;
+	padding: 2px !important;
 }
 .form-check-input{display: inline;}
 </style>
@@ -114,48 +122,52 @@ table.tb-footer tr.style-head {
 		</form>
 	<div class="card-body">
 		<div id="divPrint">
-			<!-- <link rel="stylesheet" media="print" href="<?php echo $base_url; ?>css/print.css" /> -->
 			<style>
 					table.content-data{
 						border-collapse:collapse;
 						width:100%;
-						border:1px solid #000; 
 						font-family:'Times New Roman','Khmer OS Battambang';
-						font-size:10px;
 						white-space: nowrap;
 						margin:0 auto;
 						color:#000;
 						margin:0 auto;
 					}
+					.hideprintdate{font-size: 9px ;}
+					.solidborderdouble{ border:2px solid #000;}
+					.solidborder-leftdouble{ border-left:2px solid #000;}
+					.solidborder-rightdouble{ border-right:2px solid #000;}
+					.solidborder-topdouble{ border-top:2px solid #000;}
+					.solidborder-bottomdouble{ border-bottom:2px solid #000;}
+					tr.solidborder td{
+						border:1px solid #000;
+					}
+					.btmdothborder{border-bottom:1px dashed #969696;}
+					.btmdothborder td{border-left:1px dashed #969696;}
+					tr td.bordernone{border:1px solid #fff;}
+					tr td.solidborderright{border-right:1px solid #000;}
+					tr td.solidborderleft{border-left:1px solid #000;}
+					tr.noborder{ border: 1px solid #fff;}
+
 					table.content-data  tr.style-head {
-					   line-height: 22px; 
+					   line-height: 18px; 
 					   padding:1px 0px; 
 					   white-space: nowrap;
 					   background: #CCD9FF;
 					   text-align: center;
 					}
 					table.content-data tr td{
-						padding: 2px;
-						font-size:11px; 
+						padding:1px;
+						font-size:10px; 
+						line-height: 17px;
 					}
-				
-					.greycolor{background-color:#dddd;}
+					tr td span{
+						line-height: 17px;
+					}
+					.greycolor{background-color:#bbb;}
 					.right{text-align: right;}
-					tr.noborder{ border: 1px solid #fff;border-top: 1px solid #000;}
-					td.btmborder{border-bottom: 2px solid #000;font-weight:bold;}
-					.fixedwidth td{width: 40px;}
+					.fixedwidth td{width: 50px;}
 					.width-contact{width:150px;word-break: break-all;white-space:normal;}
 					.widthstudent{width: 150px; white-space:pre-line;}
-					
-					table.content-data tbody td span.text-truncate {
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-						line-height: inherit;
-						width: 100px;
-						display: block;
-					}
-					
 					.widthCol-px-40{
 						width: 40px !important;
 					}
@@ -165,9 +177,10 @@ table.tb-footer tr.style-head {
 					.widthCol-px-70{
 						width: 70px !important;
 					}
+					.noborder-left{border-left:1px solid #fff;}
+					.backgroundBold{background:#9db6ff; font-weight: bold;}
 					@media print { 
 						<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
-						
 					 }
 				</style>	
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
@@ -177,32 +190,33 @@ table.tb-footer tr.style-head {
 				<tr>
 					<td width="15%" align="center"></td>
 					<td width="70%" align="center">
-						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">Student Payment Report</span><br />
-						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblreportType"></label><br /></span>
-						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo date("d-M-y");?></span>
+						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';">Student Payment Report</span><br />
+						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblreportType"></label><br /></span>
+						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo date("d-M-y");?></span><label id="lblBranchId"></label>
 					</td>
-					<td width="15%" align="center"></td>
+					<td width="15%" align="center"><label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label></td>
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-						<table class="content-data" border="1">
+						<table class="content-data">
 								<thead>
-									<tr class="style-head" align="center">
+									<tr class="style-head solidborder solidborder-topdouble solidborder-rightdouble solidborder-leftdouble" align="center">
 										<td rowspan="2">No.</td>
 										<td rowspan="2">Student Id</td>
-										<td class="widthCol-px-70" rowspan="2">Student</td>
-										<td class="widthCol-px-70" rowspan="2">Phone Number</td>
+										<td class="widthCol-px-70" rowspan="2">Name</td>
+										<td class="widthCol-px-70" rowspan="2">Tel</td>
+										<td rowspan="2">Registration</td>
 										<td rowspan="2">Status</td>
 										<td rowspan="2">Grade</td>
-										<td rowspan="2">Registration</td>
+										<td rowspan="2">Type</td>
 										<td class="widthCol-px-40" rowspan="2">Discount</td>
 										<td rowspan="2">Pay Type</td>
-										<td colspan="2">Term1</td>
-										<td colspan="2">Term2</td>
-										<td colspan="2">Term3</td>
-										<td colspan="2">Term4</td>
+										<td colspan="2">Term 1</td>
+										<td colspan="2">Term 2</td>
+										<td colspan="2">Term 3</td>
+										<td colspan="2">Term 4</td>
 									</tr>
-									<tr class="style-head fixedwidth" align="center">
+									<tr class="style-head fixedwidth solidborder solidborder-rightdouble solidborder-leftdouble" align="center">
 										<td>Date</td>
 										<td>Amount</td>
 										<td>Date</td>
@@ -221,7 +235,39 @@ table.tb-footer tr.style-head {
 									$totalTerm2 = 0;
 									$totalTerm3 = 0;
 									$totalTerm4 = 0;
-								$num = 0;
+									$countTerm1 = 0;
+									$countTerm2 = 0;
+									$countTerm3 = 0;
+									$countTerm4 = 0;
+									$activeStudent = 0;
+									$dropStudent = 0;
+										$resultTermList = array(
+											'countTerm1' => 0,
+											'AmountTerm1' => 0,
+											'countTerm2' => 0,
+											'AmountTerm2' => 0,
+											'countTerm3' => 0,
+											'AmountTerm3' => 0,
+											'countTerm4' => 0,
+											'AmountTerm4' => 0,
+
+											'unPaidCountTerm1' => 0,
+											'unPaidCountTerm2' => 0,
+											'unPaidCountTerm3' => 0,
+											'unPaidCountTerm4' => 0,
+										);
+										$resultSemesterList = array(
+											'countSemester1' => 0,
+											'AmountSemester1' => 0,
+											'countSemester2' => 0,
+											'AmountSemester2' => 0,
+										);
+
+										$resultYearList = array(
+											'countYear' => 0,
+											'AmountYear' => 0,
+										);
+									$num = 0;
 								if(!empty($this->dataPayment)){ foreach($this->dataPayment as $key=>$rs){
 									
 									if(!empty($rs['stpaymentType'])){
@@ -231,101 +277,149 @@ table.tb-footer tr.style-head {
 									}
 									
 								?>
-								<tr class="style-rowdata hover" align="center">
-									<td><?php echo $num+=1; ?></td>
-									<td align="left"><?php echo $rs['stu_code']; ?></td>
-									<td align="left"><span class="widthCol-px-70"><?php echo $rs['student_name']; ?></span></td>
-									<td align="left"><span class="widthCol-px-70 text-truncate"><?php echo $rs['tel']; ?></span></td>
-									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
-									<td><?php echo $rs['grade']; ?></td>
-									<td><?php echo $rs['registrationDate']; ?></td>
+								<tr class="hover btmdothborder solidborder-leftdouble solidborder-rightdouble" align="center">
+									
 									<?php
 										$resultPayment = $rs['paymentList'];
 										$totalTerm1 +=  ($resultPayment['payment1']!='')?$resultPayment['payment1']:0;
 										$totalTerm2 +=  ($resultPayment['payment2']!='')?$resultPayment['payment2']:0;
 										$totalTerm3 +=  ($resultPayment['payment3']!='')?$resultPayment['payment3']:0;
 										$totalTerm4 +=  ($resultPayment['payment4']!='')?$resultPayment['payment4']:0;
-									?>
-									<td><span class="widthCol-px-40"><?php echo $rs['discountCode']; ?></span></td>
-									<td align="left"><?php echo $rs['stpaymentType'];?></td>
-									<?php
+
 										$resultPayment['term1'] = empty(($resultPayment['payment1'])) ? $resultPayment['term1'] : 0;
 										$resultPayment['term2'] = empty(($resultPayment['payment2'])) ? $resultPayment['term2'] : 0;
 										$resultPayment['term3'] = empty(($resultPayment['payment3'])) ? $resultPayment['term3'] : 0;
 										$resultPayment['term4'] = empty(($resultPayment['payment4'])) ? $resultPayment['term4'] : 0;
+										
+										$countTerm1 += empty($resultPayment['periodDate1'])?0:1;
+										$countTerm2 += empty($resultPayment['periodDate2'])?0:1;
+										$countTerm3 += empty($resultPayment['periodDate3'])?0:1;
+										$countTerm4 += empty($resultPayment['periodDate4'])?0:1;
+										$activeStudent+=($rs['stopType']==0)?1:0;
+										$dropStudent+=($rs['stopType']!=0)?1:0;
+
+											$resultTermList['unPaidCountTerm1'] += empty($resultPayment['periodDate1']) ? 1 :0;
+											$resultTermList['unPaidCountTerm2'] += empty($resultPayment['periodDate2']) ? 1 :0;
+											$resultTermList['unPaidCountTerm3'] += empty($resultPayment['periodDate3']) ? 1 :0;
+											$resultTermList['unPaidCountTerm4'] += empty($resultPayment['periodDate4']) ? 1 :0;
+
+										if($rs['payment_term']==2){//term
+											$resultTermList['countTerm1'] += empty($resultPayment['periodDate1']) ? 0 : 1;
+											$resultTermList['countTerm2'] += empty($resultPayment['periodDate2']) ? 0 : 1;
+											$resultTermList['countTerm3'] += empty($resultPayment['periodDate3']) ? 0 : 1;
+											$resultTermList['countTerm4'] += empty($resultPayment['periodDate4']) ? 0 : 1;
+
+											$resultTermList['AmountTerm1'] += empty($resultPayment['payment1']) ? 0 : $resultPayment['payment1'];
+											$resultTermList['AmountTerm2'] += empty($resultPayment['payment2']) ? 0 : $resultPayment['payment2'];
+											$resultTermList['AmountTerm3'] += empty($resultPayment['payment3']) ? 0 : $resultPayment['payment3'];
+											$resultTermList['AmountTerm4'] += empty($resultPayment['payment4']) ? 0 : $resultPayment['payment4'];
+
+										}elseif($rs['payment_term']==3){
+											$resultSemesterList['countSemester1'] += empty($resultPayment['periodDate1']) ? 0 :  1;
+											$resultSemesterList['AmountSemester1'] += empty($resultPayment['payment1']) ? 0 : $resultPayment['payment1'];
+
+											$resultSemesterList['countSemester2'] += empty($resultPayment['periodDate3']) ? 0 :  1;
+											$resultSemesterList['AmountSemester2'] += empty($resultPayment['payment3']) ? 0 : $resultPayment['payment3'];
+										}elseif($rs['payment_term']==4){
+											$resultYearList['countYear'] += empty($resultPayment['periodDate1']) ? 0 :  1;
+											$resultYearList['AmountYear'] += empty($resultPayment['payment1']) ? 0 :  $resultPayment['payment1'];
+										}
 									?>
-									<td class="<?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/y',strtotime($resultPayment['periodDate1'])):""; ?></td>
-									<td class="<?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo ($resultPayment['payment1']!='')?number_format($resultPayment['payment1'],2):''; ?></td>
-									<td class="<?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/y',strtotime($resultPayment['periodDate2'])):""; ?></td>
-									<td class="<?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment2']!='')?number_format($resultPayment['payment2'],2):''; ?></td>
-									<td class="<?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" ><?php echo !empty($resultPayment['periodDate3'])?date('d/m/y',strtotime($resultPayment['periodDate3'])):""; ?></td>
-									<td class="<?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment3']!='')?number_format($resultPayment['payment3'],2):''; ?></td>
-									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/y',strtotime($resultPayment['periodDate4'])):""; ?></td>
+									
+									<td><?php echo $num+=1; ?></td>
+									<td align="left"><?php echo $rs['stu_code']; ?></td>
+									<td align="left"><span class="widthCol-px-70"><?php echo $rs['student_name']; ?></span></td>
+									<td align="left"><span class="widthCol-px-70"><?php echo $rs['tel']; ?></span></td>
+									<td><?php echo $rs['registrationDate']; ?></td>
+									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
+									<td><?php echo $rs['grade']; ?></td>
+									<td><span class="widthCol-px-40"><?php echo $rs['discountCode']; ?></span></td>
+									<td><?php echo !empty($rs['discountValue'])?str_replace(".00","",$rs['discountValue'])."%":""; ?></td>
+									<td align="left"><?php echo $rs['stpaymentType'];?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/y',strtotime($resultPayment['periodDate1'])):""; ?></td>
+									<td class="solidborderright <?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo ($resultPayment['payment1']!='')?number_format($resultPayment['payment1'],2):''; ?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/y',strtotime($resultPayment['periodDate2'])):""; ?></td>
+									<td class="solidborderright <?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment2']!='')?number_format($resultPayment['payment2'],2):''; ?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" ><?php echo !empty($resultPayment['periodDate3'])?date('d/m/y',strtotime($resultPayment['periodDate3'])):""; ?></td>
+									<td class="solidborderright <?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment3']!='')?number_format($resultPayment['payment3'],2):''; ?></td>
+									<td class="solidborderleft<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/y',strtotime($resultPayment['periodDate4'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment4']!='')?number_format($resultPayment['payment4'],2):''; ?></td>
 								</tr>
-								
 								<?php
 								}}
 								?>
-								<tr class="noborder">
-									<td colspan="10"></td>
-									<td class="right btmborder"><?php echo number_format($totalTerm1, 2); ?></td>
-									<td></td>
-									<td class="right btmborder"><?php echo number_format($totalTerm2, 2); ?></td>
-									<td></td>
-									<td class="right btmborder"><?php echo number_format($totalTerm3, 2); ?></td>
-									<td></td>
-									<td class="right btmborder"><?php echo number_format($totalTerm4, 2); ?></td>
+								<tr class="backgroundBold solidborderdouble">
+									<td colspan="9"></td>
+									<td >Total</td>
+									<td align="center"><?php echo $countTerm1; ?></td>
+									<td align="center" class="right"><?php echo number_format($totalTerm1, 2); ?></td>
+									<td align="center"><?php echo $countTerm2; ?></td>
+									<td align="center" class="right"><?php echo number_format($totalTerm2, 2); ?></td>
+									<td align="center"><?php echo $countTerm3; ?></td>
+									<td align="center" class="right"><?php echo number_format($totalTerm3, 2); ?></td>
+									<td align="center"><?php echo $countTerm4; ?></td>
+									<td align="center" class="right"><?php echo number_format($totalTerm4, 2); ?></td>
 								</tr>
-								<?php
-								if(!empty($termOption)){
-									$totalPaid = 0;
-									$strSubTable='
-									<tr class="noborder">
-										<td colspan="12"></td>
-										<td colspan="7" style="padding-top: 5px !important;">
-									';
-									
-									$strColhead='<tr class="noborder" style="background-color :#c1d0f3;border: solid 1px #fff;"> ';
-									
-									$strColVal='<tr class="noborder">';
-									foreach($termOption AS $thisKey =>$thisVal){
-										$totalPaid += $thisVal;
-										$strColhead.='
-											<td class="center" width="33.33%">'.$thisKey.'</td>
-										';
-										$strColVal.='
-											<td class="center bold">'.sprintf('%02d', $thisVal).'</td>
-										';
-									}
-									$strColhead.='<td class="center bold">Total</td>';
-									$strColVal.='
-											<td class="center bold">'.sprintf('%02d', $totalPaid).'</td>
-										';
-									$strSubTable.='
-											<table class="content-data" style=" text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
-												<tbody>
-												
-												'.$strColhead.'
-												'.$strColVal.'
-												</tbody>
-											</table>
-										';
-									$strSubTable.='</td>
-									</tr>';
-									
-									$strColhead.='</tr>';
-									$strColVal.='</tr>';
-										
-									echo $strSubTable;
-								}
-								?>
+								<tr >
+									<td colspan="18" class="noborder" style="border: 1px solid #fff;">&nbsp;</td>
+								</tr>
+								<tr class="hover solidborder solidborder-leftdouble solidborder-rightdouble solidborder-topdouble" align="center">
+									<td class="bordernone">&nbsp;</td>
+									<td class="bordernone" align="right"><strong>TT Student :<?php echo $activeStudent + $dropStudent; ?></strong></td>
+									<td class="bordernone" align="right"><strong>Active:</strong></td>
+									<td class="bordernone" align="left"><strong><?php echo $activeStudent; ?></strong></td>
+									<td class="bordernone" align="right"><strong>Drop:</strong></td>
+									<td colspan="4" class="bordernone solidborderright" align="left"><?php echo $dropStudent; ?></td>
+									<td class="solidborder">Term</td>
+									<td><?php echo $resultTermList['countTerm1'];?></td>
+									<td><?php echo number_format($resultTermList['AmountTerm1'],2);?></td>
+									<td><?php echo $resultTermList['countTerm2'];?></td>
+									<td><?php echo number_format($resultTermList['AmountTerm2'],2);?></td>
+									<td><?php echo $resultTermList['countTerm3'];?></td>
+									<td><?php echo number_format($resultTermList['AmountTerm3'],2);?></td>
+									<td><?php echo $resultTermList['countTerm4'];?></td>
+									<td><?php echo number_format($resultTermList['AmountTerm4'],2);?></td>
+								</tr>
+								<tr class="hover solidborder solidborder-leftdouble solidborder-rightdouble" align="center">
+									<td class="bordernone" align="right" colspan="3"><strong>Total Income to Date :</strong></td>
+									<td class="bordernone"><strong><?php echo number_format($totalTerm1 + $totalTerm2 + $totalTerm3 + $totalTerm4); ?></strong></td>
+									<td colspan="5" class="bordernone solidborderright"></td>
+									<td>Semester</td>
+									<td><?php echo $resultSemesterList['countSemester1'];?></td>
+									<td><?php echo number_format($resultSemesterList['AmountSemester1'],2);?></td>
+									<td colspan="2" class="greycolor"></td>
+									<td><?php echo $resultSemesterList['countSemester2'];?></td>
+									<td><?php echo number_format($resultSemesterList['AmountSemester2'],2);?></td>
+									<td colspan="2" class="greycolor"></td>
+								</tr>
+								<tr class="hover solidborder solidborder-leftdouble solidborder-rightdouble" align="center">
+									<td class="bordernone">&nbsp;</td>
+									<td class="bordernone"></td>
+									<td class="bordernone"></td>
+									<td class="bordernone"></td>
+									<td colspan="5" class="bordernone solidborderright" ></td>
+									<td>Year</td>
+									<td><?php echo $resultYearList['countYear'];?></td>
+									<td><?php echo number_format($resultYearList['AmountYear'],2);?></td>
+									<td colspan="6" class="greycolor"></td>
+								</tr>
+								<tr class="hover solidborder solidborder-leftdouble solidborder-rightdouble solidborder-bottomdouble" align="center">
+									<td class="bordernone">&nbsp;</td>
+									<td class="bordernone"></td>
+									<td class="bordernone"></td>
+									<td class="bordernone"></td>
+									<td colspan="5" class="bordernone solidborderright" ></td>
+									<td>Unpaid</td>
+									<td><?php echo $resultTermList['unPaidCountTerm1'];?></td>
+									<td></td>
+									<td><?php echo $resultTermList['unPaidCountTerm2'];?></td>
+									<td></td>
+									<td><?php echo $resultTermList['unPaidCountTerm3'];?></td>
+									<td></td>
+									<td><?php echo $resultTermList['unPaidCountTerm4'];?></td>
+									<td></td>
+								</tr>
 							</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" width="100%">
-						<?php echo $this->rsfooteracc;?>
 					</td>
 				</tr>
 			</table>
@@ -337,7 +431,19 @@ table.tb-footer tr.style-head {
 <script>
 	dojo.require("dojo.data.ItemFileWriteStore");
 	require(["dojo/ready"], function (ready) {
-		$('#lblreportType').html("<?php echo $lblReport; ?>");
+		ready(function () {
+			$('#lblreportType').html("<?php echo $lblReport; ?>");
+			let branchLable = "-"+dijit.byId("branch_id").attr('displayedValue');
+			
+			$('#lblBranchId').html(branchLable);
+
+			degree = dijit.byId('degree');
+			degree.on('change', function(evt) {
+				getallGrade();
+			});
+			getallGrade();
+		});
+
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,
@@ -346,16 +452,9 @@ table.tb-footer tr.style-head {
 			name: "grade",
 			class: 'fullside',
 			placeHolder: 'Grade',
-			onChange: function() {
-
-			}
 		}, "grade");
 
-		degree = dijit.byId('degree');
-		degree.on('change', function(evt) {
-			getallGrade();
-		});
-		getallGrade();
+		
 	});
 
 	var url_dept = '<?php echo $this->url(array('module' => 'global', 'controller' => 'grade', 'action' => 'get-grade')); ?>';

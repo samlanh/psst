@@ -625,7 +625,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'service_type'=>0,
 					'end_date'	=>date('Y-m-d'),
 					'service'	=>'',
-					'nearlyPaymetySort'	=>1,
+					'nearlyPaymetySort'	=>2,
 					'periodDay'	=>7,
 				);
 				
@@ -644,20 +644,15 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-			$this->view->rsfooteracc = $frm->getFooterAccount();
 			$this->view->printFormat = $frm->getPrintPageFormat();
 		}catch(Exception $e){
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		$this->view->search = $search;
-		//$form=new Registrar_Form_FrmSearchInfor();
-		//$form->FrmSearchRegister();
-		//Application_Model_Decorator::removeAllDecorator($form);
-		//$this->view->form_search=$form;
 		
 		$form = new Application_Form_FrmCombineSearchGlobal();
-    	$frm = $form->FormNealyPaymentFilter();
+    	$frm = $form->FormNealyPaymentFilter($search);
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->form_search = $frm;
 		
@@ -1605,8 +1600,15 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 			$branch_id = empty($formdata['branch_id'])?null:$formdata['branch_id'];
 			$frm = new Application_Form_FrmGlobal();
 			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-			$this->view->rsfooteracc = $frm->getFooterAccount();
-			$this->view->printFormat = $frm->getPrintPageFormat();
+			
+			$paramFormat = array(
+				'pageSize'=>'A4 landscape',
+				'marginTop'=>'0.6cm',
+				'marginRight'=>'0.5cm',
+				'marginBottom'=>'0.9cm',
+				'marginLeft'=>'0.5cm',
+			);
+			$this->view->printFormat = $frm->getPrintPageFormat($paramFormat);
 		
     	}catch (Exception $e){
     		Application_Form_FrmMessage::message("Application Error");

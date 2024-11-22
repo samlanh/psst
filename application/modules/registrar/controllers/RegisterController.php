@@ -75,6 +75,8 @@ class Registrar_RegisterController extends Zend_Controller_Action {
       	$_data = $this->getRequest()->getPost();
       	try{
       		$db = new Registrar_Model_DbTable_DbRegister();
+				// // echo $_POST['study_year']['data-term-study'];
+				// exit();
       		$db->addRegister($_data);
       		if(!empty($_data['save_close'])){
       			//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/registrar/register");

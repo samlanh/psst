@@ -115,9 +115,7 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 			$result = $this->db->getLatestAcadmicYear();
 			$currentAcademic = $result['id'];
 		}
-
 		$_academic->setValue($currentAcademic);
-
 		return $_academic;
 	}
 	function getStatusSearch($_data=null){
@@ -1145,8 +1143,8 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		);
 		
 		$_arr =array(
-				1=>$this->tr->translate("STUDENT"),
 				2=>$this->tr->translate("SERVICE"),
+				1=>$this->tr->translate("STUDENT"),
 		);
 		$nearlyPaymetySort->setMultiOptions($_arr);
 		

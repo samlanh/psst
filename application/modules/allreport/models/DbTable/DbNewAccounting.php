@@ -36,7 +36,6 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 // (SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
 		$sql = "SELECT 
 				s.stu_id,
-				
 				s.stu_code,
 				stu_khname AS student_name,
 				CASE
@@ -45,15 +44,16 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 					WHEN primary_phone=3 THEN (SELECT f.motherPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
 					WHEN primary_phone=4 THEN (SELECT f.guardianPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
 				END tel,
-				
 				dg.stop_type AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
 				(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
 				dg.grade as gradeId,
 				dg.feeId,
 				vpm.paymentList,
+				vpm.payment_term,
 				vpm.stpaymentType,
 				vpm.discountCode,
+				vpm.discountValue,
 				(SELECT SUBSTRING_INDEX(installmentOrdering,',',1) AS installmentOrdering FROM `rms_startdate_enddate` WHERE id=vpm.termPaidStartId) as startTerm
 			  FROM 
 				 rms_student AS s
@@ -64,6 +64,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 
 			  WHERE
 			   	s.status=1
+				AND dg.is_maingrade=1
 				AND s.customer_type=1
 				";
 		$where = "";// 

@@ -114,44 +114,36 @@ table.tb-footer tr.style-head {
 		</form>
 	<div class="card-body">
 		<div id="divPrint">
+			<!-- <link rel="stylesheet" media="print" href="<?php echo $base_url; ?>css/print.css" /> -->
 			<style>
-				#footer{display: none;}
-					table.content-data {page-break-inside:auto; font-family:'Times New Roman','Khmer OS Battambang'; }
-					tr.content-data{ page-break-inside:avoid; page-break-after:auto; }
-					#header {
-					  display: table-header-group;
-					  page-break-inside:avoid; page-break-after:auto;
-					}	
-					td{ padding: 1px !important;}
-					tr.line td{ border-bottom: 2px solid #000;padding-top: 5px; }
 					table.content-data{
 						border-collapse:collapse;
 						width:100%;
 						border:1px solid #000; 
 						font-family:'Times New Roman','Khmer OS Battambang';
-						font-size:11px;
+						font-size:10px;
 						white-space: nowrap;
 						margin:0 auto;
 						color:#000;
 						margin:0 auto;
 					}
 					table.content-data  tr.style-head {
-					   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 22px; 
-						background: #CCD9FF;
-						text-align: center;
+					   line-height: 22px; 
+					   padding:1px 0px; 
+					   white-space: nowrap;
+					   background: #CCD9FF;
+					   text-align: center;
 					}
 					table.content-data tr td{
 						padding: 2px;
-					}
-					table.content-data tr.style-rowdata {
 						font-size:11px; 
-						height: 23px;
 					}
+				
 					.greycolor{background-color:#dddd;}
 					.right{text-align: right;}
 					tr.noborder{ border: 1px solid #fff;border-top: 1px solid #000;}
 					td.btmborder{border-bottom: 2px solid #000;font-weight:bold;}
-					.fixedwidth td{width: 50px;}
+					.fixedwidth td{width: 40px;}
 					.width-contact{width:150px;word-break: break-all;white-space:normal;}
 					.widthstudent{width: 150px; white-space:pre-line;}
 					
@@ -163,39 +155,27 @@ table.tb-footer tr.style-head {
 						width: 100px;
 						display: block;
 					}
-					.widthCol-px-30{
-						width: 30px !important;
-					}
+					
 					.widthCol-px-40{
 						width: 40px !important;
 					}
 					.widthCol-px-50{
 						width: 50px !important;
 					}
-					.widthCol-px-60{
-						width: 60px !important;
-					}
 					.widthCol-px-70{
 						width: 70px !important;
 					}
-					.widthCol-px-100{
-						width: 100px !important;
-					}
-					.widthCol-px-120{
-						width: 120px !important;
-					}
-					@media print {
+					@media print { 
 						<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 						
-					}
+					 }
 				</style>	
 			<table  style="background:#fff; margin: 0 auto; ;white-space: nowrap;width: 100%">
 				<tr>
 					<td colspan="3"><?php echo $this->rsheader;?></td>
 				</tr>
 				<tr>
-					<td width="15%" align="center">
-					</td>
+					<td width="15%" align="center"></td>
 					<td width="70%" align="center">
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';">Student Payment Report</span><br />
 						<span style="color:#000; font-size: 12px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblreportType"></label><br /></span>
@@ -205,15 +185,13 @@ table.tb-footer tr.style-head {
 				</tr>
 				<tr>
 					<td colspan="3" id="exportExcel">
-					<table class="content-data" border="1">
+						<table class="content-data" border="1">
 								<thead>
 									<tr class="style-head" align="center">
 										<td rowspan="2">No.</td>
-										<td rowspan="2">Branch</td>
 										<td rowspan="2">Student Id</td>
 										<td class="widthCol-px-70" rowspan="2">Student</td>
 										<td class="widthCol-px-70" rowspan="2">Phone Number</td>
-										<td class="widthCol-px-50" rowspan="2">Student Type</td>
 										<td rowspan="2">Status</td>
 										<td rowspan="2">Grade</td>
 										<td rowspan="2">Registration</td>
@@ -225,14 +203,14 @@ table.tb-footer tr.style-head {
 										<td colspan="2">Term4</td>
 									</tr>
 									<tr class="style-head fixedwidth" align="center">
-										<td class="widthCol-px-70" >Date</td>
-										<td class="widthCol-px-70" >Amount</td>
-										<td class="widthCol-px-70" >Date</td>
-										<td class="widthCol-px-70" >Amount</td>
-										<td class="widthCol-px-70" >Date</td>
-										<td class="widthCol-px-70" >Amount</td>
-										<td class="widthCol-px-70" >Date</td>
-										<td class="widthCol-px-70" >Amount</td>
+										<td>Date</td>
+										<td>Amount</td>
+										<td>Date</td>
+										<td>Amount</td>
+										<td>Date</td>
+										<td>Amount</td>
+										<td>Date</td>
+										<td>Amount</td>
 									</tr>
 								</thead>
 								<?php 
@@ -255,11 +233,9 @@ table.tb-footer tr.style-head {
 								?>
 								<tr class="style-rowdata hover" align="center">
 									<td><?php echo $num+=1; ?></td>
-									<td align="left"><?php echo $rs['branch_name']; ?></td>
 									<td align="left"><?php echo $rs['stu_code']; ?></td>
 									<td align="left"><span class="widthCol-px-70"><?php echo $rs['student_name']; ?></span></td>
 									<td align="left"><span class="widthCol-px-70 text-truncate"><?php echo $rs['tel']; ?></span></td>
-									<td align="left"><span class="widthCol-px-50 text-truncate"><?php echo $rs['studentType']; ?></span></td>
 									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
 									<td><?php echo $rs['grade']; ?></td>
 									<td><?php echo $rs['registrationDate']; ?></td>
@@ -287,11 +263,12 @@ table.tb-footer tr.style-head {
 									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/y',strtotime($resultPayment['periodDate4'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment4']!='')?number_format($resultPayment['payment4'],2):''; ?></td>
 								</tr>
+								
 								<?php
 								}}
 								?>
 								<tr class="noborder">
-									<td colspan="12"></td>
+									<td colspan="10"></td>
 									<td class="right btmborder"><?php echo number_format($totalTerm1, 2); ?></td>
 									<td></td>
 									<td class="right btmborder"><?php echo number_format($totalTerm2, 2); ?></td>
@@ -339,7 +316,6 @@ table.tb-footer tr.style-head {
 									
 									$strColhead.='</tr>';
 									$strColVal.='</tr>';
-									
 										
 									echo $strSubTable;
 								}

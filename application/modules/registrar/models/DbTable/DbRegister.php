@@ -304,6 +304,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				);
 				$where="student_id=".$data['old_stu'];
 				$this->update($arr,$where);
+
+				$result = $gdb->getFeeStudyinfoByIdGloable($data['study_year']);
+				$academicYearId = empty($result) ? '' : $result['academicYearId'];
 				
 				$arr=array(
 					'branch_id'		=> $data['branch_id'],
@@ -325,6 +328,7 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'create_date'	=> $paid_date,
 					'user_id'		=> $this->getUserId(),
 					'academic_year'	=> $data['study_year'],
+					'academicYearId'=> $academicYearId,
 					'paystudent_type'=>$rs_stu['is_stu_new'],//
 					'group_id'		=> empty($data['groupId']) ? 0 : $data['groupId'],
 					'degree'		=> $rs_stu['degree'],
@@ -332,7 +336,9 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					'degree_culture'=> $rs_stu['calture'],
 					'is_current'=> $data['balance_due']>0?1:0,//1 ជំពាក់
 				);
-				$paymentid = $this->insert($arr);
+				$paymentid = $this->insert($arr);//inser to payment
+
+				
 		
 				if($data['student_type']==1 AND $data['customer_type']==1){ // only old_student can have credit_memo
 					if(!empty($data['credit_memo_id'])){

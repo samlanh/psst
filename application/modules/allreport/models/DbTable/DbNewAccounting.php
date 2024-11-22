@@ -32,10 +32,11 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 			$viewName = " v_studentnapfeepaid";
 			$condiontion = " AND dg.itemType=2 AND dg.grade=360 ";
 		 }
-
+//(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,
+// (SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
 		$sql = "SELECT 
 				s.stu_id,
-				(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,
+				
 				s.stu_code,
 				stu_khname AS student_name,
 				CASE
@@ -44,7 +45,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 					WHEN primary_phone=3 THEN (SELECT f.motherPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
 					WHEN primary_phone=4 THEN (SELECT f.guardianPhone FROM rms_family f WHERE f.id=s.familyId LIMIT 1)
 				END tel,
-				(SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
+				
 				dg.stop_type AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
 				(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
@@ -81,6 +82,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['academic_year'])){
 			$where.= " AND dg.academic_year = ".$search['academic_year'];
+			$where.= " AND vpm.academicYearId = ".$search['academic_year'];
 		}
 		if(!empty($search['degree'])){
 			$where.= " AND dg.degree = ".$search['degree'];

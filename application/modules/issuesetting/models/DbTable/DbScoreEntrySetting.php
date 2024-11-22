@@ -24,6 +24,7 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
 					WHEN s.examType = 2 THEN '$semester'
 				END AS examType
 				,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.academicYear LIMIT 1) AS academicYear	
+				,(SELECT GROUP_CONCAT(i.shortcut) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,s.degreeId) LIMIT 1) AS degreeList
 				,s.examFromDate
 				,s.`examEndDate`
 				,s.fromDate
@@ -54,6 +55,7 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
     	if($search['status_search']>-1){
     		$where.= " AND s.status = ".$db->quote($search['status_search']);
     	}
+    	$where.=$dbp->getDegreePermission('s.degreeId');
     	$where.=$dbp->getAccessPermission('s.branchId');
     	return $db->fetchAll($sql.$where.$orderby);
     }

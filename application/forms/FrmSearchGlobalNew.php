@@ -1176,6 +1176,29 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		$periodDay->setValue($this->request->getParam('periodDay'));	
 		return $periodDay;
 	}
+	
+	function getCalendarTypeSearch($_data=null){
+		$calendarType = new Zend_Dojo_Form_Element_FilteringSelect("calendarType");
+		$calendarType->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		$_arr =array(
+				0=>$this->tr->translate("ALL"),
+				1=>$this->tr->translate("HOLIDAY"),
+				2=>$this->tr->translate("SCHOOL_EVENT"),
+				3=>$this->tr->translate("EXAMINATION"),
+				4=>$this->tr->translate("COMPETITION"),
+		);
+		$calendarType->setMultiOptions($_arr);
+		
+		$calendarType->setValue($this->request->getParam('calendarType'));	
+		return $calendarType;
+	}
 
 	
 	

@@ -143,6 +143,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						COALESCE(DATE_FORMAT(fam.guardianDob, '%d-%m-%Y'),'') AS guardianDobFormat,
 						
 						g.branch_id AS branchId,
+						gds.degree,
 						gds.group_id,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
 						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
@@ -1849,12 +1850,21 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	public function getCalendarHolidayEveryYear($search){
     		$db = $this->getAdapter();
     		try{
+    			
+				$typeUser = empty($search['typeUser'])?0:$search['typeUser'];
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 		    	$title="title";
 		    	
 		    	if ($currentLang==2){
 		    		$title="title_en";
 		    	}
+				if($typeUser==1){ //student
+					$search["stu_id"] = empty($search['userId'])? 0 :$search['userId'];
+					$stuInfo = $this->getStudentInformation($search);
+					if(!empty($stuInfo['value'][0])){
+					}
+					$search["degree"] = empty($stuInfo['value'][0]['degree'])?0:$stuInfo['value'][0]['degree'];
+				}
 		    	
 				$month = date('m',strtotime($search['mothHoliday']));
 				$year_month = date('Y-m',strtotime($search['mothHoliday']));
@@ -1869,7 +1879,10 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							mc.`active` =1 
 							AND (( mc.`type_holiday` =1  AND DATE_FORMAT(mc.date, '%m')= ".$month.") 
     			 				OR  (mc.`type_holiday` =2  AND DATE_FORMAT(mc.date, '%Y-%m')='".$year_month."'))";
-    			 $sql.=" ORDER BY DATE_FORMAT(mc.date, '%d') ASC ";
+    			if(!empty($search["degree"])){
+					$sql.=" AND FIND_IN_SET('" . $search["degree"] . "', mc.dept) ";
+				}
+				$sql.=" ORDER BY DATE_FORMAT(mc.date, '%d') ASC ";
     			 
     			 		$res = $db->fetchAll($sql);
 	    				$result = array(

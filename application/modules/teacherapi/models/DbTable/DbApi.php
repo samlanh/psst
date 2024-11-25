@@ -112,8 +112,43 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     function generateToken($row){
     	$db = $this->getAdapter();
     	try{
+			
+			$token = $row['mobileToken'];
     		$this->_name = "mobile_mobile_token";
-    		
+			if(!empty($row['mobileToken'])){
+				$token = $row['mobileToken'];
+				$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' LIMIT 1";
+				$rsid = $db->fetchOne($sql);
+				if(!empty($rsid)){
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					//$where ='id= '.$rsid;
+					$where ="token= '".$token."'";
+					$this->update($_arr, $where);
+				}else{
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					
+					$_arr['date'] = date("Y-m-d H:i:s");
+					$this->_name = "mobile_mobile_token";
+					$this->insert($_arr);
+				}
+			}
+			
+			/*
+    		$this->_name = "mobile_mobile_token";
     		$token = $row['mobileToken'];
     		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' AND stu_id=0 LIMIT 1";
     		$rsid = $db->fetchOne($sql);
@@ -156,7 +191,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					}
 					
 	    		}
-    		}
+    		}*/
     		
     		return $token;
     	}catch (Exception $e){
@@ -2184,7 +2219,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql="
 				SELECT
 					g.id AS groupId
-					,(SELECT br.$branch FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
+					,(SELECT br.$branch FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchName
 					,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
 					,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameEn
 					,(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen

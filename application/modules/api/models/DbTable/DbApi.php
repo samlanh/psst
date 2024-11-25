@@ -999,9 +999,43 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     function generateToken($row){
     	$db = $this->getAdapter();
     	try{
+			
+			$token = $row['mobileToken'];
     		$this->_name = "mobile_mobile_token";
+			if(!empty($row['mobileToken'])){
+				$token = $row['mobileToken'];
+				$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' LIMIT 1";
+				$rsid = $db->fetchOne($sql);
+				if(!empty($rsid)){
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					//$where ='id= '.$rsid;
+					$where ="token= '".$token."'";
+					$this->update($_arr, $where);
+				}else{
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					
+					$_arr['date'] = date("Y-m-d H:i:s");
+					$this->_name = "mobile_mobile_token";
+					$this->insert($_arr);
+				}
+			}
     		
-    		$token = $row['mobileToken'];
+    		/*
+			$token = $row['mobileToken'];
     		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' AND stu_id=0 LIMIT 1";
     		$rsid = $db->fetchOne($sql);
     		if(!empty($rsid)){
@@ -1062,6 +1096,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					
 	    		}
     		}
+			
+			*/
     		
     		return $token;
     	}catch (Exception $e){
@@ -1905,6 +1941,39 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" WHERE t.token ='$token' LIMIT 1 ";
 			return $db->fetchRow($sql);
 		}
+		
+		function checkTimeSecondBeforeAddToken($token){
+			$db = $this->getAdapter();
+			$sql ="
+				SELECT 
+					t.* 
+				FROM mobile_mobile_token AS t 
+				WHERE t.token ='$token'
+				ORDER BY gtmp.`id` DESC LIMIT 1 
+			";
+			$row = $db->fetchRow($sql);
+			
+			if(!empty($row)){
+				$secondLimit="10";
+				$createDate = $row["date"];
+				$newCreateDate = new DateTime($createDate);
+				$newCreateDate->add(new DateInterval('PT'.$secondLimit.'S')); 
+				$createDateNew = $newCreateDate->format('Y-m-d H:i:s');
+				
+				$todayDate = new DateTime();
+				$timeToday = $todayDate->format('Y-m-d H:i:s');
+				
+				$timeToday = date_create($timeToday);
+				$timeCreateDateNew = date_create($createDateNew);
+				
+				if($timeToday > $timeCreateDateNew){
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
+	
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{
@@ -1913,12 +1982,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$check = $this->checkTokenDevice($_data['token']);
 					$this->_name='mobile_mobile_token';
 					if(empty($check)){
-						$array = array(
-							'token'	=>$_data['token'],
-							'device_type'=> $_data['device_type'],
-							'date'	=>date('Y-m-d H:i:s'),
-						);
-						return $this->insert($array);
+						$checkingSecond= $this->checkTimeSecondBeforeAddToken($_data['token']);
+						if(empty($checkingSecond)){
+							$array = array(
+								'token'	=>$_data['token'],
+								'device_type'=> $_data['device_type'],
+								'date'	=>date('Y-m-d H:i:s'),
+							);
+							return $this->insert($array);
+						}
 					}
 				}
 				

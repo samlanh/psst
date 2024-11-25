@@ -311,12 +311,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$userId = empty($_data['userId'])?0:$_data['userId'];
 			
+			$annual='Annual';
 			$colunmname='title_en';
 			$label = 'name_en';
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$subjectTitle='subject_titleen';
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmname='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -327,12 +329,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql="
 				SELECT 
 					grd.*
+					,CONCAT(grd.academicYear,COALESCE(grd.examType,0),COALESCE(grd.forSemester,0),COALESCE(grd.forMonth,0)) AS rowMonthlyScore
 					,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
 					,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
 					,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 					,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
 					,CASE
 						WHEN grd.examType = 2 THEN grd.forSemester
+						WHEN grd.examType = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
 					END AS forMonthTitle
 					,g.group_code AS  groupCode
@@ -1954,7 +1958,33 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	
+	public function getViewListByType($search){
+		$db=$this->getAdapter();
+		
+		$currentLang = empty($search['currentLang']) ? 1:$search['currentLang'];
+		$viewType = empty($search['viewType']) ? 0:$search['viewType'];
+		
+		$label = "name_en";
+		if($currentLang==1){// khmer
+			$label = "name_kh";
+		}
+		$sql="
+			SELECT
+				v.key_code as id,
+				v.$label as name
+			FROM
+				rms_view as v
+			WHERE
+				v.status = 1
+				AND v.type = $viewType
+				
+			";
+		if($viewType==9){
+			$sql.=" AND v.key_code NOT IN (0,5,6) ";
+		}
+		$sql.=" ORDER BY v.key_code ASC ";
+		return $db->fetchAll($sql);
+	}
 	public function getFormOptionSelect($_data){
 		$db = $this->getAdapter();
 		try{
@@ -1978,7 +2008,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $this->getAllTeachingDegreeByTeacher($_data);
 			}else if($getControlType=="ratingOption"){
 				$row = $this->getRatingOption($_data);
-			
+			}else if($getControlType=="groupStatus"){
+				$_data["viewType"] = 9;
+				$row = $this->getViewListByType($_data);
 			}
 			
 			$result = array(
@@ -2224,12 +2256,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$date->modify('+7 day');
 			$nextDate = $date->format($format);
 			
+			$annual='Annual';
 			$colunmName='title_en';
 			$label = 'name_en';
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$scoreTitle = "title_score_en";
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -2244,9 +2278,11 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sc.`exam_type` AS examType
 					,sc.`for_month` AS forMonth
 					,sc.`for_semester` AS forSemester
+					,sc.`date_input` AS entryDate
 					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =sc.`exam_type` LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN sc.exam_type = 2 THEN sc.for_semester
+						WHEN sc.exam_type = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					,g.id AS groupId
@@ -2337,7 +2373,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$scoreTitle = "title_score_en";
+			$annual='Annual';
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -2355,6 +2393,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =sc.`exam_type` LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN sc.exam_type = 2 THEN sc.for_semester
+						WHEN sc.exam_type = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					,g.id AS groupId
@@ -2635,12 +2674,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$userId = empty($_data['userId'])?0:$_data['userId'];
 			
 			
+			$annual='Annual';
 			$colunmName='title_en';
 			$label = 'name_en';
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$scoreTitle = "title_score_en";
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -2659,6 +2700,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =sc.`exam_type` LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN sc.exam_type = 2 THEN sc.for_semester
+						WHEN sc.exam_type = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					,g.id AS groupId
@@ -2666,6 +2708,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,g.degree AS degreeId
 					,g.academic_year AS academicYearId
 					,g.is_pass AS groupProcess
+					,(SELECT $label FROM rms_view AS v WHERE v.type=9 AND v.key_code=g.is_pass LIMIT 1) as groupProcessTitle
 					,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
 					,(SELECT i.$colunmName FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle

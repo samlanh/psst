@@ -57,6 +57,9 @@ class Teacherapi_IndexController extends Zend_Controller_Action
 			}else if ($GetData['url']=="optionRating"){
 				$GetData['getControlType'] = "ratingOption";
     			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionGroupStatus"){
+				$GetData['getControlType'] = "groupStatus";
+    			$_dbAction->getFormOptionSelectAction($GetData);
 				
 			}else if ($GetData['url']=="countingClass"){
     			$_dbAction->getCountingClassAction($GetData);

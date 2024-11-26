@@ -10,6 +10,7 @@
 	$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
 	
 ?>
+
 <style type="text/css">
 svg {
     position: relative !important;
@@ -631,16 +632,20 @@ svg {
 	</div>	
 	
 </div>
+
 <link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
 <script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.min.js"></script>
 <script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/raphael/raphael-min.js"></script>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
+
 <script type="text/javascript">
+	dojo.require("dojo.NodeList");
+	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
+
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	//var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-	
+	var grade_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 
 		new dijit.form.FilteringSelect({
@@ -659,6 +664,7 @@ svg {
 		}, "group");
 		
 		new dijit.form.FilteringSelect({
+			store: grade_store,
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
 			required: false,                        
@@ -667,6 +673,7 @@ svg {
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
 			onChange: function() {  
+				getAllGroupByBranch();
 			}
 		}, "grade");
 
@@ -686,7 +693,8 @@ svg {
 		 branch_id.on('change', function(evt) {
 			 getAllGroupByBranch();
 			
-	    });
+	     });
+
 		var teacher = dijit.byId('teacher');
 		teacher.on('change', function(evt) {
 			getAllSubject();
@@ -758,7 +766,10 @@ svg {
 			handleAs:"json",
 			load: function(data) {
 			    group_store  = getDataStorefromJSON('id','name', data);
-			    dijit.byId('group').set('store',group_store);   
+			    dijit.byId('group').set('store',group_store);
+				<?php if (!empty($this->search['group'])){?>
+					dijit.byId('group').attr('value','<?php echo $this->search['group']?>');  
+				<?php }?>   
 			   
 			},
 			error: function(err) {
@@ -767,25 +778,29 @@ svg {
 	}
 	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){
-		getAllGroupByBranch();  
 		dept_id = dijit.byId('degree').get('value');
 		if(dept_id=='' || dept_id==-1){return false;}
-			dojo.xhrPost({
-				url:url_dept,
-				content:{
-					'dept_id':dept_id,
-					'noaddnew':1
-					},
-				handleAs:"json",
-				load: function(data) {
-					dijit.byId('grade').attr('value','');
-					grade_store  = getDataStorefromJSON('id','name', data);
-				    dijit.byId('grade').set('store',grade_store); 
-				   
+		dojo.xhrPost({
+			url:url_dept,
+			content:{
+				'dept_id':dept_id,
+				'noaddnew':1
 				},
-				error: function(err) {
-				}
-			});
+			handleAs:"json",
+			load: function(data) {
+				//alert(data);
+				dijit.byId('grade').attr('value','');
+				grade_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('grade').set('store',grade_store); 
+				<?php if (!empty($this->search['grade'])){?>
+				dijit.byId('grade').attr('value','<?php echo $this->search['grade']?>');  
+				<?php }?> 
+				
+			},
+			error: function(err) {
+			}
+		});
+		getAllGroupByBranch();  
 	}
 
 	<?php foreach($fullArrayByTeacher as $fullarr){ ?>

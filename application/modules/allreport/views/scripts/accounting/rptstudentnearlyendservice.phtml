@@ -116,7 +116,8 @@
 					.solidborder-rightdouble{ border-right:2px solid #000;}
 					.solidborder-topdouble{ border-top:2px solid #000;}
 					.solidborder-bottomdouble{ border-bottom:2px solid #000;}
-
+					
+					.solidborder-top{ border-top:1px solid #000;}
 					tr td.solidborderleft{
 						border-left:1px solid #000;
 					}
@@ -248,17 +249,20 @@
 										}
 										
 										
+										$classTopRow="";
+										$classBottomRow="";
 										$stringFront="";
 										if ($studentId != $row['studentId']) {
 											$i++;
 											$strFilter =  (string) $row['studentId'];
 											$arrRow = $this->row;
 											$resultOFStudent = array_filter($arrRow, function ($item) use ($strFilter) {
-												if (stripos($item['studentId'], $strFilter) !== false) {
+												if ($item['studentId'] == $strFilter) {
 													return $item;
 												}
 												return;
 											});
+											
 											$amtRecord = count($resultOFStudent);
 											$amtRecord = ($amtRecord ==0) ? 1 : $amtRecord;
 											$stuName = $row['stuNameKh'];
@@ -276,11 +280,14 @@
 													<span class="w-px-120 wrapcontent">'.$row['tel'].'</span>
 												</td>
 											';
+											if($key>0){
+												$classTopRow="solidborder-top";
+											}
 										}
 										$row['paidamount'] = empty($row['paidamount']) ? 0 : $row['paidamount'];
 										$totalPmt = $totalPmt+$row['paidamount'];
 									?>
-									<tr class="btmdothborder solidborder-leftdouble solidborder-rightdouble hover context-menu-one" <?php if (!empty($row['pmtDetailId'])) { ?> oncontextmenu="setrowdata(<?php echo $row['pmtDetailId']; ?>,<?php echo $row['paymentId']; ?>,<?php echo $row['studentId']; ?>);return false;" <?php } ?>  style="white-space:nowrap;">
+									<tr class="<?php echo $classTopRow." ".$classBottomRow;?> btmdothborder solidborder-leftdouble solidborder-rightdouble hover context-menu-one" <?php if (!empty($row['pmtDetailId'])) { ?> oncontextmenu="setrowdata(<?php echo $row['pmtDetailId']; ?>,<?php echo $row['paymentId']; ?>,<?php echo $row['studentId']; ?>);return false;" <?php } ?>  style="white-space:nowrap;">
 										<?php echo $stringFront; ?>	
 										<td class="leftdothborder" data-label="<?php echo $tr->translate("Service"); ?>" align="center" >
 											<span class="bold text-truncate w-px-200 service_<?php echo $row['pmtDetailId']; ?>">

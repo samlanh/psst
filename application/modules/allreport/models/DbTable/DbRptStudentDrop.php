@@ -30,6 +30,7 @@ class Allreport_Model_DbTable_DbRptStudentDrop extends Zend_Db_Table_Abstract
 					(SELECT $str FROM `rms_view` WHERE `rms_view`.`type`=5 and `rms_view`.`key_code`=stdp.`type`LIMIT 1 ) as type,
 					(SELECT g.group_code FROM `rms_group` AS g WHERE g.id=stdp.group LIMIT 1 ) AS group_name,
 					stdp.note,stdp.date_stop,stdp.reason,
+					(SELECT $str from `rms_view` where `rms_view`.`type`=43 and `rms_view`.`key_code`=stdp.reasonId LIMIT 1) AS reasonTitle,
 					(SELECT $str from `rms_view` where `rms_view`.`type`=6 and `rms_view`.`key_code`=`stdp`.`status` LIMIT 1) AS status
 				 FROM 
 				 	rms_student_drop as stdp,

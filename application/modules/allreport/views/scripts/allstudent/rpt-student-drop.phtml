@@ -122,6 +122,7 @@ table.tb-footer tr.style-head {
 							<td scope="col" rowspan="2" ><?php echo $tr->translate("TYPE")?></td>
 							<td scope="col" rowspan="2"><?php echo $tr->translate("STOP_DATE")?></td>
 							<td scope="col" rowspan="2"><?php echo $tr->translate("REASON")?></td>
+							<td scope="col" rowspan="2"><?php echo $tr->translate("NOTE")?></td>
 						</tr>
 						<tr class="style-head">
 							<td scope="col"><?php echo $tr->translate("STUDENT_ID")?></td>
@@ -150,7 +151,8 @@ table.tb-footer tr.style-head {
 							<td data-label="<?php echo $tr->translate("SESSION");?>"><?php echo $row['session'];?></td>
 							<td data-label="<?php echo $tr->translate("TYPE");?>"><?php echo $row['type'];?></td>
 							<td data-label="<?php echo $tr->translate("STOP_DATE");?>"><?php echo date("d-m-Y",strtotime($row['date_stop']));?></td>
-							<td data-label="<?php echo $tr->translate("REASON");?>" style="padding: 5px; line-height:18px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;" ><?php echo $row['reason'];?></td>
+							<td data-label="<?php echo $tr->translate("REASON");?>"><?php echo $row['reasonTitle'];?></td>
+							<td data-label="<?php echo $tr->translate("NOTE");?>" style="padding: 5px; line-height:18px; text-align: left; width: 200px;min-width: 200px;white-space: normal; overflow-wrap: break-word;" ><?php echo $row['reason'];?></td>
 						</tr>
 					<?php }?>	
 					</table>	

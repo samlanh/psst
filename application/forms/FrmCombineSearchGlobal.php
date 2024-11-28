@@ -192,4 +192,24 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		));
 		return $this;
 	}
+	
+	function FormSearchCalendar($search=null)
+	{
+		$frm = new Application_Form_FrmSearchGlobalNew();
+		$textSearch = $frm->controlTextSearch($search);
+		
+		$startDateFilter = $frm->getStartDateSearch($search);
+		$endDateFilter = $frm->getEndDateSearch($search);
+		$calendarTypeFilter = $frm->getCalendarTypeSearch($search);
+		$statusFilter = $frm->getStatusSearch($search);
+
+		$this->addElements(array(
+			$textSearch,
+			$startDateFilter,
+			$endDateFilter,
+			$calendarTypeFilter,
+			$statusFilter,
+		));
+		return $this;
+	}
 }

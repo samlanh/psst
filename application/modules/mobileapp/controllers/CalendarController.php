@@ -22,7 +22,7 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 			else{
 				$search = array(
 						'adv_search' => '',
-						'search_status' => -1,
+						'status' => -1,
 						'start_date'=> date('Y-m-d'),
 						'end_date'=>date('Y-m-d'));
 			}
@@ -30,7 +30,7 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","AMOUNT_DAY","START_DATE","END_DATE","STATUS");
+			$collumns = array("TITLE","AMOUNT_DAY","START_DATE","END_DATE","EVENT","STATUS");
 			$link=array(
 					'module'=>'mobileapp','controller'=>'calendar','action'=>'edit',
 			);
@@ -40,8 +40,8 @@ class Mobileapp_CalendarController extends Zend_Controller_Action
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 	
-		$frm = new Application_Form_FrmSearch();
-		$frm = $frm->FrmSearch();
+		$frm = new Application_Form_FrmCombineSearchGlobal();
+		$frm = $frm->FormSearchCalendar();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm = $frm;
     }

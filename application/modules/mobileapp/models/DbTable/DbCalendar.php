@@ -9,20 +9,33 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 	}
 	function getAllCalendar($search){
 		$db=$this->getAdapter();
+		
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$from_date =(empty($search['start_date']))? '1': "mba.start_date >= '".$search['start_date']."'";
 		$to_date = (empty($search['end_date']))? '1': "mba.start_date <= '".$search['end_date']."'";
 		$where = " AND 
 		CASE WHEN mba.type_holiday = 1 
 		THEN  mba.type_holiday = 1 
 		ELSE ".$from_date." AND ".$to_date." END ";	
-		$sql="SELECT mba.keycode as id
-				,mba.title,mba.amount_day
+		$sql="SELECT 
+				mba.keycode as id
+				,SUBSTRING(mba.title, 1, 90) AS title
+				,mba.amount_day
 				,mba.start_date
 				,mba.end_date
+				,CASE 
+					WHEN mba.calendarType =2 THEN '".$tr->translate("SCHOOL_EVENT")."'
+					WHEN mba.calendarType =3 THEN '".$tr->translate("EXAMINATION")."'
+					WHEN mba.calendarType =4 THEN '".$tr->translate("COMPETITION")."'
+					ELSE '".$tr->translate("HOLIDAY")."'
+				END as calendarTypeTitle
 				,mba.active as status
 			FROM $this->_name AS mba WHERE 1";
-		if($search['search_status']>-1){
-			$where.= " AND mba.active = ".$search['search_status'];
+		if($search['status']>-1){
+			$where.= " AND mba.active = ".$search['status'];
+		}
+		if(!empty($search['calendarType'])){
+			$where.= " AND mba.calendarType = ".$search['calendarType'];
 		}
 		if(!empty($search['adv_search'])){
 			$s_where=array();
@@ -71,7 +84,7 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 	            	
 	            	$status=1;
 	            	if (empty($data['add'])){
-	            		$status=$data['status'];
+	            		$status= empty($data['status']) ? 0 : 1;
 	            	}
 	            	
 	            	for($i=1;$i<=$data['amount_day'];$i++){
@@ -98,7 +111,8 @@ class Mobileapp_Model_DbTable_DbCalendar extends Zend_Db_Table_Abstract
 							'status' => 1,		
 							'dept' => $dept,	
 			            	'keycode' => $lastId,
-			            		'type_holiday' => $data['type_holiday'],
+							'type_holiday' => $data['type_holiday'],
+							'calendarType' => $data['calendarType'],
 			            );
 						$_arr['create_date']=date("Y-m-d H:i:s");
 			      	  	$this->insert($_arr);

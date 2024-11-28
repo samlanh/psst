@@ -112,8 +112,43 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     function generateToken($row){
     	$db = $this->getAdapter();
     	try{
+			
+			$token = $row['mobileToken'];
     		$this->_name = "mobile_mobile_token";
-    		
+			if(!empty($row['mobileToken'])){
+				$token = $row['mobileToken'];
+				$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' LIMIT 1";
+				$rsid = $db->fetchOne($sql);
+				if(!empty($rsid)){
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					//$where ='id= '.$rsid;
+					$where ="token= '".$token."'";
+					$this->update($_arr, $where);
+				}else{
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					
+					$_arr['date'] = date("Y-m-d H:i:s");
+					$this->_name = "mobile_mobile_token";
+					$this->insert($_arr);
+				}
+			}
+			
+			/*
+    		$this->_name = "mobile_mobile_token";
     		$token = $row['mobileToken'];
     		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' AND stu_id=0 LIMIT 1";
     		$rsid = $db->fetchOne($sql);
@@ -156,7 +191,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					}
 					
 	    		}
-    		}
+    		}*/
     		
     		return $token;
     	}catch (Exception $e){
@@ -311,12 +346,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$userId = empty($_data['userId'])?0:$_data['userId'];
 			
+			$annual='Annual';
 			$colunmname='title_en';
 			$label = 'name_en';
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$subjectTitle='subject_titleen';
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmname='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -327,12 +364,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql="
 				SELECT 
 					grd.*
+					,CONCAT(grd.academicYear,COALESCE(grd.examType,0),COALESCE(grd.forSemester,0),COALESCE(grd.forMonth,0)) AS rowMonthlyScore
 					,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
 					,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh
 					,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameEn
 					,(SELECT $label FROM `rms_view` WHERE TYPE=19 AND key_code =grd.examType LIMIT 1) as examTypeTitle
 					,CASE
 						WHEN grd.examType = 2 THEN grd.forSemester
+						WHEN grd.examType = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=grd.forMonth  LIMIT 1) 
 					END AS forMonthTitle
 					,g.group_code AS  groupCode
@@ -712,6 +751,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.$label FROM rms_view AS v WHERE v.type=4 AND v.key_code = g.`session` LIMIT 1) AS `sessionName`
 					,(SELECT gr.$grade FROM rms_itemsdetail AS gr WHERE gr.id=g.grade AND gr.items_type=1 LIMIT 1) AS gradeTitle
 					,(SELECT dg.$degree FROM rms_items AS dg WHERE dg.id=g.degree AND dg.type=1 LIMIT 1) AS degreeTitle
+					
 				
 			";
 			$sqlColScoreValue=",'0' AS scoreValue
@@ -755,10 +795,12 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				
 				if($_data['forEvaluationInfo']=="1"){//Evaluation
 					$stringWhere = " AND ass.scoreId = $scoreId ";
+					$stringWherePrevious = " AND ass.scoreId < $scoreId ";
 					if(!empty($_data['assessmentId'])){
 						$stringWhere = " AND ass.id = ".$_data['assessmentId'];
 					}
 					$sqlColScoreValue.="
+						,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWherePrevious AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id ORDER BY assD.teacherComment DESC LIMIT 1),'') AS previousTeacherComment
 						,COALESCE((SELECT assD.teacherComment FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id ORDER BY assD.teacherComment DESC LIMIT 1),'') AS teacherComment
 						,COALESCE((SELECT assD.commentId FROM `rms_studentassessment` AS ass,`rms_studentassessment_detail` AS assD WHERE ass.id = assD.assessmentId $stringWhere AND gds.stu_id=assD.studentId AND ass.groupId = gds.group_id LIMIT 1),'0') AS isEvaluated
 					";
@@ -1951,7 +1993,33 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		return $db->fetchAll($sql);
 	}
 	
-	
+	public function getViewListByType($search){
+		$db=$this->getAdapter();
+		
+		$currentLang = empty($search['currentLang']) ? 1:$search['currentLang'];
+		$viewType = empty($search['viewType']) ? 0:$search['viewType'];
+		
+		$label = "name_en";
+		if($currentLang==1){// khmer
+			$label = "name_kh";
+		}
+		$sql="
+			SELECT
+				v.key_code as id,
+				v.$label as name
+			FROM
+				rms_view as v
+			WHERE
+				v.status = 1
+				AND v.type = $viewType
+				
+			";
+		if($viewType==9){
+			$sql.=" AND v.key_code NOT IN (0,5,6) ";
+		}
+		$sql.=" ORDER BY v.key_code ASC ";
+		return $db->fetchAll($sql);
+	}
 	public function getFormOptionSelect($_data){
 		$db = $this->getAdapter();
 		try{
@@ -1975,7 +2043,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $this->getAllTeachingDegreeByTeacher($_data);
 			}else if($getControlType=="ratingOption"){
 				$row = $this->getRatingOption($_data);
-			
+			}else if($getControlType=="groupStatus"){
+				$_data["viewType"] = 9;
+				$row = $this->getViewListByType($_data);
 			}
 			
 			$result = array(
@@ -2140,10 +2210,16 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		try{
 			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
 			$userId = empty($_data['userId'])?0:$_data['userId'];
-			
+			$label = "name_en";
+			$branch = "branch_nameen";
+			if($currentLang==1){// khmer
+				$label = "name_kh";
+				$branch = "branch_namekh";
+			}
 			$sql="
 				SELECT
 					g.id AS groupId
+					,(SELECT br.$branch FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchName
 					,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameKh
 					,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = g.branch_id LIMIT 1) AS branchNameEn
 					,(SELECT b.school_nameen FROM rms_branch AS b WHERE b.br_id=g.branch_id LIMIT 1) AS schoolNameen
@@ -2157,6 +2233,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						ELSE '0'
 					END AS isMainTeacher
 					,g.is_pass AS groupProcess
+					,(SELECT $label FROM rms_view AS v WHERE v.type=9 AND v.key_code=g.is_pass LIMIT 1) as groupProcessTitle
 					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.itemType=1 AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
 					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
 					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
@@ -2214,12 +2291,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$date->modify('+7 day');
 			$nextDate = $date->format($format);
 			
+			$annual='Annual';
 			$colunmName='title_en';
 			$label = 'name_en';
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$scoreTitle = "title_score_en";
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -2234,9 +2313,11 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,sc.`exam_type` AS examType
 					,sc.`for_month` AS forMonth
 					,sc.`for_semester` AS forSemester
+					,sc.`date_input` AS entryDate
 					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =sc.`exam_type` LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN sc.exam_type = 2 THEN sc.for_semester
+						WHEN sc.exam_type = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					,g.id AS groupId
@@ -2327,7 +2408,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$scoreTitle = "title_score_en";
+			$annual='Annual';
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -2345,6 +2428,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =sc.`exam_type` LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN sc.exam_type = 2 THEN sc.for_semester
+						WHEN sc.exam_type = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					,g.id AS groupId
@@ -2357,9 +2441,9 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
 					
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
+					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`itemType` = 1 LIMIT 1  ) AS totalStudent
+					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`itemType` = 1 LIMIT 1 ) AS maleStudent
+					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`itemType` = 1 LIMIT 1 ) AS femaleStudent
 					,CASE
 						WHEN COALESCE((SELECT ass.issueDate FROM `rms_studentassessment` AS ass WHERE ass.scoreId = sc.`id`  LIMIT 1),NULL) IS NOT NULL
 							THEN (SELECT ass.issueDate FROM `rms_studentassessment` AS ass WHERE ass.scoreId = sc.`id`  LIMIT 1)
@@ -2383,7 +2467,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND g.`teacher_id` ='.$userId;
 			$sql.=' 
 					AND g.`is_use` = 1 
-					AND g.is_pass=2
+				
 					AND g.`status` =1
 					AND sc.`status` =1
 				';
@@ -2406,7 +2490,6 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}else if(!empty($_data['limitRecord'])){
 				$sql.=" LIMIT ".$_data['limitRecord'];
 			}
-			
 			
 			$row = $_db->fetchAll($sql);
 			
@@ -2626,12 +2709,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$userId = empty($_data['userId'])?0:$_data['userId'];
 			
 			
+			$annual='Annual';
 			$colunmName='title_en';
 			$label = 'name_en';
 			$branch = "branch_nameen";
 			$month = "month_en";
 			$scoreTitle = "title_score_en";
 			if ($currentLang==1){
+				$annual='ប្រចាំឆ្នាំ';
 				$colunmName='title';
 				$label = 'name_kh';
 				$branch = "branch_namekh";
@@ -2650,6 +2735,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT v.$label FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =sc.`exam_type` LIMIT 1) as forTypeTitle
 					,CASE
 						WHEN sc.exam_type = 2 THEN sc.for_semester
+						WHEN sc.exam_type = 3 THEN '".$annual."'
 						ELSE (SELECT $month FROM `rms_month` WHERE id=sc.for_month  LIMIT 1) 
 					END AS forMonthTitle
 					,g.id AS groupId
@@ -2657,6 +2743,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,g.degree AS degreeId
 					,g.academic_year AS academicYearId
 					,g.is_pass AS groupProcess
+					,(SELECT $label FROM rms_view AS v WHERE v.type=9 AND v.key_code=g.is_pass LIMIT 1) as groupProcessTitle
 					,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
 					,(SELECT i.$colunmName FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
@@ -2693,7 +2780,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$sql.=" AND g.is_pass =".$_data['groupProcess'];
 			}
 			$sql.="
-				ORDER BY ass.id DESC, g.id ASC
+				ORDER BY g.academic_year DESC,ass.id DESC, g.id ASC
 			";
 			
 			if(!empty($_data['LimitStart'])){

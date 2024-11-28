@@ -2501,3 +2501,7 @@ span.profileChar {
 	line-height: 22px;
     font-weight: bold;
 }
+
+.custom-control.custom-checkbox .custom-control-input {
+    height: 0;
+}

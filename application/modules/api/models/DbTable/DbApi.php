@@ -143,6 +143,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						COALESCE(DATE_FORMAT(fam.guardianDob, '%d-%m-%Y'),'') AS guardianDobFormat,
 						
 						g.branch_id AS branchId,
+						gds.degree,
 						gds.group_id,
 						CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,'')) AS name_englsih,
 						(SELECT $lbView from rms_view where type=2 and key_code=s.sex LIMIT 1) as genderTitle,
@@ -998,9 +999,43 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     function generateToken($row){
     	$db = $this->getAdapter();
     	try{
+			
+			$token = $row['mobileToken'];
     		$this->_name = "mobile_mobile_token";
+			if(!empty($row['mobileToken'])){
+				$token = $row['mobileToken'];
+				$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' LIMIT 1";
+				$rsid = $db->fetchOne($sql);
+				if(!empty($rsid)){
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					//$where ='id= '.$rsid;
+					$where ="token= '".$token."'";
+					$this->update($_arr, $where);
+				}else{
+					$row['id'] = empty($row['id']) ? 0 : $row['id'];
+					$row['deviceType'] = empty($row['deviceType']) ? 0 : $row['deviceType'];
+					$row['tokenType'] = empty($row['tokenType']) ? 0 : $row['tokenType'];
+					$_arr =array(
+    					'stu_id' 		=> $row['id'],
+    					'device_type' 	=> $row['deviceType'],
+    					'tokenType' 	=> $row['tokenType'],
+					);
+					
+					$_arr['date'] = date("Y-m-d H:i:s");
+					$this->_name = "mobile_mobile_token";
+					$this->insert($_arr);
+				}
+			}
     		
-    		$token = $row['mobileToken'];
+    		/*
+			$token = $row['mobileToken'];
     		$sql="SELECT id FROM mobile_mobile_token WHERE token='".$token."' AND stu_id=0 LIMIT 1";
     		$rsid = $db->fetchOne($sql);
     		if(!empty($rsid)){
@@ -1061,6 +1096,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					
 	    		}
     		}
+			
+			*/
     		
     		return $token;
     	}catch (Exception $e){
@@ -1789,7 +1826,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    			,CASE
 					   	WHEN $currentLang = 1 THEN c.title
 					   	WHEN $currentLang = 2 THEN c.title_en
-					END AS titleHoliday 
+					END AS titleHoliday
     			FROM `mobile_calendar` AS c
 				WHERE c.`active` =1 ";
     			if (!empty($search['type_holiday'])){
@@ -1849,12 +1886,21 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
     	public function getCalendarHolidayEveryYear($search){
     		$db = $this->getAdapter();
     		try{
+    			
+				$typeUser = empty($search['typeUser'])?0:$search['typeUser'];
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
 		    	$title="title";
 		    	
 		    	if ($currentLang==2){
 		    		$title="title_en";
 		    	}
+				if($typeUser==1){ //student
+					$search["stu_id"] = empty($search['userId'])? 0 :$search['userId'];
+					$stuInfo = $this->getStudentInformation($search);
+					if(!empty($stuInfo['value'][0])){
+					}
+					$search["degree"] = empty($stuInfo['value'][0]['degree'])?0:$stuInfo['value'][0]['degree'];
+				}
 		    	
 				$month = date('m',strtotime($search['mothHoliday']));
 				$year_month = date('Y-m',strtotime($search['mothHoliday']));
@@ -1863,12 +1909,16 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							  DATE_FORMAT(mc.date, '%d') AS holiday_day,
 							  DATE_FORMAT(mc.date, '%a') AS holiday_string,
 							  DATE_FORMAT(mc.date, '%m') AS holiday_month
+							  ,mc.calendarType
 					   FROM `mobile_calendar` AS mc 
 						WHERE 
 							mc.`active` =1 
 							AND (( mc.`type_holiday` =1  AND DATE_FORMAT(mc.date, '%m')= ".$month.") 
     			 				OR  (mc.`type_holiday` =2  AND DATE_FORMAT(mc.date, '%Y-%m')='".$year_month."'))";
-    			 $sql.=" ORDER BY DATE_FORMAT(mc.date, '%d') ASC ";
+    			if(!empty($search["degree"])){
+					$sql.=" AND FIND_IN_SET('" . $search["degree"] . "', mc.dept) ";
+				}
+				$sql.=" ORDER BY DATE_FORMAT(mc.date, '%d') ASC ";
     			 
     			 		$res = $db->fetchAll($sql);
 	    				$result = array(
@@ -1891,6 +1941,39 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$sql.=" WHERE t.token ='$token' LIMIT 1 ";
 			return $db->fetchRow($sql);
 		}
+		
+		function checkTimeSecondBeforeAddToken($token){
+			$db = $this->getAdapter();
+			$sql ="
+				SELECT 
+					t.* 
+				FROM mobile_mobile_token AS t 
+				WHERE t.token ='$token'
+				ORDER BY gtmp.`id` DESC LIMIT 1 
+			";
+			$row = $db->fetchRow($sql);
+			
+			if(!empty($row)){
+				$secondLimit="10";
+				$createDate = $row["date"];
+				$newCreateDate = new DateTime($createDate);
+				$newCreateDate->add(new DateInterval('PT'.$secondLimit.'S')); 
+				$createDateNew = $newCreateDate->format('Y-m-d H:i:s');
+				
+				$todayDate = new DateTime();
+				$timeToday = $todayDate->format('Y-m-d H:i:s');
+				
+				$timeToday = date_create($timeToday);
+				$timeCreateDateNew = date_create($createDateNew);
+				
+				if($timeToday > $timeCreateDateNew){
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
+	
     	function addAppTokenId($_data){
     		$db = $this->getAdapter();
     		try{
@@ -1899,12 +1982,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$check = $this->checkTokenDevice($_data['token']);
 					$this->_name='mobile_mobile_token';
 					if(empty($check)){
-						$array = array(
-							'token'	=>$_data['token'],
-							'device_type'=> $_data['device_type'],
-							'date'	=>date('Y-m-d H:i:s'),
-						);
-						return $this->insert($array);
+						$checkingSecond= $this->checkTimeSecondBeforeAddToken($_data['token']);
+						if(empty($checkingSecond)){
+							$array = array(
+								'token'	=>$_data['token'],
+								'device_type'=> $_data['device_type'],
+								'date'	=>date('Y-m-d H:i:s'),
+							);
+							return $this->insert($array);
+						}
 					}
 				}
 				
@@ -3189,14 +3275,11 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						AND sSecond.id=s.`id`
 					)
 				) AS overallSemesterChRank
+				,(SELECT assd.`teacherComment` FROM `rms_studentassessment` AS ass JOIN `rms_studentassessment_detail` AS assD ON ass.id = assd.`assessmentId` WHERE s.id = ass.scoreId AND assd.`studentId`=sm.`student_id` ORDER BY assd.`teacherComment` DESC LIMIT 1) AS teacherComment
 			FROM
-				`rms_score` AS s,
-				`rms_score_monthly` AS sm,
-				`rms_group` AS g
-			WHERE
-				 g.`id` = s.`group_id`
-				AND s.`id`=sm.`score_id`
-				AND s.status = 1 ";
+				rms_score AS s JOIN `rms_score_monthly` AS sm ON s.`id`=sm.`score_id`
+				LEFT JOIN `rms_group` AS g ON  g.`id` = s.`group_id`
+			WHERE  s.status = 1 ";
 				
 			$scoreId = empty($search['id'])?0:$search['id'];
 			$sql.=" AND sm.student_id = ".$studentId;

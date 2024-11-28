@@ -114,6 +114,16 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 				'required'=>'true',
 				'class'=>'fullside',
 			));
+		$calendarType=  new Zend_Dojo_Form_Element_FilteringSelect('calendarType');
+		$calendarType->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));
+		$_status_opt = array(
+				1=>$this->tr->translate("HOLIDAY"),
+				2=>$this->tr->translate("SCHOOL_EVENT"),
+				3=>$this->tr->translate("EXAMINATION"),
+				4=>$this->tr->translate("COMPETITION"),
+				);
+		$calendarType->setMultiOptions($_status_opt);
+		$calendarType->setValue($request->getParam("calendarType"));
 		
 		$_id = new Zend_Form_Element_Hidden('id');
 		if(!empty($_data)){
@@ -128,13 +138,25 @@ Class Mobileapp_Form_Frmcalendar extends Zend_Dojo_Form {
 			$_note->setValue($_data['description']);
 			$_dept->setValue($_data['dept']);
 			$_type_holiday->setValue($_data['type_holiday']);
+			$calendarType->setValue($_data['calendarType']);
 		}
-		$this->addElements(array($_btn_search,$_status_search,$_title,$_id,
-				$_holiday_name,
-				$_title_en,
-				$_note,$_startdate,$_enddate,$_amount_day,$_status,$_dept,
-				$_type_holiday
-				));
+		$this->addElements(
+				array(
+					$_btn_search
+					,$_status_search
+					,$_title,$_id
+					,$_holiday_name
+					,$_title_en
+					,$_note
+					,$_startdate
+					,$_enddate
+					,$_amount_day
+					,$_status
+					,$_dept
+					,$_type_holiday
+					,$calendarType
+				)
+			);
 		return $this;
 	}
 	

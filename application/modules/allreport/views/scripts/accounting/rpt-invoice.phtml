@@ -2,10 +2,10 @@
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	echo $this->headTitle($tr->translate('RPT_INVOICE'));
 	$base_url = Application_Form_FrmMessage::getUrl("/");
-	$form=new Registrar_Form_FrmSearchInfor();
-	$form->FrmSearchRegister();
-	Application_Model_Decorator::removeAllDecorator($form);
-	$frm=$form;
+	// $form=new Registrar_Form_FrmSearchInfor();
+	// $form->FrmSearchRegister();
+	// Application_Model_Decorator::removeAllDecorator($form);
+	$frm=$this->formsearch;
 	$classHideHeight=classHideHeight;
 ?>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
@@ -173,15 +173,16 @@ table.tb-footer tr.style-head {
 							<tr class="style" align="center">
 								<td scope="col"><?php echo $tr->translate("N_O");?></td>
 								<td scope="col"><?php echo $tr->translate("BRANCH");?></td>
-								<td scope="col"><?php echo $tr->translate("GROUP");?></td>
+								<td scope="col"><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
 								<td scope="col"><?php echo $tr->translate("STUDENT_ID");?></td>
 								<td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td scope="col"><?php echo $tr->translate("SEX");?></td>
-								<td scope="col"><?php echo $tr->translate("INVOICE_DATE");?></td>
 								<td scope="col"><?php echo $tr->translate("INVOICE_NUM");?></td>
+								<td scope="col"><?php echo $tr->translate("INVOICE_DATE");?></td>
+								<td scope="col"><?php echo $tr->translate("EXPIRED_DATE");?></td>
 								<td scope="col"><?php echo $tr->translate("INPUT_DATE");?></td>
 								<td scope="col"><?php echo $tr->translate("REMARK");?></td>
-								<td scope="col"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+								<td scope="col"><?php echo $tr->translate("TOTAL_AMOUNT");?></td>
 								<td scope="col"><?php echo $tr->translate("BY_USER");?></td>
 							</tr>
 						</thead>
@@ -195,12 +196,13 @@ table.tb-footer tr.style-head {
 						<tr class="style hover"  align="center" >
 							<td data-label="<?php echo $tr->translate("N_O");?>"><?php echo $key; ?></td>
 							<td data-label="<?php echo $tr->translate("BRANCH");?>"><?php echo $rs['branch']; ?></td>
-							<td data-label="<?php echo $tr->translate("GROUP");?>"><?php echo $rs['group_name']; ?></td>
+							<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"><?php echo $rs['academicYear']; ?></td>
 							<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
-							<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['last_name']." ".$rs['stu_enname']; ?></a></td>
-							<td data-label="<?php echo $tr->translate("SEX");?>"><?php echo $rs['sex']; ?></td>
-							<td data-label="<?php echo $tr->translate("INVOICE_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
+							<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['en_name']; ?></a></td>
+							<td data-label="<?php echo $tr->translate("SEX");?>"><?php echo $rs['gender']; ?></td>
 							<td data-label="<?php echo $tr->translate("INVOICE_NUM");?>"><?php echo $rs['invoice_num']; ?></td>
+							<td data-label="<?php echo $tr->translate("INVOICE_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
+							<td data-label="<?php echo $tr->translate("EXPIRED_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['expired_date'])); ?></td>
 							<td data-label="<?php echo $tr->translate("INPUT_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
 							<td data-label="<?php echo $tr->translate("REMARK");?>"><?php echo $rs['remark']; ?></td>
 							<td data-label="<?php echo $tr->translate("TOTLE_AMOUNT");?>"><strong>$ <?php echo number_format($rs['totale_amount'],2); ?></strong></td>

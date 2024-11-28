@@ -1147,12 +1147,13 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 	{
 		$db = $this->getAdapter();
 		$sql = "SELECT 
-				(SELECT `comment` FROM `rms_comment` cm WHERE cm.id=commentId LIMIT 1) commentLabel,
-				(SELECT r.rating FROM `rms_rating` r WHERE r.id=ratingId LIMIT 1) ratingLabel,
-				(SELECT `commentType` FROM `rms_comment` cm WHERE cm.id=commentId LIMIT 1) AS commentTypeId,
-				(SELECT CONCAT(v.name_kh,' ',v.name_en) FROM `rms_view` AS v WHERE key_code=(SELECT `commentType` FROM `rms_comment` cm WHERE cm.id=commentId LIMIT 1) AND v.type=36) AS commentType,
-				(SELECT v.name_en FROM `rms_view` AS v WHERE v.key_code=(SELECT `commentType` FROM `rms_comment` cm WHERE cm.id=commentId LIMIT 1) AND v.type=36) AS commentTypeEng,
-				(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code=(SELECT `commentType` FROM `rms_comment` cm WHERE cm.id=commentId LIMIT 1) AND v.type=36) AS commentTypeKh,
+				smd.commentId,
+				(SELECT cm.`comment` FROM `rms_comment` cm WHERE cm.id=smd.commentId LIMIT 1) commentLabel,
+				(SELECT r.rating FROM `rms_rating` r WHERE r.id=smd.ratingId LIMIT 1) ratingLabel,
+				(SELECT cm.`commentType` FROM `rms_comment` cm WHERE cm.id=smd.commentId LIMIT 1) AS commentTypeId,
+				(SELECT CONCAT(v.name_kh,' ',v.name_en) FROM `rms_view` AS v WHERE key_code=(SELECT `commentType` FROM `rms_comment` cm WHERE cm.id=smd.commentId LIMIT 1) AND v.type=36) AS commentType,
+				(SELECT v.name_en FROM `rms_view` AS v WHERE v.key_code=(SELECT cm.`commentType` FROM `rms_comment` cm WHERE cm.id=smd.commentId LIMIT 1) AND v.type=36) AS commentTypeEng,
+				(SELECT v.name_kh FROM `rms_view` AS v WHERE v.key_code=(SELECT cm.`commentType` FROM `rms_comment` cm WHERE cm.id=smd.commentId LIMIT 1) AND v.type=36) AS commentTypeKh,
 				smd.teacherComment
 			FROM `rms_studentassessment` AS sm,
 				`rms_studentassessment_detail` AS smd

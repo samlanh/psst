@@ -101,9 +101,27 @@ table#table_row tr th {
 														</div>
 													</div>
 													<div class="form-group">
+													<label
+														class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR"); ?>
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<select type="text" id="academic_year" name="academic_year" queryExpr="*${0}*"
+															autoComplete="false" required="true" class="fullside"
+															dojoType="dijit.form.FilteringSelect" >
+															<?php if (!empty($this->acadimicYear)) {
+																foreach ($this->acadimicYear as $year) { ?>
+																	<option value="<?php echo $year['id']; ?>" <?php echo $row['academic_year'] == $year['id'] ? "selected" : ""; ?> >
+																		<?php echo $year['name']; ?>
+																	</option>
+																<?php }
+															} ?>
+														</select>
+													</div>
+												</div>
+													<div class="form-group">
 														<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INPUT_DATE");?> </label>
 														<div class="col-md-7 col-sm-7 col-xs-12">
-															<input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['input_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+															<input type="text" name="input_date" id="input_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['input_date'];?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
 														</div>
 													</div>
 												</div>
@@ -143,6 +161,16 @@ table#table_row tr th {
 													<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("INVOICE_DATE");?> </label>
 													<div class="col-md-7 col-sm-7 col-xs-12">
 														<input type="text" name="invoice_date" id="invoice_date" constraints="{datePattern:'dd/MM/yyyy'}" value="<?php echo $row['invoice_date']?>" class="fullside" dojoType="dijit.form.DateTextBox"/>
+													</div>
+												</div>
+												<div class="form-group">
+													<label
+														class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRED_DATE"); ?>
+													</label>
+													<div class="col-md-7 col-sm-7 col-xs-12">
+														<input type="text" name="expire_date" id="expire_date" value="<?php echo $row['expired_date']?>"
+															constraints="{datePattern:'dd/MM/yyyy'}"  class="fullside"
+															dojoType="dijit.form.DateTextBox" required />
 													</div>
 												</div>
 												<div class="form-group">
@@ -199,7 +227,6 @@ table#table_row tr th {
 							<?php echo '<th>'.$value.'</th>'; ?>			
 							<?php }?>
 							<th><?php echo $tr->translate("VALIDATE");?></th>
-							<th><?php echo $tr->translate("PERIOD");?></th>
 							<th><?php echo $tr->translate("START_DATE");?></th>
 							<th><?php echo $tr->translate("END_DATE");?></th>
 							<th><?php echo $tr->translate("REMARK");?></th>
@@ -270,7 +297,7 @@ require(["dojo/ready"], function(ready){
 		id: "studentId",
 		name: "studentId",   
 		required:true,  
-		value:"<?php echo $this->invoice['student_name'];?>",
+		value:"<?php echo $this->invoice['student_id'];?>",
 		class: 'fullside', 
 		placeHolder:"<?php echo $tr->translate("SELECT_STUDENT_NAME");?>",          
 		onChange: function() { 
@@ -326,7 +353,7 @@ function getallstudentname(){//
 		}
 	let selectId; 
 	if(oldBranch==branch_id){
-		selectId = '<?php echo $this->invoice['student_name'];?>';  
+		selectId = '<?php echo $this->invoice['student_id'];?>';  
 	 }
 	getAllStudentByBranch(urlGet,contentData,selectId);
 }

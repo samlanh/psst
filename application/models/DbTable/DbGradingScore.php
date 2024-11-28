@@ -703,7 +703,8 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 				gradingId,
 				studentId,
 				subCriterialTitleKh,
-				subCriterialTitleEng
+				subCriterialTitleEng,
+				gtd.note
 			FROM 
 				`rms_grading_tmp` gt,
 				`rms_grading_detail_tmp` gtd
@@ -950,7 +951,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		 
    		 
    		if(!empty($criterial)) foreach($criterial AS $rowCri){
-			
+			$notedData = "";
    			$rsScore = array();
    			if(!empty($data['gradingRowId'])){
    				$gradingId = $data['gradingId'];
@@ -980,6 +981,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					$indexSub=0;
    					if(!empty($rsScore)){
    						foreach($rsScore AS $score){
+							$notedData = empty($score['note']) ? "" : $score['note'];
 							$classShowTitle="";
 							if($coutnSubCriterial>2){
 								$classShowTitle="criteria-info";
@@ -1051,6 +1053,8 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					$attScore=0;
    					$readonly="";
    					$resultScore = empty($rsScore)?0:$rsScore[0]['totalGrading'];
+					$notedData = empty($rsScore)? "": $rsScore[0]['note'];
+					
    					if($rowCri['criteriaType']==0){//att
    						$resultScore = $maxSubjectScore-($maxSubjectScore*$reductPercentage/100);
    						$resultScore = ($resultScore<0)?0:$resultScore;
@@ -1073,7 +1077,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    			$string.='</td>';
    		}
    		$string.='<td data-label="សម្គាល់/Remark">';
-   		$string.='<input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="" type="text" ></td>';
+   		$string.='<input dojoType="dijit.form.TextBox" class="fullside" name="note_'.$keyIndex.'"  value="'.$notedData.'" type="text" ></td>';
    		$string.='';
    		$string.='</tr>';
    

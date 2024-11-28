@@ -1772,31 +1772,30 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			$grade = "rms_itemsdetail.title_en";
 			$degree = "rms_items.title_en";
 		}
-		$sql = "SELECT s.id,s.title_score,s.title_score_en, 
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = s.for_academic_year LIMIT 1) AS academicYear,
+		$sql = "SELECT sj.id,sj.title_score,sj.title_score_en, 
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = sj.for_academic_year LIMIT 1) AS academicYear,
     		g.group_code, g.grade, g.degree,g.branch_id,
 			
 			(SELECT branch_namekh FROM rms_branch WHERE rms_branch.br_id=g.branch_id LIMIT 1) AS branch_name, 
 			(SELECT rms_items.title FROM rms_items WHERE rms_items.id=g.degree AND rms_items.type=1 LIMIT 1) AS degree_name,
 			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
-			sd.`subject_id`,sd.`teacher_id`,
-			(SELECT subject_titlekh FROM `rms_subject` WHERE rms_subject.id=sd.`subject_id` LIMIT 1) AS subject_name, 
-			(SELECT teacher_name_kh FROM `rms_teacher` WHERE rms_teacher.id=sd.`teacher_id` LIMIT 1) AS teacher_name, 
-			(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=s.id AND sm.type=1 ) TotaStudent 
+			sj.`subject_id`,sj.`teacher_id`,
+			(SELECT subject_titlekh FROM `rms_subject` WHERE rms_subject.id=sj.`subject_id` LIMIT 1) AS subject_name, 
+			(SELECT teacher_name_kh FROM `rms_teacher` WHERE rms_teacher.id=sj.`teacher_id` LIMIT 1) AS teacher_name, 
+			(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=sj.id AND sm.type=1 ) TotaStudent 
 			
-			FROM `rms_score` AS s 
-			LEFT JOIN `rms_group` AS g ON g.id = s.group_id 
-			INNER JOIN `rms_score_detail` AS sd ON s.`id` = sd.`score_id`
+			FROM v_score_ft_subjectscore AS sj
+			LEFT JOIN `rms_group` AS g ON g.id = sj.group_id 
 		
     	";
 		
 
 		$where = ' WHERE 1 ';
 		if (($search['branch_id']) > 0) {
-			$where .= ' AND s.branch_id=' . $search['branch_id'];
+			$where .= ' AND sj.branch_id=' . $search['branch_id'];
 		}
 		if (!empty($search['group'])) {
-			$where .= ' AND s.group_id=' . $search['group'];
+			$where .= ' AND sj.group_id=' . $search['group'];
 		}
 		if (!empty($search['academic_year'])) {
 			$where .= ' AND g.academic_year=' . $search['academic_year'];
@@ -1807,33 +1806,36 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		if (!empty($search['grade'])) {
 			$where .= ' AND g.grade=' . $search['grade'];
 		}
+		if (!empty($search['sort_degree'])) {
+			$where .= ' AND g.degree in(' . $search['sort_degree'] . ')';
+		}
 		if (!empty($search['exam_type'])) {
-			$where .= ' AND s.exam_type=' . $search['exam_type'];
+			$where .= ' AND sj.exam_type=' . $search['exam_type'];
 		}
 		if (!empty($search['for_semester'])) {
-			$where .= ' AND s.for_semester=' . $search['for_semester'];
+			$where .= ' AND sj.for_semester=' . $search['for_semester'];
 		}
 		if (!empty($search['for_month'])) {
-			$where .= ' AND s.for_month=' . $search['for_month'];
+			$where .= ' AND sj.for_month=' . $search['for_month'];
 		}
 		if (!empty($search['sort_degree'])) {
 			$where .= ' AND g.degree in(' . $search['sort_degree'] . ')';
 		}
 		if (!empty($search['teacher'])) {
-			$where .= ' AND sd.teacher_id =' . $search['teacher'];
+			$where .= ' AND sj.teacher_id =' . $search['teacher'];
 		}
 		if (!empty($search['subjectId'])) {
-			$where .= ' AND sd.subject_id=' . $search['subjectId'];
+			$where .= ' AND sj.subject_id=' . $search['subjectId'];
 		}
 
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$where .= $dbp->getAccessPermission("s.branch_id");
+		$where .= $dbp->getAccessPermission("sj.branch_id");
 		$where .= $dbp->getDegreePermission("g.degree");
 
 		$orderBy = " 	
-				GROUP BY sd.`subject_id`,sd.score_id
-			ORDER BY  sd.teacher_id,sd.subject_id,g.degree,s.group_id  ASC ";
-		//echo $sql . $where . $orderBy; 
+				GROUP BY sj.`subject_id`,sj.id
+			ORDER BY  sj.teacher_id,sj.subject_id,g.degree,sj.group_id  ASC ";
+	//	echo $sql . $where . $orderBy; 
 		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
 
 		$resultInfo = array();

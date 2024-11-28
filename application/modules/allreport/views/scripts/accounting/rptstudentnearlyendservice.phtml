@@ -135,9 +135,18 @@
 						font-weight: bold !important;
 						background: #CCD9FF;
 						white-space: nowrap;
-						}
+					}
+					table tr.style-head td {
+						border: solid 1px #626262;
+					}
+					table.content-data td,
+					table.content-data td span,
 					table tr td{
 						padding:1px;
+						line-height : inherit;
+					}
+					table.content-data tr.footerTotal {
+						background: #ccd9ff;
 					}
 					.bold {
 						font-weight: 600;
@@ -203,13 +212,14 @@
 										<tr class="solidborder-topdouble solidborder-rightdouble solidborder-leftdouble style-head" align="center" >
 											<td scope="col" rowspan="2">No.</td>
 											<td scope="col" colspan="3">Student Information</td>
+											<td scope="col" class="w-px-200" rowspan="2">Service</td>
 											<td class="solidborderleft" scope="col" colspan="6">Previous Payment </td>
 											<td scope="col" rowspan="2">Late(Days)</td>
 										</tr>
 										<tr align="center" class="solidborder-bottomdouble solidborder-leftdouble solidborder-rightdouble style-head" >
 											<td scope="col">Student Id</td>
-											<td scope="col" class="w-px-150">Name</td>
-											<td scope="col" class="w-px-100">Tel</td>
+											<td scope="col" class="text-truncate w-px-150">Name</td>
+											<td scope="col" class="text-truncate w-px-120">Tel</td>
 											<td class="solidborderleft" scope="col">Receipt</td>
 											<td scope="col">Date</td>
 											<td scope="col">Paid</td>
@@ -219,37 +229,61 @@
 										</tr>
 								</thead>
 								<?php  
+								
+								
 									$studentId="";
 									$i=0;
 									$oldRow=0;
+									$totalPmt = 0;
 								if (!empty($this->row)) {
 									foreach ($this->row as $key => $row) {
-										$i++;
 										$end_dat = $row['endDate'];
 										$total_day = strtotime($end_dat) - strtotime($this->search['end_date']);
 										$day = (int) ($total_day / (60 * 60 * 24));
 										$daylate = $day;
 										if ($day >= 0) {
-											$daylate = "Remain " . abs($day);
+											$daylate = "R " . sprintf('%02d',abs($day));
 										} else {
-											$daylate = "Late " . abs($day);
+											$daylate = "L " . sprintf('%02d',abs($day));
 										}
+										
+										
+										$stringFront="";
+										if ($studentId != $row['studentId']) {
+											$i++;
+											$strFilter =  (string) $row['studentId'];
+											$arrRow = $this->row;
+											$resultOFStudent = array_filter($arrRow, function ($item) use ($strFilter) {
+												if (stripos($item['studentId'], $strFilter) !== false) {
+													return $item;
+												}
+												return;
+											});
+											$amtRecord = count($resultOFStudent);
+											$amtRecord = ($amtRecord ==0) ? 1 : $amtRecord;
+											$stuName = $row['stuNameKh'];
+											$stuName = empty($stuName) ? $row['stuNameEn'] : $stuName;
+											$stringFront='
+												<td rowspan="'.$amtRecord.'" data-label="'.$tr->translate("N_O").'" align="center" >'.$i.'</td>
+												<td class="leftdothborder" rowspan="'.$amtRecord.'" data-label="'.$tr->translate("Student Id").'" align="center" >
+												'.$row['stuCode'].'
+												</td>
+												
+												<td class="leftdothborder" rowspan="'.$amtRecord.'" data-label="'.$tr->translate("Name").'" align="left" >
+													<span class="w-px-150 wrapcontent">'.$stuName.'</span>
+												</td>
+												<td class="leftdothborder" rowspan="'.$amtRecord.'" data-label="'.$tr->translate("Tel").'" align="left" >
+													<span class="w-px-120 wrapcontent">'.$row['tel'].'</span>
+												</td>
+											';
+										}
+										$row['paidamount'] = empty($row['paidamount']) ? 0 : $row['paidamount'];
+										$totalPmt = $totalPmt+$row['paidamount'];
 									?>
-										<tr class="hover context-menu-one" <?php if (!empty($row['pmtDetailId'])) { ?> oncontextmenu="setrowdata(<?php echo $row['pmtDetailId']; ?>,<?php echo $row['paymentId']; ?>,<?php echo $row['studentId']; ?>);return false;" <?php } ?>  style="white-space:nowrap;"></tr>
-													<?php
-													//if ($studentId != $row['studentId']) {
-													?>
-										<td data-label="<?php echo $tr->translate("N_O"); ?>" align="center" ><?php //echo $i; ?></td>
-										<td colspan="3" data-label="<?php echo $tr->translate("CATEGORY"); ?>">
-											<?php echo $row['stuCode']; ?> <strong><?php echo $row['stuNameKh'];
-											echo empty($row['stuNameEn']) ? "" : "/" . $row['stuNameEn']; ?></strong> <?php echo $tr->translate("STUDY_INFO"); ?> : <strong><?php echo $row['groupCode']; ?></strong>
-											<span class="text-truncate w-px-120 categoryName_<?php echo $row['pmtDetailId']; ?>">
-												<?php echo $row['categoryName']; ?>
-											</span>
-											<span class="hidden-data branchName_<?php echo $row['pmtDetailId']; ?>">
-												<?php echo $row['branchName']; ?>
-											</span>
-											<span class="text-truncate w-px-200 service_<?php echo $row['pmtDetailId']; ?>">
+									<tr class="btmdothborder solidborder-leftdouble solidborder-rightdouble hover context-menu-one" <?php if (!empty($row['pmtDetailId'])) { ?> oncontextmenu="setrowdata(<?php echo $row['pmtDetailId']; ?>,<?php echo $row['paymentId']; ?>,<?php echo $row['studentId']; ?>);return false;" <?php } ?>  style="white-space:nowrap;">
+										<?php echo $stringFront; ?>	
+										<td class="leftdothborder" data-label="<?php echo $tr->translate("Service"); ?>" align="center" >
+											<span class="bold text-truncate w-px-200 service_<?php echo $row['pmtDetailId']; ?>">
 												<?php echo $row['serviceTitle']; ?>
 											</span>
 										</td>
@@ -273,10 +307,16 @@
 										<td data-label="<?php echo $tr->translate("REMAIN_DAY"); ?>"  align="center" style="color: red;font-weight: bold;"><?php echo $daylate; ?></td>
 									</tr>
 									<?php 
-										//$studentId = $row['studentId'];  
+										$studentId = $row['studentId'];  
 									} 
 									?>
-
+									<tr class="footerTotal solidborder-topdouble solidborder-bottomdouble solidborder-rightdouble solidborder-leftdouble" style="white-space:nowrap;">
+										<td colspan="7" align="center">
+																				
+										</td>
+										<td align="center"><span class="bold"><?php echo  number_format($totalPmt,2);?></span></td>
+										<td colspan="4" align="center"></td>
+									</tr>
 								<?php 
 
 								} ?>
@@ -306,7 +346,7 @@
 							<?php  
 								$serviceId="";
 								$i=0;
-								$totalpaid=0;
+								$totalPmt=0;
 								$totalbalance=0; 
 								if(!empty($this->row)){foreach ($this->row AS $row) { $i++;
 								$end_dat=$row['endDate'];
@@ -314,11 +354,14 @@
 								$day=(int)($total_day/(60*60*24));
 								$daylate =$day;
 								if($day>=0){
-									$daylate ="R ".abs($day);
+									$daylate ="R ".sprintf('%02d',abs($day));
 								}else{
-									$daylate ="L ".abs($day);
+									$daylate ="L ".sprintf('%02d',abs($day));
 								}
 								//count(json_decode($row['paymentList'], TRUE))
+								
+								$row['paidamount'] = empty($row['paidamount']) ? 0 : $row['paidamount'];
+								$totalPmt = $totalPmt+$row['paidamount'];
 							?>
 								<?php if($serviceId != $row['grade']){?>
 								<tr class="bg-category solidborder-leftdouble solidborder-rightdouble solidborder-topdouble solidborder-bottomdouble"  >
@@ -352,7 +395,14 @@
 									<td class="solidborderright" data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: red;font-weight: bold;"><?php echo $daylate;?></td>
 								</tr>
 								<?php $serviceId =$row['grade']; ?>	 
-								<?php }}?>	 
+								<?php }?>	 
+								<tr class="footerTotal solidborder-topdouble solidborder-bottomdouble solidborder-rightdouble solidborder-leftdouble" style="white-space:nowrap;">
+									<td colspan="7" align="center">						
+									</td>
+									<td align="center"><span class="bold"><?php echo  number_format($totalPmt,2);?></span></td>
+									<td colspan="4" align="center"></td>
+								</tr>
+								<?php }?>	 
 							</table>
 						<?php }?>
 					</td>

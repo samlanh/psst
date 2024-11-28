@@ -18,18 +18,20 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 					,s.stu_code
 					,s.stu_khname
 					,CONCAT(s.last_name,' ',s.stu_enname) as en_name
-					,(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2 LIMIT 1) AS sex
-					,DATE_FORMAT(v.invoice_date,'%d-%M-%Y') AS invoice_date
+					,(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2 LIMIT 1) AS gender
+					,(SELECT CONCAT(fromYear,'-',toYear) FROM `rms_academicyear` WHERE id=v.academic_year LIMIT 1) AS academicYear
 					,v.invoice_num
-					,v.input_date
+					,v.invoice_date,
+					v.expired_date
 					,v.remark
 					,v.totale_amount 
+					,v.input_date
 					,(SELECT u.first_name FROM rms_users AS u WHERE u.id = v.user_id LIMIT 1) AS first_name
 				FROM 
 					rms_invoice_account  AS v ,
 					rms_student AS s 
 				WHERE 
-				    stu_id = student_name 
+				    s.stu_id =v.student_id 
 					AND s.status=1 
 					AND s.customer_type=1 ";
 		
@@ -41,10 +43,8 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$s_where=array();
     		$s_search=addslashes(trim($search['search']));
     		$s_where[]= " v.branch_id LIKE '%{$s_search}%'";
+			$s_where[]= " v.invoice_num LIKE '%{$s_search}%'";
     		$s_where[]= " s.stu_khname LIKE '%{$s_search}%'";
-    		$s_where[]="  v.student_name LIKE '%{$s_search}%'";
-    		$s_where[]="  v.last_name LIKE '%{$s_search}%'";
-    		$s_where[]= " v.invoice_num LIKE '%{$s_search}%'";
 			$s_where[]= " s.stu_code LIKE '%{$s_search}%'";
     		$where.=' AND ('.implode(' OR ', $s_where).')';
     	}
@@ -52,7 +52,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$where.=" AND v.branch_id=".$search['branch_id'];
     	}
     	if(!empty($search['studentId'])){
-    		$where.=" AND v.student_name=".$search['studentId'];
+    		$where.=" AND v.student_id=".$search['studentId'];
     	}
 		$order=" ORDER BY v.id DESC";
 		$dbp = new Application_Model_DbTable_DbGlobal();
@@ -64,6 +64,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		$sql="SELECT v.* ,
 				(SELECT title FROM rms_itemsdetail WHERE rms_itemsdetail.id=v.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				(SELECT title FROM rms_items WHERE rms_items.id=v.degree AND rms_items.type=1 LIMIT 1)AS degree,
+				(SELECT CONCAT(fromYear,'-',toYear) FROM `rms_academicyear` WHERE id=v.academic_year LIMIT 1) AS academicYear,
 				s.stu_khname ,
 				s.stu_enname,
 				s.last_name,
@@ -71,7 +72,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 				s.sex,
 				s.tel
 			FROM rms_invoice_account  AS v ,
-				rms_student AS s WHERE stu_id = student_name and id=".$id." LIMIT 1";
+				rms_student AS s WHERE s.stu_id = v.student_id and id=".$id." LIMIT 1";
 		return $db->fetchrow($sql);
 	}
 	public function getinvoiceservice($id){
@@ -103,11 +104,12 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     		$invoice_num= $this->getvCode($data['branch_id']);
 	    	$arr = array(
 	    			'branch_id'=>$data['branch_id'],
-	    			'student_name'=>$data['studentId'],
 	    			'student_id'=>$data['studentId'],
+	    			'academic_year'=>$data['academic_year'],
 					'invoice_date'=>$data['invoice_date'],
 	    			'invoice_num'=>$invoice_num,
 					'input_date'=>$data['input_date'],
+					'expired_date'=>$data['expire_date'],
 	    			'remark'=>$data['remark'],
 					'totale_amount'=>$data['totle_amount'],
 	    			'user_id'=>$this->getUserId(),
@@ -146,8 +148,9 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		try{
 	    	$arr = array(
     			'branch_id'=>$data['branch_id'],
-    			'student_name'=>$data['studentId'],
     			'student_id'=>$data['studentId'],
+				'academic_year'=>$data['academic_year'],
+				'expired_date'=>$data['expire_date'],
 				'invoice_date'=>$data['invoice_date'],
     			'invoice_num'=>$data['invoice_num'],
 				'input_date'=>$data['input_date'],

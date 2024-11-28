@@ -911,13 +911,21 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$this->view->all_invoice = $db->getinvoice($search);
 
 				$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
-				$frm = new Application_Form_FrmGlobal();
-				$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
-				$this->view->rsfooteracc = $frm->getFooterAccount();
+				
 			}catch (Exception $e){
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
+			$frm = new Application_Form_FrmGlobal();
+			$this->view-> rsheader = $frm->getLetterHeaderReport($branch_id);
+			$this->view->rsfooteracc = $frm->getFooterAccount();
 			$this->view->search = $search;
+
+
+			$form=new Registrar_Form_FrmSearchInfor();
+			$frmSearch = $form->FrmSearchRegister();
+			Application_Model_Decorator::removeAllDecorator($frmSearch);
+			$this->view->formsearch = $frmSearch;
+
 		}
     public function rptInvoicedetailAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
@@ -926,7 +934,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 		$this->view->invoice = $row;
 		$rs=$this->view->invoice_service = $db->getinvoiceservice($id);
 		$model = new Application_Model_DbTable_DbGlobal();
-		$this->view->payment_term = $model->getAllPaymentTerm(null,null);		
+		$term =$model->getAllPaymentTerm(null,null);
+		unset($term[5]);
+		$this->view->payment_term =	$term ;
 		$key = new Application_Model_DbTable_DbKeycode();
 		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
 		

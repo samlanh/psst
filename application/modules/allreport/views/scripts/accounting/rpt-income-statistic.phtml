@@ -167,7 +167,7 @@ table.tb-footer tr.style-head{
 					.right{text-align: right;}
 					.fixedwidth td{width: 50px;}
 					.width-contact{width:150px;word-break: break-all;white-space:normal;}
-					.widthstudent{width: 150px; white-space:pre-line;}
+					.widthstudent{width: 150px;white-space:pre-line;}
 					.widthCol-px-40{
 						width: 40px !important;
 					}
@@ -192,7 +192,7 @@ table.tb-footer tr.style-head{
 					<td width="70%" align="center">
 						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';">Student Payment Report</span><br />
 						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblreportType"></label><br /></span>
-						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo date("d-M-y");?></span><label id="lblBranchId"></label>
+						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblAcadmicYear"></label><label id="lblBranchId"></label>
 					</td>
 					<td width="15%" align="center"><label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label></td>
 				</tr>
@@ -241,32 +241,33 @@ table.tb-footer tr.style-head{
 									$countTerm4 = 0;
 									$activeStudent = 0;
 									$dropStudent = 0;
-										$resultTermList = array(
-											'countTerm1' => 0,
-											'AmountTerm1' => 0,
-											'countTerm2' => 0,
-											'AmountTerm2' => 0,
-											'countTerm3' => 0,
-											'AmountTerm3' => 0,
-											'countTerm4' => 0,
-											'AmountTerm4' => 0,
 
-											'unPaidCountTerm1' => 0,
-											'unPaidCountTerm2' => 0,
-											'unPaidCountTerm3' => 0,
-											'unPaidCountTerm4' => 0,
-										);
-										$resultSemesterList = array(
-											'countSemester1' => 0,
-											'AmountSemester1' => 0,
-											'countSemester2' => 0,
-											'AmountSemester2' => 0,
-										);
+									$resultTermList = array(
+										'countTerm1' => 0,
+										'AmountTerm1' => 0,
+										'countTerm2' => 0,
+										'AmountTerm2' => 0,
+										'countTerm3' => 0,
+										'AmountTerm3' => 0,
+										'countTerm4' => 0,
+										'AmountTerm4' => 0,
 
-										$resultYearList = array(
-											'countYear' => 0,
-											'AmountYear' => 0,
-										);
+										'unPaidCountTerm1' => 0,
+										'unPaidCountTerm2' => 0,
+										'unPaidCountTerm3' => 0,
+										'unPaidCountTerm4' => 0,
+									);
+									$resultSemesterList = array(
+										'countSemester1' => 0,
+										'AmountSemester1' => 0,
+										'countSemester2' => 0,
+										'AmountSemester2' => 0,
+									);
+
+									$resultYearList = array(
+										'countYear' => 0,
+										'AmountYear' => 0,
+									);
 									$num = 0;
 								if(!empty($this->dataPayment)){ foreach($this->dataPayment as $key=>$rs){
 									
@@ -278,18 +279,14 @@ table.tb-footer tr.style-head{
 									
 								?>
 								<tr class="hover btmdothborder solidborder-leftdouble solidborder-rightdouble" align="center">
-									
 									<?php
 										$resultPayment = $rs['paymentList'];
+
 										$totalTerm1 +=  ($resultPayment['payment1']!='')?$resultPayment['payment1']:0;
 										$totalTerm2 +=  ($resultPayment['payment2']!='')?$resultPayment['payment2']:0;
 										$totalTerm3 +=  ($resultPayment['payment3']!='')?$resultPayment['payment3']:0;
 										$totalTerm4 +=  ($resultPayment['payment4']!='')?$resultPayment['payment4']:0;
 
-										$resultPayment['term1'] = empty(($resultPayment['payment1'])) ? $resultPayment['term1'] : 0;
-										$resultPayment['term2'] = empty(($resultPayment['payment2'])) ? $resultPayment['term2'] : 0;
-										$resultPayment['term3'] = empty(($resultPayment['payment3'])) ? $resultPayment['term3'] : 0;
-										$resultPayment['term4'] = empty(($resultPayment['payment4'])) ? $resultPayment['term4'] : 0;
 										
 										$countTerm1 += empty($resultPayment['periodDate1'])?0:1;
 										$countTerm2 += empty($resultPayment['periodDate2'])?0:1;
@@ -298,10 +295,10 @@ table.tb-footer tr.style-head{
 										$activeStudent+=($rs['stopType']==0)?1:0;
 										$dropStudent+=($rs['stopType']!=0)?1:0;
 
-											$resultTermList['unPaidCountTerm1'] += empty($resultPayment['periodDate1']) ? 1 :0;
-											$resultTermList['unPaidCountTerm2'] += empty($resultPayment['periodDate2']) ? 1 :0;
-											$resultTermList['unPaidCountTerm3'] += empty($resultPayment['periodDate3']) ? 1 :0;
-											$resultTermList['unPaidCountTerm4'] += empty($resultPayment['periodDate4']) ? 1 :0;
+											$resultTermList['unPaidCountTerm1'] += empty($resultPayment['term1']) ? 1 :0;
+											$resultTermList['unPaidCountTerm2'] += empty($resultPayment['term2']) ? 1 :0;
+											$resultTermList['unPaidCountTerm3'] += empty($resultPayment['term3']) ? 1 :0;
+											$resultTermList['unPaidCountTerm4'] += empty($resultPayment['term4']) ? 1 :0;
 
 										if($rs['payment_term']==2){//term
 											$resultTermList['countTerm1'] += empty($resultPayment['periodDate1']) ? 0 : 1;
@@ -324,8 +321,12 @@ table.tb-footer tr.style-head{
 											$resultYearList['countYear'] += empty($resultPayment['periodDate1']) ? 0 :  1;
 											$resultYearList['AmountYear'] += empty($resultPayment['payment1']) ? 0 :  $resultPayment['payment1'];
 										}
+
+										$resultPayment['term1'] = empty(($resultPayment['payment1'])) ? $resultPayment['term1'] : 0;
+										$resultPayment['term2'] = empty(($resultPayment['payment2'])) ? $resultPayment['term2'] : 0;
+										$resultPayment['term3'] = empty(($resultPayment['payment3'])) ? $resultPayment['term3'] : 0;
+										$resultPayment['term4'] = empty(($resultPayment['payment4'])) ? $resultPayment['term4'] : 0;
 									?>
-									
 									<td><?php echo $num+=1; ?></td>
 									<td align="left"><?php echo $rs['stu_code']; ?></td>
 									<td align="left"><span class="widthCol-px-70"><?php echo $rs['student_name']; ?></span></td>
@@ -336,17 +337,17 @@ table.tb-footer tr.style-head{
 									<td><span class="widthCol-px-40"><?php echo $rs['discountCode']; ?></span></td>
 									<td><?php echo !empty($rs['discountValue'])?str_replace(".00","",$rs['discountValue'])."%":""; ?></td>
 									<td align="left"><?php echo $rs['stpaymentType'];?></td>
-									<td class="solidborderleft <?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/y',strtotime($resultPayment['periodDate1'])):""; ?></td>
-									<td class="solidborderright <?php echo($resultPayment['term1'] == 1) ? "greycolor" : ""; ?>"><?php echo ($resultPayment['payment1']!='')?number_format($resultPayment['payment1'],2):''; ?></td>
-									<td class="solidborderleft <?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/y',strtotime($resultPayment['periodDate2'])):""; ?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term1'] == 1) ? " greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/y',strtotime($resultPayment['periodDate1'])):""; ?></td>
+									<td class="solidborderright <?php echo($resultPayment['term1'] == 1) ? " greycolor" : ""; ?>"><?php echo ($resultPayment['payment1']!='')?number_format($resultPayment['payment1'],2):''; ?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term2'] == 1) ? " greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/y',strtotime($resultPayment['periodDate2'])):""; ?></td>
 									<td class="solidborderright <?php echo($resultPayment['term2'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment2']!='')?number_format($resultPayment['payment2'],2):''; ?></td>
-									<td class="solidborderleft <?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" ><?php echo !empty($resultPayment['periodDate3'])?date('d/m/y',strtotime($resultPayment['periodDate3'])):""; ?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term3'] == 1) ? " greycolor" : ""; ?>" ><?php echo !empty($resultPayment['periodDate3'])?date('d/m/y',strtotime($resultPayment['periodDate3'])):""; ?></td>
 									<td class="solidborderright <?php echo($resultPayment['term3'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment3']!='')?number_format($resultPayment['payment3'],2):''; ?></td>
-									<td class="solidborderleft<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/y',strtotime($resultPayment['periodDate4'])):""; ?></td>
+									<td class="solidborderleft <?php echo($resultPayment['term4'] == 1) ? " greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate4'])?date('d/m/y',strtotime($resultPayment['periodDate4'])):""; ?></td>
 									<td class="<?php echo($resultPayment['term4'] == 1) ? "greycolor" : ""; ?>" align="right"><?php echo ($resultPayment['payment4']!='')?number_format($resultPayment['payment4'],2):''; ?></td>
 								</tr>
 								<?php
-								}}
+									}}
 								?>
 								<tr class="backgroundBold solidborderdouble">
 									<td colspan="9"></td>
@@ -360,7 +361,7 @@ table.tb-footer tr.style-head{
 									<td align="center"><?php echo $countTerm4; ?></td>
 									<td align="center" class="right"><?php echo number_format($totalTerm4, 2); ?></td>
 								</tr>
-								<tr >
+								<tr>
 									<td colspan="18" class="noborder" style="border: 1px solid #fff;">&nbsp;</td>
 								</tr>
 								<tr class="hover solidborder solidborder-leftdouble solidborder-rightdouble solidborder-topdouble" align="center">
@@ -397,7 +398,7 @@ table.tb-footer tr.style-head{
 									<td class="bordernone"></td>
 									<td class="bordernone"></td>
 									<td class="bordernone"></td>
-									<td colspan="5" class="bordernone solidborderright" ></td>
+									<td colspan="5" class="bordernone solidborderright"></td>
 									<td>Year</td>
 									<td><?php echo $resultYearList['countYear'];?></td>
 									<td><?php echo number_format($resultYearList['AmountYear'],2);?></td>
@@ -433,8 +434,11 @@ table.tb-footer tr.style-head{
 	require(["dojo/ready"], function (ready) {
 		ready(function () {
 			$('#lblreportType').html("<?php echo $lblReport; ?>");
-			let branchLable = "-"+dijit.byId("branch_id").attr('displayedValue');
 			
+			let lblAcadmicYear = dijit.byId("academic_year").attr('displayedValue');
+			$('#lblAcadmicYear').html(lblAcadmicYear);
+
+			let branchLable = "-"+dijit.byId("branch_id").attr('displayedValue');
 			$('#lblBranchId').html(branchLable);
 
 			degree = dijit.byId('degree');

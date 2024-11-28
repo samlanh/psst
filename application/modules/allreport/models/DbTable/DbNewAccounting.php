@@ -67,7 +67,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				AND dg.is_maingrade=1
 				AND s.customer_type=1
 				";
-		$where = "";// 
+		$where = "";
 	
 		if (!empty($search['adv_search'])){
 			$s_where = array();
@@ -76,7 +76,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 			$s_where[] = " stu_khname LIKE '%{$s_search}%'";
 			$s_where[] = " stu_enname LIKE '%{$s_search}%'";
 			$s_where[] = " tel LIKE '%{$s_search}%'";
-			$where .=' AND ('.implode(' OR ',$s_where).')';
+			$where.=' AND ('.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['branch_id'])){
 			$where.= " AND s.branch_id = ".$search['branch_id'];
@@ -97,7 +97,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		$where .= " AND ".$from_date." AND ".$to_date;
 
 		if($search['active_type']>-1){
-			//$where.= " AND dg.stop_type = ".$search['active_type'];
+			
 			if ($search['active_type'] == 0) {
 				$where.= " AND dg.stop_type=0 AND dg.is_current=1";
 			} else {
@@ -119,6 +119,8 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		
 		$order=" order by s.stu_id DESC ";
 		$db = $this->getAdapter();
+		// echo $sql.$where.$order;
+		// exit();
 		
 		$resultStudent =  $db->fetchAll($sql.$where.$order);
 	
@@ -138,10 +140,13 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				return ($var['paymentList']['term'.$filterTerm] == $paymentStatus);
 			});
 		}
+		// print_r($resultStudent);
+		// exit();
 		return $resultStudent;
 	}
 	function ExtraColumns($dataPayment,$startTerm)
 	{
+		//print_r($startTerm);
 		$arrExtra = array(
 			'stpaymentType'=>'',
 			'discountCode'=>'',
@@ -163,12 +168,13 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 	
 		if (!empty($dataPayment)) {
 			$startTerm = !empty($startTerm)?$startTerm:0;
-			
+
 			
 			foreach($dataPayment as $key=> $resultPayment){
 				if ($startTerm > 4) {
 					break;
 				}
+				
 				if($resultPayment['payment_term']==4){//year
 					$arrExtra['term1'] = 1;
 					$arrExtra['term2'] = 1;
@@ -180,12 +186,18 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				}
 				if($resultPayment['payment_term']==3){//semestere
 					
-					if ($startTerm == 1) {// semester 1
+					if ($startTerm == 1) {  // semester 1
 						$arrExtra['term1'] = 1;
 						$arrExtra['term2'] = 1;
 						$arrExtra['periodDate1'] = $resultPayment['paidDate'];
 						$arrExtra['payment1'] = $resultPayment['totalpayment'];
+						$startTerm = 2;//next loop will +1 continue to bottom step
+						
 					}elseif($startTerm == 3){//semester 2
+						
+						$arrExtra['term1'] = 1;//just update
+						$arrExtra['term2'] = 1;//just update
+
 						$arrExtra['term3'] = 1;
 						$arrExtra['term4'] = 1;
 						
@@ -199,14 +211,20 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 						$arrExtra['periodDate1'] = $resultPayment['paidDate'];
 						$arrExtra['payment1'] = $resultPayment['totalpayment'];
 					}elseif($startTerm == 2){//term2
+						$arrExtra['term1'] = 1;//just update
 						$arrExtra['term2'] = 1;
 						$arrExtra['periodDate2'] = $resultPayment['paidDate'];
 						$arrExtra['payment2'] = $resultPayment['totalpayment'];
 				}elseif($startTerm == 3){//term3
+						$arrExtra['term1'] = 1;//just update
+						$arrExtra['term2'] = 1;//just update
 						$arrExtra['term3'] = 1;
 						$arrExtra['periodDate3'] =  $resultPayment['paidDate'];
 						$arrExtra['payment3'] = $resultPayment['totalpayment'];
 				}elseif($startTerm == 4){//term4
+					    $arrExtra['term1'] = 1;//just update
+						$arrExtra['term2'] = 1;//just update
+						$arrExtra['term3'] = 1;//just update
 						$arrExtra['term4'] = 1;
 						$arrExtra['periodDate4'] = $resultPayment['paidDate'];
 						$arrExtra['payment4'] = $resultPayment['totalpayment'];

@@ -48,7 +48,7 @@
 						<ul style="font-size:12px;font-weight:bold;">
 							<li>លេខវិក័យបត្រ / Invoice No. : <?php echo $this->invoice['invoice_num']; ?></li>
 							<li style="padding-top:2px;">ថ្ងៃចេញវិក័យបត្រ / Invoice Date : <?php echo date("d/m/Y",strtotime($this->invoice['invoice_date'])); ?></li>
-							<li style="padding-top:2px;">សុពលភាព / Valid Date : <?php echo date("d/m/Y",strtotime($this->invoice['invoice_date'])); ?></li>
+							<li style="padding-top:2px;">សុពលភាព / Valid Date : <?php echo date("d/m/Y",strtotime($this->invoice['expired_date'])); ?></li>
 						</ul>
 					</td>
 				</tr>
@@ -76,7 +76,7 @@
 								<td width="10%" style="white-space: nowrap;">
 									<?php echo $tr->translate("ACADEMIC_YEAR");?>/Year
 								</td>
-								<td width="25%" ><div  class="value"> : &nbsp;<?php //echo $this->invoice['invoice_num']; ?></div></td>
+								<td width="25%" ><div  class="value"> : &nbsp;<?php echo $this->invoice['academicYear']; ?></div></td>
 							</tr>
 							<tr>
 								<td  style="white-space: nowrap;">

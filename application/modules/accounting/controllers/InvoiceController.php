@@ -26,11 +26,12 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$db = new Accounting_Model_DbTable_Dbinvoice();
 			$rs_rows = $db->getinvoice($search);
 			$list = new Application_Form_Frmtable();
-    		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX","INVOICE_DATE","INVOICE_NUM","INPUT_DATE","REMARK","AMOUNT","USER");
+    		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX",
+			"ACADEMIC_YEAR","INVOICE_NUM","INVOICE_DATE","EXPIRED_DATE","REMARK","TOTAL_AMOUNT","INPUT_DATE","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);
-    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('group_name'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
+    		$this->view->list=$list->getCheckList(10, $collumns, $rs_rows , array('branch'=>$link,'stu_code'=>$link,'stu_khname'=>$link,'invoice_date'=>$link, ));
 			
 			
 		}catch (Exception $e){
@@ -67,6 +68,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		$this->view->branch = $model->getAllBranch();
+		$this->view->acadimicYear = $model->getAllAcademicYear();
     }
 	public function editAction(){
 		$db = new Accounting_Model_DbTable_Dbinvoice();
@@ -96,7 +98,8 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		$this->view->branch =  $model->getAllBranch();
-		
+		$this->view->acadimicYear = $model->getAllAcademicYear();
+
 		$db = new Global_Model_DbTable_DbTerm();
 		$param = array(
 			'branch_id'=>$branch_id,
@@ -104,6 +107,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			'option'=>1,
 		);
 		$this->view->rs_term = $db->getTermStudyInterm($param);
+		
 	}
 	function getitemsdetailAction(){
 		if($this->getRequest()->isPost()){

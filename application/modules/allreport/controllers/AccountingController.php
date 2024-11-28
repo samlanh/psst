@@ -639,7 +639,9 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 				$search['end_date'] = date('Y-m-d');
 			}
 			$db = new Allreport_Model_DbTable_DbRptStudentNearlyEndService();
-			$abc = $this->view->row = $db->getAllStudentNearlyEndService($search);
+			$row = $db->getAllStudentNearlyEndService($search);
+			$this->view->row = $row;
+			
 			
 			$branch_id = empty($search['branch_id'])?null:$search['branch_id'];
 			$frm = new Application_Form_FrmGlobal();

@@ -173,12 +173,41 @@
 													<th><?php echo $tr->translate("SUBJECT"); ?></th>
 													<?php
 													$criterrialList = json_decode($row["criterialList"], true);
-													if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$rs){ ?>
-														<th><?php echo $rs['criterialTitle']; ?></th>
+													if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ ?>
+														<th><?php echo $cr['criterialTitle']; ?></th>
 													<?php } ?>
 												</tr>
 											</thead>
 											<tbody class="table-border-bottom-0">
+												<?php
+													$num=0;
+													$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
+													if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
+														$num++; ?>
+														<tr>
+															<td> <?php echo $num; ?> </td>
+															<td> <?php echo $sj['shortcut'].' - '.$sj['teacher']; ?> </td>
+															<?php
+															if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ ?>
+																<td> 
+																	<?php 
+																		// $gradingTpm = array(
+																		// 	'gradingId' => $row['gradingId'],
+																		// 	'groupId'   => $row['id'],
+																		// 	'subjectId' => $sj['subject_id'],
+																		// 	'criteriaId' => $cr['criteriaId'],
+																		// 	'examType'    => $examType ,
+																		// 	'forSemester' => $semester ,
+																		// 	'forMonth' 	  => $month ,
+																		// 	'teacherId'   => $rs['teacher'] ,
+																		// );
+																		// $rsCriterrial= $dbg->checkCriterial($gradingTpm);
+																	 ?>
+																	<a class="btn btn-primary  btn-sm" href="#" role="button">11/11/24</a>
+																</td>
+															<?php } ?>
+														</tr>
+													<?php } ?>
 											</tbody>
 										</table>
 									</div>

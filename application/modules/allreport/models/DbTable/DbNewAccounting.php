@@ -34,6 +34,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		 }
 //(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,
 // (SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
+//(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
 		$sql = "SELECT 
 				s.stu_id,
 				s.stu_code,
@@ -46,7 +47,8 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				END tel,
 				dg.stop_type AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
-				(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
+				(SELECT COALESCE(NULLIF(it.`shortcut`,''),$grade) FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
+				
 				dg.grade as gradeId,
 				dg.feeId,
 				vpm.paymentList,

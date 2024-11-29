@@ -194,11 +194,13 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			`g`.`note`,
 			(select $label from rms_view where type=9 and key_code=is_pass) as group_status,
 			 $criterialList 
+			,vgsm.`jsonSubjectList`
 			 ";
 
 		$sql .= $dbp->caseStatusShowImage("g.status");
 		$sql .= " FROM `rms_group` AS `g` 
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
+				LEFT JOIN `v_group_subject_for_month` AS vgsm ON vgsm.`group_id`=g.`id`
 		";
 
 		$where = ' WHERE 1 ';

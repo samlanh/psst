@@ -192,7 +192,7 @@ table.tb-footer tr.style-head{
 					<td width="70%" align="center">
 						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';">Student Payment Report</span><br />
 						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblreportType"></label><br /></span>
-						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblAcadmicYear"></label><label id="lblBranchId"></label>
+						<span style="color:#000; font-size: 11px;font-family:'Times New Roman','Khmer OS Muol Light';"><label id="lblBranchId"></label><label id="lblAcadmicYear"></label>
 					</td>
 					<td width="15%" align="center"><label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label></td>
 				</tr>
@@ -435,10 +435,10 @@ table.tb-footer tr.style-head{
 		ready(function () {
 			$('#lblreportType').html("<?php echo $lblReport; ?>");
 			
-			let lblAcadmicYear = dijit.byId("academic_year").attr('displayedValue');
+			let lblAcadmicYear = "&nbsp;"+dijit.byId("academic_year").attr('displayedValue');
 			$('#lblAcadmicYear').html(lblAcadmicYear);
 
-			let branchLable = "-"+dijit.byId("branch_id").attr('displayedValue');
+			let branchLable = dijit.byId("branch_id").attr('displayedValue')+" - ";
 			$('#lblBranchId').html(branchLable);
 
 			degree = dijit.byId('degree');

@@ -717,17 +717,16 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		$lang = $_db->currentlang();
 		if($lang==1){// khmer
 			$label = "name_kh";
-			$branch = "branch_namekh";
 			$grade = "item.title";
-			$degree = "rms_items.title";
+			
 		}else{ // English
 			$label = "name_en";
-			$branch = "branch_nameen";
 			$grade = "item.title_en";
-			$degree = "rms_items.title_en";
 		}
 		$sql="SELECT 
-    			  spd.id,
+				  sp.receipt_number,
+				  sp.balance_due as balance,	
+				  DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS create_date ,
     			  spd.payment_id,
 				  spd.fee,
 				  spd.qty,
@@ -735,31 +734,22 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 				  spd.extra_fee,
 				  spd.discount_percent,
 				  spd.discount_amount,
+				 (SELECT ds.discountCode FROM `rms_dis_setting` ds WHERE ds.id=spd.discount_type LIMIT 1) as discountCode,
 				  spd.paidamount,	
-				  sp.balance_due as balance,	
-				  (SELECT dis_name FROM `rms_discount` WHERE disco_id=spd.discount_type LIMIT 1) AS discount_type,
-				  spd.paidamount,
 				  spd.note,
 				  spd.is_onepayment,
 				  DATE_FORMAT(spd.start_date, '%d-%m-%Y') AS start_date ,
 				  DATE_FORMAT(spd.validate, '%d-%m-%Y') AS validate ,
-				  sp.receipt_number,
-				  DATE_FORMAT(sp.create_date, '%d-%m-%Y') AS create_date ,
-				  sp.is_void,
-				  $grade AS item_name,
-				  (SELECT $degree FROM rms_items WHERE item.items_type LIMIT 1) AS category,
-				  (SELECT CONCAT(first_name) FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_name,
+				  (SELECT $grade FROM rms_itemsdetail AS item WHERE item.id=spd.itemdetail_id LIMIT 1) item_name,
 				  (SELECT $label FROM rms_view  WHERE rms_view.type=6 AND key_code=spd.payment_term LIMIT 1) AS payment_term,
-				  (SELECT $label FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status                  
+				  (SELECT st.title FROM `rms_startdate_enddate` st WHERE st.id=spd.academicFeeTermId LIMIT 1) term_installment,
+				  (SELECT $label FROM rms_view WHERE TYPE=10 AND key_code=sp.is_void LIMIT 1) AS void_status,
+				  (SELECT first_name FROM rms_users WHERE rms_users.id = sp.user_id LIMIT 1) AS user_name                  
 			FROM 
     				rms_student_payment AS sp,
-    				rms_student_paymentdetail AS spd,
-    				rms_student AS s,
-    				rms_itemsdetail AS item
+    				rms_student_paymentdetail AS spd
     			WHERE 
-					item.id=spd.itemdetail_id
-    				AND s.stu_id = sp.student_id
-    				AND sp.id=spd.payment_id ";
+					sp.id=spd.payment_id ";
 		if(!empty($data['studentId'])){
 			$sql.=" AND sp.student_id =".$data['studentId'];
 		}
@@ -771,65 +761,52 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 			if(!empty($results)){
 				$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 				$str.='<table class="collape tablesorter" style="border-collapse: collapse; border:1px solid #ccc;white-space: nowrap;">'
-						.'<thead><tr  class="head-td" style="background:#ececec;font-size:10px;color:#000"><th class="tdheader">'.$tr->translate("N_O").'</th>'
-						.'<th class="tdheader">'.$tr->translate('SERVICE_CATE').'</th>'
+						.'<thead><tr  class="head-td" style="background:#d3e3fd;font-size:10px;color:#000"><th class="tdheader">'.$tr->translate("N_O").'</th>'
 						.'<th class="tdheader">'.$tr->translate('SERVICES').'</th>'
 						.'<th class="tdheader">'.$tr->translate('PAID_DATE').'</th>'
 						.'<th class="tdheader">'.$tr->translate('RECEIPT_NO').'</th>'
 						.'<th class="tdheader">'.$tr->translate('PAYMENT_TERM').'</th>'
-						.'<th class="tdheader">'.$tr->translate('QTY').'x'.$tr->translate('PRICE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('QTY').'</th>'
+						.'<th class="tdheader">'.$tr->translate('PRICE').'</th>'
 						.'<th class="tdheader">'.$tr->translate('SUBTOTAL').'</th>'
-						.'<th class="tdheader">'.$tr->translate("EXTRA_FEE").'/'.$tr->translate("DEDUCT").'</th>'
+						.'<th class="tdheader">'.$tr->translate("OTHER").'</th>'
 						.'<th class="tdheader">'.$tr->translate('DISCOUNT_TYPE').'</th>'
 						.'<th class="tdheader">'.$tr->translate('DISCOUNT').'</th>'
 						.'<th class="tdheader">'.$tr->translate('PAID').'</th>'
 						.'<th class="tdheader">'.$tr->translate('BALANCE').'</th>'
-						.'<th class="tdheader">'.$tr->translate('VALID_DATE').'</th>'
+						.'<th class="tdheader">'.$tr->translate('VALIDATE').'</th>'
 						.'<th class="tdheader">'.$tr->translate('NOTE').'</th>'
 						.'<th class="tdheader">'.$tr->translate('STATUS').'</th>'
 						.'<th class="tdheader">'.$tr->translate('USER').'</th>'
-						.'<th class="tdheader">'.$tr->translate('DETAIL').'</th>'
 				.'</thead>';
 				$url = Zend_Controller_Front::getInstance()->getBaseUrl();
 				foreach($results as $key=> $result){
 					$str.= '<tr style="background-color:none;font-size:11px;text-align:center;" class="hover">';
+						
+						$payment_term = !empty($result['term_installment'])?$result['term_installment']:$result['payment_term'];
+						$validate ='';
+						$validate = ($result['is_onepayment']!=1 AND !empty($result['start_date']) AND !empty($result['validate'])) ? $result['start_date'].'/'.$result['validate']:"";
+						$discount_percent=($result['discount_percent']>0)?str_replace(".00","",$result['discount_percent'])."%":"";
+						$discount_amount=($result['discount_amount']>0)?$result['discount_amount']:"";
+						$sign = ($discount_percent!="" AND $discount_amount!="")?"+":"";
+
 						$str.= '<td>'.($key+1).'</td>';
-						$str.= '<td style="text-align:left;">'.$result['category'].'</td>';
 						$str.= '<td style="text-align:left;"><label class="notedDescription">'.$result['item_name'].'</label></td>';
 						$str.= '<td>'.$result['create_date'].'</td>';
-						$str.= '<td>'.$result['receipt_number'].'</td>';
-						$payment_term='';
-						if($result['payment_term']!=null){
-							$payment_term=$result['payment_term'];
-						}
+						$str.= '<td style="text-align:left;"><a target="_blank" href="'.$url.'/allreport/accounting/rptreceiptdetail/id/'.$result['payment_id'].'">'.$result['receipt_number'].'</a></td>';
 						$str.= '<td style="text-align:left;">'.$payment_term.'</td>';
-						$str.= '<td>'.$result['qty'].'x'.$result['fee'].'</td>';
-						$str.= '<td>'.$result['subtotal'].'</td>';
-						$str.= '<td>'.$result['extra_fee'].'</td>';
-						if($result['discount_type']==null || $result['discount_type']){
-							$dis_type = "";
-						}else{
-							$dis_type = $result['discount_type'];
-						}
-						$str.= '<td>'.$dis_type.'</td>';
-						$discount_percent='';
-						if($result['discount_percent']>=0){
-							$discount_percent=$discount_percent.'/';
-						}
-						
-							$validate ='';
-						if($result['is_onepayment']!=1){
-							$validate=$result['start_date'].'/'.$result['validate'];
-						}
-						$str.= '<td>'.$discount_percent.$result['discount_amount'].'</td>';
-						$str.= '<td>'.$result['paidamount'].'</td>';
-						$str.= '<td>'.$result['balance'].'</td>';
-						
+						$str.= '<td>'.str_replace(".00","",$result['qty']).'</td>';
+						$str.= '<td>'.str_replace(".00","",$result['fee']).'</td>';
+						$str.= '<td>'.str_replace(".00","",$result['subtotal']).'</td>';
+						$str.= '<td>'.str_replace(".00","",$result['extra_fee']).'</td>';
+						$str.= '<td>'.$result['discountCode'].'</td>';
+						$str.= '<td>'.$discount_percent.$sign.$discount_amount.'</td>';
+						$str.= '<td><strong>'.number_format($result['paidamount'],0).' </strong><small class="usdright">$ </small></td>';
+						$str.= '<td>'.number_format($result['balance'],0).'</td>';
 						$str.= '<td>'.$validate.'</td>';
 						$str.= '<td>'.$result['note'].'</td>';
 						$str.= '<td>'.$result['void_status'].'</td>';
 						$str.= '<td style="text-align:left;">'.$result['user_name'].'</td>';
-						$str.= '<td style="text-align:left;"><a target="_blank" href="'.$url.'/allreport/accounting/rptreceiptdetail/id/'.$result['payment_id'].'">'.$tr->translate('DETAIL').'</a></td>';
 					$str.="</tr>";
 				}
 			}

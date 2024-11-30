@@ -4841,6 +4841,69 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
+	
+	function getSubjectScoreTranscriptAPI($data)
+	{ 
+		
+		$db = $this->getAdapter();
+		$strCollect = 'gdSub.amount_subject';
+		$strMaxScore = 'gdSub.max_score';
+		if ($data['examType'] == 2 OR $data['examType'] == 3) { //semester
+			$strCollect = 'gdSub.amount_subject_sem';
+			$strMaxScore = 'gdSub.semester_max_score';
+		}
+
+		$strSubjecMaxScore = $strMaxScore;
+		$strMultiSubject = $strCollect;
+
+		$subjectId = empty($data['subjectId']) ? 0 : $data['subjectId'];
+		$scoreId = empty($data['scoreId']) ? 0 : $data['scoreId'];
+		$sql = "SELECT
+					sd.`subject_id`,
+					sd.gradingTotalId,
+					sd.`score` AS totalAverage,
+					FIND_IN_SET(sd.`score`,
+						(SELECT GROUP_CONCAT(insd.score ORDER BY insd.score DESC)
+						FROM 
+							rms_score_detail AS insd 
+						 WHERE
+							insd.`score_id`=$scoreId
+						 	AND sd.`subject_id`=insd.subject_id
+						ORDER BY insd.`score` DESC )) AS rankingSubject,
+					sd.score_cut,
+					sj.subject_titlekh AS sub_name,
+					sj.subject_lang AS subjectLang,
+					sj.subject_titleen AS sub_name_en,
+					$strSubjecMaxScore AS maxScore,
+					$strMultiSubject AS multiSubject,
+					sd.amount_subject
+					,COALESCE(gSS.innerSubject,0) AS innerSubject
+					,COALESCE(gSS.innerSubject,0) AS innerSubjectNew
+					,gSS.innerSubjectList AS innerSubjectListNew
+					,criSj.`criteriaScoreList`
+				FROM  (`rms_score` AS s JOIN `rms_score_detail` AS sd ON sd.`score_id` = s.`id`)
+						LEFT JOIN rms_group AS g ON g.id=sd.group_id 
+						LEFT JOIN `rms_group_subject_detail` AS gdSub ON gdSub.group_id = sd.group_id AND gdSub.subject_id=sd.subject_id 
+						LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id` 
+						LEFT JOIN `rms_subject` AS sj ON sj.id = sd.subject_id 
+						LEFT JOIN v_gradingsubsubjectscore AS gSS ON gSS.studentId=sd.`student_id` AND gSS.gradingId=sd.gradingTotalId AND gSS.subjectId=sd.`subject_id`
+						LEFT JOIN `v_criteriascore_subject` AS criSj ON criSj.`settingEntryId` = s.`settingId` AND criSj.`subjectId` = sd.subject_id AND criSj.`studentId` = sd.`student_id`
+				WHERE 1 ";
+		if (!empty($scoreId)) {
+			$sql .= " AND sd.`score_id`=" . $scoreId;
+		}
+		if (!empty($data['studentId'])) {
+			$sql .= " AND sd.`student_id`=" . $data['studentId'];
+		}
+		if (!empty($subjectId)) {
+			$sql .= " AND sd.`subject_id`=" . $subjectId;
+		}
+		if (!empty($data['groupbySubjectId'])) { //for get all subject in result detail
+			$sql .= " GROUP BY subject_id ";
+		}
+		$sql .= " ORDER  BY sj.subject_lang ASC, gsj.subject_order  ASC ";
+		return $db->fetchAll($sql);
+	}
 	function getStudentTranscriptExam($_data){
 		$db = $this->getAdapter();
 		try{
@@ -4875,12 +4938,13 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					'studentId'=>$studentId,
 					'examType'=>$scoreInfo['exam_type']
 					);
-			$scoreSubjectInfo =  $dbTrancript->getSubjectScoreTranscript($resultScoreArr);
+			//$scoreSubjectInfo =  $dbTrancript->getSubjectScoreTranscript($resultScoreArr);
+			$scoreSubjectInfo =  $this->getSubjectScoreTranscriptAPI($resultScoreArr);
 		
+			//$scoreResultList = $scoreSubjectInfo;
 			$scoreResultList = array();
 			if(!empty($scoreSubjectInfo)){
 				foreach ($scoreSubjectInfo as $key=> $result){
-					
 					$scoreResultList[$key] = array(
 							'subject_id'=>$result['subject_id'],
 							'gradingTotalId'=>$result['gradingTotalId'],
@@ -4894,9 +4958,12 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							'maxScore'	=>$result['maxScore'],
 							'multiSubject'=>$result['multiSubject'],
 							'amount_subject'=>$result['amount_subject'],
+							'innerSubjectNew'=>$result['innerSubjectNew'],
+							'innerSubjectListNew'=>$result['innerSubjectListNew'],
+							'criteriaScoreList'=>$result['criteriaScoreList'],
 							'innerSubject'=>0
 						);
-					
+					//Will Remove After Update App New Version
 					$arrSub= array(
 						'gradingId'=>$result['gradingTotalId'],
 						'subjectId'=>$result['subject_id'],

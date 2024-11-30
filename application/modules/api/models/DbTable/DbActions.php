@@ -1460,6 +1460,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		$db = new Api_Model_DbTable_DbApi();
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		$row = $db->getStudentTranscriptExam($search);
+		
 		if ($row['status']){
 			$arrResult = array(
 				"result" => $row['value'],

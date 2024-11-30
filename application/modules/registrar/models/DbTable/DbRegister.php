@@ -585,8 +585,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
     	$_db  = new Application_Model_DbTable_DbGlobal();
     	$user = $_db->getUserAccessPermission('sp.user_id');
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
-    	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-    	$print=$tr->translate("PRINT_SCHO");
+    
+    	
     	$db=$this->getAdapter();
     	
     	$lang = $_db->currentlang();

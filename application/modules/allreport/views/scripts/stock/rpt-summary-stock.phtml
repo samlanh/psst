@@ -245,7 +245,7 @@ table.tb-footer tr.style-head {
 								<td data-label="<?php echo $tr->translate("REQUEST_QTY");?>">&nbsp;<?php if($rs_row['qtyUsage']>0){echo number_format($rs_row['qtyUsage']);}else{ echo "-";} ?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("TRANSFER_OUT");?>">&nbsp;<?php if(!empty($rs_row['qtyTransferOut'])){echo number_format(-1*$rs_row['qtyTransferOut']);}else{ echo "-";} ?>&nbsp;</td>
 								<td data-label="<?php echo $tr->translate("ADJUST_STOCK");?>">&nbsp;<?php if(!empty($rs_row['qtyAdjust'])){echo number_format(-1*$rs_row['qtyAdjust']);}else{ echo "-";} ?>&nbsp;</td>
-								<td data-label="<?php echo $tr->translate("CURR_QTY");?>" class=" <?php if($rs_row['isClosed']==1){ echo "redBold"; } ?> ">
+								<td data-label="<?php echo $tr->translate("CURRENT_QTY");?>" class=" <?php if($rs_row['isClosed']==1){ echo "redBold"; } ?> ">
 									<?php 
 										if($rs_row['isClosed']==1){
 											echo number_format($rs_row['qtyClosing']);

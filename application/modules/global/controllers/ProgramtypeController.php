@@ -23,7 +23,7 @@ class Global_ProgramtypeController extends Zend_Controller_Action {
  			$rs_rows= $db->getAllProgramType($search);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("TITLE","TITLE_EN","SHORTCUT","TYPE","DEGREE","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("TITLE","TITLE_EN","SHORTCUT","TYPE","DEGREE","CREATE_DATE","BY_USER","STATUS");
 			$link=array(
 				'module'=>'global','controller'=>'programtype','action'=>'edit',
 			);

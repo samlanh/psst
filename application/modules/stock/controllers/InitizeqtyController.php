@@ -25,7 +25,7 @@ class Stock_InitizeqtyController extends Zend_Controller_Action {
 			$rows = $db->getAllProductLocattion($search);
 			
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","BARCODE","PRODUCT_NAME","CURRENT_QTY","UNIT_COST","SELL_PRICE","PRICE_SET","TYPE","DATE","BY_USER","STATUS");
+			$collumns = array("BRANCH","BAR_CODE","PRODUCT_NAME","CURRENT_QTY","UNIT_COST","SELL_PRICE","PRICE_SET","TYPE","DATE","BY_USER","STATUS");
 
 // 			$link=array(
 // 					'module'=>'stock','controller'=>'adjuststock','action'=>'edit',

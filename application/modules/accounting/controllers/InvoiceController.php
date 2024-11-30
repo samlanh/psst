@@ -27,7 +27,7 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 			$rs_rows = $db->getinvoice($search);
 			$list = new Application_Form_Frmtable();
     		$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","SEX",
-			"ACADEMIC_YEAR","INVOICE_NUM","INVOICE_DATE","EXPIRED_DATE","REMARK","TOTAL_AMOUNT","INPUT_DATE","USER");
+			"ACADEMIC_YEAR","INVOICE_NO","INVOICE_DATE","EXPIRED_DATE","REMARK","TOTAL_AMOUNT","INPUT_DATE","USER");
     		$link=array(
     				'module'=>'accounting','controller'=>'invoice','action'=>'edit',
     		);

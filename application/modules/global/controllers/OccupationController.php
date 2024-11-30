@@ -22,7 +22,7 @@ class Global_OccupationController extends Zend_Controller_Action {
 			$rs_rows= $db->getAllOccupation($search);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("OCCUPATION_KHNAME","OCCUPATION_ENNAME","CREATED_DATE","BY_USER","STATUS");
+			$collumns = array("OCCUPATION_KHNAME","OCCUPATION_ENNAME","CREATE_DATE","BY_USER","STATUS");
 			$link=array(
 					'module'=>'global','controller'=>'occupation','action'=>'edit',
 			);

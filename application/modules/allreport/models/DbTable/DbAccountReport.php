@@ -233,6 +233,60 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 			Application_Form_FrmMessage::message("APPLICATION_ERROR");
 		}
 	}
+	
+	function getIncomeDailyTotal($search=null){
+		try{
+			$dbGb = new Application_Model_DbTable_DbGlobal();
+			$currentLang = $dbGb->currentlang();
+			$branch_id = $dbGb->getAccessPermission('spt.`branchId`');
+			$branch = $dbGb->getBranchDisplay();
+			
+			$labelFull = $dbGb->getViewLabelDisplay();
+			$labelShort = $dbGb->getViewLabelDisplay("shortcut");
+			
+			$columnItem = 'title_en';
+			if ($currentLang == 1) {
+				$columnItem = 'title';
+			}
+			
+			$db=$this->getAdapter();
+			$fromDate =(empty($search['start_date']))? '1': " DATE_FORMAT(spt.`createDateFmt`, '%Y-%m-%d %H:%i:%s') >= '".$search['start_date']." 00:00:00'";
+			$toDate = (empty($search['end_date']))? '1': " DATE_FORMAT(spt.`createDateFmt`, '%Y-%m-%d %H:%i:%s') <= '".$search['end_date']." 23:59:59'";
+			$sql=" SELECT
+						(SELECT b.$branch FROM rms_branch AS b WHERE b.br_id = spt.`branchId` LIMIT 1) AS branchName
+						
+						,(SELECT v.$labelFull FROM `rms_view` AS v WHERE v.type =8 AND v.key_code = spt.`pmtMethod` LIMIT 1) AS paymentMethodTitle
+						,COALESCE((SELECT b.`bank_name` FROM `rms_bank` AS b WHERE b.id = spt.`bankId` LIMIT 1),'N/A') AS bankName
+						
+						,spt.*
+				  FROM
+						`v_income_daily_total` AS spt 
+				  WHERE 1
+						
+						$branch_id ";
+	
+			$sql.= " AND ".$fromDate." AND ".$toDate;
+	
+			if(!empty($search['adv_search'])){
+				$s_where=array();
+				$s_search = str_replace(' ', '', addslashes(trim($search['adv_search'])));
+				$s_where[] = " REPLACE(spt.`branchId`,' ','') LIKE '%{$s_search}%'";
+				
+				$where.=' AND ('.implode(' OR ', $s_where).')';
+			}
+			if(!empty($search['branch_id'])){
+				$sql.= " AND spt.branchId = ".$search['branch_id'];
+			}
+	
+			$order=" ORDER BY spt.`pmtMethod` DESC,spt.`bankId` ASC";
+			
+			
+			return $db->fetchAll($sql.$order);
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			Application_Form_FrmMessage::message("APPLICATION_ERROR");
+		}
+	}
     
 }
    

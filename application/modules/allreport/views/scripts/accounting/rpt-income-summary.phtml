@@ -1,0 +1,391 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$pageTitle = $tr->translate("RPT_INCOME_DAILY_SUMARRY");
+	echo $this->headTitle($pageTitle);
+	
+	$frm =  $this->form_search;
+	$classHideHeight=classHideHeight;
+	$dateFormat ="d/m/y";
+	
+	$parentCol = $this->parentCol;
+
+	$countCol = count($parentCol);
+	$dbAcc = new Allreport_Model_DbTable_DbAccountReport();
+?>
+<style>
+	.hideprintdate {
+		display: none !important;
+	}
+	.hover:hover {
+		background: #ddd;
+	}
+</style>
+<div
+	style="min-height: 10cm; margin: 0 auto; padding: 0.2cm 0.2cm 0cm 0.2cm">
+	<div class="card-box">
+		<div class="col-sm-12 border-botom">
+			<div class="col-sm-8 pd-0">
+				<h4 class="m-b-0">
+					<i class="fa fa-file-text"></i>&nbsp;&nbsp;&nbsp;<?php echo $pageTitle;?></h4>
+			</div>
+			<div class="col-sm-4 text-right"></div>
+		</div>
+	</div>
+	<form id='foundation_class' action="" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
+		<div class="form-group">
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("branch_id");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("start_date");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("end_date");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+				<button class="button-class button-primary"
+					iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button"
+					showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
+			</div>
+			<div class="col-md-2 col-sm-2 col-xs-12"></div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-12 col-sm-12 col-xs-12"></div>
+		</div>
+	</form>
+	<div id="divPrint">
+		<style>
+			.style {
+				line-height: 16px;
+			}
+			.styleheader{line-height: 20px;}
+			table.content-data {
+				border-collapse: collapse;
+				border: 1px solid #000;
+			}
+			table.content-data tr td{
+				padding:1px;
+			}
+			#header {
+				display: table-header-group;
+				page-break-inside: avoid;
+				page-break-after: auto;
+				margin-top: 100px;
+			}
+			table.content-data thead tr.styleheader {
+				padding: 1px 0px;
+				white-space: nowrap;
+				height: 24px;
+				background: #c1d0f3;
+				font-weight: 600;
+			}
+			table.content-data thead tr.styleheader td {
+				white-space: pre-line;
+				line-height: 14px;
+			}
+			table.content-data tbody td span.text-truncate {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				line-height: inherit;
+				width: 100px;
+				display: block;
+			}
+			table.content-data tr.style {
+				white-space: nowrap;
+			}
+			.noted {
+				width: 60px !important;
+			}
+			table tr td{
+				font-family: 'Times New Roman', 'Khmer OS Battambang';
+			}
+			
+			.row_data{
+				white-space: normal; max-width: 200px;
+			}
+			.content-data,.hideprintdate{font-size: 9px ;}
+			tr.style.total-row {
+				background: #edf2ff;
+			}
+
+			tr.style.gtotal-row {
+				background: #c1d0f3;
+			}
+			.redColor{
+				color : #e00000 !important;
+			}
+			.setfontsize{font-size:10px !important;}
+			
+			@media print {
+				.hide {
+					visibility: visible;
+					height: <?php echo $classHideHeight;?>;
+				}
+				<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
+				.bgRow {
+					background: #d6e2ff !important;
+					}
+				.branchName{font-size: 11px;}
+			}
+			
+		</style>
+		<table style="width:100%;">
+			<tr>
+				<td colspan="3"><?php echo $this->rsheader;?></td>
+			</tr>
+			<tr>
+				<td width="15%" align="center"></td>
+				<td align="center" width="70%">
+					<div style="width:100%;margin-top: -25px;">
+						<div style="font-size:12px;color: #000;font-family: 'Times New Roman','Khmer OS Muol Light';">
+							<?php echo $pageTitle; ?>
+						</div>
+						<div  class="setfontsize branchName"></div>
+							<?php if(!empty($this->search["start_date"])){?>
+						<div class="setfontsize" style="margin-bottom:5px; color: #000;  font-family: 'Times New Roman', 'Khmer OS Muol Light'; line-height:15px;"><?php echo date($dateFormat,strtotime($this->search["start_date"]))?> to <?php echo date($dateFormat,strtotime($this->search["end_date"]));?></div><?php }?>
+					</div>
+				</td>
+				<td width="15%">
+					<label class='hideprintdate'>Print Date <?php echo date("d-m-Y H:i");?></label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" id="exportExcel" valign="top">
+					<?php 
+					 	$i=1;
+					 	$summaryInfoArray = array();
+							$oldLabelMethod="";
+							$colspanTotal=$countCol;
+							if($countCol>1){
+								$colspanTotal=$countCol-1;
+							}
+									
+							$paymentMethod="";
+							$bankId="";
+							
+							$totalPaidByMethod=0;
+							$totalCreditMemoByMethod=0;
+							
+							$gTutionTotal=0;
+							$gTotalPaid=0;
+							$gTotalCreditMemo=0;
+							if(!empty($this->rowStDailyPmt)){
+					 ?>
+					<table class="content-data" width="100%" border="1" align="center">
+						<thead>
+							<tr class="styleheader" align="center">
+								<td scope="col"><?php echo $tr->translate("No");?></td>
+								<td scope="col" width="50px"><?php echo $tr->translate("Paid Date");?></td>
+								
+								<td scope="col"><?php echo $tr->translate("Tuition");?></td>
+								<td scope="col"><?php echo $tr->translate("Discount");?></td>
+								<?php if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){?>
+								<td scope="col" width="70px"><?php echo $mainParent["title"];?></td>
+								<?php } ?>
+								<td scope="col"><?php echo $tr->translate("Paid");?></td>
+								<td scope="col"><?php echo $tr->translate("Method");?></td>
+								
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							foreach($this->rowStDailyPmt as $kerIndex => $rs){ 
+								$i++; 
+								$payTerm="";
+								$tutionTotalFeeLabel="";
+								$tutionFeeDisPer="";
+								$tutionFeeDisAmt="";	
+								
+								$pmtDetailJson = json_decode($rs['pmtDetailJson'], TRUE);
+							?>
+							
+								<?php 
+									$strTotalByMethod="";
+									$columnTypeStr="";
+									if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){ 
+										$columnClass="";
+										$expl = explode(',', $mainParent["listSubId"]);
+										$totalPaymentLabel="";
+										$totalPayment=0;
+										$gTotalPayment = 0;
+										if(!empty($pmtDetailJson)) foreach($pmtDetailJson as $detail){
+											$category = empty($detail["category"]) ? 0 : $detail["category"];
+											$keyIndex = in_array($category, $expl);
+											if(in_array($category, $expl)) {
+												$thisTotal= empty($detail["totalPayment"]) ? 0 : $detail["totalPayment"];
+												$totalPayment = $totalPayment + $thisTotal;
+												
+											
+												if($detail["itemType"]==1){
+													$tutionTotalFeeLabel=$detail["fee"];
+													$payTerm= empty($detail["payTermTitle"]) ?  $tr->translate("OTHER") :  $detail["payTermTitle"];
+													$tutionFeeDisPer=($detail["disPer"]>0) ?  str_replace(".00","",$detail["disPer"])."%" : "";
+													
+													if($detail["disPer"]>0){
+														$tutionFeeDisAmt=($detail["disAmt"]>0) ? "+".$detail["disAmt"] : "";
+													}else{
+														$tutionFeeDisAmt=($detail["disAmt"]>0) ? $detail["disAmt"] : "";
+													}
+												}
+											}
+											
+										}
+										$gTotalPayment = $gTotalPayment + $totalPayment;
+										$totalPaymentLabel= empty($totalPayment) ? "" : number_format($totalPayment,2);
+										if($totalPayment<0){
+											$columnClass="redColor";
+											$totalPaymentLabel = "(".number_format($totalPayment,2).")";
+										}
+										
+										$currTotalMethod = empty($parentCol[$k]["totalByMethod"]) ? "" : number_format($parentCol[$k]["totalByMethod"],2);
+										$strTotalByMethod.= '<td align="right"><strong>'.$currTotalMethod.'</strong></td>';
+										if($paymentMethod !=$rs["pmtMethod"] || $bankId !=$rs["bankId"]){
+											$parentCol[$k]["totalByMethod"] = 0;
+										}
+										$parentCol[$k]["totalByMethod"] = $parentCol[$k]["totalByMethod"] + $gTotalPayment;
+										$parentCol[$k]["gTotal"] = empty($parentCol[$k]["gTotal"]) ? 0 : $parentCol[$k]["gTotal"];
+										$parentCol[$k]["gTotal"] = $parentCol[$k]["gTotal"] + $gTotalPayment;
+										
+										
+										$columnTypeStr.= '<td class="'.$columnClass.'" align="right" data-label="'.$mainParent["title"].'">'.$totalPaymentLabel.'</td>';
+									}
+								?>
+									
+								<?php 
+									if($paymentMethod !=$rs["pmtMethod"] || $bankId !=$rs["bankId"]){
+										$rowLabel = $rs["bankName"];
+										if($rs["pmtMethod"]==1){
+											$rowLabel = $rs["paymentMethodTitle"];
+										}
+								?>
+								<?php if($kerIndex>0){ 
+								$arryTotal = array(
+									"methodTitle" =>$oldLabelMethod
+									,"totalRecord" =>$i-1
+									,"totalCrediMemoAmt" =>$totalCreditMemoByMethod
+									,"totalPaidAmt" =>$totalPaidByMethod
+								);
+								array_push($summaryInfoArray, $arryTotal);
+								?>
+								<tr class="style total-row">
+									<td colspan="3" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
+									<td></td>
+									<?php echo $strTotalByMethod;?>
+									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
+									<td></td>
+								</tr>
+								<?php } 
+									$oldLabelMethod = $rowLabel;
+									//reset
+									
+									$totalPaidByMethod=0;
+									$totalCreditMemoByMethod=0;
+									$i=1;
+								?>
+								<tr class="style">
+									<td colspan="<?php echo 12+$countCol;?>" align="left"><strong><?php echo $rowLabel;?></strong></td>
+								</tr>
+								<?php }?>
+								 <tr class="style hover"   >
+									<td data-label="<?php echo $tr->translate("No");?>" align="center"><?php echo $i;?></td>
+									<td data-label="<?php echo $tr->translate("Paid Date");?>" align="center"><?php echo date($dateFormat, strtotime($rs['createDate'])); ?></td>
+									<td data-label="<?php echo $tr->translate("Tuition");?>" align="right"><?php echo $tutionTotalFeeLabel;?></td>
+									<td data-label="<?php echo $tr->translate("Discount");?>" align="center"><?php echo $tutionFeeDisPer.$tutionFeeDisAmt;?></td>
+									
+									<?php echo $columnTypeStr; ?>
+									<?php 
+										
+										$paidAmount = $rs['ttMPaidAmt'];
+										$paidAmountLabel = number_format($paidAmount,2);
+										$paidClass="";
+										if($paidAmount<0){
+											$paidClass="redColor";
+											$paidAmountLabel = "(".$paidAmountLabel.")";
+										}		
+									?>
+									
+									<td data-label="<?php echo $tr->translate("Paid");?>" align="right" class="<?php echo $paidClass;?>"><?php echo $paidAmountLabel; ?></td>
+									<td data-label="<?php echo $tr->translate("Method");?>" align="center"><?php echo $rowLabel; ?></td>
+									
+									
+								</tr>
+								
+								<?php 
+									$totalPaidByMethod = $totalPaidByMethod + $paidAmount;
+										$gTotalPaid = $gTotalPaid + $paidAmount;
+									
+									$paymentMethod=$rs["pmtMethod"];
+									$bankId=$rs["bankId"];
+								?>
+							<?php }
+								$arryTotal = array(
+									"methodTitle" =>$oldLabelMethod
+									,"totalRecord" =>$i
+									,"totalPaidAmt" =>$totalPaidByMethod
+								);
+								array_push($summaryInfoArray, $arryTotal);
+							?>
+								<tr class="style total-row">
+									<td colspan="3" align="right"><strong><?php echo $tr->translate("TOTAL")." ".$oldLabelMethod;?></strong></td>
+									<td></td>
+									<?php 
+									$strGTotal="";
+									if(!empty($parentCol)) foreach($parentCol AS $k =>$mainParent){ 
+									$currTotalMethod = empty($mainParent["totalByMethod"]) ? "" : number_format($mainParent["totalByMethod"],2);
+									$gTotal = empty($mainParent["gTotal"]) ? "" : number_format($mainParent["gTotal"],2);
+									$strGTotal.= '<td align="right"><strong>'.$gTotal.'</strong></td>';
+									?>
+									<td align="right"><strong><?php echo $currTotalMethod;?></strong></td>
+									<?php } ?>
+									<td align="right"><strong><?php echo number_format($totalPaidByMethod,2);?></strong></td>
+									<td></td>
+								</tr>
+								<tr class="style gtotal-row">
+									<td colspan="3" align="right"><strong><?php echo $tr->translate("GRAND_TOTAL");?></strong></td>
+									<td></td>
+									<?php echo $strGTotal;?>
+									<td align="right"><strong><?php echo number_format($gTotalPaid,2);?></strong></td>
+									<td></td>
+								</tr>
+						
+						</tbody>
+					</table>
+					<div style="display: flex; text-align: right;align-content: end;flex-wrap: wrap;flex-direction: column;margin-top: 10px; margin-right:183px;">
+						<table  class="content-data" style=" width:22%; text-align: center; margin: 0 auto; font-weight: bold; border: 0;">
+							<tr>
+								<td colspan="4" align="center" style=" background-color :#c1d0f3;"><strong><?php echo $tr->translate("incomeSummary");?></strong></td>
+							</tr>
+							<tr>
+								<td width="25%" align="right" style="white-space:nowrap;"><?php echo $tr->translate("GRAND_TOTAL");?></td>
+								<td width="25%" align="right"><?php echo sprintf('%02d', count($this->rowStDailyPmt));?></td>
+								<td width="25%" align="right">$</td>
+								<td width="25%" align="right"><?php echo number_format($gTotalPaid,2);?></td>
+							</tr>
+							<?php if(!empty($summaryInfoArray)) foreach($summaryInfoArray as $sum){?>
+							<tr>
+								<td align="right"><?php echo $sum["methodTitle"];?></td>
+								<td align="right"><?php echo sprintf('%02d', $sum["totalRecord"]);?></td>
+								<td align="right">$</td>
+								<td align="right"><?php echo number_format($sum["totalPaidAmt"],2);?></td>
+							</tr>
+							<?php } ?>
+						</table>
+					</div>
+					<?php echo $this->rsfooteracc;?>
+					<?php } ?>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script src="<?php echo $this->baseUrl();?>/js/help.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js" type="text/javascript"></script>
+<script type="text/javascript">
+	dojo.require("dojo.data.ItemFileWriteStore"); 
+	dojo.require("dijit.form.CheckBox"); 
+	
+	dojo.ready(function(){
+		
+	});
+</script>

@@ -68,19 +68,16 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	$_db = new Application_Model_DbTable_DbGlobal();
     	$lang = $_db->currentlang();
     	if($lang==1){// khmer
-    		$label = "name_kh";
-    		$grade = "i.title";
-    		$degree = "rms_items.title";
-    		$branch = "b.branch_namekh";
+    		$grade = "it.title";
+    		$degree = "itd.title";
     	}else{ // English
-    		$label = "name_en";
-    		$grade = "i.title_en";
-    		$degree = "rms_items.title_en";
-    		$branch = "b.branch_nameen";
+    		$grade = "it.title_en";
+    		$degree = "itd.title_en";
     	}
     	$sql="SELECT tf.*,
-			    	$grade as class,
-			    	(SELECT $degree FROM `rms_items` WHERE rms_items.id=i.items_id LIMIT 1) as degree
+					(SELECT COALESCE(NULLIF(it.`shortcut`,''),$grade) FROM `rms_itemsdetail` it WHERE (`it`.`id`=`tf`.`class_id`) LIMIT 1) as class,
+					(SELECT $degree FROM `rms_items` itd WHERE `itd`.`id`=i.items_id LIMIT 1) as degree
+			    	
 			    	FROM 
 			    		rms_tuitionfee_detail as tf,
 			    		rms_itemsdetail as i 
@@ -99,7 +96,6 @@ class Allreport_Model_DbTable_DbRptFee extends Zend_Db_Table_Abstract
     	if($search!=null AND $search['school_option']>0){
     		$where.=" AND i.schoolOption = ".$search['school_option'];
     	}
-
     	$result = $db->fetchAll($sql.$where.$order);    	
     	if(!empty($result)){
     		return $result;

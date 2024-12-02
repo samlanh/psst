@@ -22,19 +22,23 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 	   		$label = "name_en";
 	   		$grade = "it.title_en";
 	   	}
-			$viewName = " v_studenttutionfeepaid";
+			
 
-		$condiontion = " AND itemType=1 AND dg.is_maingrade=1 ";
-		if($search['reportType']==2){
-			$viewName = " v_studentlunchfeepaid";
-			$condiontion = " AND dg.itemType=2 AND dg.grade=361 ";
+		if ($search['reportType'] == 1) {
+			$viewName = " v_studenttutionfeepaid";
+			$condiontion = " AND itemType=1 AND dg.is_maingrade=1 ";
+		}
+		elseif($search['reportType']==2){
+			$viewName = " v_studentlunchfeepaid ";
+			$condiontion = " AND dg.itemType=2 AND dg.grade = 361 ";//dg.itemType=2 
 		 }elseif($search['reportType']==3){
-			$viewName = " v_studentnapfeepaid";
-			$condiontion = " AND dg.itemType=2 AND dg.grade=360 ";
+			$viewName = " v_studentnapfeepaid ";//
+			$condiontion = " AND dg.itemType=2 AND dg.grade = 360   ";//AND 
 		 }
-//(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,
-// (SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
-//(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
+			//(SELECT $branch FROM `rms_branch` WHERE rms_branch.br_id = s.branch_id LIMIT 1) AS branch_name,
+			// (SELECT $label FROM `rms_view` WHERE type=40 and key_code=s.studentType LIMIT 1) AS studentType,
+			//(SELECT REPLACE($grade,'Grade','') FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
+		
 		$sql = "SELECT 
 				s.stu_id,
 				s.stu_code,
@@ -47,8 +51,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				END tel,
 				dg.stop_type AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
-				(SELECT COALESCE(NULLIF(it.`shortcut`,''),$grade) FROM `rms_itemsdetail` it WHERE (`it`.`id`=`dg`.`grade`) AND (`it`.`items_type`=1) LIMIT 1) as grade,
-				
+				(SELECT COALESCE(NULLIF(it.`shortcut`,''),$grade) FROM `rms_itemsdetail` it WHERE (`it`.`id`=`vpm`.`grade`) LIMIT 1) as grade,
 				dg.grade as gradeId,
 				dg.feeId,
 				vpm.paymentList,
@@ -63,10 +66,8 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				ON s.stu_id = dg.stu_id $condiontion
 				LEFT JOIN $viewName AS vpm
 				ON s.stu_id=vpm.studentId 
-
 			  WHERE
 			   	s.status=1
-				AND dg.is_maingrade=1
 				AND s.customer_type=1
 				";
 		$where = "";
@@ -99,7 +100,6 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		$where .= " AND ".$from_date." AND ".$to_date;
 
 		if($search['active_type']>-1){
-			
 			if ($search['active_type'] == 0) {
 				$where.= " AND dg.stop_type=0 AND dg.is_current=1";
 			} else {
@@ -121,8 +121,6 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		
 		$order=" order by s.stu_id DESC ";
 		$db = $this->getAdapter();
-		// echo $sql.$where.$order;
-		// exit();
 		
 		$resultStudent =  $db->fetchAll($sql.$where.$order);
 	

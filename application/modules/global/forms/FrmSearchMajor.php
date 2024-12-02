@@ -40,7 +40,7 @@ Class Global_Form_FrmSearchMajor extends Zend_Dojo_Form{
 	
 		$_title = new Zend_Dojo_Form_Element_TextBox('title');
 		$_title->setAttribs(array('dojoType'=>$this->text,'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("INPUT_FACULTY_MAJOR")));
+				'placeholder'=>$this->tr->translate("TITLE")));
 		$_title->setValue($request->getParam("title"));
 		
 		$_status=  new Zend_Dojo_Form_Element_FilteringSelect('status_search');

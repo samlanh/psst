@@ -136,7 +136,7 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		));
 		
 		$rsschool = $db->getAllSchoolOption();
-		$options=array(-1=>$this->tr->translate("SELECT_SCHOOL_OPTIONS"));
+		$options=array(-1=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"));
 		if(!empty($rsschool))foreach($rsschool AS $row){
 			$options[$row['id']]=$row['name'];
 		}
@@ -244,14 +244,14 @@ Class Accounting_Form_FrmFee extends Zend_Dojo_Form {
 		$schooloption->setAttribs(array(
 			'dojoType'=>'dijit.form.FilteringSelect',
 			'required' =>'false',
-			'placeholder'=>$this->tr->translate("SELECT_SCHOOL_OPTIONS"),
+			'placeholder'=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"),
 			'class'=>'fullside',
 			'queryExpr'=>'*${0}*',
 			'autoComplete'=>"false"
 		));
 		
 		$rsschool = $db->getAllSchoolOption();
-		$options=array(-1=>$this->tr->translate("SELECT_SCHOOL_OPTIONS"));
+		$options=array(-1=>$this->tr->translate("PLEASE_SELECT_SCHOOL_OPTION"));
 		if(!empty($rsschool))foreach($rsschool AS $row){
 			$options[$row['id']]=$row['name'];
 		}

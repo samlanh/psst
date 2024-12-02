@@ -271,8 +271,7 @@ class Stock_Model_DbTable_DbClosingStock extends Zend_Db_Table_Abstract
     				 ad.note,
     				 ad.proId,
     				 (SELECT `proCode` FROM `st_product` WHERE st_product.`proId`=ad.proId LIMIT 1) AS proCode,
-					 (SELECT `proName` FROM `st_product` WHERE st_product.`proId`=ad.proId LIMIT 1) AS proName,
-					 (SELECT measureLabel FROM st_product p WHERE p.proId=ad.proId LIMIT 1) measureLabel
+					 (SELECT `proName` FROM `st_product` WHERE st_product.`proId`=ad.proId LIMIT 1) AS proName
     		FROM $this->_name as ad WHERE ad.adjustId=".$recordId." ";
     	return $db->fetchAll($sql);
     }

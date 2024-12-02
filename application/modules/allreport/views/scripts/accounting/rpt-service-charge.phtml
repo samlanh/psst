@@ -150,6 +150,7 @@
 								<td scope="col"><?php echo $tr->translate('TERM')?></td>
 								<td scope="col"><?php echo $tr->translate('SEMESTER')?></td>
 								<td scope="col"><?php echo $tr->translate('YEAR')?></td>
+								<td scope="col"><?php echo $tr->translate('ONE_PAYMENT')?></td>
 								<td scope="col"><?php echo $tr->translate('NOTE')?></td>
 							</tr>
 						</thead>
@@ -160,10 +161,11 @@
 								<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>" ><?php echo @$row['academic'];?></td>
 								<td data-label="<?php echo $tr->translate("SERVICE_CATE");?>" align="left" >&nbsp;&nbsp;<?php echo @$row['degree'];?></td>	
 								<td data-label="<?php echo $tr->translate("SERVICE_NAME");?>" align="left" >&nbsp;&nbsp;<?php echo @$row['class'];?></td>	
-								<td data-label="<?php echo $tr->translate("MONTHLY");?>" ><?php echo number_format(@$row['monthly'],2);?> $</td>
-								<td data-label="<?php echo $tr->translate("TERM");?>" ><?php echo number_format(@$row['quarter'],2);?> $</td>
-								<td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo number_format(@$row['semester'],2);?> $</td>
-								<td data-label="<?php echo $tr->translate("YEAR");?>" ><?php echo number_format(@$row['year'],2);?> $</td>
+								<td data-label="<?php echo $tr->translate("MONTHLY");?>" ><?php echo $row['monthly']>0? number_format(@$row['monthly'],2):"";?></td>
+								<td data-label="<?php echo $tr->translate("TERM");?>" ><?php echo $row['quarter']>0? number_format(@$row['quarter'],2):"";?></td>
+								<td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo $row['quarter']>0? number_format(@$row['semester'],2):"";?></td>
+								<td data-label="<?php echo $tr->translate("YEAR");?>" ><?php echo $row['year']>0? number_format(@$row['year'],2):"";?></td>
+								<td data-label="<?php echo $tr->translate("ONE_PAYMENT");?>" ><?php echo $row['one_payment']>0? number_format(@$row['one_payment'],2):"";?></td>
 								<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo @$row['remark'];?></td>
 							</tr>
 					<?php }?>	

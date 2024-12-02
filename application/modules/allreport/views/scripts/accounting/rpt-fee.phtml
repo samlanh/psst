@@ -107,13 +107,12 @@
 									font-size:8px;
 								}
 								table.content-data thead tr.style {
-								line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
+									line-height: 25px; font-size:10px !important; padding:1px 0px; white-space: nowrap;height: 22px; 
 									background: #c1d0f3;
 									font-weight:600;
 								}
 								table.content-data tr.style {
 								 white-space: nowrap;
-								
 								}
 								table.tb-footer{
 									border-collapse:collapse;
@@ -155,55 +154,50 @@
 					<table class="content-data" width="100%" border="1" align="center"  >
 						<thead>
 							<tr class="style" align="center"align="center" >
-								<td scope="col" ><?php echo $tr->translate('N_O')?></td>
-								<td scope="col" ><?php echo $tr->translate('BRANCH')?></td>
-								<td scope="col"  ><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
-								<td scope="col" ><?php echo $tr->translate('TYPE_STUDY')?></td>
-								<td scope="col"  ><?php echo $tr->translate('TYPE')?></td>
-								<td scope="col" ><?php echo $tr->translate('DEGREE')?></td>
-								<td scope="col"  ><?php echo $tr->translate('GRADE')?></td>
-								<td scope="col" ><?php echo $tr->translate('MONTHLY')?></td>
-								<td scope="col" ><?php echo $tr->translate('TERM')?></td>
-								<td scope="col" ><?php echo $tr->translate('SEMESTER')?></td>
-								<td scope="col"  ><?php echo $tr->translate('YEAR')?></td>
-								<td scope="col"  ><?php echo $tr->translate('NOTE')?></td>
+								<td scope="col"><?php echo $tr->translate('N_O')?></td>
+								<td scope="col"><?php echo $tr->translate('BRANCH')?></td>
+								<td scope="col"><?php echo $tr->translate('ACADEMIC_YEAR')?></td>
+								<td scope="col"><?php echo $tr->translate('TYPE_STUDY')?></td>
+								<td scope="col"><?php echo $tr->translate('TYPE')?></td>
+								<td scope="col"><?php echo $tr->translate('DEGREE')?></td>
+								<td scope="col"><?php echo $tr->translate('GRADE')?></td>
+								<td scope="col"><?php echo $tr->translate('MONTHLY')?></td>
+								<td scope="col"><?php echo $tr->translate('TERM')?></td>
+								<td scope="col"><?php echo $tr->translate('SEMESTER')?></td>
+								<td scope="col"><?php echo $tr->translate('YEAR')?></td>
+								<td scope="col"><?php echo $tr->translate('ONE_PAYMENT_ONLY')?></td>
+								<td scope="col"><?php echo $tr->translate('NOTE')?></td>
 							</tr>
 						</thead>
 					<?php $i=0; if(!empty($this->rs)){foreach ($this->rs AS $row) { $i++;?>
-						<tr class="hover style" align="center" >
-							<td data-label="<?php echo $tr->translate("N_O");?>" ><?php echo $i;?></td>
+						<tr class="hover style"  >
+							<td align="center" data-label="<?php echo $tr->translate("N_O");?>" ><?php echo $i;?></td>
 							<td data-label="<?php echo $tr->translate("BRANCH");?>" ><?php echo @$row['branch_id'];?></td>
 							<td data-label="<?php echo $tr->translate("ACADEMIC_YEAR");?>"><?php echo @$row['academic'];?></td>
 							<td data-label="<?php echo $tr->translate("TYPE_STUDY");?>" ><?php echo @$row['study_type'];?></td>
 							<td data-label="<?php echo $tr->translate("TYPE");?>" ><?php echo @$row['generation'];?></td>
 							<td data-label="<?php echo $tr->translate("DEGREE");?>" align="left" >&nbsp;&nbsp;<?php echo @$row['degree'];?></td>	
 							<td data-label="<?php echo $tr->translate("GRADE");?>" align="left" >&nbsp;&nbsp;<?php echo @$row['class'];?></td>	
-							<td data-label="<?php echo $tr->translate("MONTHLY");?>" ><?php echo number_format(@$row['monthly'],2);?> $</td>
-							<td data-label="<?php echo $tr->translate("TERM");?>" ><?php echo number_format(@$row['quarter'],2);?> $</td>
-							<td data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo number_format(@$row['semester'],2);?> $</td>
-							<td data-label="<?php echo $tr->translate("YEAR");?>" ><?php echo number_format(@$row['year'],2);?> $</td>
+							<td data-label="<?php echo $tr->translate("MONTHLY");?>" ><?php echo $row['monthly']>0?number_format(@$row['monthly'],0):"";?></td>
+							<td align="center" data-label="<?php echo $tr->translate("TERM");?>" ><?php echo number_format(@$row['quarter'],0);?></td>
+							<td align="center" data-label="<?php echo $tr->translate("SEMESTER");?>" ><?php echo number_format(@$row['semester'],0);?></td>
+							<td align="center" data-label="<?php echo $tr->translate("YEAR");?>" ><?php echo number_format(@$row['year'],0);?></td>
+							<td data-label="<?php echo $tr->translate("ONE_PAYMENT_ONLY");?>" ><?php echo $row['one_payment']>0?number_format(@$row['one_payment'],0):"";?></td>
 							<td data-label="<?php echo $tr->translate("NOTE");?>" ><?php echo @$row['remark'];?></td>
 						</tr>
 					<?php }}?>	
 					</table>	
 				</td>
 			</tr>
-			<tr>
-				<td colspan="3" width="100%">
-					<?php echo $this->rsfooteracc;?>
-				</td>
-			</tr>
 		</table>
 	</div>		
 </div>
-
 
 <script type="text/javascript">
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore"); 
 	
 	dojo.ready(function(){ 
-		
 		new dijit.form.FilteringSelect({
 			queryExpr: "*${0}*",
 			autoComplete: false,                     
@@ -212,9 +206,6 @@
 			name: "grade",  
 			class: 'fullside',  
 			placeHolder:"<?php echo $tr->translate("SELECT_GRADE");?>",          
-			onChange: function() {  
-
-			}
 		}, "grade");
 		getallGrade();
 		
@@ -245,4 +236,4 @@
 				}
 			});
 	}
-</script> 
+</script>

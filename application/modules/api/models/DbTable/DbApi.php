@@ -926,7 +926,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	    	}
 	    	
 	    	$amt = $minor+$moderate+$major+$other;
-	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'Minor'=>$minor,"MODERATE"=>$moderate,"MAJOR"=>$major,"OTHER"=>$other,"TOTALAMT"=>$amt);
+	    	$summary_arr = array('acarYear'=>$academicYear,'className'=>$className,'Minor'=>$minor,"MODERATE"=>$moderate,"GRADE"=>$major,"OTHER"=>$other,"TOTALAMT"=>$amt);
 	    	
 	    	$sql_note = "SELECT
 					    	atnd.title,atnd.description

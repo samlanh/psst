@@ -175,7 +175,7 @@
 											<td style="font-size: 13px; ">&nbsp; <?php echo $tr->translate("SCHOOL_AND_NAME");?></td>
 											<td style="font-size: 13px; ">&nbsp; <?php echo $tr->translate("GRADE_LAVEL");?></td>
 											<td style="font-size: 13px; ">&nbsp; <?php echo $tr->translate("YEAR");?></td>
-											<td style="font-size: 13px; ">&nbsp;<?php echo $tr->translate("MAJOR");?></td>
+											<td style="font-size: 13px; ">&nbsp;<?php echo $tr->translate("GRADE");?></td>
 											<td style="font-size: 13px; ">&nbsp;<?php echo $tr->translate("NOTE");?></td>
 										</tr>
 										<?php if(!empty($this->row_detail)) foreach($this->row_detail As $key=>$rs){?>
@@ -305,11 +305,6 @@
 											<?php $subject = $db->getSubjectScoreByTest($record['id']);
 												if (!empty($subject)) foreach ($subject as $ss){
 													$title=$ss["subject"];
-// 													if ($ss['subjecttest_id']==1){
-// 														$title = $tr->translate("KHMER");
-// 													}else if ($ss['subjecttest_id']==2){
-// 														$title = $tr->translate("MATH");
-// 													}
 											?>
 											<tr class="row-value">
 												<td colspan="4" class="borderbottom-none" style="border-top: none;">&nbsp;</td>

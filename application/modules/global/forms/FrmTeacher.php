@@ -51,7 +51,8 @@ Class Global_Form_FrmTeacher extends Zend_Dojo_Form {
 				'class'=>'fullside height-text',));
 		
 		$phone = new Zend_Dojo_Form_Element_NumberTextBox('phone');
-		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true','placeholder'=>$this->tr->translate("PLEASE_SELECT_PHONE")));
+		$phone->setAttribs(array('dojoType'=>$this->tvalidate,'class'=>'fullside','required'=>'true',
+		'placeholder'=>$this->tr->translate("TEL")));
 		
 		$sex = new Zend_Dojo_Form_Element_FilteringSelect('sex');
 		$sex->setAttribs(array('dojoType'=>$this->filter,'class'=>'fullside',));

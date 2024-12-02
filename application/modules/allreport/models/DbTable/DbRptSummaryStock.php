@@ -828,26 +828,7 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 			    	AND sp.is_void = 0
     		";
 
-    	// $sql="SELECT 
-		// 			(SELECT b.branch_nameen FROM `rms_branch` AS b  WHERE b.br_id = sp.branch_id LIMIT 1) AS branch_name,
-		// 			sp.receipt_number,
-		// 			spd.*,
-		// 			sum(spd.qty) as qty,
-		// 			sum(spd.subtotal) as subtotal,
-		// 			(SELECT it.title FROM `rms_items` AS it WHERE it.id = i.items_id LIMIT 1) AS category,
-		// 			i.title AS items_name,
-		// 			i.code AS code
-		// 	 	FROM 
-		// 	 		`rms_student_payment` AS sp,
-		// 			`rms_student_paymentdetail` AS spd,
-		// 			rms_itemsdetail as i
-		// 		WHERE 
-		// 			sp.id = spd.payment_id
-		// 			AND i.id = spd.itemdetail_id
-		// 			AND i.items_type = 3
-		//     		AND sp.status=1
-		//     		AND sp.is_void = 0
-    	// 	";
+    	
     	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".date("Y-m-d",strtotime($search['start_date']))." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " sp.create_date <= '".date("Y-m-d",strtotime($search['end_date']))." 23:59:59'";
     	$sql.= " AND  ".$from_date." AND ".$to_date;
@@ -867,13 +848,11 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$where.= " AND sd.pro_id= ".$db->quote($search['product']);
     	}
     	if(!empty($search['branch_id'])){
-    		$where.= " AND sd.branch_id= ".$db->quote($search['branch_id']);
+    		$where.= " AND sp.branch_id= ".$db->quote($search['branch_id']);
     	}
     	$dbp = new Application_Model_DbTable_DbGlobal();
-    	$where.=$dbp->getAccessPermission('sd.branch_id');
+    	$where.=$dbp->getAccessPermission('sp.branch_id');
     	$where.=" GROUP BY sp.branch_id, sd.pro_id ";
-		// echo $sql . $where;
-		// exit();
     	return $db->fetchAll($sql.$where);
     }
     function getAllProductSold($search){

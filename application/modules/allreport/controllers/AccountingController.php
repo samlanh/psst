@@ -764,6 +764,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
 						$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
 					}
+					elseif($payment_tran['payment_term']==5){
+						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
+						$rs_rows[$key_old]['one_payment'] = $payment_tran['tuition_fee'];
+					}
 				}else{
 					if($key==0){
 						$rs_rows=array();
@@ -854,6 +858,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 						$rs_rows[$key]['session'] = $payment_tran['session'];
 						$rs_rows[$key]['remark'] = $payment_tran['remark'];
 						$rs_rows[$key]['monthly'] = $payment_tran['tuition_fee'];
+						$rs_rows[$key]['one_payment'] = '';
 							
 						$key_old=$key;
 						$key++;
@@ -868,6 +873,10 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					}elseif($payment_tran['payment_term']==4){
 						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
 						$rs_rows[$key_old]['year'] = $payment_tran['tuition_fee'];
+					}
+					elseif($payment_tran['payment_term']==5){
+						$term = $model->getAllPaymentTerm($payment_tran['payment_term']);
+						$rs_rows[$key_old]['one_payment'] = $payment_tran['tuition_fee'];
 					}
 				}else{
 					if($key==0){

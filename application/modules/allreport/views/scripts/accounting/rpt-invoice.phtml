@@ -177,7 +177,7 @@ table.tb-footer tr.style-head {
 								<td scope="col"><?php echo $tr->translate("STUDENT_ID");?></td>
 								<td scope="col"><?php echo $tr->translate("STUDENT_NAME");?></td>
 								<td scope="col"><?php echo $tr->translate("SEX");?></td>
-								<td scope="col"><?php echo $tr->translate("INVOICE_NUM");?></td>
+								<td scope="col"><?php echo $tr->translate("INVOICE_NO");?></td>
 								<td scope="col"><?php echo $tr->translate("INVOICE_DATE");?></td>
 								<td scope="col"><?php echo $tr->translate("EXPIRED_DATE");?></td>
 								<td scope="col"><?php echo $tr->translate("INPUT_DATE");?></td>
@@ -200,7 +200,7 @@ table.tb-footer tr.style-head {
 							<td data-label="<?php echo $tr->translate("STUDENT_ID");?>"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_code']; ?></a></td>
 							<td data-label="<?php echo $tr->translate("STUDENT_NAME");?>" align="left"><a target="_blank" style="color:#000;" href="<?php echo $this->baseurl();?>/allreport/accounting/rpt-invoicedetail/id/<?php echo $rs['id'];?>"><?php echo $rs['stu_khname']."/".$rs['en_name']; ?></a></td>
 							<td data-label="<?php echo $tr->translate("SEX");?>"><?php echo $rs['gender']; ?></td>
-							<td data-label="<?php echo $tr->translate("INVOICE_NUM");?>"><?php echo $rs['invoice_num']; ?></td>
+							<td data-label="<?php echo $tr->translate("INVOICE_NO");?>"><?php echo $rs['invoice_num']; ?></td>
 							<td data-label="<?php echo $tr->translate("INVOICE_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['invoice_date'])); ?></td>
 							<td data-label="<?php echo $tr->translate("EXPIRED_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['expired_date'])); ?></td>
 							<td data-label="<?php echo $tr->translate("INPUT_DATE");?>"><?php echo date("d/m/Y",strtotime($rs['input_date'])); ?></td>
@@ -344,7 +344,8 @@ table.tb-footer tr.style-head {
 			content:{
 				'branchId':branch_id,
 				'customerType':1,
-				
+				'joinGroup': 1,
+				'activeStudent':1
 			},
 			handleAs:"json",
 			load: function(data){

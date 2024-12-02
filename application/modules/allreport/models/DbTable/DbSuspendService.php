@@ -61,7 +61,7 @@ class Allreport_Model_DbTable_DbSuspendService extends Zend_Db_Table_Abstract
 				if (!empty($condiction)){
 					$where.=" AND itd.items_id IN ($condiction)";
 				}else{
-					$where.=" AND itd.items_id=".$search['item'];
+					$where.=" AND itd.items_id=".$search['category'];
 				}
 		   	}
 			if(!empty($search['adv_search'])){

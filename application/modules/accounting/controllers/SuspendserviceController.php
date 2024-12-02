@@ -27,7 +27,7 @@ class Accounting_SuspendserviceController extends Zend_Controller_Action {
 			$db =  new Accounting_Model_DbTable_DbSuspendservice();
 			$rs = $db->getStudentSuspendService($search);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","CREATED_DATE","USER","STATUS");
+			$collumns = array("BRANCH","STUDENT_ID","STUDENT_NAMEKHMER","NAME_ENGLISH","CREATE_DATE","USER","STATUS");
 			
 			$this->view->list=$list->getCheckList(0, $collumns, $rs,array());
 		}catch (Exception $e){

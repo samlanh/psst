@@ -88,13 +88,7 @@ class Application_Model_CustomAuth extends Zend_Controller_Plugin_Abstract
  		return "";
  	}
 	
- 	/**
- 	 * redirect url to any where not base url (currencysmart.localserver/)
- 	 * @param unknown_type $request
- 	 * @param unknown_type $controller
- 	 * @param unknown_type $action
- 	 * @param unknown_type $module
- 	 */
+ 	
 	protected function _redirect_homepage($request, $controller, $action, $module)
 	{
 		if ($request->getControllerName() == $controller

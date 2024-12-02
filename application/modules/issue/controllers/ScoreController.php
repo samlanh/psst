@@ -35,7 +35,7 @@ class Issue_ScoreController extends Zend_Controller_Action
 
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH", "EXAM_TITLE", "STUDY_YEAR", "STUDENT_GROUP", "GRADE", "SESSION", "ROOM_NAME", "USER", "STATUS");
-			//"SCORE_LEVEL",
+			
 			$link = array(
 				'module' => 'issue', 'controller' => 'score', 'action' => 'edit',
 			);

@@ -40,21 +40,7 @@ Class Library_Form_FrmSearchMajor extends Zend_Dojo_Form{
 				0=>$this->tr->translate("NOT_COMPLETE"));
 		$is_full->setMultiOptions($_opt);
 		$is_full->setValue($request->getParam("is_full"));
-		
-// 		$_cateory_parent = new Zend_Dojo_Form_Element_FilteringSelect("parent");
-// 		$_cateory_parent->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'required'=>'true',
-// 				 ));
-// 		$option = array("0"=>$this->tr->translate("SELECT_CATEGORY"));
-// 		$result = $db->getCategory();
-		 
-// 		if(!empty($result))foreach($result AS $row){
-// 			$option[$row['id']]=$row['name'];
-// 		}
-// 		if (!empty($_data)){
-// 			unset($option[$data['id']]);
-// 		}
+
         
 		$_cateory_parent = new Zend_Dojo_Form_Element_FilteringSelect("parent");
 		$_cateory_parent->setAttribs(array(

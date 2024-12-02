@@ -393,7 +393,7 @@ class Application_Form_FrmGlobal
 						<td width="30%">&nbsp;</td>
 						<td width="35%" align="center">
 							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Battambang' . "'" . ';">' . $tr->translate("CREATE_WORK_DATE") . '</span><br />
-							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Muol Light' . "'" . ';">' . $tr->translate("PREPARE_BY") . '</span>
+							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Muol Light' . "'" . ';">' . $tr->translate("PREPARED_BY") . '</span>
 						</td>
 					</tr>
 				';
@@ -1746,9 +1746,29 @@ class Application_Form_FrmGlobal
 		$marginRight = empty($data["marginRight"]) ? "0.5cm" : $data["marginRight"];
 		$marginBottom = empty($data["marginBottom"]) ? "1cm" : $data["marginBottom"];
 		$marginLeft = empty($data["marginLeft"]) ? "0.5cm" : $data["marginLeft"];
+		$borderTopFooter = empty($data["borderTopFooter"]) ? "0px" : $data["borderTopFooter"];
+		//content: "ទំព័រ " counter(page) " / " counter(pages);
 		$str="@page {";
 				$str.="size: $pageSize;";
 				$str.="margin: $marginTop $marginRight $marginBottom $marginLeft;";
+				
+				$str.='
+				counter-increment: page;
+				@bottom-right {
+					font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';
+					border-top: '.$borderTopFooter.' solid #000000;
+					padding-right:20px;
+					font-size: 9px !important;
+					content: " " counter(page) " / " counter(pages);
+				}
+				@bottom-left {
+					padding-left:20px;
+					content: "";
+					font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';
+					font-size: 9px !important;
+					border-top: '.$borderTopFooter.' solid #000000;
+				}
+				';
 		$str.="}";
 		return $str;
 	}

@@ -37,7 +37,7 @@ Class Library_Form_FrmBook extends Zend_Dojo_Form {
 		$barcode->setAttribs(array(
 				'dojoType'=>'dijit.form.ValidationTextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("BARCODE"),
+				'placeholder'=>$this->tr->translate("BAR_CODE"),
 		));
 		
 		$publisher = new Zend_Dojo_Form_Element_ValidationTextBox('publisher');

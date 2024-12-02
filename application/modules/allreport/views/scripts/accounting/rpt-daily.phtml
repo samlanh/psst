@@ -345,7 +345,7 @@
 						<tr class="titlerow" align="center">
 							<td scope="col"><?php echo $tr->translate('N_O')?></td>
 							<td scope="col"><?php echo $tr->translate('RECEIPT_NO')?></td>
-							<td scope="col"><?php echo $tr->translate('INVOICE_NUM')?></td>
+							<td scope="col"><?php echo $tr->translate('INVOICE_NO')?></td>
 							<td colspan="2" scope="col"><?php echo $tr->translate('RECEIVER')?></td>
 							<td colspan="2" scope="col"><?php echo $tr->translate('EXPENSE_TITLE')?></td>
 							<td scope="col"><?php echo $tr->translate('TOTAL')?></td>
@@ -375,7 +375,7 @@
 										style="text-decoration: none; color: #000;"
 										href="<?php echo $this->url(array('module'=>'allreport','controller'=>'accounting','action'=>'rpt-expensedetail','id'=>$row['id']));?>"
 										target="blank"><?php echo $row['invoice']; ?></a></td>
-									<td data-label="<?php echo $tr->translate("INVOICE_NUM");?>"><?php echo $row['external_invoice']; ?></td>
+									<td data-label="<?php echo $tr->translate("INVOICE_NO");?>"><?php echo $row['external_invoice']; ?></td>
 									<td colspan="2"
 										data-label="<?php echo $tr->translate("RECEIVER");?>"><?php echo $row['receiver']; ?></td>
 									<td colspan="2"

@@ -24,7 +24,7 @@ class Global_YearstudyController extends Zend_Controller_Action {
  			$rs_rows= $db->getAllYearStudy($search);
 		
 			$list = new Application_Form_Frmtable();
-			$collumns = array("FROM_YEAR","TO_YEAR","DEGREE","CREATED_DATE","BY_USER","Default","STATUS");
+			$collumns = array("FROM_YEAR","TO_YEAR","DEGREE","CREATE_DATE","BY_USER","Default","STATUS");
 			$link=array(
 				'module'=>'global','controller'=>'yearstudy','action'=>'edit',
 			);

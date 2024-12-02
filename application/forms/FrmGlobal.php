@@ -393,7 +393,7 @@ class Application_Form_FrmGlobal
 						<td width="30%">&nbsp;</td>
 						<td width="35%" align="center">
 							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Battambang' . "'" . ';">' . $tr->translate("CREATE_WORK_DATE") . '</span><br />
-							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Muol Light' . "'" . ';">' . $tr->translate("PREPARE_BY") . '</span>
+							<span style=" font-family:' . "'" . 'Times New Roman' . "'" . ',' . "'" . 'Khmer OS Muol Light' . "'" . ';">' . $tr->translate("PREPARED_BY") . '</span>
 						</td>
 					</tr>
 				';

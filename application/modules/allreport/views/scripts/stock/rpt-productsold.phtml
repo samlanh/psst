@@ -157,7 +157,7 @@
 									<td scope="col">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('PROFIT');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('RECEIPT_NO');?></td>
-									<td scope="col"> &nbsp;<?php echo $tr->translate('CREATED_DATE');?>&nbsp;</td>
+									<td scope="col"> &nbsp;<?php echo $tr->translate('CREATE_DATE');?>&nbsp;</td>
 									<td scope="col">&nbsp;<?php echo $tr->translate('USER');?>&nbsp;</td>
 							   </tr>
 						   </thead>
@@ -188,7 +188,7 @@
 							    <td data-label="<?php echo $tr->translate("TOTAL");?>"><strong><?php echo number_format($subTotalSell,2);?></strong>&nbsp;</td>
 							    <td align="center" data-label="<?php echo $tr->translate("PROFIT");?>"><strong><?php echo number_format($subTotalSell-$subTotalcost,2);?></strong>&nbsp;</td>
 							    <td align="center" data-label="<?php echo $tr->translate("RECEIPT_NO");?>"><strong><?php echo $rs['receipt_number'];?></strong></td>
-							    <td align="center" data-label="<?php echo $tr->translate("CREATED_DATE");?>"><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
+							    <td align="center" data-label="<?php echo $tr->translate("CREATE_DATE");?>"><?php echo date('d/m/Y',strtotime($rs['create_date']));?></td>
 							    <td align="center" data-label="<?php echo $tr->translate("USER");?>"><?php echo $rs['user']; ?></td>
 							 </tr>
 						  		<?php 

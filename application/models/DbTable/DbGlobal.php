@@ -694,15 +694,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $this->getAllItems(null);
 	}
 
-	function getAllDept($search, $start, $limit)
-	{
-		$db = $this->getAdapter();
-		$sql = $this->_buildQuery($search) . " LIMIT " . $start . ", " . $limit;
-		if ($limit == 'All') {
-			$sql = $this->_buildQuery($search);
-		}
-		return $db->fetchAll($sql);
-	}
+	
 
 
 	public function getGlobalResultList($sql, $sql_count)
@@ -768,18 +760,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			return $rs;
 		return $rs[$id];
 	}
-	public static function getAllDegreeById($id = null)
-	{
-		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$rs = array(
-			1 => $tr->translate("Grade School"),
-			2 => $tr->translate("Pramary School"),
-			3 => $tr->translate('Other'),
-		);
-		if ($id == null)
-			return $rs;
-		return $rs[$id];
-	}
+	
 	public function getAllPaymentTerm($id = null, $hidemonth = null)
 	{
 		if ($hidemonth != null) {
@@ -803,30 +784,8 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			return $opt_term[$id];
 		}
 	}
-	public function getAllServicePayment($id = null)
-	{
-		$opt_term = array(
-			1 => $this->tr->translate('RIEL'),
-			2 => $this->tr->translate('PRICE1'),
-			3 => $this->tr->translate('PRICE2')
-		);
-		if ($id == null)
-			return $opt_term;
-		else
-			return $opt_term[$id];
-	}
-	public function getAllGEPPrgramPayment($id = null)
-	{
-		$opt_term = array(
-			1 => $this->tr->translate('FEE'),
-			2 => $this->tr->translate('2TERM'),
-			3 => $this->tr->translate('3TERM')
-		);
-		if ($id == null)
-			return $opt_term;
-		else
-			return $opt_term[$id];
-	}
+	
+	
 
 	public static function getAllMention($id = null)
 	{
@@ -844,27 +803,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			return $opt_rank[$id];
 	}
 
-	public function getTutionFeebyCondition($data)
-	{
-		$db = $this->getAdapter();
-		//for bachelor
-		$degree = $data['degree'];
-		$metion = $data['metion'];
-		$batch = $data['batch'];
-		$faculty_id = $data['faculty_id'];
-		$payment_type = $data['payment_term'];
-		if ($degree == 2) {
-			$sql = " SELECT tuition_fee FROM `rms_tuitionfee` AS f,`rms_tuitionfee_detail` AS fd
-   		WHERE f.fee_id = fd.fee_id AND metion = $metion AND  degree =$degree AND
-   		batch = $batch AND faculty_id = $faculty_id AND `payment_type`=$payment_type LIMIT 1";
-		} else {
-			$sql = "SELECT tuition_fee FROM `rms_tuitionfee` AS f,`rms_tuitionfee_detail` AS fd
-   		WHERE f.fee_id = fd.fee_id AND metion = $faculty_id AND  degree =$degree AND
-   		batch = $batch AND `payment_type`=$payment_type";
-		}
-		return $db->fetchOne($sql);
-	}
-
+	
 	function getTeacherCode($branch_id = 0)
 	{
 		$db = $this->getAdapter();
@@ -3229,7 +3168,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 								<span id="lbl_mothertel" class="inf-value" style="display:none;">' . $rs['mother_phone'] . '</span>
 								<span id="lbl_degreeId" class="inf-value" style="display:none;">' . $rs['degree'] . '</span>
 								<span class="title-info">'. $tr->translate("MOTHER_NAME") . '</span> : <span id="lbl_mother" class="inf-value">'. $rs['mother_enname'] . '</span>
-								<span class="title-info">'. $tr->translate("PARENT_PHONE") . '</span> : <span id="lbl_parentphone" class="inf-value">' . $rs['guardian_tel'] . '</span>
+								<span class="title-info">'. $tr->translate("PARENT_TEL") . '</span> : <span id="lbl_parentphone" class="inf-value">' . $rs['guardian_tel'] . '</span>
 								<span class="title-info">'. $tr->translate("STATUS") . '</span> : <span id="lbl_culturelevel" class="inf-value red bold" >' . $rs['status_student'] . '</span>
 							';
 			$str_parentinfo.= '</p>';

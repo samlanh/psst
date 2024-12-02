@@ -140,72 +140,131 @@
 					<div class="col-md-12 col-sm-12 col-xs-12 classListSubject"> 
 						<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
 							<div class="card-content">
-								<div class="row d-flex">
-									<div class="col-xs-3 pr-0">
+								<div class="row ">
+									<div class="col-xs-12">
 										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
+											<span class="text-white font-large-2 "><?php echo $row['group_code']; ?></span>,
+											<span class="text-white font-large-2 "><small class="timeSchedule text-white mt-0 mb-1"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['room_name']; ?></small></span>,
 											<span class="text-white font-large-2 text-center">
-												<?php echo $row['group_code']; ?>
-												<small class="timeSchedule text-white mt-0 mb-3"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['room_name']; ?></small>
+												<small class="timeSchedule text-white mt-0 mb-1"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['teaccher']; ?></small>
 												<?php 
-												$examType  = $this->search['exam_type'];
-												$month	   = $this->search['for_month'];
-												$semester  = $this->search['for_semester'];
-												if($examType==1){
-                                                  $examlabel =  $tr->translate("TEACHERSCORE")." : ".$tr->translate("MONTHLY")." ".$month; 
-												}elseif($examType==2){
-													if($semester==1){
-														$examlabel= $tr->translate("TEACHERSCORE")." : ".$tr->translate("SEMESTER1");
-													}elseif($semester==2){
-														$examlabel= $tr->translate("TEACHERSCORE")." : ".$tr->translate("SEMESTER2");
+													$examType  = $this->search['exam_type'];
+													$month	   = $this->search['for_month'];
+													$semester  = $this->search['for_semester'];
+													if($examType==1){
+													$examlabel =  $tr->translate("TEACHERSCORE")." : ".$tr->translate("MONTHLY")." ".$month; 
+													}elseif($examType==2){
+														if($semester==1){
+															$examlabel= $tr->translate("TEACHERSCORE")." : ".$tr->translate("SEMESTER1");
+														}elseif($semester==2){
+															$examlabel= $tr->translate("TEACHERSCORE")." : ".$tr->translate("SEMESTER2");
+														}
 													}
-												}
-											
 												?>
-												
 											</span>
 										</div>
 									</div>
-									<div class="col-xs-9 pl-0">
-										<table class="table table-bordered">
-											<thead>
-												<tr>
+								</div>
+								<div class="row d-flex">
+									<div class="col-xs-12 ">
+										<table class="table table-bordered ">
+											<thead class="bg-dark text-white  ">
+												<tr class="head-td">
 													<th><?php echo $tr->translate("NUM"); ?></th>
 													<th><?php echo $tr->translate("SUBJECT"); ?></th>
+													<th><?php echo $tr->translate("TEACHER"); ?></th>
 													<?php
 													$criterrialList = json_decode($row["criterialList"], true);
 													if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ ?>
 														<th><?php echo $cr['criterialTitle']; ?></th>
 													<?php } ?>
+													<th><?php echo $tr->translate("RESULT"); ?></th>
 												</tr>
 											</thead>
 											<tbody class="table-border-bottom-0">
 												<?php
+													// Score Temporary as json-list
+													$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
+
+													// Score Grading as json-list
+													$jsonScoreGrading = json_decode($row["jsonScoreGrading"], true);
+												//	print_r($jsonScoreGrading);
+
 													$num=0;
 													$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
 													if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
 														$num++; ?>
 														<tr>
-															<td> <?php echo $num; ?> </td>
-															<td> <?php echo $sj['shortcut'].' - '.$sj['teacher']; ?> </td>
+															<td class="text-center"> <?php echo $num; ?> </td>
+															<td> <?php echo $sj['shortcut']; ?> </td>
+															<td> <?php echo $sj['teacher']; ?> </td>
 															<?php
-															if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ ?>
+															   $arrayButtonColor= array(
+																'0'=> 'btn-primary',
+																'1'=> 'btn-danger',
+																'2'=> 'btn-info',
+																'3'=> 'btn-warning',
+																'4'=> 'btn-primary',
+																'5'=> 'btn-success',
+																'6'=> 'btn-danger',
+																'7'=> 'btn-info',
+																'8'=> 'btn-warning',
+															   );
+
+															if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ 
+
+																	$criteriaClass = $arrayButtonColor[$cindex] ;
+																	// if($cr['criteriaType']==2){
+																	// 	$criteriaClass = "btn-success";
+																	// }
+																?>
 																<td> 
 																	<?php 
-																		// $gradingTpm = array(
-																		// 	'gradingId' => $row['gradingId'],
-																		// 	'groupId'   => $row['id'],
-																		// 	'subjectId' => $sj['subject_id'],
-																		// 	'criteriaId' => $cr['criteriaId'],
-																		// 	'examType'    => $examType ,
-																		// 	'forSemester' => $semester ,
-																		// 	'forMonth' 	  => $month ,
-																		// 	'teacherId'   => $rs['teacher'] ,
-																		// );
-																		// $rsCriterrial= $dbg->checkCriterial($gradingTpm);
-																	 ?>
-																	<a class="btn btn-primary  btn-sm" href="#" role="button">11/11/24</a>
+																		$filterSubjectId = $sj['subject_id'];  //  subjectId you want to filter by
+																		$filterCiteriaId = $cr['criteriaId'];  //  citeriaId you want to filter by
+																		// Filter the array
+																		$rsScoreTmp = array_filter($jsonScoreTmp , function ($item) use ($filterSubjectId, $filterCiteriaId) {
+																			return $item['subjectId'] == $filterSubjectId && $item['citeriaId'] == $filterCiteriaId;
+																		});
+																		// Reset array keys for better readability
+																		$rsScoreTmp = array_values($rsScoreTmp);
+																	
+																		if(!empty($rsScoreTmp)) foreach($rsScoreTmp as $rstmp){ ?>
+																		<a class="btn <?php echo $criteriaClass  ; ?>  btn-sm" target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-grading-list/id/".$rstmp['tmpId']."/fullcontrol/1";?>" role="button">
+																			<i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+																			<?php 
+																				$format = 'd-M-Y';
+																				$dateString = $rstmp['dateInput'];
+																				$date = new DateTime($dateString);
+																				$dateInput = $date->format($format);
+																				echo $dateInput;
+																			?>
+																		</a>
+																	<?php } ?>
 																</td>
+																
 															<?php } ?>
+															<td> 
+																<?php 
+																	$SubjectId = $sj['subject_id'];  
+																	$rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
+																		return $item['subjectId'] == $SubjectId;
+																	});
+																	// Reset array keys for better readability
+																	$rsScoreGrading = array_values($rsScoreGrading);
+																	if(!empty($rsScoreGrading)){ ?>
+																		<a class="btn btn-success btn-sm" target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rsScoreGrading['0']['gId'];?>/fullcontrol/1" role="button">
+																			<i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+																			<?php 
+																				$format = 'd-M-Y';
+																				$dateString = $rsScoreGrading['0']['dateInput'];
+																				$date = new DateTime($dateString);
+																				$dateInput = $date->format($format);
+																				echo $dateInput;
+																			?>
+																		</a>
+																<?php } ?>
+															</td>
 														</tr>
 													<?php } ?>
 											</tbody>

@@ -134,73 +134,85 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
-		$colunmname = 'title_en';
-		$label = "name_en";
-		$branch = "branch_nameen";
-		if ($currentLang == 1) {
-			$colunmname = 'title';
-			$label = "name_kh";
-			$branch = "branch_namekh";
-		}
-
-	//	criterialList
 		
-		$criteriaId = "criteriaId";
-		$criterialTitle="criterialTitle";
-		$criterialTitleEn="criterialTitleEn";
-		// $criterialList = "(SELECT 
-		// 	CONCAT('[', GROUP_CONCAT(CONCAT('{','\"$criteriaId\":', vs.criteriaId ,',\"$criterialTitle\":\"', vs.criterialTitle ,'\",\"$criterialTitleEn\":\"', vs.criterialTitleEn ,'\"}') SEPARATOR ','), ']')
-		// 	FROM `v_criterial_setting` AS vs 
-		// 	WHERE vs.`score_setting_id` = g.`gradingId` AND vs.forExamType= ".$search['exam_type']." AND vs.criteriaType > 0
-		// 	ORDER BY vs.criteriaType ASC
-		// ) AS criterialList ";
+		$criterialTitle="criterialTitleEn";
+		$subjectTitle="subject_titleen";
+		$teacherName="teacher_name_en";
+		if ($currentLang == 1) {
+		
+			$criterialTitle="criterialTitle";
+			$subjectTitle="subject_titlekh";
+			$teacherName="teacher_name_kh";
+		}
+		$criterialList ='
+			(SELECT
+				CONCAT(
+					"[" ,
+					GROUP_CONCAT(
+						CONCAT(
+							"{",
+							"\"criteriaId\":", vs.criteriaId, ",",
+							"\"criteriaType\":", vs.criteriaType, ",",
+							"\"criterialTitle\":\"", vs.'.$criterialTitle.', "\"",
+							"}"
+						) 
+						ORDER BY vs.criteriaType ASC
+					),
+					"]"
+				)
+			FROM `v_criterial_setting` AS vs 
+			WHERE vs.`score_setting_id` = g.`gradingId` 
+			AND vs.forExamType = '.$search['exam_type'].' 
+			AND vs.criteriaType > 0
+			) AS criterialList
+		';
 
-		$criterialList = "(SELECT 
-		CONCAT('[', GROUP_CONCAT(CONCAT('{','\"$criteriaId\":', vs.criteriaId ,',\"$criterialTitle\":\"', vs.criterialTitle ,'\",\"$criterialTitleEn\":\"', vs.criterialTitleEn ,'\"}') SEPARATOR ','), ']')
-		FROM `v_criterial_setting` AS vs 
-		WHERE vs.`score_setting_id` = g.`gradingId` AND vs.forExamType= ".$search['exam_type']." AND vs.criteriaType > 0
-		ORDER BY vs.criteriaType ASC
-		) AS criterialList ";
+		$jsonSubjectList ='
+			(SELECT
+				CONCAT(
+					"[" ,
+					GROUP_CONCAT(
+						CONCAT(
+							"{",
+							"\"subject_id\":", `gs`.`subject_id`, ",",
+							"\"shortcut\":\"", `sj`.'.$subjectTitle.', "\",",
+							"\"teacher\":\"", `t`.'.$teacherName.', "\"",
+							"}"
+						) 
+						ORDER BY `sj`.`subject_lang`
+					),
+					"]"
+				)
+			FROM `rms_group_subject_detail` `gs`
+				LEFT JOIN `rms_subject` `sj` ON `sj`.`id` = `gs`.`subject_id`
+			    LEFT JOIN `rms_teacher` `t`	ON `t`.`id` = `gs`.`teacher`
+				WHERE 
+				`gs`.`group_id` = g.id  ';
+			if($search['exam_type']==1){
+				$jsonSubjectList .=' AND  `gs`.`amount_subject` > 0 ';
+			}else{
+				$jsonSubjectList .=' AND  `gs`.`amount_subject_sem` > 0 ';
+			}
+		 $jsonSubjectList .=' ) AS jsonSubjectList ';
 
-	// subject List
-
-		// $subjectName="(SELECT sj.shortcut FROM `rms_subject` AS sj WHERE sj.id = gs.`subject_id` )";
-		// $teacherName="(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = gs.`teacher` )";
-		// $subjectList = " SELECT 
-		// 	CONCAT('[',GROUP_CONCAT(
-		// 		CONCAT(
-		// 		'{','\"subject_id\":',gs.`subject_id` 
-		// 		,',\"subject_name\":',$subjectName
-		// 		,',\"teacher\":',$teacherName
-		// 		,'}'
-		// 		) 
-		// 	SEPARATOR ','),']')
-		// 	FROM  `rms_group_subject_detail` AS gs WHERE 1 GROUP BY gs.`group_id` 
-		// ) AS subjectList ";
-	
 		$sql = "SELECT `g`.`id`, `g`.`gradingId`,
-			(SELECT $branch FROM `rms_branch` AS b  WHERE b.br_id = g.branch_id LIMIT 1) AS branch_name,
+			
 			`g`.`group_code` AS `group_code`,
-			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS tuitionfee_id,	
+			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
 			 `g`.`semester` AS `semester`, 
-			i.$colunmname AS degree,
-			(SELECT id.$colunmname FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS grade,
-			(SELECT`rms_view`.$label FROM `rms_view`	WHERE ((`rms_view`.`type` = 4)
-			AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
-			(select count(subject_id) from rms_group_subject_detail where rms_group_subject_detail.group_id = g.id limit 1 ) as totalSubject,
-			time,
-			`g`.`note`,
-			(select $label from rms_view where type=9 and key_code=is_pass) as group_status,
-			 $criterialList 
-			,vgsm.`jsonSubjectList`
+			 $criterialList ,
+			 $jsonSubjectList, 
+		      vgt.jsonScoreTmp,
+			  vg.jsonScoreGrading
 			 ";
 
 		$sql .= $dbp->caseStatusShowImage("g.status");
 		$sql .= " FROM `rms_group` AS `g` 
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
-				LEFT JOIN `v_group_subject_for_month` AS vgsm ON vgsm.`group_id`=g.`id`
+				LEFT JOIN v_grading_tmp AS vgt ON vgt.groupId = g.id AND vgt.gradingSettingId = g.gradingId
+				LEFT JOIN v_grading AS vg ON vg.groupId = g.id 
 		";
 
 		$where = ' WHERE 1 ';
@@ -231,10 +243,23 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		if (!empty($search['degree'])) {
 			$where .= ' AND `g`.`degree`=' . $search['degree'];
 		}
+		if ($search['exam_type'] > 0) {
+			$where .= " AND vgt.examType =" . $search['exam_type'];
+			$where .= " AND vg.examType =" . $search['exam_type'];
+		}
+		if ($search['for_month'] > 0) {
+			$where .= " AND vgt.forMonth =" . $search['for_month'];
+			$where .= " AND vg.forMonth =" . $search['for_month'];
+		}
+		if ($search['for_semester'] > 0) {
+			$where .= " AND vgt.forSemester =" . $search['for_semester'];
+			$where .= " AND vg.forSemester =" . $search['for_semester'];
+		}
+
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$order =  ' ORDER BY `g`.`id` DESC ';
-		echo $sql . $where . $order;
+		//echo $sql . $where . $order;
 		return $db->fetchAll($sql . $where . $order);
 	}
 }

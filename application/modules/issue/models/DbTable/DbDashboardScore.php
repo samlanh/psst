@@ -134,15 +134,15 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		$db = $this->getAdapter();
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$currentLang = $dbp->currentlang();
-		$colunmname = 'title_en';
-		$label = "name_en";
-		$branch = "branch_nameen";
+		
 		$criterialTitle="criterialTitleEn";
+		$subjectTitle="subject_titleen";
+		$teacherName="teacher_name_en";
 		if ($currentLang == 1) {
-			$colunmname = 'title';
-			$label = "name_kh";
-			$branch = "branch_namekh";
+		
 			$criterialTitle="criterialTitle";
+			$subjectTitle="subject_titlekh";
+			$teacherName="teacher_name_kh";
 		}
 		$criterialList ='
 			(SELECT
@@ -152,7 +152,8 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 						CONCAT(
 							"{",
 							"\"criteriaId\":", vs.criteriaId, ",",
-							"\"'.$criterialTitle.'\":\"", vs.criterialTitle, "\"",
+							"\"criteriaType\":", vs.criteriaType, ",",
+							"\"criterialTitle\":\"", vs.'.$criterialTitle.', "\"",
 							"}"
 						) 
 						ORDER BY vs.criteriaType ASC
@@ -174,8 +175,8 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 						CONCAT(
 							"{",
 							"\"subject_id\":", `gs`.`subject_id`, ",",
-							"\"shortcut\":\"", `sj`.`shortcut`, "\",",
-							"\"teacher\":\"", `t`.`teacher_name_kh`, "\"",
+							"\"shortcut\":\"", `sj`.'.$subjectTitle.', "\",",
+							"\"teacher\":\"", `t`.'.$teacherName.', "\"",
 							"}"
 						) 
 						ORDER BY `sj`.`subject_lang`
@@ -186,11 +187,13 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 				LEFT JOIN `rms_subject` `sj` ON `sj`.`id` = `gs`.`subject_id`
 			    LEFT JOIN `rms_teacher` `t`	ON `t`.`id` = `gs`.`teacher`
 				WHERE 
-				`gs`.`group_id` = g.id  AND 
-				`gs`.`amount_subject` > 0
-				
-			) AS jsonSubjectList
-		';
+				`gs`.`group_id` = g.id  ';
+			if($search['exam_type']==1){
+				$jsonSubjectList .=' AND  `gs`.`amount_subject` > 0 ';
+			}else{
+				$jsonSubjectList .=' AND  `gs`.`amount_subject_sem` > 0 ';
+			}
+		 $jsonSubjectList .=' ) AS jsonSubjectList ';
 
 		$sql = "SELECT `g`.`id`, `g`.`gradingId`,
 			
@@ -200,13 +203,16 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
 			 $criterialList ,
-			 $jsonSubjectList
-		
+			 $jsonSubjectList, 
+		      vgt.jsonScoreTmp,
+			  vg.jsonScoreGrading
 			 ";
 
 		$sql .= $dbp->caseStatusShowImage("g.status");
 		$sql .= " FROM `rms_group` AS `g` 
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
+				LEFT JOIN v_grading_tmp AS vgt ON vgt.groupId = g.id AND vgt.gradingSettingId = g.gradingId
+				LEFT JOIN v_grading AS vg ON vg.groupId = g.id 
 		";
 
 		$where = ' WHERE 1 ';
@@ -237,35 +243,23 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		if (!empty($search['degree'])) {
 			$where .= ' AND `g`.`degree`=' . $search['degree'];
 		}
+		if ($search['exam_type'] > 0) {
+			$where .= " AND vgt.examType =" . $search['exam_type'];
+			$where .= " AND vg.examType =" . $search['exam_type'];
+		}
+		if ($search['for_month'] > 0) {
+			$where .= " AND vgt.forMonth =" . $search['for_month'];
+			$where .= " AND vg.forMonth =" . $search['for_month'];
+		}
+		if ($search['for_semester'] > 0) {
+			$where .= " AND vgt.forSemester =" . $search['for_semester'];
+			$where .= " AND vg.forSemester =" . $search['for_semester'];
+		}
+
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$order =  ' ORDER BY `g`.`id` DESC ';
-		echo $sql . $where . $order;
+		//echo $sql . $where . $order;
 		return $db->fetchAll($sql . $where . $order);
-
-		// $resultGroup = $db->fetchAll($sql . $where . $order);
-		// $results = array();
-		// if (!empty($resultGroup)) {
-		// 	foreach ($resultGroup as $key =>  $rs) {
-
-		// 		$results['group_code'] = $rs['group_code'];
-		// 		$results['academic_year'] = $rs['academic_year'];
-		// 		$results['room_name'] = $rs['room_name'];
-		// 		$results['teaccher'] = $rs['teaccher'];
-		// 		$results['jsonSubjectList'] = $rs['jsonSubjectList'];
-		// 		$results['criterialList'] = $rs['criterialList'];
-				
-		// 		$criterrialList = json_decode($rs["criterialList"], true);
-		// 		if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ 
-					
-		// 			$data['crieriaId'] = $rs['subject_id'];
-					
-		// 		     $rsGrading = $this->getGradingScoreData($data);
-		// 		 } 
-				
-		// 	}
-		// }
-		// return $results;
-
 	}
 }

@@ -119,22 +119,42 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 			$this->_name='rms_invoice_account';		
 	    	$_id = $this->insert($arr);
 			$ids = explode(',', $data['identity']);
-			foreach ($ids as $i){
-				$arr_s = array(
-					'vid'=>$_id,
-					'service_id'=>$data['service_'.$i],
-					'month'=>$data['amount_'.$i],
-					'term'=>$data['term_'.$i],
-					'semester'=>$data['semester_'.$i],
-					'year'=>$data['year_'.$i],
-					'start_date'=>$data['startdate_'.$i],
-					'end_date'=>$data['enddate_'.$i],
-					'remark'=>$data['remark_'.$i],
-					'is_onepayment'=>$data['onepayment_'.$i],
-					'period'=>$data['term_study'.$i],
+			$this->_name = 'rms_invoice_account_detail';
+			if ($data['invoice_type']==2) {//draft invoice
+				foreach ($ids as $i) {
+					$arr_s = array(
+						'vid' => $_id,
+						'service_id' => $data['service_' . $i],
+						'month' => $data['amount_' . $i],
+						'term' => $data['term_' . $i],
+						'semester' => $data['semester_' . $i],
+						'year' => $data['year_' . $i],
+						'start_date' => $data['startdate_' . $i],
+						'end_date' => $data['enddate_' . $i],
+						'remark' => $data['remark_' . $i],
+						'is_onepayment' => $data['onepayment_' . $i],
+						'period' => $data['term_study' . $i],
 					);
-				$this->_name='rms_invoice_account_detail';	
-				$this->insert($arr_s);
+					
+					$this->insert($arr_s);
+				}
+			} elseif ($data['invoice_type'] == 1) {//invoice for Payment
+				foreach ($ids as $i) {
+					$arr_s = array(
+						'vid' => $_id,
+						'service_id' => $data['service_' . $i],
+						'academicYearId' => $data['academic_year_' . $i],
+						'payAs' => $data['term_' . $i],
+						'qty' => $data['qty_' . $i],
+						'price' => $data['price_' . $i],
+						'discountId' => $data['discount_type' . $i],
+						'totalPayment' => $data['total_amount' . $i],
+						'period' => $data['term_study' . $i],
+						'start_date' => $data['startdate_' . $i],
+						'end_date' => $data['enddate_' . $i],
+					);
+					$this->insert($arr_s);
+				}
 			}
 		    $db->commit();
     	}catch(Exception $e){

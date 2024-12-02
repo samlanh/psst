@@ -54,7 +54,7 @@ class Application_Model_DbTable_DbGlobalUp extends Zend_Db_Table_Abstract
 			if (!empty($data['itemType'])) {
 				$sql .= " AND gds.itemType=" . $data['itemType'];
 			}
-			if (!empty($data['activStudent'])) {
+			if (!empty($data['activeStudent'])) {
 				$sql .= " AND (gds.stop_type=0 OR gds.stop_type=3 OR gds.stop_type=4) ";
 			}
 			if (isset($data['isCurrent'])) {

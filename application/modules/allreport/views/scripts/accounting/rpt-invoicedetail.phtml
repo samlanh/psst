@@ -157,7 +157,7 @@
 										?>	
 										<tr align="center" style="font-size: 12px;">
 										    <td style="border:1px solid #000;"><?php echo $key; ?></td>
-											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php if($row['type']==1){ echo $tr->translate("TUITION_FEE"); }elseif($row['type']==2){ echo $tr->translate("SERVICE");} echo " ".$row['title']; //if($row['type']==1) echo 'Tuition Fee('.$row['grade'].')';if($row['type']==2) echo $row['service_name']?></td>
+											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php echo " ".$row['title'];?></td>
 										    <td style="border:1px solid #000;"><?php if($row['month']!=0) echo '$&nbsp;'.number_format($row['month'],2); ?></td>
 										    <td style="border:1px solid #000;"><?php if($row['term']!=0) echo '$&nbsp;'.number_format($row['term'],2); ?></td>
 										    <td style="border:1px solid #000;"><?php if($row['semester']!=0) echo '$&nbsp;'.number_format($row['semester'],2); ?></td>

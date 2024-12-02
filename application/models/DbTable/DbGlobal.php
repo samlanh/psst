@@ -5213,7 +5213,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			WHEN `discountPeriod`=2 THEN `discountPeriod`=2 $WherediscountPromotion 	
 			ELSE  1	
 		END";
-		// Application_Model_DbTable_DbUserLog::writeMessageError($sql);
+		
 		if(!empty($data['fetchAll'])){
 			$result =  $this->getAdapter()->fetchAll($sql);
 			if (!empty($result) AND !empty($data['optionList'])) {

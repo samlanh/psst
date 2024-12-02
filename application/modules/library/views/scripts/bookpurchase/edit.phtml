@@ -104,7 +104,7 @@ $frm_c=$this->frm_cat;
 												<input class="fullside" dojoType="dijit.form.TextBox" name="serial" id="serial" type="text" placeHolder="<?php echo $tr->translate("SERIAL_NO");?>" >
 											</div>
 											<div class="col-md-3 col-sm-12 col-xs-12">
-												<input class="fullside" dojoType="dijit.form.TextBox" name="barcode" id="barcode" type="text" placeHolder="<?php echo $tr->translate("BARCODE");?>">
+												<input class="fullside" dojoType="dijit.form.TextBox" name="barcode" id="barcode" type="text" placeHolder="<?php echo $tr->translate("BAR_CODE");?>">
 											</div>
 											<div class="col-md-3 col-sm-12 col-xs-12">
 												<input class="fullside" dojoType="dijit.form.TextBox" name="note_new" id="note_new" type="text" placeHolder="<?php echo $tr->translate("NOTE");?>">
@@ -200,7 +200,7 @@ function addRow() {
 		temp+='<th><?php echo $tr->translate("N_O");?></th>';
 		temp+='<th ><?php echo $tr->translate("BOOK_NAME");?></th>';
 		temp+='<th ><?php echo $tr->translate("SERIAL_NO");?></th>';
-		temp+='<th ><?php echo $tr->translate("BARCODE");?></th>';
+		temp+='<th ><?php echo $tr->translate("BAR_CODE");?></th>';
 		temp+='<th ><?php echo $tr->translate("NOTE");?></th>';
 		temp+='<th ><?php echo $tr->translate("STATUS");?></th>';
 		dojo.query("#head-title").append(temp);
@@ -251,7 +251,7 @@ function initialize() {
 			temp+='<th><?php echo $tr->translate("N_O");?></th>';
 			temp+='<th ><?php echo $tr->translate("BOOK_NAME");?></th>';
 			temp+='<th ><?php echo $tr->translate("SERIAL_NO");?></th>';
-			temp+='<th ><?php echo $tr->translate("BARCODE");?></th>';
+			temp+='<th ><?php echo $tr->translate("BAR_CODE");?></th>';
 			temp+='<th ><?php echo $tr->translate("NOTE");?></th>';
 			temp+='<th ><?php echo $tr->translate("STATUS");?></th>';
 			dojo.query("#head-title").append(temp);

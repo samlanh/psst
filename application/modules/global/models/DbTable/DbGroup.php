@@ -21,7 +21,7 @@ class Global_Model_DbTable_DbGroup extends Zend_Db_Table_Abstract
 		$rows = $_db->getAllSubjectStudy($schoolOption);
 		array_unshift($rows,array('id' => -1,"name"=>$tr->translate("ADD_NEW_SUBJECT"),"shortcut"=>""));
 		if($opt!=null){return $rows;}
-		$options = '<option value="0">'.$tr->translate("CHOOSE_SUJECT").'</option>';
+		$options = '<option value="0">'.$tr->translate("SELECT_SUBJECT").'</option>';
 		if(!empty($rows))foreach($rows as $value){
 			$options .= '<option value="'.$value['id'].'" >'.htmlspecialchars($value['name']."-".$value['shortcut'], ENT_QUOTES).'</option>';
 		}

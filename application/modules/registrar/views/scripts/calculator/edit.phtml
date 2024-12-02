@@ -428,7 +428,7 @@ function printCashCount(){
 		//all total in khmer
 		rs_kh_total=dijit.byId('rs_kh_total').get('value');
 		dojo.byId("lbr_total_").innerHTML =isNaN(rs_kh_total)?0:rs_kh_total;
-		//all dolla and riel
+		
 		total_amount=dijit.byId('total_amount').get('value');
 		dojo.byId("lbdr_totals_amount").innerHTML =dojo.number.format(isNaN(total_amount)?0:total_amount,2);
 		d_hundred=dijit.byId('d_hundred').get('value').toFixed(2);
@@ -503,7 +503,7 @@ function printCashCount(){
 		//all total in khmer
 		rs_kh_total=dijit.byId('rs_kh_total').get('value');
 		dojo.byId("lbr_total_1").innerHTML =dojo.number.format(isNaN(rs_kh_total)?0:rs_kh_total,2);
-		//all dolla and riel
+		
 		total_amount=dijit.byId('total_amount').get('value');
 		dojo.byId("lbdr_totals_amount1").innerHTML =dojo.number.format(isNaN(total_amount)?0:total_amount,2);
 

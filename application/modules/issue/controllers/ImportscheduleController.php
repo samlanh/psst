@@ -1,9 +1,7 @@
 <?php
 class Issue_importscheduleController extends Zend_Controller_Action {
 	
-	const REDIRECT_URL_ADD ='/items/measure/add';
-	const REDIRECT_URL_CLOSE ='/items/measure/index';
-	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
+	
     public function init()
     {    	
      /* Initialize action controller here */

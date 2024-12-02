@@ -23,7 +23,7 @@ class Accounting_ServicechargeController extends Zend_Controller_Action {
     		}
     		$db = new Accounting_Model_DbTable_DbServiceCharge();
     		$service= $db->getAllServiceFee($search);
-    		$collumns = array("BRANCH","ACADEMIC_YEAR","CREATED_DATE","PROCESS_TYPE","BY_USER","STATUS");
+    		$collumns = array("BRANCH","ACADEMIC_YEAR","CREATE_DATE","PROCESS_TYPE","BY_USER","STATUS");
     		$link=array(
     				'module'=>'accounting','controller'=>'servicecharge','action'=>'edit',
     		);

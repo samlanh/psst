@@ -30,7 +30,7 @@ class Issue_StudentrefillscoreController extends Zend_Controller_Action {
 			$rs_rows = $db->getStudentRefillScore($search);
 			$list = new Application_Form_Frmtable();
 			$collumns = array("BRANCH","STUDENT_CODE","STUDENT_NAME", "STUDENT_GROUP","EXAM_TITLE", "EXAM_TYPE", "FOR_SEMESTER", "FOR_MONTH", "STATUS");
-			//"SCORE_LEVEL",
+			
 			
 			$this->view->list = $list->getCheckList(10, $collumns, $rs_rows, array(
 			));

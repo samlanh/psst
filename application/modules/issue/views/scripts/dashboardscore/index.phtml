@@ -6,6 +6,7 @@
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
 	$dbgb = new Application_Model_DbTable_DbGlobal();
+	$urlDelete = $this->baseUrl()."/issue/scoretmp/delete/id/";
 	//print_r($this->row);
 ?>
 
@@ -49,6 +50,21 @@
 		height: 480px;
 		overflow: auto;
 	}
+	.card.border-top-2 {
+		border-top-width: 2px!important;
+	}
+	.head-td {
+		background: #ffffff !important;
+		color: black !important ;
+		font-family: 'Khmer OS Battambang','Times New Roman', Times, serif;
+		font-size: 12px;
+	}
+	.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+		padding: 1px 1px;
+		font-family: 'Khmer OS Battambang','Times New Roman';
+		font-size: 12px;
+	}
+
 </style>
 	<link href="<?php echo $base_url;?>admin/build/css/external-template.css" rel="stylesheet">
 	<div class="row"> 
@@ -138,15 +154,15 @@
 						}
 					?>
 					<div class="col-md-12 col-sm-12 col-xs-12 classListSubject"> 
-						<div class="card mb-1 <?php echo $cardClass; ?> border-top-5">
+						<div class="card mb-1 <?php echo $cardClass; ?> border-top-2 ">
 							<div class="card-content">
 								<div class="row ">
 									<div class="col-xs-12">
-										<div class="d-flex align-items-center h-100 <?php echo $bgClass; ?>">
-											<span class="text-white font-large-2 "><?php echo $row['group_code']; ?></span>,
-											<span class="text-white font-large-2 "><small class="timeSchedule text-white mt-0 mb-1"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['room_name']; ?></small></span>,
-											<span class="text-white font-large-2 text-center">
-												<small class="timeSchedule text-white mt-0 mb-1"><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['teaccher']; ?></small>
+										<div class="d-flex align-items-center h-100 p-1 ">
+											<span class="font-medium-5 "><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['group_code']; ?></span>,&nbsp;
+											<span class="font-medium-5" ><i class="fa fa-university" aria-hidden="true"></i> <?php  echo $row['room_name']; ?></span>,&nbsp;
+											<span class="font-medium-5" ><i class="glyphicon glyphicon-user"></i> <?php  echo $row['teaccher']; ?></span>
+											<span class="font-large-2 text-center">
 												<?php 
 													$examType  = $this->search['exam_type'];
 													$month	   = $this->search['for_month'];
@@ -171,17 +187,23 @@
 											<thead class="bg-dark text-white  ">
 												<tr class="head-td">
 													<th><?php echo $tr->translate("NUM"); ?></th>
-													<th><?php echo $tr->translate("SUBJECT"); ?></th>
-													<th><?php echo $tr->translate("TEACHER"); ?></th>
+													<th width="10%" ><?php echo $tr->translate("TEACHER"); ?></th>
+													<th width="15%" ><?php echo $tr->translate("SUBJECT"); ?></th>
 													<?php
+													
 													$criterrialList = json_decode($row["criterialList"], true);
-													if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ ?>
-														<th><?php echo $cr['criterialTitle']; ?></th>
+													if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ 
+															$thwidth ="10%";
+															if($cindex== 3){
+  																$thwidth ="18%";
+															}
+													?>
+														<th width="<?php echo $thwidth; ?>"  ><?php echo $cr['criterialTitle']; ?></th>
 													<?php } ?>
 													<th><?php echo $tr->translate("RESULT"); ?></th>
 												</tr>
 											</thead>
-											<tbody class="table-border-bottom-0">
+											<tbody class="table-border-bottom-0 ">
 												<?php
 													// Score Temporary as json-list
 													$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
@@ -194,10 +216,10 @@
 													$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
 													if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
 														$num++; ?>
-														<tr>
+														<tr class="hover">
 															<td class="text-center"> <?php echo $num; ?> </td>
-															<td> <?php echo $sj['shortcut']; ?> </td>
 															<td> <?php echo $sj['teacher']; ?> </td>
+															<td> <?php echo $sj['shortcut']; ?> </td>
 															<?php
 															   $arrayButtonColor= array(
 																'0'=> 'btn-primary',
@@ -214,11 +236,12 @@
 															if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ 
 
 																	$criteriaClass = $arrayButtonColor[$cindex] ;
-																	// if($cr['criteriaType']==2){
-																	// 	$criteriaClass = "btn-success";
-																	// }
+																	$classCol = " col-md-12 col-sm-12 col-xs-12 ";
+																	if($cindex==3){
+																		$classCol = " col-md-6 col-sm-6 col-xs-6 ";
+																	}
 																?>
-																<td> 
+																<td > 
 																	<?php 
 																		$filterSubjectId = $sj['subject_id'];  //  subjectId you want to filter by
 																		$filterCiteriaId = $cr['criteriaId'];  //  citeriaId you want to filter by
@@ -230,21 +253,33 @@
 																		$rsScoreTmp = array_values($rsScoreTmp);
 																	
 																		if(!empty($rsScoreTmp)) foreach($rsScoreTmp as $rstmp){ ?>
-																		<a class="btn <?php echo $criteriaClass  ; ?>  btn-sm" target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-grading-list/id/".$rstmp['tmpId']."/fullcontrol/1";?>" role="button">
-																			<i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-																			<?php 
-																				$format = 'd-M-Y';
-																				$dateString = $rstmp['dateInput'];
-																				$date = new DateTime($dateString);
-																				$dateInput = $date->format($format);
-																				echo $dateInput;
-																			?>
-																		</a>
+																		<div class="<?php echo $classCol ; ?>">
+																			<div class="btn-group">
+																				<button class="btn <?php echo $criteriaClass  ; ?> btn-sm dropdown-toggle" type="button" id="dropdownMenuButton_<?php echo $rstmp['tmpId']; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																					<span class="glyphicon glyphicon-chevron-down"></span>
+																					<?php 
+																						$format = 'd-M-y';
+																						$dateString = $rstmp['dateInput'];
+																						$date = new DateTime($dateString);
+																						$dateInput = $date->format($format);
+																						echo $dateInput;
+																					?>
+																				</button>
+																				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton_<?php echo $rstmp['tmpId']; ?>">
+																					<a class="dropdown-item"  target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-grading-list/id/".$rstmp['tmpId']."/fullcontrol/1";?>">
+																						<span><i class="fa fa-eye" aria-hidden="true"></i>  <?php echo $tr->translate("VIEW"); ?></span>
+																					</a>
+																					<div class="dropdown-divider"></div>
+																					<a class="dropdown-item" onclick="setrowdata(<?php echo $rstmp['tmpId']; ?>)"><span><i class="fa fa-trash-o" aria-hidden="true"></i>  <?php echo $tr->translate("DELETE"); ?></span></a>
+																				</div>
+																			</div>
+																			
+																		</div>
 																	<?php } ?>
 																</td>
 																
 															<?php } ?>
-															<td> 
+															<td class="text-center"> 
 																<?php 
 																	$SubjectId = $sj['subject_id'];  
 																	$rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
@@ -253,16 +288,27 @@
 																	// Reset array keys for better readability
 																	$rsScoreGrading = array_values($rsScoreGrading);
 																	if(!empty($rsScoreGrading)){ ?>
-																		<a class="btn btn-success btn-sm" target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rsScoreGrading['0']['gId'];?>/fullcontrol/1" role="button">
-																			<i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-																			<?php 
-																				$format = 'd-M-Y';
-																				$dateString = $rsScoreGrading['0']['dateInput'];
-																				$date = new DateTime($dateString);
-																				$dateInput = $date->format($format);
-																				echo $dateInput;
-																			?>
-																		</a>
+																		
+																		<div class="btn-group">
+																			<button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenuButton_<?php echo $row['id'].$SubjectId; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																				<span class="glyphicon glyphicon-chevron-down"></span>
+																				<?php 
+																					$format = 'd-M-y';
+																					$dateString = $rsScoreGrading['0']['dateInput'];
+																					$date = new DateTime($dateString);
+																					$dateInput = $date->format($format);
+																					echo $dateInput;
+																				?>
+																			</button>
+																			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton_<?php echo $row['id'].$SubjectId; ?>">
+																				<a class="dropdown-item"  target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rsScoreGrading['0']['gId'];?>/fullcontrol/1">
+																					<span><i class="fa fa-eye" aria-hidden="true"></i>  <?php echo $tr->translate("VIEW"); ?></span>
+																				</a>
+																				<div class="dropdown-divider"></div>
+																				<a class="dropdown-item" href="#"><span><i class="fa fa-trash-o" aria-hidden="true"></i>  <?php echo $tr->translate("DELETE"); ?></span></a>
+																			</div>
+																		</div>
+																		
 																<?php } ?>
 															</td>
 														</tr>
@@ -281,6 +327,30 @@
 		</div>
 	</div>
 	
+<div class="dijitHidden">
+	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate('DELETE_RECORD_TITLE');?>'"  id="updateForm" style="width:350px;" >
+		<div class="card pb-10 pt-10 pl-10 pr-10">
+			<form id="voidFormInfo"  name="data" action="" dojoType="dijit.form.Form" method="post">
+				<div class="card-box">
+					
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12" id="contentInfoPop">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-12 border-top mt-20 ptb-10 text-center">
+							<p class="message-title text-primary"><?php echo $tr->translate('DO_YOU_WANT_TO_DELETE_THIS_RECORD');?></p>
+														
+							<input onclick="dijit.byId('updateForm').hide();" type="button" value="1" label="<?php echo $tr->translate('NO');?>" id="busyButton" dojoType="dijit.form.Button" class="button-class button-danger" iconClass="glyphicon glyphicon-remove" /> 
+							<input onclick="gotoAction();" type="button" value="1" label="<?php echo $tr->translate('CONFIRM');?>" id="okButton" dojoType="dijit.form.Button" class="button-class button-primary" iconClass="glyphicon glyphicon-ok" /> 
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 					dojo.require('dijit.form.DateTextBox');
@@ -331,7 +401,43 @@ function getallGrade(){
 			}
 		});
 }
+
+function setrowdata(index){
+	dijit.byId('updateForm').show();
+	row = index;
+
+	getGetTmpGrading(row);
+}
+var urlTmpGrading = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoretmp','action'=>'getinfo')); ?>';
+	function getGetTmpGrading(row){
+		
+		dojo.xhrPost({
+			url: urlTmpGrading,
+			content:{
+				'gradingTmpId':row,
+				},
+			handleAs:"json",
+			load: function(data) {
+				//alert(data);
+				var strinfo="";
+				if(data!=""){
+					strinfo+='<small >'+data.branchName+'</small>';
+					strinfo+='<h3 class="text-primary">'+data.title+' ('+data.subjectName+')</h3>';
+					strinfo+='<p><?php echo $tr->translate("STUDENT_GROUP");?>: <strong>'+data.groupCode+'</strong> '+data.examType+' '+data.for_month+'</p>';
+					strinfo+='<p><?php echo $tr->translate("TEACHER");?>: <strong>'+data.taecherName+'</strong></p>';
+					strinfo+='<p><?php echo $tr->translate("CREATE_DATE");?>: <strong>'+data.createDate+'</strong></p>';
+				}
+				$( "#contentInfoPop" ).html( strinfo );
+				
+			},
+			error: function(err) {
+			}
+		});
+	}
+	
+	function gotoAction(){
+		// dijit.byId('updateForm').hide();
+		// url='<?php echo $urlDelete;?>';
+		// window.location.href = url+row;
+	}
 </script>
-<?php 
-	//echo $this->render('externalFoot.phtml');
-?>

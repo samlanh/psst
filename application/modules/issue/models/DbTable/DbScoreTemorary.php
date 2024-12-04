@@ -222,6 +222,7 @@ class Issue_Model_DbTable_DbScoreTemorary extends Zend_Db_Table_Abstract
 		$where .= " AND gt.id =" . $search['gradingTmpId'];
 		$order = " ORDER BY id DESC ";
 		$order .= " LIMIT 1 ";
-		return $db->fetchRow($sql . $where . $order);
+		$result = $db->fetchRow($sql . $where . $order);
+		return !empty($result) ? $result:0;
 	}
 }

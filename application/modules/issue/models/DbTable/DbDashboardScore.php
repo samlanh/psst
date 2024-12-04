@@ -9,126 +9,6 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		return $session_user->user_id;
 	}
 
-	function checkCriterial($data)
-	{
-		$db = $this->getAdapter();
-		$sql = "SELECT g.id, g.dateInput,			
-		(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= g.criteriaId LIMIT 1) criteriaType
-		,(SELECT es.title FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitle 
-		,(SELECT es.title_en FROM `rms_exametypeeng` AS es WHERE es.id = g.criteriaId LIMIT 1) AS criterialTitleEng 
-		,COUNT(g.criteriaId) AS inputTime
-		FROM `rms_grading_tmp` AS g WHERE 1 ";
-		if (!empty($data['gradingId'])) {
-			$sql .= ' AND  g.gradingSettingId=' . $data['gradingId'];
-		}
-		if (!empty($data['groupId'])) {
-			$sql .= ' AND  g.`groupId`=' . $data['groupId'];
-		}
-		if (!empty($data['teacherId'])) {
-			$sql .= ' AND  g.`teacherId`=' . $data['teacherId'];
-		}
-		if (!empty($data['subjectId'])) {
-			$sql .= ' AND  g.`subjectId`=' . $data['subjectId'];
-		}
-		if (!empty($data['examType'])) {
-			$sql .= ' AND  g.`examType`=' . $data['examType'];
-		}
-		if (!empty($data['forMonth'])) {
-			$sql .= ' AND  g.`forMonth`=' . $data['forMonth'];
-		}
-		$sql .= " GROUP BY g.`criteriaId` ";
-		$sql .= "  ORDER BY criteriaType ASC, g.`criteriaId` ASC ";
-
-		$db = $this->getAdapter();
-		$Row = $db->fetchAll($sql);
-		return $Row;
-	}
-
-	function getGradingScoreData($data)
-	{
-		$sujectId = empty($data['subjectId']) ? 0 : $data['subjectId'];
-		$sql = "SELECT 
-				gt.gradingId,
-				gt.totalAverage ,
-				(SELECT COUNT(DISTINCT(g.criteriaId)) FROM `rms_grading_detail` AS g WHERE g.totalGrading>0 AND gd.id=g.gradingId AND gd.subjectId = $sujectId LIMIT 1) AS totalCriteria
-				FROM `rms_grading_total` gt,
-					`rms_grading` gd
-				 WHERE gd.id=gt.gradingId ";
-		if (!empty($data['groupId'])) {
-			$sql .= " AND gd.groupId=" . $data['groupId'];
-		}
-		if (!empty($data['examType'])) {
-			if ($data['examType'] == 1) { //month
-				if (!empty($data['forMonth'])) {
-					$sql .= " AND gd.formonth= " . $data['forMonth'];
-				}
-			}
-			$sql .= " ANd gd.examType = " . $data['examType'];
-		}
-		if (!empty($data['forSemester'])) {
-			$sql .= " AND gd.forSemester = " . $data['forSemester'];
-		}
-		if (!empty($data['subjectId'])) {
-			$sql .= " AND gd.subjectId = " . $sujectId;
-		}
-		if (!empty($data['teacherId'])) {
-			$sql .= " AND gd.teacherId = " . $data['teacherId'];
-		}
-		$from_date = (empty($data['start_date'])) ? '1' : "gd.dateInput >= '" . $data['start_date'] . " 00:00:00'";
-		$to_date = (empty($search['end_date'])) ? '1' : "gd.dateInput <= '" . $data['end_date'] . " 23:59:59'";
-		$sql .= " AND " . $from_date . " AND " . $to_date;
-
-		$sql .= " ORDER BY gd.subjectId ASC ";
-		return $this->getAdapter()->fetchRow($sql);
-	}
-
-	function getSubjectScoreByGroup($data)
-	{
-
-		$strSubjectLange = " (SELECT subject_lang FROM `rms_subject` s WHERE
-		s.id=sd.subject_id LIMIT 1) ";
-
-		$db = $this->getAdapter();
-		$sql = "SELECT
-			sd.*, 
-			(SELECT sj.subject_titlekh FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name,
-			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = sd.subject_id LIMIT 1) AS sub_name_en,
-			(SELECT t.teacher_name_kh FROM `rms_teacher` AS t WHERE t.id = sd.teacher LIMIT 1) AS teacher_name_kh,
-			(SELECT t.teacher_name_en FROM `rms_teacher` AS t WHERE t.id = sd.teacher LIMIT 1) AS teacher_name_en,
-			$strSubjectLange AS subjectLang
-			FROM
-			rms_group_subject_detail AS sd   WHERE sd.`group_id` = " . $data['groupId'];
-		if (!empty($data['examType'])) {
-			if ($data['examType'] == 1) { //month
-				$sql .= " AND sd.amount_subject >0  ";
-			} else {
-				$sql .= " AND sd.amount_subject_sem > 0 ";
-			}
-		}
-		$sql .= " ORDER  BY $strSubjectLange ";
-		$subjectDetail = $db->fetchAll($sql);
-
-		$results = array();
-		if (!empty($subjectDetail)) {
-			foreach ($subjectDetail as $key => $rs) {
-				$results[$key]['teacher'] = $rs['teacher'];
-				$results[$key]['subjectId'] = $rs['subject_id'];
-				$results[$key]['sub_name'] = $rs['sub_name'];
-				$results[$key]['sub_name_en'] = $rs['sub_name_en'];
-				$results[$key]['teacher_name_kh'] = $rs['teacher_name_kh'];
-				$results[$key]['teacher_name_en'] = $rs['teacher_name_en'];
-				$results[$key]['subjectLang'] = $rs['subjectLang'];
-				$data['subjectId'] = $rs['subject_id'];
-				$data['teacherId'] = $rs['teacher'];
-				$rsGrading = $this->getGradingScoreData($data);
-				$results[$key]['gradingScore'] = $rsGrading['totalAverage'];
-				$results[$key]['gradingId'] = $rsGrading['gradingId'];
-				$results[$key]['totalCriteria'] = $rsGrading['totalCriteria'];
-			}
-		}
-		return $results;
-	}
-
 	function getAllGroups($search)
 	{
 		$db = $this->getAdapter();
@@ -261,5 +141,57 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		$order =  ' ORDER BY `g`.`id` DESC ';
 		//echo $sql . $where . $order;
 		return $db->fetchAll($sql . $where . $order);
+	}
+
+	function getScoreTmpById($score_id)
+	{
+		$db = $this->getAdapter();
+		$sql = "SELECT s.*,
+		(SELECT c.criteriaType FROM  `rms_exametypeeng` AS c WHERE c.id = s.`criteriaId` LIMIT 1 ) AS criteriaType
+		FROM rms_grading_tmp AS s WHERE s.id =$score_id ";
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$sql .= $dbp->getAccessPermission('branchId');
+		return $db->fetchRow($sql);
+	}
+	function deleteTmpScore($_data)
+	{
+		$db = $this->getAdapter();
+		$db->beginTransaction();
+
+		try {
+			
+			$id= $_data['id'];
+
+			$rs = $this->getScoreTmpById($id);
+			if(empty($rs)){
+				return 2;//not permission
+			}
+			$this->_name = "rms_grading_tmp";
+			$where = " id = $id";
+			$this->delete($where);
+
+			$this->_name = 'rms_grading_detail_tmp';
+			$this->delete("gradingId=" . $id);
+			if(!empty($rs)){
+				if ($rs['criteriaType'] == 2) {  // EXAM
+
+					$this->_name = 'rms_grading';
+					$this->delete("gradingTmpId=" . $id);
+	
+					$this->_name = 'rms_grading_detail';
+					$this->delete("gradingTmpId=" . $id);
+	
+					$this->_name = 'rms_grading_total';
+					$this->delete("gradingTmpId=" . $id);
+				}
+
+			}
+			$db->commit();
+			return 1;
+		} catch (exception $e) {
+			Application_Form_FrmMessage::message("Application Error");
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
+		}
 	}
 }

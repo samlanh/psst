@@ -83,7 +83,7 @@ class Allreport_Model_DbTable_DbRptPayment extends Zend_Db_Table_Abstract
     			WHERE 
     				1
     				AND sp.id=$id  ";
-    	$sql.=$_db->getAccessPermission('sp.branch_id');
+    	//$sql.=$_db->getAccessPermission('sp.branch_id');
     	$sql.=" LIMIT 1 ";
     		return $db->fetchRow($sql);
     }

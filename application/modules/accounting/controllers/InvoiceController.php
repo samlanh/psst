@@ -62,9 +62,6 @@ class Accounting_InvoiceController extends Zend_Controller_Action {
 	    	}
     	}
 		
-		
-		$_db = new Application_Model_DbTable_DbGlobal();
-		
 		$model = new Application_Model_DbTable_DbGlobal();
 		$this->view->payment_term = $model->getAllPaymentTerm(null,null);
 		$this->view->branch = $model->getAllBranch();

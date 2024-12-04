@@ -178,8 +178,7 @@
 											<?php foreach ($payment_term as $value) { ?>
 											<?php echo '<td style="border:1px solid #000;white-space: nowrap;min-width:50px;">' . $value . '</td>'; ?>			
 											<?php } ?>
-											<td style="border:1px solid #000;white-space: nowrap;">ថ្ងៃចាប់ផ្តើម<br />Start Date</td>
-											<td style="border:1px solid #000;white-space: nowrap;">ថ្ងៃបញ្ចប់<br />End Date</td>
+											
 											<td style="border:1px solid #000;white-space: nowrap;">ផ្សេងៗ<br />Other</td>
 										</tr>
 										<?php
@@ -204,8 +203,6 @@
 												echo '&nbsp;' . number_format($row['semester'], 2); ?></td>
 										    <td style="border:1px solid #000;"><?php if ($row['year'] != 0)
 												echo '&nbsp;' . number_format($row['year'], 2); ?></td>
-											<td style="border:1px solid #000;"><?php echo date("d/m/Y", strtotime($row['start_date'])); ?></td>
-											<td style="border:1px solid #000;"><?php echo date("d/m/Y", strtotime($row['end_date'])); ?></td>
 											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php echo $row['remark']; ?></td>
 										</tr>
 										<?php }

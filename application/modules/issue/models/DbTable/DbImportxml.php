@@ -110,7 +110,7 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			$data = array(
 				'subject_id'=>$subjectId,
 				'techer_id' =>$teacherId,
-				'note'=>'abc',
+				'note'=>'a',
 				);
 		$this->updateExistingSchedule($lessionId,$data,$groupId);
 		}
@@ -128,11 +128,11 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 			mkdir($urlPart, 0777, true);
 		}
 		$fileName = $_FILES['xml_file']['name'];
-		
-			$tmp = $_FILES['xml_file']['tmp_name'];
+		$tmp = $_FILES['xml_file']['tmp_name'];
 			if(move_uploaded_file($tmp, $urlPart.$fileName)){
 				$sessionXml=new Zend_Session_Namespace('xmlFile');
 				$sessionXml->xml_FileName=$fileName;
+				$this->truncateStringCode();
 				return 1;
 			}
 			else{
@@ -155,6 +155,29 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
     	
 
 	}
+	function truncateStringCode(){
+		$sql = " TRUNCATE `rms_cards` ";
+		$db = $this->getAdapter();
+		$db->query($sql);
+
+	
+		$array = array(
+			'strId' => '',
+		);
+		$where = "id>0";
+		
+		$this->_name='rms_subject';
+		$this->update($array,$where);
+
+		
+		$this->_name='rms_teacher';
+		$where = "id>0";
+		$this->update($array,$where);
+
+		$this->_name='rms_group';
+		$where = "id>0";
+		$this->update($array,$where);
+	}
 	function importxmlSubject($data)
 	{
 		$array = $this->getXmlDataFromFile();
@@ -165,7 +188,6 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 		$academicYear = 8;
 		if(!empty($array)){
 			//$step = 7;
-
 			if ($step == 2) {
 				$tableData = $array["subjects"]["subject"];
 				$subjectColumn = $array["subjects"]["@attributes"]["columns"];
@@ -257,7 +279,15 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 						'techer_id' =>$teacherId,
 						'note'=>'abc',
 						);
+
 					$this->updateExistingSchedule($lessionId,$data,$groupId);
+
+					$this->_name = "rms_group_subject_detail";
+					$data = array(
+						'teacher' =>$teacherId,
+					);
+					$where = "group_id=".$groupId." AND subject_id=".$subjectId;
+					$this->update($data,$where);
 				}
 				
 
@@ -295,6 +325,8 @@ class Issue_Model_DbTable_DbImportxml extends Zend_Db_Table_Abstract
 				// 		}
 				// 	}
 				return 8;
+			} else {
+				return 0;
 			}
 		}else{
 			return 0;

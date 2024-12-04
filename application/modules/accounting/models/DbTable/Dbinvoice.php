@@ -137,11 +137,11 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 						'term' => $data['term_' . $i],
 						'semester' => $data['semester_' . $i],
 						'year' => $data['year_' . $i],
-						'start_date' => $data['startdate_' . $i],
-						'end_date' => $data['enddate_' . $i],
 						'remark' => $data['remark_' . $i],
 						'is_onepayment' => $data['onepayment_' . $i],
-						'period' => $data['term_study' . $i],
+						//'start_date' => $data['startdate_' . $i],
+						//'end_date' => $data['enddate_' . $i],
+						//'period' => $data['term_study' . $i],
 					);
 					
 					$this->insert($arr_s);

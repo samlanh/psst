@@ -583,9 +583,8 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 	
     function getAllStudentRegister($search=null){
     	$_db  = new Application_Model_DbTable_DbGlobal();
-    	$user = $_db->getUserAccessPermission('sp.user_id');
+    	// $user = $_db->getUserAccessPermission('sp.user_id');
     	$branch_id = $_db->getAccessPermission('sp.branch_id');
-    
     	
     	$db=$this->getAdapter();
     	
@@ -622,7 +621,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					rms_student_payment AS sp
 				WHERE 
 					s.stu_id=sp.student_id 
-					$user 
 					$branch_id ";
     	
 	    	$from_date =(empty($search['start_date']))? '1': " sp.create_date >= '".$search['start_date']." 00:00:00'";
@@ -1100,7 +1098,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		s.sex,
 		s.stu_code,
 		s.stu_id,
-			
 		sp.degree as degree_id,
 		(SELECT rms_items.title FROM rms_items WHERE rms_items.id=sp.degree AND rms_items.type=1 LIMIT 1) AS degree,
 		(SELECT sgh.group_id FROM `rms_group_detail_student` AS sgh WHERE sgh.itemType=1 AND sgh.stu_id = sp.`student_id` ORDER BY sgh.gd_id DESC LIMIT 1) as group_id,
@@ -1112,10 +1109,6 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 		WHERE
 		s.stu_id = sp.student_id
 		AND sp.id=$id AND is_closed=0 ";
-		
-		$_db  = new Application_Model_DbTable_DbGlobal();
-		$sql.= $_db->getUserAccessPermission('sp.branch_id');
-		
 		return $db->fetchRow($sql);
 	}
 	function getLastStudentPaymentRecord($stuId){

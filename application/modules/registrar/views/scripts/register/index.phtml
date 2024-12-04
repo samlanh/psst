@@ -325,7 +325,6 @@
 	function setrowdata(index){
 		row = index;
 		var strinfo="";
-		
 		strinfo+='<small >'+$("#branchValue"+index).text()+'</small>';
 		strinfo+='<h3 class="text-danger red"><small class="text-primary " ><?php echo $tr->translate("RECEIPT_NO");?>:</small > '+$("#receiptValue"+index).text()+'</h3>';
 		strinfo+='<p><?php echo $tr->translate("STUDENT_NAME");?>: <strong class="text-primary ">'+$("#stuCodeValue"+index).text()+' '+$("#stuNameValue"+index).text()+' </strong> </p>';
@@ -364,7 +363,7 @@
 						alert("<?php echo $tr->translate("VOID_FAIL");?>");
 					}
 					dijit.byId('reason').set('value','');
-					location.reload();
+					//location.reload();
 					HideloadingBlock();
 				},
 				error: function(err){
@@ -376,6 +375,7 @@
 		}
 	}
 	function VoidForm(index){
+		setrowdata(index);
 		dijit.byId('id').set('value',index);
 		dijit.byId('updateForm').show();
 	}

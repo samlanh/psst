@@ -13,6 +13,7 @@ class Issue_ImportxmlscheduleController extends Zend_Controller_Action {
 		try{
 			// include  PUBLIC_PATH.'/Classes/PHPExcel/IOFactory.php';
 			$db=new Issue_Model_DbTable_DbImportxml();
+			// $db->truncateStringCode();
 			if($this->getRequest()->isPost()){
 				// $adapter = new Zend_File_Transfer_Adapter_Http();
 				// $adapter->receive();
@@ -27,8 +28,6 @@ class Issue_ImportxmlscheduleController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$db->uploadXMLFile($data);
 				Application_Form_FrmMessage::Sucessfull("Import Successfully","/issue/importxmlschedule");
-			}else{
-
 			}
 			
 			$frm = new Issue_Form_FrmSchedule();
@@ -37,8 +36,9 @@ class Issue_ImportxmlscheduleController extends Zend_Controller_Action {
 			$this->view->frm_items = $frm;
 			
 		}catch (Exception $e){
-			
 			Application_Form_FrmMessage::message("Application Error");
+			echo $e->getMessage();
+			exit();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
 		

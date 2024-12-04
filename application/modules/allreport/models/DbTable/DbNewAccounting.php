@@ -59,7 +59,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				vpm.stpaymentType,
 				vpm.discountCode,
 				vpm.discountValue,
-				(SELECT SUBSTRING_INDEX(installmentOrdering,',',1) AS installmentOrdering FROM `rms_startdate_enddate` WHERE id=vpm.termPaidStartId) as startTerm
+				(SELECT SUBSTRING_INDEX(MIN(installmentOrdering),',',1) AS installmentOrdering FROM `rms_startdate_enddate` WHERE FIND_IN_SET(id,termPaidList) LIMIT 1) AS startTerm
 			  FROM 
 				 rms_student AS s
 				INNER JOIN `rms_group_detail_student` AS dg
@@ -119,10 +119,13 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 		
 		$where.=$_db->getAccessPermission('s.branch_id');
 		
-		$order=" order by s.stu_id DESC ";
+		$order=" order by s.stu_id DESC";
 		$db = $this->getAdapter();
+	
 		
 		$resultStudent =  $db->fetchAll($sql.$where.$order);
+		
+		
 	
 		if (!empty($resultStudent)) {
 			foreach ($resultStudent as $key=> $result) {
@@ -146,7 +149,8 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 	}
 	function ExtraColumns($dataPayment,$startTerm)
 	{
-		//print_r($startTerm);
+		// print_r($startTerm);
+		// exit();
 		$arrExtra = array(
 			'stpaymentType'=>'',
 			'discountCode'=>'',
@@ -164,12 +168,16 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 			'payment2'=>'',
 			'payment3'=>'',
 			'payment4'=>'',
+
+			'unPaidCountTerm1'=>0,
+			'unPaidCountTerm2'=>0,
+			'unPaidCountTerm3'=>0,
+			'unPaidCountTerm4'=>0,
 		);
 	
 		if (!empty($dataPayment)) {
 			$startTerm = !empty($startTerm)?$startTerm:0;
 
-			
 			foreach($dataPayment as $key=> $resultPayment){
 				if ($startTerm > 4) {
 					break;
@@ -189,8 +197,10 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 					if ($startTerm == 1) {  // semester 1
 						$arrExtra['term1'] = 1;
 						$arrExtra['term2'] = 1;
+						$arrExtra['term4'] = 1;
 						$arrExtra['periodDate1'] = $resultPayment['paidDate'];
 						$arrExtra['payment1'] = $resultPayment['totalpayment'];
+						$arrExtra['unPaidCountTerm3'] = $resultPayment['totalpayment'];
 						$startTerm = 2;//next loop will +1 continue to bottom step
 						
 					}elseif($startTerm == 3){//semester 2
@@ -203,6 +213,8 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 						
 						$arrExtra['periodDate3'] = $resultPayment['paidDate'];
 						$arrExtra['payment3'] = $resultPayment['totalpayment'];
+						$arrExtra['unPaidCountTerm4'] = 0;//
+						$arrExtra['unPaidCountTerm3'] = 0;//
 					}
 				}
 				if($resultPayment['payment_term']==2){//term1
@@ -210,17 +222,29 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 						$arrExtra['term1'] = 1;
 						$arrExtra['periodDate1'] = $resultPayment['paidDate'];
 						$arrExtra['payment1'] = $resultPayment['totalpayment'];
+
+						$arrExtra['unPaidCountTerm2'] = $resultPayment['totalpayment'];
+						$arrExtra['unPaidCountTerm3'] = $resultPayment['totalpayment'];
+						$arrExtra['unPaidCountTerm4'] = $resultPayment['totalpayment'];
 					}elseif($startTerm == 2){//term2
 						$arrExtra['term1'] = 1;//just update
 						$arrExtra['term2'] = 1;
 						$arrExtra['periodDate2'] = $resultPayment['paidDate'];
 						$arrExtra['payment2'] = $resultPayment['totalpayment'];
+
+						$arrExtra['unPaidCountTerm2'] = 0;
+						$arrExtra['unPaidCountTerm3'] = $resultPayment['totalpayment'];
+						$arrExtra['unPaidCountTerm4'] = $resultPayment['totalpayment'];
 				}elseif($startTerm == 3){//term3
 						$arrExtra['term1'] = 1;//just update
 						$arrExtra['term2'] = 1;//just update
 						$arrExtra['term3'] = 1;
 						$arrExtra['periodDate3'] =  $resultPayment['paidDate'];
 						$arrExtra['payment3'] = $resultPayment['totalpayment'];
+
+						$arrExtra['unPaidCountTerm3'] = 0;
+						$arrExtra['unPaidCountTerm4'] = $resultPayment['totalpayment'];
+
 				}elseif($startTerm == 4){//term4
 					    $arrExtra['term1'] = 1;//just update
 						$arrExtra['term2'] = 1;//just update
@@ -228,6 +252,8 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 						$arrExtra['term4'] = 1;
 						$arrExtra['periodDate4'] = $resultPayment['paidDate'];
 						$arrExtra['payment4'] = $resultPayment['totalpayment'];
+
+						$arrExtra['unPaidCountTerm4'] = 0;
 					}
 				}
 				$startTerm=$startTerm+1;

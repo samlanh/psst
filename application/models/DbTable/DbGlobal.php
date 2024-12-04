@@ -5132,7 +5132,11 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$sqlDiscountFor = "(SELECT $colunmname FROM `rms_view` WHERE TYPE=37 AND key_code=ds.discountFor LIMIT 1)";
 			$sqlforType = "(SELECT $colunmname FROM `rms_view` WHERE type=38 AND key_code=ds.discountForType LIMIT 1) ";
 			$sqlPeriod = "(SELECT $colunmname FROM `rms_view` WHERE type=39 AND key_code=ds.discountPeriod LIMIT 1) ";
-
+			
+			$sqlStuId = '';
+			if (!empty($data['studentId'])) {
+				$sqlStuId .= " AND disc.studentId=" . $data['studentId'];
+			}
 			$sql = "
 				SELECT
 					ds.id,
@@ -5163,7 +5167,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 					DATE_FORMAT(ds.endDate,'%y') endYear
 				FROM `rms_dis_setting` AS ds
 					LEFT JOIN rms_discount_student disc
-					ON ds.`id`=disc.`discountGroupId`
+					ON ds.`id`=disc.`discountGroupId` $sqlStuId
 				WHERE ds.isCurrent=1 AND ds.status=1 ";
 		}
 		if (!empty($data['discountPeriod'])) {
@@ -5172,7 +5176,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 
 		$sqldiscountId = '';
 		$sqldiscountCateId = '';
-		$sqlStuId = '';
+		
 		$sqldegree = '';
 		$sqlGrade = '';
 		$sqlPeriod = '';
@@ -5187,9 +5191,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if (!empty($data['discountId'])) {//discount category id
 			$sqldiscountCateId .= " AND ds.discountId=" . $data['discountId'];
 		}
-		if (!empty($data['studentId'])) {
-			$sqlStuId .= " AND disc.studentId=" . $data['studentId'];
-		}
+		
 		if (!empty($data['degree'])) {
 			$sqldegree .= " AND FIND_IN_SET (" . $data['degree'] . ",ds.degree)";
 		}

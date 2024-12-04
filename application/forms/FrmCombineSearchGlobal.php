@@ -222,6 +222,7 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$forSemesterFilter = $frm->getForSemesterSearch($search);
 		$forMonthFilter = $frm->getForMonthSearch($search);
 		$criterialFilter = $frm->getCriteriaIDSearch($search);
+		$teacherFilter = $frm->getTeacherSearch($search);
 		$startDateFilter = $frm->getStartDateSearch($search);
 		$endDateFilter = $frm->getEndDateSearch($search);
 		$IssueScoreStatusFilter = $frm->getIssueScoreStatusSearch($search);
@@ -234,6 +235,7 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$forSemesterFilter,
 			$forMonthFilter,
 			$criterialFilter,
+			$teacherFilter,
 			$startDateFilter,
 			$endDateFilter,
 			$IssueScoreStatusFilter,

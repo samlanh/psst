@@ -1,7 +1,7 @@
 <?php
 
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$pageTitle = $tr->translate("TEACHER_DASHBOARD_ISSUE");
+	$pageTitle = $tr->translate("TEACHER_DASHBOARD");
 	echo $this->headTitle($pageTitle);
 	$base_url = Application_Form_FrmMessage::getUrl("/");
 	$frm =  $this->form_search;
@@ -112,9 +112,8 @@
 							</script>
 							<div class="form-group">
 								<div class="col-md-2 col-sm-2 col-xs-12">
-									<?php echo $frm->getElement("adv_search");?>
+									<?php echo $frm->getElement("branch_id");?>
 								</div>
-								
 							   <div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("academic_year");?>
 							   </div>
@@ -127,16 +126,25 @@
 							   <div class="col-md-2 col-sm-3 col-xs-12">
 									<?php echo $frm->getElement("exam_type");?>
 								</div>
-						   </div>
-							<div class="form-group"> 
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("for_semester");?>
 								</div>
+						   </div>
+							<div class="form-group"> 
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("for_month");?>
 								</div>
-								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
-								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div>
+								<div class="col-md-2 col-sm-2 col-xs-12"> 
+									<input id="subjectId" /> 
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("criteriaId");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("issueScoreStatus");?>
+								</div>
+								<!-- <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
+								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div> -->
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 								</div>
@@ -144,6 +152,40 @@
 					   </form>
 				   </div>
 			   </div>
+			   <div class="card">
+					<div class="card-content collapse show">
+						<div class="card-box text-center">
+							<h4 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;">
+								<!-- <i style="font-size:25px;margin-right:10px;" class="fa fa-file-text-o" aria-hidden="true"></i> -->
+								<?php echo $tr->translate("TEACHER_DASHBOARD");?>
+							</h4>
+							<h5 style="font-family:'khmer os muol light';font-size:12px;text-align: center; color: #666;padding:2px 0;">
+								<?php 
+									$examlabel="";
+									if(!empty($this->search['exam_type'])){
+									
+										$examType  = $this->search['exam_type'];
+										$month	   = $this->search['for_month'];
+										$semester  = $this->search['for_semester'];
+										if($examType==1){
+										$examlabel =  $tr->translate("MONTHLY")." ".$month; 
+										}elseif($examType==2){
+											if($semester==1){
+												$examlabel= $tr->translate("SEMESTER1");
+											}elseif($semester==2){
+												$examlabel= $tr->translate("SEMESTER2");
+											}
+										}
+												
+									}
+									echo $examlabel;
+								
+								?>
+							</h5>
+
+						</div>
+					</div>
+				</div>
 			   <div class="row score-dashboard"> 
 					<?php if(!empty($this->row)) foreach($this->row as $gindex =>$row){ 
 						$cardClass = "border-top-primary border-top-darken-1";
@@ -184,9 +226,9 @@
 								<div class="row d-flex">
 									<div class="col-xs-12 ">
 										<table class="table table-bordered ">
-											<thead class="bg-dark text-white  ">
+											<thead class="bg-dark text-white ">
 												<tr class="head-td">
-													<th><?php echo $tr->translate("NUM"); ?></th>
+													<th width="5%"><?php echo $tr->translate("NUM"); ?></th>
 													<th width="10%" ><?php echo $tr->translate("TEACHER"); ?></th>
 													<th width="15%" ><?php echo $tr->translate("SUBJECT"); ?></th>
 													<?php
@@ -194,7 +236,7 @@
 													$criterrialList = json_decode($row["criterialList"], true);
 													if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){ 
 															$thwidth ="10%";
-															if($cindex== 3){
+															if($cindex== 0){
 																if($cr['criteriaType']==2){
 																	$thwidth ="10%";
 																}else{
@@ -218,18 +260,26 @@
 												//	print_r($jsonScoreGrading);
 
 													$num=0;
+													
 													$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
 													if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
-														$num++; ?>
+
+														$subjectLang="";
+														if($sj["subject_lang"]== 2){
+															$subjectLang="(Eng)";
+														}
+														
+														$num++; 
+													?>
 														<tr class="hover">
 															<td class="text-center"> <?php echo $num; ?> </td>
 															<td> <?php echo $sj['teacher']; ?> </td>
-															<td> <?php echo $sj['shortcut']; ?> </td>
+															<td> <?php echo $sj['shortcut'].$subjectLang; ?> </td>
 															<?php
 															   $arrayButtonColor= array(
 																'0'=> 'btn-primary',
-																'1'=> 'btn-danger',
-																'2'=> 'btn-info',
+																'1'=> 'btn-info',
+																'2'=> 'btn-danger',
 																'3'=> 'btn-warning',
 																'4'=> 'btn-primary',
 																'5'=> 'btn-success',
@@ -242,12 +292,8 @@
 
 																	$criteriaClass = $arrayButtonColor[$cindex] ;
 																	$classCol = " col-md-12 col-sm-12 col-xs-12 ";
-																	if($cindex==3){
-																		if($cr['criteriaType']==2){
-																			$classCol = " col-md-12 col-sm-12 col-xs-12 ";
-																		}else{
-																			$classCol = " col-md-6 col-sm-6 col-xs-6 ";
-																		}
+																	if($cindex==0){
+																		$classCol = " col-md-6 col-sm-12 col-xs-12 ";
 																		
 																	}
 																?>
@@ -277,7 +323,7 @@
 																				</button>
 																				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton_<?php echo $rstmp['tmpId']; ?>">
 																					<a class="dropdown-item"  target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-grading-list/id/".$rstmp['tmpId']."/fullcontrol/1";?>">
-																						<span><i class="fa fa-eye" aria-hidden="true"></i>  <?php echo $tr->translate("VIEW"); ?></span>
+																						<span><i class="fa fa-file-text-o" aria-hidden="true"></i>  <?php echo $tr->translate("VIEW"); ?></span>
 																					</a>
 																					<div class="dropdown-divider"></div>
 																					<a class="dropdown-item" onclick="setrowdata(<?php echo $rstmp['tmpId']; ?>)"><span><i class="fa fa-trash-o" aria-hidden="true"></i>  <?php echo $tr->translate("DELETE"); ?></span></a>
@@ -367,12 +413,48 @@
 			onChange: function() {  
 			}
 		}, "grade");
-		
+		new dijit.form.FilteringSelect({
+			queryExpr: "*${0}*",
+			autoComplete: false, 
+			required:false,            
+			id: "subjectId",
+			name: "subjectId",           
+			class: 'fullside', 
+			placeHolder:"ជ្រើសមុខវិជ្ជា/Select Subject",          
+			onChange: function() {
+			}
+		}, "subjectId");
+
+		getAllSubject();
 		getallGrade();
 		<?php if(!empty($this->search['academic_year'])){?>
 		dijit.byId('academic_year').attr('value','<?php echo $this->search['academic_year'];?>'); 
 		<?php } ?>
 	});
+
+	urlGetSubjectStore = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoretmp','action'=>'getsubjectlist'));?>';
+	function getAllSubject(){
+		dijit.byId('subjectId').reset();
+		var subjectStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+		dijit.byId('subjectId').set('store',subjectStore); 
+
+		group     = '';
+
+		dojo.xhrPost({
+			url: urlGetSubjectStore,
+			content:{
+				'groupId':group,
+				},
+			handleAs:"json",
+			load: function(data) {
+				subjectStore  = getDataStorefromJSON('id','name', data);
+				dijit.byId('subjectId').set('store',subjectStore); 
+				dijit.byId('subjectId').attr('value','<?php echo $this->search['subjectId']?>');      
+			},
+			error: function(err) {
+			}
+		});
+	}
 
 	var url_dept = '<?php echo $this->url(array('module'=>'global','controller'=>'grade','action'=>'get-grade')); ?>';
 	function getallGrade(){

@@ -1198,6 +1198,24 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		return $calendarType;
 	}
 
-	
+	function getIssueScoreStatusSearch($_data=null){
+		$issueScoreStatus = new Zend_Dojo_Form_Element_FilteringSelect("issueScoreStatus");
+		$issueScoreStatus->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		$_arr =array(
+				''=>$this->tr->translate("ALL"),
+				1=>$this->tr->translate("EXAM_COMPLETED"),
+				2=>$this->tr->translate("NOT_YET_EXAM"),
+		);
+		$issueScoreStatus->setMultiOptions($_arr);
+		$issueScoreStatus->setValue($this->request->getParam('issueScoreStatus'));	
+		return $issueScoreStatus;
+	}
 	
 }

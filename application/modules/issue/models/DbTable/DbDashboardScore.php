@@ -36,7 +36,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 							"\"criterialTitle\":\"", vs.'.$criterialTitle.', "\"",
 							"}"
 						) 
-						ORDER BY vs.criteriaType ASC
+						ORDER BY vs.criteriaType,vs.criteriaId ASC
 					),
 					"]"
 				)
@@ -55,11 +55,12 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 						CONCAT(
 							"{",
 							"\"subject_id\":", `gs`.`subject_id`, ",",
+							"\"subject_lang\":", `sj`.subject_lang, ",",
 							"\"shortcut\":\"", `sj`.'.$subjectTitle.', "\",",
 							"\"teacher\":\"", `t`.'.$teacherName.', "\"",
 							"}"
 						) 
-						ORDER BY `sj`.`subject_lang`
+						ORDER BY `sj`.`subject_lang`, sj.id ASC
 					),
 					"]"
 				)
@@ -138,7 +139,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
-		$order =  ' ORDER BY `g`.`id` DESC ';
+		$order =  ' ORDER BY `g`.`degree`,g.grade ASC,  `g`.`id` DESC ';
 		//echo $sql . $where . $order;
 		return $db->fetchAll($sql . $where . $order);
 	}

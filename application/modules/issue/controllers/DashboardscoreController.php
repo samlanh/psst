@@ -12,15 +12,30 @@ class Issue_DashboardscoreController extends Zend_Controller_Action {
 		$db = new Issue_Model_DbTable_DbDashboardScore();
 		if($this->getRequest()->isPost()){
 			$search=$this->getRequest()->getPost();
-			$this->view->search = $search;
+			
 			$rows= $db->getAllGroups($search);
 		}else{
-			$rows='';
+			
+			$rows = array();
+			$search = array(
+				'adv_search'=>'',
+				'academic_year'=> '',
+				'exam_type'=>0,
+				'for_semester'=>0,
+				'for_month'=>0,
+				'degree'=>0,
+				'grade'=> 0,
+				'subjectId'=> '',
+				'criteriaId'=> '',
+				'issueScoreStatus'=> '',
+				'start_date'=> '',
+				'end_date'=>date('Y-m-d')
+			);
 		}
-		
+		$this->view->search = $search;
 		$this->view->row = $rows;
-		$form=new Application_Form_FrmSearchGlobal();
-		$forms=$form->FrmSearch();
+		$form=new Application_Form_FrmCombineSearchGlobal();
+		$forms=$form->FormSearchTeacherDasboard();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search=$form;
 		
@@ -40,7 +55,7 @@ class Issue_DashboardscoreController extends Zend_Controller_Action {
 				
 			 } catch (Exception $e) {
 				 Application_Form_FrmMessage::message("UPDATE_FAIL");
-				 Applicatiaon_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+				// Applicatiaon_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			 }
 		 }
 		 exit();

@@ -212,4 +212,32 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		));
 		return $this;
 	}
+	function FormSearchTeacherDasboard($search=null)
+	{
+		$frm = new Application_Form_FrmSearchGlobalNew();
+		$branchFilter = $frm->getBranchSearch($search);
+		$yearFilter = $frm->getAcademicYearSearch($search);
+		$degreeFilter = $frm->getDegreeSearch($search);
+		$examTypeFilter = $frm->getExamTypeSearch($search);
+		$forSemesterFilter = $frm->getForSemesterSearch($search);
+		$forMonthFilter = $frm->getForMonthSearch($search);
+		$criterialFilter = $frm->getCriteriaIDSearch($search);
+		$startDateFilter = $frm->getStartDateSearch($search);
+		$endDateFilter = $frm->getEndDateSearch($search);
+		$IssueScoreStatusFilter = $frm->getIssueScoreStatusSearch($search);
+		
+		$this->addElements(array(
+			$branchFilter,
+			$yearFilter,
+			$degreeFilter,
+			$examTypeFilter,
+			$forSemesterFilter,
+			$forMonthFilter,
+			$criterialFilter,
+			$startDateFilter,
+			$endDateFilter,
+			$IssueScoreStatusFilter,
+		));
+		return $this;
+	}
 }

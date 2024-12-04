@@ -32,7 +32,7 @@
 			</style>
 		<table width="100%" style="font-family:Times New Roman,'Khmer OS Battambang">
 				<tr height="90px;">
-					<td colspan="3"  style="" align="center" valign="top">
+					<td colspan="3" align="center" valign="top">
 						<?php echo $this->header?>
 					</td>
 				</tr>
@@ -139,47 +139,90 @@
 							<tr>
 							    <td colspan="5">
 								    <table width="100%" style="font-size: 12px;border-collapse: collapse; white-space: nowrap;border:1px solid #000;font-family:Times New Roman,'Khmer OS Battambang">
-									    <tr class="head-tr" style="background:#ccd9ff;height: 25px;text-align: center;font-weight: bolder;">
-										    <td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("N_O");?><br />No.</td>
-											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("SERVICES");?><br />Description</td>
-											
-											<?php $s=0; ?>
-											<?php  foreach ($payment_term as $value){?>
-											<?php echo '<td style="border:1px solid #000;white-space: nowrap;min-width:50px;">'.$value.'</td>'; ?>			
-											<?php }?>
+									   <?php if ($this->invoice['invoiceType'] == 1) {//outstanding ?>
+										<tr class="head-tr" style="background:#ccd9ff;height: 25px;text-align: center;font-weight: bolder;">
+										    <td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("N_O"); ?><br />No.</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("បរិយាយ"); ?><br />Description</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("បង់ជា"); ?><br />Pay As</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("ចំនួន"); ?><br />Qty</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("តម្លៃ"); ?><br />Price</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("ការបញ្ចុះតម្លៃ"); ?><br />Discount</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("ប្រាក់ត្រូវបង់"); ?><br />Sub Total</td>
+										</tr>
+										<?php
+										$totalPayment = 0;
+										foreach ($this->invoice_service as $key => $row) {
+											$key = $key + 1;
+											$totalPayment += $row['totalPayment'];
+										?>
+										<tr align="center" style="font-size: 12px;">
+										    <td style="border:1px solid #000;"><?php echo $key; ?></td>
+										    <td style="border:1px solid #000;"><?php echo $row['title']; ?></td>
+										    <td style="border:1px solid #000;"><?php echo $row['payAs']; ?></td>
+										    <td style="border:1px solid #000;"><?php echo $row['qty']; ?></td>
+										    <td style="border:1px solid #000;"><?php echo $row['price']; ?></td>
+										    <td style="border:1px solid #000;"><?php echo $row['discountValue']; ?></td>
+											<td style="border:1px solid #000;"><?php echo $row['totalPayment']; ?></td>
+										</tr>
+										<?php }?>
+											<tr style="font-weight:bold;">
+												<td colspan="5"></td>
+												<td align="center" style="background:#ccd9ff; border:1px solid #000;"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
+												<td align="center" style="background:#ccd9ff; border:1px solid #000;"><?php echo number_format($totalPayment,2); ?></td>
+											</tr>
+										<?php }else { ?>
+											<tr class="head-tr" style="background:#ccd9ff;height: 25px;text-align: center;font-weight: bolder;">
+										    <td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("N_O"); ?><br />No.</td>
+											<td style="border:1px solid #000;white-space: nowrap;"><?php echo $tr->translate("SERVICES"); ?><br />Description</td>
+											<?php $s = 0; ?>
+											<?php foreach ($payment_term as $value) { ?>
+											<?php echo '<td style="border:1px solid #000;white-space: nowrap;min-width:50px;">' . $value . '</td>'; ?>			
+											<?php } ?>
 											<td style="border:1px solid #000;white-space: nowrap;">ថ្ងៃចាប់ផ្តើម<br />Start Date</td>
 											<td style="border:1px solid #000;white-space: nowrap;">ថ្ងៃបញ្ចប់<br />End Date</td>
 											<td style="border:1px solid #000;white-space: nowrap;">ផ្សេងៗ<br />Other</td>
 										</tr>
-										<?php $month=0;$term=0;$semester=0;$year=0;?>
-										<?php if(!empty($this->invoice_service)){
-											foreach($this->invoice_service as $key=> $row){ $key=$key+1;
+										<?php
+											$month=0;
+											$term=0;
+											$semester=0;
+											$year=0;
+										?>
+										<?php 
+										if(!empty($this->invoice_service)){
+											foreach ($this->invoice_service as $key => $row) {
+												$key = $key + 1;
 										?>	
 										<tr align="center" style="font-size: 12px;">
 										    <td style="border:1px solid #000;"><?php echo $key; ?></td>
-											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php echo " ".$row['title'];?></td>
-										    <td style="border:1px solid #000;"><?php if($row['month']!=0) echo '$&nbsp;'.number_format($row['month'],2); ?></td>
-										    <td style="border:1px solid #000;"><?php if($row['term']!=0) echo '$&nbsp;'.number_format($row['term'],2); ?></td>
-										    <td style="border:1px solid #000;"><?php if($row['semester']!=0) echo '$&nbsp;'.number_format($row['semester'],2); ?></td>
-										    <td style="border:1px solid #000;"><?php if($row['year']!=0) echo '$&nbsp;'.number_format($row['year'],2); ?></td>
-											<td style="border:1px solid #000;"><?php echo date("d/m/Y",strtotime($row['start_date'])); ?></td>
-											<td style="border:1px solid #000;"><?php echo date("d/m/Y",strtotime($row['end_date'])); ?></td>
+											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php echo " " . $row['title']; ?></td>
+										    <td style="border:1px solid #000;"><?php if ($row['month'] != 0)
+												echo '&nbsp;' . number_format($row['month'], 2); ?></td>
+										    <td style="border:1px solid #000;"><?php if ($row['term'] != 0)
+												echo '&nbsp;' . number_format($row['term'], 2); ?></td>
+										    <td style="border:1px solid #000;"><?php if ($row['semester'] != 0)
+												echo '&nbsp;' . number_format($row['semester'], 2); ?></td>
+										    <td style="border:1px solid #000;"><?php if ($row['year'] != 0)
+												echo '&nbsp;' . number_format($row['year'], 2); ?></td>
+											<td style="border:1px solid #000;"><?php echo date("d/m/Y", strtotime($row['start_date'])); ?></td>
+											<td style="border:1px solid #000;"><?php echo date("d/m/Y", strtotime($row['end_date'])); ?></td>
 											<td align="left" style="border:1px solid #000;">&nbsp;&nbsp;<?php echo $row['remark']; ?></td>
 										</tr>
-										<?php 
-										$month=$month+$row['month'];
-										$term=$term+$row['term'];
-										$semester=$semester+$row['semester'];
-										$year=$year+$row['year'];
-											}} ?>	
+										<?php }
+										}
+											$month=$month+$row['month'];
+											$term=$term+$row['term'];
+											$semester=$semester+$row['semester'];
+											$year=$year+$row['year'];
+										 ?>	
 										<tr style="font-weight:bold;">
 											<td colspan="2" align="center" style="background:#ccd9ff; border:1px solid #000;"><?php echo $tr->translate("TOTLE_AMOUNT");?></td>
 											<td align="center" style="background:#ccd9ff; border:1px solid #000;"><?php if($month!=0) echo '$&nbsp;'.number_format($month,2); ?></td>
 											<td align="center" style="background:#ccd9ff; border:1px solid #000;"><?php if($term!=0) echo '$&nbsp;'.number_format($term,2); ?></td>
 											<td align="center" style="background:#ccd9ff; border:1px solid #000;"><?php if($semester!=0) echo '$&nbsp;'.number_format($semester,2); ?></td>
 											<td align="center" style="background:#ccd9ff; border:1px solid #000;"><?php if($year!=0) echo '$&nbsp;'.number_format($year,2); ?></td>
-										     
 										</tr>
+										<?php } ?>
 									</table>
 								</td>
 							</tr>		

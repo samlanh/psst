@@ -200,7 +200,7 @@ $payment_term = $this->payment_term;
 									</div>
 									<div class="form-group">
 										<label
-											class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRED_DATE"); ?>
+											class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXPIRE_DATE"); ?>
 										</label>
 										<div class="col-md-7 col-sm-7 col-xs-12">
 											<input type="text" name="expire_date" id="expire_date"
@@ -391,7 +391,6 @@ $payment_term = $this->payment_term;
 				temp+='<th>Service</th>';
 				temp+='<th>ឆ្នាំសិក្សា</th>';			
 				temp+='<th>បង់ជា</th>';	
-					
 				temp+='<th>ចំនួន</th>';			
 				temp+='<th>តម្លៃ</th>';			
 				temp+='<th>ការបញ្ចុះតម្លៃ</th>';			
@@ -667,6 +666,7 @@ $payment_term = $this->payment_term;
 			totalDiscountPercent = Math.round((subtotal * discount_percent / 100));
 		}else{
 			totalDiscountPercent = ($("#discount_type"+index).find(':selected').data('discount-value')); 
+			totalDiscountPercent = isNaN(totalDiscountPercent) ? 0 : totalDiscountPercent;
 		}
 
 		total_pay = parseFloat(subtotal) - totalDiscountPercent;

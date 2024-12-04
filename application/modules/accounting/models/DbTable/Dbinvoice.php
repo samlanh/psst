@@ -9,21 +9,25 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 		$db= $this->getAdapter();
 		
 		$dbp = new Application_Model_DbTable_DbGlobal();
-		$currentlang = $dbp->currentlang();
 		
 		$branch= $dbp->getBranchDisplay();
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+		$Label1 = $tr->translate('Outstanding Fee');
+		$Label2 = $tr->translate('Draft Information Invoice');
 		
 		$sql="SELECT v.id 
 					,(SELECT b.$branch FROM `rms_branch` AS b WHERE b.br_id=v.branch_id LIMIT 1) AS branch
 					,s.stu_code
 					,s.stu_khname
 					,CONCAT(s.last_name,' ',s.stu_enname) as en_name
-					,(SELECT v.name_en FROM rms_view AS v WHERE v.key_code=s.sex AND v.type=2 LIMIT 1) AS gender
 					,(SELECT CONCAT(fromYear,'-',toYear) FROM `rms_academicyear` WHERE id=v.academic_year LIMIT 1) AS academicYear
+					,CASE 
+						WHEN v.invoiceType=1 THEN '".$Label1."'
+						ELSE  '".$Label2."'
+					END AS invoiceType
 					,v.invoice_num
 					,v.invoice_date,
 					v.expired_date
-					,v.remark
 					,v.totale_amount 
 					,v.input_date
 					,(SELECT u.first_name FROM rms_users AS u WHERE u.id = v.user_id LIMIT 1) AS first_name
@@ -38,7 +42,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
     	$from_date =(empty($search['start_date']))? '1': " v.input_date >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': " v.input_date <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
-    	
+		
     	if(!empty($search['search'])){
     		$s_where=array();
     		$s_search=addslashes(trim($search['search']));
@@ -65,6 +69,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 				(SELECT title FROM rms_itemsdetail WHERE rms_itemsdetail.id=v.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade,
 				(SELECT title FROM rms_items WHERE rms_items.id=v.degree AND rms_items.type=1 LIMIT 1)AS degree,
 				(SELECT CONCAT(fromYear,'-',toYear) FROM `rms_academicyear` WHERE id=v.academic_year LIMIT 1) AS academicYear,
+
 				s.stu_khname ,
 				s.stu_enname,
 				s.last_name,
@@ -78,7 +83,9 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	public function getinvoiceservice($id){
 		$db= $this->getAdapter();
 		$sql="SELECT v.* ,
-			(SELECT p.title FROM rms_itemsdetail AS p WHERE v.service_id = p.id  LIMIT 1) as title
+			(SELECT p.title FROM rms_itemsdetail AS p WHERE v.service_id = p.id  LIMIT 1) as title,
+			(SELECT discountValue FROM `rms_dis_setting` WHERE id=v.discountId LIMIT 1) discountValue,
+			(SELECT name_en FROM `rms_view` WHERE type=6 AND key_code=v.payAs LIMIT 1) AS payAs
 		FROM 
 		rms_invoice_account_detail AS v 
 		WHERE vid='".$id."' ";
@@ -105,6 +112,7 @@ class Accounting_Model_DbTable_Dbinvoice extends Zend_Db_Table_Abstract
 	    	$arr = array(
 	    			'branch_id'=>$data['branch_id'],
 	    			'student_id'=>$data['studentId'],
+	    			'invoiceType'=>$data['invoice_type'],
 	    			'academic_year'=>$data['academic_year'],
 					'invoice_date'=>$data['invoice_date'],
 	    			'invoice_num'=>$invoice_num,

@@ -299,4 +299,14 @@ class Foundation_LecturerController extends Zend_Controller_Action {
 		}
 	}
 	
+	
+	function checkUsernameAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Global_Model_DbTable_DbTeacher();
+			$return=$db->checkUserName($data);
+			print_r(Zend_Json::encode($return));
+			exit();
+		}
+	}
 }

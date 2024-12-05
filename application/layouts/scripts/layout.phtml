@@ -72,6 +72,12 @@ if ($module != 'default') {
 		<?php if (($module == 'global' and $controller == "grade" and $action == "add") or ($module == 'global' and $controller == "grade" and $action == "edit")) { ?>
 		<script src="<?php echo $this->baseUrl();?>/admin/js/jquery-ui.js"></script>
 		<?php } ?>
+		
+		<?php if ($module=="home" AND $controller=="searchstudentinfo" AND ($action=="student-detail") ){?>
+			<script src="<?php echo $this->baseUrl()?>/admin/js/EZView/EZView.js"></script>
+			<script src="<?php echo $this->baseUrl()?>/admin/js/EZView/draggable.js"></script>
+		<?php } ?>
+	
 		<?php if (($module == 'test' and $controller == "index" and $action == "add") or ($module == 'test' and $controller == "index" and $action == "edit") or ($module == 'foundation' and $controller == "register" and $action == "add") or ($module == 'foundation' and $controller == "register" and $action == "copy")) { ?>
 			<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/webcam/webcamjs/webcam.js"></script>
 			<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/webcam/webcamjs/webcam.min.js"></script>

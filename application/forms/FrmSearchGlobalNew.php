@@ -1151,6 +1151,26 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		$nearlyPaymetySort->setValue($this->request->getParam('nearlyPaymetySort'));	
 		return $nearlyPaymetySort;
 	}
+	function getNearlyPaymetyFilterType($_data=null){
+		$nearlyFilterType = new Zend_Dojo_Form_Element_FilteringSelect("nearlyFilterType");
+		$nearlyFilterType->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		
+		$_arr =array(
+				1=>$this->tr->translate("WITH_NO_NEARLY_DATE"),
+				2=>$this->tr->translate("NEARLY_DATE"),
+		);
+		$nearlyFilterType->setMultiOptions($_arr);
+		
+		$nearlyFilterType->setValue($this->request->getParam('nearlyFilterType'));	
+		return $nearlyFilterType;
+	}
 	
 	function getPeriodDaySearch($_data=null){
 		$periodDay = new Zend_Dojo_Form_Element_FilteringSelect("periodDay");

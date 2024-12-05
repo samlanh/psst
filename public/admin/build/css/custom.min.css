@@ -2505,3 +2505,55 @@ span.profileChar {
 .custom-control.custom-checkbox .custom-control-input {
     height: 0;
 }
+
+
+div#EZView0 {
+    background: #000000cc;
+}
+div#EZView0 {
+	background: #000000cc;
+}
+div#EZView0 img.content {
+	border-radius: 10px;
+}
+div#EZView0 .tools-container a {
+	padding: 2px;
+}
+div#EZView0 .tools-container a img {
+	color: #fff;
+	opacity: 1;
+	background-color: #ffe037c4 !important;
+	width: 35px !important;
+	filter: brightness(1) invert(1);
+}
+
+div#EZView0 spam.tools {
+	top: 10px !important;
+	left: 10px !important;
+}
+div#EZView0 .tools-container a.close{
+	opacity: 1;
+}
+
+div#EZView0 .tools-container a.close:focus, .tools-container a.close:hover {
+	opacity: 1;
+	background-color: #fdeee7 !important;
+}
+div#EZView0 .tools-container a.close img {
+	background-color: #37ffee !important;
+	width: 29px !important;!i;!;
+	filter: brightness(1) invert(1);
+}
+div#EZView0 a.next , a.back {
+	padding: 5px;
+}
+div#EZView0 a.next img, a.back img {
+	color: #fff;
+	opacity: 1;
+	background-color: #ffe037c4 !important;
+	width: 35px !important;
+	height: 35px !important;!i;!;
+	filter: brightness(1) invert(1);
+	border-radius: 100%;
+	!I;!;
+}

@@ -627,6 +627,7 @@ class Allreport_AccountingController extends Zend_Controller_Action {
 					'service'	=>'',
 					'nearlyPaymetySort'	=>2,
 					'periodDay'	=>7,
+					'nearlyFilterType'	=>1,
 				);
 				
 				$dbGb = new Application_Model_DbTable_DbGlobal();

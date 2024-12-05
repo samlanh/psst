@@ -17,7 +17,7 @@
 		$multiProgramClass = "";
 	}
 ?>
-<style>
+<style>			
  .bold{
 		font-weight:bold;
   }
@@ -392,10 +392,31 @@ table.content-data tr.style-rowdata {
 																					<td><?php echo $tr->translate("DATE_BACK");?></td>
 																					<td><?php echo $tr->translate("NOTE");?></td>
 																				</tr>
-																				<?php $i=0;if(!empty($this->document)){foreach($this->document as $rs){$i++;?>
+																				<?php $i=0;if(!empty($this->document)){
+																					foreach($this->document as $rs){$i++;
+																					$extensionFile="";
+																					$linkDoc="#";
+																					if($rs['is_receive']==1){
+																						if (!empty($rs['attachment_file'])){
+																							if (file_exists(PUBLIC_PATH."/images/document/student/".$rs['attachment_file'])){
+																								$linkDoc = $this->baseUrl().'/images/document/student/'.$rs['attachment_file'];
+																								$explodeArr = explode(".", $rs['attachment_file']);
+																								$extensionFile = strtolower(end($explodeArr));
+																							}
+																						}
+																					}
+																				?>
 																				<tr style="font-size:13px;height:23px;">
 																					<td align="center"><?php echo $i;?></td>
-																					<td><?php echo $rs['document_type'];?></td>
+																					<td>
+																						<?php if($extensionFile!=""){?>
+																						<span class="gallery1" href="<?php echo $linkDoc;?>" alt="<?php echo $rs['document_type'];?>" >
+																							<?php echo $rs['document_type'];?>
+																						</span>
+																						<?php }else{ 
+																							echo $rs['document_type']; 
+																						} ?>
+																					</td>
 																					<td align="center"><?php echo date("d/m/Y",strtotime($rs['date_give']));?></td>
 																					<td align="center"><?php if($rs['is_receive']==1){echo $tr->translate("RECEIVED");}else{echo $tr->translate("NOT_RECEIVED");}?></td>
 																					<td align="center"><?php if($rs['is_receive']==1){ echo "-"; }else{echo date("d/m/Y",strtotime($rs['date_end']));}?></td>
@@ -1384,6 +1405,9 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
+$( document ).ready(function() {
+   $('.gallery1').EZView();
+});
 
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');

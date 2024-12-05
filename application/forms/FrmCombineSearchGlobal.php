@@ -179,6 +179,11 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$getServiceTypeSearch = $frm->getServiceTypeSearch($search);
 		$nearlyPaymetySort = $frm->getNearlyPaymetySortSearch($search);
 		$periodDay = $frm->getPeriodDaySearch($search);
+		$nearlyFilterType = $frm->getNearlyPaymetyFilterType($search);
+		
+		$paymentTermFilter = $frm->getPaymentTermSearch($search);
+		$paymentTermFilter->removeMultiOption(1);
+		$paymentTermFilter->removeMultiOption(5);
 
 		$this->addElements(array(
 			$textSearch,
@@ -189,6 +194,8 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$getServiceTypeSearch,
 			$nearlyPaymetySort,
 			$periodDay,
+			$nearlyFilterType,
+			$paymentTermFilter,
 		));
 		return $this;
 	}

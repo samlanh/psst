@@ -25,7 +25,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			$teacherName="teacher_name_kh";
 		}
 		$criterialList ='
-			(SELECT
+			(
 				CONCAT(
 					"[" ,
 					GROUP_CONCAT(
@@ -40,10 +40,6 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 					),
 					"]"
 				)
-			FROM `v_criterial_setting` AS vs 
-			WHERE vs.`score_setting_id` = g.`gradingId` 
-			AND vs.forExamType = '.$search['exam_type'].' 
-			AND vs.criteriaType > 0
 			) AS criterialList
 		';
 
@@ -91,6 +87,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 
 		$sql .= $dbp->caseStatusShowImage("g.status");
 		$sql .= " FROM `rms_group` AS `g` 
+		 		LEFT JOIN  `v_criterial_setting` AS vs ON (  vs.`score_setting_id` = g.`gradingId`  AND vs.criteriaType > 0)
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
 				LEFT JOIN v_grading_tmp AS vgt ON vgt.groupId = g.id AND vgt.gradingSettingId = g.gradingId
 				LEFT JOIN v_grading AS vg ON vg.groupId = g.id 
@@ -127,6 +124,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		if ($search['exam_type'] > 0) {
 			$where .= " AND vgt.examType =" . $search['exam_type'];
 			$where .= " AND vg.examType =" . $search['exam_type'];
+			$where .= " AND vs.forExamType  =" . $search['exam_type'];
 		}
 		if ($search['for_month'] > 0) {
 			$where .= " AND vgt.forMonth =" . $search['for_month'];
@@ -136,12 +134,58 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			$where .= " AND vgt.forSemester =" . $search['for_semester'];
 			$where .= " AND vg.forSemester =" . $search['for_semester'];
 		}
-
+	
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
+		$groupBy="  GROUP BY g.id  ";
 		$order =  ' ORDER BY `g`.`degree`,g.grade ASC,  `g`.`id` DESC ';
-		//echo $sql . $where . $order;
-		return $db->fetchAll($sql . $where . $order);
+		echo $sql . $where . $order;
+		return $db->fetchAll($sql . $where .$groupBy. $order);
+
+		// $result = $db->fetchAll($sql . $where . $order);
+
+		//  if(!empty($result)) foreach($result as $index =>$row){
+
+		// 	// subject List And Array List
+
+		// 	$criterrialList = json_decode($row["criterialList"], true);
+		// 	$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
+
+		// 	// Score Temporary as json-list
+		// 	$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
+
+		// 	// Score Grading as json-list
+		// 	$jsonScoreGrading = json_decode($row["jsonScoreGrading"], true);
+
+		// 	if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
+
+		// 		if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){
+
+		// 			$filterSubjectId = $sj['subject_id'];  //  subjectId you want to filter by
+		// 			$filterCiteriaId = $cr['criteriaId'];  //  citeriaId you want to filter by
+		// 			// Filter the array
+		// 			$rsScoreTmp = array_filter($jsonScoreTmp , function ($item) use ($filterSubjectId, $filterCiteriaId) {
+		// 				return $item['subjectId'] == $filterSubjectId && $item['citeriaId'] == $filterCiteriaId;
+		// 			});
+		// 			// Reset array keys for better readability
+		// 			$rsScoreTmp = array_values($rsScoreTmp);
+		// 			if(!empty($rsScoreTmp)) foreach($rsScoreTmp as $rstmp){ 
+
+		// 			}
+
+		// 		}
+
+		// 		$SubjectId = $sj['subject_id'];  
+		// 		$rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
+		// 			return $item['subjectId'] == $SubjectId;
+		// 		});
+		// 		// Reset array keys for better readability
+		// 		$rsScoreGrading = array_values($rsScoreGrading);
+
+		// 	}
+
+		// }
+
 	}
 
 	function getScoreTmpById($score_id)

@@ -28,6 +28,7 @@ class Issue_DashboardscoreController extends Zend_Controller_Action {
 				'subjectId'=> '',
 				'criteriaId'=> '',
 				'issueScoreStatus'=> '',
+				'teacher'=> '',
 				'start_date'=> '',
 				'end_date'=>date('Y-m-d')
 			);

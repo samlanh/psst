@@ -164,8 +164,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 					
 				,v.`receiptNo`
 				,v.paidamount
-				,(SELECT title FROM `rms_startdate_enddate` WHERE id=v.paymentTerm LIMIT 1) AS paymentTerm
+				,(SELECT title FROM `rms_startdate_enddate` WHERE id=v.academicFeeTermId LIMIT 1) AS paymentTerm
 				,v.academicFeeTermId
+				,v.paymentTerm AS paymentTermId
 				,v.`feeId`
 				,v.`academicYear` AS paymentAcademicYear
 				,v.`creadDate` AS paymentDate
@@ -213,18 +214,20 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
 			
 				
 			";
-		$toDate = (empty($search['end_date']))? '1': "vSt.`endDate` <= '".$search['end_date']." 23:59:59'";
-		$toDatePmt = (empty($search['end_date']))? '1': "v.`endDate` <= '".$search['end_date']." 23:59:59'";
-    	$sql.=" 
-		AND  
-					CASE WHEN (NULLIF(vSt.`endDate`,'') IS NOT NULL OR vSt.`endDate` !='0000-00-00')
-							THEN $toDate
-						WHEN (NULLIF(v.`endDate`,'') IS NOT NULL OR v.`endDate` !='0000-00-00')
-							THEN $toDatePmt
-					ELSE 1 END
-				
-				$branch_id
-		";
+		$search['nearlyFilterType'] = empty($search['nearlyFilterType']) ? 1 : $search['nearlyFilterType'];
+		if($search['nearlyFilterType']==2){
+			$toDate = (empty($search['end_date']))? '1': "vSt.`endDate` <= '".$search['end_date']." 23:59:59'";
+			$toDatePmt = (empty($search['end_date']))? '1': "v.`endDate` <= '".$search['end_date']." 23:59:59'";
+			$sql.=" 
+			AND  
+						CASE WHEN (NULLIF(vSt.`endDate`,'') IS NOT NULL OR vSt.`endDate` !='0000-00-00')
+								THEN $toDate
+							WHEN (NULLIF(v.`endDate`,'') IS NOT NULL OR v.`endDate` !='0000-00-00')
+								THEN $toDatePmt
+						ELSE 1 END
+			";
+		 }
+		$sql.=$branch_id;
      	$where=" ";
 		/*
 			,COALESCE(NULLIF(vSt.`degreeShortcut`,''),vSt.$item) AS categoryName
@@ -264,7 +267,9 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
      	if(!empty($search['service'])){
      		$where .=" AND vSt.grade=".$search['service'];
      	}
- 
+		if(!empty($search['pay_term'])){
+		  $where .=" AND v.paymentTerm=".$search['pay_term'];
+		}
      	if(($search['branch_id']>0)){
      		$where.= " AND vSt.branchId = ".$search['branch_id'];
      	}
@@ -288,7 +293,7 @@ class Allreport_Model_DbTable_DbRptStudentNearlyEndService extends Zend_Db_Table
     	$order=" ORDER BY vSt.`degree` ASC, vSt.`grade` ASC, vSt.`stuCode` ASC ";
 		$nearlyPaymetySort = empty($search['nearlyPaymetySort']) ? 1 : $search['nearlyPaymetySort'];
 		if($nearlyPaymetySort==1){
-			$order=" ORDER BY vSt.`stuCode` ASC , vSt.`degree` ASC , vSt.`grade` ASC ";
+			$order=" ORDER BY vSt.`stuNameKh` ASC , vSt.`stuCode` ASC , vSt.`degree` ASC , vSt.`grade` ASC ";
 		}
     	//$order.=" LIMIT 10 ";
 		

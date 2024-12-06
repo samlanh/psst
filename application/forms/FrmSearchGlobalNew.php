@@ -1232,6 +1232,7 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 				''=>$this->tr->translate("ALL"),
 				1=>$this->tr->translate("EXAM_COMPLETED"),
 				2=>$this->tr->translate("NOT_YET_EXAM"),
+				3=>$this->tr->translate("NOT_YET_INPUT_CRITERIA"),
 		);
 		$issueScoreStatus->setMultiOptions($_arr);
 		$issueScoreStatus->setValue($this->request->getParam('issueScoreStatus'));	

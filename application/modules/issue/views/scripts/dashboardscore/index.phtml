@@ -142,9 +142,6 @@
 									<input id="subjectId" /> 
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-12">
-									<?php echo $frm->getElement("criteriaId");?>
-								</div>
-								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("issueScoreStatus");?>
 								</div>
 								<!-- <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
@@ -244,7 +241,7 @@
 																if($cr['criteriaType']==2){
 																	$thwidth ="10%";
 																}else{
-																	$thwidth ="18%";
+																	$thwidth ="20%";
 																}
   															
 															}
@@ -256,22 +253,12 @@
 											</thead>
 											<tbody class="table-border-bottom-0 ">
 												<?php
-													// Score Temporary as json-list
-												//	$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
-
-													// Score Grading as json-list
-												//	$jsonScoreGrading = json_decode($row["jsonScoreGrading"], true);
-												//	print_r($jsonScoreGrading);
-
 													$num=0;
-													
 													$jsonSubjectList = json_decode($row["scoreSubjectTmpList"], true);
 												
 												//	print_r($jsonSubjectList);
 
 													if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
-
-													//	$jsonScoreTmp = json_decode($sj["jsonScoreTmp"], true);
 
 														$subjectLang="";
 														if($sj["subject_lang"]== 2){

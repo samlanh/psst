@@ -18,6 +18,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		$criterialTitle="criterialTitleEn";
 		$subjectTitle="subject_titleen";
 		$teacherName="teacher_name_en";
+
 		if ($currentLang == 1) {
 		
 			$criterialTitle="criterialTitle";
@@ -43,97 +44,75 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			) AS criterialList
 		';
 
+		// Subquery group concat subject AND  scoretmp
+
 		$scoreSubjectTmpList ='
 		(SELECT
 			CONCAT(
 				"[",
-				GROUP_CONCAT(
-					CONCAT(
-						"{",
-						"\"subjectId\":",
-						vgs.`subjectId`,
-						",",
-						"\"teacherId\":",
-						vgs.`teacherId`,
-						",",
-						"\"gradingId\":",
-						vgs.`gradingId`,
-						",",
-						"\"subject_lang\":",
-						`sj`.subject_lang,
-						",",
-						"\"shortcut\":\"",
-						'.$subjectTitle.',
-						"\",",
-						"\"teacher\":\"",
-						'.$teacherName.',
-						"\",",
-						"\"dateInput\":\"",
-						 vgs.dateInput,
-						"\",",
-						"\"jsonScoreTmp\":",
-						vgs.`jsonScoreTmp`,
-						"}"
-						)
-						ORDER BY `sj`.`subject_lang`,
-						sj.id ASC
-					),
-				"]"
-			)
-			FROM  `v_grading_tmp_by_subject` AS vgs 
-				LEFT JOIN `rms_subject` AS sj ON sj.`id` = vgs.`subjectId`
-				LEFT JOIN  `rms_teacher` AS t ON t.`id` = vgs.`teacherId`
-				WHERE vgs.`groupId` = g.`id`
-			';
-			if ($search['exam_type'] > 0) {
-				$scoreSubjectTmpList .= " AND vgs.examType =" . $search['exam_type'];
-			}
-			if ($search['for_month'] > 0) {
-				$scoreSubjectTmpList .= " AND vgs.forMonth =" . $search['for_month'];
-			}
-			if ($search['for_semester'] > 0) {
-				$scoreSubjectTmpList .= " AND vgs.forSemester =" . $search['for_semester'];
-			}
-			if (!empty($search['issueScoreStatus'])) {
-				if($search['issueScoreStatus']==1){
-					$scoreSubjectTmpList .= " AND vgs.gradingId > 0 ";
-				}elseif($search['issueScoreStatus']==2){
-					$scoreSubjectTmpList .= " AND vgs.gradingId = 0 ";
-				}
-				//$scoreSubjectTmpList .= " AND vgs.gradingId =" . $search['for_semester'];
-			}
-		$scoreSubjectTmpList .=' ) AS scoreSubjectTmpList ';
-
-		$jsonSubjectList ='
-			(SELECT
-				CONCAT(
-					"[" ,
 					GROUP_CONCAT(
 						CONCAT(
 							"{",
-							"\"subject_id\":", `gs`.`subject_id`, ",",
-							"\"subject_lang\":", `sj`.subject_lang, ",",
-							"\"shortcut\":\"", `sj`.'.$subjectTitle.', "\",",
-							"\"teacher\":\"", `t`.'.$teacherName.', "\"",
+							"\"subjectId\":", COALESCE(gs.`subject_id`, 0), ",",
+							"\"teacherId\":", COALESCE(gs.`teacher`, 0), ",",
+							"\"gradingId\":", COALESCE(vgs.`gradingId`, 0), ",",
+							"\"subject_lang\":", COALESCE(sj.`subject_lang`, 0), ",",
+							"\"shortcut\":\"", COALESCE(sj.'.$subjectTitle.', ""), "\",",
+							"\"teacher\":\"", COALESCE(t.'.$teacherName.', ""), "\",",
+							"\"dateInput\":\"", COALESCE(vgs.`dateInput`, ""), "\",",
+							"\"jsonScoreTmp\":", COALESCE(vgs.`jsonScoreTmp`, "[]"),
 							"}"
-						) 
-						ORDER BY `sj`.`subject_lang`, sj.id ASC
+						)
+						ORDER BY sj.`subject_lang`, sj.`id` ASC
 					),
-					"]"
-				)
+				"]"
+			) AS json_result
 			FROM `rms_group_subject_detail` `gs`
+			    LEFT JOIN  `v_grading_tmp_by_subject` AS vgs  ON
+				 ( vgs.`subjectId` = gs.`subject_id` AND vgs.`groupId` = gs.`group_id` ';
+
+				 //  Search Grading Score 
+
+				    if ($search['exam_type'] > 0) {
+						$scoreSubjectTmpList .='  AND vgs.examType = '.$search['exam_type'];
+					}
+					if ($search['for_month'] > 0) {
+						$scoreSubjectTmpList .='  AND vgs.forMonth = '.$search['for_month'];
+					}
+					if ($search['for_semester'] > 0) {
+						$scoreSubjectTmpList .='  AND vgs.forSemester = '.$search['for_semester'];
+					}
+				 
+				$scoreSubjectTmpList .=' )
 				LEFT JOIN `rms_subject` `sj` ON `sj`.`id` = `gs`.`subject_id`
 			    LEFT JOIN `rms_teacher` `t`	ON `t`.`id` = `gs`.`teacher`
-				WHERE 
-				`gs`.`group_id` = g.id  ';
-			if($search['exam_type']==1){
-				$jsonSubjectList .=' AND  `gs`.`amount_subject` > 0 ';
-			}else{
-				$jsonSubjectList .=' AND  `gs`.`amount_subject_sem` > 0 ';
+				WHERE gs.`group_id` = g.`id`
+			';
+			if ($search['exam_type'] > 0) {
+				if($search['exam_type']==1){
+					$scoreSubjectTmpList .=' AND  `gs`.`amount_subject` > 0 ';
+				}else{
+					$scoreSubjectTmpList .=' AND  `gs`.`amount_subject_sem` > 0 ';
+				}
 			}
-		 $jsonSubjectList .=' ) AS jsonSubjectList ';
+			if (!empty($search['teacher'])) {
+				$scoreSubjectTmpList .= ' AND `gs`.`teacher` =' . $search['teacher'];
+			}
+			if (!empty($search['subjectId'])) {
+				$scoreSubjectTmpList .= ' AND `gs`.`subject_id` =' . $search['subjectId'];
+			}
+			if (!empty($search['issueScoreStatus'])) {
+				if($search['issueScoreStatus']==1){
+					$scoreSubjectTmpList .= " AND vgs.gradingId > 0 "; // ប្រឡងរួច
+				}elseif($search['issueScoreStatus']==2){
+					$scoreSubjectTmpList .= " AND vgs.gradingId = 0 "; // មិនទាន់ប្រឡង
+				}elseif($search['issueScoreStatus']==3){
+					$scoreSubjectTmpList .= " AND vgs.jsonScoreTmp IS NULL "; // មិនទាន់បញ្ចូលរបបពិន្ទុ
+				}
+			}
+		$scoreSubjectTmpList .=' ) ';
 
-
+		/// Group Query
 
 		$sql = "SELECT `g`.`id`, `g`.`gradingId`,
 			
@@ -143,26 +122,15 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
 			 $criterialList ,
-			 $scoreSubjectTmpList
+			 $scoreSubjectTmpList  AS scoreSubjectTmpList
 			 ";
 
 		$sql .= $dbp->caseStatusShowImage("g.status");
 		$sql .= " FROM `rms_group` AS `g` 
 		 		LEFT JOIN  `v_criterial_setting` AS vs ON (  vs.`score_setting_id` = g.`gradingId`  AND vs.criteriaType > 0)
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
-				
 		";
-		// $sql .= " FROM `rms_group` AS `g` 
-		// 		LEFT JOIN  `v_criterial_setting` AS vs ON (  vs.`score_setting_id` = g.`gradingId`  AND vs.criteriaType > 0)
-		// 	LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
-		// 	LEFT JOIN v_grading_tmp AS vgt ON vgt.groupId = g.id AND vgt.gradingSettingId = g.gradingId
-		// 	LEFT JOIN v_grading AS vg ON vg.groupId = g.id 
-		// ";
-
 		$where = ' WHERE 1 ';
-		$from_date = (empty($search['start_date'])) ? '1' : "g.date >= '" . $search['start_date'] . " 00:00:00'";
-		$to_date = (empty($search['end_date'])) ? '1' : "g.date <= '" . $search['end_date'] . " 23:59:59'";
-		//$where.= " AND ".$from_date." AND ".$to_date;
 
 		if (!empty($search['adv_search'])) {
 			$s_where = array();
@@ -187,58 +155,15 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		if (!empty($search['degree'])) {
 			$where .= ' AND `g`.`degree`=' . $search['degree'];
 		}
-		
-	
+
+		$where .= ' AND ('.$scoreSubjectTmpList.') IS NOT NULL  '; // hide group that value null
+
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$groupBy="  GROUP BY g.id  ";
 		$order =  ' ORDER BY `g`.`degree`,g.grade ASC,  `g`.`id` DESC ';
-		//echo $sql . $where .$groupBy. $order; exit();
+		//echo $sql . $where .$groupBy. $order; //exit();
 		return $db->fetchAll($sql . $where .$groupBy. $order);
-
-		// $result = $db->fetchAll($sql . $where . $order);
-
-		//  if(!empty($result)) foreach($result as $index =>$row){
-
-		// 	// subject List And Array List
-
-		// 	$criterrialList = json_decode($row["criterialList"], true);
-		// 	$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
-
-		// 	// Score Temporary as json-list
-		// 	$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
-
-		// 	// Score Grading as json-list
-		// 	$jsonScoreGrading = json_decode($row["jsonScoreGrading"], true);
-
-		// 	if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
-
-		// 		if(!empty($criterrialList)) foreach($criterrialList as $cindex =>$cr){
-
-		// 			$filterSubjectId = $sj['subject_id'];  //  subjectId you want to filter by
-		// 			$filterCiteriaId = $cr['criteriaId'];  //  citeriaId you want to filter by
-		// 			// Filter the array
-		// 			$rsScoreTmp = array_filter($jsonScoreTmp , function ($item) use ($filterSubjectId, $filterCiteriaId) {
-		// 				return $item['subjectId'] == $filterSubjectId && $item['citeriaId'] == $filterCiteriaId;
-		// 			});
-		// 			// Reset array keys for better readability
-		// 			$rsScoreTmp = array_values($rsScoreTmp);
-		// 			if(!empty($rsScoreTmp)) foreach($rsScoreTmp as $rstmp){ 
-
-		// 			}
-
-		// 		}
-
-		// 		$SubjectId = $sj['subject_id'];  
-		// 		$rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
-		// 			return $item['subjectId'] == $SubjectId;
-		// 		});
-		// 		// Reset array keys for better readability
-		// 		$rsScoreGrading = array_values($rsScoreGrading);
-
-		// 	}
-
-		// }
 
 	}
 

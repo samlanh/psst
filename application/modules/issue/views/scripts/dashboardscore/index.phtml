@@ -257,16 +257,21 @@
 											<tbody class="table-border-bottom-0 ">
 												<?php
 													// Score Temporary as json-list
-													$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
+												//	$jsonScoreTmp = json_decode($row["jsonScoreTmp"], true);
 
 													// Score Grading as json-list
-													$jsonScoreGrading = json_decode($row["jsonScoreGrading"], true);
+												//	$jsonScoreGrading = json_decode($row["jsonScoreGrading"], true);
 												//	print_r($jsonScoreGrading);
 
 													$num=0;
 													
-													$jsonSubjectList = json_decode($row["jsonSubjectList"], true);
+													$jsonSubjectList = json_decode($row["scoreSubjectTmpList"], true);
+												
+												//	print_r($jsonSubjectList);
+
 													if(!empty($jsonSubjectList)) foreach($jsonSubjectList as $sjindex =>$sj){
+
+													//	$jsonScoreTmp = json_decode($sj["jsonScoreTmp"], true);
 
 														$subjectLang="";
 														if($sj["subject_lang"]== 2){
@@ -303,10 +308,12 @@
 																?>
 																<td > 
 																	<?php 
-																		$filterSubjectId = $sj['subject_id'];  //  subjectId you want to filter by
+																		// json score temporary
+
+																		$filterSubjectId = $sj['subjectId'];  //  subjectId you want to filter by
 																		$filterCiteriaId = $cr['criteriaId'];  //  citeriaId you want to filter by
 																		// Filter the array
-																		$rsScoreTmp = array_filter($jsonScoreTmp , function ($item) use ($filterSubjectId, $filterCiteriaId) {
+																		$rsScoreTmp = array_filter($sj["jsonScoreTmp"] , function ($item) use ($filterSubjectId, $filterCiteriaId) {
 																			return $item['subjectId'] == $filterSubjectId && $item['citeriaId'] == $filterCiteriaId;
 																		});
 																		// Reset array keys for better readability
@@ -341,18 +348,20 @@
 															<?php } ?>
 															<td width="10%" class="text-center"> 
 																<?php 
-																	$SubjectId = $sj['subject_id'];  
-																	$rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
-																		return $item['subjectId'] == $SubjectId;
-																	});
+																	// $SubjectId = $sj['subjectId'];  
+																	// $rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
+																	// 	return $item['subjectId'] == $SubjectId;
+																	// });
 																	// Reset array keys for better readability
-																	$rsScoreGrading = array_values($rsScoreGrading);
-																	if(!empty($rsScoreGrading)){ ?>
-																		<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$rsScoreGrading['0']['gId'];?>/fullcontrol/1"class="btn btn-success btn-sm" role="button" aria-disabled="true">
+																	//$rsScoreGrading = array_values($rsScoreGrading);
+
+																	$gradingId = $sj['gradingId'];
+																	if( $gradingId > 0 ){ ?>
+																		<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$gradingId;?>/fullcontrol/1"class="btn btn-success btn-sm" role="button" aria-disabled="true">
 																			<span class="glyphicon glyphicon-list-alt"></span>
 																			<?php 
 																				$format = 'd-M-y';
-																				$dateString = $rsScoreGrading['0']['dateInput'];
+																				$dateString = $sj['dateInput'];
 																				$date = new DateTime($dateString);
 																				$dateInput = $date->format($format);
 																				echo $dateInput;

@@ -8,6 +8,27 @@
 	$dbgb = new Application_Model_DbTable_DbGlobal();
 	$urlDelete = $this->baseUrl()."/issue/dashboardscore/delete/id/";
 	//print_r($this->row);
+	
+	$currentLang = $dbgb->currentlang();
+	$monthKH = array(
+		"1" => "January", "2" => "February", "3" => "March", "4" => "April", "5" => "May", "6" => "June", "7" => "July", "8" => "August", "9" => "September", "10" => "October", "11" => "November", "12" => "December"
+	);
+	if ($currentLang == 1) {
+		$monthKH = array(
+			"1" => "មករា",
+			"2" => "កុម្ភៈ",
+			"3" => "មីនា",
+			"4" => "មេសា",
+			"5" => "ឧសភា",
+			"6" => "មិថុនា",
+			"7" => "កក្កដា",
+			"8" => "សីហា",
+			"9" => "កញ្ញា",
+			"10" => "តុលា",
+			"11" => "វិច្ឆិកា",
+			"12" => "ធ្នូ"
+		);
+	}
 ?>
 
 <style>
@@ -156,11 +177,12 @@
 			   <div class="card">
 					<div class="card-content collapse show">
 						<div class="card-box text-center">
-							<h4 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #666;padding:2px 0;">
-								<!-- <i style="font-size:25px;margin-right:10px;" class="fa fa-file-text-o" aria-hidden="true"></i> -->
+							<h4 style="font-family:'khmer os muol light';font-size:14px;text-align: center; color: #2c2c2c;padding:2px 0;">
+								<i style="font-size:18px;margin-right:10px;" class="fa fa-graduation-cap" aria-hidden="true"></i>
 								<?php echo $tr->translate("TEACHER_DASHBOARD");?>
 							</h4>
-							<h5 style="font-family:'khmer os muol light';font-size:12px;text-align: center; color: #666;padding:2px 0;">
+							<h5 style="font-family:'khmer os muol light';font-size:12px;text-align: center; color: #2c2c2c;padding:2px 0;">
+								<i class="fa fa-calendar" aria-hidden="true"></i>
 								<?php 
 									$examlabel="";
 									if(!empty($this->search['exam_type'])){
@@ -168,8 +190,9 @@
 										$examType  = $this->search['exam_type'];
 										$month	   = $this->search['for_month'];
 										$semester  = $this->search['for_semester'];
+										$monthChar = empty($monthKH[$month]) ? "" : $monthKH[$month];
 										if($examType==1){
-										$examlabel =  $tr->translate("MONTHLY")." ".$month; 
+											$examlabel =  $tr->translate("MONTHLY")." ".$monthChar; 
 										}elseif($examType==2){
 											if($semester==1){
 												$examlabel= $tr->translate("SEMESTER1");
@@ -177,7 +200,6 @@
 												$examlabel= $tr->translate("SEMESTER2");
 											}
 										}
-												
 									}
 									echo $examlabel;
 								
@@ -335,13 +357,6 @@
 															<?php } ?>
 															<td width="10%" class="text-center"> 
 																<?php 
-																	// $SubjectId = $sj['subjectId'];  
-																	// $rsScoreGrading = array_filter($jsonScoreGrading , function ($item) use ($SubjectId) {
-																	// 	return $item['subjectId'] == $SubjectId;
-																	// });
-																	// Reset array keys for better readability
-																	//$rsScoreGrading = array_values($rsScoreGrading);
-
 																	$gradingId = $sj['gradingId'];
 																	if( $gradingId > 0 ){ ?>
 																		<a target="_blank" href="<?php echo $this->baseUrl()."/extreport/rpt-score-list/id/".$gradingId;?>/fullcontrol/1"class="btn btn-success btn-sm" role="button" aria-disabled="true">
@@ -495,13 +510,10 @@
 			load: function(data) {
 				
 				if(data==0){
-					alert("<?php echo $tr->translate("Can not delete!");?>");
-					
+					alert("<?php echo $tr->translate("Can't Delete! ");?>");
 				}else{
-
 					dijit.byId('id').set('value',row);
 					dijit.byId('updateForm').show();
-
 					var strinfo="";
 					if(data!=""){
 						strinfo+='<small >'+data.branchName+'</small>';
@@ -512,8 +524,6 @@
 					}
 					$( "#contentInfoPop" ).html( strinfo );
 				}
-				
-				
 			},
 			error: function(err) {
 			}

@@ -105,10 +105,11 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 				if($search['issueScoreStatus']==1){
 					$scoreSubjectTmpList .= " AND vgs.gradingId > 0 "; // ប្រឡងរួច
 				}elseif($search['issueScoreStatus']==2){
-					$scoreSubjectTmpList .= " AND vgs.gradingId = 0 "; // មិនទាន់ប្រឡង
-				}elseif($search['issueScoreStatus']==3){
-					$scoreSubjectTmpList .= " AND vgs.jsonScoreTmp IS NULL "; // មិនទាន់បញ្ចូលរបបពិន្ទុ
+					$scoreSubjectTmpList .= " AND ( vgs.gradingId = 0 OR vgs.jsonScoreTmp IS NULL ) "; // មិនទាន់ប្រឡង
 				}
+				// elseif($search['issueScoreStatus']==3){
+				// 	$scoreSubjectTmpList .= " AND vgs.jsonScoreTmp IS NULL "; // មិនទាន់បញ្ចូលរបបពិន្ទុ
+				// }
 			}
 		$scoreSubjectTmpList .=' ) ';
 
@@ -120,7 +121,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
 			 `g`.`semester` AS `semester`, 
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-			(select teacher_name_kh from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
+			(select $teacherName from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
 			 $criterialList ,
 			 $scoreSubjectTmpList  AS scoreSubjectTmpList
 			 ";

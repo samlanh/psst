@@ -583,6 +583,33 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 			$month = "month_kh";
 			$subjectTitle = 'subject_titlekh';
 		}
+		$criterialList ='
+			
+			CONCAT(
+				"[",
+					GROUP_CONCAT(
+						CONCAT(
+							"{",
+							"\"criteriaId\":",
+							vs.criteriaId,
+							",",
+							"\"criteriaType\":",
+							vs.criteriaType,
+							",",
+							"\"criterialTitle\":\"",
+							vs.criterialTitle,
+							"\",",
+							"\"criterialTitleEng\":\"",
+							vs.criterialTitleEn,
+							"\"",
+							"}"
+							)
+							ORDER BY vs.criteriaType,
+							vs.criteriaId ASC
+						),
+					"]"
+				) AS criterialList
+		';
 		$sql = "SELECT 
 				grd.*
 				,(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
@@ -620,12 +647,14 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT rms_items.$colunmname FROM `rms_items` WHERE rms_items.`id`=`g`.`degree` AND rms_items.type=1 LIMIT 1) AS degreeTitle
 				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
-				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName
+				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName,
+				$criterialList
 		";
 
-		$sql .= " FROM rms_grading AS grd,
-					rms_group AS g 
-			WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
+		$sql .= " FROM  rms_grading AS grd
+					LEFT JOIN rms_group AS g ON  grd.groupId = g.id
+					LEFT JOIN `vapi_criteria_setting` AS vs  ON  vs.score_setting_id = grd.gradingSettingId
+			WHERE  grd.inputOption=2 ";
 
 		$where = '';
 		if (empty($fullControlID)) {

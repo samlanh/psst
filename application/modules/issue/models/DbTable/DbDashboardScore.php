@@ -156,13 +156,15 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		if (!empty($search['degree'])) {
 			$where .= ' AND `g`.`degree`=' . $search['degree'];
 		}
-
+		if ($search['exam_type'] > 0) {
+			$where .= ' AND vs.forExamType=' . $search['exam_type'];
+		}
 		$where .= ' AND ('.$scoreSubjectTmpList.') IS NOT NULL  '; // hide group that value null
 
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$groupBy="  GROUP BY g.id  ";
-		$order =  ' ORDER BY `g`.`degree`,g.grade ASC,  `g`.`id` DESC ';
+		$order =  ' ORDER BY `g`.`degree`,g.grade,`g`.`group_code` ASC ';
 		//echo $sql . $where .$groupBy. $order; //exit();
 		return $db->fetchAll($sql . $where .$groupBy. $order);
 

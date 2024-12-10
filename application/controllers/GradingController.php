@@ -166,6 +166,16 @@ class GradingController extends Zend_Controller_Action
 		if(empty($row)){
 			$this->_redirect("/external/group");
 		}
+		$arrayChecking = array(
+				'settingEntryId'=>$settingEntryId,
+				'groupId'=>$id,
+				'subjectId'=>$subjectId
+				);
+		$checking = $dbExternal->checkingExaminationSubject($arrayChecking);
+		if(!empty($checking)){
+			Application_Form_FrmMessage::Sucessfull("Issued Examination Ready","/external/group");
+		}
+		
 		$this->view-> month = $dbExternal->getAllMonth();
 	
 		$gradingId = $row['gradingId'];

@@ -1321,6 +1321,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT cri.criteriaType FROM `rms_exametypeeng` cri WHERE cri.id= s.criteriaId LIMIT 1) criteriaType
 				,(SELECT es.$title FROM `rms_exametypeeng` AS es WHERE es.id = s.criteriaId LIMIT 1) AS criterialTitle
 				,(SELECT COUNT(gd.id) FROM `rms_grading_tmp` AS gd WHERE gd.criteriaId = s.criteriaId AND gd.subjectId= " . $data['subjectId'] . " AND gd.settingEntryId= " . $data['settingEntryId'] . " AND gd.groupId=" . $data['groupId'] . " AND gd.examType=" . $data['examType'] . " LIMIT 1) AS timeInput 
+				,COALESCE((SELECT gd.id FROM `rms_grading_tmp` AS gd WHERE gd.criteriaId = s.criteriaId AND gd.subjectId= " . $data['subjectId'] . " AND gd.settingEntryId= " . $data['settingEntryId'] . " AND gd.groupId=" . $data['groupId'] . " AND gd.examType=" . $data['examType'] . " ORDER BY gd.id DESC LIMIT 1),'0') AS lastedGrId 
 			FROM `rms_scoreengsettingdetail` AS s 
 			WHERE s.score_setting_id=$gradingId 
 			AND (s.subjectId =0 OR s.subjectId=" . $data['subjectId'] . ")
@@ -1516,6 +1517,27 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		// if($criterialType==2){
 		// 	echo $sql;
 		// }
+		return $db->fetchRow($sql);
+	}
+	
+	function checkingExaminationSubject($data){
+		$db = $this->getAdapter();
+		$subjectId = empty($data["subjectId"]) ? 0 : $data["subjectId"];
+		$groupId = empty($data["groupId"]) ? 0 : $data["groupId"];
+		$settingEntryId = empty($data["settingEntryId"]) ? 0 : $data["settingEntryId"];
+		$sql="
+		SELECT 
+			g.`id` AS groupId
+			,gd.`id`
+		FROM  `rms_group` AS g 
+			JOIN `rms_grading` AS gd ON gd.groupId= g.`id`  AND  gd.settingEntryId= $settingEntryId
+		WHERE 
+			g.is_use=1  
+			AND g.is_pass=2 
+			AND gd.`subjectId` = $subjectId 
+			AND g.`id` = $groupId 
+		LIMIT 1
+		";
 		return $db->fetchRow($sql);
 	}
 }

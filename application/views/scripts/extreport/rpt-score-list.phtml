@@ -59,7 +59,9 @@
 	
 	$dbExternal = new Application_Model_DbTable_DbExternal();
 	$rs = $this->rs;
-	print_r($rs);
+
+	$criterrialList = json_decode($rs["criterialList"], true);
+	print_r($criterrialList);
 	
 	$gradingId = $rs['id'];
 	$maxSubjectScore = $rs['maxSubjectscore'];

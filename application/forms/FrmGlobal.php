@@ -1741,15 +1741,20 @@ class Application_Form_FrmGlobal
 	function getPrintPageFormat($data=array())
 	{
 		//$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-		$pageSize = empty($data["pageSize"]) ? "A4" : $data["pageSize"];
+		$pageSize = empty($data["pageSize"]) ? "" : $data["pageSize"];
 		$marginTop = empty($data["marginTop"]) ? "0.7cm" : $data["marginTop"];
 		$marginRight = empty($data["marginRight"]) ? "0.5cm" : $data["marginRight"];
-		$marginBottom = empty($data["marginBottom"]) ? "1cm" : $data["marginBottom"];
+		$marginBottom = empty($data["marginBottom"]) ? "1.5cm" : $data["marginBottom"];
 		$marginLeft = empty($data["marginLeft"]) ? "0.5cm" : $data["marginLeft"];
 		$borderTopFooter = empty($data["borderTopFooter"]) ? "0px" : $data["borderTopFooter"];
+		$footerLeftContent = empty($data["footerLeftContent"]) ? "" : $data["footerLeftContent"];
+		$footerLeftTextTransform = empty($data["footerLeftTextTransform"]) ? "initial" : $data["footerLeftTextTransform"];
 		//content: "ទំព័រ " counter(page) " / " counter(pages);
 		$str="@page {";
-				$str.="size: $pageSize;";
+				//$str.="size: $pageSize;";
+				if(!empty($pageSize)){
+					$str.="size: $pageSize;";
+				}
 				$str.="margin: $marginTop $marginRight $marginBottom $marginLeft;";
 				
 				$str.='
@@ -1758,14 +1763,15 @@ class Application_Form_FrmGlobal
 					font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';
 					border-top: '.$borderTopFooter.' solid #000000;
 					padding-right:20px;
-					font-size: 9px !important;
+					font-size: 12px !important;
 					content: " " counter(page) " / " counter(pages);
 				}
 				@bottom-left {
 					padding-left:20px;
-					content: "";
+					content: "'.$footerLeftContent.'";
+					text-transform: '.$footerLeftTextTransform.';
 					font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';
-					font-size: 9px !important;
+					font-size: 12px !important;
 					border-top: '.$borderTopFooter.' solid #000000;
 				}
 				';

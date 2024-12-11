@@ -179,6 +179,11 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$getServiceTypeSearch = $frm->getServiceTypeSearch($search);
 		$nearlyPaymetySort = $frm->getNearlyPaymetySortSearch($search);
 		$periodDay = $frm->getPeriodDaySearch($search);
+		$nearlyFilterType = $frm->getNearlyPaymetyFilterType($search);
+		
+		$paymentTermFilter = $frm->getPaymentTermSearch($search);
+		$paymentTermFilter->removeMultiOption(1);
+		$paymentTermFilter->removeMultiOption(5);
 
 		$this->addElements(array(
 			$textSearch,
@@ -189,6 +194,8 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$getServiceTypeSearch,
 			$nearlyPaymetySort,
 			$periodDay,
+			$nearlyFilterType,
+			$paymentTermFilter,
 		));
 		return $this;
 	}
@@ -209,6 +216,36 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$endDateFilter,
 			$calendarTypeFilter,
 			$statusFilter,
+		));
+		return $this;
+	}
+	function FormSearchTeacherDasboard($search=null)
+	{
+		$frm = new Application_Form_FrmSearchGlobalNew();
+		$branchFilter = $frm->getBranchSearch($search);
+		$yearFilter = $frm->getAcademicYearSearch($search);
+		$degreeFilter = $frm->getDegreeSearch($search);
+		$examTypeFilter = $frm->getExamTypeSearch($search);
+		$forSemesterFilter = $frm->getForSemesterSearch($search);
+		$forMonthFilter = $frm->getForMonthSearch($search);
+		$criterialFilter = $frm->getCriteriaIDSearch($search);
+		$teacherFilter = $frm->getTeacherSearch($search);
+		$startDateFilter = $frm->getStartDateSearch($search);
+		$endDateFilter = $frm->getEndDateSearch($search);
+		$IssueScoreStatusFilter = $frm->getIssueScoreStatusSearch($search);
+		
+		$this->addElements(array(
+			$branchFilter,
+			$yearFilter,
+			$degreeFilter,
+			$examTypeFilter,
+			$forSemesterFilter,
+			$forMonthFilter,
+			$criterialFilter,
+			$teacherFilter,
+			$startDateFilter,
+			$endDateFilter,
+			$IssueScoreStatusFilter,
 		));
 		return $this;
 	}

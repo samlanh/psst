@@ -41,6 +41,11 @@
 			dojoType="dijit.form.Form" method="post"  enctype="multipart/form-data">
 			<script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
+				isDuplicate = dijit.byId('isDuplicate').get('value');
+				if(isDuplicate==1){
+					dijit.byId('user_name').focus();
+					return false;
+				}
 				if(dojo.byId('password').value != dojo.byId('confirm_password').value ){
 					alert('សូមពិនិត្រ ពាក្យសំងាត់ទាំង 2 របស់អ្នក មិនដូចគ្នាទេ, សូមបញ្ចូល ម្តងទៀត..');
 					dojo.byId('password').value = '';
@@ -251,13 +256,17 @@
 										</div> 
 										<div class="col-md-10 col-sm-10 col-xs-12"> 
 											<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("LECTURER_ACCOUNT");?></p>
+											<span id="messageDuplicate" style="color: red; display: block;"></span>
 										</div> 
 									</div>
 									 <div class="form-group">
-									   <label class="control-label col-md-5 col-sm-5 col-xs-12" ><?php echo $tr->translate("ACCOUNT_NAME");?>
+									   <label class="control-label col-md-5 col-sm-5 col-xs-12" >
+									   <?php echo $tr->translate("ACCOUNT_NAME");?>
 									   </label>
 									   <div class="col-md-7 col-sm-7 col-xs-12">
 											<?php echo $frm->getElement("user_name");?>
+											<input type="hidden" name="oldUsername" id="oldUsername" value="<?php echo $this->rs['user_name'];?>" dojoType="dijit.form.TextBox" />
+											<input type="hidden" name="isDuplicate" id="isDuplicate" value="0" dojoType="dijit.form.TextBox" />
 									   </div>
 									</div>
 									<div class="form-group">
@@ -723,6 +732,11 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 			filterDistrict();
 			initialize();
 			checkStaffType();
+			
+		var userName = dijit.byId('user_name');
+		 userName.on('keyup', function(evt) {
+			 checkUserName();
+		});
 	});
 	
 	require(["dojo/ready"], function(ready){
@@ -746,6 +760,44 @@ var village_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::
 		}, "nation");
 	});
 	
+	
+urlCheckUserName = '<?php echo $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'check-username'));?>';
+function checkUserName(){
+	var thisUserName = dijit.byId('user_name').get('value');
+	oldUsername = dijit.byId('oldUsername').get('value');
+	
+	if(thisUserName==oldUsername){
+		dijit.byId('isDuplicate').attr('value',0);
+		document.getElementById('messageDuplicate').innerHTML ='';
+		return false;
+	}
+	
+	if(thisUserName==''){ 
+		document.getElementById('messageDuplicate').innerHTML ='';
+		dijit.byId('isDuplicate').attr('value',0);
+		return false;
+	}
+	dojo.xhrPost({
+		url:urlCheckUserName,	
+		content:{ 
+			'user_name': thisUserName ,
+		},
+		handleAs:"json",
+		load: function(data) {	
+			if(data !== false ){
+				document.getElementById('messageDuplicate').innerHTML ='<?php echo '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.$tr->translate("USER_EXISTING_READY");?>';
+				dijit.byId('user_name').focus();
+				dijit.byId('isDuplicate').attr('value',1);
+			}else{
+				document.getElementById('messageDuplicate').innerHTML ='';
+				dijit.byId('isDuplicate').attr('value',0);
+			}
+		},
+		error: function(err) {
+			
+		}
+	});
+}
 </script>
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" data-dojo-props="title:'<?php echo $tr->translate("ADD_NATION")?>'" style="width:500px;" id="popup_nation" >

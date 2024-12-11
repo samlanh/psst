@@ -84,6 +84,7 @@
 	a.mini-button-class:hover {
 		background: #009688;
 	}
+	a.mini-button-class-success,
 	span.mini-button-class-success {
 		padding: 2px;
 		font-size: 10px;
@@ -289,9 +290,19 @@
 
 														<?php } 
 													}else{ ?>
-
-															<a target="_blank" class="mini-button-class oneLineTitle" href="<?php echo $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];?>">
-																<i class="glyphicon glyphicon-sort-by-order " aria-hidden="true"></i> <?php echo $tr->translate('INPUT_SCORE');?>
+															<?php 
+															$inputUrl = $this->baseUrl()."/grading/index/id/".$row['groupId']."/criteriaId/".$rsCriterial['criteriaId']."/subjectId/".$row['subjectId']."/settingEntryId/".$row['id'];
+															$labelLink = $tr->translate('INPUT_SCORE');
+															$classBtn = "mini-button-class";
+															$iconBtn = "glyphicon glyphicon-sort-by-order";
+															if($row['IsExam']>0){
+																$classBtn = "mini-button-class-success";
+																$inputUrl = $this->baseUrl()."/extreport/rpt-grading-list/id/".$rsCriterial['lastedGrId'];
+																$labelLink = $tr->translate('VIEW');
+																$iconBtn = "glyphicon glyphicon-eye-open";
+															}?>
+															<a target="_blank" class="<?php echo $classBtn;?> oneLineTitle" href="<?php echo $inputUrl;?>">
+																<i class="<?php echo $iconBtn;?> " aria-hidden="true"></i> <?php echo $labelLink;?>
 															</a>
 
 													<?php } ?>

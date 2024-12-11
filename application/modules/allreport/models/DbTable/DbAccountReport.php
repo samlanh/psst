@@ -198,7 +198,7 @@ class Allreport_Model_DbTable_DbAccountReport extends Zend_Db_Table_Abstract
 				$s_where[] = " REPLACE(fam.`street`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(fam.`houseNo`,' ','') LIKE '%{$s_search}%'";
 				$s_where[] = " REPLACE(spt.receptNo,' ','') LIKE '%{$s_search}%'";
-				$where.=' AND ('.implode(' OR ', $s_where).')';
+				$sql.=' AND ('.implode(' OR ', $s_where).')';
 			}
 			if(!empty($search['branch_id'])){
 				$sql.= " AND spt.branchId = ".$search['branch_id'];

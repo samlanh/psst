@@ -243,7 +243,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$photo=$_data['uploaded'];
 			}else if (!empty($name)){
 				$ss = 	explode(".", $name);
-				$image_name = "profile_student_".date("Y").date("m").date("d").time().".".end($ss);
+				$image_name = $stu_code."-student-".date("Y").date("m").date("d").time().".".end($ss);
 				$tmp = $_FILES['photo']['tmp_name'];
 				if(move_uploaded_file($tmp, $part.$image_name)){
 					$photo = $image_name;
@@ -318,7 +318,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				$audiofileName = $_FILES['audiofile']['name'];
 				if (!empty($audiofileName)){
 					$tem =explode(".", $audiofileName);
-					$newFileName = "audio_".date("Y").date("m").date("d").time().".".end($tem);
+					$newFileName = $stu_code."-audio-".date("Y").date("m").date("d").time().".".end($tem);
 					$tmp = $_FILES['audiofile']['tmp_name'];
 					if(move_uploaded_file($tmp, $partAudio.$newFileName)){
 						$_arr['audioTitle']=$newFileName;
@@ -346,7 +346,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$name = $_FILES['attachment'.$i]['name'];
 						if (!empty($name)){
 							$ss = 	explode(".", $name);
-							$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+							$image_name = $stu_code."-att-".date("Y").date("m").date("d").time().$i.".".end($ss);
 							$tmp = $_FILES['attachment'.$i]['tmp_name'];
 							if(move_uploaded_file($tmp, $part.$image_name)){
 								$photo = $image_name;
@@ -469,6 +469,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 		$db->beginTransaction();//ទប់ស្កាត់មើលការErrore , មានErrore វាមិនអោយចូល
 		try{	
 			
+			$studentCode = empty($_data['student_id']) ? "" : $_data['student_id'];
 			$_arr=array(
  					'branch_id'		=>$_data['branch_id']
  					,'stu_code'		=>$_data['student_id']
@@ -526,7 +527,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$name = $_FILES['photo']['name'];
 			if (!empty($name)){
 				$ss = 	explode(".", $name);
-				$image_name = "profile_".date("Y").date("m").date("d").time().".".end($ss);
+				$image_name = $studentCode."-student-".date("Y").date("m").date("d").time().".".end($ss);
 				$tmp = $_FILES['photo']['tmp_name'];
 				if(move_uploaded_file($tmp, $part.$image_name)){
 					$_arr['photo']=$image_name;
@@ -540,7 +541,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 			$audiofileName = $_FILES['audiofile']['name'];
 			if (!empty($audiofileName)){
 				$tem =explode(".", $audiofileName);
-				$newFileName = "audio_".date("Y").date("m").date("d").time().".".end($tem);
+				$newFileName = $studentCode."-audio-".date("Y").date("m").date("d").time().".".end($tem);
 				$tmp = $_FILES['audiofile']['tmp_name'];
 				if(move_uploaded_file($tmp, $partAudio.$newFileName)){
 					$_arr['audioTitle']=$newFileName;
@@ -596,7 +597,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$name = $_FILES['attachment'.$i]['name'];
 						if (!empty($name)){
 							$ss = 	explode(".", $name);
-							$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+							$image_name = $studentCode."-att-".date("Y").date("m").date("d").time().$i.".".end($ss);
 							$tmp = $_FILES['attachment'.$i]['tmp_name'];
 							if(move_uploaded_file($tmp, $part.$image_name)){
 								$photo = $image_name;
@@ -618,7 +619,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 						$name = $_FILES['attachment'.$i]['name'];
 						if (!empty($name)){
 							$ss = 	explode(".", $name);
-							$image_name = "student_attachment_".date("Y").date("m").date("d").time().$i.".".end($ss);
+							$image_name = $studentCode."-att-".date("Y").date("m").date("d").time().$i.".".end($ss);
 							$tmp = $_FILES['attachment'.$i]['tmp_name'];
 							if(move_uploaded_file($tmp, $part.$image_name)){
 								$photo = $image_name;

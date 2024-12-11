@@ -92,7 +92,7 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->studentEvaluationDetailAction($GetData);
 			}else if ($GetData['url']=="studentAttendance"){
     			$_dbAction->studentAttendanceAction($GetData);
-			}else if ($GetData['url']=="studentAttendanceDetail"){
+			}else if ($GetData['url']=="studentAttendanceDetail"){ // will remove
     			$_dbAction->studentAttendanceDetailAction($GetData);
 			}else if ($GetData['url']=="studentSchedule"){
     			$_dbAction->studentScheduleAction($GetData);
@@ -156,6 +156,9 @@ class Api_IndexController extends Zend_Controller_Action
     			$_dbAction->getFormOptionSelectAction($GetData);
 			}else if ($GetData['url']=="optionCriteriaList"){
 				$GetData['getControlType'] = "criteriaList";
+    			$_dbAction->getFormOptionSelectAction($GetData);
+			}else if ($GetData['url']=="optionGrdTmpSubject"){
+				$GetData['getControlType'] = "grdTmpSubject";
     			$_dbAction->getFormOptionSelectAction($GetData);
 				
 			}else if ($GetData['url']=="studentAchievement"){

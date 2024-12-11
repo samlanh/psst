@@ -5,6 +5,9 @@
 	$classHideHeight=classHideHeight;
 	$nearlyPaymetySort = empty($this->search["nearlyPaymetySort"]) ? 1 : $this->search["nearlyPaymetySort"];
 	
+	$monthlyDayShow = 10;
+	$generalDayShow = 20;
+	
 ?>	
 <style>
 	.hideprintdate{display: none;}
@@ -70,6 +73,10 @@
        			<input id="service" name="service" />
        		</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("pay_term");?>
+       		</div>
+			
+			<div class="col-md-2 col-sm-2 col-xs-12">
        			<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" name="search"  type="submit"><?php echo $tr->translate("SEARCH");?></button>
        		</div>
        	</div>
@@ -79,6 +86,9 @@
        		</div>
        		<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("end_date");?>
+       		</div>
+			<div class="col-md-2 col-sm-2 col-xs-12">
+       			<?php echo $frm->getElement("nearlyFilterType");?>
        		</div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
        			<?php echo $frm->getElement("nearlyPaymetySort");?>
@@ -241,10 +251,21 @@
 										$end_dat = $row['endDate'];
 										$total_day = strtotime($end_dat) - strtotime($this->search['end_date']);
 										$day = (int) ($total_day / (60 * 60 * 24));
-										$daylate = $day;
+										$daylate = "";
+										$lateColor="inherit";
 										if ($day >= 0) {
-											$daylate = "R " . sprintf('%02d',abs($day));
+											if($row['paymentTermId']==1){
+												if(abs($day)<=$monthlyDayShow){
+													$daylate = "R " . sprintf('%02d',abs($day));
+												}
+											}else{
+												if(abs($day)<=$generalDayShow){
+													$daylate = "R " . sprintf('%02d',abs($day));
+												}
+											}
+											
 										} else {
+											$lateColor="red";
 											$daylate = "L " . sprintf('%02d',abs($day));
 										}
 										
@@ -311,7 +332,7 @@
 											<input type="hidden" name="gradeId_<?php echo $row['pmtDetailId']; ?>" id="gradeId_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['grade']; ?>" />
 										</td>
 										<td data-label="<?php echo $tr->translate("VALIDATE"); ?>" align="center"><?php echo date("d-M-y", strtotime($row['endDate'])); ?>  <input type="hidden" dojoType="dijit.form.TextBox" name="validate_<?php echo $row['pmtDetailId']; ?>" id="validate_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['endDate']; ?>" /></td>
-										<td data-label="<?php echo $tr->translate("REMAIN_DAY"); ?>"  align="center" style="color: red;font-weight: bold;"><?php echo $daylate; ?></td>
+										<td data-label="<?php echo $tr->translate("REMAIN_DAY"); ?>"  align="center" style="color: <?php echo $lateColor;?>;font-weight: bold;"><?php echo $daylate; ?></td>
 									</tr>
 									<?php 
 										$studentId = $row['studentId'];  
@@ -359,10 +380,20 @@
 								$end_dat=$row['endDate'];
 								$total_day=strtotime($end_dat)-strtotime($this->search['end_date']);
 								$day=(int)($total_day/(60*60*24));
-								$daylate =$day;
+								$daylate ="";
+								$lateColor="inherit";
 								if($day>=0){
-									$daylate ="R ".sprintf('%02d',abs($day));
+									if($row['paymentTermId']==1){
+										if(abs($day)<=$monthlyDayShow){
+											$daylate = "R " . sprintf('%02d',abs($day));
+										}
+									}else{
+										if(abs($day)<=$generalDayShow){
+											$daylate = "R " . sprintf('%02d',abs($day));
+										}
+									}
 								}else{
+									$lateColor="red";
 									$daylate ="L ".sprintf('%02d',abs($day));
 								}
 								//count(json_decode($row['paymentList'], TRUE))
@@ -399,7 +430,7 @@
 										<input type="hidden" name="gradeId_<?php echo $row['pmtDetailId']; ?>" id="gradeId_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['grade'];?>" />
 									</td>
 									<td class="leftdothborder" data-label="<?php echo $tr->translate("VALIDATE");?>" align="center"><?php echo date("d-m-y",strtotime($row['endDate']));?><input type="hidden" dojoType="dijit.form.TextBox" name="validate_<?php echo $row['pmtDetailId']; ?>" id="validate_<?php echo $row['pmtDetailId']; ?>" value="<?php echo $row['endDate'];?>" /></td>
-									<td class="solidborderright" data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: red;font-weight: bold;"><?php echo $daylate;?></td>
+									<td class="solidborderright" data-label="<?php echo $tr->translate("REMAIN_DAY");?>"  align="center" style="color: <?php echo $lateColor; ?>;font-weight: bold;"><?php echo $daylate;?></td>
 								</tr>
 								<?php $serviceId =$row['grade']; ?>	 
 								<?php }?>	 

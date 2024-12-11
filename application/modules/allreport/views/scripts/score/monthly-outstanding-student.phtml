@@ -44,8 +44,49 @@ $monthENG = array(
 
 $templateSchool = Setting_Model_DbTable_DbGeneral::geValueByKeyName('hornorTableSetting');
 $imgSing = $this->baseUrl() . '/images/agreementsign.jpg';
+$blankProfile = $this->baseUrl().'/images/no-profile.png';
 
 $branchInfo = $this->branchInfo;
+
+$rank1Profile=$blankProfile;
+if (!empty($this->studentgroup[0]['photo'])) {
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->studentgroup[0]['photo'])){
+		$rank1Profile = $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'];
+	}
+}
+
+$rank2Profile=$blankProfile;
+if (!empty($this->studentgroup[1]['photo'])) {
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->studentgroup[1]['photo'])){
+		$rank2Profile = $this->baseUrl() . '/images/photo/' . $this->studentgroup[1]['photo'];
+	}
+}
+
+$rank3Profile=$blankProfile;
+if (!empty($this->studentgroup[2]['photo'])) {
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->studentgroup[2]['photo'])){
+		$rank3Profile = $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'];
+	}
+}
+
+$rank4Profile=$blankProfile;
+if (!empty($this->studentgroup[3]['photo'])) {
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->studentgroup[3]['photo'])){
+		$rank4Profile = $this->baseUrl() . '/images/photo/' . $this->studentgroup[3]['photo'];
+	}
+}
+$rank5Profile=$blankProfile;
+if (!empty($this->studentgroup[4]['photo'])) {
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->studentgroup[4]['photo'])){
+		$rank5Profile = $this->baseUrl() . '/images/photo/' . $this->studentgroup[4]['photo'];
+	}
+}
+$rank6Profile=$blankProfile;
+if (!empty($this->studentgroup[5]['photo'])) {
+	if (file_exists(PUBLIC_PATH."/images/photo/".$this->studentgroup[5]['photo'])){
+		$rank5Profile = $this->baseUrl() . '/images/photo/' . $this->studentgroup[5]['photo'];
+	}
+}
 ?>
 <script src="<?php echo $this->baseUrl(); ?>/js/pdbs_js.js" type="text/javascript"></script>
 <?php if ($templateSchool == 1) {
@@ -310,11 +351,7 @@ $branchInfo = $this->branchInfo;
 										<table class="blogImage">
 											<tr>
 												<td style="border:1px solid #000;">
-													<img class="profileStudent" <?php if (!empty($this->studentgroup[0])) {
-															if (!empty($this->studentgroup[0]['photo'])) {
-																echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'] . '"';
-															}
-														} ?>>
+													<img class="profileStudent" src="<?php echo $rank1Profile;?>" >
 												</td>
 											</tr>
 										</table>
@@ -342,11 +379,7 @@ $branchInfo = $this->branchInfo;
 										<table class="blogImage">
 											<tr>
 												<td style="border:1px solid #000;">
-													<img class="profileStudent" <?php if (!empty($this->studentgroup[1])) {
-																					if (!empty($this->studentgroup[1]['photo'])) {
-																						echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[1]['photo'] . '"';
-																					}
-																				} ?>>
+													<img class="profileStudent" src="<?php echo $rank2Profile;?>" >
 												</td>
 											</tr>
 										</table>
@@ -374,11 +407,7 @@ $branchInfo = $this->branchInfo;
 										<table class="blogImage">
 											<tr>
 												<td style="border:1px solid #000;">
-													<img class="profileStudent" <?php if (!empty($this->studentgroup[2])) {
-																					if (!empty($this->studentgroup[2]['photo'])) {
-																						echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'] . '"';
-																					}
-																				} ?>>
+													<img class="profileStudent" src="<?php echo $rank3Profile;?>" >
 												</td>
 											</tr>
 										</table>
@@ -744,11 +773,7 @@ $branchInfo = $this->branchInfo;
 															<table width="100px" height="120px">
 																<tr>
 																	<td class="picborder">
-																		<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[0])) {
-																														if (!empty($this->studentgroup[0]['photo'])) {
-																															echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'] . '"';
-																														}
-																													} ?>>
+																		<img style="width: 100px;height: 120px;" src="<?php echo $rank1Profile;?>">
 																	</td>
 																</tr>
 															</table>
@@ -781,11 +806,7 @@ $branchInfo = $this->branchInfo;
 															<table width="100px" height="120px">
 																<tr>
 																	<td class="picborder">
-																		<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[1])) {
-																														if (!empty($this->studentgroup[1]['photo'])) {
-																															echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[1]['photo'] . '"';
-																														}
-																													} ?>>
+																		<img style="width: 100px;height: 120px;" src="<?php echo $rank2Profile;?>">
 																	</td>
 																</tr>
 															</table>
@@ -822,11 +843,7 @@ $branchInfo = $this->branchInfo;
 													<table width="100px" height="120px">
 														<tr>
 															<td class="picborder">
-																<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[2])) {
-																												if (!empty($this->studentgroup[2]['photo'])) {
-																													echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'] . '"';
-																												}
-																											} ?>>
+																<img style="width: 100px;height: 120px;" src="<?php echo $rank3Profile;?>">
 															</td>
 														</tr>
 													</table>
@@ -861,11 +878,7 @@ $branchInfo = $this->branchInfo;
 												<table width="100px" height="120px">
 													<tr>
 														<td class="picborder">
-															<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[0])) {
-																											if (!empty($this->studentgroup[0]['photo'])) {
-																												echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[0]['photo'] . '"';
-																											}
-																										} ?>>
+															<img style="width: 100px;height: 120px;" src="<?php echo $rank1Profile;?>">
 														</td>
 													</tr>
 												</table>
@@ -902,11 +915,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[1])) {
-																															if (!empty($this->studentgroup[1]['photo'])) {
-																																echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[1]['photo'] . '"';
-																															}
-																														} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank2Profile;?>">
 																		</td>
 																	</tr>
 																</table>
@@ -939,11 +948,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[2])) {
-																															if (!empty($this->studentgroup[2]['photo'])) {
-																																echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[2]['photo'] . '"';
-																															}
-																														} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank3Profile;?>">
 																		</td>
 																	</tr>
 																</table>
@@ -988,11 +993,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[3])) {
-																				if (!empty($this->studentgroup[3]['photo'])) {
-																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[3]['photo'] . '"';
-																				}
-																			} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank4Profile;?>">
 																		</td>
 																	</tr>
 																</table>
@@ -1023,11 +1024,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[4])) {
-																				if (!empty($this->studentgroup[4]['photo'])) {
-																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[4]['photo'] . '"';
-																				}
-																			} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank5Profile;?>">
 																		</td>
 																	</tr>
 																</table>
@@ -1059,11 +1056,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[5])) {
-																				if (!empty($this->studentgroup[5]['photo'])) {
-																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[5]['photo'] . '"';
-																				}
-																			} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank6Profile;?>">
 																		</td>
 																	</tr>
 																</table>
@@ -1107,11 +1100,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[3])) {
-																				if (!empty($this->studentgroup[3]['photo'])) {
-																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[3]['photo'] . '"';
-																				}
-																			} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank4Profile;?>">
 																		</td>
 																	</tr>
 																</table>
@@ -1144,11 +1133,7 @@ $branchInfo = $this->branchInfo;
 																<table width="100px" height="120px">
 																	<tr>
 																		<td class="picborder">
-																			<img style="width: 100px;height: 120px;" <?php if (!empty($this->studentgroup[4])) {
-																				if (!empty($this->studentgroup[4]['photo'])) {
-																					echo 'src="' . $this->baseUrl() . '/images/photo/' . $this->studentgroup[4]['photo'] . '"';
-																				}
-																			} ?>>
+																			<img style="width: 100px;height: 120px;" src="<?php echo $rank5Profile;?>">
 																		</td>
 																	</tr>
 																</table>

@@ -808,7 +808,7 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 		print_r(Zend_Json::encode($arrResult));
 		exit();
 	}
-	public function studentAttendanceDetailAction($search){
+	public function studentAttendanceDetailAction($search){// will remove
 		$db = new Api_Model_DbTable_DbApi();
 		$search['currentLang'] = empty($search['currentLang'])?1:$search['currentLang'];
 		

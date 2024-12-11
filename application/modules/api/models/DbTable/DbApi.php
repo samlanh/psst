@@ -2427,14 +2427,27 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		    	$type = empty($search['type'])?1:$search['type'];
 		    	$label = "name_en";
 				$branchName = "branch_nameen";
+				
+				$absentLabel = "A";
+				$pLabel = "P";
+				$lLabel = "L";
+				$elLabel = "EL";
 				if($currentLang==1){// khmer
 					
 					$branchName = "branch_namekh";
 					$label = "name_kh";
 					
+					$absentLabel = "អ.វ";
+					$pLabel = "ច្ប.";
+					$lLabel = "យ";
+					$elLabel = "ច.មុន";
+					
 				}
 				$groupList = $this->getGroupOfStudent($studentId);
 				$groupList = empty($groupList)?0:$groupList;
+				
+				
+				
 				
 				$sql="
 					SELECT
@@ -2443,29 +2456,87 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = sat.branch_id LIMIT 1) AS branchNameKh
 						,(SELECT br.branch_nameen FROM `rms_branch` AS br  WHERE br.br_id = sat.branch_id LIMIT 1) AS branchNameEn
 						,g.group_code AS groupCode
-						,satd.`attendence_status`
 						,(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
 						,(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`)) AS `roomName`
 					
-						,COUNT(satd.`attendence_status`) AS total
+						,'0' AS total
 						,sat.`date_attendence`
+						,sat.`date_attendence` AS dateAttendance
 						,DATE_FORMAT(sat.`date_attendence`,'%Y%m') AS yearMonth
-						,satd.description
 						
 
 				";
 				if($type==1){//attendance
-					
-					$groupId = empty($search['groupId']) ? 0 : $search['groupId'];
+				
+					$absentLabel = "Absent";
+					$pLabel = "Permission";
+					$lLabel = "Late";
+					$elLabel = "Early Leave";
+					if($currentLang==1){// khmer
+						$absentLabel = "អវត្តមាន";
+						$pLabel = "ច្បាប់";
+						$lLabel = "យឺត";
+						$elLabel = "ចេញមុន";
 						
+					}
+					$stringSql = "
+						,CONCAT(
+							'[',
+								COALESCE(
+									GROUP_CONCAT(
+										IF (COALESCE(vdst.`dateAttendance`,'') ='', NULL, 
+										CONCAT('{'
+											,'".'"dateAttendance"'.":'
+											,'".'"'."'
+											,COALESCE(vdst.`dateAttendance`,'')
+											,'".'"'."'
+											
+											,',".'"attendanceStatus"'.":'
+											,'".'"'."'
+											,COALESCE(vdst.`attendanceStatus`,'')
+											,'".'"'."'
+											
+											,',".'"attendanceStatusTitle"'.":'
+											,'".'"'."'
+											,CASE 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =2 THEN '".$absentLabel."' 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =3 THEN '".$pLabel."' 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =4 THEN '".$lLabel."' 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =5 THEN '".$elLabel."' 
+													ELSE ''
+												END 
+											,'".'"'."'
+											
+											,',".'"description"'.":'
+											,'".'"'."'
+											,COALESCE(vdst.`description`,'')
+											,'".'"'."'
+											
+										,'}')
+										)
+										ORDER BY vdst.`dateAttendance` ASC
+									),
+									''
+								),
+							']'
+							) AS dataDetailList
+					";
+					$groupId = empty($search['groupId']) ? 0 : $search['groupId'];
+					$sql.="
+						,COUNT( IF(vdst.`attendanceStatus` = '2', vdst.`attendanceStatus`, NULL) ) AS countNoPermission
+						,COUNT( IF(vdst.`attendanceStatus` = '3', vdst.`attendanceStatus`, NULL) ) AS countPermission
+						,COUNT( IF(vdst.`attendanceStatus` = '4', vdst.`attendanceStatus`, NULL) ) AS countLate
+						,COUNT( IF(vdst.`attendanceStatus` = '5', vdst.`attendanceStatus`, NULL) ) AS countEalyLeave
+						,COUNT( IF(vdst.`attendanceStatus` = '5', vdst.`attendanceStatus`, NULL) ) AS countEarlyLeave
+					";
+					$sql.=$stringSql;
+					/*
 					$sql.="
 						,'0' AS countNoPermission
 						,'0' AS countPermission
 						,'0' AS countLate
 						,'0' AS countEalyLeave
-									";
-					
-					/*
+					";
 					$sql.="
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=2 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countNoPermission
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat.`group_id` = sat2.`group_id` AND sat2.`type`=1 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=3 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countPermission
@@ -2474,19 +2545,80 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					";
 					*/
 				}else{//Mistake
+					$minorLabel = "Minor";
+					$moderateLabel = "Moderate";
+					$majorLabel = "Major";
+					$otherlLabel = "Other";
+					if($currentLang==1){// khmer
+						$minorLabel = "ស្រាល";
+						$moderateLabel = "មធ្យម";
+						$majorLabel = "ធ្ងន់";
+						$otherlLabel = "ផ្សេងៗ";
+						
+					}
+					$stringSql = "
+						,CONCAT(
+							'[',
+								COALESCE(
+									GROUP_CONCAT(
+										IF (COALESCE(vdst.`dateAttendance`,'') ='', NULL, 
+										CONCAT('{'
+											,'".'"dateAttendance"'.":'
+											,'".'"'."'
+											,COALESCE(vdst.`dateAttendance`,'')
+											,'".'"'."'
+											
+											,',".'"attendanceStatus"'.":'
+											,'".'"'."'
+											,COALESCE(vdst.`attendanceStatus`,'')
+											,'".'"'."'
+											
+											,',".'"attendanceStatusTitle"'.":'
+											,'".'"'."'
+											,CASE 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =1 THEN '".$minorLabel."' 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =2 THEN '".$moderateLabel."' 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =3 THEN '".$majorLabel."' 
+													WHEN COALESCE(vdst.`attendanceStatus`,'') =4 THEN '".$otherlLabel."' 
+													ELSE ''
+												END 
+											,'".'"'."'
+											
+											,',".'"description"'.":'
+											,'".'"'."'
+											,COALESCE(vdst.`description`,'')
+											,'".'"'."'
+											
+										,'}')
+										)
+										ORDER BY vdst.`dateAttendance` ASC
+									),
+									''
+								),
+							']'
+							) AS dataDetailList
+					";
 					$sql.="
+						,COUNT( IF(vdst.`attendanceStatus` = '1', vdst.`attendanceStatus`, NULL) ) AS countSmallMistake
+						,COUNT( IF(vdst.`attendanceStatus` = '2', vdst.`attendanceStatus`, NULL) ) AS countMediumMistake
+						,COUNT( IF(vdst.`attendanceStatus` = '3', vdst.`attendanceStatus`, NULL) ) AS ccountBigMistake
+						,COUNT( IF(vdst.`attendanceStatus` = '4', vdst.`attendanceStatus`, NULL) ) AS countOtherMistake
+					";
+					/*$sql.="
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=1 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countSmallMistake
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=2 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countMediumMistake
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=3 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countBigMistake
 						,(SELECT COUNT(satd2.id) FROM `rms_student_attendence_detail` AS satd2,`rms_student_attendence` AS sat2  WHERE sat2.`type`=2 AND sat2.`id`= satd2.`attendence_id` AND satd2.stu_id=$studentId AND satd2.`attendence_status`=4 AND DATE_FORMAT(sat2.`date_attendence`,'%m%Y') = DATE_FORMAT(sat.`date_attendence`,'%m%Y') ) AS countOtherMistake
-					";
+					";*/
+					$sql.=$stringSql;
 				}
 				
 				$sql.="
 					FROM
 						`rms_student_attendence` AS sat 
-						 JOIN `rms_group` AS g ON g.id=sat.group_id
-						LEFT JOIN`rms_student_attendence_detail` AS satd ON sat.`id`= satd.`attendence_id`
+						 JOIN `rms_group` AS g ON g.id=sat.group_id 
+						 LEFT JOIN `v_daily_stu_attendance` AS vdst ON vdst.`attendenceId` = sat.`id` AND vdst.`type`= $type AND vdst.`studentId` = $studentId
+						
 				";
 				$sql.="
 					WHERE
@@ -2522,6 +2654,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					$sql.=" LIMIT ".$search['limitRecord'];
 				}
 				$row = $db->fetchAll($sql);
+				/*
 				if($type==1){
 					if(!empty($row)){
 						$arrFilter =array(
@@ -2550,6 +2683,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						}
 					}
 				}
+				*/
 				
 				$result = array(
 					'status' =>true,
@@ -2606,7 +2740,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			return $restult;
 		}
 		
-		public function getStudentAttendanceDetail($search){
+		public function getStudentAttendanceDetail($search){// will remove
     		$db = $this->getAdapter();
     		try{
     			$currentLang = empty($search['currentLang'])?1:$search['currentLang'];
@@ -4635,6 +4769,35 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		$sql .=' ORDER BY cri.criteriaType ASC,cri.id ASC ';	
 		return $db->fetchAll($sql);
 	}
+	function getGrdTpmSubjectByStudent($_data){
+		$db = $this->getAdapter();
+		$studentId = empty($_data['studentId'])?0:$_data['studentId'];
+		$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+		
+		$subLangKh = "(KH)";
+		$subLangEng = "(ENG)";
+		$title="subject_titlekh";
+		if($currentLang==2){
+			$title="subject_titleen";
+			$subLangKh = "(ខ្មែរ)";
+			$subLangEng = "(អង់គ្លេស)";
+		}
+		$sql="SELECT 
+				DISTINCT grdTmp.`subjectId` AS id
+				,CASE WHEN subj.`subject_lang`=2 THEN 
+					CONCAT(subj.$title,' ','$subLangEng')
+					ELSE CONCAT(subj.$title,' ','$subLangKh')
+				END AS `name`
+			FROM 
+				`rms_grading_tmp` AS grdTmp 
+					JOIN `rms_grading_detail_tmp` AS grdTmpd ON grdTmp.`id` = grdTmpd.`gradingId`
+					LEFT JOIN `rms_subject` AS subj ON subj.id = grdTmp.`subjectId`
+			WHERE grdTmpd.`studentId` = $studentId 
+				
+			";
+		$sql .=" ORDER BY subj.$title ASC,subj.id ASC ";	
+		return $db->fetchAll($sql);
+	}
 	public function getFormOptionSelect($_data){
 		$db = $this->getAdapter();
 		try{
@@ -4675,6 +4838,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 						,array('id' => "0",'name' =>$currentLang==1 ? "ទាំងអស់" : "All") 
 					);
 				}
+			}else if($getControlType=="grdTmpSubject"){
+				$row = $this->getGrdTpmSubjectByStudent($_data);
 			}
 			
 			$result = array(
@@ -4881,10 +5046,15 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,COALESCE(gSS.innerSubject,0) AS innerSubjectNew
 					,gSS.innerSubjectList AS innerSubjectListNew
 					,criSj.`criteriaScoreList`
+					
+					,t.`teacher_name_en` AS teacherNameEn
+					,t.`teacher_name_kh` AS teacherNameKh
+					,t.`sex` AS tSex
 				FROM  (`rms_score` AS s JOIN `rms_score_detail` AS sd ON sd.`score_id` = s.`id`)
 						LEFT JOIN rms_group AS g ON g.id=sd.group_id 
 						LEFT JOIN `rms_group_subject_detail` AS gdSub ON gdSub.group_id = sd.group_id AND gdSub.subject_id=sd.subject_id 
 						LEFT JOIN rms_grade_subject_detail AS gsj ON sd.subject_id=gsj.subject_id AND g.`grade`=gsj.`grade_id` 
+						LEFT JOIN `rms_teacher` AS t ON t.`id` = gdSub.`teacher`
 						LEFT JOIN `rms_subject` AS sj ON sj.id = sd.subject_id 
 						LEFT JOIN v_gradingsubsubjectscore AS gSS ON gSS.studentId=sd.`student_id` AND gSS.gradingId=sd.gradingTotalId AND gSS.subjectId=sd.`subject_id`
 						LEFT JOIN `v_criteriascore_subject` AS criSj ON criSj.`settingEntryId` = s.`settingId` AND criSj.`subjectId` = sd.subject_id AND criSj.`studentId` = sd.`student_id`
@@ -4961,7 +5131,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							'innerSubjectNew'=>$result['innerSubjectNew'],
 							'innerSubjectListNew'=>$result['innerSubjectListNew'],
 							'criteriaScoreList'=>$result['criteriaScoreList'],
-							'innerSubject'=>0
+							'innerSubject'=>0,
+							'teacherNameEn'=>$result['teacherNameEn'],
+							'teacherNameKh'=>$result['teacherNameKh'],
 						);
 					//Will Remove After Update App New Version
 					$arrSub= array(
@@ -5955,6 +6127,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 			
+			$subLangKh = "(KH)";
+			$subLangEng = "(ENG)";
+		
 			$teacherName= "teacher_name_en";
 			$subjectTitle = "subject_titleen";
 			$criteriaTitle = "title_en";
@@ -5963,14 +6138,24 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$teacherName = "teacher_name_kh";
 				$subjectTitle = "subject_titlekh";
 				$criteriaTitle = "title";
+				
+				$subLangKh = "(ខ្មែរ)";
+				$subLangEng = "(អង់គ្លេស)";
 			}
+		
 			$sql="SELECT
 					grdTmpD.`studentId`
 					,grdTmp.`criteriaId`
 					
 					,g.`group_code` AS groupCode
 					,(SELECT CONCAT(COALESCE(ac.fromYear),'-',COALESCE(ac.toYear)) FROM rms_academicyear AS ac WHERE ac.id=g.academic_year LIMIT 1) AS academicYearTitle
-					,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = grdTmp.`subjectId` LIMIT 1) AS subjectTitle
+					
+					,CASE 
+						WHEN subj.`subject_lang`=2 THEN  
+							CONCAT('$subLangEng',' ',subj.$subjectTitle)
+						ELSE CONCAT('$subLangKh',' ',subj.$subjectTitle)
+					END AS `subjectTitle`
+					
 					,(SELECT cri.$criteriaTitle FROM `rms_exametypeeng` AS cri WHERE cri.id = grdTmp.`criteriaId` LIMIT 1) AS criteriaTitle
 					
 					,grdTmpD.`totalGrading`
@@ -5983,7 +6168,8 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			FROM
 				`rms_grading_tmp` AS grdTmp 
 				JOIN `rms_grading_detail_tmp` AS grdTmpD ON grdTmp.`id` = grdTmpD.`gradingId`
-				LEFT JOIN `rms_group` AS g ON g.id = grdTmp.groupId
+				LEFT JOIN `rms_group` AS g ON g.id = grdTmp.groupId 
+				LEFT JOIN `rms_subject` AS subj ON subj.id = grdTmp.`subjectId`
 			WHERE 1
 				AND grdTmpD.`studentId` = $studentId
 			";
@@ -6016,6 +6202,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			}
 			if(!empty($search['criteriaId'])){
 				$where.=" AND grdTmp.`criteriaId` = ".$search['criteriaId'];
+			}
+			if(!empty($search['subjectId'])){
+				$where.=" AND grdTmp.`subjectId` = ".$search['subjectId'];
 			}
 			
 			$ordering=" ORDER BY grdTmp.createDate DESC, grdTmp.`id` DESC ";

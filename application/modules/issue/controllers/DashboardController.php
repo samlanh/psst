@@ -15,16 +15,17 @@ public function indexAction()
 			$rows= $db->getAllGroups($search);
 
 		}else{
-			// $search = array(
-			// 			'adv_search'=>'',
-			// 			'academic_year'=> $currentAcademic,
-			// 			'exam_type'=>0,
-			// 			'for_semester'=>0,
-			// 			'for_month'=>0,
-			// 			'degree'=>0,
-			// 			'grade'=> 0,
-			// 			'start_date'=> '',
-			// 			'end_date'=>date('Y-m-d'));
+			$search = array(
+				'adv_search'=>'',
+				'academic_year'=> '',
+				'exam_type'=>0,
+				'for_semester'=>0,
+				'for_month'=>0,
+				'degree'=>0,
+				'grade'=> 0,
+				'start_date'=> '',
+				'end_date'=>date('Y-m-d')
+			);
 			$rows='';
 		}
 		

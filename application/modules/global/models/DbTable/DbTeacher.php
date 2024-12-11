@@ -575,4 +575,11 @@ class Global_Model_DbTable_DbTeacher extends Zend_Db_Table_Abstract
 		return $row;
 	}
 	
+	public function checkUserName($data){
+		$db =$this->getAdapter();
+		$data['user_name']= empty($data['user_name']) ? "" : $data['user_name'];
+		$sql = "SELECT id FROM `rms_teacher` WHERE user_name = '".$data['user_name']."' LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
+	
 }

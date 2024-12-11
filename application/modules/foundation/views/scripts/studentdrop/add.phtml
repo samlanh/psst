@@ -29,8 +29,8 @@
 						return false;
   	  	  			}
 					loadingBlock();
-					dijit.byId('save_close').set('disabled',true);
 					dijit.byId('save_new').set('disabled',true);
+					dijit.byId('save_close').set('readOnly',true);
 					return true;
 				}else {
 					return false;

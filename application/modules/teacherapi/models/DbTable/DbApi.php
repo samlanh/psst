@@ -387,9 +387,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
 					,COALESCE((SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1),'N/A') AS roomName
 					,(SELECT sEtStt.title FROM rms_score_entry_setting AS sEtStt WHERE sEtStt.id = grd.settingEntryId LIMIT 1) titleScoreFor
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =grd.groupId LIMIT 1 ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.stu_id=gds.stu_id AND gds.group_id =grd.groupId LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.stu_id=gds.stu_id AND gds.group_id =grd.groupId LIMIT 1 ) AS femaleStudent
+					
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
 					
 					,(SELECT COUNT( IF( grdT.totalAverage >= (grdT.maxScore/2), grdT.id, NULL))  FROM `rms_grading_total` AS grdT WHERE grdT.gradingId = grd.id AND grdT.maxScore >0 LIMIT 1 ) AS aboveAverage
 					,(SELECT COUNT( IF( grdT.totalAverage >= (grdT.maxScore/2) AND s.sex = '1', grdT.id, NULL))  FROM `rms_grading_total` AS grdT,rms_student AS s WHERE s.stu_id=grdT.studentId AND grdT.gradingId = grd.id AND grdT.maxScore >0 LIMIT 1 ) AS aboveAverageMale
@@ -398,7 +399,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			";
 			
 			$sql.=" FROM rms_grading AS grd,
-						rms_group AS g 
+						vapi_group_info AS g 
 				WHERE grd.groupId=g.id  AND grd.inputOption=2 ";
 			$sql.=' AND grd.teacherId='.$userId;
 			if(!empty($_data['academicYear'])){
@@ -441,6 +442,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 	
 	
 	
+	/*
 	function getSubjectOfClassAvailableForIssue($_data){
 		$_db = $this->getAdapter();
 		try{
@@ -519,6 +521,144 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 									AND aTs.endDate > sett.examEndDate
 				";
 			$sql.=' WHERE gsjb.teacher='.$userId;
+			$sql.=' AND CASE WHEN sett.examType =2 THEN gsjb.amount_subject_sem 
+						ELSE gsjb.amount_subject 
+						END  > 0 
+				'; 
+			$sql.=' AND g.`gradingId` !=0 ';
+			
+			$date = new DateTime();
+			$currentDate = $date->format("Y-m-d");
+			$sql.= " AND sett.fromDate <= '".$currentDate."' 
+					 AND CASE 
+							WHEN aTs.endDate IS NOT NULL
+							THEN aTs.endDate
+							ELSE sett.examEndDate
+						END >='".$currentDate."' 
+					";
+			//if($forSettingType==1){
+			//	$sql.= " AND sett.examFromDate <= '".$currentDate."' AND sett.examEndDate >='".$currentDate."' ";
+			//}else{
+			//	$sql.= " AND sett.fromDate <= '".$currentDate."' AND sett.endDate >='".$currentDate."' ";
+			//}
+			$sql.=" GROUP BY 
+						sett.id,
+						gsjb.group_id,
+						gsjb.subject_id
+				";
+			$sql.="
+				ORDER BY 
+					sett.id DESC
+					,CASE 
+						WHEN tmp.criteriaId IS NOT NULL
+						THEN '1'
+						ELSE '0'
+					END ASC
+					,`g`.`group_code` ASC
+					, gsjb.subject_id ASC
+			";
+			$row = $_db->fetchAll($sql);
+			$row = empty($row) ? array() : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+			
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	*/
+	
+	
+	function getSubjectOfClassAvailableForIssue($_data){
+		$_db = $this->getAdapter();
+		try{
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			$forSettingType = empty($_data['forSettingType'])?0:$_data['forSettingType'];
+			
+			$colunmName='title_en';
+			$label = 'name_en';
+			$branch = "branch_nameen";
+			$subjectTitle='subject_titleen';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+				$branch = "branch_namekh";
+				$subjectTitle='subject_titlekh';
+			}
+			
+			$sql="
+				SELECT 
+					sett.id AS settingEntryId
+					,sett.branchId AS branchId
+					,sett.title AS settingTitle
+					,sett.fromDate AS startDateCriteria
+					,sett.endDate AS endDateCriteria
+					,sett.examFromDate AS startDateExam
+					,CASE 
+							WHEN aTs.endDate IS NOT NULL
+							THEN aTs.endDate
+							ELSE sett.examEndDate
+						END AS endDateExam
+					,sett.examType AS examType
+					,sett.forMonth AS forMonth
+					,sett.forSemester AS forSemester
+					
+					,g.id AS groupId
+					,g.group_code AS groupCode
+					,g.gradingId AS gradingSettingId
+					,g.academic_year AS academicYearId
+					,(SELECT CONCAT(COALESCE(ac.fromYear,''),'-',COALESCE(ac.toYear,'')) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academicYear
+					,(SELECT i.$colunmName FROM `rms_items` AS i WHERE i.type=1 AND i.id = `g`.`degree` LIMIT 1) AS degreeTitle
+					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
+					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
+					
+					
+					,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitle
+					,(SELECT subj.subject_titleen FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleEng
+					,(SELECT subj.subject_titlekh FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleKh
+					,(SELECT subj.shortcut FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS shortcut
+					,(SELECT subj.subject_lang FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectLang
+					
+					,gsjb.subject_id AS subjectId
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
+					
+					,CASE 
+						WHEN tmp.criteriaId IS NOT NULL
+						THEN '1'
+						ELSE '0'
+					END AS isIssuedMonthly
+					,COALESCE(tmp.id,'0') AS gradingTmpId
+					,if(COALESCE(tmp.id,'0')>0, (SELECT gr.isLock FROM rms_grading AS gr WHERE gr.gradingTmpId = COALESCE(tmp.id,'0') LIMIT 1 ),0) AS isLockGrading
+					
+					,COALESCE((SELECT vSt.`keyValue` FROM `rms_setting` AS vSt WHERE vSt.`keyName`='criteriaLimitation' LIMIT 1),0) AS criteriaLimitSetting
+			";
+			
+			$sql.=" FROM 
+						(`rms_group_subject_detail` AS gsjb JOIN `vapi_group_info` AS g ON g.id = gsjb.group_id AND g.is_use=1 AND g.is_pass=2)
+						JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1 AND sett.academicYear = g.academic_year
+							
+							LEFT JOIN vapi_gradingtmp_exam AS tmp ON tmp.settingEntryId = sett.id AND tmp.groupId = gsjb.group_id AND tmp.subjectId = gsjb.subject_id
+							LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs 
+								ON aTs.teacherId = gsjb.teacher AND g.id = aTs.group AND FIND_IN_SET(gsjb.subject_id,(aTs.subjectId))
+									AND aTs.endDate > sett.examEndDate
+				";
+			$sql.=' WHERE gsjb.teacher='.$userId;
+			$sql.=' AND CASE WHEN sett.examType =2 THEN gsjb.amount_subject_sem 
+						ELSE gsjb.amount_subject 
+						END  > 0 
+				'; 
 			$sql.=' AND g.`gradingId` !=0 ';
 			
 			$date = new DateTime();
@@ -570,6 +710,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	/*
 	function getSubjectCriteriaOfClassByTeacher($_data){
 		$_db = $this->getAdapter();
 		try{
@@ -695,6 +836,151 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$row = $newArray;
 			}
 			$row = empty($row) ? array() : $row;
+			$result = array(
+					'status' =>true,
+					'value' =>$row,
+			);
+			return $result;
+			
+			
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+					'status' =>false,
+					'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	*/
+	
+	function getSubjectCriteriaOfClassByTeacher($_data){
+		$_db = $this->getAdapter();
+		try{
+			$currentLang = empty($_data['currentLang'])?1:$_data['currentLang'];
+			$userId = empty($_data['userId'])?0:$_data['userId'];
+			
+			$colunmName='title_en';
+			$label = 'name_en';
+			$subjectTitle='subject_titleen';
+			$criterialTitle='criterialTitleEn';
+			if ($currentLang==1){
+				$colunmName='title';
+				$label = 'name_kh';
+				$subjectTitle='subject_titlekh';
+				$criterialTitle='criterialTitle';
+			}
+			
+			$sql="
+				SELECT 
+					sett.id AS settingEntryId
+					,sett.branchId AS branchId
+					,sett.title AS settingTitle
+					,gsjb.group_id AS groupId
+					,gsjb.subject_id as subjectIdValue
+					,CASE 
+						WHEN sett.examType = 2 THEN gsjb.semester_max_score
+						ELSE gsjb.max_score
+					END AS maxScoreSubject
+					
+					,sttD.criteriaId AS criteriaId
+					,CASE WHEN COALESCE(v.`subjectId`,0)>0 
+						THEN v.`timeInput`
+						ELSE sttD.`timeInput`
+					END AS timeInput
+					,CASE WHEN COALESCE(v.`subjectId`,0)>0 
+						THEN v.`pecentage_score`
+						ELSE sttD.`pecentage_score`
+					END AS percentageScore
+					
+					,CASE WHEN COALESCE(v.`subjectId`,0)>0 
+						THEN v.`subCriteriaTitleKh`
+						ELSE sttD.`subCriteriaTitleKh`
+					END AS subCriteriaTitleKh
+					,CASE WHEN COALESCE(v.`subjectId`,0)>0 
+						THEN v.`subCriteriaTitleEng`
+						ELSE sttD.`subCriteriaTitleEng`
+					END AS subCriteriaTitleEng
+					
+					
+					
+					
+					
+					,COALESCE(v.`subjectId`,0) AS subjectIdInCriteriaSetting
+					,sttD.$criterialTitle AS criteriaTitle
+					,sttD.`criterialTitle` AS criteriaTitleKh
+					,sttD.`criterialTitleEn` AS criteriaTitleEng
+					,sttD.`criteriaType` AS criteriaType
+					
+					,g.group_code AS groupCode
+					
+					,(SELECT subj.$subjectTitle FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitle
+					,(SELECT subj.subject_titleen FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleEng
+					,(SELECT subj.subject_titlekh FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectTitleKh
+					,(SELECT subj.shortcut FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS shortcut
+					,(SELECT subj.subject_lang FROM `rms_subject` AS subj WHERE subj.id = gsjb.subject_id  LIMIT 1) AS subjectLang
+					
+					,(SELECT COUNT(tmp.id) FROM `rms_grading_tmp` AS tmp WHERE  tmp.settingEntryId = sett.id AND  tmp.groupId = g.id AND tmp.subjectId = gsjb.subject_id AND tmp.criteriaId = sttD.criteriaId LIMIT 1 ) AS totalInputted
+					
+			";
+			
+			$sql.=" FROM 
+						`rms_group_subject_detail` AS gsjb JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 
+						JOIN `rms_score_entry_setting` AS sett ON FIND_IN_SET(g.degree,sett.degreeId) AND sett.status = 1
+						JOIN `vapi_criteria_setting` AS sttD ON FIND_IN_SET(g.degree,sttD.degreeId) AND sttD.`score_setting_id` = g.`gradingId` AND sttD.`forExamType` = sett.examType
+						LEFT JOIN vapi_criteria_subject AS v ON  g.`gradingId` = v.`settingId` AND v.subjectId = COALESCE(gsjb.subject_id,0) AND sett.examType = v.forExamType AND v.`criteriaId` = sttD.`criteriaId`
+						LEFT JOIN `rms_allowed_teacher_score_setting` AS aTs ON aTs.teacherId = gsjb.teacher AND g.id = aTs.group AND FIND_IN_SET(gsjb.subject_id,(aTs.subjectId)) AND aTs.endDate > sett.examEndDate
+				";
+			$sql.=' WHERE gsjb.teacher='.$userId;
+			$sql.=' AND g.`gradingId` !=0 AND g.is_pass !=3 '; //មិនស្មើរថ្នាក់ដែលរៀនចប់
+			$sql.=' AND CASE WHEN sett.examType =2 THEN gsjb.amount_subject_sem 
+						ELSE gsjb.amount_subject 
+						END  > 0 
+				'; 
+			
+			$sql.="
+				AND sttD.`criteriaType` 
+					> CASE 
+						WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = g.`gradingId` AND sttDi.subjectId =  gsjb.subject_id ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+						THEN '1' 
+						ELSE '0'
+					END 
+					
+				 AND CASE WHEN COALESCE(v.`subjectId`,0)>0 
+						THEN v.`isNotEnteryCri`
+						ELSE sttD.`isNotEnteryCri`
+					END  = (CASE 
+							WHEN COALESCE((SELECT sttDi.isNotEnteryCri FROM `rms_scoreengsettingdetail` AS sttDi WHERE sttDi.score_setting_id = g.`gradingId` AND sttDi.subjectId =  gsjb.subject_id ORDER BY sttDi.isNotEnteryCri DESC LIMIT 1 ),'0') =1 
+								THEN '1' 
+							ELSE '0'
+							END )
+				
+			";
+			
+			$date = new DateTime();
+			$currentDate = $date->format("Y-m-d");
+			$sql.= " AND sett.fromDate <= '".$currentDate."' 
+					 AND CASE 
+							WHEN aTs.endDate IS NOT NULL
+							THEN aTs.endDate
+							ELSE sett.examEndDate
+						END >='".$currentDate."'  
+					";
+			$sql.=" GROUP BY 
+						sett.id,
+						gsjb.group_id,
+						gsjb.subject_id,
+						sttD.criteriaId 
+				";
+			$sql.=' ORDER BY 
+							sett.id DESC,
+							 gsjb.group_id ASC  
+							,gsjb.subject_id ASC
+							,sttD.`criteriaType` ASC
+							,sttD.criteriaId ASC
+							,sttD.subjectId DESC
+				';
+			$row = $_db->fetchAll($sql);
 			$result = array(
 					'status' =>true,
 					'value' =>$row,
@@ -1080,18 +1366,17 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT subj.shortcut 			FROM `rms_subject` AS subj 	WHERE subj.id = gTmp.subjectId   LIMIT 1) AS subjectShortCut
 					,(SELECT subj.subject_lang 		FROM `rms_subject` AS subj 	WHERE subj.id = gTmp.subjectId   LIMIT 1) AS subjectLang
 					
-					,COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) AS totalStudent
-					,COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) AS maleStudent
-					,COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) AS femaleStudent
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
 					
-					,(SELECT COUNT(IF(tmpD.totalGrading > 0  , s.sex, NULL))  FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.gradingId = gTmp.id LIMIT 1) AS issuedScore
-					,(SELECT COUNT(IF(tmpD.totalGrading <= 0  , s.sex, NULL))  FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.gradingId = gTmp.id LIMIT 1) AS noScore					
+					,(SELECT COUNT(IF(tmpD.totalGrading > 0  , gTmp.id, NULL))  FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.gradingId = gTmp.id LIMIT 1) AS issuedScore
+					,(SELECT COUNT(IF(tmpD.totalGrading <= 0  , gTmp.id, NULL))  FROM `rms_grading_detail_tmp` AS tmpD WHERE tmpD.gradingId = gTmp.id LIMIT 1) AS noScore					
 					
 			";
 			
 			$sql.=" FROM `rms_grading_tmp` AS gTmp
-						JOIN `rms_group` AS g ON g.`id` = gTmp.`groupId`
-						LEFT JOIN (rms_student AS s JOIN `rms_group_detail_student` AS gds ON  gds.stu_id = s.stu_id AND s.status = 1 AND s.customer_type=1 AND gds.stop_type = 0) ON  gds.group_id = g.id
+						JOIN `vapi_group_info` AS g ON g.`id` = gTmp.`groupId`
 				";
 			$sql.=' WHERE gTmp.teacherId='.$userId;
 			if(!empty($_data['settingEntryId'])){
@@ -2234,12 +2519,14 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					END AS isMainTeacher
 					,g.is_pass AS groupProcess
 					,(SELECT $label FROM rms_view AS v WHERE v.type=9 AND v.key_code=g.is_pass LIMIT 1) as groupProcessTitle
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.itemType=1 AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE gds.itemType=1 AND s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
+					
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
+					
 					
 				FROM `rms_group_subject_detail` AS gsjb
-						JOIN `rms_group` AS g ON g.id = gsjb.group_id AND g.is_use=1 AND g.`status` = 1
+						JOIN `vapi_group_info` AS g ON g.id = gsjb.group_id AND g.is_use=1 AND g.`status` = 1
 				WHERE gsjb.`teacher` = $userId
 			";
 			
@@ -2329,10 +2616,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
 					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
 					
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
 					,'' AS groupProcessTitle
 					,(SELECT COUNT( IF( grdT.total_score >= (grdT.totalMaxScore/2), grdT.id, NULL))  FROM `rms_score_monthly` AS grdT WHERE grdT.score_id = sc.`id` AND grdT.totalMaxScore >0 LIMIT 1 ) AS aboveAverage
 					,(SELECT COUNT( IF( grdT.total_score < (grdT.totalMaxScore/2), grdT.id, NULL))  FROM `rms_score_monthly` AS grdT WHERE grdT.score_id = sc.`id` AND grdT.totalMaxScore >0 LIMIT 1 ) AS belowAverage
@@ -2341,7 +2628,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$sql.=" FROM 
 						`rms_score` AS sc,
-						rms_group AS g
+						vapi_group_info AS g
 				";
 			$sql.=' WHERE 
 						sc.`group_id` = g.`id`
@@ -2440,10 +2727,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
 					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
 					
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`itemType` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`itemType` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`itemType` = 1 LIMIT 1 ) AS femaleStudent
 					,CASE
 						WHEN COALESCE((SELECT ass.issueDate FROM `rms_studentassessment` AS ass WHERE ass.scoreId = sc.`id`  LIMIT 1),NULL) IS NOT NULL
 							THEN (SELECT ass.issueDate FROM `rms_studentassessment` AS ass WHERE ass.scoreId = sc.`id`  LIMIT 1)
@@ -2460,7 +2747,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			
 			$sql.=" FROM 
 						`rms_score` AS sc,
-						rms_group AS g
+						vapi_group_info AS g
 				";
 			$sql.=' WHERE 
 						sc.`group_id` = g.`id`
@@ -2472,6 +2759,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					AND sc.`status` =1
 				';
 				//AND g.`is_pass` = 2
+			$sql.=" AND COALESCE((SELECT ass.isLock FROM rms_studentassessment AS ass WHERE ass.scoreId = sc.id LIMIT 1),'0') = 0 ";
 			if(!empty($_data['academicYear'])){
 				$sql.=" AND g.academic_year =".$_data['academicYear'];
 			}
@@ -2749,10 +3037,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,(SELECT id.$colunmName FROM `rms_itemsdetail` AS id WHERE id.id = `g`.`grade` LIMIT 1) AS gradeTitle
 					,COALESCE((SELECT `r`.`room_name` FROM `rms_room` AS `r` WHERE `r`.`room_id` = `g`.`room_id` LIMIT 1),'N/A') AS `roomName`
 					
+					,g.totalStudent AS totalStudent
+					,g.maleStudent AS maleStudent
+					,g.femaleStudent AS femaleStudent
 					
-					,(SELECT COUNT(IF(gds.stu_id !=0 AND gds.stop_type = '0', gds.stu_id, NULL)) FROM `rms_group_detail_student` AS gds WHERE gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1  ) AS totalStudent
-					,(SELECT COUNT(IF(s.sex = '1' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS maleStudent
-					,(SELECT COUNT(IF(s.sex = '2' AND gds.stop_type = '0'  , s.sex, NULL)) FROM `rms_group_detail_student` AS gds,rms_student AS s WHERE s.status=1 AND s.stu_id=gds.stu_id AND gds.group_id =g.id  AND gds.`is_current` = 1 AND gds.`is_maingrade` = 1 LIMIT 1 ) AS femaleStudent
 					,ass.issueDate AS evaluationIssueDate
 					,ass.returnDate AS evaluationReturnDate
 					,(SELECT COUNT(DISTINCT(assD.studentId)) FROM `rms_studentassessment_detail` AS assd WHERE ass.id = assD.assessmentId AND ass.scoreId = sc.`id`  LIMIT 1) AS totalStudentEvaluated
@@ -2760,7 +3048,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			";
 			
 			$sql.=" FROM 
-						`rms_studentassessment` AS ass JOIN `rms_group` AS g ON g.id  = ass.`groupId` 
+						`rms_studentassessment` AS ass JOIN `vapi_group_info` AS g ON g.id  = ass.`groupId` 
 						LEFT JOIN `rms_score` AS sc ON sc.id = ass.`scoreId`
 				";
 			$sql.=' WHERE  g.`teacher_id` ='.$userId;

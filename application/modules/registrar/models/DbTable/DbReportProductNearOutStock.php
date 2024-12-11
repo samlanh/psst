@@ -60,7 +60,16 @@ class Registrar_Model_DbTable_DbReportProductNearOutStock extends Zend_Db_Table_
     	}
 
     	if($search['category_id']>0){
-    		$where.=" AND p.items_id=".$search['category_id'];
+    		//$where.=" AND p.items_id=".$search['category_id'];
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $_db->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND p.items_id IN ($condiction)";
+			}else{
+				$where.=" AND p.items_id=".$search['category_id'];
+			}
     	}
     	if($search['product']>0){
     		$where.=" AND p.id=".$search['product'];

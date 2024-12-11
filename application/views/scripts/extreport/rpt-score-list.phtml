@@ -61,8 +61,8 @@
 	$rs = $this->rs;
 
 	$criterrialList = json_decode($rs["criterialList"], true);
-	print_r($criterrialList);
-	
+	// print_r($rs);
+	//  exit();
 	$gradingId = $rs['id'];
 	$maxSubjectScore = $rs['maxSubjectscore'];
 	$studentId= $this->students[0]['studentId'];
@@ -329,16 +329,19 @@
 									<table class="content-data"  cellpadding="2" border="1" >
 										<thead>
 											<?php 
+
+											$jsonScoreList = json_decode($this->students['0']["jsonScoreCriterialDetail"], true);
+
 											$htmlContent="";
 											$mainColSpan=1;
 													$subCol="";
 													$subColII="";
 													$colSpan=1;
-													if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
-														if(!empty($criterial['subjectId'])){
-															if(!empty($criterial['subCriterialTitleKh'])){
-																$subCriterial = explode(',', $criterial['subCriterialTitleKh']);
-																$subCriterialEng = explode(',', $criterial['subCriterialTitleEng']);
+													if(!empty($criterrialList)) foreach($criterrialList  as $criterial){ 
+														if($criterial['criteriaType']== 2 ){
+															if(!empty($rs['subCriteriaTitleKh'])){
+																$subCriterial = explode(',', $rs['subCriteriaTitleKh']);
+																$subCriterialEng = explode(',', $rs['subCriteriaTitleEng']);
 																$coutnSubCriterial = count($subCriterial);
 																$colSpan=$coutnSubCriterial;
 																$indexSub=0;
@@ -361,9 +364,12 @@
 																}
 															}else{
 																
-																$subCol.='<td rowspan="2" scope="col">';
-																$subCol.=$maxSubjectScore;
+																$subCol.='<td colspan="'.$colSpan.'"scope="col">';
+																$subCol.=$criterial['criterialTitleEng'];
 																$subCol.='</td>';
+																$subColII.='<td scope="col">';
+																$subColII.=$maxSubjectScore;
+																$subColII.='</td>';
 																$mainColSpan = $mainColSpan+1;
 															}
 							
@@ -375,8 +381,12 @@
 																'examType'   =>$rs['examType'],
 																'forMonth'   =>$rs['forMonth'],
 																);
-															
-															$rsScore = $dbExternal->getScoreByCriterial($gradingId,$studentId,$criterial['criteriaId']);
+														
+															$filterCiteriaId = $criterial['criteriaId'];  //  citeriaId you want to filter by
+															$rsScore = array_filter($jsonScoreList , function ($item) use ($filterCiteriaId) {
+																return $item['criteriaId'] == $filterCiteriaId;
+															});
+															$rsScore = array_values($rsScore);
 															$currentTimeInput = count($rsScore);
 
 															if($currentTimeInput>1){
@@ -406,8 +416,10 @@
 														$htmlContent.='
 														<td scope="col" colspan="'.$colSpan.'">
 															<span class="khmerLabel">'.$criterial['criterialTitle'].'</span>';
-														if(!empty($criterial['subjectId'])){
+														if($criterial['criteriaType']== 2 ){
+															if(!empty($rs['subCriteriaTitleKh'])){
 															$htmlContent.='<span class="englishLabel">'.$criterial['criterialTitleEng'].'</span>';
+															}
 														}
 												$htmlContent.='</td>';
 												 } ?>
@@ -480,6 +492,8 @@
 
 										$title=1;
 
+										//print_r($this->students);
+
 										if(!empty($this->students)) foreach($this->students as $student){ 
 										$i++;
 										if($student['sex']==1){ 
@@ -501,10 +515,20 @@
 											</td>
 											<td data-label="ភេទ/Sex" align="center" class="bg_<?php echo $student['sex'];?>"><?php echo $sex;?></td>
 											<?php 
-												
-											if(!empty($this->criterial)) foreach($this->criterial as $criterial){ 
-												$timeInput = $criterial['timeInput'];
-												$rsScore = $dbExternal->getScoreByCriterial($gradingId,$student['studentId'],$criterial['criteriaId']);
+
+											$jsonScoreCriterialDetail = json_decode($student["jsonScoreCriterialDetail"], true);
+
+											if(!empty($criterrialList)) foreach($criterrialList as $criterial){ 
+											
+												$filterStudentId = $student['studentId'];  //  subjectId you want to filter by
+												$filterCiteriaId = $criterial['criteriaId'];  //  citeriaId you want to filter by
+												// Filter the array
+												$rsScore = array_filter($jsonScoreCriterialDetail , function ($item) use ($filterStudentId, $filterCiteriaId) {
+													return $item['studentId'] == $filterStudentId && $item['criteriaId'] == $filterCiteriaId;
+												});
+												// Reset array keys for better readability
+												$rsScore = array_values($rsScore);
+
 												if(!empty($rsScore)) foreach($rsScore AS $score){
 												?>
 												<td data-label="<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng'];?>" align="center">
@@ -519,11 +543,11 @@
 											<?php } ?>
 											
 											<?php 
-											$averageRow = $dbExternal->getAverageAndRankBySubjectOfCriterial($gradingId,$student['studentId']); 
+											// $averageRow = $dbExternal->getAverageAndRankBySubjectOfCriterial($gradingId,$student['studentId']); 
 											
-											$remark = empty($averageRow['remark'])?"&nbsp;":$averageRow['remark'];
-											$totalAverage = empty($averageRow['totalAverage'])?0:$averageRow['totalAverage'];
-											$rank = empty($averageRow['rank'])?0:$averageRow['rank'];
+											 $remark = empty($student['remark'])?"&nbsp;":$student['remark'];
+											 $totalAverage = empty($student['totalAverage'])?0:$student['totalAverage'];
+											 $rank = empty($student['rank'])?0:$student['rank'];
 											
 											$passAvrage =0 ;
 											if(!empty($rs['maxSubjectscore'])){
@@ -543,13 +567,13 @@
 											}
 											
 											?>
-											<td data-label="មធ្យមភាគ/Average" align="center" ><?php echo $totalAverage;?></td>
+											<td data-label="មធ្យមភាគ/Average" align="center" ><?php  echo $totalAverage;?></td>
 											
 											<td data-label="និទ្ទេស/Grade" align="center">
 												<strong>
 												<?php 
-												if($averageRow['maxScore']>0){ 
-													echo $dbgb->getMentionScore($totalAverage, $rs['academicYearId'],$rs['degreeId'],1,$rs['gradeId'],$averageRow['maxScore']);
+												if($student['maxScore']>0){ 
+													echo $dbgb->getMentionScore($totalAverage, $rs['academicYearId'],$rs['degreeId'],1,$rs['gradeId'],$student['maxScore']);
 												}else{
 													echo "-";
 												}
@@ -567,16 +591,16 @@
 										<?php } ?>
 									</table>
 									
-									<?php if(!empty($this->criterial)) { ?>
+									<?php if(!empty($criterrialList)) { ?>
 									<table class="reportTotalStudent" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; line-height:20px; color:#4839bd;">
 										<tr>
 											<td>
 												<strong><u>ប្រព័ន្ធដាក់ពិន្ទុសិស្ស / Grading System ៖</u></strong>
 												<ul class="criterialNote">
-												<?php foreach($this->criterial as $criterial){ ?>
+												<?php foreach($criterrialList as $criterial){ ?>
 													
 													<li>
-														<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng']." : <strong>".$criterial['pecentage_score']." %</strong>";?>
+														<?php echo $criterial['criterialTitle']."/".$criterial['criterialTitleEng']." : <strong>".$criterial['pecentageScore']." %</strong>";?>
 													</li>
 												<?php } ?>
 												</ul>

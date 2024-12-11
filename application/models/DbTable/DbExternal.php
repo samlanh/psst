@@ -593,6 +593,9 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 							"\"criteriaId\":",
 							vs.criteriaId,
 							",",
+							"\"criteriaType\":",
+							vs.criteriaType,
+							",",
 							"\"pecentageScore\":",
 							vs.pecentage_score,
 							",",
@@ -648,12 +651,15 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 				,(SELECT rms_itemsdetail.$colunmname FROM `rms_itemsdetail` WHERE rms_itemsdetail.`id`=`g`.`grade` AND rms_itemsdetail.items_type=1 LIMIT 1) AS gradeTitle
 				,(SELECT $label FROM rms_view WHERE `type`=4 AND rms_view.key_code= `g`.`session` LIMIT 1) AS sessionTitle
 				,(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS roomName,
-				$criterialList
+				$criterialList,
+				cs.subCriteriaTitleKh,
+  				cs.subCriteriaTitleEng
 		";
 
 		$sql .= " FROM  rms_grading AS grd
 					LEFT JOIN rms_group AS g ON  grd.groupId = g.id
-					LEFT JOIN `vapi_criteria_setting` AS vs  ON  vs.score_setting_id = grd.gradingSettingId
+					LEFT JOIN `vapi_criteria_setting` AS vs  ON ( vs.score_setting_id = grd.gradingSettingId AND vs.forExamType = grd.examType )
+					LEFT JOIN `vapi_criteria_subject` AS cs ON (cs.settingId = grd.gradingSettingId AND cs.subjectId = grd.subjectId AND  cs.forExamType = grd.examType )
 			WHERE  grd.inputOption=2 ";
 
 		$where = '';
@@ -662,7 +668,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		}
 		$where .= ' AND grd.id=' . $gradingId;
 		$where .= ' LIMIT 1 ';
-
+	//	echo $sql . $where; exit();
 		return $db->fetchRow($sql . $where);
 	}
 
@@ -708,6 +714,52 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 
 	}
 
+	function getStudentGradingScore($data = array())
+	{
+		$db = $this->getAdapter();
+
+		$groupId = empty($data['groupId']) ? 0 : $data['groupId'];
+		$dbp = new Application_Model_DbTable_DbGlobal();
+		$currentLang = $dbp->currentlang();
+		$studentName = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
+		$studentEnName = $studentName;
+		if ($currentLang == 1) {
+			$studentName = 's.stu_khname';
+		}
+		$sql = "
+				SELECT
+					gt.studentId AS studentId
+					,(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stuCode
+					,(SELECT " . $studentName . " FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stu_name
+					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stuKhName
+					,(SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stuEnName
+					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS sex
+					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS gender
+					,gt.maxScore
+					,gt.`totalAverage`
+					,gt.`remark`
+					,vgd.`jsonScoreCriterialDetail`
+					,FIND_IN_SET( 
+						gt.totalAverage, 
+						(    
+							SELECT 
+								GROUP_CONCAT( dd.totalAverage ORDER BY dd.totalAverage DESC ) 
+							FROM rms_grading_total AS dd 
+							WHERE  dd.`gradingId`= gt.gradingId 
+						)
+					) AS rank
+				 ";
+		$sql .= "";
+		$sql .= "  FROM  rms_grading_total AS gt
+					LEFT JOIN v_grading_detail AS vgd
+						ON vgd.gradingId = gt.gradingId 
+						AND vgd.studentId = gt.studentId ";
+		$sql .= " WHERE  gt.`gradingId` = ".$data['gradingId'];
+		
+		 $order = " ORDER BY gt.totalAverage DESC";
+	//	echo $sql . $order; exit();
+		return $db->fetchAll($sql . $order);
+	}
 
 	function getStudentByGroupExternal($data = array())
 	{

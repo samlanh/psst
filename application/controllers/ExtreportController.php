@@ -79,6 +79,9 @@ class ExtreportController extends Zend_Controller_Action
 		$examType = empty($row['examType'])?0:$row['examType'];
 		$forMonth = empty($row['forMonth'])?0:$row['forMonth'];
 		$forSemester = empty($row['forSemester'])?0:$row['forSemester'];
+
+		// $gradingId = empty($row['gradingId'])?0:$row['gradingId'];
+    	// $subjectId = empty($row['subjectId'])?0:$row['subjectId'];
 		
 		$arrFilter = array(
 			'groupId'=>$groupId,
@@ -87,18 +90,16 @@ class ExtreportController extends Zend_Controller_Action
 			'examType'=>$examType,
 			'forMonth'=>$forMonth,
 			'forSemester'=>$forSemester,
+			'gradingId'=>$gradingID
 		);
-		$this->view->students = $dbExternal->getStudentByGroupExternal($arrFilter);
+		$this->view->students = $dbExternal->getStudentGradingScore($arrFilter);
 		
-    	$gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-    	$subjectId = empty($row['subjectId'])?0:$row['subjectId'];
-		
-		$arrSearch  = array(
-			'gradingId'=>$gradingId
-			,'subjectId'=>$subjectId
-			,'examType'=>$examType,
-		);
-		$this->view->criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
+		// $arrSearch  = array(
+		// 	'gradingId'=>$gradingId
+		// 	,'subjectId'=>$subjectId
+		// 	,'examType'=>$examType,
+		// );
+		// $this->view->criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
 		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];

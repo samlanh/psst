@@ -186,6 +186,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 			$criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
 			
 			$old_studentid = 0;
+			$old_remark = '';
 			if(!empty($_data['identity'])){
 				$ids = explode(',', $_data['identity']);
 				
@@ -204,7 +205,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 									'studentId'			=>$old_studentid,
 									'subjectId'			=> $subjectId,
 									'totalAverage'		=> number_format($totalScoreAverage,2),
-									'remark'			=> $_data['note_'.$i],
+									'remark'			=> $old_remark,
 									'maxScore'			=> $_data['maxSubjectScore'],
 							);
 							$this->_name='rms_grading_total';
@@ -214,6 +215,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 						
 						$old_studentid=$_data['student_id'.$i];
 						$pecentageScore = $rowCri['pecentage_score'];
+						$old_remark = $_data['note_'.$i];
 						
 						if(!empty($rowCri['subjectId'])){
 							if(!empty($rowCri['subCriterialTitleKh'])){
@@ -487,6 +489,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		$criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
    			
    		$old_studentid = 0;
+   		$old_remark = '';
    		if(!empty($_data['identity'])){
    			$ids = explode(',', $_data['identity']);
    
@@ -505,7 +508,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    								'studentId'			=>$old_studentid,
    								'subjectId'			=>$subjectId,
    								'totalAverage'		=>number_format($totalScoreAverage,2),
-   								'remark'			=>$_data['note_'.$i],
+   								'remark'			=>$old_remark,
    								'maxScore'			=>$_data['maxSubjectScore'],
    						);
    						$this->_name='rms_grading_total';
@@ -515,6 +518,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    
    					$old_studentid=$_data['student_id'.$i];
    					$pecentageScore = $rowCri['pecentage_score'];
+   					$old_remark = $_data['note_'.$i];
    
    					if(!empty($rowCri['subjectId'])){
    						if(!empty($rowCri['subCriterialTitleKh'])){

@@ -243,7 +243,16 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
 		}
 		
 		if(!empty($search['category_id'])){
-			$where .=' AND p.items_id = '.$search['category_id'];
+			//$where .=' AND p.items_id = '.$search['category_id'];
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $_db->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND p.items_id IN ($condiction)";
+			}else{
+				$where.=" AND p.items_id=".$search['category_id'];
+			}
 		}
 		if(!empty($search['product'])){
 			$where .= " AND cd.proId = " . $search['productId'];
@@ -842,7 +851,16 @@ class Allreport_Model_DbTable_DbRptSummaryStock extends Zend_Db_Table_Abstract
     		$sql .=' AND ( '.implode(' OR ',$s_where).')';
     	}
     	if(!empty($search['category_id'])){
-    		$where.= " AND i.items_id = ".$db->quote($search['category_id']);
+    		//$where.= " AND i.items_id = ".$db->quote($search['category_id']);
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $dbp->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND i.items_id IN ($condiction)";
+			}else{
+				$where.=" AND i.items_id=".$search['category_id'];
+			}
     	}
     	if(!empty($search['product'])){
     		$where.= " AND sd.pro_id= ".$db->quote($search['product']);

@@ -211,7 +211,16 @@ class Allreport_Model_DbTable_DbPurchase extends Zend_Db_Table_Abstract
     		$where.=" AND spd.pro_id=".$search['product'];
     	}
     	if($search['category_id']>0){
-    		$where.=" AND pro.items_id =".$search['category_id'];
+    		//$where.=" AND pro.items_id =".$search['category_id'];
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $_db->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND pro.items_id IN ($condiction)";
+			}else{
+				$where.=" AND pro.items_id=".$search['category_id'];
+			}
     	}
     	if($search['product_type']>0){
     		$where.=" AND pro.product_type =".$search['product_type'];

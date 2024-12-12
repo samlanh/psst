@@ -11,6 +11,8 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 	
 	function getAllRequestProductDetail($search=null){
 		$db = $this->getAdapter();
+		
+		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql="SELECT 
 					req_d.*,
 					req_d.id,
@@ -18,18 +20,18 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 					(SELECT title from rms_request_for as rf where rf.id = req.request_for) as request_for,
     				(SELECT title from rms_for_section as fs where fs.id = req.for_section) as for_section,
 					
-					(SELECT title FROM `rms_itemsdetail` WHERE id=req_d.`pro_id` limit 1) as pro_name,
-					(SELECT code FROM `rms_itemsdetail` WHERE id=req_d.`pro_id` limit 1) as pro_code,
+					p.title as pro_name,
+					p.code as pro_code,
 					
 					SUM(req_d.`qty_request`) AS total_request,
 					SUM(req_d.`qty_receive`) AS total_receive,
 					SUM(req_d.`price`*req_d.`qty_receive`) AS total_price
 				FROM
-					rms_request_order AS req,
-					`rms_request_orderdetail` AS req_d 
+					rms_request_order AS req JOIN `rms_request_orderdetail` AS req_d ON req.`id` = req_d.`request_id` 
+					LEFT JOIN `rms_itemsdetail` AS p ON p.id = req_d.`pro_id`
 				WHERE 
-					req.`id` = req_d.`request_id`
-					AND req.`status`=1
+					
+					 req.`status`=1
 			";
 	
 		$where="";
@@ -53,19 +55,25 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
 		}
 	
 		if($search['category_id']>0){
-			$where.=" AND (SELECT items_id FROM `rms_itemsdetail` AS p WHERE p.id = req_d.`pro_id` limit 1) =".$search['category_id'];
+			$where.=" AND p.items_id =".$search['category_id'];
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $dbp->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND p.items_id IN ($condiction)";
+			}else{
+				$where.=" AND p.items_id=".$search['category_id'];
+			}
 		}
 		if($search['product']>0){
-			$where.=" AND (SELECT p.id FROM `rms_itemsdetail` AS p WHERE p.id = req_d.`pro_id`) =".$search['product'];
+			$where.=" AND req_d.`pro_id` =".$search['product'];
 		}
 		if($search['product_type']>0){
-			$where.=" AND (SELECT p.product_type FROM `rms_itemsdetail` AS p WHERE p.id = req_d.`pro_id`) =".$search['product_type'];
+			$where.=" AND p.product_type =".$search['product_type'];
 		}
-		$dbp = new Application_Model_DbTable_DbGlobal();
+		
 		$sql.=$dbp->getAccessPermission('req_d.branch_id');
-		
-		//echo $sql.$where.$group.$order;
-		
 		return $db->fetchAll($sql.$where.$group.$order);
 	}
 	
@@ -146,7 +154,16 @@ class Allreport_Model_DbTable_DbRequestStock extends Zend_Db_Table_Abstract
     		$where.=" AND adj.pro_id=".$search['product'];
     	}
     	if($search['category_id']>0){
-    		$where.=" AND i.items_id =".$search['category_id'];
+    		//$where.=" AND i.items_id =".$search['category_id'];
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $dbp->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND i.items_id IN ($condiction)";
+			}else{
+				$where.=" AND i.items_id=".$search['category_id'];
+			}
     	}
     	if($search['product_type']>0){
     		$where.=" AND i.product_type =".$search['product_type'];

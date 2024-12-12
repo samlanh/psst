@@ -165,7 +165,6 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 			}else{
 				
 				$_data['groupId'] = empty($_data['groupId'])?0:$_data['groupId'];
-				
 				$_arr= array(
 					'user_id'		=>$this->getUserId(),
 					'branch_id'	=>$_data['branch_id'],
@@ -181,10 +180,12 @@ class Foundation_Model_DbTable_DbGroupStudentChangeGroup extends Zend_Db_Table_A
 					'note'			=>$_data['note'],
 					'status'		=>1,
 					'array_checkbox'=>$_data['identity'],
-					'fee_id'		=>$feeId,
+					//'fee_id'		=>$feeId,
 					'academic_year'	=>$_data['study_year'],
-					
 				);
+				if($_data['change_type']!=1 AND $_data['change_type']!=4){
+					$_arr['fee_id'] = $feeId;
+				}
 				$this->_name = "rms_group_student_change_group";
 				$id = $this->insert($_arr);
 			}

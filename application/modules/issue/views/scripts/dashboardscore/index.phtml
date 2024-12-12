@@ -345,6 +345,10 @@
 																						<span><i class="fa fa-file-text-o" aria-hidden="true"></i>  <?php echo $tr->translate("VIEW"); ?></span>
 																					</a>
 																					<div class="dropdown-divider"></div>
+																					<a class="dropdown-item"  target="_blank" href="<?php echo $this->baseUrl()."/grading/edit/id/".$row['id']."/gradingRowId/".$rstmp['tmpId']."/fullcontrol/1";?>">
+																						<span><i class="fa fa-pencil-square-o" aria-hidden="true"></i>  <?php echo $tr->translate("EDIT"); ?></span>
+																					</a>
+																					<div class="dropdown-divider"></div>
 																					<a class="dropdown-item" onclick="setrowdata(<?php echo $rstmp['tmpId']; ?>)"><span><i class="fa fa-trash-o" aria-hidden="true"></i>  <?php echo $tr->translate("DELETE"); ?></span></a>
 																				</div>
 																			</div>

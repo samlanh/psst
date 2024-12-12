@@ -190,21 +190,31 @@ class GradingController extends Zend_Controller_Action
 	}
 	public function editAction()
 	{
+		$tr = Application_Form_FrmLanguages::getCurrentlanguage();
 		$this->_helper->layout()->disableLayout();
 		$key = new Application_Model_DbTable_DbKeycode();
 		$dbg = new Application_Model_DbTable_DbGlobal();
 		$dbset=$key->getKeyCodeMiniInv(TRUE);
 		$db = new Application_Model_DbTable_DbGradingScore();
 		$dbexnternal = new Application_Model_DbTable_DbExternal();
+
+		$gradingRowId=$this->getRequest()->getParam("gradingRowId");
+		$gradingRowId = empty($gradingRowId)?0:$gradingRowId;
+
+		$fullControlID=$this->getRequest()->getParam("fullcontrol");
+    	$fullControlID =empty($fullControlID)?0:$fullControlID;
+
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 
-			$checkTeachSesion=  $dbexnternal->checkSessionTeacherExpireBeforeSubmit();
-			if(empty($checkTeachSesion)){
-				$dbexnternal->reloadPageTecherExpireSession();
-				exit();
+			if(empty($fullControlID)){
+				$checkTeachSesion=  $dbexnternal->checkSessionTeacherExpireBeforeSubmit();
+				if(empty($checkTeachSesion)){
+					$dbexnternal->reloadPageTecherExpireSession();
+					exit();
+				}
 			}
-
+			
 			try{
 				$rs = $db->UpdateScoreGradingByClass($_data);
 				
@@ -229,18 +239,26 @@ class GradingController extends Zend_Controller_Action
 					$notify["subTitle"] = $subTitle;
 					$dbPush->pushNotificationAPI($notify);	
 				}
+				if(!empty($fullControlID)){
+					$alert = $tr->translate("INSERT_SUCCESS");
+					echo "<script> alert('".$alert."');</script>";
+		    		echo "<script>window.close();</script>";
+				}else{
+					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");	
+				}
 				
-				Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/grading/index");				
+							
 			}catch(Exception $e){
 				Application_Form_FrmMessage::message("INSERT_FAIL");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
 		
-		$gradingRowId=$this->getRequest()->getParam("gradingRowId");
-		$gradingRowId = empty($gradingRowId)?0:$gradingRowId;
 		
-		$resultRecord = $db->getGradingScoreById($gradingRowId,$fullControlID=NULL);
+
+		
+		
+		$resultRecord = $db->getGradingScoreById($gradingRowId,$fullControlID);
 		if(empty($resultRecord)){
 			Application_Form_FrmMessage::Sucessfull("NO_RECORD", "/grading/index");
 		}

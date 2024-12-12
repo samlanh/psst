@@ -70,7 +70,16 @@ class Allreport_Model_DbTable_DbProductList extends Zend_Db_Table_Abstract
     		$where.=" AND p.status=".$search['status_search'];
     	}
     	if($search['category_id']>0){
-    		$where.=" AND p.items_id=".$search['category_id'];
+    		//$where.=" AND p.items_id=".$search['category_id'];
+			$arrCon = array(
+				"categoryId" => $search['category_id'],
+			);
+			$condiction = $_db->getChildItems($arrCon);
+			if (!empty($condiction)){
+				$where.=" AND p.items_id IN ($condiction)";
+			}else{
+				$where.=" AND p.items_id=".$search['category_id'];
+			}
     	}
     	if($search['product_type']>0){
     		$where.=" AND p.product_type=".$search['product_type'];

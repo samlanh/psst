@@ -301,18 +301,19 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$sql .= $dbp->getAccessPermission("g.branch_id");
 
-		$request = Zend_Controller_Front::getInstance()->getRequest();
-		$controllerName = $request->getControllerName();
+		// $request = Zend_Controller_Front::getInstance()->getRequest();
+		// $controllerName = $request->getControllerName();
 
-		if ($controllerName == 'assessment') {
-			$sql .= " AND g.teacher_id =" . $dbp->getTeacherUserId();
-		}
+		// if ($controllerName == 'assessment') {
+		// 	$sql .= " AND g.teacher_id =" . $dbp->getTeacherUserId();
+		// }
 
-		if ($getTeacherId != null) {
-			$sql .= " AND (SELECT group_id FROM `rms_group_subject_detail` WHERE group_id=$id AND teacher=" . $_db->getTeacherUserId() . " LIMIT 1)";
-		}
+		// if ($getTeacherId != null) {
+		// 	$sql .= " AND (SELECT group_id FROM `rms_group_subject_detail` WHERE group_id=$id AND teacher=" . $_db->getTeacherUserId() . " LIMIT 1)";
+		// }
 
 		$sql .= "  LIMIT 1 ";
+	//	echo $sql; exit();
 		return $db->fetchRow($sql);
 	}
 
@@ -340,7 +341,7 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 		WHERE 
 			g.id = gsjd.group_id
 			and gsjd.group_id = " . $groupId;
-		$sql .= ' AND gsjd.teacher=' . $this->getUserExternalId();
+	//	$sql .= ' AND gsjd.teacher=' . $this->getUserExternalId();
 		if ($examType == 1) { //for month
 			$sql .= " AND gsjd.amount_subject >0 ";
 		} else { //for semester

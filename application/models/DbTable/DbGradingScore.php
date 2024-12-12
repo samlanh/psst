@@ -822,6 +822,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 			}
    			$where.=' AND grd.id='.$gradingId;
 		   	$where.=' LIMIT 1 ';
+			//echo $sql.$where; exit();
 		   	return $db->fetchRow($sql.$where);
    }
    

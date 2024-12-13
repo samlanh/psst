@@ -233,6 +233,8 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$startDateFilter = $frm->getStartDateSearch($search);
 		$endDateFilter = $frm->getEndDateSearch($search);
 		$IssueScoreStatusFilter = $frm->getIssueScoreStatusSearch($search);
+		$CombineStatusFilter = $frm->getCombineStatusSearch($search);
+		$EvaluationStatusFilter = $frm->getEvaluationStatusSearch($search);
 		
 		$this->addElements(array(
 			$branchFilter,
@@ -246,6 +248,8 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$startDateFilter,
 			$endDateFilter,
 			$IssueScoreStatusFilter,
+			$CombineStatusFilter ,
+			$EvaluationStatusFilter ,
 		));
 		return $this;
 	}

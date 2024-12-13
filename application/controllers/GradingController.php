@@ -265,10 +265,26 @@ class GradingController extends Zend_Controller_Action
 	
 		$rscoreType = $dbg->checkScoreType($resultRecord);
 		if(!empty($rscoreType)){
+			
 			if($rscoreType['isLock']==1){
-				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+
+				if(!empty($fullControlID)){
+					$alert = $tr->translate("Can not Edit, Already Used !");
+					echo "<script> alert('".$alert."');</script>";
+					echo "<script>window.close();</script>";
+				}else{
+					Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+				}
+				
 			}elseif($resultRecord['criteriaType'] != 2 ){
-				Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+
+				if(!empty($fullControlID)){
+					$alert = $tr->translate("Can not Edit, Already Used !");
+					echo "<script> alert('".$alert."');</script>";
+					echo "<script>window.close();</script>";
+				}else{
+					Application_Form_FrmMessage::Sucessfull("Can not Edit, Already Used !","/grading/index");
+				}
 			}
 			
 		}

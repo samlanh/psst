@@ -65,6 +65,7 @@ class Accounting_TransfercreditController extends Zend_Controller_Action {
     	$db = new Accounting_Model_DbTable_DbCreditmemo();
     	$row  = $db->getCreditmemobyid($id);
     	$this->view->row = $row;
+	
     
     	$pructis=new Accounting_Form_Frmcreditmemo();
     	$frm = $pructis->Frmcreditmemotran($row);

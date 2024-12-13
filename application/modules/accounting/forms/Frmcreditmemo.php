@@ -348,13 +348,14 @@ Class Accounting_Form_Frmcreditmemo extends Zend_Dojo_Form {
 	
 		if($data!=null){
 			$_branch_id->setValue($data['branch_id']);
-			$total_amount->setValue($data['total_amount']);
+			$total_amount->setValue($data['total_amountafter']);
 			$_Description->setValue($data['note']);
 			$prob->setValue($data['prob']);
-			$_Date->setValue($data['date']);
+			$_Date->setValue(date_format(date_create($data['date']), "Y-m-d"));
 			$_enddate->setValue($data['end_date']);
 			$_stutas->setValue($data['status']);
 			$id->setValue($data['id']);
+		
 		}
 		$this->addElements(array($_enddates,$problem,$total_am,$Description_s,$start_date,$_Date,$_stutas,$prob,$_enddate,$_Description,
 				$total_amount,$_branch_id,$for_date,$id,));

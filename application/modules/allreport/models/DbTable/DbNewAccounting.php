@@ -239,6 +239,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 						$arrExtra['term1'] = 1;//just update
 						$arrExtra['term2'] = 1;//just update
 						$arrExtra['term3'] = 1;
+						$arrExtra['term4'] = 0;
 						$arrExtra['periodDate3'] =  $resultPayment['paidDate'];
 						$arrExtra['payment3'] = $resultPayment['totalpayment'];
 

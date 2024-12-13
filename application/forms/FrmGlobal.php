@@ -1763,7 +1763,7 @@ class Application_Form_FrmGlobal
 					font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';
 					border-top: '.$borderTopFooter.' solid #000000;
 					padding-right:20px;
-					font-size: 12px !important;
+					font-size: 11px !important;
 					content: " " counter(page) " / " counter(pages);
 				}
 				@bottom-left {
@@ -1771,7 +1771,7 @@ class Application_Form_FrmGlobal
 					content: "'.$footerLeftContent.'";
 					text-transform: '.$footerLeftTextTransform.';
 					font-family: '."'Times New Roman'".','."'Khmer OS Battambang'".';
-					font-size: 12px !important;
+					font-size: 11px !important;
 					border-top: '.$borderTopFooter.' solid #000000;
 				}
 				';

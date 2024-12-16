@@ -1277,4 +1277,25 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		return $evaluationStatus;
 	}
 	
+	function getSortDegreeSearch($_data=null){
+		$sort_degree = new Zend_Dojo_Form_Element_FilteringSelect("sort_degree");
+		$sort_degree->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		$_arr =array(
+			''=>$this->tr->translate("SELECT_DEGREE"),
+			4=>"Kindergarten",
+			1=>"Primary",
+			'2,3'=>$this->tr->translate("Junior-Senior"),
+		);
+		$sort_degree->setMultiOptions($_arr);
+		$sort_degree->setValue($this->request->getParam('sort_degree'));	
+		return $sort_degree;
+	}
+	
 }

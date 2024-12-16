@@ -1781,12 +1781,12 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 			(SELECT rms_itemsdetail.title FROM rms_itemsdetail WHERE rms_itemsdetail.id=g.grade AND rms_itemsdetail.items_type=1 LIMIT 1) AS grade_name, 
 			sj.`subject_id`,sj.`teacher_id`,
 			(SELECT subject_titlekh FROM `rms_subject` WHERE rms_subject.id=sj.`subject_id` LIMIT 1) AS subject_name, 
-			(SELECT teacher_name_kh FROM `rms_teacher` WHERE rms_teacher.id=sj.`teacher_id` LIMIT 1) AS teacher_name, 
+			 t.teacher_name_kh  AS teacher_name, 
 			(SELECT COUNT(sm.id) FROM `rms_score_monthly` sm WHERE sm.score_id=sj.id AND sm.type=1 ) TotaStudent 
 			
 			FROM v_score_ft_subjectscore AS sj
 			LEFT JOIN `rms_group` AS g ON g.id = sj.group_id 
-		
+			LEFT JOIN  rms_teacher AS t ON t.`id` = sj.`teacher_id`
     	";
 		
 
@@ -1821,21 +1821,18 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		if (!empty($search['sort_degree'])) {
 			$where .= ' AND g.degree in(' . $search['sort_degree'] . ')';
 		}
+		if (!empty($search['department'])) {
+			$where .= ' AND t.department =' . $search['department'];
+		}
 		if (!empty($search['teacher'])) {
 			$where .= ' AND sj.teacher_id =' . $search['teacher'];
 		}
-		if (!empty($search['subjectId'])) {
-			$where .= ' AND sj.subject_id=' . $search['subjectId'];
-		}
-
+		
 		$dbp = new Application_Model_DbTable_DbGlobal();
 		$where .= $dbp->getAccessPermission("sj.branch_id");
 		$where .= $dbp->getDegreePermission("g.degree");
 
-		$orderBy = " 	
-				GROUP BY sj.`subject_id`,sj.id
-			ORDER BY  sj.teacher_id,sj.subject_id,g.degree,sj.group_id  ASC ";
-	//	echo $sql . $where . $orderBy; 
+		$orderBy = " ORDER BY  sj.teacher_id,sj.subject_id,g.degree,g.grade,g.group_code  ASC ";
 		$scoreInfo = $db->fetchAll($sql . $where . $orderBy);
 
 		$resultInfo = array();
@@ -1933,7 +1930,6 @@ class Allreport_Model_DbTable_DbRptStudentScore extends Zend_Db_Table_Abstract
 		}
 		if (!empty($search['teacher_id'])) {
 			$where .= ' AND sd.teacher_id= ' . $search['teacher_id'];
-			//$where .= ' AND sd.teacher_id= 173 ';
 		}
 		$where .= " GROUP BY sd.`score_id`";
 		return $db->fetchAll($sql . $where);

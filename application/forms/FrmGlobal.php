@@ -1744,7 +1744,7 @@ class Application_Form_FrmGlobal
 		$pageSize = empty($data["pageSize"]) ? "" : $data["pageSize"];
 		$marginTop = empty($data["marginTop"]) ? "0.7cm" : $data["marginTop"];
 		$marginRight = empty($data["marginRight"]) ? "0.5cm" : $data["marginRight"];
-		$marginBottom = empty($data["marginBottom"]) ? "3.5cm" : $data["marginBottom"]; //3.5cm fixed when print cut charecter
+		$marginBottom = empty($data["marginBottom"]) ? "2.5cm" : $data["marginBottom"]; //2.5cm fixed when print cut charecter
 		$marginLeft = empty($data["marginLeft"]) ? "0.5cm" : $data["marginLeft"];
 		$borderTopFooter = empty($data["borderTopFooter"]) ? "0px" : $data["borderTopFooter"];
 		$footerLeftContent = empty($data["footerLeftContent"]) ? "" : $data["footerLeftContent"];

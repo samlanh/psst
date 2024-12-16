@@ -775,6 +775,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
 		   grd.forSemester,
 		   grd.criteriaId,
 		   grd.note,
+		   grd.teacherId,
 		   grd.settingEntryId,
 		   	(SELECT br.$branch FROM `rms_branch` AS br WHERE br.br_id=grd.branchId LIMIT 1) As branchName
 		   	,(SELECT br.branch_namekh FROM `rms_branch` AS br  WHERE br.br_id = grd.branchId LIMIT 1) AS branchNameKh

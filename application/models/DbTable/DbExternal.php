@@ -718,47 +718,43 @@ class Application_Model_DbTable_DbExternal extends Zend_Db_Table_Abstract
 	function getStudentGradingScore($data = array())
 	{
 		$db = $this->getAdapter();
-
-		$groupId = empty($data['groupId']) ? 0 : $data['groupId'];
-		$dbp = new Application_Model_DbTable_DbGlobal();
-		$currentLang = $dbp->currentlang();
-		$studentName = "CONCAT(COALESCE(s.last_name,''),' ',COALESCE(s.stu_enname,''))";
-		$studentEnName = $studentName;
-		if ($currentLang == 1) {
-			$studentName = 's.stu_khname';
-		}
-		$sql = "
-				SELECT
-					gt.studentId AS studentId
-					,(SELECT s.stu_code FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stuCode
-					,(SELECT " . $studentName . " FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stu_name
-					,(SELECT s.stu_khname FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stuKhName
-					,(SELECT " . $studentEnName . " FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS stuEnName
-					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS sex
-					,(SELECT s.sex FROM `rms_student` AS s WHERE s.stu_id = gt.studentId LIMIT 1) AS gender
-					,gt.maxScore
-					,gt.`totalAverage`
-					,gt.`remark`
-					,vgd.`jsonScoreCriterialDetail`
-					,FIND_IN_SET( 
-						gt.totalAverage, 
-						(    
-							SELECT 
-								GROUP_CONCAT( dd.totalAverage ORDER BY dd.totalAverage DESC ) 
-							FROM rms_grading_total AS dd 
-							WHERE  dd.`gradingId`= gt.gradingId 
-						)
+		$sql = " SELECT 
+				gt.studentId AS studentId,
+				s.stu_code AS stuCode,
+				s.stu_khname AS stu_name,
+				s.stu_khname AS stuKhName,
+				CONCAT(COALESCE(s.last_name, ''), ' ', COALESCE(s.stu_enname, '')) AS stuEnName,
+				s.sex AS sex,
+				s.sex AS gender,
+				gt.maxScore,
+				gt.totalAverage,
+				gt.remark,
+				vgd.jsonScoreCriterialDetail,
+				rankData.rank
+			FROM 
+				rms_grading_total AS gt
+			LEFT JOIN 
+				rms_student AS s ON s.stu_id = gt.studentId
+			LEFT JOIN 
+				v_grading_detail AS vgd ON vgd.gradingId = gt.gradingId AND vgd.studentId = gt.studentId
+			LEFT JOIN (
+				SELECT 
+					studentId, 
+					gradingId,
+					FIND_IN_SET(
+						totalAverage, 
+						(SELECT GROUP_CONCAT(totalAverage ORDER BY totalAverage DESC) 
+						FROM rms_grading_total 
+						WHERE gradingId = ".$data['gradingId']." )
 					) AS rank
-				 ";
-		$sql .= "";
-		$sql .= "  FROM  rms_grading_total AS gt
-					LEFT JOIN v_grading_detail AS vgd
-						ON vgd.gradingId = gt.gradingId 
-						AND vgd.studentId = gt.studentId ";
-		$sql .= " WHERE  gt.`gradingId` = ".$data['gradingId'];
-		
-		 $order = " ORDER BY gt.totalAverage DESC";
-	//	echo $sql . $order; exit();
+				FROM 
+					rms_grading_total
+				WHERE 
+					gradingId = ".$data['gradingId']."
+			) AS rankData ON rankData.studentId = gt.studentId AND rankData.gradingId = gt.gradingId
+
+			WHERE 	gt.gradingId = ".$data['gradingId'];
+		$order = " ORDER BY gt.totalAverage DESC";
 		return $db->fetchAll($sql . $order);
 	}
 

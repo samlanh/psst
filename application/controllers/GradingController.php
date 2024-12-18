@@ -310,11 +310,30 @@ class GradingController extends Zend_Controller_Action
 		}
 		$this->view-> month = $dbExternal->getAllMonth();
 	
-		$degreeId = $row['degree_id'];
-		$result = $dbg->checkEntryScoreSetting($degreeId);
+	
+		$degreeId = empty($row['degree_id']) ? 0 : $row['degree_id'];
+		$criterialType = empty($resultRecord['criteriaType']) ? 0 : $resultRecord['criteriaType'];
+		$groupId = empty($resultRecord['groupId']) ? 0 : $resultRecord['groupId'];
+		$subjectId = empty($resultRecord['subjectId']) ? 0 : $resultRecord['subjectId'];
+		$teacherId = empty($resultRecord['teacherId']) ? 0 : $resultRecord['teacherId'];
+		$arrayFaa = array(
+				'degreeId'=>$degreeId,
+				'criterialType'=>$criterialType,
+				'teacherId'=>$teacherId,
+				'groupId'=>$groupId,
+				'subjectId'=>$subjectId,
+				);
+		$result = $dbExternal->checkTecherEntrySetting($arrayFaa);
 		if(empty($result)){
-			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
+			if(!empty($fullControlID)){
+				$alert = $tr->translate("NO_PERMISSION_TO_ENTRY");
+				echo "<script> alert('".$alert."');</script>";
+				echo "<script>window.close();</script>";
+			}else{
+				Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
+			}
 		}
+		
 		$gradingId = $row['gradingId'];
 		$array = array(
 				'gradingId'=>$gradingId

@@ -338,6 +338,7 @@
 													$subColII="";
 													$colSpan=1;
 													if(!empty($criterrialList)) foreach($criterrialList  as $criterial){ 
+														$colSpan=1;
 														if($criterial['criteriaType']== 2 ){
 															if(!empty($rs['subCriteriaTitleKh'])){
 																$subCriterial = explode(',', $rs['subCriteriaTitleKh']);

@@ -9,6 +9,7 @@
 	$frm =  $this->form_search;
 	$footerScoreDocument = Setting_Model_DbTable_DbGeneral::geValueByKeyName('footerScoreDocument');
 	
+
 ?>
 
 <style type="text/css">
@@ -27,40 +28,48 @@ svg {
     	</div>
     </div>
 	<form  id='foundation_class' action="<?php echo $this->url(array('module'=>'allreport','controller'=>'score','action'=>'rpt-subject-statistic-graph')); ?>" dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
-						<script type="dojo/method" event="onSubmit">			
-								if(this.validate()) {
-									academic_year=dijit.byId('academic_year').get('value');
-									if(academic_year=='' || academic_year==0){
-										alert('<?php echo $tr->translate('SELECT_ACADEMIC_YEAR');?>!');
-										dijit.byId('academic_year').focus(); 
-										return false;
-									}
+			<script type="dojo/method" event="onSubmit">			
+					if(this.validate()) {
 
-									exam_type=dijit.byId('exam_type').get('value');
-									if(exam_type=='' || exam_type==0){
-										alert('<?php echo $tr->translate('SELECT_EXAM_TYPE');?>!');
-										dijit.byId('exam_type').focus(); 
-										return false;
-									}else if(exam_type==2){
-										for_semester=dijit.byId('for_semester').get('value');
-										if(for_semester=='' || for_semester==0){
-											alert('<?php echo $tr->translate('SELECT_SEMESTER');?>!');
-											dijit.byId('for_semester').focus(); 
-											return false;
-										}
-									}else if(exam_type==1){
-										for_month=dijit.byId('for_month').get('value');
-										if(for_month=='' || for_month==0){
-											alert('<?php echo $tr->translate('CHOOSE_MONTH');?>!');
-											dijit.byId('for_month').focus(); 
-											return false;
-										}
-									}
-									loadingBlock();
-									return true;
-								}else {
-									return false;
-								}
+						branch_id=dijit.byId('branch_id').get('value');
+						if(branch_id=='' || branch_id==0){
+							alert('<?php echo $tr->translate('SELECT_BRANCH');?>!');
+							dijit.byId('branch_id').focus(); 
+							return false;
+						}
+
+						academic_year=dijit.byId('academic_year').get('value');
+						if(academic_year=='' || academic_year==0){
+							alert('<?php echo $tr->translate('SELECT_ACADEMIC_YEAR');?>!');
+							dijit.byId('academic_year').focus(); 
+							return false;
+						}
+
+						exam_type=dijit.byId('exam_type').get('value');
+						if(exam_type=='' || exam_type==0){
+							alert('<?php echo $tr->translate('SELECT_EXAM_TYPE');?>!');
+							dijit.byId('exam_type').focus(); 
+							return false;
+						}else if(exam_type==2){
+							for_semester=dijit.byId('for_semester').get('value');
+							if(for_semester=='' || for_semester==0){
+								alert('<?php echo $tr->translate('SELECT_SEMESTER');?>!');
+								dijit.byId('for_semester').focus(); 
+								return false;
+							}
+						}else if(exam_type==1){
+							for_month=dijit.byId('for_month').get('value');
+							if(for_month=='' || for_month==0){
+								alert('<?php echo $tr->translate('CHOOSE_MONTH');?>!');
+								dijit.byId('for_month').focus(); 
+								return false;
+							}
+						}
+						loadingBlock();
+						return true;
+					}else {
+						return false;
+					}
 			</script>
 		<div class="form-group">
             <div class="col-md-2 col-sm-2 col-xs-12">
@@ -79,12 +88,7 @@ svg {
             	<input id="group" />
             </div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-				<select name="sort_degree" class="fullside height-text" dojoType="dijit.form.FilteringSelect" required="false" placeholder="Select Degree Option">
-					<option></option>
-					<option <?php echo($this->search['sort_degree']==4)?"selected":"";?> value="4">Kindergarten</option>
-					<option <?php echo($this->search['sort_degree']==1)?"selected":"";?> value="1">Primary</option>
-					<option <?php echo($this->search['sort_degree']=='3,4')?"selected":"";?> value="2,3">Junior-Senior</option>
-				</select>
+            	<?php echo $frm->getElement("sort_degree");?>
             </div>
         </div>
         <div class="form-group">
@@ -98,11 +102,11 @@ svg {
             	<?php echo $frm->getElement("for_month");?>
             </div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<?php echo $frm->getElement("teacher");?>
+            	<?php echo $frm->getElement("department");?>
             </div>
 			<div class="col-md-2 col-sm-2 col-xs-12">
-            	<input id="subjectId" />
-            </div>
+				<input id="teacher"/>
+			</div>
             <div class="col-md-2 col-sm-2 col-xs-12">
             	<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
             </div>
@@ -646,6 +650,7 @@ svg {
 	var academic_store= getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var group_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	var grade_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function(){
 
 		new dijit.form.FilteringSelect({
@@ -660,6 +665,7 @@ svg {
 		    placeHolder:"<?php echo $tr->translate("SELECT_GROUP");?>",          
 		    onChange: function() {  
 			    getAllSubject();
+				getAllTeacherByGroup();
 		    }
 		}, "group");
 		
@@ -677,18 +683,28 @@ svg {
 			}
 		}, "grade");
 
+	
+
 		new dijit.form.FilteringSelect({
+			store: teacher_store,
 			queryExpr: "*${0}*",
-			autoComplete: false, 
-			required:false,            
-			id: "subjectId",
-			name: "subjectId",           
+			autoComplete: false,                     
+			id: "teacher",
+			name: "teacher",  
 			class: 'fullside', 
-			placeHolder:"ជ្រើសមុខវិជ្ជា/Select Subject",          
-			onChange: function() {
+			readonly:false,
+			required:false,
+			placeHolder:"<?php echo $tr->translate("SELECT_TEACHER");?>",          
+			onChange: function() {  
+				
 			}
-		}, "subjectId");
+		}, "teacher");
 		
+		var department = dijit.byId('department');
+		department.on('change', function(evt) {
+			getAllTeacherByGroup();
+		});
+
 		 var branch_id = dijit.byId('branch_id');
 		 branch_id.on('change', function(evt) {
 			 getAllGroupByBranch();
@@ -697,7 +713,7 @@ svg {
 
 		var teacher = dijit.byId('teacher');
 		teacher.on('change', function(evt) {
-			getAllSubject();
+			//getAllSubject();
 			
 	    });
 
@@ -705,36 +721,52 @@ svg {
 		 academic_year.on('change', function(evt) {
 			 getAllGroupByBranch();
 	    });
-		 getAllSubject();
+		 getAllTeacherByGroup();
+		// getAllSubject();
 		 getallGrade();
 		 getAllGroupByBranch();
 	});
 	
-	urlGetSubjectStore = '<?php echo $this->url(array('module'=>'issue','controller'=>'scoretmp','action'=>'getsubjectlist'));?>';
-	function getAllSubject(){
-		dijit.byId('subjectId').reset();
-		var subjectStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-		dijit.byId('subjectId').set('store',subjectStore); 
-
-		group    = dijit.byId('group').get('value');
-		teacherId   = dijit.byId('teacher').get('value');
+	url_getteacher = '<?php echo $this->url(array('module'=>'foundation','controller'=>'lecturer','action'=>'getteacher'));?>';
+	function getAllTeacherByGroup(){
+		dijit.byId('teacher').reset();
 		
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var teacher_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('teacher').set('store',teacher_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		
+		group = dijit.byId('group').get('value');
+		department = dijit.byId('department').get('value');
+
+		if(group=='' || group==-1){
+			group=0;
+		}
 		dojo.xhrPost({
-			url: urlGetSubjectStore,
+			url: url_getteacher,
 			content:{
+				'branch_id':branch_id,
 				'groupId':group,
-				'teacherId':teacherId,
+				'department':department,
+				'hideAddnew':1,
 				},
 			handleAs:"json",
 			load: function(data) {
-				subjectStore  = getDataStorefromJSON('id','name', data);
-				dijit.byId('subjectId').set('store',subjectStore); 
-				dijit.byId('subjectId').attr('value','<?php echo $this->search['subjectId']?>');      
+				teacher_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('teacher').set('store',teacher_store);   
+				<?PHP if(!empty($this->search['teacher'])){?>
+				dijit.byId('teacher').set('value','<?php echo $this->search['teacher'];?>');  
+				<?PHP } ?>
 			},
 			error: function(err) {
 			}
 		});
 	}
+
+	
 
 	url_getgroup = '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'getallgroup'));?>';
 	function getAllGroupByBranch(){
@@ -803,24 +835,27 @@ svg {
 		getAllGroupByBranch();  
 	}
 
-	<?php foreach($fullArrayByTeacher as $fullarr){ ?>
+	setTimeout(function() {
+		<?php foreach($fullArrayByTeacher as $fullarr){ ?>
 
 		config<?php echo $fullarr['rowCode'] ?> = {
 			data: <?php echo Zend_Json::encode($fullarr['data']); ?>,
 			xkey: 'y',
 			ykeys: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
 			labels: <?php echo Zend_Json::encode($fullarr['yKey']); ?>,
-		
+
 			dataLabelsPosition: "inside",
 			hideHover: 'auto',
 			gridTextColor: '#000',
 			showZero: false,
 			resize: true,
 			barColors: <?php echo Zend_Json::encode($fullarr['colorBar']); ?>
-	};
-	config<?php echo $fullarr['rowCode'] ?>.element = 'bar-chart-<?php echo $fullarr['rowCode'] ?>';
-	Morris.Bar(config<?php echo $fullarr['rowCode'] ?>);
+		};
+		config<?php echo $fullarr['rowCode'] ?>.element = 'bar-chart-<?php echo $fullarr['rowCode'] ?>';
+		Morris.Bar(config<?php echo $fullarr['rowCode'] ?>);
 
-	<?php } ?>
+		<?php } ?>
+	}, 1000);
+	
    
 </script>

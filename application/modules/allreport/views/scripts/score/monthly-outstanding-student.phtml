@@ -195,6 +195,25 @@ if (!empty($this->studentgroup[5]['photo'])) {
 					margin: 0.2cm;
 					pading: 0.2cm;
 				}
+				body {
+					-webkit-print-color-adjust: exact; /* Ensures colors and backgrounds are printed */
+					print-color-adjust: exact; /* Standard version for color printing */
+				}
+				.backgroundOutStanding {
+					background-image: url('<?php echo $backgroundImage; ?>');
+					background-size: 100%;
+					background-repeat: no-repeat;
+					position: relative;
+					display: inline-block;
+					line-height: 23px;
+					top: 2px;
+					width: 21cm;
+					height: 28.5cm;
+					font-family: 'Times New Roman', 'Khmer OS Battambang';
+					margin: 0 auto;
+					text-align: center;
+					width: 100%;
+				}
 			}
 		</style>
 		<div class="backgroundOutStanding" style="margin: 0 auto;">
@@ -544,6 +563,26 @@ if (!empty($this->studentgroup[5]['photo'])) {
 						size: portrait;
 						;
 						margin-top: 5cm;
+					}
+					body {
+						-webkit-print-color-adjust: exact; /* Ensures colors and backgrounds are printed */
+						print-color-adjust: exact; /* Standard version for color printing */
+					}
+					.backgroundOutStanding {
+						background-image: url('<?php echo $image; ?>');
+						background-size: 20.5cm 29cm;
+						background-repeat: no-repeat;
+						position: relative;
+						display: inline-block;
+						line-height: 23px;
+						
+						height: 28cm;
+						width: 20.5cm;
+						color: #3f3f95;
+						font-family: 'Times New Roman', sans-serif, 'Khmer OS Muol Light';
+						padding: 0.5cm 0cm;
+						margin: 0 auto;
+						text-align: center;
 					}
 				}
 			</style>

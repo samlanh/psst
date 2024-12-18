@@ -253,37 +253,55 @@ class Allreport_Model_DbTable_DbAttendanceReport extends Zend_Db_Table_Abstract
     		$degree = "rms_items.title_en";
     		$branch = "b.branch_nameen";
     	}
-    	$sql=" SELECT 
-					g.id as group_id,
-					g.`group_code`,
-					g.`branch_id`,
-					(SELECT CONCAT(ac.fromYear,'-',ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,	
-					(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
-					(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
 		
-					(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
-					`g`.`semester` AS `semester`,
-					(SELECT`rms_view`.$label FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
-					gsd.`stu_id`,
-					st.`stu_code`,st.`stu_enname`,st.`stu_khname`,st.`last_name`,st.`sex`
-				FROM 
-					`rms_group_detail_student` AS gsd,
-					`rms_group` AS g,
-					`rms_student` AS st,
-					rms_student_attendence AS sta
+    	$sql=' SELECT 
+				g.id AS group_id,
+				g.`group_code`,
+				g.`branch_id`,
+				(SELECT CONCAT(ac.fromYear,"-",ac.toYear) FROM `rms_academicyear` AS ac WHERE ac.id = g.academic_year LIMIT 1) AS academic_year,
+				(SELECT rms_items.title FROM `rms_items` WHERE (`rms_items`.`id`=`g`.`degree`) AND (`rms_items`.`type`=1) LIMIT 1) AS degree,
+				(SELECT rms_itemsdetail.title FROM `rms_itemsdetail` WHERE (`rms_itemsdetail`.`id`=`g`.`grade`) AND (`rms_itemsdetail`.`items_type`=1) LIMIT 1 )AS grade,
+				(SELECT `r`.`room_name` FROM `rms_room` `r` WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`, `g`.`semester` AS `semester`,
+				(SELECT`rms_view`.name_kh FROM `rms_view` WHERE ((`rms_view`.`type` = 4) AND (`rms_view`.`key_code` = `g`.`session`))LIMIT 1) AS `session`,
+				gsd.`stu_id`, 
+				st.`stu_code`,
+				st.`stu_enname`,
+				st.`stu_khname`,
+				st.`last_name`,
+				st.`sex` ,
+				(SELECT 
+				CONCAT("[",
+					GROUP_CONCAT(
+						CONCAT(
+							"{",
+							"\"dateAttendance\":\"",
+							v_att.dateAttendance,
+							"\""
+							",",
+							"\"attendanceStatus\":",
+							v_att.attendanceStatus,
+							"}"
+						)
+					),
+				"]"
+				) FROM `v_daily_stu_attendance` AS v_att 
+					WHERE v_att.`groupId`= g.`id`
+						AND v_att.type=1 
+						AND v_att.`studentId`=gsd.`stu_id` 
+					)  AS attendanceStatusList
+				
+				FROM `rms_student` AS st 
+					INNER JOIN `rms_group_detail_student` AS gsd 
+					ON (st.`stu_id` = gsd.`stu_id` AND gsd.itemType=1 )
+					LEFT JOIN `rms_group` AS g ON (g.`id` = gsd.`group_id` AND g.is_pass!=1) 
+					INNER JOIN rms_student_attendence AS sta ON (sta.group_id = g.id) 
 				WHERE 
-					gsd.itemType=1 
-					AND sta.type=1
+					sta.type=1
+					AND sta.status=1 
 					AND gsd.status=1
 					AND gsd.stop_type=0
-	    			AND g.`id` = gsd.`group_id`
-				 	AND sta.group_id = g.id 
-				 	AND st.`stu_id` = gsd.`stu_id` 
-				 	AND sta.status=1 
-				 	AND g.is_pass!=1 
-				 	AND st.customer_type=1
-    		";
-    	
+				 	AND st.customer_type=1';
+		
     	$from_date =(empty($search['start_date']))? '1': "sta.date_attendence >= '".$search['start_date']." 00:00:00'";
     	$to_date = (empty($search['end_date']))? '1': "sta.date_attendence <= '".$search['end_date']." 23:59:59'";
     	$where = " AND ".$from_date." AND ".$to_date;
@@ -309,7 +327,6 @@ class Allreport_Model_DbTable_DbAttendanceReport extends Zend_Db_Table_Abstract
     	
     	$order =" GROUP BY sta.group_id,gsd.stu_id 
     		ORDER BY `g`.`degree`,`g`.`grade`,g.group_code ASC ,g.id DESC,st.stu_khname ASC ";
-    	
     	return $db->fetchAll($sql.$where.$order);
     }
 	

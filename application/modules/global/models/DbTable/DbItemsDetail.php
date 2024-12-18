@@ -789,8 +789,11 @@
 		$branch_id = $result["branch_id"];
 		$string="";
 		$location="";
-		$sql = "SELECT ide.id,ide.code,$grade,
-			(SELECT $degree FROM `rms_items` AS it WHERE it.id = ide.items_id LIMIT 1) AS degree,
+		$sql = "SELECT 
+			ide.id,
+			ide.code,
+			$grade,
+			$degree as degree,
 			ide.price,
 			CASE    
 				WHEN  ide.is_onepayment = 0 THEN '".$tr->translate("IS_VALIDATE")."'
@@ -800,7 +803,9 @@
 			(SELECT CONCAT(first_name) FROM rms_users WHERE ide.user_id=id LIMIT 1 ) AS user_name
 			  ";
 		$sql.=$dbgb->caseStatusShowImage("ide.status");
-		$sql.=" FROM `rms_itemsdetail` AS ide WHERE 1 AND ide.is_productseat = 1 ";
+		$sql.=" FROM `rms_itemsdetail` AS ide
+			LEFT JOIN rms_items it ON it.id = ide.items_id
+		WHERE 1 AND ide.is_productseat = 1 ";
 		$orderby = " ORDER BY ide.items_id ASC,ide.ordering ASC, ide.id DESC ";
 		$where = ' ';
 		if(!empty($items_type)){
@@ -819,11 +824,13 @@
 			$sql .=' AND ( '.implode(' OR ',$s_where).')';
 		}
 		if(!empty($search['items_search'])){
-		$where.= " AND ide.items_id  = ".$db->quote($search['items_search']);
+			$where.= " AND (it.id  = ".$search['items_search'];
+			$where.= " OR it.parent = ".$search['items_search'].")";
 		}
 		if($search['status_search']>-1 AND $search['status_search']!=''){
 			$where.= " AND status = ".$db->quote($search['status_search']);
 		}
+		
 		return $db->fetchAll($sql.$where.$location.$orderby);
 	}
 	function getProductSetDetailById($id){

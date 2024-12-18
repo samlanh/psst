@@ -52,13 +52,11 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 				dg.stop_type AS stopType,
 				DATE_FORMAT(s.create_date,'%d/%m/%Y') AS registrationDate,
 				(SELECT COALESCE(NULLIF(it.`shortcut`,''),$grade) FROM `rms_itemsdetail` it WHERE (`it`.`id`=`vpm`.`grade`) LIMIT 1) as grade,
-				dg.grade as gradeId,
-				dg.feeId,
 				vpm.paymentList,
-				vpm.payment_term,
-				vpm.stpaymentType,
 				vpm.discountCode,
 				vpm.discountValue,
+				vpm.payment_term,
+				(SELECT `name_en` FROM `rms_view` WHERE `rms_view`.`type` = 6 AND `key_code` = `vpm`.`payment_term` LIMIT 1) AS `stpaymentType`,
 				(SELECT SUBSTRING_INDEX(MIN(installmentOrdering),',',1) AS installmentOrdering FROM `rms_startdate_enddate` WHERE FIND_IN_SET(id,termPaidList) LIMIT 1) AS startTerm
 			  FROM 
 				 rms_student AS s
@@ -239,6 +237,7 @@ class Allreport_Model_DbTable_DbNewAccounting extends Zend_Db_Table_Abstract
 						$arrExtra['term1'] = 1;//just update
 						$arrExtra['term2'] = 1;//just update
 						$arrExtra['term3'] = 1;
+						$arrExtra['term4'] = 0;
 						$arrExtra['periodDate3'] =  $resultPayment['paidDate'];
 						$arrExtra['payment3'] = $resultPayment['totalpayment'];
 

@@ -79,10 +79,6 @@ class ExtreportController extends Zend_Controller_Action
 		$examType = empty($row['examType'])?0:$row['examType'];
 		$forMonth = empty($row['forMonth'])?0:$row['forMonth'];
 		$forSemester = empty($row['forSemester'])?0:$row['forSemester'];
-
-		// $gradingId = empty($row['gradingId'])?0:$row['gradingId'];
-    	// $subjectId = empty($row['subjectId'])?0:$row['subjectId'];
-		
 		$arrFilter = array(
 			'groupId'=>$groupId,
 			'forScoreSubject'=>1,
@@ -94,16 +90,8 @@ class ExtreportController extends Zend_Controller_Action
 		);
 		$this->view->students = $dbExternal->getStudentGradingScore($arrFilter);
 		
-		// $arrSearch  = array(
-		// 	'gradingId'=>$gradingId
-		// 	,'subjectId'=>$subjectId
-		// 	,'examType'=>$examType,
-		// );
-		// $this->view->criterial = $dbExternal->getGradingCriteriaItems($arrSearch);
-		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];
-    	//$this->view->header = $frm->getHeaderReceipt($branch_id);
     	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
     	
     	$db = new Application_Model_DbTable_DbGlobal();

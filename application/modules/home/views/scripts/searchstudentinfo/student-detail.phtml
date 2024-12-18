@@ -16,6 +16,8 @@
 	if($studyInfoSetting !=1){ 
 		$multiProgramClass = "";
 	}
+	
+	$studentHasDocument=0;	
 ?>
 <style>			
  .bold{
@@ -392,7 +394,9 @@ table.content-data tr.style-rowdata {
 																					<td><?php echo $tr->translate("DATE_BACK");?></td>
 																					<td><?php echo $tr->translate("NOTE");?></td>
 																				</tr>
-																				<?php $i=0;if(!empty($this->document)){
+																				<?php
+																				
+																				$i=0;if(!empty($this->document)){
 																					foreach($this->document as $rs){$i++;
 																					$extensionFile="";
 																					$linkDoc="#";
@@ -402,6 +406,7 @@ table.content-data tr.style-rowdata {
 																								$linkDoc = $this->baseUrl().'/images/document/student/'.$rs['attachment_file'];
 																								$explodeArr = explode(".", $rs['attachment_file']);
 																								$extensionFile = strtolower(end($explodeArr));
+																								$studentHasDocument=1;
 																							}
 																						}
 																					}
@@ -1405,9 +1410,11 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.Textarea");
 dojo.require("dijit.form.DateTextBox");
+<?php if($studentHasDocument==1){?>
 $( document ).ready(function() {
    $('.gallery1').EZView();
 });
+<?php } ?>
 
 	function copyRecord(url){
 		 id = dijit.byId('recordcopy').get('value');

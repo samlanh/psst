@@ -400,6 +400,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    		$group_info = $dbExternal->getGroupDetailByIDExternal($_data['group']);
    		$academicYear = empty($group_info['academic_year'])?0:$group_info['academic_year'];
    		$subjectId = $_data['subjectId'];
+   		$teacherId = $_data['teacherId'];
    		$maxSubjectScore = $_data['maxSubjectScore'];
    		$gradingSettingId = empty($group_info['gradingId'])?0:$group_info['gradingId'];
    
@@ -416,7 +417,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    				'inputOption'		=>2, //1 normal,2 teache input
    				'note'				=>$_data['note'],
    				'status'			=>1,
-   				'teacherId'			=>$this->getUserExternalId(),
+   				'teacherId'			=>$teacherId ,
    				'modifyDate'		=>date("Y-m-d H:i:s"),
    				'dateInput'			=>date("Y-m-d"),
 				'settingEntryId'	=> $_data['settingEntryId'],
@@ -473,7 +474,7 @@ class Application_Model_DbTable_DbGradingScore extends Zend_Db_Table_Abstract
    					'note'				=>$_data['note'],
    					'status'			=>1,
    						
-   					'teacherId'			=>$this->getUserExternalId(),
+   					'teacherId'			=>$teacherId ,
    					'createDate'		=>date("Y-m-d H:i:s"),
    					'modifyDate'		=>date("Y-m-d H:i:s"),
 					'settingEntryId'	=> $_data['settingEntryId'],

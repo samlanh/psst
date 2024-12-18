@@ -167,7 +167,6 @@ table.tb-footer tr.style-head{
 					}
 					.greycolor{background-color:#bbb;}
 					.right{text-align: right;}
-					.fixedwidth td{width: 50px;}
 					.width-contact{width:150px;word-break: break-all;white-space:normal;}
 					.widthstudent{width: 150px;white-space:pre-line;}
 					.widthCol-px-40{
@@ -176,11 +175,28 @@ table.tb-footer tr.style-head{
 					.widthCol-px-50{
 						width: 50px !important;
 					}
+					.widthCol-px-60{
+						width: 60px !important;
+					}
 					.widthCol-px-70{
 						width: 70px !important;
 					}
+					.widthCol-px-80{
+						width: 80px !important;
+					}
+					.widthCol-px-100{
+						width: 100px !important;
+					}
+					.widthCol-px-120{
+						width: 120px !important;
+					}
 					.noborder-left{border-left:1px solid #fff;}
 					.backgroundBold{background:#9db6ff; font-weight: bold;}
+					.content-data tr td.padding-left2{padding-left: 4px;}
+					.content-data tr td.padding-right2{padding-right: 4px;}
+					table{
+							table-layout: fixed; 
+						}
 					@media print { 
 						<?php if(!empty($this->printFormat)){ echo $this->printFormat; } ?>
 					 }
@@ -201,29 +217,29 @@ table.tb-footer tr.style-head{
 								<thead>
 									<tr class="style-head solidborder solidborder-topdouble solidborder-rightdouble solidborder-leftdouble" align="center">
 										<td rowspan="2">No.</td>
-										<td class="widthCol-px-50" rowspan="2">Student Id</td>
-										<td class="widthCol-px-70" rowspan="2">Name</td>
-										<td class="widthCol-px-70" rowspan="2">Tel</td>
+										<td class="widthCol-px-80" rowspan="2">Student Id</td>
+										<td class="widthCol-px-100" rowspan="2">Name</td>
+										<td class="widthCol-px-120" rowspan="2">Tel</td>
 										<td rowspan="2">Registration</td>
-										<td rowspan="2">Status</td>
-										<td rowspan="2">Grade</td>
-										<td rowspan="2">Type</td>
-										<td class="widthCol-px-40" rowspan="2">Discount</td>
-										<td rowspan="2">Pay Type</td>
+										<td class="widthCol-px-50" rowspan="2">Status</td>
+										<td class="widthCol-px-50" rowspan="2">Grade</td>
+										<td class="widthCol-px-50" rowspan="2">Type</td>
+										<td class="widthCol-px-50" rowspan="2">Discount</td>
+										<td class="widthCol-px-50" rowspan="2">Pay Type</td>
 										<td colspan="2">Term 1</td>
 										<td colspan="2">Term 2</td>
 										<td colspan="2">Term 3</td>
 										<td colspan="2">Term 4</td>
 									</tr>
-									<tr class="style-head fixedwidth solidborder solidborder-rightdouble solidborder-leftdouble" align="center">
-										<td>Date</td>
-										<td>Amount</td>
-										<td>Date</td>
-										<td>Amount</td>
-										<td>Date</td>
-										<td>Amount</td>
-										<td>Date</td>
-										<td>Amount</td>
+									<tr class="style-head solidborder solidborder-rightdouble solidborder-leftdouble" align="center">
+										<td class="widthCol-px-5">Date</td>
+										<td class="widthCol-px-50">Amount</td>
+										<td class="widthCol-px-50">Date</td>
+										<td class="widthCol-px-50">Amount</td>
+										<td class="widthCol-px-50">Date</td>
+										<td class="widthCol-px-50">Amount</td>
+										<td class="widthCol-px-50">Date</td>
+										<td class="widthCol-px-50">Amount</td>
 									</tr>
 								</thead>
 								<?php 
@@ -338,15 +354,15 @@ table.tb-footer tr.style-head{
 										$resultPayment['term4'] = empty(($resultPayment['payment4'])) ? $resultPayment['term4'] : 0;
 									?>
 									<td><?php echo $num+=1; ?></td>
-									<td align="left"><?php echo $rs['stu_code']; ?></td>
-									<td align="left"><span><?php echo $rs['student_name']; ?></span></td>
-									<td align="left"><span class="widthCol-px-70"><?php echo $rs['tel']; ?></span></td>
+									<td align="left" class="padding-left2 padding-right2"><?php echo $rs['stu_code']; ?></td>
+									<td align="left" class="padding-left2"><span><?php echo $rs['student_name']; ?></span></td>
+									<td align="left" class="padding-left2"><span class="widthCol-px-70 "><?php echo $rs['tel']; ?></span></td>
 									<td><?php echo $rs['registrationDate']; ?></td>
 									<td><?php echo $rs['stopType']!=0?'x':''; ?></td>
 									<td><?php echo $rs['grade']; ?></td>
 									<td><span class="widthCol-px-40"><?php echo $rs['discountCode']; ?></span></td>
 									<td><?php echo !empty($rs['discountValue'])?str_replace(".00","",$rs['discountValue'])."%":""; ?></td>
-									<td align="left"><?php echo $rs['stpaymentType'];?></td>
+									<td align="center"><?php echo $rs['stpaymentType'];?></td>
 									<td class="solidborderleft <?php echo($resultPayment['term1'] == 1) ? " greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate1'])?date('d/m/y',strtotime($resultPayment['periodDate1'])):""; ?></td>
 									<td class="solidborderright <?php echo($resultPayment['term1'] == 1) ? " greycolor" : ""; ?>"><?php echo ($resultPayment['payment1']!='')?number_format($resultPayment['payment1'],2):''; ?></td>
 									<td class="solidborderleft <?php echo($resultPayment['term2'] == 1) ? " greycolor" : ""; ?>"><?php echo !empty($resultPayment['periodDate2'])?date('d/m/y',strtotime($resultPayment['periodDate2'])):""; ?></td>
@@ -395,7 +411,7 @@ table.tb-footer tr.style-head{
 									<td class="bordernone" align="right" colspan="3"><strong>Total Income to Date :</strong></td>
 									<td class="bordernone"><strong><?php
 										$totalPaidAllTerm = $totalTerm1 + $totalTerm2 + $totalTerm3 + $totalTerm4;
-									echo number_format($totalPaidAllTerm); ?></strong></td>
+									echo number_format($totalPaidAllTerm,2); ?></strong></td>
 									<td colspan="5" class="bordernone solidborderright"></td>
 									<td>Semester</td>
 									<td><?php echo $resultSemesterList['countSemester1'];?></td>
@@ -425,7 +441,7 @@ table.tb-footer tr.style-head{
 									<td class="bordernone">&nbsp;</td>
 									<td class="bordernone"></td>
 									<td class="bordernone">Estimate for Year </td>
-									<td class="bordernone"><?php echo number_format($totalPaidAllTerm+$totalUnpaid)?></td>
+									<td class="bordernone"><?php echo number_format($totalPaidAllTerm+$totalUnpaid,2)?></td>
 									<td colspan="5" class="bordernone solidborderright" ></td>
 									<td>Unpaid</td>
 									<td><?php echo $resultTermList['unPaidCountTerm1'];?></td>

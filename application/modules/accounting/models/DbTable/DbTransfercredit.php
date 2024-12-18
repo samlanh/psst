@@ -54,6 +54,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 	
 	function transfercreditMemo($data){
 		$db = $this->getAdapter();
+		$db->beginTransaction();
  		try{
 			$sql="SELECT id FROM rms_transfer_credit WHERE student_id =".$data['studentId'];
 			$rs = $db->fetchOne($sql);
@@ -79,12 +80,20 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'user_id'		=>$this->getUserId(),);
 			$this->_name='rms_transfer_credit';
 			$this->insert($arr);
+
+			$arr = array(
+				'total_amountafter' => 0,
+			);
 			
+			$this->_name='rms_creditmemo';
+			$where = "student_id=" . $data['studentId'];
+			$this->update($arr,$where);
+
 			$arr = array(
 				'branch_id'		=>$data['branch_id'],
 				'student_id'	=>$data['toStudentId'],
-				'total_amount'	=>0,
-				'total_amountafter'=>0,
+				'total_amount'	=>$data['total_amount'],
+				'total_amountafter'=>$data['total_amount'],
 				'note'			=>$data['Description'],
 				'prob'			=>$data['prob'],
 				'type'			=>1,
@@ -94,6 +103,7 @@ class Accounting_Model_DbTable_DbTransfercredit extends Zend_Db_Table_Abstract
 				'user_id'		=>$this->getUserId(),);
 			$this->_name='rms_creditmemo';
 			$this->insert($arr);
+			$db->commit();
 			
 		}catch (Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());

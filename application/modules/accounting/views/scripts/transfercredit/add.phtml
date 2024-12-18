@@ -233,6 +233,8 @@ function getAllstudentBranch(){
 	selectedId = '<?php echo $this->row['student_id'];?>';
 	contentData = {
 			'branchId':branchId,
+			'joinGroup': 1,
+			'activeStudent':1,
 			'customerType':1
 			}
 	getAllStudentByBranch(urlGet,contentData,selectedId);
@@ -246,7 +248,9 @@ function getallstudentname(){
 			url:urlGet,
 			content:{
 				'branch_id':branch_id,
-				'customer_type':1
+				'joinGroup': 1,
+				'activeStudent':1,
+				//'customer_type':1
 			},
 			handleAs:"json",
 			load: function(data) {

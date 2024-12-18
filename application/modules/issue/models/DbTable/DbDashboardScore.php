@@ -25,6 +25,9 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			$subjectTitle="subject_titlekh";
 			$teacherName="teacher_name_kh";
 		}
+
+		// Concat Criteria
+
 		$criterialList ='
 			(
 				CONCAT(
@@ -123,13 +126,30 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 			(SELECT `r`.`room_name`	FROM `rms_room` `r`	WHERE (`r`.`room_id` = `g`.`room_id`) LIMIT 1) AS `room_name`,
 			(select $teacherName from rms_teacher where rms_teacher.id = g.teacher_id limit 1 ) as teaccher,
 			 $criterialList ,
-			 $scoreSubjectTmpList  AS scoreSubjectTmpList
+			 $scoreSubjectTmpList  AS scoreSubjectTmpList,
+			 COALESCE(s.id , 0) AS scoreId,
+    		 COALESCE(sts.id, 0) AS assementId
 			 ";
 
 		$sql .= $dbp->caseStatusShowImage("g.status");
 		$sql .= " FROM `rms_group` AS `g` 
 		 		LEFT JOIN  `v_criterial_setting` AS vs ON (  vs.`score_setting_id` = g.`gradingId`  AND vs.criteriaType > 0)
 				LEFT JOIN  `rms_items` AS i ON i.type=1 AND i.id = `g`.`degree`
+				LEFT JOIN `rms_score` AS s ON 
+				( 
+					s.status = 1 AND s.group_id = g.id ";
+					if ($search['exam_type'] > 0) {
+						$sql .='  AND  s.exam_type = '.$search['exam_type'];
+					}
+					if ($search['for_month'] > 0) {
+						$sql .='  AND s.for_month = '.$search['for_month'];
+					}
+					if ($search['for_semester'] > 0) {
+						$sql .='  AND s.for_semester = '.$search['for_semester'];
+					}
+					
+		$sql .= " )
+				LEFT JOIN `rms_studentassessment` AS sts ON (sts.scoreId = s.id AND sts.groupId = g.id )
 		";
 		$where = ' WHERE 1 ';
 
@@ -159,13 +179,27 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		if ($search['exam_type'] > 0) {
 			$where .= ' AND vs.forExamType=' . $search['exam_type'];
 		}
+		if (!empty($search['scoreCombineStatus'])) {
+			if ($search['scoreCombineStatus']==1 ) {
+				$where .='  AND  s.id IS NOT NULL ';
+			}elseif($search['scoreCombineStatus']==2){
+				$where .='  AND  s.id IS NULL ';
+			}
+		}
+		if (!empty($search['evaluationStatus'])) {
+			if ($search['evaluationStatus']==1 ) {
+				$where .='  AND sts.id IS NOT NULL ';
+			}elseif($search['evaluationStatus']==2){
+				$where .='  AND sts.id IS NULL ';
+			}
+		}
 		$where .= ' AND ('.$scoreSubjectTmpList.') IS NOT NULL  '; // hide group that value null
 
 		$where .= $dbp->getAccessPermission('g.branch_id');
 		$where .= $dbp->getSchoolOptionAccess('i.schoolOption');
 		$groupBy="  GROUP BY g.id  ";
 		$order =  ' ORDER BY `g`.`degree`,g.grade,`g`.`group_code` ASC ';
-		//echo $sql . $where .$groupBy. $order; //exit();
+		//echo $sql . $where .$groupBy. $order; exit();
 		return $db->fetchAll($sql . $where .$groupBy. $order);
 
 	}

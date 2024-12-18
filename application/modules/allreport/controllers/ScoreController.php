@@ -845,7 +845,7 @@ class Allreport_ScoreController extends Zend_Controller_Action
 				'exam_type' => 0,
 				'for_semester' => 0,
 				'for_month' => 0,
-				'subjectId' => '',
+				'department' => '',
 				'teacher' => '',
 				'start_date' => date('Y-m-d'),
 				'end_date' => date('Y-m-d'),
@@ -858,11 +858,10 @@ class Allreport_ScoreController extends Zend_Controller_Action
 		$branch_id = empty($search['branch_id']) ? 1 : $search['branch_id'];
 		$frm = new Application_Form_FrmGlobal();
 		$this->view->rsheader = $frm->getLetterHeaderReport($branch_id);
-	//	$this->view->rsfooter = $frm->getFooterAccount(2);
 		$this->view->printFormat = $frm->getPrintPageFormat();
 
-		$form = new Application_Form_FrmSearchGlobal();
-		$forms = $form->FrmSearch();
+		$form = new Application_Form_FrmCombineSearchGlobal();
+		$forms = $form->FormSearchSubjectStatistic();
 		Application_Model_Decorator::removeAllDecorator($forms);
 		$this->view->form_search = $form;
 	}

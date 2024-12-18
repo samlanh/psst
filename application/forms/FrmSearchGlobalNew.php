@@ -1238,5 +1238,64 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		$issueScoreStatus->setValue($this->request->getParam('issueScoreStatus'));	
 		return $issueScoreStatus;
 	}
+	function getCombineStatusSearch($_data=null){
+		$scoreCombineStatus = new Zend_Dojo_Form_Element_FilteringSelect("scoreCombineStatus");
+		$scoreCombineStatus->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		$_arr =array(
+				''=>$this->tr->translate("RESULT_STATUS"),
+				1=>$this->tr->translate("RESULT_COMBINED"),
+				2=>$this->tr->translate("RESULT_NOT_YET_COMBINED"),
+		);
+		$scoreCombineStatus->setMultiOptions($_arr);
+		$scoreCombineStatus->setValue($this->request->getParam('scoreCombineStatus'));	
+		return $scoreCombineStatus;
+	}
+	function getEvaluationStatusSearch($_data=null){
+		$evaluationStatus = new Zend_Dojo_Form_Element_FilteringSelect("evaluationStatus");
+		$evaluationStatus->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		$_arr =array(
+				''=>$this->tr->translate("ALL"),
+				1=>$this->tr->translate("EVALUATED"),
+				2=>$this->tr->translate("NOT_YET_EVALUATION"),
+		);
+		$evaluationStatus->setMultiOptions($_arr);
+		$evaluationStatus->setValue($this->request->getParam('evaluationStatus'));	
+		return $evaluationStatus;
+	}
+	
+	function getSortDegreeSearch($_data=null){
+		$sort_degree = new Zend_Dojo_Form_Element_FilteringSelect("sort_degree");
+		$sort_degree->setAttribs(array(
+			'dojoType'=>'dijit.form.FilteringSelect',
+			'class'=>'fullside',
+			'autoComplete'=>"false",
+			'queryExpr'=>'*${0}*',
+			'required'=>false
+			)
+		);
+		$_arr =array(
+			''=>$this->tr->translate("SELECT_DEGREE"),
+			4=>"Kindergarten",
+			1=>"Primary",
+			'2,3'=>$this->tr->translate("Junior-Senior"),
+		);
+		$sort_degree->setMultiOptions($_arr);
+		$sort_degree->setValue($this->request->getParam('sort_degree'));	
+		return $sort_degree;
+	}
 	
 }

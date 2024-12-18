@@ -233,6 +233,8 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 		$startDateFilter = $frm->getStartDateSearch($search);
 		$endDateFilter = $frm->getEndDateSearch($search);
 		$IssueScoreStatusFilter = $frm->getIssueScoreStatusSearch($search);
+		$CombineStatusFilter = $frm->getCombineStatusSearch($search);
+		$EvaluationStatusFilter = $frm->getEvaluationStatusSearch($search);
 		
 		$this->addElements(array(
 			$branchFilter,
@@ -246,6 +248,35 @@ Class Application_Form_FrmCombineSearchGlobal extends Zend_Dojo_Form {
 			$startDateFilter,
 			$endDateFilter,
 			$IssueScoreStatusFilter,
+			$CombineStatusFilter ,
+			$EvaluationStatusFilter ,
+		));
+		return $this;
+	}
+
+	function FormSearchSubjectStatistic($search=null)
+	{
+		$frm = new Application_Form_FrmSearchGlobalNew();
+		$branchFilter = $frm->getBranchSearch($search);
+		$yearFilter = $frm->getAcademicYearSearch($search);
+		$degreeFilter = $frm->getDegreeSearch($search);
+		$examTypeFilter = $frm->getExamTypeSearch($search);
+		$forSemesterFilter = $frm->getForSemesterSearch($search);
+		$forMonthFilter = $frm->getForMonthSearch($search);
+		$teacherFilter = $frm->getTeacherSearch($search);
+		$departmentFilter = $frm->getDepartSearch($search);
+		$degreeSortFilter = $frm->getSortDegreeSearch($search);
+		
+		$this->addElements(array(
+			$branchFilter,
+			$yearFilter,
+			$degreeFilter,
+			$examTypeFilter,
+			$forSemesterFilter,
+			$forMonthFilter,
+			$departmentFilter,
+			$teacherFilter,
+			$degreeSortFilter
 		));
 		return $this;
 	}

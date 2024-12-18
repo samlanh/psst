@@ -147,11 +147,11 @@
 							   <div class="col-md-2 col-sm-3 col-xs-12">
 									<?php echo $frm->getElement("exam_type");?>
 								</div>
+						   </div>
+							<div class="form-group"> 
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("for_semester");?>
 								</div>
-						   </div>
-							<div class="form-group"> 
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("for_month");?>
 								</div>
@@ -165,8 +165,15 @@
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<?php echo $frm->getElement("issueScoreStatus");?>
 								</div>
-								<!-- <div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("start_date");?></div>
-								<div class="col-md-2 col-sm-2 col-xs-12"> <?php echo $frm->getElement("end_date");?></div> -->
+								
+							</div>
+							<div class="form-group"> 
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("scoreCombineStatus");?>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-12">
+									<?php echo $frm->getElement("evaluationStatus");?>
+								</div>
 								<div class="col-md-2 col-sm-2 col-xs-12">
 									<button class="button-class button-primary" iconClass="glyphicon glyphicon-search" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button>
 								</div>
@@ -220,8 +227,8 @@
 					<div class="col-md-12 col-sm-12 col-xs-12 classListSubject"> 
 						<div class="card mb-1 <?php echo $cardClass; ?> border-top-2 ">
 							<div class="card-content">
-								<div class="row ">
-									<div class="col-xs-12">
+								<div class="row">
+									<div class="col-md-6 col-sm-6 col-xs-12">
 										<div class="d-flex align-items-center h-100 p-1 ">
 											<span class="font-medium-5 "><i class="glyphicon glyphicon-blackboard"></i> <?php  echo $row['group_code']; ?></span>,&nbsp;
 											<span class="font-medium-5" ><i class="fa fa-university" aria-hidden="true"></i> <?php  echo $row['room_name']; ?></span>,&nbsp;
@@ -243,6 +250,34 @@
 												?>
 											</span>
 										</div>
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-12 align-items-center h-100 p-1">
+										<span><i class="glyphicon glyphicon-list-alt"></i> <?php echo $tr->translate("RESULT_STATUS"); ?> : 
+											<?php if(!empty($row['scoreId'])){ ?>
+												<a class="btn btn-success btn-sm" role="button" aria-disabled="true">
+													<?php echo $tr->translate("RESULT_COMBINED"); ?>
+													<i class="fa fa-check-circle" aria-hidden="true"></i>
+												</a>
+											<?php }else{ ?>
+												<a class="btn btn-info btn-sm" role="button" aria-disabled="true">
+													<?php echo $tr->translate("RESULT_NOT_YET_COMBINED"); ?>
+													<i class="fa fa-spinner" aria-hidden="true"></i>
+												</a>
+											<?php } ?>
+										</span>,&nbsp;
+										<span><i class="fa fa-commenting-o" aria-hidden="true"></i> <?php echo $tr->translate("STUDENT_ASSESSMENT"); ?> : 
+											<?php if(!empty($row['assementId'])){ ?>
+												<a class="btn btn-success btn-sm" role="button" aria-disabled="true">
+													<?php echo $tr->translate("EVALUATED"); ?>
+													<i class="fa fa-check-circle" aria-hidden="true"></i>
+												</a>
+											<?php }else{ ?>
+												<a class="btn btn-info btn-sm" role="button" aria-disabled="true">
+													<?php echo $tr->translate("NOT_YET_EVALUATION"); ?>
+													<i class="fa fa-spinner" aria-hidden="true"></i>
+												</a>
+											<?php } ?>
+										</span>
 									</div>
 								</div>
 								<div class="row d-flex">

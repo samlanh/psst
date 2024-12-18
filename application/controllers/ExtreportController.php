@@ -103,7 +103,7 @@ class ExtreportController extends Zend_Controller_Action
 		
     	$frm = new Application_Form_FrmGlobal();
     	$branch_id = empty($row['branchId'])?1:$row['branchId'];
-    	$this->view->header = $frm->getHeaderReceipt($branch_id);
+    	//$this->view->header = $frm->getHeaderReceipt($branch_id);
     	$this->view->headerScore = $frm->getHeaderReportScore($branch_id);
     	
     	$db = new Application_Model_DbTable_DbGlobal();

@@ -480,7 +480,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 								<?php }
 								if ($scoreResult['exam_type'] == 1) {
 									$avg_rang = $old_average;
-									$avg_score = $rs['average'];
+									$avg_score = $rs['total_score'];
 								} else {
 									$avg_rang = $old_overral_average;
 									$avg_score = $rs['overallAssessmentSemester'];
@@ -702,7 +702,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 							</tr>
 							<?php
 							$old_overral_average = $rs['overallAssessmentSemester'];
-							$old_average = $rs['average'];
+							$old_average = $rs['total_score'];
 						}
 					}
 				 ?>

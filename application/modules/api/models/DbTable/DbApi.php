@@ -3290,9 +3290,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 							)
 						)
 					ELSE FIND_IN_SET( 
-							sm.total_avg, 
+							sm.total_score, 
 							(
-								SELECT GROUP_CONCAT( smSecond.total_avg ORDER BY total_avg DESC )
+								SELECT GROUP_CONCAT( smSecond.total_score ORDER BY total_score DESC )
 								FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
 								sSecond.`id`=smSecond.`score_id`
 								AND sSecond.group_id= s.`group_id`
@@ -3302,9 +3302,9 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				END AS rank
 					
 				,FIND_IN_SET( 
-					sm.total_avg, 
+					sm.total_score, 
 					(
-						SELECT GROUP_CONCAT( smSecond.total_avg ORDER BY total_avg DESC )
+						SELECT GROUP_CONCAT( smSecond.total_score ORDER BY total_score DESC )
 						FROM rms_score_monthly AS smSecond ,rms_score AS sSecond WHERE
 						sSecond.`id`=smSecond.`score_id`
 						AND sSecond.group_id= s.`group_id`

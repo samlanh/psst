@@ -1080,10 +1080,10 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 				$scoreId = empty($_data['scoreId']) ? "0" : $_data['scoreId'];
 				$sqlColScoreValue="
 					,FIND_IN_SET( 
-						COALESCE((SELECT ms.total_avg FROM `rms_score_monthly` AS ms WHERE ms.score_id = $scoreId AND ms.student_id = s.stu_id LIMIT 1),'0'), 
+						COALESCE((SELECT ms.total_score FROM `rms_score_monthly` AS ms WHERE ms.score_id = $scoreId AND ms.student_id = s.stu_id LIMIT 1),'0'), 
 						(    
 							SELECT 
-								GROUP_CONCAT( dd.total_avg ORDER BY dd.total_avg DESC ) 
+								GROUP_CONCAT( dd.total_score ORDER BY dd.total_score DESC ) 
 							FROM rms_score_monthly AS dd 
 							WHERE  dd.`score_id`= $scoreId
 						)
@@ -1142,7 +1142,7 @@ class Teacherapi_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			if(!empty($_data['forEvaluationInfo'])){
 				$scoreId = empty($_data['scoreId']) ? "0" : $_data['scoreId'];
 				$order_by.="
-					COALESCE((SELECT ms.total_avg FROM `rms_score_monthly` AS ms WHERE ms.score_id = $scoreId AND ms.student_id = s.stu_id LIMIT 1),'0') DESC,
+					COALESCE((SELECT ms.total_score FROM `rms_score_monthly` AS ms WHERE ms.score_id = $scoreId AND ms.student_id = s.stu_id LIMIT 1),0) DESC,
 				";
 			}
 			

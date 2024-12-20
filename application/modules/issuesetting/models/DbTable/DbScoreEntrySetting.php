@@ -42,9 +42,9 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
     	if(!empty($search['advance_search'])){
    			 $s_where = array();
     		$s_search = addslashes(trim($search['advance_search']));
-    					$s_where[] = " s.title LIKE '%{$s_search}%'";
-    					$s_where[] = " s.description LIKE '%{$s_search}%'";
-    					$sql .=' AND ( '.implode(' OR ',$s_where).')';
+			$s_where[] = " s.title LIKE '%{$s_search}%'";
+			$s_where[] = " s.description LIKE '%{$s_search}%'";
+			$sql .=' AND ( '.implode(' OR ',$s_where).')';
    	 	}
    	 	if(!empty($search['branch_search'])){
    	 		$where.= " AND s.branchId = ".$db->quote($search['branch_search']);
@@ -55,7 +55,10 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
     	if($search['status_search']>-1){
     		$where.= " AND s.status = ".$db->quote($search['status_search']);
     	}
-    	$where.=$dbp->getDegreePermission('s.degreeId');
+		$conDiction = array(
+			"forSplit"=>1
+		);
+    	$where.=$dbp->getDegreePermission('s.degreeId',$conDiction);
     	$where.=$dbp->getAccessPermission('s.branchId');
     	return $db->fetchAll($sql.$where.$orderby);
     }
@@ -102,6 +105,10 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
    		
    		$dbp = new Application_Model_DbTable_DbGlobal();
    		$sql.=$dbp->getAccessPermission('s.branchId');
+		$conDiction = array(
+			"forSplit"=>1
+		);
+    	$sql.=$dbp->getDegreePermission('s.degreeId',$conDiction);
    		return $db->fetchRow($sql);
    }
  
@@ -142,5 +149,35 @@ class Issuesetting_Model_DbTable_DbScoreEntrySetting extends Zend_Db_Table_Abstr
    		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
    		$db->rollBack();
    	}
+   }
+   
+   function getAllEntrySettingOpt($data = array()){
+	   $db = $this->getAdapter();
+	   $sql = " SELECT 
+					sett.id
+					,CONCAT(sett.title,' (',(SELECT GROUP_CONCAT(COALESCE(NULLIF(i.shortcut,''),i.title)) FROM rms_items AS i WHERE i.type=1 AND FIND_IN_SET(i.id,sett.degreeId) LIMIT 1),')') As name 
+				";
+		$sql .= " FROM `rms_score_entry_setting` AS sett 
+		";
+		$sql .= "  WHERE sett.status=1 AND sett.title!='' ";
+		
+		$branchId = empty($data['branchId']) ? 0 : $data['branchId'];
+		$academicYear = empty($data['academicYear']) ? 0 : $data['academicYear'];
+		$sql .= " AND sett.branchId =$branchId ";
+		$sql .= " AND sett.academicYear =$academicYear ";
+		
+		
+		if (!empty($data['degreeId'])) {
+			$degreeId = empty($data['degreeId']) ? 0 : $data['degreeId'];
+			$sql .= " AND FIND_IN_SET($degreeId,sett.degreeId)";
+		}
+		$dbGb = new Application_Model_DbTable_DbGlobal();
+		$sql .= $dbGb->getAccessPermission("sett.branchId");
+		$conDiction = array(
+			"forSplit"=>1
+		);
+    	$sql.=$dbGb->getDegreePermission('sett.degreeId',$conDiction);
+		$sql .= " ORDER BY sett.id DESC, sett.title ASC ";
+		return $db->fetchAll($sql);
    }
 }

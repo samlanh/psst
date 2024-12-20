@@ -325,7 +325,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require("dojo.data.ItemFileWriteStore");
 
 	var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-
+	var settingEntryStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function() {
 		var subjectList = [];
 		var dataStuList = [];
@@ -356,7 +356,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		}, "academic_year");
 		
 		new dijit.form.FilteringSelect({
-			store:academic_store,
+			store:settingEntryStore,
 			queryExpr: "*${0}*",
 			autoComplete: false,                      
 			required: false,               

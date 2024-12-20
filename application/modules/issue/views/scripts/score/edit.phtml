@@ -100,61 +100,47 @@ $db_score = new Issue_Model_DbTable_DbScore();
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE"); ?> <span class="required">*</span></label>
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_FROM"); ?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<div class="col-md-6 col-sm-6 col-xs-12">
-										<input type="text" placeHolder="Khmer Title" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score']; ?>" required="true" dojoType="dijit.form.ValidationTextBox" />
-									</div>
-									<div class="col-md-6 col-sm-6 col-xs-12">
-										<input type="text" placeHolder="English Title" name="title_en" id="title_en" value="<?php echo $this->score['title_score_en']; ?>" class="fullside" dojoType="dijit.form.TextBox" />
-									</div>
+									<select readonly id="score_option" name="score_option" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
+										<option value="1" <?php if ($this->score['settingId'] > 0) { echo "selected"; } ?> ><?php echo $tr->translate("FROM_GRADING_SYSTEM"); ?></option>
+										<option value="2" <?php if ($this->score['settingId'] == 0) { echo "selected"; } ?> ><?php echo $tr->translate("ACCORDING_ENTRY"); ?></option>
+									</select>
 								</div>
-
 							</div>
 							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE"); ?> <span class="required">*</span></label>
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR"); ?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="exam_type" name="exam_type" readonly="readonly" class="fullside" onchange="checkExamType();" dojoType="dijit.form.FilteringSelect">
-										<option value="1" <?php if ($this->score['exam_type'] == 1) {
-																echo "selected";
-															} ?>><?php echo $tr->translate("MONTHLY"); ?></option>
-										<option value="2" <?php if ($this->score['exam_type'] == 2) {
-																echo "selected";
-															} ?>><?php echo $tr->translate("SEMESTER"); ?></option>
-										<option value="3" <?php if ($this->score['exam_type'] == 3) {
+									<input id="academic_year">
+								</div>
+							</div>
+							<div class="form-group fromGradingType">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SETTING_ENTRY"); ?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input id="settingEntryId">
+									<input class="fullside" dojoType="dijit.form.TextBox" id="degreeSetting" name="degreeSetting" value="" type="hidden">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="sortStundent" name="sortStundent" class="fullside" onchange="reloadOrder();" dojoType="dijit.form.FilteringSelect">
+										<option value="0" <?php if ($this->sortType == 0) {
 																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("YEARLY_RESULT"); ?></option>
+															} ?>><?php echo $tr->translate("DEFAULT"); ?></option>
+										<option value="1" <?php if ($this->sortType == 1) {
+																echo "Selected='selected'";
+															} ?>><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
+										<option value="2" <?php if ($this->sortType == 2) {
+																echo "Selected='selected'";
+															} ?>><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
+										<option value="3" <?php if ($this->sortType == 3) {
+																echo "Selected='selected'";
+															} ?>><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
 									</select>
 								</div>
 							</div>
-							<div class="form-group examtype_display annaul_exam_display">
-								<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select dojoType="dijit.form.FilteringSelect" readonly="readonly" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">
-										<?php if (!empty($this->month)) {
-											foreach ($this->month as $month) { ?>
-												<option value="<?php echo $month['id'] ?>" <?php if ($month['id'] == $this->score['for_month']) {
-																								echo "selected='selected'";
-																							} ?>><?php echo $month['name'] ?></option>
-										<?php }
-										} ?>
-									</select>
-								</div>
-							</div>
-							<div class="form-group annaul_exam_display">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select dojoType="dijit.form.FilteringSelect" readonly="readonly" required="true" class="fullside" id="for_semester" name="for_semester" type="text">
-										<option value="1" <?php if ($this->score['for_semester'] == 1) {
-																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("SEMESTER1"); ?></option>
-										<option value="2" <?php if ($this->score['for_semester'] == 2) {
-																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("SEMESTER2"); ?></option>
-
-									</select>
-								</div>
-							</div>
+							
 							<div class="form-group ">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("STATUS"); ?> </label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
@@ -210,24 +196,62 @@ $db_score = new Issue_Model_DbTable_DbScore();
 									<input id="group" />
 								</div>
 							</div>
+							
 							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE"); ?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="sortStundent" name="sortStundent" class="fullside" onchange="reloadOrder();" dojoType="dijit.form.FilteringSelect">
-										<option value="0" <?php if ($this->sortType == 0) {
+									<select id="exam_type" name="exam_type" readonly="readonly" class="fullside" onchange="checkExamType();" dojoType="dijit.form.FilteringSelect">
+										<option value="1" <?php if ($this->score['exam_type'] == 1) {
+																echo "selected";
+															} ?>><?php echo $tr->translate("MONTHLY"); ?></option>
+										<option value="2" <?php if ($this->score['exam_type'] == 2) {
+																echo "selected";
+															} ?>><?php echo $tr->translate("SEMESTER"); ?></option>
+										<option value="3" <?php if ($this->score['exam_type'] == 3) {
 																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("DEFAULT"); ?></option>
-										<option value="1" <?php if ($this->sortType == 1) {
-																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
-										<option value="2" <?php if ($this->sortType == 2) {
-																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
-										<option value="3" <?php if ($this->sortType == 3) {
-																echo "Selected='selected'";
-															} ?>><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
+															} ?>><?php echo $tr->translate("YEARLY_RESULT"); ?></option>
 									</select>
 								</div>
+							</div>
+							<div class="form-group examtype_display annaul_exam_display">
+								<label class="control-label  col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_MONTH"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select dojoType="dijit.form.FilteringSelect" readonly="readonly" required="true" class="fullside" id="for_month" name="for_month" queryExpr="*${0}*" autoComplete="false">
+										<?php if (!empty($this->month)) {
+											foreach ($this->month as $month) { ?>
+												<option value="<?php echo $month['id'] ?>" <?php if ($month['id'] == $this->score['for_month']) {
+																								echo "selected='selected'";
+																							} ?>><?php echo $month['name'] ?></option>
+										<?php }
+										} ?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group annaul_exam_display">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("FOR_SEMESTER"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select dojoType="dijit.form.FilteringSelect" readonly="readonly" required="true" class="fullside" id="for_semester" name="for_semester" type="text">
+										<option value="1" <?php if ($this->score['for_semester'] == 1) {
+																echo "Selected='selected'";
+															} ?>><?php echo $tr->translate("SEMESTER1"); ?></option>
+										<option value="2" <?php if ($this->score['for_semester'] == 2) {
+																echo "Selected='selected'";
+															} ?>><?php echo $tr->translate("SEMESTER2"); ?></option>
+
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TITLE"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<input type="text" placeHolder="Khmer Title" name="title" id="title" class="fullside" value="<?php echo $this->score['title_score']; ?>" required="true" dojoType="dijit.form.ValidationTextBox" />
+									</div>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<input type="text" placeHolder="English Title" name="title_en" id="title_en" value="<?php echo $this->score['title_score_en']; ?>" class="fullside" dojoType="dijit.form.TextBox" />
+									</div>
+								</div>
+
 							</div>
 							<div class="form-group">
 								<label class="control-label col-md-12 col-sm-12 col-xs-12"><?php echo $tr->translate("NOTE"); ?> </label>
@@ -301,6 +325,7 @@ $db_score = new Issue_Model_DbTable_DbScore();
 	}
 </style>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
+<script src="<?php echo $this->baseUrl();?>/admin/js/global.js"  type="text/javascript"></script>
 <script type="text/javascript">
 	dojo.require("dijit.form.Textarea");
 	dojo.require("dijit.form.DateTextBox");
@@ -308,6 +333,8 @@ $db_score = new Issue_Model_DbTable_DbScore();
 	dojo.require("dojo.NodeList-manipulate");
 	dojo.require("dojo.data.ObjectStore");
 	dojo.require("dojo.data.ItemFileWriteStore");
+	var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+	var settingEntryStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function() {
 		var subject = [];
 		new dijit.form.FilteringSelect({
@@ -324,11 +351,85 @@ $db_score = new Issue_Model_DbTable_DbScore();
 				getInfoBygroup();
 			}
 		}, "group");
+		
+		new dijit.form.FilteringSelect({
+			store:academic_store,
+			queryExpr: "*${0}*",
+			autoComplete: false,                      
+			required: false,               
+			readOnly: true,               
+			id: "academic_year",
+			name: "academic_year",   
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",
+			onChange: function() {  
+				getAllGroupByBranch();
+				getAllSettingEntry();
+			}
+		}, "academic_year");
+		
+		new dijit.form.FilteringSelect({
+			store:settingEntryStore,
+			queryExpr: "*${0}*",
+			autoComplete: false,                      
+			required: false,               
+			id: "settingEntryId",
+			name: "settingEntryId",   
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_SETTING");?>",
+			onChange: function() {  
+				
+				
+			}
+		}, "settingEntryId");
+		
+		getAllAcademicByBranch();
+		
+		
 		checkExamType();
 		getAllGroupByBranch();
+		checkingGradingOpt();
+		setTimeout(function() {
+			getAllSettingEntry();
+		}, 400);
+		
 
 	});
-
+	
+	function checkingGradingOpt() {
+		var scoreOption = dijit.byId('score_option').get('value');
+		$(".fromGradingType").css("display", "none");
+		dijit.byId('exam_type').set("readOnly", false);
+		dijit.byId('for_month').set("readOnly", false);
+		dijit.byId('for_semester').set("readOnly", false);
+		if(scoreOption==1){
+			$(".fromGradingType").css("display", "flow-root");
+			dijit.byId('exam_type').set("readOnly", true);
+			dijit.byId('for_month').set("readOnly", true);
+			dijit.byId('for_semester').set("readOnly", true);
+		}
+		dijit.byId('exam_type').set("readOnly", true);
+	}
+	url_getacademic= '<?php echo $this->url(array('module'=>'foundation','controller'=>'group','action'=>'get-academicyear'));?>';
+	function getAllAcademicByBranch(){
+		dijit.byId('academic_year').reset();
+		branch_id = dijit.byId('branch_id').get('value');
+		if(branch_id=='' || branch_id==-1){
+			var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
+			dijit.byId('academic_year').set('store',academic_store);  
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+			contentData = {
+				'branch_id':branch_id
+			}
+			getAllYear(url_getacademic,contentData);
+			
+		setTimeout(function() {
+			dijit.byId('academic_year').set('value','<?php echo $this->score['for_academic_year']; ?>'); 
+		}, 300);
+	}
+	
 	function reloadOrder() {
 		loadingBlock();
 		<?php
@@ -512,7 +613,7 @@ $db_score = new Issue_Model_DbTable_DbScore();
 		url_group = '<?php echo $this->url(array('module' => 'issue', 'controller' => 'scoreeng', 'action' => 'getgroupinfo')); ?>';
 		group = dijit.byId('group').get('value');
 		if (group == '') {
-			alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP"); ?>");
+			//alert("<?php echo $tr->translate("PLEASE_SELECT_GROUP"); ?>");
 			dojo.byId("gr-info").innerHTML = "";
 			return false;
 		}
@@ -575,6 +676,8 @@ $db_score = new Issue_Model_DbTable_DbScore();
 
 			$(".annaul_exam_display").css("display", "none");
 		}
+		
+		dijit.byId('exam_type').set("readOnly", true);
 	}
 	
 	url_getgroup = '<?php echo $this->url(array('module' => 'issue', 'controller' => 'score', 'action' => 'getgroupbybranch')); ?>';
@@ -669,5 +772,33 @@ $db_score = new Issue_Model_DbTable_DbScore();
 		if ($('#push_notify').is(':checked')) {
 			$('#publicNow').prop('checked', true);
 		}
+	}
+	
+	var urlGetEntrySetting = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'scoreentrysetting','action'=>'get-setting'));?>';
+	function getAllSettingEntry() {
+		dijit.byId('settingEntryId').reset();
+		
+		var branchId = dijit.byId('branch_id').get('value');
+		if (branchId == '' || branchId == -1) {
+			var settingEntryStore = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('settingEntryId').set('store', settingEntryStore);
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		var academicYear = dijit.byId('academic_year').get('value');
+		dojo.xhrPost({
+			url: urlGetEntrySetting,
+			content: {
+				'branchId': branchId,
+				'academicYear': academicYear,
+			},
+			handleAs: "json",
+			load: function(data) {
+				settingEntryStore = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('settingEntryId').set('store', settingEntryStore);
+				dijit.byId('settingEntryId').set('value','<?php echo $this->score['settingId']; ?>'); 
+			},
+			error: function(err) {}
+		});
 	}
 </script>

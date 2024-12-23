@@ -108,6 +108,94 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_FROM"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="score_option" name="score_option" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
+										<option value="1"><?php echo $tr->translate("FROM_GRADING_SYSTEM"); ?></option>
+										<option value="2"><?php echo $tr->translate("ACCORDING_ENTRY"); ?></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input id="academic_year">
+								</div>
+							</div>
+							<div class="form-group fromGradingType">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SETTING_ENTRY"); ?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input id="settingEntryId">
+									<input class="fullside" dojoType="dijit.form.TextBox" id="degreeSetting" name="degreeSetting" value="" type="hidden">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="sortStundent" name="sortStundent" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
+										<option value="0"><?php echo $tr->translate("DEFAULT"); ?></option>
+										<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
+										<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
+										<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
+									</select>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<div class="card-blogform">
+									<div class="introduction">
+										<div class="d-flex">
+											<div class="settings-main-icon ">
+												<i class="fa fa-info-circle" aria-hidden="true"></i>
+											</div>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<p class="tx-20 font-weight-semibold d-flex ">ការណែនាំ</p>
+											</div>
+										</div>
+										<label class="control-label bold col-md-12 col-sm-12 col-xs-12">1.ពិន្ទុទាញពី</label>
+										<ul>
+											<li>ទាញពីការដាក់ពិន្ទុរបស់គ្រូ : ដើម្បីទាញពិន្ទុពីការបញ្ចូលរបស់គ្រូ</li>
+											<li>យោងលើការបញ្ចូល : ដើម្បីបញ្ចូលពិន្ទុដោយខ្លួនឯង</li>
+										</ul>
+										<label class="control-label bold col-md-12 col-sm-12 col-xs-12">2.ដកធិក(Untick)លើមុខវិជា្ជណាមួយករណីមុខវិជា្ជនោះមិនត្រូវបានចាត់ចូលក្នុងការប្រឡង</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="card-blogform">
+						<div class="card-body">
+							<div class="form-group">
+								<div class="d-flex">
+									<div class="settings-main-icon ">
+										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
+									</div>
+									<div class="col-md-10 col-sm-10 col-xs-12">
+										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_INFO"); ?></p>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_STATUS"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<select id="group_option" name="group_option" class="fullside" onchange="getAllGroupByBranch();" dojoType="dijit.form.FilteringSelect">
+										<option value="2"><?php echo $tr->translate("IS_CURRENT"); ?></option>
+										<option value="1"><?php echo $tr->translate("IS_PASS"); ?></option>
+										<option value="3"><?php echo $tr->translate("PASS_DEGREE"); ?></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP"); ?> <span class="required">*</span></label>
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<input id="group">
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_TYPE"); ?> <span class="required">*</span></label>
 								<div class="col-md-7 col-sm-7 col-xs-12">
 									<select id="exam_type" name="exam_type" class="fullside" onchange="getInfoData(); checkExamType();" dojoType="dijit.form.FilteringSelect">
@@ -149,84 +237,6 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 									<div class="col-md-6 col-sm-6 col-xs-12">
 										<input type="text" placeHolder="English title" name="title_en" id="title_en" class="fullside" dojoType="dijit.form.TextBox" />
 									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="card-blogform">
-									<div class="introduction">
-										<div class="d-flex">
-											<div class="settings-main-icon ">
-												<i class="fa fa-info-circle" aria-hidden="true"></i>
-											</div>
-											<div class="col-md-10 col-sm-10 col-xs-12">
-												<p class="tx-20 font-weight-semibold d-flex ">ការណែនាំ</p>
-											</div>
-										</div>
-										<label class="control-label bold col-md-12 col-sm-12 col-xs-12">1.ពិន្ទុទាញពី</label>
-										<ul>
-											<li>ទាញពីការដាក់ពិន្ទុរបស់គ្រូ : ដើម្បីទាញពិន្ទុពីការបញ្ចូលរបស់គ្រូ</li>
-											<li>យោងលើការបញ្ចូល : ដើម្បីបញ្ចូលពិន្ទុដោយខ្លួនឯង</li>
-										</ul>
-										<label class="control-label bold col-md-12 col-sm-12 col-xs-12">2.ដកធិក(Untick)លើមុខវិជា្ជណាមួយករណីមុខវិជា្ជនោះមិនត្រូវបានចាត់ចូលក្នុងការប្រឡង</label>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-4 col-xs-12">
-					<div class="card-blogform">
-						<div class="card-body">
-							<div class="form-group">
-								<div class="d-flex">
-									<div class="settings-main-icon ">
-										<i class="glyphicon glyphicon-education" aria-hidden="true"></i>
-									</div>
-									<div class="col-md-10 col-sm-10 col-xs-12">
-										<p class="tx-20 font-weight-semibold d-flex "><?php echo $tr->translate("GROUP_INFO"); ?></p>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("EXAM_FROM"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="score_option" name="score_option" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
-										<option value="1"><?php echo $tr->translate("FROM_GRADING_SYSTEM"); ?></option>
-										<option value="2"><?php echo $tr->translate("ACCORDING_ENTRY"); ?></option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("ACADEMIC_YEAR"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input id="academic_year">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP_STATUS"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="group_option" name="group_option" class="fullside" onchange="getAllGroupByBranch();" dojoType="dijit.form.FilteringSelect">
-										<option value="2"><?php echo $tr->translate("IS_CURRENT"); ?></option>
-										<option value="1"><?php echo $tr->translate("IS_PASS"); ?></option>
-										<option value="3"><?php echo $tr->translate("PASS_DEGREE"); ?></option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("GROUP"); ?> <span class="required">*</span></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<input id="group">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label bold col-md-5 col-sm-5 col-xs-12"><?php echo $tr->translate("SORT_STUDENT"); ?></label>
-								<div class="col-md-7 col-sm-7 col-xs-12">
-									<select id="sortStundent" name="sortStundent" class="fullside" onchange="getInfoData();" dojoType="dijit.form.FilteringSelect">
-										<option value="0"><?php echo $tr->translate("DEFAULT"); ?></option>
-										<option value="1"><?php echo $tr->translate("BY_STU_CODE_ASC"); ?></option>
-										<option value="2"><?php echo $tr->translate("BY_STU_KHNAME_ASC"); ?></option>
-										<option value="3"><?php echo $tr->translate("BY_STU_ENNAME_ASC"); ?></option>
-									</select>
 								</div>
 							</div>
 							<input class="fullside" dojoType="dijit.form.TextBox" id="year_study" name="year_study" value="" type="hidden">
@@ -315,7 +325,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	dojo.require("dojo.data.ItemFileWriteStore");
 
 	var academic_store  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
-
+	var settingEntryStore  = getDataStorefromJSON('id','name',<?php print_r(Zend_Json::encode(array()));?> );
 	dojo.ready(function() {
 		var subjectList = [];
 		var dataStuList = [];
@@ -341,23 +351,60 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			placeHolder:"<?php echo $tr->translate("SELECT_ACADEMIC_YEAR");?>",
 			onChange: function() {  
 				getAllGroupByBranch();
+				getAllSettingEntry();
 			}
 		}, "academic_year");
-
+		
+		new dijit.form.FilteringSelect({
+			store:settingEntryStore,
+			queryExpr: "*${0}*",
+			autoComplete: false,                      
+			required: false,               
+			id: "settingEntryId",
+			name: "settingEntryId",   
+			class: 'fullside', 
+			placeHolder:"<?php echo $tr->translate("SELECT_SETTING");?>",
+			onChange: function() {  
+				
+				getSettingInfo();
+				setTimeout(function() {
+					getAllGroupByBranch();
+				}, 800);
+				
+			}
+		}, "settingEntryId");
+		
+		checkingGradingOpt();
 		getAllGroupByBranch();
 		getAllAcademicByBranch();
 	});
 
 	function getInfoData() {
+		checkingGradingOpt();
 		getInfoBygroup();
 	}
+	
+	function checkingGradingOpt() {
+		var scoreOption = dijit.byId('score_option').get('value');
+		$(".fromGradingType").css("display", "none");
+		dijit.byId('exam_type').set("readOnly", false);
+		dijit.byId('for_month').set("readOnly", false);
+		dijit.byId('for_semester').set("readOnly", false);
+		if(scoreOption==1){
+			$(".fromGradingType").css("display", "flow-root");
+			dijit.byId('exam_type').set("readOnly", true);
+			dijit.byId('for_month').set("readOnly", true);
+			dijit.byId('for_semester').set("readOnly", true);
+		}
+	}
+	
 	var inx = 0;
 	var url_getStudent = '<?php echo $this->url(array('module' => 'issue', 'controller' => 'score', 'action' => 'get-student')); ?>';
 
 	function filterStudent() {
 		$('#identity').val('');
 		dojo.query("#table_row").append("");
-		loadingBlock();
+		
 
 		group = dijit.byId('group').get('value');
 		sortStundent = dijit.byId('sortStundent').get('value');
@@ -370,6 +417,7 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		if (group == '') {
 			return false;
 		}
+		loadingBlock();
 		dojo.xhrPost({
 			url: url_getStudent,
 			content: {
@@ -488,10 +536,13 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				} else {
 					$('#identity').val('');
 				}
+				HideloadingBlock();
 			},
-			error: function(err) {}
+			error: function(err) {
+				HideloadingBlock();
+			}
 		});
-		HideloadingBlock();
+		
 	}
 
 
@@ -555,24 +606,32 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 	}
 
 	function checkExamType() {
-		exam_type = dijit.byId("exam_type").get("value");
-		dijit.byId('for_month').set("readOnly", false);
-		dijit.byId('for_semester').set("readOnly", false);
-
-
-		$(".examtype_display").css("display", "flow-root");
-		$(".annaul_exam_display").css("display", "flow-root");
-		if (exam_type == 2) {
+		
+		var scoreOption = dijit.byId('score_option').get('value');
+		if(scoreOption==1){
+			dijit.byId('exam_type').set("readOnly", true);
 			dijit.byId('for_month').set("readOnly", true);
-			$(".examtype_display").css("display", "none");
-		} else if (exam_type == 3) {
-			dijit.byId('for_month').attr("value", '');
-			dijit.byId('for_semester').attr("value", '');
+			dijit.byId('for_semester').set("readOnly", true);
+		}else{
+			exam_type = dijit.byId("exam_type").get("value");
+			dijit.byId('for_month').set("readOnly", false);
+			dijit.byId('for_semester').set("readOnly", false);
 
-			dijit.byId('for_month').set("required", false);
-			dijit.byId('for_semester').set("required", false);
 
-			$(".annaul_exam_display").css("display", "none");
+			$(".examtype_display").css("display", "flow-root");
+			$(".annaul_exam_display").css("display", "flow-root");
+			if (exam_type == 2) {
+				dijit.byId('for_month').set("readOnly", true);
+				$(".examtype_display").css("display", "none");
+			} else if (exam_type == 3) {
+				dijit.byId('for_month').attr("value", '');
+				dijit.byId('for_semester').attr("value", '');
+
+				dijit.byId('for_month').set("required", false);
+				dijit.byId('for_semester').set("required", false);
+
+				$(".annaul_exam_display").css("display", "none");
+			}
 		}
 	}
 
@@ -638,12 +697,19 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 			dijit.byId('branch_id').focus();
 			return false;
 		}
+		var degreeSetting = dijit.byId('degreeSetting').get('value');
+		var settingEntryId = dijit.byId('settingEntryId').get('value');
+		if (settingEntryId == '') {
+			settingEntryId = 0;
+		}
 		dojo.xhrPost({
 			url: url_getgroup,
 			content: {
 				'branch_id': branch_id,
 				'academic_year': academic_year,
 				'is_pass': is_pass,
+				'degreeList': degreeSetting,
+				'settingEntryId': settingEntryId,
 			},
 			handleAs: "json",
 			load: function(data) {
@@ -735,5 +801,66 @@ $baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 				'branch_id':branch_id
 			}
 			getAllYear(url_getacademic,contentData);
+	}
+	
+	var urlGetEntrySetting = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'scoreentrysetting','action'=>'get-setting'));?>';
+	function getAllSettingEntry() {
+		dijit.byId('settingEntryId').reset();
+		dijit.byId('exam_type').set('value', 1);
+		dijit.byId('for_month').set('value', '<?PHP echo $current_month;?>');
+		dijit.byId('for_semester').set('value', 1);
+		dijit.byId('degreeSetting').set('value', "");
+		
+		var branchId = dijit.byId('branch_id').get('value');
+		if (branchId == '' || branchId == -1) {
+			var settingEntryStore = getDataStorefromJSON('id', 'name', <?php print_r(Zend_Json::encode(array())); ?>);
+			dijit.byId('settingEntryId').set('store', settingEntryStore);
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		var academicYear = dijit.byId('academic_year').get('value');
+		dojo.xhrPost({
+			url: urlGetEntrySetting,
+			content: {
+				'branchId': branchId,
+				'academicYear': academicYear,
+			},
+			handleAs: "json",
+			load: function(data) {
+				settingEntryStore = getDataStorefromJSON('id', 'name', data);
+				dijit.byId('settingEntryId').set('store', settingEntryStore);
+			},
+			error: function(err) {}
+		});
+	}
+	
+	function getSettingInfo(){
+		var urlGetEntrySettingInfo = '<?php echo $this->url(array('module'=>'issuesetting','controller'=>'scoreentrysetting','action'=>'get-settinginfo'));?>';
+	
+		var branchId = dijit.byId('branch_id').get('value');
+		if (branchId == '' || branchId == -1) {
+			dijit.byId('branch_id').focus();
+			return false;
+		}
+		var settingEntryId = dijit.byId('settingEntryId').get('value');
+		dojo.xhrPost({
+			url: urlGetEntrySettingInfo,
+			content: {
+				'branchId': branchId,
+				'settingEntryId': settingEntryId,
+			},
+			handleAs: "json",
+			load: function(data) {
+				if(data){
+					dijit.byId('degreeSetting').set('value', data.degreeId);
+					dijit.byId('exam_type').set('value', data.examType);
+					dijit.byId('for_month').set('value', data.forMonth);
+					dijit.byId('for_semester').set('value', data.forSemester);
+					dijit.byId('title').set('value', data.title);
+					dijit.byId('title_en').set('value', data.title);
+				}
+			},
+			error: function(err) {}
+		});
 	}
 </script>

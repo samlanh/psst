@@ -35,6 +35,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 				'for_semester' => $_data['for_semester'],
 				'for_month' => $_data['for_month'],
 				'score_option' => $_data['score_option'],
+				'settingId' => $_data['settingEntryId'],
 			);
 
 			$_data['publicNow'] = empty($_data['publicNow']) ? 0 : 1;
@@ -1059,6 +1060,7 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			$where .= " AND s.for_semester =" . $search['for_semester'];
 		}
 		$where .= $dbp->getAccessPermission('s.branch_id');
+		$where .= $dbp->getDegreePermission('g.degree');
 		$order = " ORDER BY id DESC ";
 		return $db->fetchAll($sql . $where . $order);
 	}
@@ -1384,7 +1386,8 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 		s.id=gsjd.subject_id LIMIT 1) ";
 
 		$db = $this->getAdapter();
-		$sql = "SELECT
+		$sql = "
+		SELECT
 			gsjd.*,
 			g.amount_subject AS amount_subjectdivide,
 			gsjd.max_score AS max_subjectscore,
@@ -1400,10 +1403,9 @@ class Issue_Model_DbTable_DbScore extends Zend_Db_Table_Abstract
 			(SELECT sj.subject_titleen FROM `rms_subject` AS sj WHERE sj.id = gsjd.subject_id LIMIT 1) AS subject_titleen,
 			(SELECT dsd.score_in_class from rms_dept_subject_detail as dsd where dsd.dept_id = g.degree and dsd.subject_id = gsjd.subject_id LIMIT 1) as max_score
 		FROM
-			rms_group_subject_detail AS gsjd ,
-			rms_group as g
-		WHERE
-		g.id = gsjd.group_id
+			rms_group_subject_detail AS gsjd JOIN  rms_group AS g ON g.id = gsjd.group_id
+		WHERE 1
+		
 		";
 		if (!empty($data['group_id'])) {
 			$sql .= " and gsjd.group_id = " . $data['group_id'];

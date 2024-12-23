@@ -151,7 +151,7 @@ class Issue_Model_DbTable_DbDashboardScore extends Zend_Db_Table_Abstract
 		$sql .= " )
 				LEFT JOIN `rms_studentassessment` AS sts ON (sts.scoreId = s.id AND sts.groupId = g.id )
 		";
-		$where = ' WHERE 1 ';
+		$where = ' WHERE 1  AND g.status=1 ';
 
 		if (!empty($search['adv_search'])) {
 			$s_where = array();

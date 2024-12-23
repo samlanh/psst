@@ -110,29 +110,31 @@ class Allreport_ScoreController extends Zend_Controller_Action
 	function rptScoreDetailAction()
 	{ //តាមមុខវិជ្ជាលម្អិត
 		$id = $this->getRequest()->getParam("id");
+		$id = empty($id) ? 0 : $id;
 		$db = new Allreport_Model_DbTable_DbRptStudentScore();
 	
 		$row = $db->getScoreExamByID($id);
 		$this->view->scoreResult=$row;
+		if(!empty($row)){
+			$this->view->subj = $db->getSubjectScoreGroup($row ['group_id'], null, $row ['exam_type']);
 
-		$this->view->subj = $db->getSubjectScoreGroup($row ['group_id'], null, $row ['exam_type']);
+			$param=array(
+				'group_id' => $row['group_id'],
+				'for_academic_year' => $row['for_academic_year'],
+				'degree' => $row['degree'],
+				'exam_type' => $row['exam_type'],
+				'semesterTotalAverage' => $row['semesterTotalAverage'],
+			);
 
-		$param=array(
-			'group_id' => $row['group_id'],
-			'for_academic_year' => $row['for_academic_year'],
-			'degree' => $row['degree'],
-			'exam_type' => $row['exam_type'],
-			'semesterTotalAverage' => $row['semesterTotalAverage'],
-		);
+			$this->view->studentgroup  = $db->getStundetScoreDetailGroup($id,$param);
+			
+			$key = new Application_Model_DbTable_DbKeycode();
+			$this->view->data = $key->getKeyCodeMiniInv(TRUE);
 
-		$this->view->studentgroup  = $db->getStundetScoreDetailGroup($id,$param);
-		
-		$key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data = $key->getKeyCodeMiniInv(TRUE);
-
-		$dbSetting = new Setting_Model_DbTable_Dbduty();
-		$dregreeId = empty($row['degree']) ? 0 : $row['degree'];
-		$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
+			$dbSetting = new Setting_Model_DbTable_Dbduty();
+			$dregreeId = empty($row['degree']) ? 0 : $row['degree'];
+			$this->view->principalInfo = $dbSetting->getDutyByDegree($dregreeId, 1);
+		}
 	}
 
 	function rptMonthlytranscriptAction()

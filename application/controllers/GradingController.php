@@ -325,7 +325,13 @@ class GradingController extends Zend_Controller_Action
 				);
 		$result = $dbExternal->checkTecherEntrySetting($arrayFaa);
 		if(empty($result)){
-			Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
+			if(!empty($fullControlID)){
+				$alert = $tr->translate("NO_PERMISSION_TO_ENTRY");
+				echo "<script> alert('".$alert."');</script>";
+				echo "<script>window.close();</script>";
+			}else{
+				Application_Form_FrmMessage::Sucessfull("NO_PERMISSION_TO_ENTRY","/grading/index");
+			}
 		}
 		
 		$gradingId = $row['gradingId'];

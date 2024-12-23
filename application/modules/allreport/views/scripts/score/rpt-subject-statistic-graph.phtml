@@ -378,6 +378,85 @@ svg {
 										div.bar-chart{
 											height:220px;
 										}
+
+										.gradientA {
+											background: linear-gradient(30deg, 
+												black 20%, 
+												white 20%, 
+												black 40%, 
+												white 40%, 
+												black 60%, 
+												white 60%, 
+												black 80%, 
+												white 80%,
+												black 100%
+											);								
+										}
+										.gradientB {
+											background: linear-gradient(30deg, 
+												blue 20%, 
+												white 20%, 
+												blue 40%, 
+												white 40%, 
+												blue 60%, 
+												white 60%, 
+												blue 80%, 
+												white 80%,
+												blue 100%
+											);								
+										}
+										.gradientC {
+											background: linear-gradient(30deg, 
+												green 20%, 
+												white 20%, 
+												green 40%, 
+												white 40%, 
+												green 60%, 
+												white 60%, 
+												green 80%, 
+												white 80%,
+												green 100%
+											);								
+										}
+										.gradientD {
+											background: linear-gradient(30deg, 
+												orange 20%, 
+												white 20%, 
+												orange 40%, 
+												white 40%, 
+												orange 60%, 
+												white 60%, 
+												orange 80%, 
+												white 80%,
+												orange 100%
+											);								
+										}
+										.gradientE {
+											background: linear-gradient(30deg, 
+												red 20%, 
+												white 20%, 
+												red 40%, 
+												white 40%, 
+												red 60%, 
+												white 60%, 
+												red 80%, 
+												white 80%,
+												red 100%
+											);								
+										}
+										.gradientF {
+											background: linear-gradient(30deg, 
+												purple 20%, 
+												white 20%, 
+												purple 40%, 
+												white 40%, 
+												purple 60%, 
+												white 60%, 
+												purple 80%, 
+												white 80%,
+												purple 100%
+											);								
+										}
 										
 						</style>
 						<?php 
@@ -398,6 +477,14 @@ svg {
 						  $Total_Group_F_Percent =0;
 						  $oldGradeName=''; 
 						  $oldDegreeName=''; 
+
+						  $grandStudentTotal=0;
+						  $totalGradeA=0;
+						  $totalGradeB=0;
+						  $totalGradeC=0;
+						  $totalGradeD=0;
+						  $totalGradeE=0;
+						  $totalGradeF=0;
 
 						  $lineColors = array(
 								"#4394E5",
@@ -463,7 +550,18 @@ svg {
 									array_push($fullArrayByTeacher,$arrRow);
 
 									
+									
 								?>
+									<tr class="hover" align="center" style="font-size:12px; height: 28px; font-weight: bold; background: #e3e3e3;font-family:'Times New Roman','Khmer OS Battambang'" >
+										<td colspan="4" align="center"><?php echo $tr->translate("TOTAL"); ?></td>
+										<td><?php echo $grandStudentTotal; ?></td>
+										<td><span class="separateColumn passedGrade"><?php echo $totalGradeA;?></span><span class="separateColumn passedGrade bold-text"><?php  echo $Total_Grade_A_Percent; ?></span></td>
+										<td><span class="separateColumn passedGrade"><?php echo $totalGradeB;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_B_Percent; ?></span></td>
+										<td><span class="separateColumn passedGrade"><?php echo $totalGradeC;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_C_Percent; ?></span></td>
+										<td><span class="separateColumn passedGrade"><?php echo $totalGradeD;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_D_Percent; ?></span></td>
+										<td><span class="separateColumn passedGrade"><?php echo $totalGradeE;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_E_Percent; ?></span></td>
+										<td><span class="separateColumn passedGrade"><?php echo $totalGradeF;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_F_Percent; ?></span></td>
+									</tr>
 									<tr class="hover" style="height: 70px; " align="center">
 										<td colspan="11" style="position: relative;border-left: solid 1px #fff;border-right: solid 1px #fff; border-bottom: solid 1px #fff;">
 											<h2 class="charTitle"><?php echo $tr->translate("CHART"); ?></h2>
@@ -485,6 +583,46 @@ svg {
 											</div>
 											<div id="bar-chart-<?php echo $chartKey; ?>" class="bar-chart" ></div>
 											<h2 class="charTitleBottom"><?php echo $tr->translate("MENTION_GRADE"); ?></h2>
+											<div class="text-center" >
+												<ul class="list-inline chart-detail-list">
+													<li>
+														<h5 class="font-normal">
+														<div class="square gradientA" ></div>
+														&nbsp;<?php echo $tr->translate("GRADE_A").' : '.$totalGradeA;?>
+														</h5>
+													</li>
+													<li>
+														<h5 class="font-normal">
+														<div class="square gradientB " ></div>
+														&nbsp;<?php echo $tr->translate("GRADE_B").' : '.$totalGradeB;?>
+														</h5>
+													</li>
+													<li>
+														<h5 class="font-normal">
+														<div class="square gradientC" ></div>
+														&nbsp;<?php echo $tr->translate("GRADE_C").' : '.$totalGradeC;?>
+														</h5>
+													</li>
+													<li>
+														<h5 class="font-normal">
+														<div class="square gradientD" ></div>
+														&nbsp;<?php echo $tr->translate("GRADE_D").' : '.$totalGradeD;?>
+														</h5>
+													</li>
+													<li>
+														<h5 class="font-normal">
+														<div class="square gradientE " ></div>
+														&nbsp;<?php echo $tr->translate("GRADE_E").' : '.$totalGradeE;?>
+														</h5>
+													</li>
+													<li>
+														<h5 class="font-normal">
+														<div class="square gradientF" ></div>
+														&nbsp;<?php echo $tr->translate("GRADE_F").' : '.$totalGradeF;?>
+														</h5>
+													</li>
+												</ul>
+											</div>
 										</td>
 									</tr>
 									</table>
@@ -502,6 +640,14 @@ svg {
 									$arrRowColor =array();
 									$teacherClass=0;
 									$arrGroupColor =array();
+
+									$grandStudentTotal=0;
+									$totalGradeA=0;
+									$totalGradeB=0;
+									$totalGradeC=0;
+									$totalGradeD=0;
+									$totalGradeE=0;
+									$totalGradeF=0;
 								
 								}
 							?>
@@ -572,9 +718,25 @@ svg {
 								array_push($arrGroupColor,$rowGroColor);
 								$oldTeacher = $rs['teacher_name'];  
 								$teacherClass++;
+
+								$grandStudentTotal = $grandStudentTotal + $rs['TotaStudent'];
+								$totalGradeA = $totalGradeA +@$rs['Total_A'];
+								$totalGradeB = $totalGradeB +@$rs['Total_B'];
+								$totalGradeC = $totalGradeC +@$rs['Total_C'];
+								$totalGradeD = $totalGradeD +@$rs['Total_D'];
+								$totalGradeE = $totalGradeE +@$rs['Total_E'];
+								$totalGradeF = $totalGradeF +@$rs['Total_F'];
+
+								$Total_Grade_A_Percent =@str_replace('.00','',number_format($totalGradeA/$grandStudentTotal*100,2));
+								$Total_Grade_B_Percent =@str_replace('.00','',number_format($totalGradeB/$grandStudentTotal*100,2));
+								$Total_Grade_C_Percent =@str_replace('.00','',number_format($totalGradeC/$grandStudentTotal*100,2));
+								$Total_Grade_D_Percent =@str_replace('.00','',number_format($totalGradeD/$grandStudentTotal*100,2));
+								$Total_Grade_E_Percent =@str_replace('.00','',number_format($totalGradeE/$grandStudentTotal*100,2));
+								$Total_Grade_F_Percent =@str_replace('.00','',number_format($totalGradeF/$grandStudentTotal*100,2));
+
 								?>
 
-								<tr class="style hover" align="center" >
+							<tr class="style hover" align="center" >
 								<td align="center"><?php echo $i;?></td>
 								<td><?php echo $rs['branch_name']; ?></td>
 								<td ><?php echo $rs['subject_name']; ?></td>
@@ -600,7 +762,16 @@ svg {
 							array_push($fullArrayByTeacher,$arrRow);
 
 						?>
-						
+							<tr class="hover" align="center" style="font-size:12px; height: 28px; font-weight: bold; background: #e3e3e3;font-family:'Times New Roman','Khmer OS Battambang'">
+								<td colspan="4" align="center"><?php echo $tr->translate("TOTAL"); ?></td>
+								<td><?php echo $grandStudentTotal; ?></td>
+								<td><span class="separateColumn passedGrade"><?php echo $totalGradeA;?></span><span class="separateColumn passedGrade bold-text"><?php  echo $Total_Grade_A_Percent; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo $totalGradeB;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_B_Percent; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo $totalGradeC;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_C_Percent; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo $totalGradeD;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_D_Percent; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo $totalGradeE;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_E_Percent; ?></span></td>
+								<td><span class="separateColumn passedGrade"><?php echo $totalGradeF;?></span><span class="separateColumn passedGrade bold-text"><?php echo $Total_Grade_F_Percent; ?></span></td>
+							</tr>
 							<tr class="hover" style="position:relative; " align="center">
 								<td colspan="11" style="position: relative; border-left: solid 1px #fff; border-right: solid 1px #fff; border-bottom: solid 1px #fff;"  >
 									<h2 class="charTitle"><?php echo $tr->translate("CHART"); ?></h2>
@@ -622,6 +793,46 @@ svg {
 									</div>
 									<div id="bar-chart-<?php echo $chartKey;?>" class="bar-chart"></div>
 									<h2 class="charTitleBottom"><?php echo $tr->translate("MENTION_GRADE"); ?></h2>
+									<div class="text-center" >
+										<ul class="list-inline chart-detail-list">
+											<li>
+												<h5 class="font-normal">
+												<div class="square gradientA" ></div>
+												&nbsp;<?php echo $tr->translate("GRADE_A").' : '.$totalGradeA;?>
+												</h5>
+											</li>
+											<li>
+												<h5 class="font-normal">
+												<div class="square gradientB " ></div>
+												&nbsp;<?php echo $tr->translate("GRADE_B").' : '.$totalGradeB;?>
+												</h5>
+											</li>
+											<li>
+												<h5 class="font-normal">
+												<div class="square gradientC" ></div>
+												&nbsp;<?php echo $tr->translate("GRADE_C").' : '.$totalGradeC;?>
+												</h5>
+											</li>
+											<li>
+												<h5 class="font-normal">
+												<div class="square gradientD" ></div>
+												&nbsp;<?php echo $tr->translate("GRADE_D").' : '.$totalGradeD;?>
+												</h5>
+											</li>
+											<li>
+												<h5 class="font-normal">
+												<div class="square gradientE " ></div>
+												&nbsp;<?php echo $tr->translate("GRADE_E").' : '.$totalGradeE;?>
+												</h5>
+											</li>
+											<li>
+												<h5 class="font-normal">
+												<div class="square gradientF" ></div>
+												&nbsp;<?php echo $tr->translate("GRADE_F").' : '.$totalGradeF;?>
+												</h5>
+											</li>
+										</ul>
+									</div>
 								</td>
 							</tr>
 						

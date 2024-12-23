@@ -135,5 +135,25 @@ class Issuesetting_ScoreentrysettingController extends Zend_Controller_Action {
     	Application_Model_Decorator::removeAllDecorator($frm);
     	$this->view->frm_items = $frm;
     }
+	
+	public function getSettingAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$model = new Issuesetting_Model_DbTable_DbScoreEntrySetting();
+			$row = $model->getAllEntrySettingOpt($data);
+			print_r(Zend_Json::encode($row));
+			exit();
+		}
+	}
+	public function getSettinginfoAction(){
+		if($this->getRequest()->isPost()){
+			$data=$this->getRequest()->getPost();
+			$model = new Issuesetting_Model_DbTable_DbScoreEntrySetting();
+			$id = empty($data["settingEntryId"]) ? 0 : $data["settingEntryId"];
+			$row = $model->getScoreEntrySettingById($id);
+			print_r(Zend_Json::encode($row));
+			exit();
+		}
+	}
   
 }

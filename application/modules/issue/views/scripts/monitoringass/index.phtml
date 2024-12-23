@@ -162,6 +162,8 @@
 												<li>
 													<?php 
 													$linkAss = $this->baseUrl()."/issue/monitoringass/view-assessment/id/";
+													$urlScoreDetail = $this->baseUrl()."/allreport/score/rpt-score-detail/id/";
+
 													$fullControl = "";
 													if($row['isLockAssessment']==1){
 														$linkAss = $this->baseUrl()."/extreport/rpt-assessment-list/id/";
@@ -169,6 +171,7 @@
 													}
 													?>
 													<a target="_blank" href="<?php echo $linkAss.$row['assessmentId'].$fullControl;?>"><?php echo $tr->translate('VIEW_ASSESSMENT');?></a>
+													<a target="_blank" href="<?php echo $urlScoreDetail.$row['id'].$fullControl;?>"><?php echo $tr->translate('SCORE_DETAIL');?></a>
 												</li>
 											</ul>
 										  </li>

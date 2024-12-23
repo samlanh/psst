@@ -23,6 +23,7 @@ class Issue_Model_DbTable_DbMonitorAssessment extends Zend_Db_Table_Abstract
 		
 		$sql = "
 			SELECT 
+				s.id,
 				s.`title_score` AS titleScore
 				,(SELECT b.".$branch." FROM `rms_branch` AS b WHERE b.br_id=s.branch_id LIMIT 1) AS branch_name
 				,(SELECT v.".$label." FROM `rms_view` AS v WHERE v.type=19 AND v.key_code =s.exam_type LIMIT 1) AS examTypeTitle

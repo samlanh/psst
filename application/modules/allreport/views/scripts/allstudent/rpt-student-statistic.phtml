@@ -49,183 +49,366 @@ table.tb-footer tr.style-head {
 		            </div>
             	</div>
 		</form>
-	<div id="divPrint">
-		<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
-			<tr>
-				<td colspan="3"><?php echo $this->rsheader;?></td>
-			</tr>
-			<tr>
-				<td width="15%" align="center">
-				</td>
-				<td width="70%"  align="center">
-					<span style=" color:#4839bd; font-size:14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
-					<span style=" color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></span>
-				</td>
-				<td width="15%" align="center">
-				</td>
-			</tr>
-		<style>
-				table tr th{
-					border: 1px solid #000;	
-					text-align: center;
-					padding: 3px 2px;
-				}
-				table {page-break-inside:auto }
-				tr{ page-break-inside:avoid; page-break-after:auto; }
-				table.content-data{
-					border-collapse:collapse;
-					width:100%;
-					border:1px solid #4839bd; 
-					font-family:'Times New Roman','Khmer OS Battambang';
-					font-size:12px;
-					white-space: nowrap;
-					margin:0 auto;
-					color:#4839bd;
-					margin:0 auto;
-				}
-				table.content-data thead tr.style-head {
-				   line-height: 25px; padding:1px 0px; white-space: nowrap;height: 20px; 
-					background: #ccd9ff;
-					text-align: center;
-				}
-				table.content-data tr.style-rowdata {
-					font-size:12px; 
-					height: 23px;
-				}
-				@media print {
-					@page {
-						page: A4;
-						size: portrait;;
-						margin: 0.5cm;
-					}
-				}
-		</style>
-			<tr>
-				<td colspan="3" valign="top">
-				<div id="exportExcel">
-				<?php if (!empty($this->rs)){?>
-					<table class="content-data" cellpadding="1"​  border="1" >
-						<thead>
-							<tr class="style-head">
-								<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
-								<td colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
-									<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
-								</td>
-							</tr>
-							<tr class="style-head">
-								<td><?php echo $tr->translate("BRANCH");?></td>
-								<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
-								<td><?php echo $tr->translate("DEGREE");?></td>
-								<td><?php echo $tr->translate("GRADE");?></td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
-								<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
-								<td><?php echo $tr->translate("MALE");?></td>
-								<td><?php echo $tr->translate("FEMALE");?></td>
-							</tr>
-						</thead>
-					<?php 
-						$i=0;
-						$totalNew = 0;
-						$totalOld=0;
-						$totalStudent = 0;
-						$GrandtotalStudent = 0;
-						$GrandtotalMale=0;
-						$GrandtotalFemale=0;
-						$GrandtotalNew = 0;
-						$GrandtotalOld=0;
-						$totalDrop=0;
-						$totalStudying=0;
-						$totalMale=0;
-						$totalFemale=0;
-						$degree='';
-					if(!empty($this->rs)){
-						foreach($this->rs AS $key=>$row){  
+		<div class="card-box">
+		<ul class="nav  md-pills pills-primary nav-tab" role="tablist">
+			<li class="nav-item active " >
+				<a class="nav-link " data-toggle="tab" href="#panel21" role="tab"><i class="fa fa-file-text-o ml-2"></i>
+					<?php echo $tr->translate("RPT_STUDENT_STATISTIC"); ?></a>
+			</li>
 
-						$newStudent = $row['newStudent'];
-						$oldStudent = $row['oldStudent'];
-						$totalstu = $row['totalStu'];
-
-						$maleStu = $row['stuMale'];
-						$femaleStu = $row['stuFemale'];
-
-						$GrandtotalStudent =$GrandtotalStudent+$totalstu;
-						$GrandtotalMale =$GrandtotalMale+$maleStu;
-						$GrandtotalFemale =$GrandtotalFemale+$femaleStu;
-						$GrandtotalNew =$GrandtotalNew+$newStudent;
-						$GrandtotalOld =$GrandtotalOld+$oldStudent;
-					?>
-					
-						<?php if($degree!=$row['degree']){?>
-								<?php if ($key>0){ $i=0;  ?>
-								<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
-									<td colspan="5"><?php echo $tr->translate("TOTAL");?></td>
-									<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
-									<td><?php echo $totalMale." ".$tr->translate("STUDENT_UNIT");?></td>
-									<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
-								</tr>
-						<?php  }} ?>
-						<tr class="style-rowdata hover" align="center"  >
-							<td><?php echo ++$i;?></td>
-							<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
-							<td align="left">&nbsp;<?php echo $row['academic_year_name'];?>&nbsp;</td>
-							<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
-							<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
-							<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $maleStu." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $femaleStu." ".$tr->translate("STUDENT_UNIT");?></td>		
+			<li class="nav-item ">
+				<a class="nav-link" data-toggle="tab" href="#panel22" role="tab">
+					<i class="fa fa-bar-chart ml-2"></i> <?php echo $tr->translate("CHART"); ?>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<!--/. Tab Menu -->
+	<div class="col-md-12">
+		<!-- Tab panels -->
+		<div class="tab-content vertical">
+			<!--Panel 1-->
+			<div class="tab-pane fade in active " id="panel21" role="tabpanel">
+				<div class="text-right">
+					<a class="qButton print" href="#" title="<?php echo $tr->translate("PRINT"); ?>"
+						onclick="doPrintProfle('divPrint');"><i class="fa fa-print" aria-hidden="true"></i></a>
+				</div>
+				<div id="divPrint">
+					<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
+						<tr>
+							<td colspan="3"><?php echo $this->rsheader;?></td>
 						</tr>
-							<?php if($degree!=$row['degree']){ 
-								if ($key>0){
-									$totalStudent = 0;
-									$totalMale=0;
-									$totalFemale=0;
-									$totalNew = 0;
-									$totalOld=0;
+						<tr>
+							<td width="15%" align="center">
+							</td>
+							<td width="70%"  align="center">
+								<span style=" color:#4839bd; font-size:14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
+								<span style=" color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></span>
+							</td>
+							<td width="15%" align="center">
+							</td>
+						</tr>
+					<style>
+							table tr th{
+								border: 1px solid #000;	
+								text-align: center;
+								padding: 3px 2px;
+							}
+							table {page-break-inside:auto }
+					
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:12px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+								margin:0 auto;
+							}
+							table.content-data thead tr.style-head {
+							line-height: 25px; padding:1px 0px; white-space: nowrap;height: 20px; 
+								background: #ccd9ff;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
+							@media print {
+								@page {
+									page: A4;
+									size: portrait;;
+									margin: 0.5cm;
 								}
 							}
-							$totalstu = $row['totalStu'];
-							$totalStudent =$totalStudent+$totalstu;
-							$totalNew=$totalNew+$newStudent;
-							$totalOld = $totalOld+$oldStudent;
-							$totalMale = $totalMale+$maleStu;
-							$totalFemale = $totalFemale+$femaleStu;							
-						?>
-						<?php $degree=$row['degree'];?>					
-						<?php }} ?>	
-						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
-							<td colspan="5"><?php echo $tr->translate("TOTAL");?></td>
-							<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $totalMale." ".$tr->translate("STUDENT_UNIT");?></td>
-							<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
+					</style>
+						<tr>
+							<td colspan="3" valign="top">
+							<div id="exportExcel">
+							<?php if (!empty($this->rs)){?>
+								<table class="content-data" cellpadding="1"​  border="1" >
+									<thead>
+										<tr class="style-head">
+											<td rowspan="2"><?php echo $tr->translate("NUM");?></td>
+											<td colspan="9"><?php echo $tr->translate("STUDY_INFO");?>
+												<input type="hidden" name="id_selected" id="id_selected" dojoType="dijit.form.TextBox" />
+											</td>
+										</tr>
+										<tr class="style-head">
+											<td><?php echo $tr->translate("BRANCH");?></td>
+											<td><?php echo $tr->translate("ACADEMIC_YEAR");?></td>
+											<td><?php echo $tr->translate("DEGREE");?></td>
+											<td><?php echo $tr->translate("GRADE");?></td>
+											<td scope="col" >&nbsp;<?php echo $tr->translate("TOTAL_STUDENT");?>&nbsp;</td>
+											<td scope="col" >&nbsp;<?php echo $tr->translate("NEW_STUDENT");?>&nbsp;</td>
+											<td scope="col" >&nbsp;<?php echo $tr->translate("OLD_STUDENT");?>&nbsp;</td>
+											<td><?php echo $tr->translate("MALE");?></td>
+											<td><?php echo $tr->translate("FEMALE");?></td>
+										</tr>
+									</thead>
+								<?php 
+									$i=0;
+									$totalNew = 0;
+									$totalOld=0;
+									$totalStudent = 0;
+									$GrandtotalStudent = 0;
+									$GrandtotalMale=0;
+									$GrandtotalFemale=0;
+									$GrandtotalNew = 0;
+									$GrandtotalOld=0;
+									$totalDrop=0;
+									$totalStudying=0;
+									$totalMale=0;
+									$totalFemale=0;
+									$degree='';
+								if(!empty($this->rs)){
+									foreach($this->rs AS $key=>$row){  
+
+									$newStudent = $row['newStudent'];
+									$oldStudent = $row['oldStudent'];
+									$totalstu = $row['totalStu'];
+
+									$maleStu = $row['stuMale'];
+									$femaleStu = $row['stuFemale'];
+
+									$GrandtotalStudent =$GrandtotalStudent+$totalstu;
+									$GrandtotalMale =$GrandtotalMale+$maleStu;
+									$GrandtotalFemale =$GrandtotalFemale+$femaleStu;
+									$GrandtotalNew =$GrandtotalNew+$newStudent;
+									$GrandtotalOld =$GrandtotalOld+$oldStudent;
+								?>
+								
+									<?php if($degree!=$row['degree']){?>
+											<?php if ($key>0){ $i=0;  ?>
+											<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
+												<td colspan="5"><?php echo $tr->translate("TOTAL");?></td>
+												<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+												<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
+												<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
+												<td><?php echo $totalMale." ".$tr->translate("STUDENT_UNIT");?></td>
+												<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
+											</tr>
+									<?php  }} ?>
+									<tr class="style-rowdata hover" align="center"  >
+										<td><?php echo ++$i;?></td>
+										<td align="left">&nbsp;<?php echo $row['branch_name'];?>&nbsp;</td>
+										<td align="left">&nbsp;<?php echo $row['academic_year_name'];?>&nbsp;</td>
+										<td align="left">&nbsp;<?php echo $row['degree_name'];?></td>
+										<td align="left">&nbsp;<?php echo $row['grade_name'];?></td>
+										<td><?php echo $totalstu." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $newStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $oldStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $maleStu." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $femaleStu." ".$tr->translate("STUDENT_UNIT");?></td>		
+									</tr>
+										<?php if($degree!=$row['degree']){ 
+											if ($key>0){
+												$totalStudent = 0;
+												$totalMale=0;
+												$totalFemale=0;
+												$totalNew = 0;
+												$totalOld=0;
+											}
+										}
+										$totalstu = $row['totalStu'];
+										$totalStudent =$totalStudent+$totalstu;
+										$totalNew=$totalNew+$newStudent;
+										$totalOld = $totalOld+$oldStudent;
+										$totalMale = $totalMale+$maleStu;
+										$totalFemale = $totalFemale+$femaleStu;							
+									?>
+									<?php $degree=$row['degree'];?>					
+									<?php }} ?>	
+									<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#dbdde5;">
+										<td colspan="5"><?php echo $tr->translate("TOTAL");?></td>
+										<td><?php echo $totalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $totalNew." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $totalOld." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $totalMale." ".$tr->translate("STUDENT_UNIT");?></td>
+										<td><?php echo $totalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
+									</tr>
+									<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
+										<td colspan="5"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
+										<td><?php echo $GrandtotalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
+										<td><?php echo $GrandtotalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
+										<td><?php echo $GrandtotalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
+										<td><?php echo $GrandtotalMale." ".$tr->translate("STUDENT_UNIT");?></td>
+										<td><?php echo $GrandtotalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
+									</tr>
+								</table> 
+								<?php }?>
+							</div>	
+							</td>
 						</tr>
-						<tr align="center" class="hover" style="font-weight:bold;height:30px;font-size:14px;background:#a3bbff;">
-							<td colspan="5"><?php echo $tr->translate("TOTAL_STUDENT");?></td>
-							<td><?php echo $GrandtotalStudent." ".$tr->translate("STUDENT_UNIT");?></td>	
-							<td><?php echo $GrandtotalNew." ".$tr->translate("STUDENT_UNIT");;?></td>	
-							<td><?php echo $GrandtotalOld." ".$tr->translate("STUDENT_UNIT");;?></td>	
-							<td><?php echo $GrandtotalMale." ".$tr->translate("STUDENT_UNIT");?></td>
-							<td><?php echo $GrandtotalFemale." ".$tr->translate("STUDENT_UNIT");?></td>
+						<tr>
+							<td colspan="3" width="100%">
+								<?php  echo $this->rsfooter ?>
+							</td>
 						</tr>
-					</table> 
-					<?php }?>
-				</div>	
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" width="100%">
-					<?php  echo $this->rsfooter ?>
-				</td>
-			</tr>
-		</table>
+					</table>
+				</div>
+			</div>
+			<!--Panel 2-->
+			<div class="tab-pane fade in " id="panel22" role="tabpanel">
+				<div id="divPrintgrap">
+					<table border="0" style="background:#fff; margin: 0 auto; width: 100%; ">
+						<tr>
+							<td colspan="3"><?php echo $this->rsheader;?></td>
+						</tr>
+						<tr>
+							<td width="15%" align="center">
+							</td>
+							<td width="70%"  align="center">
+								<span style=" color:#4839bd; font-size:14px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT_STATISTIC");?></span><br />
+								<span style=" color:#4839bd; font-size:12px;font-family:'Times New Roman','Khmer OS Muol Light';"><?php if (!empty($this->search['allacademicyear'])){ echo $tr->translate("STUDY_YEAR")." ".$this->search['allacademicyear'];}?></span>
+							</td>
+							<td width="15%" align="center">
+							</td>
+						</tr>
+						<style>
+							table tr th{
+								border: 1px solid #000;	
+								text-align: center;
+								padding: 3px 2px;
+							}
+							table {page-break-inside:auto }
+					
+							table.content-data{
+								border-collapse:collapse;
+								width:100%;
+								border:1px solid #4839bd; 
+								font-family:'Times New Roman','Khmer OS Battambang';
+								font-size:12px;
+								white-space: nowrap;
+								margin:0 auto;
+								color:#4839bd;
+								margin:0 auto;
+							}
+							table.content-data thead tr.style-head {
+							line-height: 25px; padding:1px 0px; white-space: nowrap;height: 20px; 
+								background: #ccd9ff;
+								text-align: center;
+							}
+							table.content-data tr.style-rowdata {
+								font-size:12px; 
+								height: 23px;
+							}
+							@media print {
+								@page {
+									page: A4;
+									size: portrait;;
+									margin: 0.5cm;
+								}
+							}
+							.square {
+								width: 15px;
+								height: 12px;
+								display: inline-block;
+							}
+
+							ul.list-inline.chart-detail-list {
+								list-style: none;
+								margin: 0;
+								padding: 0;
+								width: 100%;
+								font-family: 'Times New Roman','Khmer OS Battambang';
+							}
+
+							ul.list-inline.chart-detail-list li {
+								display: inline-block;
+								padding-right: 10px;
+								vertical-align: middle;
+							}
+							ul.list-inline.chart-detail-list li h5 {
+								font-size: 12px;
+								line-height: inherit;
+								margin: 0;
+								padding: 0;
+								font-family: 'Times New Roman','Khmer OS Battambang';
+							}
+							.charTitle,
+							.charTitleBottom{
+								margin: 0;
+								padding: 0;
+								font-size: 14px;
+								line-height: inherit;
+								font-family: 'Times New Roman','Khmer OS Muol Light';
+							}
+							.charTitle {
+								margin-top: 10px;
+							}
+							.charTitleBottom{
+								margin-bottom: 10px;
+							}
+							
+							div.bar-chart{
+								height:220px;
+							}
+						</style>
+						<?php
+							$chartKey=0;
+							$totalstu = 0;
+							$newStudent = 0;
+							$oldStudent = 0;
+							
+							$maleStu = 0;
+							$femaleStu = 0;
+							$degree='';
+							if(!empty($this->rs)){
+								foreach($this->rs AS $key=>$row){  
+
+									$totalstu = $row['totalStu'];
+									$newStudent = $row['newStudent'];
+									$oldStudent = $row['oldStudent'];
+								
+									$maleStu = $row['stuMale'];
+									$femaleStu = $row['stuFemale'];
+							?>
+							<?php if($degree!=$row['degree']){?>
+								<?php if ($key>0){
+									 $i=0;  
+									 $chartKey++;
+									 ?>
+									<tr style="position:relative; " align="center">
+										<td colspan="3" style="position: relative; border-left: solid 1px #fff; border-right: solid 1px #fff; border-bottom: solid 1px #fff;" >
+											<h2 class="charTitle"><?php echo $tr->translate("CHART").$tr->translate("DEGREE"); ?></h2>
+											<div id="bar-chart-<?php echo $chartKey; ?>" class="bar-chart" ></div>
+											<h2 class="charTitleBottom"><?php echo $tr->translate("GRADE"); ?></h2>
+										</td>
+									</tr>
+								<?php  }
+								} 
+							?>
+							<?php if($degree!=$row['degree']){ 
+
+								$degree=$row['degree'];?>	
+
+							<?php }} ?>	
+							<tr style="position:relative; " align="center">
+								<td colspan="3" style="position: relative; border-left: solid 1px #fff; border-right: solid 1px #fff; border-bottom: solid 1px #fff;" >
+									<h2 class="charTitle"><?php echo $tr->translate("CHART").$tr->translate("DEGREE"); ?></h2>
+									<div id="bar-chart" class="bar-chart" ></div>
+									<h2 class="charTitleBottom"><?php echo $tr->translate("GRADE"); ?></h2>
+								</td>
+							</tr>
+						<tr>
+							<td colspan="3" width="100%">
+								<?php  echo $this->rsfooter ?>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	
 </div>
+<link rel="stylesheet" href="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.css">
+<script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/morris/morris.min.js"></script>
+<script src="<?php echo $this->baseUrl()."/"?>dashboard/plugins/raphael/raphael-min.js"></script>
 <script src="<?php echo $this->baseUrl();?>/js/help.js"></script>
 <script type="text/javascript">
 dojo.require("dojo.data.ItemFileWriteStore"); 
@@ -273,4 +456,45 @@ function getallGrade(){
 			}
 		});
 }
+
+
+
+
+
+function doPrintProfle(keyid) {
+	window.frames["print_frame"].document.body.innerHTML = dojo.byId(keyid).innerHTML;
+	window.frames["print_frame"].window.focus();
+	window.frames["print_frame"].window.print();
+	hideDialog();
+}	
+
+// var data = [
+      
+//       { y: '2018', a: 80,  b: 65},
+//       { y: '2019', a: 90,  b: 70},
+//       { y: '2020', a: 100, b: 75},
+//       { y: '2021', a: 115, b: 75},
+//       { y: '2022', a: 120, b: 85},
+//       { y: '2023', a: 145, b: 85},
+//       { y: '2024', a: 160, b: 95}
+//     ];
+
+// setTimeout( function() {
+// 	config = {
+// 		data: data,
+// 		xkey: 'y',
+// 		ykeys: ['a', 'b'],
+// 		labels: ['Total Income', 'Total '],
+
+// 		dataLabelsPosition: "inside",
+// 		hideHover: 'auto',
+// 		gridTextColor: '#000',
+// 		showZero: false,
+// 		resize: true,
+// 		barColors: ['#007bc3', '#5e2590'],
+// 	};
+// 	config.element = 'bar-chart';
+// 	Morris.Bar(config);
+// }, 1000);
+
 </script>

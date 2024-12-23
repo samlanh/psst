@@ -386,8 +386,8 @@ $link = "/allreport/score/rpt-monthlytranscript";
 											<td style="width:50px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("ANNAUL_AVG"); ?></td>
 
 										<?php	} ?>
-										<td style="width:100px;" colspan="3" style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MENTION_AND_COMENT") ?></td>
-										<td style="width:100px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RANK"); ?></td>
+										<td style="width:100px;" colspan="3"  rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("MENTION_AND_COMENT") ?></td>
+										<td style="width:55px;" rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RANK"); ?></td>
 										<td rowspan="<?php echo $colspan; ?>"><?php echo $tr->translate("RESULT"); ?></td>
 									</tr>
 									<?php
@@ -414,7 +414,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 																<div><span><?php echo $subject['sub_name']; ?></span></div>
 															</td>
 														<?php } elseif ($show_subject == 0) { ?>
-															<td><?php echo $subject['shortcut']; ?></td>
+															<td style="width:40px;" ><?php echo $subject['shortcut']; ?></td>
 											<?php }
 													}
 												}

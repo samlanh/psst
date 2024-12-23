@@ -1949,7 +1949,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					t.* 
 				FROM mobile_mobile_token AS t 
 				WHERE t.token ='$token'
-				ORDER BY gtmp.`id` DESC LIMIT 1 
+				ORDER BY t.`id` DESC LIMIT 1 
 			";
 			$row = $db->fetchRow($sql);
 			

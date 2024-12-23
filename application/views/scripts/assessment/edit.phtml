@@ -301,8 +301,12 @@ dojo.require('dijit.form.NumberTextBox');
 dojo.require("dojo.NodeList-manipulate");
 dojo.require("dojo.data.ItemFileWriteStore"); 
 dojo.ready(function(){
-	duplicationRecord();
-	filterStudent();
+	setTimeout(function () {
+		loadingBlock();
+		duplicationRecord();
+		filterStudent();
+	}, 1000);
+	
 });
 
 
@@ -359,7 +363,6 @@ function filterStudent(){
 		   HideloadingBlock();	
 	   },		
 	    error: function(err) {
-			alert(err);
 			HideloadingBlock();
 	    }
 	});
@@ -415,11 +418,8 @@ function duplicationRecord(){
 				$( "#duplicateMessage" ).addClass( "hidden" );
 
 	       }
-		  
-		   HideloadingBlock();	
 	   },		
 	    error: function(err) {
-			HideloadingBlock();
 	    }
 	});
 	

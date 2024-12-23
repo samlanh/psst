@@ -211,8 +211,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		  $db->commit();
 		  return $assessmentId;
 		}catch (Exception $e){
-			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
 		}
    }
    
@@ -460,7 +460,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		   			$showRow="in";
 		   		}
 		   			
-		   		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="'.$exspan.'" class="rowData '.$rowClasss.' accordion-toggle bg-secondary text-primary text-center" id="row'.$keyIndex.'">';
+		   		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="'.$exspan.'" class="rowData '.$rowClasss.' accordion-toggle text-primary text-center" id="row'.$keyIndex.'">';
 			   		$string.='<td rowspan="2" data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
 			   		$string.='<td rowspan="2" data-label="'.$tr->translate("STUDENT").'"  align="left">';
 				   		$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
@@ -633,7 +633,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 			$showRow="in";
 		}
 			
-		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="'.$exspan.'" class="rowData '.$rowClasss.' accordion-toggle bg-secondary text-primary text-center" id="row'.$keyIndex.'">';
+		$string.='<tr  data-toggle="collapse" data-target="#demo_'.$keyIndex.'"  aria-expanded="'.$exspan.'" class="rowData '.$rowClasss.' accordion-toggle text-primary text-center" id="row'.$keyIndex.'">';
 			$string.='<td rowspan="2" data-label="'.$tr->translate("NUM").'"  align="center">&nbsp;'.$key.'</td>';
 			$string.='<td rowspan="2" data-label="'.$tr->translate("STUDENT").'"  align="left">';
 				$string.='<strong class="text-dark">'.$stu['stuCode'].'</strong><br />';
@@ -1015,8 +1015,8 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		  $db->commit();
 		  return $assessmentId;
 		}catch (Exception $e){
-			$db->rollBack();
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$db->rollBack();
 		}
    }
    

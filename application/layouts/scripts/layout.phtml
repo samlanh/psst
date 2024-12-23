@@ -11,6 +11,9 @@ $module = $request->getModuleName();
 
 if ($module != 'default') {
 	
+	$forViewing = $request->getParam("forViewing");
+	$forViewing = empty($forViewing) ? 0 : $forViewing;
+	
 	$session_user = new Zend_Session_Namespace(SYSTEM_SES);
 	$username = $session_user->first_name;
 	$them_style =  $session_user->theme_style;
@@ -23,11 +26,14 @@ if ($module != 'default') {
 	$currentlang = $ddgb->currentlang();
 	if (empty($user_id)) {
 		if (empty($teacher_id)) {
-			Application_Form_FrmMessage::redirectUrl('/');
+			if($forViewing!=1){
+				Application_Form_FrmMessage::redirectUrl('/');
+			}
 		}
 	}
 
-
+	
+	
 	$session_user = new Zend_Session_Namespace(SYSTEM_SES);
 	$arr_module = $session_user->arr_acl;
 	$user_id = $session_user->user_id;
@@ -48,8 +54,10 @@ if ($module != 'default') {
 	//500 = 5 min
 	if ($diff > 2000 || !isset($t0)) {
 		$session_user->unsetAll();
-		Application_Form_FrmMessage::redirectUrl("/");
-		exit();
+		if($forViewing!=1){
+			Application_Form_FrmMessage::redirectUrl("/");
+			exit();
+		}
 	} else {
 		$session_user->unlock();
 		$session_user->timeout = time();
@@ -379,8 +387,10 @@ if ($module != 'default') {
 		<script>
 			$(document).ready(function() {
 				$("body").hover(function() {
+					<?php if($forViewing!=1){ ?>
 					updateTimeOut();
 					checkSessionExpire();
+					<?php } ?>
 				});
 				$('.ckeditor').summernote({
 				  minHeight: 300, 

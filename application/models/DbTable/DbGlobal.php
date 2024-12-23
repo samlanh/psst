@@ -1072,16 +1072,27 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		return $sql;
 	}
 
-	public function getDegreePermission($degreeStr = 'degree')
+	public function getDegreePermission($degreeStr = 'degree',$dataCodiction=array())
 	{
 
 		$user = $this->getUserProfile();
 		$level = $user['user_type'];
 		$stringCondiction = "";
 		if ($level != 1) {
+			
 			if (!empty($user['degreeList'])) {
 				$degreeList = $user['degreeList'];
-				$stringCondiction = " AND $degreeStr IN ($degreeList)";
+				if (!empty($dataCodiction['forSplit'])) {
+					$slist = explode(",", $degreeList);
+					$s_where = array();
+					foreach ($slist as $option_id) {
+						$s_where[] = "(FIND_IN_SET('" . $option_id . "', " . $degreeStr . ") )";
+					}
+					$stringCondiction .= ' AND ( ' . implode(' OR ', $s_where) . ')';
+		
+				}else{
+					$stringCondiction = " AND $degreeStr IN ($degreeList)";
+				}
 			}
 
 		}
@@ -3387,6 +3398,14 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		}
 		if (!empty($data['academic_year'])) {
 			$sql .= " AND g.academic_year = ".$data['academic_year'];
+		}
+		if (!empty($data['degreeList'])) {
+			$degreeList = empty($data['degreeList']) ? "0" : $data['degreeList'];
+			$sql .= " AND FIND_IN_SET (g.`degree`,'$degreeList') ";
+		}
+		if (!empty($data['settingEntryId'])) {
+			$settingEntryId = empty($data['settingEntryId']) ? "0" : $data['settingEntryId'];
+			$sql .= " AND COALESCE((SELECT s.settingId FROM `rms_score` AS s WHERE s.status=1 AND s.`settingId` = $settingEntryId AND g.id =s.`group_id`  LIMIT 1 ),0) =0 ";
 		}
 		$sql .= $this->getAccessPermission('g.branch_id');
 		$sql .= $this->getDegreePermission('g.degree');

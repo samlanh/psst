@@ -55,6 +55,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 	}
 </style>
 <script src="<?php echo $this->baseUrl(); ?>/js/help.js"></script>
+<?php if(!empty($this->scoreResult)){ ?>
 <div style="min-height:10cm; margin:0 auto; padding:0.5cm 0.5cm 0.5cm 0.5cm">
 	<div class="card-box">
 		<div class="col-sm-12 border-botom">
@@ -480,7 +481,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 								<?php }
 								if ($scoreResult['exam_type'] == 1) {
 									$avg_rang = $old_average;
-									$avg_score = $rs['average'];
+									$avg_score = $rs['total_score'];
 								} else {
 									$avg_rang = $old_overral_average;
 									$avg_score = $rs['overallAssessmentSemester'];
@@ -495,7 +496,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 								?>
 								<td align="center">
 									<?php
-									echo (float) $total_score;
+									echo number_format((float) $total_score,2);
 									?>
 								</td>
 								<?php
@@ -702,7 +703,7 @@ $link = "/allreport/score/rpt-monthlytranscript";
 							</tr>
 							<?php
 							$old_overral_average = $rs['overallAssessmentSemester'];
-							$old_average = $rs['average'];
+							$old_average = $rs['total_score'];
 						}
 					}
 				 ?>
@@ -807,6 +808,20 @@ $link = "/allreport/score/rpt-monthlytranscript";
 		</label>
 	</div>
 </div>
+<?php }else{ ?>
+	<div id="container" class="clear" style=" margin: 0 auto;text-align: center;">
+		<section id="fof" class="clear">
+			<div class="hgroup">
+					   
+				<img src="<?php echo $this->baseUrl(); ?>/images/logo.png" style="width: 240px;">
+			
+			<h2>សូមអភ័យទោស ! <span>ទំព័រនេះមិនមានទិន្នន័យទេ។</span></h2>
+		  </div>
+		  <p>សូមអរគុណ !</p>
+		  </section>
+	  </div>
+<?php } ?>
+
 <?php
 $urlOutStanding = $this->baseUrl() . "/allreport/score/certificate-letterofpraisenew/id/";
 $urlOutStandingNoPhoto = $this->baseUrl() . $link;

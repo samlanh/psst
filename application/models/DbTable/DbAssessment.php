@@ -47,7 +47,7 @@ class Application_Model_DbTable_DbAssessment extends Zend_Db_Table_Abstract
 		";
 		
 		$sql.=" FROM  `rms_score` AS s
-		INNER JOIN  `rms_group` AS g ON s.`group_id` = g.`id` WHERE 1";
+		INNER JOIN  `rms_group` AS g ON s.`group_id` = g.`id` WHERE 1 AND s.status =1 ";
 		
 		$where ='';
 		$from_date =(empty($search['start_date']))? '1': "s.date_input >= '".$search['start_date']." 00:00:00'";

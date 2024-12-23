@@ -537,9 +537,9 @@ class Allreport_Model_DbTable_DbScoreTranscript extends Zend_Db_Table_Abstract
 					(SELECT month_en FROM rms_month WHERE rms_month.id = s.for_month LIMIT 1) AS forMonthEnLabel,
 					s.for_semester,
 					
-					FIND_IN_SET((SELECT sm.total_avg FROM rms_score_monthly sm WHERE 
+					FIND_IN_SET((SELECT sm.total_score FROM rms_score_monthly sm WHERE 
 				 				sm.score_id=s.id AND sm.student_id=" . $data['studentId'] . " LIMIT 1),
-					(SELECT GROUP_CONCAT(total_avg ORDER BY total_avg DESC)
+					(SELECT GROUP_CONCAT(total_score ORDER BY total_score DESC)
 						FROM 
 							rms_score_monthly AS dd 
 						 WHERE

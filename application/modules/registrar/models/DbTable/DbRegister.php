@@ -461,6 +461,11 @@ class Registrar_Model_DbTable_DbRegister extends Zend_Db_Table_Abstract
 					}
 					$this->_name='rms_group_detail_student';
 					$where = "stu_id=".$data['old_stu']." AND grade=".$data['item_id'.$i];
+					if(!empty($rs_item)){
+						if($rs_item['items_type']!=1){
+							$where.= " AND is_current = 1 ";
+						}
+					}
 					$this->update($arr, $where);
 					
 					if(!empty($rs_item) AND !empty($data['autoNextPay'.$i])){

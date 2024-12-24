@@ -1594,7 +1594,6 @@ function getRefreshItems(type=0){
 		handleAs:"json",
 		load: function(data) {
 			degree_store  = getDataStorefromJSON('id','name', data);
-			dijit.byId('degree').set('store',degree_store);  
 			if(type==1){
 				dijit.byId('degreeAddRow').set('store',degree_store);
 			}else{

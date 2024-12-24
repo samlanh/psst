@@ -146,7 +146,6 @@ Class Application_Form_FrmSearchGlobalNew extends Zend_Dojo_Form {
 		));
 		$_date = $this->request->getParam("start_date");
 		$_startdate->setValue($_date);
-
 		return $_startdate;
 	}
 	function getPaymentDateSearch($_data=null){//used

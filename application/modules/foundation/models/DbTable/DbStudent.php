@@ -405,7 +405,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 									'is_use'=> 1,//ប្រើប្រាស់
 									'is_pass'=> 2,//កំពុងសិក្សា
 							);
-							$whereGroup = 'id = '.$groupId;
+							$whereGroup = ' is_use = 0 AND id = '.$groupId;
 							$this->update($dataGro, $whereGroup);
 						}
 				}
@@ -452,7 +452,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 									'is_use'=> 1,//ប្រើប្រាស់
 									'is_pass'=> 2,//កំពុងសិក្សា
 							);
-							$whereGroup = 'id = '.$group_id;
+							$whereGroup = ' is_use = 0 AND id = '.$group_id;
 							$this->update($data_gro, $whereGroup);
 						}
 					}

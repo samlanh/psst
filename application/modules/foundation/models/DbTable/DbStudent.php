@@ -176,7 +176,7 @@ class Foundation_Model_DbTable_DbStudent extends Zend_Db_Table_Abstract
 				WHERE s.stu_id =".$id." 
 				AND s.customer_type=1";
 			$dbp = new Application_Model_DbTable_DbGlobal();
-			$sql.=$dbp->getAccessPermission();
+			$sql.=$dbp->getAccessPermission("s.branch_id");
 			return $db->fetchRow($sql);
 	}
 	

@@ -1978,4 +1978,36 @@ class Api_Model_DbTable_DbActions extends Zend_Db_Table_Abstract
 			exit();
 		}
 	}
+	
+	public function setReadCriteriaAction($search){
+		try{
+			$search['studentId'] = empty($search['studentId'])?0:$search['studentId'];
+			$search['mobileToken'] = empty($search['mobileToken'])?0:$search['mobileToken'];
+			$search['readType'] = empty($search['readType'])?"markAllRead":$search['readType'];
+			$db = new Api_Model_DbTable_DbApi();
+			$row = $db->setReadCriteria($search);
+			if ($row['status']){
+				$arrResult = array(
+						"result" => $row['value'],
+						"code" => "SUCCESS",
+					);
+			}else{
+				$arrResult = array(
+					"code" => "ERR_",
+					"message" => $row['value'],
+				);
+			}
+			$dbPush = new Api_Model_DbTable_DbPushNotification();
+			$dbPush->updateDeviceInfo($search);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}catch(Exception $e){
+			$arrResult = array(
+				"code" => "ERR_",
+				"message" => $e->getMessage(),
+			);
+			print_r(Zend_Json::encode($arrResult));
+			exit();
+		}
+	}
 }

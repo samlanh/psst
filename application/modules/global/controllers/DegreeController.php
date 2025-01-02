@@ -60,6 +60,13 @@ class Global_DegreeController extends Zend_Controller_Action {
     	$db = new Global_Model_DbTable_DbItems();
     	$this->view->comment = $db->getAllComment();
     	
+		$isParentInfo = $db->getIsParentDegreeId();
+		$isParentId =0;
+		if(!empty($isParentInfo)){
+			$isParentId =$isParentInfo["id"];
+		}
+    	$this->view->isParentId = $isParentId;
+    	
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree(null);
     	Application_Model_Decorator::removeAllDecorator($frm);
@@ -128,6 +135,12 @@ class Global_DegreeController extends Zend_Controller_Action {
     	 
     	$db = new Global_Model_DbTable_DbItems();
     	$this->view->comment = $db->getAllComment();
+		$isParentInfo = $db->getIsParentDegreeId();
+		$isParentId =0;
+		if(!empty($isParentInfo)){
+			$isParentId =$isParentInfo["id"];
+		}
+    	$this->view->isParentId = $isParentId;
     	 
     	$frm = new Global_Form_FrmItems();
     	$frm->FrmAddDegree($row);

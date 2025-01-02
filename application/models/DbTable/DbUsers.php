@@ -20,7 +20,20 @@ class Application_Model_DbTable_DbUsers extends Zend_Db_Table_Abstract
 		}else {
 			return null;
 		}
-	}	
+	}
+	function getUserInformationById($user_id){
+		$db = $this->getAdapter();
+		$sql="
+		SELECT 
+			s.*
+			,s.user_type AS level
+			,(SELECT ut.user_type FROM `rms_acl_user_type` AS ut WHERE ut.user_type_id = s.user_type LIMIT 1) AS user_typetitle 
+			,(SELECT ut.user_type FROM `rms_acl_user_type` AS ut WHERE ut.user_type_id = s.user_type LIMIT 1) AS userTypeTitle 
+			,(SELECT ut.dashboardType FROM `rms_acl_user_type` AS ut WHERE ut.user_type_id = s.user_type LIMIT 1) AS dashboardType 
+		FROM `rms_users` AS s
+		WHERE s.id = $user_id LIMIT 1";
+		return $db->fetchRow($sql);
+	}
 	
 	//function get user id from database
 	public function getUserID($user_name)

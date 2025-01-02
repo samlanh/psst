@@ -472,4 +472,11 @@
 		}
 		return 0;
 	}
+	
+	public function getIsParentDegreeId($data = array()){
+		$db = $this->getAdapter();
+		$sql=" SELECT d.* FROM rms_items AS d WHERE d.is_parent =1 AND d.type = 1 ";
+		$sql.=" LIMIT 1 ";
+		return $db->fetchRow($sql);
+	}
 }

@@ -6163,6 +6163,7 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 					,grdTmpD.`subCriterialTitleKh`
 					,(SELECT sEnT.`title` FROM `rms_score_entry_setting` AS sEnT WHERE sEnT.id = grdTmp.`settingEntryId` LIMIT 1 ) AS entrySettingTitle
 					,grdTmp.*
+					,COALESCE(DATE_FORMAT(grdTmp.createDate, '%Y%m%d'),'') AS createDateFmt
 					,(SELECT t.$teacherName  FROM `rms_teacher` AS t WHERE t.id =grdTmp.`teacherId` LIMIT 1) AS teacherName
 					
 			FROM
@@ -6218,6 +6219,46 @@ class Api_Model_DbTable_DbApi extends Zend_Db_Table_Abstract
 			$result = array(
 				'status' =>true,
 				'value' =>$row,
+			);
+			return $result;
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			$result = array(
+				'status' =>false,
+				'value' =>$e->getMessage(),
+			);
+			return $result;
+		}
+	}
+	
+	public function setReadCriteria($_data){
+		$db = $this->getAdapter();
+		try{
+			$mobileToken 	= empty($_data['mobileToken'])?0:$_data['mobileToken'];
+			$studentId 		= empty($_data['studentId'])?0:$_data['studentId'];
+			$gradingTmpId 		= empty($_data['gradingTmpId'])?0:$_data['gradingTmpId'];
+			
+			if($readType=="markAllRead"){
+				$_arr=array(
+					'isRead'			=> 1,						
+					'readDate'	  	=> date("Y-m-d H:i:s"),
+				);
+				$where = " isRead=0 AND studentId= $studentId";
+				$this->_name = "rms_grading_detail_tmp";
+				$this->update($_arr,$where);
+									
+			}else {
+				$_arr=array(
+					'isRead'			=> 1,						
+					'readDate'	  	=> date("Y-m-d H:i:s"),
+				);
+				$where = " isRead=0 AND gradingId = ".$gradingTmpId." AND studentId= $studentId";
+				$this->_name = "rms_grading_detail_tmp";
+				$this->update($_arr,$where);
+			}
+			$result = array(
+					'status' =>true,
+					'value' =>array(),
 			);
 			return $result;
 		}catch(Exception $e){

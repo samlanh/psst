@@ -210,6 +210,8 @@ class Api_IndexController extends Zend_Controller_Action
     				$_dbAction->loginSchoolBusAction($postData);
 				}else if ($GetData['url']=="onlineOfflineSchoolBus"){
     				$_dbAction->onlineOfflineSchoolBusAction($postData);
+				}else if ($GetData['url']=="setReadCriteria"){
+    				$_dbAction->setReadCriteriaAction($postData);
 					
     			}
     			else{

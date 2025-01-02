@@ -2988,7 +2988,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		if ($prefixOpt == 1) {//branch
 			$pre = $this->getPrefixCode($branch_id);//by branch
 			
-			$settingFor = 100; //PSIS CHV
+			$settingFor = 101; //PSIS CHV
 			if($settingFor==100){
 				$lastedAca = $this->getLatestAcadmicYear();
 				if(!empty($lastedAca)){

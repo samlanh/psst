@@ -1,6 +1,6 @@
 <?php
 	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
-	$this->headTitle($tr->translate('RPT_STUDENT')); 
+	$this->headTitle($tr->translate('STUDENT_NOT_YET_REPORT')); 
 	echo $this->headTitle(''); 
 	$frm =  $this->form_search;
 	$classHideHeight="110px";
@@ -16,7 +16,7 @@
 	<div class="card-box">
        		<div class="col-sm-12 border-botom">
 		    	<div class="col-sm-8 pd-0">
-	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('RPT_STUDENT');?></h4>
+	    			<h4 class="m-b-0"><i class="fa fa-file " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php echo $tr->translate('STUDENT_NOT_YET_REPORT');?></h4>
     			</div>
     			<div class="col-sm-4 text-right">
     			</div>
@@ -64,7 +64,7 @@
 					<td width="15%" align="center">
 					</td>
 					<td width="70%"  align="center">
-						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("RPT_STUDENT");?></strong><br />
+						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 14px;font-family:'Khmer OS Muol Light';"><?php echo $tr->translate("STUDENT_NOT_YET_REPORT");?></strong><br />
 						<strong style="font-weight:normal;font-family: Arial Black;color:#000; font-size: 12px;font-family:'Khmer OS Muol Light';"><?php if(!empty($this->search['start_date'])){?><?php echo date('d-M-Y',strtotime($this->search['start_date']));?> <?php echo $tr->translate("TO");?> <?php echo date('d-M-Y',strtotime($this->search['end_date']));}?> </strong>
 					</td>
 					<td width="15%" align="center">

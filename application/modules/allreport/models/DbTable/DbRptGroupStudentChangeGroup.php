@@ -61,11 +61,10 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
 				WHERE 
 					gds.itemType=1 
 					AND gds.`group_id` = gscg.`to_group` 
-					and gscg.change_type=1
 				  	AND gds.`old_group` = gscg.`from_group`
 				  	and gscg.to_group=g.id
 				  	and gds.stu_id=st.stu_id   
-    	";
+    	"; //and gscg.change_type=1
     	
     	$order=" ORDER BY gscg.`id` ASC";
     	
@@ -89,7 +88,8 @@ class Allreport_Model_DbTable_DbRptGroupStudentChangeGroup extends Zend_Db_Table
     		$where.=' AND st.branch_id='.$search['branch_id'];
     	}
     	if(!empty($search['academic_year'])){
-    		$where.=' AND g.academic_year='.$search['academic_year'];
+    		$where.=' AND gscg.academic_year='.$search['academic_year'];
+    		//$where.=' AND g.academic_year='.$search['academic_year'];
     	}
     	if(!empty($search['grade_bac'])){
     		$where.=' AND g.grade='.$search['grade_bac'];
